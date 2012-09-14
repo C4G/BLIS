@@ -9,6 +9,9 @@ LangUtil::setPageId("lab_configs");
 //$script_elems->enableJWizard(); 
 $script_elems->enableDatePicker();
 
+putUILog('lab_config_new', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
+
 global $labIdArray;
 ?>
 <link rel='stylesheet' type='text/css' href='css/wizard_styles.css' />
@@ -71,6 +74,55 @@ function loadnext(divout,divin){
 	$("." + divin).show();
 }
 
+function get_testbox2(stype_id)
+{
+	//var stype_val = $('#'+stype_id).attr("value");
+        var stype_val = stype_id;
+        $('#test_list_by_site').show();
+	if(stype_val == "")
+	{
+		$('#test_list_by_site').html("-<?php echo 'Select Facility to display its Test Catalog here'; ?>-");
+		return;
+	}
+	$('#test_list_by_site').html("<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>");
+	$('#test_list_by_site').load(
+		"ajax/test_list_by_site.php", 
+		{
+			site_id: stype_val
+		}
+	);
+}
+
+function show_testbox2(st)
+{
+	//var stype_val = $('#'+stype_id).attr("value");
+        $('.test_list_forms').hide();
+        $('#test_list_'+ st).show();
+	
+}
+
+function remove_option(st)
+{
+    $('#iloc_sites').find('select').removeAttr('disabled');
+  $('#iloc_sites').empty();
+       $("#iloc_sites").html($("#iloc_sites_t").html());
+       $('#iloc_sites').find('select').attr('id', 'ilocation');
+        $('#iloc_sites').find('select').attr('name', 'ilocation');
+    $("#ilocation option[value='"+st+"']").remove();
+    if(st == '0')
+        {
+            $('#iloc_sites').find('select').attr('disabled', true);
+        }
+
+
+}
+
+function remove_option2(st)
+{
+   
+    $("#ilocation option[value='"+st+"']").remove();	
+}
+
 function checkandadd()
 {
 	//Validate
@@ -83,7 +135,7 @@ function checkandadd()
 	var location = $('#location').attr("value");
 	if(location == "")
 	{
-		alert("<?php echo LangUtil::$pageTerms['TIPS_MISSING_LOCATION']; ?>");
+		alert("<?php echo "Facility Location Missing"; ?>");
 		return;
 	}
 	var lab_admin = $('#lab_admin').attr("value");
@@ -91,6 +143,13 @@ function checkandadd()
 	{
 		alert("<?php echo LangUtil::$pageTerms['TIPS_MISSING_MGR']; ?>");
 		return;
+	}
+        
+        var bloc = $('#blocation').attr("value");
+	if(bloc == '0')
+	{
+		//alert("<?php echo 'Base Lab Configuration not selected'; ?>");
+		//return;
 	}
 	/*
 	var stype_entries = $('.stype_entry');
@@ -134,6 +193,35 @@ function checkandadd()
 <style type="text/css">
 	#registration { width:950px; margin:20px; background:#F6F6F6; }
 	#registration > div { padding:0 10px; }
+.hor-minimalist-compact
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	background: #fff;
+	width: 480px;
+	border-collapse: collapse;
+	text-align: left;
+        padding: 6px 4px;
+}
+
+.hor-minimalist-compact th
+{
+	font-size: 14px;
+	font-weight: normal;
+	color: #039;
+	 padding: 6px 4px;
+	border-bottom: 2px solid #6678b1;
+}
+.hor-minimalist-compact td
+{
+	color: #669;
+	padding: 2px 6px 0px 6px;
+}
+
+.hor-minimalist-compact tbody tr:hover td
+{
+	/*color: #009;*/
+}
 </style>
 <br>
 <b><?php echo LangUtil::$pageTerms['NEW_LAB_CONFIGURATION']; ?>	</b>
@@ -142,7 +230,7 @@ function checkandadd()
 <form id='new_lab_form' name='new_lab_form' action='lab_config_add.php' method='post'>
 <DIV id="wizardwrapper">
 
-  <DIV class="1" style="display: block; ">
+  <DIV class="1" style="opacity: 1; display: block; margin-left: 150px;">
     <H3>1: <?php echo LangUtil::$pageTerms['MENU_SITEINFO']; ?></H3>
     <DIV id="wizardcontent"> 
 	<br>
@@ -157,12 +245,21 @@ function checkandadd()
 			</tr>
 			<tr>
 				<td><?php echo "Country" ?><?php $page_elems->getAsterisk(); ?></td>
-				<td><select name='country' id='country'> 
+				<!--<td><select name='country' id='country'> 
 					<?php 
 						foreach($labIdArray as $key=>$value)
 							echo "<option value='$key'>$key</option>";
 					?>
-				</select></td>
+				</select></td>-->
+                                <td><?php 
+                                $usr_c = get_username_by_id($_SESSION['user_id']);
+                                $usr_c = strtolower($usr_c);
+                                $usr_c = ucfirst($usr_c);
+                                $usr_cs = substr($usr_c, 0, strpos($usr_c, "_"));
+                                echo $usr_cs; 
+                                ?>
+                                <input type="hidden" name="country" value="<?php echo $usr_cs; ?>">
+                                </td>
 			</tr>
 			<?php 
 			//If user is superadmin
@@ -194,12 +291,13 @@ function checkandadd()
       <BUTTON type="button" class="next" onclick="loadnext(1,4);"> Next <IMG src="js/jquery.jwizard/images/jwizard_arrow_right.png" alt=""> </BUTTON>
     </DIV>
     <br><br>
-    <UL id="mainNav" class="fiveStep" style="margin-left: 150px;">
+    <UL id="mainNav" class="fiveStep" >
       <LI class="current"><div class='white_big'>Step 1:<br><?php echo LangUtil::$pageTerms['MENU_SITEINFO']; ?></div></LI>
-      <!--<LI><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>-->
-      <!--<LI><div class='white_big'>Step 3:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>-->
+      <!--<LI><div class='white_big'>Step 2:<br><?php //echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>-->
       <LI><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></div></LI>
-      <LI class="mainNavNoBg"><div class='white_big'>Step 3:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>
+      <LI><div class='white_big'>Step 3:<br><?php echo "Base Config"; ?></div></LI>
+      <LI><div class='white_big'>Step 4:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>
+      <!--<LI class="mainNavNoBg"><div class='white_big'>Step 5:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>-->
     </UL>
     <DIV style="clear:both"></DIV>
   </DIV>
@@ -220,51 +318,196 @@ function checkandadd()
       <LI class="current"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>
       <LI><div class='white_big'>Step 3:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>
       <LI><div class='white_big'>Step 4:<br><?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></div></LI>
-      <LI class="mainNavNoBg"><div class='white_big'>Step 5:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>
+      <!--<LI class="mainNavNoBg"><div class='white_big'>Step 4:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>-->
     </UL>
 	<DIV style="clear:both"></DIV>
   </DIV>
   
-  
-  <DIV id="wizardpanel" class="3" style="opacity: 1; display: none; ">
-    <H3>3: <?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></H3>
+    <DIV id="wizardpanel" class="7" style="opacity: 1; display: none; margin-left: 150px;">
+    <H3>3: <?php echo "Base Lab Configuration"; ?></H3>
     <DIV id="wizardcontent">
 	<br>
-	<?php $page_elems->getTestTypeCheckboxes(); ?>
+        
+        <!--<form id='base_config_form' name='base_config_form' action='ajax/import_config.php' method='get'>-->
+                    <input type='hidden' name='lid' value='<?php echo $lab_config->id; ?>'></input>
+                    
+                                    <?php echo 'Select the facility to set base configuration:'; ?>
+                    
+                                <?php
+                                        //$site_list = get_site_list($_SESSION['user_id']);
+                                        //print_r($site_list);
+                                        //echo "<input type='checkbox' name='".$elem_name."[]' id='$elem_id' value='$key'>$value</input>";
+                                        ?>
+                                        <select name='blocation' id='blocation' class='uniform_width'  onchange="javascript:remove_option(this.value);">
+                                            <option value='0'><?php echo 'None'; ?></option>
+                                        <?php
+                                            $page_elems->getSiteOptions();
+                                        ?>
+                                        </select>
+                                        <br><br>
+                                        <i><small>This setting will import lab configuration from the selected lab to this new lab.</small>
+                                        <br>
+                                        <small>If you want to create an empty lab then select 'None' above.</small>
+                                        <br>
+                                        <small>Setting a base lab configuration also allows you to import tests from other existing labs in the next step.</small></i>
+                                
+            </form>
 	</DIV>
     <DIV class="buttons">
-      <BUTTON type="button" class="previous" onclick="loadnext(3,2);"> <IMG src="js/jquery.jwizard/images/jwizard_arrow_left.png" alt=""> <?php echo LangUtil::$generalTerms['CMD_BACK']; ?> </BUTTON>
-      <BUTTON type="button" class="next" onclick="loadnext(3,4);"> Next <IMG src="js/jquery.jwizard/images/jwizard_arrow_right.png" alt=""> </BUTTON>
+      <BUTTON type="button" class="previous" onclick="loadnext(7,4);"> <IMG src="js/jquery.jwizard/images/jwizard_arrow_left.png" alt=""> <?php echo LangUtil::$generalTerms['CMD_BACK']; ?> </BUTTON>
+      <BUTTON type="button" class="next" onclick="loadnext(7,3);"> Next <IMG src="js/jquery.jwizard/images/jwizard_arrow_right.png" alt=""> </BUTTON>
     </DIV>
     <br><br>
     <UL id="mainNav" class="fiveStep">
       <LI class="done"><div class='white_big'>Step 1:<br><?php echo LangUtil::$pageTerms['MENU_SITEINFO']; ?></div></LI>
-      <LI class="lastDone"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>
-      <LI class="current"><div class='white_big'>Step 3:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>
-      <LI><div class='white_big'>Step 4:<br><?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></div></LI>
-      <LI class="mainNavNoBg"><div class='white_big'>Step 5:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>
+      <!--<LI class="done"><div class='white_big'>Step 2:<br><?php //echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>-->
+      <LI class="done"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></div></LI>
+      <LI class='current'><div class='white_big'>Step 3:<br><?php echo "Base Config"; ?></div></LI>
+      <LI class='mainNavNoBg'><div class='white_big'>Step 4:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>
+      <!--<LI class="mainNavNoBg"><div class='white_big'>Step 5:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>-->
+    </UL>
+	<DIV style="clear:both"></DIV>
+  </DIV>
+  
+  <DIV id="wizardpanel" class="3" style="opacity: 1; display: none; margin-left: 150px;">
+    <H3>4: <?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></H3>
+    <DIV id="wizardcontent">
+	<br>
+        
+        <!--<form id='import_config_form' name='import_config_form' action='ajax/import_config.php' method='get'>-->
+                    <input type='hidden' name='lid' value='<?php echo $lab_config->id; ?>'></input>
+                    
+                                  
+                                
+                                
+                                <?php
+                                   
+                                        //$site_list = get_site_list($_SESSION['user_id']);
+                                        //print_r($site_list);
+                                        //echo "<input type='checkbox' name='".$elem_name."[]' id='$elem_id' value='$key'>$value</input>";
+                                        ?>
+                                        <div id="iloc_sites_t" style='display: none;'>
+                                            <?php echo 'Select the facility from which you want to import tests:'; ?>
+                                        <select name='ilocation2' id='ilocation2' class='uniform_width' onchange="javascript:show_testbox2(this.value);">
+                                        <option value='0'><?php echo 'Select Facility'; ?></option>
+                                        <?php
+                                            $page_elems->getSiteOptions();
+                                        ?>
+                                        </select>
+                                        </div>
+                    
+                                        <div id="iloc_sites">
+                                              <?php echo 'Select the facility from which you want to import tests:'; ?>
+                                        <select name='ilocation' id='ilocation' class='uniform_width' disabled="disabled" onchange="javascript:show_testbox2(this.value);">
+                                        <option value='0'><?php echo 'Select Facility'; ?></option>
+                                        <?php
+                                            $page_elems->getSiteOptions();
+                                        ?>
+                                        </select>
+                                        </div>
+                                        <br>
+                                        <?php  $site_ls = get_site_list($_SESSION['user_id']);
+                                            foreach($site_ls as $st => $val) {
+                                            $div_st = "test_list_".$st;
+                                            echo "<div id='".$div_st."' class='test_list_forms' style='display: none;'>"; ?>
+                                        <?php
+                                        $test_type_list = get_test_types_by_site($st);
+                                        /*if($site_id <= 0)
+                                        {
+                                            echo 'Select Facility to display its Test Catalog here';
+                                            return;
+                                        }
+                                        */
+                                        if(count($test_type_list) == 0)
+                                        {
+                                                # No compatible tests exist in the configuration
+                                                ?>
+                                                <br>
+                                                <span class='clean-error uniform_width'>
+                                                        <?php echo 'Test Catalog is empty for this site'; ?>
+                                                </span>
+                                                <?php
+                                                
+                                        }
+                                        ?>
+                                        <table style='width:auto;' class='hor-minimalist-compact'>
+                                        <tbody>
+                                        <tr valign='top'>
+                                        <?php
+                                        $count = 0;
+                                        foreach($test_type_list as $test_type)
+                                        {
+                                        ?>
+                                                <td>
+                                                <table>
+                                                <tr valign='top'>
+
+                                                        <td>
+                                                            <?php
+                                                                //echo "<input type='checkbox' name='itest[".$st."][".$test_type->testTypeId."]' id='$st' value='Yes'>";
+                                                                echo "<input type='checkbox' name='itest[".$st."][]' id='$st' value='".$test_type->testTypeId."'>";
+                                                                echo $test_type->getName();
+                                                                echo "</input>";
+                                                                ?>
+                                                        </td>
+                                                </tr>
+                                                </table>
+                                                </td>
+                                                <?php
+                                                $count++;
+                                                if($count % 3 == 0)
+                                                {
+                                                ?>
+                                                        </tr>
+                                                        <tr>
+                                                <?php
+                                                }
+                                        }
+                                        ?>
+                                        </tbody>
+                                        </table>
+                                        
+                                        <?php echo "</div>";
+                                        } ?>
+                                
+            </form>
+	</DIV>
+    <DIV class="buttons">
+      <BUTTON type="button" class="previous" onclick="loadnext(3,7);"> <IMG src="js/jquery.jwizard/images/jwizard_arrow_left.png" alt=""> <?php echo LangUtil::$generalTerms['CMD_BACK']; ?> </BUTTON>
+      <BUTTON type="button" class="next" onclick="loadnext(3,5);"> Next <IMG src="js/jquery.jwizard/images/jwizard_arrow_right.png" alt=""> </BUTTON>
+    </DIV>
+    <br><br>
+    <UL id="mainNav" class="fiveStep">
+      <LI class="done"><div class='white_big'>Step 1:<br><?php echo LangUtil::$pageTerms['MENU_SITEINFO']; ?></div></LI>
+      <!--<LI class="done"><div class='white_big'>Step 2:<br><?php //echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>-->
+      <LI class="done"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></div></LI>
+      <LI class="done"><div class='white_big'>Step 3:<br><?php echo "Base Config"; ?></div></LI>
+      <LI class='current'><div class='white_big'>Step 4:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>
+      <!--<LI class="mainNavNoBg"><div class='white_big'>Step 5:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>-->
     </UL>
 	<DIV style="clear:both"></DIV>
   </DIV>
 
  
   <DIV id="wizardpanel" class="4" style="opacity: 1; display: none; margin-left: 150px;">
-    <H3>4: <?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></H3>
+    <H3>2: <?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></H3>
     <DIV id="wizardcontent">
 	<br>
 	<?php $page_elems->getOperatorForm(1); ?>
 	</DIV>
     <DIV class="buttons">
       <BUTTON type="button" class="previous" onclick="loadnext(4,1);"> <IMG src="js/jquery.jwizard/images/jwizard_arrow_left.png" alt=""> <?php echo LangUtil::$generalTerms['CMD_BACK']; ?> </BUTTON>
-      <BUTTON type="button" class="next" onclick="loadnext(4,5);"> Next <IMG src="js/jquery.jwizard/images/jwizard_arrow_right.png" alt=""> </BUTTON>
+      <BUTTON type="button" class="next" onclick="loadnext(4,7);"> Next <IMG src="js/jquery.jwizard/images/jwizard_arrow_right.png" alt=""> </BUTTON>
     </DIV>
     <br><br>
     <UL id="mainNav" class="fiveStep">
-      <LI class="done"><div class='white_big'>Step 1:<br><?php echo LangUtil::$pageTerms['MENU_SITEINFO']; ?></div></LI>
-      <!--<LI class="done"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>
-      <LI class="lastDone"><div class='white_big'>Step 3:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>-->
+        <LI class="done"><div class='white_big'>Step 1:<br><?php echo LangUtil::$pageTerms['MENU_SITEINFO']; ?></div></LI>
+      <!--<LI class="lastDone"><div class='white_big'>Step 2:<br><?php //echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>-->
       <LI class="current"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></div></LI>
-      <LI class="mainNavNoBg"><div class='white_big'>Step 3:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>
+      <LI><div class='white_big'>Step 3:<br><?php echo "Base Config"; ?></div></LI>
+      <LI><div class='white_big'>Step 4:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>
+      <!--<LI class="mainNavNoBg"><div class='white_big'>Step 5:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>-->
+      
     </UL>
 	<DIV style="clear:both"></DIV>
   </DIV>
@@ -285,16 +528,17 @@ function checkandadd()
 		&nbsp;&nbsp;&nbsp;&nbsp;<input id='add_button' type='button' value='<?php echo LangUtil::$generalTerms['CMD_ADD']; ?>' onclick='javascript:checkandadd();'></input>
 	</DIV>
     <DIV class="buttons">
-      <BUTTON type="button" class="previous" onclick="loadnext(5,4);"> <IMG src="js/jquery.jwizard/images/jwizard_arrow_left.png" alt=""> <?php echo LangUtil::$generalTerms['CMD_BACK']; ?> </BUTTON>
+      <BUTTON type="button" class="previous" onclick="loadnext(5,3);"> <IMG src="js/jquery.jwizard/images/jwizard_arrow_left.png" alt=""> <?php echo LangUtil::$generalTerms['CMD_BACK']; ?> </BUTTON>
       <BUTTON type="button" class="next" disabled="disabled"> Next <IMG src="js/jquery.jwizard/images/jwizard_arrow_right.png" alt=""> </BUTTON>
     </DIV>
 	<br><br>
     <UL id="mainNav" class="fiveStep">
       <LI class="done"><div class='white_big'>Step 1:<br><?php echo LangUtil::$pageTerms['MENU_SITEINFO']; ?></div></LI>
-      <!--<LI class="done"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>
-      <LI class="done"<div class='white_big'>Step 3:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>-->
-      <LI class="lastDone"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></div></LI>
-      <LI class="mainNavNoBg current"><div class='white_big'>Step 3:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>
+      <!--<LI class="done"><div class='white_big'>Step 2:<br><?php //echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>-->
+      <LI class="done"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></div></LI>
+      <LI class="done"><div class='white_big'>Step 3:<br><?php echo "Base Config"; ?></div></LI>
+      <LI class='done'><div class='white_big'>Step 4:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>
+      <!--<LI class="current"><div class='white_big'>Step 5:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>-->
     </UL>
 	<DIV style="clear:both"></DIV>
   </DIV>
@@ -314,10 +558,11 @@ function checkandadd()
 	<br><br>
     <UL id="mainNav" class="fiveStep">
       <LI class="done"><div class='white_big'>Step 1:<br><?php echo LangUtil::$pageTerms['MENU_SITEINFO']; ?></div></LI>
-      <!--<LI class="done"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>
-      <LI class="done"<div class='white_big'>Step 3:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>-->
-      <LI class="lastDone"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></div></LI>
-      <LI class="mainNavNoBg current"><div class='white_big'>Step 3:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>
+      <!--<LI class="done"><div class='white_big'>Step 2:<br><?php //echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?></div></LI>-->
+      <LI class="done"><div class='white_big'>Step 2:<br><?php echo LangUtil::$generalTerms['TECHNICIANS']; ?></div></LI>
+      <LI class="done"><div class='white_big'>Step 3:<br><?php echo "Base Config"; ?></div></LI>
+      <LI class='done'><div class='white_big'>Step 4:<br><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></div></LI>
+      <!--<LI class="current"><div class='white_big'>Step 5:<br><?php echo LangUtil::$pageTerms['MENU_FIELDS']; ?></div></LI>-->
     </UL>
 	<DIV style="clear:both"></DIV>
   </DIV>

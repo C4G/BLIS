@@ -5,6 +5,7 @@
 include("redirect.php");
 include("includes/header.php");
 LangUtil::setPageId("search");
+putUILog('search', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 ?>
 <script type='text/javascript'>

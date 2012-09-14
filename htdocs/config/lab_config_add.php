@@ -8,6 +8,9 @@ include("includes/db_lib.php");
 include("includes/random.php");
 include("lang/lang_xml2php.php");
 
+putUILog('lab_config_add', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
+
 $saved_session = SessionUtil::save();
 
 $lab_config = new LabConfig();
@@ -16,7 +19,12 @@ $lab_config->location = $_REQUEST['location'];
 $lab_config->country = $_REQUEST['country'];
 $lab_admin = $_REQUEST['lab_admin'];
 $country = $_REQUEST['country'];
-
+/*$usr_c = get_username_by_id($_SESSION['user_id']);
+$usr_c = strtolower($usr_c);
+$usr_c = ucfirst($usr_c);
+$country = $usr_c;*/
+$blocation = $_REQUEST['blocation'];
+$itests = $_REQUEST['itest'];
 global $labIdArray;
 $count = 0;
 foreach($labIdArray as $key => $value) {
@@ -222,6 +230,22 @@ $langdata_path = $LOCAL_PATH."langdata_".$lab_config_id."/";
 remarks_db2xml($langdata_path, $lab_config_id);
 
 $_SESSION['lab_config_id'] = $saved_id;
+
+if($blocation > 0)
+{
+    setBaseConfig($blocation, $lab_config_id);
+
+    foreach($itests as $key=>$itest)
+    {
+        if($blocation != $key)
+        {
+            foreach($itest as $it)
+            {
+                import_test_between_labs($it, $key, $lab_config_id);
+            }
+        }
+    }
+}
 SessionUtil::restore($saved_session);
 header("location:lab_config_added.php?id=$saved_config_id");
 ?>

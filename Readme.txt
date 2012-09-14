@@ -1,22 +1,25 @@
-C4G BLIS v2.1
+C4G BLIS v2.2
 
-This update introduces the following features to BLIS,
-1. Ability to add sub-measures.
-2. New measure type: Free-Text measures.
-3. Test and Specimen count reports grouped on the basis of lab sections, gender and age-groups.
-4. New visualization for patient reports.
+This update introduces the following features/changes to C4G BLIS,
+1. Ability for the administrator to view aggregate user statistics and individual user logs.
+2. Ability for the country director to set a base lab configuration for new labs and import individual test from pre-existing lab configurations.
+3. An entirely new comprehensive inventory management system replacing the old system.
+4. Ability for the administrator to remove registered specimens and retrieve deleted specimens.
+5. Integrated range visualization to existing patient reports with the ability to hide/view these visualization from within the report view.
+6. Resolved issues with the sub-measure feature.
+7. Extended the ability to add more measures and submeasures (up to 25 measures and 25 sub-measures for each measure).
+8. Resolved issues with alignment of results in patient reports.
+9. Updated Page Help and Tips.
 
-Please download the update file, C4GBLIS_update.zip from the following link,
-http://dl.dropbox.com/u/6511140/C4GBLIS_update.zip
+The update procedure is slightly different for the individual labs and the country directors.
 
-To apply this update,
-1. Extract the attached 'C4GBLIS_update.zip' file to obtain three files namely, 'htdocs.zip' and 'updateBLIS.bat' and '7za.exe'.
-2. Copy and replace these 3 files to your BLIS folder.
-3. Run the updateBLIS.bat file and wait for it to successfully update your version for BLIS to v2.1.
+The update procedure for individual labs is as follows,
+- Download the two update files, splash.png and htdocs.zip.
+- Unzip the zip file to get the htdocs folder and then copy and replace the htdocs folder and the splash file in your BLIS folder with these.
+- Start BLIS and click on 'Update to New Version' under the Lab configuration tab. Click on 'Start update' and wait for it to finish.
+- This completes the update procedure and you can continue using the updated version of BLIS.
 
-
-Instructions for our new features,
-- Sub-measures can be added in the same way as measures to both new or existing tests, though it is recommended that you create new tests to utilize the sub-measures feature.
-- Free-text measure type can be applied in the same way as other measure types.
-- The new visualization of patient reports are accessible from patient profile and specimen info pages  from the 'View Report Visualization' link on the left. The new updated version of Firefox is required to view these new reports. If you have not already updated your Firefox, the update for Firefox is available on our website, http://blis.cc.gatech.edu/download.php.
-- The new specimen and test count reports are accessible from the reports page by choosing the 'Counts' option on your right. These new reports appear as 'Test Count (Grouped)' and 'Specimen Count (Grouped)' options. These reports are configurable from the lab configuration by choosing the 'Test/Specimen Grouped Reports' option under the 'Reports' option on the left.
+The update procedure for the country director is as follows,
+- Download the two update files, splash.png and htdocs.zip.
+- Unzip the zip file to get the htdocs folder and then copy and replace the htdocs folder and the splash file in your BLIS folder with these.
+- This completes the update procedure.

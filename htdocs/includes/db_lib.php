@@ -2797,7 +2797,6 @@ class Test
                 $submeasure_list = array();
                 $comb_measure_list = array();
                // print_r($measure_list);
-                
                 foreach($measure_list as $measure)
                 {
                     
@@ -3013,7 +3012,6 @@ class Test
 	}
 	
         public function decodeResultWithoutMeasures($show_range=false) {
-        
             # Converts stored result value(s) for showing on front-end
 		# Get measure, unit pairs for this test
 		$test_type = TestType::getById($this->testTypeId);
@@ -3131,13 +3129,13 @@ class Test
                                             else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
                                             {
                                                     if($result_list[$i] != $curr_measure->unit)
-                                                            $retval .= "<br><b>".$result_list[$i]."</b> &nbsp;<br>";
+                                                            $retval .= "<br><b>".$result_list[$i]."</b> &nbsp;";
                                                     else
-                                                            $retval .= "<br>".$result_list[$i]."&nbsp;<br>";
+                                                            $retval .= "<br>".$result_list[$i]."&nbsp;";
                                             }
                                             else
                                             {
-                                                    $retval .= "<br>".$result_list[$i]."&nbsp;<br>";
+                                                    $retval .= "<br>".$result_list[$i]."&nbsp;";
                                             }
                                     }
                                     else
@@ -3149,17 +3147,17 @@ class Test
                                             {
                                                     $result_string = "";
                                                     $value_list = str_replace("_", ",", $result_list[$i]);
-                                                    $retval .= "<b>".$value_list."</b>";
+                                                    $retval .= "<br><b>".$value_list."</b>";
                                             }
                                             else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
                                             {
                                                     if($result_list[$i]!=$curr_measure->unit)
-                                                            $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;<br>";
+                                                            $retval .= "<br><b>".$result_list[$i]."</b>"."&nbsp;";
                                                     else
-                                                            $retval .= $result_list[$i]."&nbsp;<br>";
+                                                            $retval .= $result_list[$i]."&nbsp;";
                                             }
                                             else
-                                                    $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;<br>";
+                                                    $retval .= "<br><b>".$result_list[$i]."</b>"."&nbsp;";
                                     }
 
                                     if($show_range === true)
@@ -3188,11 +3186,11 @@ class Test
 
                             if(count($measure_list) == 1)
                             {
-                                $retval .= "<br>".$ft_result."&nbsp;<br>";   
+                                $retval .= "<br>".$ft_result."&nbsp;";   
                             }
                             else
                             {
-                                 $retval .= "<br>".$ft_result."&nbsp;<br>"; 
+                                 $retval .= "<br>".$ft_result."&nbsp;"; 
                             }
                             if($show_range === true)
                                         {
@@ -3389,6 +3387,18 @@ class Test
 			return LangUtil::$generalTerms['DONE'];
 	}
 
+        public function getTestRegDate()
+        {
+                $query_string =
+			"SELECT date_collected FROM specimen ".
+			"WHERE specimen_id = ( ".
+			"SELECT specimen_id FROM test WHERE test_id = $this->testId".
+                        ")";
+			//"AND result<>''";
+		$resultset = query_associative_one($query_string, $row_count);
+                $retval = $resultset['date_collected'];
+		return $retval;
+        }
 }
 
 class CustomField
@@ -4433,6 +4443,323 @@ class SessionUtil
 	}
 }
 
+
+class UILog
+{
+    // Name of the file where the message logs will be appended.
+	private $LOGFILENAME;
+	
+    // Define the separator for the fields. Default is comma (,).
+	private $SEPARATOR;
+        
+   // hHeaders
+	private $HEADERS;
+        
+        public $datetime;
+        public $id;
+        public $info;
+        public $file;
+        public $user;
+        public $lab;
+        public $version;
+        public $tag1;
+        public $tag2;
+        public $tag3;
+        
+    function UILog($logfilename = '../../local/UILog.csv', $separator = ',') {
+                global $VERSION;
+                $vers = $VERSION;
+                $verss = str_replace('.','-',$vers);
+                $logfilename = "../../local/UILog_".$verss.".csv";
+		$this->LOGFILENAME = $logfilename;
+		$this->SEPARATOR = $separator;
+		$this->HEADERS =
+			'DATETIME' . $this->SEPARATOR . 
+                        'IDENTIFIER' . $this->SEPARATOR . 
+			'INFO' . $this->SEPARATOR .
+                        'FILE' . $this->SEPARATOR .
+                        'USER' . $this->SEPARATOR .
+                        'LAB' . $this->SEPARATOR .
+                        'VERSION' . $this->SEPARATOR .
+                        'TAG1' . $this->SEPARATOR .
+                        'TAG2' . $this->SEPARATOR .
+			'TAG3';
+	}
+        
+    public function writeUILog()
+    {
+        global $VERSION;
+        $this->datetime = date("Y-m-d H:i:s");
+        $this->user = $_SESSION['user_id'];
+        $this->lab = $_SESSION['lab_config_id'];
+        $this->version = $VERSION;
+
+        
+                
+        if (!file_exists($this->LOGFILENAME)) 
+        {
+		$headers = $this->HEADERS .  "\n";
+	}
+        
+        $fd = fopen($this->LOGFILENAME, "a");
+        
+        if (@$headers) 
+        {
+		fwrite($fd, $headers);
+	}
+        
+        //$entry = array($datetime,$errorlevel,$tag,$value,$line,$file);
+        $entry = array($this->datetime, $this->id, $this->info, $this->file, $this->user, $this->lab, $this->version, $this->tag1, $this->tag2, $this->tag3);
+        fputcsv($fd, $entry, $this->SEPARATOR);
+
+        fclose($fd);
+    }
+}
+
+
+
+class UserStats
+{
+    #Specimen table ts reflect date of specimen/test registration and test table ts reflects date of resut entry
+    #Specimen table user_id reflects user who registered the specime/test and test table user_id reflects the user who enetered results
+    
+    public function getAdminUser($lab_config_id)
+    {
+        $saved_db = DbUtil::switchToGlobal();
+        $query_string = 
+                            "SELECT admin_user_id FROM lab_config ".
+                            "WHERE lab_config_id = $lab_config_id";
+                        
+	$resultset = query_associative_one($query_string);
+        //print_r($resultset);
+        $retval = $resultset['admin_user_id'];	
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+    }
+    
+    public function getAllUsers($lab_config_id)
+    {
+        $saved_db = DbUtil::switchToGlobal();
+        $query_string = 
+			"SELECT user_id FROM user ".
+			"WHERE lab_config_id = $lab_config_id ".
+                        "AND user_id <> ".
+			"( ".
+                            "SELECT admin_user_id FROM lab_config ".
+                            "WHERE lab_config_id = $lab_config_id".
+                        " ) ";
+	
+	$retval = array();
+	$resultset = query_associative_all($query_string, $row_count);
+        //print_r($resultset);
+	foreach($resultset as $record)
+	{
+             //$i = $resultset['user_id'];
+             $retval[] = $record['user_id'];
+	}
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+    }
+    
+    public function getTestStats($user_id, $lab_config_id, $date_from, $date_to)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        $date_from_parts = explode("-", $date_from);		
+        $date_to_parts = explode("-", $date_to);
+        $date_from_ts = mktime(0, 0, 0, $date_from_parts[1], $date_from_parts[2], $date_from_parts[0]);
+        $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
+        $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
+        $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+
+        $query_string = 
+				"SELECT COUNT(*) as count_val FROM test ".
+				"WHERE specimen_id IN ( ".
+                                "SELECT specimen_id from specimen ".
+                                "WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
+				"AND user_id = $user_id)";
+	
+	$resultset = query_associative_one($query_string);
+	$retval = $resultset['count_val'];
+        DbUtil::switchRestore($saved_db);
+        return $retval;
+    }
+    
+    public function getPatientsStats($user_id, $lab_config_id, $date_from, $date_to)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        $date_from_parts = explode("-", $date_from);		
+        $date_to_parts = explode("-", $date_to);
+        $date_from_ts = mktime(0, 0, 0, $date_from_parts[1], $date_from_parts[2], $date_from_parts[0]);
+        $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
+        $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
+        $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+
+        $query_string = 
+				"SELECT COUNT(*) as count_val FROM patient ".
+				"WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
+				"AND created_by = $user_id";
+	
+	$resultset = query_associative_one($query_string);
+	$retval = $resultset['count_val'];
+        DbUtil::switchRestore($saved_db);
+        return $retval;
+    }
+    
+    public function getSpecimenStats($user_id, $lab_config_id, $date_from, $date_to)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        $date_from_parts = explode("-", $date_from);		
+        $date_to_parts = explode("-", $date_to);
+        $date_from_ts = mktime(0, 0, 0, $date_from_parts[1], $date_from_parts[2], $date_from_parts[0]);
+        $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
+        $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
+        $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+
+        $query_string = 
+				"SELECT COUNT(*) as count_val FROM specimen ".
+				"WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
+				"AND user_id = $user_id";
+	
+	$resultset = query_associative_one($query_string);
+	$retval = $resultset['count_val'];
+        DbUtil::switchRestore($saved_db);
+        return $retval;
+    }
+    
+    public function getResultStats($user_id, $lab_config_id, $date_from, $date_to)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        $date_from_parts = explode("-", $date_from);		
+        $date_to_parts = explode("-", $date_to);
+        $date_from_ts = mktime(0, 0, 0, $date_from_parts[1], $date_from_parts[2], $date_from_parts[0]);
+        $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
+        $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
+        $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+
+        $query_string = 
+				"SELECT COUNT(*) as count_val FROM test ".
+				"WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
+				"AND user_id = $user_id ".
+                                "AND result <> ''";
+	
+	$resultset = query_associative_one($query_string);
+	$retval = $resultset['count_val'];
+        DbUtil::switchRestore($saved_db);
+        return $retval;      
+    }
+    
+    public function getPatientRegLog($user_id, $lab_config_id, $date_from, $date_to)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        $date_from_parts = explode("-", $date_from);		
+        $date_to_parts = explode("-", $date_to);
+        $date_from_ts = mktime(0, 0, 0, $date_from_parts[1], $date_from_parts[2], $date_from_parts[0]);
+        $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
+        $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
+        $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+
+        $query_string = 
+				"SELECT * FROM patient ".
+				"WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
+				"AND created_by = $user_id";
+	
+	$resultset = query_associative_all($query_string, $row_count);
+	$patient_list = array();
+	if(count($resultset) > 0)
+	{
+		foreach($resultset as $record)
+		{
+			$patient_list[] = Patient::getObject($record);
+		}
+	}
+        DbUtil::switchRestore($saved_db);
+        return $patient_list;
+    }
+    
+    public function getSpecimenRegLog($user_id, $lab_config_id, $date_from, $date_to)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        $date_from_parts = explode("-", $date_from);		
+        $date_to_parts = explode("-", $date_to);
+        $date_from_ts = mktime(0, 0, 0, $date_from_parts[1], $date_from_parts[2], $date_from_parts[0]);
+        $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
+        $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
+        $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+
+        $query_string = 
+				"SELECT * FROM specimen ".
+				"WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
+				"AND user_id = $user_id";
+	
+	$resultset = query_associative_all($query_string, $row_count);
+	$test_list = array();
+	if(count($resultset) > 0)
+	{
+		foreach($resultset as $record)
+		{
+			$test_list[] = Specimen::getObject($record);
+		}
+	}
+        DbUtil::switchRestore($saved_db);
+        return $test_list;
+    }
+    
+    public function getTestRegLog($user_id, $lab_config_id, $date_from, $date_to)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        $date_from_parts = explode("-", $date_from);		
+        $date_to_parts = explode("-", $date_to);
+        $date_from_ts = mktime(0, 0, 0, $date_from_parts[1], $date_from_parts[2], $date_from_parts[0]);
+        $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
+        $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
+        $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+
+        $query_string = 
+				"SELECT * FROM test ".
+				"WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
+				"AND user_id = $user_id";
+	
+	$resultset = query_associative_all($query_string, $row_count);
+	$test_list = array();
+	if(count($resultset) > 0)
+	{
+		foreach($resultset as $record)
+		{
+			$test_list[] = Test::getObject($record);
+		}
+	}
+        DbUtil::switchRestore($saved_db);
+        return $test_list;
+    }
+    
+    public function getResultEntryLog($user_id, $lab_config_id, $date_from, $date_to)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        $date_from_parts = explode("-", $date_from);		
+        $date_to_parts = explode("-", $date_to);
+        $date_from_ts = mktime(0, 0, 0, $date_from_parts[1], $date_from_parts[2], $date_from_parts[0]);
+        $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
+        $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
+        $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+
+        $query_string = 
+				"SELECT * FROM test ".
+				"WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
+				"AND user_id = $user_id";
+	
+	$resultset = query_associative_all($query_string, $row_count);
+	$test_list = array();
+	if(count($resultset) > 0)
+	{
+		foreach($resultset as $record)
+		{
+			$test_list[] = Test::getObject($record);
+		}
+	}
+        DbUtil::switchRestore($saved_db);
+        return $test_list;
+    }
+}
 
 #
 # Functions for managing user profiles and login
@@ -5700,10 +6027,25 @@ function get_stock_details($entry_id)
 	DbUtil::switchRestore($saved_db);
 	return $retval;
 }
-function add_stocks($name,$lot_number,$expiry_date,$manufacture,$supplier,$quantity_supplied,$unit , $cost_per_unit,$ts) {
+function add_new_stock($name,$lot_number,$expiry_date,$manufacture,$supplier,$quantity_supplied,$unit , $cost_per_unit,$ts) {
 	# Adds a new stock or update the quantity of the stock
 	
 	$saved_db = DbUtil::switchToLabConfigRevamp();
+        # Find the entry_id (primary key)
+	/*$query_string = "SELECT MAX(entry_id) as'entry_id'FROM stock_details";
+	$record = query_associative_one($query_string);
+	if($record == null || $record['entry_id'] == null)
+	$entry_id=0;
+	else
+	$entry_id=$record['entry_id'];
+        
+        $current_ts = date("Y-m-d H:i:s" , $ts[$i]);
+        
+        $query_string = 
+                "INSERT INTO stock_details(name,lot_number,expiry_date, manufacturer, quantity_ordered,quantity_supplied,current_quantity,supplier,unit,entry_id,cost_per_unit,date_of_reception, date_of_supply) ".
+                "VALUES ('$name[$i]','$lot_number[$i]','$expiry_date[$i]', '$manufacture[$i]', '$quantity_supplied[$i]' ,'$quantity_supplied[$i]','$current_quantity','$supplier[$i]','$unit[$i]','$current_entry_id','$cost_per_unit[$i]', '$current_ts','$current_ts')";
+        query_insert_one($query_string);**/
+        
 	$length= count($name);
 	
 	# Find the entry_id (primary key)
@@ -6027,6 +6369,24 @@ function create_lab_config_tables($lab_config_id, $db_name)
 		query_blind($sql_command.";");
 	}
 }
+
+
+function blis_db_update($lab_config_id, $db_name, $ufile)
+{
+	# Creates empty tables for a new lab configuration
+	global $con;
+	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	db_change($db_name);
+	$file_name = "../data/".$ufile.".sql";
+	$sql_file = fopen($file_name, 'r');
+	$sql_string = fread($sql_file, filesize($file_name));
+	$sql_command_list = explode(";", $sql_string);
+	foreach($sql_command_list as $sql_command)
+	{
+		query_blind($sql_command.";");
+	}
+}
+
 
 function create_lab_config_revamp_tables($lab_config_id, $revamp_db_name)
 {
@@ -9770,4 +10130,763 @@ function getSubmeasureIDs($id)
         }
         
         
+function setBaseConfig($from_id, $to_id)
+{
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+    
+    $query_string = "DELETE FROM test_category WHERE test_category_id > 0";
+    query_blind($query_string);
+    $dbn = "blis_".$from_id.".test_category";
+    $dbnn = "blis_".$to_id.".test_category";
+    $query_string = "INSERT INTO ".$dbnn." (test_category_id, name, description) SELECT test_category_id, name, description FROM ".$dbn;
+    query_insert_one($query_string);
+    
+    $query_string = "DELETE FROM measure WHERE measure_id > 0";
+    query_blind($query_string);
+    $dbn = "blis_".$from_id.".measure";
+    $dbnn = "blis_".$to_id.".measure";
+    $query_string = "INSERT INTO ".$dbnn." (measure_id, name, unit_id, range, description, unit) SELECT measure_id, name, unit_id, range, description, unit FROM ".$dbn;
+    query_insert_one($query_string);
+    
+    $query_string = "DELETE FROM specimen_type WHERE specimen_type_id > 0";
+    query_blind($query_string);
+    $dbn = "blis_".$from_id.".specimen_type";
+    $dbnn = "blis_".$to_id.".specimen_type";
+    $query_string = "INSERT INTO ".$dbnn." (specimen_type_id, name, description) SELECT specimen_type_id, name, description FROM ".$dbn;
+    query_insert_one($query_string);
+    
+    $query_string = "DELETE FROM reference_range WHERE id > 0";
+    query_blind($query_string);
+    $dbn = "blis_".$from_id.".reference_range";
+    $dbnn = "blis_".$to_id.".reference_range";
+    $query_string = "INSERT INTO ".$dbnn." (id, measure_id, age_min, age_max, sex, range_lower, range_upper) SELECT id, measure_id, age_min, age_max, sex, range_lower, range_upper FROM ".$dbn;
+    query_insert_one($query_string);
+    
+    $query_string = "DELETE FROM test_type WHERE test_type_id > 0";
+    query_blind($query_string);
+    $dbn = "blis_".$from_id.".test_type";
+    $dbnn = "blis_".$to_id.".test_type";
+    $query_string = "INSERT INTO ".$dbnn." (test_type_id, name, description, test_category_id, is_panel, disabled, clinical_data, hide_patient_name, prevalence_threshold, target_tat) SELECT test_type_id, name, description, test_category_id, is_panel, disabled, clinical_data, hide_patient_name, prevalence_threshold, target_tat FROM ".$dbn;
+    query_insert_one($query_string);
+  
+    $query_string = "DELETE FROM test_type_measure WHERE test_type_id > 0";
+    query_blind($query_string);
+    $dbn = "blis_".$from_id.".test_type_measure";
+    $dbnn = "blis_".$to_id.".test_type_measure";
+    $query_string = "INSERT INTO ".$dbnn." (test_type_id, measure_id) SELECT test_type_id, measure_id FROM ".$dbn;
+    query_insert_one($query_string);
+    
+    $query_string = "DELETE FROM unit WHERE unit_id > 0";
+    query_blind($query_string);
+    $dbn = "blis_".$from_id.".unit";
+    $dbnn = "blis_".$to_id.".unit";
+    $query_string = "INSERT INTO ".$dbnn." (unit_id, unit) SELECT unit_id, unit FROM ".$dbn;
+    query_insert_one($query_string);
+    
+    $query_string = "DELETE FROM custom_field_type WHERE id > 0";
+    query_blind($query_string);
+    $dbn = "blis_".$from_id.".custom_field_type";
+    $dbnn = "blis_".$to_id.".custom_field_type";
+    $query_string = "INSERT INTO ".$dbnn." (id, field_type) SELECT id, field_type FROM ".$dbn;
+    query_insert_one($query_string);
+    
+    /*
+    $query_string = "DELETE FROM labtitle_custom_field WHERE id > 0";
+    query_blind($query_string);
+    $dbn = "blis_".$from_id.".labtitle_custom_field";
+    $dbnn = "blis_".$to_id.".labtitle_custom_field";
+    $query_string = "INSERT INTO ".$dbnn." (id, field_name, field_options, field_type_id) SELECT id, field_name, field_options, field_type_id FROM ".$dbn;
+    query_insert_one($query_string);
+    */
+    
+    $query_string = "DELETE FROM patient_custom_field WHERE id > 0";
+    query_blind($query_string);
+    $dbn = "blis_".$from_id.".patient_custom_field";
+    $dbnn = "blis_".$to_id.".patient_custom_field";
+    $query_string = "INSERT INTO ".$dbnn." (id, field_name, field_options, field_type_id) SELECT id, field_name, field_options, field_type_id FROM ".$dbn;
+    query_insert_one($query_string);
+    
+    $query_string = "DELETE FROM specimen_custom_field WHERE id > 0";
+    query_blind($query_string);
+    $dbn = "blis_".$from_id.".specimen_custom_field";
+    $dbnn = "blis_".$to_id.".specimen_custom_field";
+    $query_string = "INSERT INTO ".$dbnn." (id, field_name, field_options, field_type_id) SELECT id, field_name, field_options, field_type_id FROM ".$dbn;
+    query_insert_one($query_string);
+    
+    DbUtil::switchRestore($saved_db);
+    
+}   
+
+function setBaseConfigSpecimens($from_id, $to_id)
+{
+    # test_category table
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $query_string =
+			"SELECT * FROM test_category ";
+    $recordset = query_associative_all($query_string, $row_count);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+    $query_string = "DELETE FROM test_category WHERE test_category_id > 0";
+    query_blind($query_string);
+    foreach($recordset as $rec)
+    {
+        $val1 = $rec['test_category_id'];
+        $val2 = $rec['name'];
+        $val3 = $rec['description'];
+        $query_string = "INSERT INTO test_category (test_category_id, name, description) VALUES ($val1, '$val2', '$val3') ";
+        query_insert_one($query_string);
+    }
+    DbUtil::switchRestore($saved_db);
+    
+    # measure table
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $query_string =
+			"SELECT * FROM measure ";
+    $recordset = query_associative_all($query_string, $row_count);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+     $query_string = "DELETE FROM measure WHERE measure_id > 0";
+    query_blind($query_string);
+    /*foreach($recordset as $rec)
+    {
+        // $intLat = !empty($intLat) ? "'$intLat'" : "NULL";
+        $val1 = $rec['measure_id'];
+        $val2 = $rec['name'];
+        $val3 = db_prep_int($rec['unit_id'], 1);
+        $val4 = $rec['range'];
+        $val5 = db_prep_string($rec['description']);
+        $val6 = db_prep_string($rec['unit']);
+        $val1 = !empty($val1) ? $val1 : NULL;
+        $val2 = !empty($val2) ? $val2 : "";
+        $val3 = !empty($val3) ? $val3 : NULL;
+        $val4 = !empty($val4) ? $val4 : NULL;
+        $val5 = !empty($val5) ? "$val5" : NULL;
+        $val6 = !empty($val6) ? "$val6" : NULL;
+
+        echo "---->".$val1."@".$val2."@".$val3."@".$val4."@".$val5."@".$val6."@"."<br><br>";
+        $query_string = "INSERT INTO measure (measure_id, name, unit_id, range, description, unit) VALUES ($val1, '$val2', $val3, '$val4', '$val5', '$val6')";
+        echo $query_string."<br>";
+        query_insert_one($query_string);
+    }*/
+    $dbn = "blis_".$from_id.".measure";
+    $dbnn = "blis_".$to_id.".measure";
+     $query_string = "INSERT INTO ".$dbnn." (measure_id, name, unit_id, range, description, unit) SELECT measure_id, name, unit_id, range, description, unit FROM ".$dbn;
+     query_insert_one($query_string);
+    DbUtil::switchRestore($saved_db);
+    return;
+    
+    
+    # specimen_type table
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $query_string =
+			"SELECT * FROM specimen_type ";
+    $recordset = query_associative_all($query_string, $row_count);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+     $query_string = "DELETE FROM specimen_type WHERE specimen_type_id > 0";
+    query_blind($query_string);
+    foreach($recordset as $rec)
+    {
+        $val1 = $rec['specimen_type_id'];
+        $val2 = $rec['name'];
+        $val3 = $rec['description'];
+        $query_string = "INSERT INTO specimen_type (specimen_type_id, name, description) VALUES ($val1, '$val2', '$val3') ";
+        query_insert_one($query_string);
+    }
+    DbUtil::switchRestore($saved_db);
+    
+    # reference_range table
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $query_string =
+			"SELECT * FROM reference_range ";
+    $recordset = query_associative_all($query_string, $row_count);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+     $query_string = "DELETE FROM reference_range WHERE id > 0";
+    query_blind($query_string);
+    foreach($recordset as $rec)
+    {
+        $val1 = $rec['id'];
+        $val2 = $rec['measure_id'];
+        $val3 = $rec['age_min'];
+        $val4 = $rec['age_max'];
+        $val5 = $rec['sex'];
+        $val6 = $rec['range_lower'];
+        $val7 = $rec['range_upper'];
+        $query_string = "INSERT INTO reference_range (id, measure_id, age_min, age_max, sex, range_lower, range_upper) VALUES ($val1, $val2, '$val3', '$val4', '$val5', '$val6', '$val7') ";
+        query_insert_one($query_string);
+    }
+    DbUtil::switchRestore($saved_db);
+    
+    # test_type table
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $query_string =
+			"SELECT * FROM test_type ";
+    $recordset = query_associative_all($query_string, $row_count);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+     $query_string = "DELETE FROM test_type WHERE test_type_id > 0";
+    query_blind($query_string);
+    foreach($recordset as $rec)
+    {
+        $val1 = $rec['test_type_id'];
+        $val2 = $rec['name'];
+        $val3 = $rec['description'];
+        $val4 = $rec['test_category_id'];
+        $val5 = $rec['is_panel'];
+        $val6 = $rec['disabled'];
+        $val7 = $rec['clinical_data'];
+        $val8 = $rec['hide_patient_name'];
+        $val9 = $rec['prevalence_threshold'];
+        $val10 = $rec['target_tat'];
+        $query_string = "INSERT INTO test_type (test_type_id, name, description, test_category_id, is_panel, disabled, clinical_data, hide_patient_name, prevalence_threshold, target_tat) VALUES ($val1, '$val2', '$val3', $val4, $val5, $val6, '$val7', $val8, $val9, $val10) ";
+        query_insert_one($query_string);
+    }
+    DbUtil::switchRestore($saved_db);
+    
+     # test_type_measure table
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $query_string =
+			"SELECT * FROM test_type_measure ";
+    $recordset = query_associative_all($query_string, $row_count);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+     $query_string = "DELETE FROM test_type_measure WHERE test_type_id > 0";
+    query_blind($query_string);
+    foreach($recordset as $rec)
+    {
+        $val1 = $rec['test_type_id'];
+        $val2 = $rec['measure_id'];
+        $query_string = "INSERT INTO test_type_measure (test_type_id, measure_id) VALUES ($val1, $val2) ";
+        query_insert_one($query_string);
+    }
+    DbUtil::switchRestore($saved_db);
+    
+    # unit table
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $query_string =
+			"SELECT * FROM unit ";
+    $recordset = query_associative_all($query_string, $row_count);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+     $query_string = "DELETE FROM unit WHERE unit_id > 0";
+    query_blind($query_string);
+    foreach($recordset as $rec)
+    {
+        $val1 = $rec['unit_id'];
+        $val2 = $rec['unit'];
+        $query_string = "INSERT INTO unit (unit_id, unit) VALUES ($val1, '$val2') ";
+        query_insert_one($query_string);
+    }
+    DbUtil::switchRestore($saved_db);
+    
+    # custom_field_type table
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $query_string =
+			"SELECT * FROM custom_field_type ";
+    $recordset = query_associative_all($query_string, $row_count);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+     $query_string = "DELETE FROM custom_field_type WHERE id > 0";
+    query_blind($query_string);
+    foreach($recordset as $rec)
+    {
+        $val1 = $rec['id'];
+        $val2 = $rec['field_type'];
+        $query_string = "INSERT INTO custom_field_type (id, field_type) VALUES ($val1, '$val2') ";
+        query_insert_one($query_string);
+    }
+    DbUtil::switchRestore($saved_db);
+ 
+    # labtitle_custom_field table
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $query_string =
+			"SELECT * FROM labtitle_custom_field ";
+    $recordset = query_associative_all($query_string, $row_count);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+     $query_string = "DELETE FROM labtitle_custom_field WHERE id > 0";
+    query_blind($query_string);
+    foreach($recordset as $rec)
+    {
+        $val1 = $rec['id'];
+        $val2 = $rec['field_name'];
+        $val3 = $rec['field_options'];
+        $val4 = $rec['field_type_id'];
+        $query_string = "INSERT INTO labtitle_custom_field (id, field_name, field_options, field_type_id) VALUES ($val1, '$val2', '$val3', $val4) ";
+        query_insert_one($query_string);
+    }
+    DbUtil::switchRestore($saved_db);
+    
+    # patient_custom_field table
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $query_string =
+			"SELECT * FROM patient_custom_field; ";
+    $recordset = query_associative_all($query_string, $row_count);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+    $query_string = "DELETE FROM patient_custom_field WHERE id > 0";
+    query_blind($query_string);
+    foreach($recordset as $rec)
+    {
+        $val1 = $rec['id'];
+        $val2 = $rec['field_name'];
+        $val3 = $rec['field_options'];
+        $val4 = $rec['field_type_id'];
+        $query_string = "INSERT INTO patient_custom_field; (id, field_name, field_options, field_type_id) VALUES ($val1, '$val2', '$val3', $val4) ";
+        query_insert_one($query_string);
+    }
+    DbUtil::switchRestore($saved_db);
+    
+    # specimen_custom_field table
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $query_string =
+			"SELECT * FROM specimen_custom_field; ";
+    $recordset = query_associative_all($query_string, $row_count);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+    $query_string = "DELETE FROM specimen_custom_field WHERE id > 0";
+    query_blind($query_string);
+    foreach($recordset as $rec)
+    {
+        $val1 = $rec['id'];
+        $val2 = $rec['field_name'];
+        $val3 = $rec['field_options'];
+        $val4 = $rec['field_type_id'];
+        $query_string = "INSERT INTO specimen_custom_field; (id, field_name, field_options, field_type_id) VALUES ($val1, '$val2', '$val3', $val4) ";
+        query_insert_one($query_string);
+    }
+    DbUtil::switchRestore($saved_db);
+}
+
+function import_test_between_labs($test_id, $from_id, $to_id)
+{
+    //echo "<pre>";
+    $tt = new TestType();
+    $test_type = new TestType();
+    $saved_db = DbUtil::switchToLabConfig($from_id);
+    $test_type = $tt->getById($test_id);
+    //print_r($test_obj);
+    $measure_objs = $test_type->getMeasures();
+    //print_r($measure_objs);
+    DbUtil::switchRestore($saved_db);
+    
+    $saved_db = DbUtil::switchToLabConfig($to_id);
+    //$test_type->testTypeId;
+    $test_name = $test_type->name;
+    $test_descr = $test_type->description;
+    $clinical_data = $test_type->clinical_data;
+    $cat_code = $test_type->testCategoryId;
+    $hide_patient_name = $test_type->hidePatientName;
+    $prevalenceThreshold = $test_type->prevalenceThreshold;
+    $targetTat = $test_type->targetTat;
+    $is_panel = $test_type->isPanel;
+    $lab_config_id = $to_id;
+    $new_test_id = add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat);
+    $subm_flags = array();
+    $id_list = array();
+    foreach($measure_objs as $mo)
+    {
+        if($mo->checkIfSubmeasure() == 0)
+        {
+            if($mo->getRangeType() == Measure::$RANGE_NUMERIC)
+            {
+                $m_id = add_measure($mo->name, $mo->range, $mo->unit);
+                array_push($id_list, $m_id);
+                if($mo->range == ':')
+                {
+                    //$ref = new ReferenceRange();
+                    $refs = $mo->getReferenceRanges($from_id);
+                    foreach($refs as $ref)
+                    {
+                        $ref->measureId = $m_id;
+                        $ref->addToDb($to_id);
+                    }
+                }
+            }
+            else
+            {
+                $m_id = add_measure($mo->name, $mo->range, $mo->unit);
+                array_push($id_list, $m_id);
+            }
+        }
+        else
+        {
+            $dec_name = $mo->truncateSubmeasureTag();
+            $enc_name = "\$sub*".$m_id."/$".$dec_name;
+            $sm_id = add_measure($enc_name, $mo->range, $mo->unit);
+            array_push($id_list, $sm_id);
+        }
+            
+    }
+    
+    foreach($id_list as $measure_id)
+    {
+        add_test_type_measure($new_test_id, $measure_id);
+    }
+    DbUtil::switchRestore($saved_db);
+    //echo "<pre>";
+}
+
+/***************************************************
+ * Test Removal Module STARTS
+***************************************************/
+function remove_specimens($lid, $sp, $remarks)
+{
+            $created_by = $_SESSION["user_id"];
+            
+            $saved_db = DbUtil::switchToLabConfig($lid);            
+            
+            $query_string = "INSERT INTO removal_record (r_id, type, remarks, user_id, status) ".
+                            "VALUES ($sp, 1, '$remarks', $created_by, 1)";
+            query_insert_one($query_string);
+            
+            DbUtil::switchRestore($saved_db);
+}
+  
+function get_removed_specimens($lid)
+{
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT * from removal_record WHERE type = 1 AND status = 1";
+            $recordset = query_associative_all($query_string, $row_count);
+            
+            DbUtil::switchRestore($saved_db);
+            
+            return $recordset;
+}
+
+function retrieve_specimens($lid, $sp)
+{
+        $lab_config_id = $lid;
+            
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);  
+    
+        $query_string = "UPDATE removal_record SET status = 0 WHERE r_id = $sp AND status = 1 AND type = 1";
+            query_update($query_string);
+            
+        DbUtil::switchRestore($saved_db);
+}
+
+function check_removal_record($lid, $sp)
+{
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT count(*) as val from removal_record WHERE type = 1 AND status = 1 AND r_id = $sp";
+            $recordset = query_associative_one($query_string);
+            
+            DbUtil::switchRestore($saved_db);
+            return $recordset['val'];
+}
+
+
+
+/***************************************************
+ * Test Removal Module ENDS
+***************************************************/
+
+function putUILog($id, $info, $file, $tag1, $tag2, $tag3)
+{
+    $uiLog = new UILog();
+    $uiLog->id = $id;
+    $uiLog->info = $info;
+    $uiLog->file = $file;
+    $uiLog->tag1 = $tag1;
+    $uiLog->tag2 = $tag2;
+    $uiLog->tag3 = $tag3;
+    $uiLog->writeUILog();
+}
+
+class Inventory
+{
+        public $id;
+	public $name;
+	public $unit;
+	public $remarks;
+	public $quantity;
+	        
+        public function addReagent($name, $unit, $remarks)
+        {
+            $created_by = $_SESSION["user_id"];
+            $lab_config_id = $_SESSION["lab_config_id"];
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);            
+            
+            $query_string = "INSERT INTO inv_reagent (name, unit, remarks, created_by) ".
+                            "VALUES ('$name', '$unit', '$remarks', $created_by)";
+            query_insert_one($query_string);
+            
+            DbUtil::switchRestore($saved_db);
+        }
+        
+        public function editReagent()
+        {
+            
+        }
+        
+        public function addStock($reagent_id, $lot, $e_date, $manu, $sup, $quant, $cost, $r_date, $remarks)
+        {
+            $created_by = $_SESSION["user_id"];
+            $lab_config_id = $_SESSION["lab_config_id"];
+            if($cost == '')
+                $cost = 0;
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "INSERT INTO inv_supply (reagent_id, lot, expiry_date, manufacturer, supplier, quantity_ordered, quantity_supplied, cost_per_unit, user_id, date_of_order, date_of_supply, date_of_reception, remarks) ".
+                            "VALUES ($reagent_id, '$lot', '$e_date', '$manu', '$sup', 0, $quant, $cost, $created_by, '$r_date', '$r_date', '$r_date', '$remarks')";
+            query_insert_one($query_string);
+            
+            DbUtil::switchRestore($saved_db);
+        }
+        
+        public function useStock($reagent_id, $lot, $quant, $u_date, $remarks)
+        {
+            $created_by = $_SESSION["user_id"];
+            $lab_config_id = $_SESSION["lab_config_id"];
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "INSERT INTO inv_usage (reagent_id, lot, quantity_used, date_of_use, user_id, remarks) ".
+                            "VALUES ($reagent_id, '$lot', $quant, '$u_date', $created_by, '$remarks')";
+            query_insert_one($query_string);
+            
+            DbUtil::switchRestore($saved_db);
+        }
+        
+        public function editStock()
+        {
+            
+        }
+        
+        public function getQuantity($lid, $r_id)
+        {
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT sum(quantity_supplied) as val from inv_supply where reagent_id = $r_id";
+            $recordset = query_associative_one($query_string);
+            $supply = $recordset['val'];
+            
+            $query_string = "SELECT sum(quantity_used) as val from inv_usage where reagent_id = $r_id";
+            $recordset2 = query_associative_one($query_string);
+            $usage = $recordset2['val'];
+                        
+            $quantity = $supply - $usage;
+            
+            DbUtil::switchRestore($saved_db);
+            
+            return $quantity;
+        }
+        
+        public function checkReagent($lid, $name)
+        {
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT count(*) as val from inv_reagent WHERE name = '$name'";
+            $recordset = query_associative_one($query_string);
+            $count = $recordset['val'];
+            
+            $check = 0;
+            
+            if($count > 0)
+                $check = 1;
+            
+            DbUtil::switchRestore($saved_db);
+           
+            return $check;
+        }
+        
+        public function checkLot($lid, $r_id, $lot)
+        {
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT count(*) as val from inv_supply WHERE lot = '$lot' AND reagent_id = $r_id";
+            $recordset = query_associative_one($query_string);
+            $count = $recordset['val'];
+            
+            $check = 0;
+            
+            if($count > 0)
+                $check = 1;
+            
+            DbUtil::switchRestore($saved_db);
+            
+            return $check;
+        }
+        
+        public function getLotQuantity($lid, $r_id, $lot)
+        {
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT * from inv_supply where reagent_id = $r_id AND lot = '$lot'";
+            $recordset2 = query_associative_one($query_string);
+            $quantity = $recordset2['quantity_supplied'];
+            
+            $query_string = "SELECT * from inv_usage where reagent_id = $r_id AND lot = '$lot'";
+            $recordset = query_associative_all($query_string, $row_count);
+            foreach($recordset as $rec)
+                $quantity = $quantity - $rec['quantity_used']; 
+            
+            DbUtil::switchRestore($saved_db);
+            
+            return $quantity;
+        }
+        
+        public function getStockDetails($lid, $r_id)
+        {
+           
+        }
+        
+        public function getReagentById($lid, $r_id)
+        {
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT * from inv_reagent WHERE id = $r_id";
+            $recordset = query_associative_one($query_string);
+            
+            DbUtil::switchRestore($saved_db);
+            
+            return $recordset;
+        }
+        
+        public function getLot($lid, $r_id, $lot)
+        {
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT * from inv_supply WHERE reagent_id = $r_id AND lot = '$lot'";
+            $recordset = query_associative_one($query_string);
+            
+            DbUtil::switchRestore($saved_db);
+            
+            return $recordset;
+        }
+        
+        public function getAllReagents($lid)
+        {
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT * from inv_reagent";
+            $recordset = query_associative_all($query_string, $row_count);
+            
+            DbUtil::switchRestore($saved_db);
+            
+            return $recordset;
+        }
+        
+        public function getStocksList($lid, $r_id)
+        {
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT * from inv_supply WHERE reagent_id = $r_id";
+            $recordset = query_associative_all($query_string, $row_count);
+            
+            DbUtil::switchRestore($saved_db);
+            
+            return $recordset;
+        }
+        
+        public function getReagentUnit($lid, $id)
+        {
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT unit from inv_reagent WHERE id=$id";
+            $recordset = query_associative_one($query_string);
+            
+            DbUtil::switchRestore($saved_db);
+            
+            return $recordset['unit'];
+        }
+        
+        public function updateReagent($lid, $r_id, $name, $unit, $remarks)
+        {
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);    
+            
+            $query_string = "UPDATE inv_reagent SET name = '$name', unit = '$unit' , remarks = '$remarks' WHERE id = $r_id";
+            query_update($query_string);
+                                
+            DbUtil::switchRestore($saved_db);            
+        }
+        
+        public function updateStock($lid, $r_id, $lot, $n_lot, $e_date, $manu, $sup, $cost, $r_date, $remarks)
+        {
+            $lab_config_id = $lid;
+            if($cost == '')
+                $cost = 0;
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);    
+            
+            $query_string = "UPDATE inv_supply SET lot='$n_lot', expiry_date='$e_date', manufacturer='$manu', supplier='$sup', cost_per_unit='$cost', date_of_reception='$r_date', remarks='$remarks' WHERE reagent_id = $r_id AND lot='$lot'";
+            query_update($query_string);
+                                
+            $query_string = "UPDATE inv_usage SET lot='$n_lot' WHERE reagent_id = $r_id AND lot='$lot'";
+            query_update($query_string);
+            
+            DbUtil::switchRestore($saved_db);
+            
+        }
+        
+        public function get_inv_supply_by_user($lid, $user)
+        {
+                    $lab_config_id = $lid;
+
+                    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+
+                    $query_string = "SELECT * from inv_supply WHERE user_id = $user";
+                    $recordset = query_associative_all($query_string, $row_count);
+
+                    DbUtil::switchRestore($saved_db);
+
+                    return $recordset;
+        }
+
+        public function get_inv_usage_by_user($lid, $user)
+        {
+                    $lab_config_id = $lid;
+
+                    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+
+                    $query_string = "SELECT * from inv_usage WHERE user_id = $user";
+                    $recordset = query_associative_all($query_string, $row_count);
+
+                    DbUtil::switchRestore($saved_db);
+
+                    return $recordset;
+        }
+        
+}
+
+
 ?>

@@ -21,6 +21,10 @@ $pid = $_REQUEST['pid']; # Surrogate key
 # Check partial DOB flags
 $dob = "";
 $partial_dob = "";
+
+$uiinfo = "agep=".$age_param;
+putUILog('patient_add', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 if(trim($_REQUEST['yyyy']) == "" && trim($_REQUEST['mm']) == "" && trim($_REQUEST['dd']) == "")
 {
 	# Only age specified

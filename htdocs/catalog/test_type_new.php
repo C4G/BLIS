@@ -5,6 +5,10 @@
 include("redirect.php");
 include("includes/header.php");
 LangUtil::setPageId("catalog");
+
+putUILog('test_type_new', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
+
 $script_elems->enableLatencyRecord();
 ?>
 <script type='text/javascript'>
@@ -558,8 +562,8 @@ function isInputNumber(evt) {
 					<td><u><?php echo LangUtil::$generalTerms['UNIT'] ; ?> /Default Value</u>[<a href='#unit_help' rel='facebox'>?</a>]</td>
 				</tr>
 				<?php
-				$max_num_measures = 10;
-                                $max_num_submeasures = 6;
+				$max_num_measures = 15;
+                                $max_num_submeasures = 15;
 				for($i = 1; $i <= $max_num_measures; $i += 1)
 				{
 					echo "<tr valign='top' id='mrow_$i' ";

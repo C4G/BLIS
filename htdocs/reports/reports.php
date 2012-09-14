@@ -3,11 +3,15 @@ include("redirect.php");
 include("includes/header.php");
 LangUtil::setPageId("reports");
 
+putUILog('reports', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
+
 $script_elems->enableDatePicker();
 $script_elems->enableJQueryForm();
 $script_elems->enableTableSorter();
 db_get_current();
 ?>
+
 <div class='reports_subdiv_help' id='reports_div_help' style='display:none'>
 <?php
 	$tips_string = "";
@@ -37,6 +41,20 @@ db_get_current();
 <?php
 	//Turnaround time
 	$tips_string = "Select the date interval to view the average test-wise turn-around times for the lab test reports.";
+	$page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
+?>
+</div>
+<div class='reports_subdiv_help' id='stock_report_div_help' style='display:none'>
+<?php
+	//Turnaround time
+	$tips_string = "Access previous inventory data.";
+	$page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
+?>
+</div>
+<div class='reports_subdiv_help' id='user_stats_div_help' style='display:none'>
+<?php
+	//Turnaround time
+	$tips_string = "Display user specific statistics and user activity logs.";
 	$page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
 ?>
 </div>
@@ -111,6 +129,19 @@ db_get_current();
 ?>
 </div>
 
+<style type="text/css">
+.ustats_link_v
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	background-color:#a7dd5c;
+}
+
+.ustats_link_u
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+}
+</style>
+
 <script type='text/javascript'>
 $(document).ready(function(){
 	$("input[name='rage']").change(function() {
@@ -176,6 +207,12 @@ $(document).ready(function(){
 	{
 		?>
 		show_specimen_count_form();
+		<?php
+	}
+        else if (isset($_REQUEST['show_ust']))
+	{
+		?>
+                    $('#user_stats_div').show();
 		<?php
 	}
 	else if (isset($_REQUEST['show_t_agg']))
@@ -345,6 +382,8 @@ function show_specimen_count_form()
 	$('#specimen_count_menu').addClass('current_menu_option');
 }
 
+
+
 function show_test_history_form()
 {
 	$('.reports_subdiv').hide();
@@ -460,6 +499,46 @@ function show_selection(divName) {
 	$('#'+divName+'_div_help').show();
 	$('.menu_option').removeClass('current_menu_option');
 	$('#pending_tests_menu').addClass('current_menu_option');
+}
+
+function show_user_stats_submenu(divID) {
+	if(divID == 1)
+        {
+            $('#user_stats_all').show();
+            $('#ustats_a').removeClass('ustats_link_u');
+            $('#ustats_a').addClass('ustats_link_v');
+            $('#ustats_i').removeClass('ustats_link_v');
+            $('#ustats_i').addClass('ustats_link_u');
+            $('#user_stats_individual').hide();
+        }
+        else if(divID == 2)
+        {
+            $('#user_stats_all').hide();
+            $('#ustats_i').removeClass('ustats_link_u');
+            $('#ustats_i').addClass('ustats_link_v');
+            $('#ustats_a').removeClass('ustats_link_v');
+            $('#ustats_a').addClass('ustats_link_u');
+            $('#user_stats_individual').show();
+        }
+        
+}
+
+function user_radio(divID) {
+	if(divID == 1)
+        {
+            $("#user_stats_form").attr("action", "reports_user_stats_all.php");
+            $("#user_stats_form").attr("target", "_self");
+            $('#user_stats_all').show();
+            $('#user_stats_individual').hide();
+        }
+        else if(divID == 2)
+        {
+            $("#user_stats_form").attr("action", "reports_user_stats_individual.php");
+            $("#user_stats_form").attr("target", "_blank");
+            $('#user_stats_all').hide();
+            $('#user_stats_individual').show();
+        }
+        
 }
 
 function toggleInfectionReportSettings()
@@ -1591,9 +1670,15 @@ function show_custom_report_form(report_id)
 						<li class='menu_option' id='disease_report_menu'>
 							<a href='javascript:show_selection("disease_report");'><?php echo LangUtil::$pageTerms['MENU_INFECTIONREPORT']; ?></a>
 						</li>
-						<li class='menu_option' id='stock_report_menu'>
-							<a href='javascript:show_selection("stock_report");'>Inventory</a>
+                                                <?php if(is_admin(get_user_by_id($_SESSION['user_id'])))
+                                                { ?>
+                                                <li class='menu_option' id='user_stats_menu'>
+							<a href='javascript:show_selection("user_stats");'>User Statistics</a>
 						</li>
+                                                <?php } ?><li class='menu_option' id='stock_report_menu'>
+							<a href='javascript:show_selection("stock_report");'>Previous Inventory Data</a>
+						</li>
+                                                
 					<?php } ?>
 				<?php /*
 				if( is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) ) { ?>
@@ -2441,7 +2526,7 @@ function show_custom_report_form(report_id)
 					<td></td>
 					<td>
 						<br>
-						<input type='button' id='specimen_count_submit_button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick="javascript:get_count_report();">
+						<input type='button' id='specimen_count_submit_button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='javascript:get_count_report()'>
 						</input>
 						<!--
 						--Merged into single submit button--
@@ -2459,6 +2544,205 @@ function show_custom_report_form(report_id)
 		</form>
 	</div>
 	
+        <div id='user_stats_div' style='display:none;' class='reports_subdiv'>
+		<b><?php echo "User Statistics"; ?></b>
+                <?php $userStats = new UserStats(); ?>
+		<!--<br><br>
+                
+                <a id="ustats_a" class="ustats_link_u" href='javascript:show_user_stats_submenu(1);'>User Stats for All Users</a>
+                |
+                <a id="ustats_i" class="ustats_link_u" href='javascript:show_user_stats_submenu(2);'>User Logs for Individual Users</a>
+
+                <br><br>-->
+                
+
+		<form name="user_stats_form" id="user_stats_form" action="reports_user_stats_all.php" method='post' target='_blank'>
+                    <table cellpadding="4px">
+			
+				<tr valign='top'>
+					<td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?> </td>
+					<td>
+					<?php
+						$name_list = array("yyyy_from", "mm_from", "dd_from");
+						$id_list = array("yyyy_from7", "mm_from7", "dd_from7");
+						$value_list = $monthago_array;
+						$page_elems->getDatePicker($name_list, $id_list, $value_list);
+					?>
+					</td>
+				</tr>
+				<tr valign='top'>
+					<td><?php echo LangUtil::$generalTerms['TO_DATE']; ?> </td>
+					<td>
+					<?php
+						$name_list = array("yyyy_to", "mm_to", "dd_to");
+						$id_list = array("yyyy_to7", "mm_to7", "dd_to7");
+						$value_list = $today_array;
+						$page_elems->getDatePicker($name_list, $id_list, $value_list);
+					?>
+					</td>
+				</tr>
+				
+                                <tr valign='top'>
+					<td><?php echo "Stat Type" ?></td>
+                                            <td>
+						
+                                                <input type='radio' id='stat_type' name='stat_type' value='a' onclick="user_radio(1)">
+							<?php echo "Collective User Stats"; ?>
+						</input>
+						<br>
+                                                <input type='radio' id='stat_type' name='stat_type' value='i' onclick="user_radio(2)">
+							<?php echo "Individual User Logs"; ?>
+						</input>
+                                                
+					</td>
+				</tr>
+                       </table>         
+                      <div id='user_stats_all' style='display:none;'>
+                          <table cellpadding="4px">
+				<tr valign='top'>
+					<td><?php echo LangUtil::$pageTerms['COUNT_TYPE'] ?></td>
+                                            <td>
+						<input type='checkbox' id='count_type_pr' name='count_type_pr' value='Yes' checked>
+							<?php echo "Patients Registered"; ?>
+						</input>
+						<br>
+                                                <input type='checkbox' id='count_type_sr' name='count_type_sr' value='Yes' checked>
+							<?php echo "Specimens Registered"; ?>
+						</input>
+                                                <br>
+                                                <input type='checkbox' id='count_type_tr' name='count_type_tr' value='Yes' checked>
+							<?php echo "Tests Registered"; ?>
+						</input>
+                                                <br>
+						<input type='checkbox' id='count_type_re' name='count_type_re' value='Yes' checked>
+							<?php echo "Results Entered"; ?>
+						</input>
+						<br>
+                                                
+					</td>
+				</tr>
+                                <tr>
+					<td></td>
+					<td>
+						<br>
+						<input type='submit' id='user_stats_all_submit_button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>'>
+						</input>
+						<!--
+						--Merged into single submit button--
+						<input type='button' id='specimen_count_submit_button' value='Specimen Count' onclick="javascript:get_specimen_count_report();"></input>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type='button' value='Test Count' onclick="javascript:get_tests_done_report2();"></input>
+						-->
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<span id='specimen_count_progress_spinner' style='display:none'>
+							<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
+						</span>
+					</td>
+				</tr>
+                             </table>
+                    </div>
+
+				
+	
+
+                <div id='user_stats_individual' style='display:none;'>
+                    <table cellpadding="4px">
+			<?php
+			$site_list = get_site_list($_SESSION['user_id']);
+			//if(count($site_list) == 1)
+                        if(true)
+			{
+				//foreach($site_list as $key=>$value)
+					//echo "<input type='hidden' name='location' id='location7' value='$key'></input>";
+                            $liddd = $_SESSION['lab_config_id'];
+                                        echo "<input type='hidden' name='location' id='location7' value='$liddd'></input>";
+			
+                                $user_ids = array();
+                                array_push($user_ids, $userStats->getAdminUser($lab_config_id));
+                                $user_ids_others =  $userStats->getAllUsers($lab_config_id);
+                                foreach($user_ids_others as $uids)
+                                     array_push($user_ids, $uids);
+                                //print_r($user_ids);
+                        ?>
+                                <tr>
+					<td><?php echo "User"; ?> </td>
+					<td>
+						<select name='user_id' id='user_id' class='uniform_width'>
+						<?php foreach($user_ids as $uid) {?>
+                                                    <option value='<?php echo $uid; ?>'><?php echo get_username_by_id($uid); ?></option>	
+						<?php } ?>
+                                                </select>
+					</td>
+				</tr>
+                        <?php
+                        }
+			else
+			{
+			?>
+				<tr>
+					<td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
+					<td>
+						<select name='location' id='location7' class='uniform_width'>
+						<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>	
+						<?php
+							$page_elems->getSiteOptions();
+						?>
+						</select>
+					</td>
+				</tr>
+			<?php
+			}
+			?>
+				
+				<tr valign='top'>
+					<td><?php echo "Log Type"; ?></td>
+					<td>
+						<input type='radio' id='log_type' name='log_type' value='1' checked>
+							<?php echo "Patients Registry"; ?>
+						</input>
+						<br>
+                                                <input type='radio' id='log_type' name='log_type' value='2'>
+							<?php echo "Specimens Registry"; ?>
+						</input>
+                                                <br>
+                                                <input type='radio' id='log_type' name='log_type' value='3'>
+							<?php echo "Tests Registry"; ?>
+						</input>
+                                                <br>
+						<input type='radio' id='log_type' name='log_type' value='4'>
+							<?php echo "Results Entry"; ?>
+						</input>
+						<br>
+                                                <input type='radio' id='log_type' name='log_type' value='5'>
+							<?php echo "Inventory Transaction"; ?>
+						</input>
+                                                <br>
+						
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<br>
+						<input type='submit' id='user_stats_individual_submit_button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>'>
+						</input>
+						<!--
+						--Merged into single submit button--
+						<input type='button' id='specimen_count_submit_button' value='Specimen Count' onclick="javascript:get_specimen_count_report();"></input>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type='button' value='Test Count' onclick="javascript:get_tests_done_report2();"></input>
+						-->
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<span id='specimen_count_progress_spinner' style='display:none'>
+							<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
+						</span>
+					</td>
+				</tr>
+			</table>
+                    </div>
+		</form>
+                </div>
+            
 	<div id='test_history_div' class='reports_subdiv'  style='display:none'>
 		<b><?php echo LangUtil::$pageTerms['MENU_PATIENT']; ?></b>
 		<br><br>
@@ -2731,6 +3015,7 @@ function show_custom_report_form(report_id)
 	
 	<div id='stock_report_div' class='reports_subdiv' style='display:none'>
 		<b>Inventory</b>
+              
 		<br><br>
 		<form id='stock_report_form' action='current_inventory.php' method='post'>
 		<table>

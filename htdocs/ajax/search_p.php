@@ -23,6 +23,9 @@ $q = strip_tags($q);
 $a = $_REQUEST['a'];
 $saved_db = "";
 $lab_config = null;
+$uiinfo = "op=".$a."&qr=".$q;
+putUILog('search_p', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 ?>
 
 <script type="text/javascript">

@@ -57,6 +57,9 @@ $doctor = $_REQUEST['doctor'];
 $doctor = preg_replace("/[^a-zA-Z\s]/", "", $doctor);
 $title=$_REQUEST['title'];
 $tests_list = $_REQUEST['t_type_list'];
+
+putUILog('specimen_add', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 begin_transaction();
 
 $specimen = new Specimen();

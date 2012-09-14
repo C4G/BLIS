@@ -7,6 +7,9 @@ include("includes/db_lib.php");
 include("lang/lang_xml2php.php");
 
 
+putUILog('test_type_add', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
+
 $test_name = $_REQUEST['test_name'];
 $cat_code = $_REQUEST['cat_code'];
 $hide_patient_name = $_REQUEST['hidePatientName'];

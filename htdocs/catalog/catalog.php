@@ -12,6 +12,9 @@ include("redirect.php");
 include("includes/header.php");
 LangUtil::setPageId("catalog");
 
+putUILog('catalog', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
+
 $dialog_id = "dialog_deletecatalog";
 $script_elems->enableTableSorter("styleCatalog");
 ?>

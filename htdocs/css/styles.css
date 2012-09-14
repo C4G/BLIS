@@ -220,6 +220,37 @@ dl dt label {
  Styling for the tables 
    ------------------   */
 
+.hor-minimalist-compact
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 22px;
+	background: #fff;
+	margin: 45px;
+	width: 480px;
+	border-collapse: collapse;
+	text-align: left;
+        padding: 10px 8px;
+}
+
+.hor-minimalist-compact th
+{
+	font-size: 14px;
+	font-weight: normal;
+	color: #039;
+	padding: 10px 8px;
+	border-bottom: 2px solid #6678b1;
+}
+.hor-minimalist-compact td
+{
+	color: #669;
+	padding: 9px 8px 0px 8px;
+}
+
+.hor-minimalist-compact tbody tr:hover td
+{
+	/*color: #009;*/
+}
+
 .hor-minimalist-a
 {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;

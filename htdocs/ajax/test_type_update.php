@@ -12,6 +12,8 @@ include("../lang/lang_xml2php.php");
 //$lab_config_id = $_REQUEST['id'];
 //-NC3065
 
+putUILog('test_type_update', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 $test_type_id = $_REQUEST['tid'];
 $cat_code = $_REQUEST['cat_code'];
 $measures_to_delete = array();

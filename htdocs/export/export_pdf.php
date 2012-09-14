@@ -1,5 +1,6 @@
 <?php
-
+include("../includes/db_lib.php");
+putUILog('export_pdf', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 //getting new instance 
 $pdfFile = new_pdf(); 
 

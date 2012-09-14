@@ -11,6 +11,7 @@ $script_elems->enableJQueryValidate();
 $script_elems->enableTableSorter();
 $script_elems->enableLatencyRecord();
 $script_elems->enableTokenInput();
+putUILog('specimen_info', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 
 $sid = $_REQUEST['sid'];

@@ -25,6 +25,9 @@ if($lang_util_included === false)
 */
 $doc_session = $_SESSION['doctor'];
 
+putUILog('specimenbox_add', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
+
 $page_elems = new PageElems();
 $num = $_REQUEST['num'];
 $pid = $_REQUEST['pid'];

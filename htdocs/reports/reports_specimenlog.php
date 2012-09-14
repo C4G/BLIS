@@ -12,6 +12,7 @@ DbUtil::switchToLabConfig($lab_config_id);
 $lab_config = get_lab_config_by_id($lab_config_id);
 $specimen_id = $_REQUEST['specimen_id'];
 $specimen = get_specimen_by_id($specimen_id);
+putUILog('reports_specimenlog', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 ?>
 <script type='text/javascript'>
 function print_content(div_id)

@@ -43,7 +43,7 @@ function get_top_menu_options($user_role)
 		$page_list[LangUtil::getPageTitle("results_entry")] = "results_entry.php";
 		$page_list[LangUtil::getPageTitle("search")] = "search.php";
 		$page_list[LangUtil::getPageTitle("reports")] = "reports.php";
-		$page_list["Inventory"]="stock_add.php";
+		$page_list["Inventory"]="view_stock.php";
 		$id=get_lab_config_id($_SESSION['user_id']);
 		if($id==0)
 		{

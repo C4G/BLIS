@@ -9,6 +9,8 @@ LangUtil::setPageId("search");
 
 $q = $_REQUEST['q'];
 $a = $_REQUEST['a'];
+$uiinfo = "op=".$a."&qr=".$q;
+putUILog('search_s', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 $specimen_list = array();
 # Fetch list from DB
 if($a == 0)

@@ -1,0 +1,139 @@
+<?php
+#
+# Adds a new test type to catalog in DB
+#
+include("redirect.php");
+
+include("includes/header.php");
+include("includes/stats_lib.php");
+include("lang/lang_xml2php.php");
+include("../users/accesslist.php");
+
+LangUtil::setPageId("stocks");
+
+$view_update = 1;
+$view_add = 1;
+$view_edit = 0;
+putUILog('view_stock', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
+if(is_admin(get_user_by_id($_SESSION['user_id']))) {
+            $view_edit = 1;
+            //header( 'Location: home.php' );
+}
+
+$script_elems->enableFlotBasic();
+$script_elems->enableFlipV();
+$script_elems->enableTableSorter();
+   $script_elems->enableJQueryForm();
+$script_elems->enableDatePicker();
+$script_elems->enableTableSorter();
+$script_elems->enableLatencyRecord();
+    $lid = $_SESSION['$lab_config_id'];
+?>
+
+<script type='text/javascript'>
+	$(document).ready(function(){
+			$('#current_inventory').tablesorter();
+	});
+
+</script>
+<p style="text-align: right;"><a rel='facebox' href='#view_stocks_help'>Page Help</a></p>
+<a href='inv_new_reagent.php'> <?php echo "Add Reagent" ; ?></a> &nbsp;|&nbsp;<b> <?php echo LangUtil::$pageTerms['Current_Inventory']; ?></b>
+<table class='tablesorter' id='current_inventory'  style='width:600px'>
+	<thead>
+		<tr align='center'>
+			<th> <?php echo LangUtil::$pageTerms['Reagent']; ?></th>
+			<th> <?php echo LangUtil::$pageTerms['Quantity']; ?></th>
+                        <th><?php echo "Unit"; ?></th>
+                        <?php if($view_update == 1){ ?>
+                        <th><?php 
+                            echo "Update";
+                            ?></th>
+                        <?php } ?>
+                        <?php if($view_add == 1){ ?>
+                        <th><?php 
+                            echo "Add";
+                            ?></th>
+                        <?php } ?>
+                        <?php if($view_edit == 1){ ?>
+                        <th><?php 
+                            echo "Edit";
+                            ?></th>
+                        <?php } ?>
+                       
+		</tr>
+	</thead>
+<?php
+
+    $reagents_list = Inventory::getAllReagents($lid);
+    foreach($reagents_list as $reagent) {
+?>  <tbody>
+		<tr align='center'>
+			<td><?php echo $reagent['name'];?></td>
+			<td><?php 
+                        
+                            $quant = Inventory::getQuantity($lid, $reagent['id']);
+                            if($quant == '')
+                                echo "0";
+                            else 
+                                echo $quant;
+                        ?></td>
+			<td><?php 
+                        $uni = $reagent['unit'];
+                            if($uni == '')
+                                echo "units";
+                            else 
+                                echo $uni;
+                            ?></td>
+                        <?php if($view_update == 1){ ?>
+                        <td><?php 
+                            echo "<a href='stock_lots.php?id=".$reagent['id']."'> Log Stock Usage</a>";
+                            ?></td>
+                        <?php } ?>
+                        <?php if($view_add == 1){ ?>
+                        <td><?php 
+                            echo "<a href='inv_new_stock.php?id=".$reagent['id']."'> Add Stock</a>";
+                            ?></td>
+                        <?php } ?>
+                        <?php if($view_edit == 1){ ?>
+                        <td><?php 
+                            echo "<a href='edit_stock.php?id=".$reagent['id']."'> Edit Details</a>";
+                            ?></td>
+                        <?php } ?>
+                        
+		</tr>
+<?php 
+	} 
+?>
+	</tbody>
+</table>
+
+<div id='view_stocks_help' class='right_pane' style='display:none;margin-left:10px;'>
+<ul>	
+        <?php
+
+                echo "<li>";
+                echo " Displays Inventory of all Reagents";
+                echo "</li>";
+                echo "<li>";
+                echo " New Reagents can be added from the 'Add Reagents' link ";
+                echo "</li>";
+                echo "<li>";
+                echo " New stocks (lots) can be added for indiviual reagents using 'Add Stocks' link ";
+                echo "</li>";
+                echo "<li>";
+                echo " Signed out qunatities of stocks can be logged in using the 'Log Stock Usage' link";
+                echo "</li>";
+                echo "<li>";
+                echo " Administrators can edit Reagent and Stock details";
+                echo "</li>";
+
+
+
+        ?>
+</ul>
+</div>
+
+<?php
+include("includes/footer.php");
+?>

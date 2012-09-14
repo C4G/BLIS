@@ -7,6 +7,7 @@ include("includes/db_lib.php");
 include("includes/script_elems.php");
 include("includes/page_elems.php");
 LangUtil::setPageId("reports");
+putUILog('reports_onetesthistory', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 # Helper function to fetch test history records
 function get_records_to_print($lab_config, $patient_id, $specimen_id) {

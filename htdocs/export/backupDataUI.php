@@ -1,6 +1,7 @@
 <?php
 include("../includes/header.php");
 $labConfigId = $_REQUEST['id'];
+putUILog('backup_data_ui', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 ?>
 
 <script type="text/javascript">
@@ -82,7 +83,7 @@ $labConfigId = $_REQUEST['id'];
 		<?php if( $_SESSION['locale'] != "fr" ) { ?>
 			<p><?php $page_elems->getProgressSpinner("Backing up Data.. Please wait"); ?></p>
 		<?php } else { ?>
-			<p><?php $page_elems->getProgressSpinner("Sauvegarde des données.. Sil vous plait attendre"); ?></p>
+			<p><?php $page_elems->getProgressSpinner("Sauvegarde des donnï¿½es.. Sil vous plait attendre"); ?></p>
 		<?php } ?>
 		</td>
 	</tr>

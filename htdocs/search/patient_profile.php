@@ -7,6 +7,8 @@ include("redirect.php");
 include("includes/header.php");
 LangUtil::setPageId("patient_profile");
 
+putUILog('patient_profile', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 $pid = $_REQUEST['pid'];
 $script_elems->enableJQueryForm();
 $script_elems->enableDatePicker();

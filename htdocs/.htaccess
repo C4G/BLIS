@@ -25,6 +25,7 @@ RewriteRule ^lab_configs\.php$ config/lab_configs.php
 RewriteRule ^lab_config_home\.php$ config/lab_config_home.php
 RewriteRule ^lab_config_new\.php$ config/lab_config_new.php
 RewriteRule ^lab_config_add\.php$ config/lab_config_add.php
+RewriteRule ^lab_config_addd\.php$ config/lab_config_addd.php
 RewriteRule ^lab_config_added\.php$ config/lab_config_added.php
 RewriteRule ^lab_config_status\.php$ config/lab_config_status.php
 RewriteRule ^cfield_new\.php$ config/cfield_new.php
@@ -41,8 +42,12 @@ RewriteRule ^worksheet_custom_updated\.php$ config/worksheet_custom_updated.php
 RewriteRule ^reports\.php$ reports/reports.php
 RewriteRule ^report_onetesthistory\.php$ reports/report_onetesthistory.php
 RewriteRule ^report_selected_tests\.php$ reports/report_selected_tests.php
+RewriteRule ^remove_selected_tests\.php$ reports/remove_selected_tests.php
+RewriteRule ^retrieve_specimens\.php$ reports/retrieve_specimens.php
 RewriteRule ^reports_testhistory\.php$ reports/reports_testhistory.php
 RewriteRule ^viz_test_history\.php$ reports/viz_test_history.php
+RewriteRule ^reports_user_stats_individual\.php$ reports/reports_user_stats_individual.php
+RewriteRule ^reports_user_stats_all\.php$ reports/reports_user_stats_all.php
 RewriteRule ^reports_specimen\.php$ reports/reports_specimen.php
 RewriteRule ^reports_specimenlog\.php$ reports/reports_specimenlog.php
 RewriteRule ^reports_print\.php$ reports/reports_print.php
@@ -189,3 +194,15 @@ RewriteRule ^updateCountryDbAtLocal.php$ update/updateCountryDbAtLocal.php
 
 ## /debug folder
 RewriteRule ^testsuite_backend$ debug/testsuite_backend.php
+
+## /inventory folder
+RewriteRule ^new_reagent\.php$ inventory/new_reagent.php
+RewriteRule ^new_stock\.php$ inventory/new_stock.php
+RewriteRule ^inv_new_reagent\.php$ inventory/inv_new_reagent.php
+RewriteRule ^inv_new_stock\.php$ inventory/inv_new_stock.php
+RewriteRule ^use_stock\.php$ inventory/use_stock.php
+RewriteRule ^edit_stock\.php$ inventory/edit_stock.php
+RewriteRule ^edit_lot\.php$ inventory/edit_lot.php
+RewriteRule ^view_stock\.php$ inventory/view_stock.php
+RewriteRule ^view_stocks\.php$ inventory/view_stocks.php
+RewriteRule ^stock_lots\.php$ inventory/stock_lots.php

@@ -11,6 +11,9 @@
 		}
 	});
 	}
+        
+        
+        
 </script>
 
 <?php
@@ -22,6 +25,8 @@
 include("includes/db_close.php");
 LangUtil::setPageId("footer");
 ?>
+
+
 </div><!-- end of center_pane-->
 
 <div id='bottom_pane'>
@@ -33,11 +38,11 @@ LangUtil::setPageId("footer");
 		<?php
 		if($_SESSION['locale'] == "en")
 		{
-			echo "<a href='userguide/blis_user_guide_en/index.html' target='_blank'>User Guide |</a>";
+			echo "<a href='userguide/blis_user_guide_en/index.html' target='_blank' >User Guide |</a>";
 		}
 		else if($_SESSION['locale'] == "fr")
 		{
-			echo "<a href='userguide/blis_user_guide_fr/index.html' target='_blank'>Guide de l'utilisateur |</a>";
+			echo "<a href='userguide/blis_user_guide_fr/index.html' target='_blank' >Guide de l'utilisateur |</a>";
 		}
 		else
 		{

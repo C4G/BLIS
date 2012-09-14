@@ -64,6 +64,8 @@ if($lab_config == null)
 $date_from = $_REQUEST['yyyy_from']."-".$_REQUEST['mm_from']."-".$_REQUEST['dd_from'];
 $date_to = $_REQUEST['yyyy_to']."-".$_REQUEST['mm_to']."-".$_REQUEST['dd_to'];
 $cat_code = $_REQUEST['cat_code'];
+$uiinfo = "from=".$date_from."&to=".$date_to."&ct=".$cat_code;
+putUILog('reports_disease', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 $selected_test_ids = $lab_config->getTestTypeIds();
 if($cat_code != 0)
 {

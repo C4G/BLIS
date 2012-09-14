@@ -252,6 +252,10 @@ $lab_config_id = array($_REQUEST['location']);
 $summary_type = $_REQUEST['summary_type'];
 $date_from = $_REQUEST['yyyy_from']."-".$_REQUEST['mm_from']."-".$_REQUEST['dd_from'];
 $date_to = $_REQUEST['yyyy_to']."-".$_REQUEST['mm_to']."-".$_REQUEST['dd_to'];
+
+$uiinfo = "from=".$date_from."&to=".$date_to;
+putUILog('reports_infection', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 $test_type_id = 0;
 
 $lab_config = get_lab_config_by_id($lab_config_id[0]);

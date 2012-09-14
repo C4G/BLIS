@@ -8,6 +8,9 @@ include("includes/header.php");
 include("includes/ajax_lib.php");
 LangUtil::setPageId("catalog");
 
+putUILog('test_type_edit', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
+
 $script_elems->enableJQueryForm();
 $script_elems->enableTokenInput();
 

@@ -7,7 +7,34 @@
     include("redirect.php");
 include("includes/header.php");
 include("../includes/ajax_lib.php");
+echo exec('scc.bat');
+/*
+$uiLog = new UILog();
+$uiLog->id = 'id';
+$uiLog->info = '-';
+$uiLog->file = basename($_SERVER['REQUEST_URI'], ".php");
+$uiLog->tag1 = 'X';
+$uiLog->tag2 = 'X';
+$uiLog->tag3 = 'X';
+$uiLog->writeUILog();
+*/
+/*
+global $VERSION;
+                $vers = $VERSION;
+                $verss = str_replace('.','-',$vers);
+                echo $verss;*/
+//putUILog('$id', '$info', basename($_SERVER['REQUEST_URI'], ".php"), '$tag1', '$tag2', '$tag 3');
+//import_test_between_labs(137, 128, 10);
+//$name = "Serum Fluid";
+//$unit = "ml";
+//$remarks = "some remarks too";
+//Inventory::addReagent($name, $unit, $remarks);
+//$siteList = get_site_list($_SESSION['user_id']);
+//echo "<pre>";
+//print_r($siteList);
+//echo "</pre>";
 
+/*
 $my_name = "test 1";
 echo ucwords(strtolower($my_name));
 echo "<br>";
@@ -421,7 +448,7 @@ $measure_list_objs = $test_type_obj->getMeasures();
                     echo $result_up;
                     //updateTestRecordByIds($test_id_up, $result_up);
 
-                }*/
+                }
     $test_type_obj = get_test_type_by_id(130);
  $result_indices = array();
 //$update_timestamp = mktime(0, 0, 0, 7, 1, 2012);
@@ -677,5 +704,5 @@ $measure_list_objs = $test_type_obj->getMeasures();
                 echo "<br>Seee<br>";
                 print_r($subm_ids);
                 
-
+*/
 ?>

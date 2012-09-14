@@ -7,6 +7,9 @@ include("../includes/db_lib.php");
 require_once("../includes/perms_check.php");
 include("../includes/page_elems.php");
 include("../includes/script_elems.php");
+
+putUILog('export_config', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 $page_elems = new PageElems();
 $script_elems = new ScriptElems();
 $script_elems->enableJQuery();

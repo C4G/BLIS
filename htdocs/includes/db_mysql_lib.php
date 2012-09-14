@@ -22,20 +22,25 @@ function query_insert_one($query)
 	# Single insert statement
 	global $con;
 	mysql_query( $query, $con ) or die(mysql_error());
-	//if($LOG_QUERIES == true)	
+	if($LOG_QUERIES == true)
+        {
 		DebugLib::logDBUpdates($query, db_get_current());
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
+        }
 		
 }
+
 
 function query_update($query)
 {
 	# Single update statement
 	global $con;
     mysql_query( $query, $con ) or die(mysql_error());
-	//if($LOG_QUERIES == true)	
+	if($LOG_QUERIES == true)	
+        {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
 		DebugLib::logDBUpdates($query, db_get_current());
+        }
 }
 
 function query_delete($query)
@@ -43,9 +48,11 @@ function query_delete($query)
 	# Single delete from statement
 	global $con;
 	mysql_query( $query, $con ) or die(mysql_error());
-	//if($LOG_QUERIES == true)	
+	if($LOG_QUERIES == true)
+        {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
 		DebugLib::logDBUpdates($query, db_get_current());
+        }
 }
 
 function query_alter($query)
@@ -53,9 +60,11 @@ function query_alter($query)
 	# Single ALTER statement
 	global $con;
     mysql_query( $query, $con ) or die(mysql_error());
-	//if($LOG_QUERIES == true)	
+	if($LOG_QUERIES == true)
+        {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
 		DebugLib::logDBUpdates($query, db_get_current());
+        }
 }
 
 function query_associative_all( $query, &$row_count ) 
@@ -68,9 +77,11 @@ function query_associative_all( $query, &$row_count )
 	$row_count = mysql_num_rows( $result );
     $retval = array();
     while ( $row = mysql_fetch_assoc($result) ){ $retval[] = $row; }
-	//if($LOG_QUERIES == true)	
+	if($LOG_QUERIES == true)
+        {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
 		DebugLib::logDBUpdates($query, db_get_current());
+        }
     return $retval;
 }
 
@@ -82,9 +93,11 @@ function query_associative_one( $query )
         return null;
     }
     $retval = mysql_fetch_assoc( $result );
-	//if($LOG_QUERIES == true)	
+	if($LOG_QUERIES == true)
+        {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
 		DebugLib::logDBUpdates($query, db_get_current());
+        }
 	return $retval;
 }
 
@@ -94,9 +107,11 @@ function query_num_rows( $table_name )
 	$query_string =
 		"SELECT COUNT(*) AS val FROM $table_name";
 	$record = query_associative_one($query_string);
-	//if($LOG_QUERIES == true)	
+	if($LOG_QUERIES == true)
+        {
 		DebugLib::logQuery($query_string, db_get_current(), $_SESSION['username']);
 		DebugLib::logDBUpdates($query, db_get_current());
+        }
 	return $record['val'];
 }
 
@@ -107,9 +122,11 @@ function query_empty_table( $table_name )
 	$query_string =
 		"DELETE FROM $table_name";
 	query_blind($query_string);
-	//if($LOG_QUERIES == true)	
+	if($LOG_QUERIES == true)	
+        {
 		DebugLib::logQuery($query_string, db_get_current(), $_SESSION['username']);
 		DebugLib::logDBUpdates($query, db_get_current());
+        }
 }
 
 function db_escape( $value ) 
@@ -264,9 +281,11 @@ function query_blind( $query )
 {
     global $con;
     $result = mysql_query( $query, $con );
-	//if($LOG_QUERIES == true)	
+	if($LOG_QUERIES == true)
+        {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
 		DebugLib::logDBUpdates($query, db_get_current());
+        }
     return $result;
 }
 

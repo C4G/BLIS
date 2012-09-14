@@ -325,6 +325,7 @@ $LANG_ARRAY = array (
 		"MENU_MGR" => "Change Manager", 
 		"MENU_DEL" => "Delete Configuration", 
 		"MENU_EXPORTCONFIG" => "Export Configuration", 
+                "MENU_IMPORTCONFIG" => "Import Configuration", 
 		"RECENT_ACTIVITY" => "Recent Activity", 
 		"SP_REGNS" => "Specimen Registrations", 
 		"RE_ENTRIES" => "Result Entries", 

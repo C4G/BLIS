@@ -12,9 +12,8 @@ $script_elems->enableDatePicker();
 
 $file=$_REQUEST['file'];
 
-echo "Only administrator can change stock details";
-include("includes/footer.php");
-return;
+//echo "Only administrator can change stock details";
+//return;
 ?>
 <script type='text/javascript'>
 function update_stock()

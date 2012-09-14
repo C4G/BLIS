@@ -2,6 +2,9 @@
 #
 # Exports the given HTML content as word document
 #
+include("../includes/db_lib.php");
+putUILog('export_word', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 $date = date("Ymdhi");
 $file_name = "blisreport_".$date.".doc";
 header("Content-Type: application/vnd.ms-word");

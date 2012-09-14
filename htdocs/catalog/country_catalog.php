@@ -39,6 +39,11 @@ $(document).ready(function(){
 		load_right_pane('measures_div');
 		<?php
 	}
+        else if( isset($_REQUEST['show_mc'])) {
+		?>
+		load_right_pane('master_catalog_div');
+		<?php
+	}
 	?>
 });
 
@@ -190,6 +195,10 @@ function hide_right_pane()
 <a href="javascript:load_right_pane('measures_div');" class='menu_option' id='measures_div_menu'>
 	<?php echo LangUtil::$generalTerms['MEASURES']; ?>
 </a>
+<br><br>
+<a href="javascript:load_right_pane('master_catalog_div');" class='menu_option' id='master_catalog_div_menu'>
+	<?php echo "Master Test Catalog"; ?>
+</a>
 
 </td>
 <td id='right_pane'>
@@ -255,6 +264,17 @@ function hide_right_pane()
 			<b>Currently Associated Measures</b><br><br>
 			<?php $page_elems->getMeasuresCountryLevel(); ?>
 		</div>
+	</div>
+                    
+        <div id='master_catalog_div' class='content_div' style='display:none;'>
+		<form id="measureSelector">
+		<?php $page_elems->getMasterCatalog(); ?>
+		<span id='progress_tc_spinner' style='display:none;'><?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?></span>
+		</td>
+		</tr>
+		</table>
+		</form>
+		<br>
 	</div>
 </td>
 </tr>

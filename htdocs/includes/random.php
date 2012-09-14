@@ -13,12 +13,16 @@ else
 	require_once("../includes/db_lib.php");
 }
 
-set_time_limit(18000);
 
-$MAX_NUM_PATIENTS = 500000;
-$MAX_NUM_SPECIMENS = 500000;
 
-$NUM_PATIENTS = 0;
+set_time_limit(1800000);
+
+$con = mysql_connect( $DB_HOST, $DB_USER, $DB_PASS );
+
+$MAX_NUM_PATIENTS = 5000000;
+$MAX_NUM_SPECIMENS = 5000000;
+
+$NUM_PATIENTS = 2000;
 $NUM_SPECIMENS = 0;
 
 $PATIENT_ID_START = 1;
@@ -74,6 +78,7 @@ function get_random_name() {
 	while ($length--) {
 		$str .= $charset[mt_rand(0, $count-1)];
 	}
+    //$str = "Bob";
     return $str;
 }
 
@@ -237,7 +242,7 @@ function add_patients_random($num_patients)
 		$dob = get_random_date($minDate, $maxDate);
 		$sql = "INSERT INTO `patient` (`patient_id`,`name`,`dob`,`sex`,`addl_id`,`surr_id`)".
 				"VALUES ($patientId, '$name' , '$dob' , '$sex', $addl_id, $surr_id)";
-		query_insert_one($sql);
+                        query_insert_one($sql);
 		
 		$count++;
 	}

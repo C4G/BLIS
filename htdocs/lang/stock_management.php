@@ -1,8 +1,9 @@
 <?php
 #
 # (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
-# Admin Stock Management Page
-# 
+# Admin Stock Management Page to add new stock
+# Sneds POST request to stock_details.php 
+#
 
 include("../users/accesslist.php");
 if( !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList)) 

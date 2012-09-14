@@ -37,7 +37,9 @@ if ( substr($session_num,strpos($session_num, "-")+1 ) )
 $doc_array= getDoctorList();
 $php_array= addslashes(implode("%", $doc_array));
 	
-	?>
+$uiinfo = "pid=".$_REQUEST['pid']."&dnum=".$_REQUEST['dnum'];
+putUILog('new_specimen', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+?>
 	<script>
   $(document).ready(function(){
 //var data = "Core Selectors Attributes Traversing Manipulation CSS Events Effects Ajax Utilities".split(" ");

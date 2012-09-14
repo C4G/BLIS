@@ -11,6 +11,8 @@ include("includes/random.php");
 include("includes/stats_lib.php");
 LangUtil::setPageId("lab_config_home");
 
+putUILog('lab_config_home', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 $script_elems->enableTableSorter();
 $script_elems->enableJQueryForm();
 ?>
@@ -161,7 +163,7 @@ $script_elems->enableJQueryForm();
 
 <div id='new_help' style='display:none'>
 <small>
-<u>Add New</u> lets you add new registration fileds as required for the lab.
+<u>Add New</u> lets you add new registration fields as required for the lab.
 </small>
 </div>
 
@@ -206,6 +208,7 @@ if($lab_config == null)
 <?php $page_elems->getCompatibilityJsArray("st_map", $lab_config_id); ?>
 
 $(document).ready(function(){
+        $("#inventory_div").load("view_stocks.php");;
 	$("input[name='rage']").change(function() {
 		toggle_agegrouplist();
 	});
@@ -401,6 +404,21 @@ $(document).ready(function(){
 		fetch_worksheet_summary();
 		<?php
 	}
+        else if(isset($_REQUEST['importupdate']))
+	{
+		# Show report config updated message
+		?>
+		$('#worksheet_config_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('worksheet_config_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+		$('#worksheet_config_msg').show();
+		<?php 
+		$post_parts = explode(",", $_REQUEST['wcfgupdate']); 
+		?>
+		right_load(12, 'worksheet_config_div');
+		$('#cat_code12').attr("value", "<?php echo $post_parts[0]; ?>");
+		$('#test_type12').attr("value", "<?php echo $post_parts[1]; ?>");
+		fetch_worksheet_summary();
+		<?php
+	}
 	else if( isset($_REQUEST['revert']) ) {
 		if( isset($_REQUEST['updateChange'])) { ?>
 			right_load(18, 'update_database_div');
@@ -451,10 +469,34 @@ function performDbUpdate() {
 	});
 }
 
+function get_testbox2(stype_id)
+{
+	//var stype_val = $('#'+stype_id).attr("value");
+        var stype_val = stype_id;
+        $('#test_list_by_site').show();
+	if(stype_val == "")
+	{
+		$('#test_list_by_site').html("-<?php echo 'Select Facility to display its Test Catalog here'; ?>-");
+		return;
+	}
+	$('#test_list_by_site').html("<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>");
+	$('#test_list_by_site').load(
+		"ajax/test_list_by_site.php", 
+		{
+			site_id: stype_val
+		}
+	);
+}
+
 function toggle_div(div_name) {
 	$("#"+div_name).hide();
 }
 
+function inventory_load()
+{
+    //$("#inventory_div").load("view_stock.php");
+    right_load(15, 'inventory_div');
+}
 
 function performUpdate()
 {
@@ -495,6 +537,37 @@ function check_compatible()
 {
 }
 
+function blis_update_t()
+{
+    $('#update_button').hide();
+    $('#update_spinner').show();
+    setTimeout( "blis_update();", 5000); 
+}
+
+function blis_update()
+{
+    
+    $.ajax({
+		type : 'POST',
+		url : 'update/blis_update.php',
+		success : function(data) {
+			if ( data=="true" ) {
+                            $('#update_failure').hide();
+                            $('#update_spinner').hide();
+                            $('#update_success').show();
+			}
+			else {
+                                $('#update_success').hide();
+
+                                $('#update_spinner').hide();
+				$('#update_failure').show();
+			}
+		}
+	});
+        
+    $('#update_button').show();
+}
+
 function right_load(option_num, div_id)
 {
 	$('#name9').attr("value", "<?php echo $lab_config->name; ?>");
@@ -505,7 +578,7 @@ function right_load(option_num, div_id)
 	$('#'+div_id).show();
 	$('#option'+option_num).addClass('current_menu_option');
 	if ( option_num == 16 ) {
-		performUpdate();
+		//performUpdate();
 	}
 }
 
@@ -1043,13 +1116,15 @@ function right_load_1(option_num, div_id)
 						<a id='option13' class='menu_option' href="javascript:right_load(13, 'backup_revert_div');"><?php echo LangUtil::$pageTerms['MENU_BACKUP_REVERT']; ?></a><br><br></li>
 						<?php if(is_super_admin($user) || is_country_dir($user)) { ?>
 								<a id='option18' class='menu_option' href="javascript:right_load(18, 'update_database_div');"><?php echo 'Update Data'; ?></a><br><br></li>
+                                                                <a id='option34' class='menu_option' href="javascript:right_load(34, 'import_config_div');"><?php echo 'Import Configuration' ?></a><br><br></li>
+
 						<?php }
 					}
 				?>
 				
 				<a href='export_config?id=<?php echo $_REQUEST['id']; ?>' target='_blank'><?php echo LangUtil::$pageTerms['MENU_EXPORTCONFIG']; ?></a><br><br></li>
 			
-				<a rel='facebox' id='option16' class='menu_option' href="update.php">Update to New Version</a>
+				<a id='option39' class='menu_option' href="javascript:right_load(39, 'blis_update_div');">Update to New Version</a>
 				<br><br>
 				
 				<?php /* Enable for Data Merging
@@ -1074,6 +1149,27 @@ function right_load_1(option_num, div_id)
 					<form id='backup_form' name='backup_form' action='data_backup' method='post' target='_blank'>
 						<input type='hidden' name='id' value='<?php echo $_REQUEST['id']; ?>'></input>
 					</form>
+				</div>
+                            
+                                <div class='right_pane' id='blis_update_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;"><a rel='facebox' href='#Summary_config'>Page Help</a></p>
+				<b><?php echo "BLIS Update"; ?></b>
+					<br><br>
+                                        <input type="Button" id="update_button" name="update_button" value="Start Update" onclick="javascript:blis_update_t()"/>
+                                        <br>
+                                        <div id='update_spinner' style='display:none;'>
+                                        <?php
+					$spinner_message = "Updating to C4G BLIS v2.2"."<br>";
+                                        $page_elems->getProgressSpinnerBig($spinner_message);
+                                        ?>
+                                        </div>
+                                        <br>
+                                        <div id='update_success' class='clean-orange' style='display:none;width:350px;'>
+                                            Update to v2.2 Successful!
+                                        </div>
+                                        <div id='update_failure' class='clean-error' style='display:none;width:350px;'>
+                                            Update to v2.2 Failed! Try Again.
+                                        </div>
 				</div>
 				
 				<div class='right_pane' id='st_types_div' style='display:none;margin-left:10px;'>
@@ -1172,15 +1268,6 @@ function right_load_1(option_num, div_id)
 				</div>
 					
 				<div class='right_pane' id='inventory_div' style='display:none;margin-left:10px;'>
-					<?php
-					$reload_url = "lab_config_home.php?id=$lab_config_id";
-					?>
-					<b>Inventory</b>
-					 <ul>
-					<li>
-				<a href='stock_management?locale=<?php echo $_SESSION['locale']; ?>&id=<?php echo $_REQUEST['id']; ?>'><?php echo LangUtil::$pageTerms['New Stock']; ?></a>
-				<br><br></li>
-					<li><a href='stock_edit.php'><?php echo LangUtil::$pageTerms['Edit Stock']; ?></a>	<br><br></li>
 				</div>
 				
 				<div class='right_pane' id='fields_div' style='display:none;margin-left:10px;'>
@@ -1799,6 +1886,26 @@ function right_load_1(option_num, div_id)
 					</form>
 				</div>
 				
+
+                            <div id='view_stocks_help' class='right_pane' style='display:none;margin-left:10px;'>
+                                    <ul>	
+                                            <?php
+
+                                                    echo "<li>";
+                                                    echo " Toggle Patient Number or Patient's Age to be displayed as part of Search Results";
+                                                    echo "</li>";
+                                                    echo "<li>";
+                                                    echo " Choosing to display Patient Number and/or Patient's Age as part of Search results slows down the time taken to search ";
+                                                    echo "</li>";
+
+
+
+                                            ?>
+                                    </ul>
+                                    </div>
+
+                                
+                                
 				<div class='right_pane' id='del_config_div' style='display:none;margin-left:10px;'>
 					<b><?php echo LangUtil::$pageTerms['MENU_DEL']; ?></b>
 					<br><br>
@@ -2064,6 +2171,106 @@ function right_load_1(option_num, div_id)
 									</td>
 								</tr>
 								<tr valign='top'>
+									<td></td>
+									<td>
+										<input type='button' onclick='javascript:update_database_submit();' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>'></input>
+										&nbsp;&nbsp;&nbsp;
+										<span id='update_database_progress' style='display:none'>
+											<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
+										</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+					<br><br>
+					<div id='update_success' class='clean-orange' style='display:none;width:350px;'>
+						Updated Successfully&nbsp;&nbsp;&nbsp;<a href="javascript:toggle_div('update_success');"--><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>
+					</div>
+					<div id='update_failure' class='clean-orange' style='display:none;width:350px;'>
+						Update Failed&nbsp;&nbsp;&nbsp;<a href="javascript:toggle_div('update_failure');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>
+					</div>
+				</div>
+                                
+                                <div class='right_pane' id='import_config_div' style='display:none;margin-left:10px;'>
+					<p style="text-align: right;"><a rel='facebox' href='#importconfig'>Page Help</a></p>
+					<b><?php echo "Import Configuration"; ?></b>
+					<br><br>
+					<form id='import_config_form' name='import_config_form' action='ajax/import_config.php' method='get'>
+						<input type='hidden' name='lid' value='<?php echo $lab_config->id; ?>'></input>
+						<table>
+							<tbody>
+                                                            <tr valign='top'>
+                                                                <td><?php echo '- Select the facility from which you want to import data:'; ?></td>
+									<td>
+										<?php echo ""; ?>
+									</td>
+								</tr>
+                                                                <tr valign='top'>
+                                                                <td><?php
+                                                                    //$site_list = get_site_list($_SESSION['user_id']);
+                                                                    //print_r($site_list);
+                                                                    //echo "<input type='checkbox' name='".$elem_name."[]' id='$elem_id' value='$key'>$value</input>";
+                                                                    ?>
+                                                                    <select name='location' id='location2' class='uniform_width' onchange="javascript:get_testbox2(this.value);">
+                                                                    <option value='0'><?php echo 'Select Facility'; ?></option>
+                                                                    <?php
+                                                                        $page_elems->getSiteOptions();
+                                                                    ?>
+                                                                    </select>
+                                                                    
+                                                                        
+                                                                </td>
+									<td>
+										<?php //echo $lab_config->id; ?>
+									</td>
+								</tr>
+                                                                <tr valign='top'>
+                                                                <td>
+                                                                    <div id='test_list_by_site'>
+                                                                        <?php //echo 'Select Facility to dispay its test catalog '?>
+                                                                        </div>
+                                                                </td>
+									<td>
+										<?php echo ""; ?>
+									</td>
+								</tr>
+                                                                <tr valign='top'>
+                                                                <td><?php echo '- Select the configuration data you want to import:'; ?></td>
+									<td>
+										<?php echo ""; ?>
+									</td>
+								</tr>
+								
+								<tr valign='top'>
+									<td><?php echo 'Import test catalog'; ?></td>
+									<td>
+										<input type='checkbox' id="import_tc" name='import_tc' >
+                                                                                </input>
+									</td>
+								</tr>
+								<tr valign='top'>
+									<td><?php echo 'Import specimen catalog'; ?></td>
+									<td>
+										<input type='checkbox' id="import_sc" name='import_sc' >
+                                                                                </input>
+									</td>
+								</tr>
+                                                                <tr valign='top'>
+									<td><?php echo 'Import Statistic Report settings'; ?></td>
+									<td>
+										<input type='checkbox' id="import_sr" name='import_sr' >
+                                                                                </input>
+									</td>
+								</tr>
+                                                                <tr valign='top'>
+									<td><?php echo 'Import Patient Report configurations and Worksheets'; ?></td>
+									<td>
+										<input type='checkbox' id="import_pw" name='import_pw' >
+                                                                                </input>
+									</td>
+								</tr>
+                                                                <tr valign='top'>
 									<td></td>
 									<td>
 										<input type='button' onclick='javascript:update_database_submit();' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>'></input>

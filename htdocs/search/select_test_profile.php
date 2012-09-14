@@ -12,6 +12,16 @@ $script_elems->enableJQueryForm();
 $script_elems->enableDatePicker();
 $script_elems->enableTableSorter();
 $script_elems->enableLatencyRecord();
+$admin = 0;
+if(is_admin(get_user_by_id($_SESSION['user_id']))) {
+     $admin = 1;}
+$rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
+foreach($rem_recs as $rem_rec)
+{
+    $rem_specs[] = $rem_rec['r_id'];
+    $rem_remarks[] = $rem_rec['remarks'];
+}
+//print_r($rem_specs);
 ?>
 <script type='text/javascript'>
 function toggle_profile_divs()
@@ -110,6 +120,43 @@ var url_string = "report_selected_tests.php?specimen_array="+txt+"&pid="+pid;
 	window.open(url_string);
 
 }
+
+
+function get_select_tests_del(pid)
+{
+var _chkBoxes = document.getElementsByName("liked");
+var _chkBoxesLen = _chkBoxes.length;
+var i=0;
+var txt=new Array();
+var k=0;
+for(i=0; i<_chkBoxesLen; i++)
+if (_chkBoxes[i].checked == true)
+{
+txt[k]=_chkBoxes[i].value;
+k++;
+}
+var url_string = "remove_selected_tests.php?specimen_array="+txt+"&pid="+pid;
+	window.open(url_string, "_self");
+
+}
+
+function get_select_tests_undel(pid)
+{
+var _chkBoxes = document.getElementsByName("liked");
+var _chkBoxesLen = _chkBoxes.length;
+var i=0;
+var txt=new Array();
+var k=0;
+for(i=0; i<_chkBoxesLen; i++)
+if (_chkBoxes[i].checked == true)
+{
+txt[k]=_chkBoxes[i].value;
+k++;
+}
+var url_string = "retrieve_specimens.php?specimen_array="+txt+"&pid="+pid;
+	window.open(url_string, "_self");
+
+}
 </script>
 <br>
 <b>Patient Report</b>
@@ -120,7 +167,16 @@ var url_string = "report_selected_tests.php?specimen_array="+txt+"&pid="+pid;
 <b><?php echo LangUtil::$generalTerms['CMD_THISTORY']; ?></b></p>
 <?php $page_elems->getSelectPatientHistory($pid); ?>
 <br>
+
 <p align="right">
 <?php $page_elems->getPatientSelectReport($pid); ?>
 </p>
+<?php if($admin == 1){ ?>
+<p align="right">
+<?php $page_elems->getDeleteOptions($pid); ?>
+</p>
+<p align="right">
+<?php $page_elems->getUnDeleteOptions($pid); ?>
+</p>
+<?php } ?>
 <?php include("includes/footer.php"); ?>

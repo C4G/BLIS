@@ -2,6 +2,7 @@
 
 include("redirect.php");
 include("../includes/db_lib.php");
+putUILog('backup_data', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 if($SERVER == $ON_ARC)
 {

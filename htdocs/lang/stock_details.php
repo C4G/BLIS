@@ -8,7 +8,10 @@ include("includes/stats_lib.php");
 include("lang/lang_xml2php.php");
 LangUtil::setPageId("stocks");
 
+$script_elems->enableFlotBasic();
+$script_elems->enableFlipV();
 $script_elems->enableTableSorter();
+echo $_REQUEST['file'];
 $file=$_REQUEST['file'];
 ?>
 
@@ -17,22 +20,17 @@ $file=$_REQUEST['file'];
 			$('#current_inventory').tablesorter();
 	});
 
-	function update_stock()	{
-	$('#file').attr("value",'2');
-	var num=document.getElementById('new_quantity').value;
-	$('#new_test_form2').submit();
-	}
-
-	function update_stock_add() {
-	var quantity=document.getElementById('new_quantity').value;
-	var quantity_add=quantity*-1;
-	$('#new_quantity').attr("value",quantity_add);
-	$('#file').attr("value",'2');
-	var num=document.getElementById('new_quantity').value;
-	$('#new_test_form2').submit();
-	}
 </script>
-
+<style type='text/css'>
+.flipv_up {
+	font-size: 12px;
+	font-family: Tahoma;
+}
+.flipv {
+	font-size: 12px;
+	font-family: Tahoma;
+}
+</style>
 <?php
 	$length=$_REQUEST['count'];
 
@@ -74,9 +72,11 @@ $file=$_REQUEST['file'];
 		$yyyy_to=$_REQUEST[$yyyy_to_request];
 		$ts[$i-1]= mktime(0,0,0,$mm_to,$dd_to,$yyyy_to);
 	}
-	if($name[0]!=""&&$file=='1')
-		add_stocks($name,$lot_number,$expiry_date,$manufacture,$supplier,$quantity_supplied,$unit,$cost_per_unit,$ts);
-		
+	if($name[0]!="" && $file=='1')
+		add_new_stock($name,$lot_number,$expiry_date,$manufacture,$supplier,$quantity_supplied,$unit,$cost_per_unit,$ts);
+	
+        $_REQUEST['file'] = '0';
+        echo $_REQUEST['file'];
 	$retval=array();
 	$retval=get_stocks();
 ?>
@@ -90,6 +90,7 @@ $file=$_REQUEST['file'];
 			<th> <?php echo LangUtil::$pageTerms['Manufacturer']; ?></th>
 			<th> <?php echo LangUtil::$pageTerms['Supplier']; ?></th>
 			<th><?php echo LangUtil::$pageTerms['Total_Quantity']; ?></th>
+                        <th><?php echo "Unit"; ?></th>
 			<th><?php echo LangUtil::$pageTerms['Cost_per_Unit']; ?></th>
 		</tr>
 	</thead>
@@ -103,7 +104,8 @@ $file=$_REQUEST['file'];
 			<td><?php echo $value[4];?></td>
 			<td><?php echo $value[2];?></td>
 			<td><?php echo $value[5];?></td>
-			<td><?php echo $value[3]." ".$value[6];?></td>
+			<td><?php echo $value[3]; ?></td>
+                        <td><?php echo $value[6]; ?></td>
 			<td><?php echo $value[8];?></td>
 		</tr>
 <?php 

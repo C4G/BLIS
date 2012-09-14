@@ -74,6 +74,10 @@ $date_to = $_REQUEST['yt']."-".$_REQUEST['mt']."-".$_REQUEST['dt'];
 $lab_config_id = $_REQUEST['l'];
 $cat_code = $_REQUEST['c'];
 $ttype = $_REQUEST['t'];
+
+$uiinfo = "from=".$date_from."&to=".$date_to."&ct=".$cat_code."&tt=".$ttype;
+putUILog('daily_log_specimens', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 $lab_config = get_lab_config_by_id($lab_config_id);
 $test_types = get_lab_config_test_types($lab_config_id);
 

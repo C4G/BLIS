@@ -11,6 +11,8 @@ $script_elems->enableFlotBasic();
 $script_elems->enableFlipV();
 $script_elems->enableTableSorter();
 $script_elems->enableLatencyRecord();
+
+$uiinfo = "from=".$date_from."%to=".$date_to;
 ?>
 <script type='text/javascript'>
 $(window).load(function(){
@@ -77,6 +79,9 @@ function updateDoctorName(id) {
 $lab_config_id = $_REQUEST['location'];
 $date_from = $_REQUEST['yyyy_from']."-".$_REQUEST['mm_from']."-".$_REQUEST['dd_from'];
 $date_to = $_REQUEST['yyyy_to']."-".$_REQUEST['mm_to']."-".$_REQUEST['dd_to'];
+$uiinfo = "from=".$date_from."&to=".$date_to;
+putUILog('doctor_stats', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 DbUtil::switchToLabConfig($lab_config_id);
 $lab_config = get_lab_config_by_id($lab_config_id);
 if($lab_config == null)

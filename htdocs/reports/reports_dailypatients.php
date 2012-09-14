@@ -8,6 +8,7 @@ include("includes/script_elems.php");
 include("includes/page_elems.php");
 LangUtil::setPageId("reports");
 
+
 $page_elems = new PageElems();
 $script_elems = new ScriptElems();
 $script_elems->enableJquery();
@@ -17,6 +18,10 @@ $script_elems->enableDragTable();
 $date_from = $_REQUEST['yf']."-".$_REQUEST['mf']."-".$_REQUEST['df'];
 $date_to = $_REQUEST['yt']."-".$_REQUEST['mt']."-".$_REQUEST['dt'];
 $lab_config_id = $_REQUEST['l'];
+
+$uiinfo = "from=".$date_from."&to=".$date_to;
+putUILog('daily_log_patients', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 $lab_config = get_lab_config_by_id($lab_config_id);
 $saved_db = DbUtil::switchToLabConfig($lab_config_id);
 //$patient_list = Patient::getByAddDate($date_from);

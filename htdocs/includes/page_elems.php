@@ -631,6 +631,46 @@ class PageElems
 		DbUtil::switchRestore($saved_db);
 	}
 	
+        public function getMasterCatalog() {
+		#Return table which includes dropdowns of measures configured in all labs in the country
+		echo "<table class='hor-minimalist-b tablesorter' id='testTypeTable'>";
+		$count = 1;
+                echo "<tr><th>"."Test Name"."</th><th></th><th>"."Site Name"."</th></tr>";
+		$siteList = get_site_list($_SESSION['user_id']);
+		foreach($siteList as $labConfigId => $labName) {
+                    $ttype_list = get_test_types_catalog($labConfigId);
+                    $space = 0;
+                    foreach($ttype_list as $key => $value)
+                    {
+                        echo  "<tr><td>".$value."</td>";
+                        echo "<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+			echo "<td>".$labName."</td></tr>";
+                        $space = 1;
+                        
+                    }
+                    if($space == 1)
+                        echo "<tr><td></td><td></td><td></td></tr>";
+                    //echo "<pre>";
+                    //print_r($ttype_list);
+                    //echo "</pre>"; 
+                    
+			//echo "<td><select id='measureNameSelect$count'>";
+			//$measuresList = getMeasuresByLab($labConfigId);
+			//foreach($measuresList as $measure) {
+			//	echo "<option value='$labConfigId:$measure->measureId'>".$measure->name."</option>";
+			//}
+			//echo "</select></td></tr>";
+			$count++;
+			DbUtil::switchRestore($saved_db);
+		}
+                echo "</table>";
+		//echo "<tr><td></td><td></td></tr>";
+		//echo "<tr>";
+		//echo "<td>Country Specimen Name:</td>"; ?>
+		
+	<?php
+	}
+        
 	public function getSpecimenNamesSelector() {
 		#Return table which includes dropdowns of specimens configured in all labs in the country
 		echo "<table>";
@@ -772,6 +812,22 @@ class PageElems
 		}
 	}
 	
+        public function getTestListToImport($elem_name, $elem_id)
+	{
+		# Returns a set of check boxes buttons for all tests available in catalog
+		$test_list = get_specimen_types_catalog();
+		if(count($test_list) == 0)
+		{
+			echo "No tests present in catalog";
+			return;
+		}
+		foreach($test_list as $key => $value)
+		{
+			echo "<input type='checkbox' name='".$elem_name."[]' id='$elem_id' value='$key'>$value</input>";
+		}
+	}
+	
+        
 	public function getTestTypeInfo($test_name, $show_db_name=false)
 	{
 		# Returns HTML for displaying test type information
@@ -2138,10 +2194,11 @@ class PageElems
 	<?php
 	}
 	
-	public function getSelectSpecimenInfoRow($specimen)
+	public function getSelectSpecimenInfoRow($specimen, $rem_specs, $admin)
 	{
 		# Returns HTML table row containing specimen info
 		# Called by getPatientHistory() function
+                
 		?>
 		<form name="f1" id="f1">
 		
@@ -2163,7 +2220,22 @@ class PageElems
 				<?php echo DateLib::mysqlToString($specimen->dateRecvd); ?>
 			</td>
 			<td>
-				<?php echo $specimen->getStatus(); ?>
+				<?php if($admin == 1)
+                                     {
+                                        if(in_array($specimen->specimenId, $rem_specs))
+                                        {
+                                            echo "Removed";
+                                        }
+                                        else
+                                        {
+                                            echo $specimen->getStatus(); 
+                                        }
+                                     }
+                                     else
+                                     {
+                                         echo $specimen->getStatus(); 
+                                     }
+                                ?>
 			</td>
 			<td>
 				<a href='specimen_info.php?sid=<?php echo $specimen->specimenId; ?>' title='Click to View Details of this Specimen'><?php echo LangUtil::$generalTerms['DETAILS']; ?></a>
@@ -2178,7 +2250,7 @@ class PageElems
 		</form>
 		<?php
 	}
-	public function getSpecimenInfoRow($specimen)
+	public function getSpecimenInfoRow($specimen, $rem_specs, $admin)
 	{
 		# Returns HTML table row containing specimen info
 		# Called by getPatientHistory() function
@@ -2201,7 +2273,22 @@ class PageElems
 				<?php echo DateLib::mysqlToString($specimen->dateRecvd); ?>
 			</td>
 			<td>
-				<?php echo $specimen->getStatus(); ?>
+				<?php if($admin == 1)
+                                     {
+                                        if(in_array($specimen->specimenId, $rem_specs))
+                                        {
+                                            echo "Removed";
+                                        }
+                                        else
+                                        {
+                                            echo $specimen->getStatus(); 
+                                        }
+                                     }
+                                     else
+                                     {
+                                         echo $specimen->getStatus(); 
+                                     }
+                                ?>
 			</td>
 			<td>
 				<a href='specimen_info.php?sid=<?php echo $specimen->specimenId; ?>' title='Click to View Details of this Specimen'><?php echo LangUtil::$generalTerms['DETAILS']; ?></a>
@@ -2247,6 +2334,18 @@ class PageElems
 	public function getPatientHistory($pid)
 	{
 		# Returns HTML table displaying patient test history
+                $admin = 0;
+                if(is_admin(get_user_by_id($_SESSION['user_id']))) {
+                    $admin = 1;}
+                $rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
+                $rem_specs = array();
+                $rem_remarks = array();
+                foreach($rem_recs as $rem_rec)
+                {
+                    $rem_specs[] = $rem_rec['r_id'];
+                    $rem_remarks[] = $rem_rec['remarks'];
+                }
+            
 		$specimen_list = get_specimens_by_patient_id($pid);
 		if(count($specimen_list) == 0)
 		{
@@ -2290,7 +2389,12 @@ class PageElems
 			<?php
 			foreach($specimen_list as $specimen)
 			{
-				$this->getSpecimenInfoRow($specimen); 
+                            if($admin == 0)
+                            {
+                                if(in_array($specimen->specimenId, $rem_specs))
+                                    continue;
+                            }
+				$this->getSpecimenInfoRow($specimen, $rem_specs, $admin); 
 			}
 			?>
 			</tbody>
@@ -2302,6 +2406,18 @@ class PageElems
 	public function getSelectPatientHistory($pid)
 	{
 		# Returns HTML table displaying patient test history
+                $admin = 0;
+                if(is_admin(get_user_by_id($_SESSION['user_id']))) {
+                    $admin = 1;}
+                $rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
+                $rem_specs = array();
+                $rem_remarks = array();
+                foreach($rem_recs as $rem_rec)
+                {
+                    $rem_specs[] = $rem_rec['r_id'];
+                    $rem_remarks[] = $rem_rec['remarks'];
+                }
+                
 		$specimen_list = get_specimens_by_patient_id($pid);
 		if(count($specimen_list) == 0)
 		{
@@ -2341,7 +2457,13 @@ class PageElems
 			<?php
 			foreach($specimen_list as $specimen)
 			{
-				$this->getSelectSpecimenInfoRow($specimen); 
+                            if($admin == 0)
+                            {
+                                if(in_array($specimen->specimenId, $rem_specs))
+                                    continue;
+                            }
+                            
+				$this->getSelectSpecimenInfoRow($specimen, $rem_specs, $admin); 
 			}
 			?>
 			</tbody>
@@ -2356,6 +2478,24 @@ class PageElems
 	?><!--'reports_testhistory.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>'-->
 				<a href='javascript:get_select_tests(<?php echo $patient_id;?>);' title='Click to Generate Test History Report for this Patient'>
 					<?php echo LangUtil::$pageTerms['MSG_PRINTHISTORY']; ?>
+				</a>
+	<?php		
+	}
+        
+        public function getDeleteOptions($patient_id)
+	{
+	?><!--'reports_testhistory.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>'-->
+				<a href='javascript:get_select_tests_del(<?php echo $patient_id;?>);' title='Click here to Delete the selected Tests'>
+					<?php echo "Remove Selected Specimens"; ?>
+				</a>
+	<?php		
+	}
+        
+        public function getUnDeleteOptions($patient_id)
+	{
+	?><!--'reports_testhistory.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>'-->
+				<a href='javascript:get_select_tests_undel(<?php echo $patient_id;?>);' title='Click here to Retrieve deleted Tests'>
+					<?php echo "Retrieve Deleted Specimens"; ?>
 				</a>
 	<?php		
 	}
@@ -2391,11 +2531,7 @@ class PageElems
 					<?php echo LangUtil::$pageTerms['MSG_PRINTHISTORY']; ?>
 				</a>
 			</p>
-                        <p>
-				<a href='viz_test_history.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>' title='Click to Generate Test History Report Visualization for this Patient' target='_blank'>
-					<?php echo " View Report Visualization"; ?>
-				</a>
-			</p>
+                       
 			<!--<p><a href='#'>Export as XML</a></p>-->
 			</div>
 		<?php
@@ -2615,13 +2751,8 @@ class PageElems
 					<?php
 				}
 			}
-			$viz_url = "viz_test_history.php?location=".$_SESSION['lab_config_id']."&patient_id=".$specimen->patientId."&yf=$date_parts[0]&mf=$date_parts[1]&df=$date_parts[2]&yt=$date_parts[0]&mt=$date_parts[1]&dt=$date_parts[2]";
 			?>
-                                        <p>
-				<a href='<?php echo $viz_url; ?>' title='Click to Generate Test History Report Visualization for this Patient' target='_blank'>
-					<?php echo " View Report Visualization"; ?>
-				</a>
-			</p>
+                                
 		</div>
 		<?php
 	}

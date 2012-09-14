@@ -17,6 +17,8 @@ $lab_config_id = $_REQUEST['location'];
 $date_from = $_REQUEST['yyyy_from']."-".$_REQUEST['mm_from']."-".$_REQUEST['dd_from'];
 $date_to = $_REQUEST['yyyy_to']."-".$_REQUEST['mm_to']."-".$_REQUEST['dd_to'];
 $include_pending = false;
+$uiinfo = "from=".$date_from."&to=".$date_to."&ip=".$_REQUEST['pending'];
+putUILog('reports_tat', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 if($_REQUEST['pending'] == 'Y')
 {
 	$include_pending = true;
