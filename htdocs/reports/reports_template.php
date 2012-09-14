@@ -260,7 +260,9 @@ function print_content(div_id)
 				## Technician comments
 				echo "<td>".$test->getComments()."</td>";
 				## Entered by
-				echo "<td>".get_username_by_id($test->verifiedBy);."</td>";
+                                //NC3065
+				//echo "<td>".get_username_by_id($test->verifiedBy);."</td>";
+                                echo "<td>".get_username_by_id($test->verifiedBy)."</td>";
 				## Verified by
 				echo "<td>".$test->getVerifiedBy."</td>";
 			

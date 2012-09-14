@@ -42,6 +42,7 @@ RewriteRule ^reports\.php$ reports/reports.php
 RewriteRule ^report_onetesthistory\.php$ reports/report_onetesthistory.php
 RewriteRule ^report_selected_tests\.php$ reports/report_selected_tests.php
 RewriteRule ^reports_testhistory\.php$ reports/reports_testhistory.php
+RewriteRule ^viz_test_history\.php$ reports/viz_test_history.php
 RewriteRule ^reports_specimen\.php$ reports/reports_specimen.php
 RewriteRule ^reports_specimenlog\.php$ reports/reports_specimenlog.php
 RewriteRule ^reports_print\.php$ reports/reports_print.php
@@ -51,6 +52,8 @@ RewriteRule ^reports_infection\.php$ reports/reports_infection.php
 RewriteRule ^doctor_stats\.php$ reports/doctor_stats.php
 RewriteRule ^reports_specimencount\.php$ reports/reports_specimencount.php
 RewriteRule ^reports_tests_done\.php$ reports/reports_tests_done.php
+RewriteRule ^reports_testcount_grouped\.php$ reports/reports_testcount_grouped.php
+RewriteRule ^reports_specimencount_grouped\.php$ reports/reports_specimencount_grouped.php
 RewriteRule ^reports_tat\.php$ reports/reports_tat.php
 RewriteRule ^report_disease\.php$ reports/report_disease.php
 RewriteRule ^infection_aggregate\.php$ reports/infection_aggregate.php

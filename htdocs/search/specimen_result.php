@@ -89,7 +89,46 @@ $test_list = get_tests_by_specimen_id($specimen->specimenId);
 	foreach($test_list as $test)
 	{
 		$test_type = get_test_type_by_id($test->testTypeId);
+                
 		$measure_list = $test_type->getMeasures();
+                
+                $submeasure_list = array();
+                $comb_measure_list = array();
+               // print_r($measure_list);
+                
+                foreach($measure_list as $measure)
+                {
+                    
+                    $submeasure_list = $measure->getSubmeasuresAsObj();
+                    //echo "<br>".count($submeasure_list);
+                    //print_r($submeasure_list);
+                    $submeasure_count = count($submeasure_list);
+                    
+                    if($measure->checkIfSubmeasure() == 1)
+                    {
+                        continue;
+                    }
+                        
+                    if($submeasure_count == 0)
+                    {
+                        array_push($comb_measure_list, $measure);
+                    }
+                    else
+                    {
+                        array_push($comb_measure_list, $measure);
+                        foreach($submeasure_list as $submeasure)
+                           array_push($comb_measure_list, $submeasure); 
+                    }
+                }
+                /*
+                                echo "<pre><br>";
+                print_r($measure_list);
+ 
+                $measure_list = $comb_measure_list;
+                print_r($measure_list);
+                echo "</pre>";  
+                */
+                $measure_list = $comb_measure_list;
 		$result_list = explode(",", $test->result);
 		?>
 		<tr valign='top'>
@@ -110,7 +149,17 @@ $test_list = get_tests_by_specimen_id($specimen->specimenId);
 				echo "<span style='float:right'>";
 				echo "<label for='$field_name'>";
 				if(count($measure_list) != 1)
-					echo $measure->getName();
+                                {
+                                    if($measure->checkIfSubmeasure() == 1)
+                                    {
+                                        $decName = $measure->truncateSubmeasureTag();
+                                        echo $decName.":";
+                                    }
+                                    else
+                                    {
+					echo $measure->getName().":";
+                                    }
+                                }
 				echo "&nbsp;".$measure->unit;
 				echo "</label>";
 				if($range_type == Measure::$RANGE_OPTIONS)
@@ -198,6 +247,11 @@ $test_list = get_tests_by_specimen_id($specimen->specimenId);
 					$page_elems->getTokenList(-1, $field_id,"result_".$test_type->testTypeId."_".$measure->measureId, $url_string, $hint_text,"");
 					echo "</div>";
 				}
+                                else if($range_type == Measure::$RANGE_FREETEXT)
+                                {
+                                    # Text box
+                                    echo "<textarea name='$field_name' id='$field_id' class='uniform_width results_entry'></textarea>";
+                                }
 				echo "</span>";
 				echo "</td>";
 				echo "<td>";

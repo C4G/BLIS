@@ -11,7 +11,8 @@ $updated_entry = new SpecimenType();
 $updated_entry->specimenTypeId = $_REQUEST['sid'];
 $updated_entry->name = $_REQUEST['name'];
 $updated_entry->description = $_REQUEST['description'];
-$test_type_list = get_test_types_catalog();
+$reff = 1;
+$test_type_list = get_test_types_catalog($lab_config_id, $reff);
 $updated_test_list = array();
 foreach($test_type_list as $key=>$value)
 {

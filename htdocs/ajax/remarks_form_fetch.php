@@ -36,7 +36,17 @@ foreach($measure_list as $measure)
 	//$remaeks_list is an array r_l[range]=>description.
 	//$remarks_list = $measure_remarks[$measure->measureId];
 	$remarks_list=$measure->getInterpretation();
-	echo $measure->getName();
+        if($measure->checkIfSubmeasure() == 1)
+        {
+            $decName = $measure->truncateSubmeasureTag();
+        }
+        else
+        {
+            $decName = $measure->getName();
+        }
+                echo "<br>";
+
+	echo "<b>".$decName."</b>";
 	if($range_type == Measure::$RANGE_NUMERIC)
 	{
 	
@@ -155,6 +165,29 @@ foreach($measure_list as $measure)
 			}
 			
 		}
+                
+                else if($range_type == Measure::$RANGE_FREETEXT)
+		{
+		
+			echo $range_list=$measure->getRangeValues();
+                    
+			/*foreach($range_list as $key=>$value)
+			{
+				$inter_value=$remarks_list[$key];
+				if($inter_value=="")
+				$inter_value=$value;
+				echo "<tr>";
+				echo "<td>";
+				echo $value;
+				echo "</td>";
+				echo "<td>";
+				echo "<input type='text' value='$inter_value' name='remarks_".$measure->measureId."[]' class='uniform_width'></input>";
+				echo "</td>";
+				echo "</tr>";
+			}*/
+			
+		}
+                
 		?>
 		</tbody>
 	</table>

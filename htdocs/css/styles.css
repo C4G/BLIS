@@ -258,6 +258,18 @@ dl dt label {
 	border-collapse: collapse;
 	text-align: left;
 }
+
+.hor-minimalist-b gr
+{
+	/*font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;*/
+	font-size: 14px;
+	background: #fff;
+	/*margin: 45px;*/
+	width: 600px;
+	border-collapse: collapse;
+	text-align: left;
+}
+
 .hor-minimalist-b th
 {
 	font-size: 14px;

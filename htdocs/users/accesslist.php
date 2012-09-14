@@ -34,6 +34,13 @@ function isAdmin($user) {
 	return false;
 }
 
+
+function isLoggedIn($user){
+    if($user->level != "")
+		return true;
+	return false;
+}
+
 function displayForbiddenMessage() {
 	echo "<b><font size='6px'>Forbidden</b></font><br><br>";
 	echo "You don't have permission to access ".basename($_SERVER['PHP_SELF'])." on this server";
@@ -41,17 +48,17 @@ function displayForbiddenMessage() {
 }
 
 $countryDirPageList = array();
-array_push($countryDirPageList, 'lab_configs.php', 'lab_config_new.php', 'update_database.php', 'update.php', 'lab_config_status.php', 'remarks_edit.php', 'lab_config_home.php',
-'switchto_tech.php', 'lab_admins.php', 'lab_admin_edit.php', 'lab_admin_new.php', 'country_catalog.php', 'reports.php', 'stock_management.php', 'stock_edit.php', 
-'lab_user_new.php', 'reports_userlog.php', 'lab_user_edit.php', 'ofield_update.php', 'cfield_new.php', 'cfield_edit.php');
+array_push($countryDirPageList, 'lab_configs.php', 'lab_config_new.php', 'update_database.php', 'update.php', 'lab_config_status.php','st_types_update.php', 'remarks_edit.php', 'lab_config_home.php',
+'switchto_tech.php', 'lab_admins.php', 'lab_admin_edit.php', 'lab_admin_new.php', 'country_catalog.php', 'reports.php', 'stock_management.php', 'stock_edit.php','lab_config_tat_update.php', 
+'lab_user_new.php', 'reports_userlog.php', 'lab_user_edit.php', 'ofield_update.php', 'search_config_update.php', 'cfield_new.php', 'cfield_edit.php');
 
 $adminPageList = array();
 array_push($adminPageList, 'lab_configs.php', 'catalog.php', 'reports.php', 'data_backup2.php', 'update.php', 'st_types_update.php', 'remarks_edit.php', 'lab_config_tat_update.php',
-'stock_management.php', 'stock_edit.php', 'lab_user_new.php', 'reports_userlog.php', 'lab_user_edit.php', 'ofield_update.php', 'cfield_new.php', 'cfield_edit.php');
+'stock_management.php', 'stock_edit.php', 'lab_user_new.php', 'reports_userlog.php', 'lab_user_edit.php', 'ofield_update.php', 'search_config_update.php', 'cfield_new.php', 'cfield_edit.php');
 
 $superAdminPageList = array();
-array_push($superAdminPageList, 'lab_configs.php', 'lab_config_new.php', 'update_database.php', 'update.php', 'lab_config_status.php', 'lab_config_home.php',
+array_push($superAdminPageList, 'lab_configs.php', 'lab_config_new.php', 'update_database.php', 'update.php', 'lab_config_status.php','st_types_update.php', 'lab_config_home.php',
 'switchto_tech.php', 'lab_admins.php', 'lab_admin_edit.php', 'lab_admin_new.php', 'country_catalog.php', 'reports.php', 'stock_management.php', 'stock_edit.php', 
-'lab_user_new.php', 'reports_userlog.php', 'lab_user_edit.php', 'ofield_update.php', 'cfield_new.php', 'cfield_edit.php');
+'lab_user_new.php', 'reports_userlog.php', 'lab_user_edit.php', 'ofield_update.php', 'search_config_update.php', 'cfield_new.php', 'cfield_edit.php');
 
 ?>

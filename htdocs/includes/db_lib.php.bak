@@ -1243,8 +1243,7 @@ class TestType
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 		$query_string = 
 			"SELECT measure_id FROM test_type_measure ".
-			"WHERE test_type_id=$this->testTypeId ";
-                        //"ORDER BY ts";
+			"WHERE test_type_id=$this->testTypeId";
 		$resultset = query_associative_all($query_string, $row_count);
 		$retval = array();
 		if($resultset) {
@@ -1264,7 +1263,7 @@ class TestType
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 		$query_string = 
 			"SELECT measure_id FROM test_type_measure ".
-			"WHERE test_type_id=$this->testTypeId ";
+			"WHERE test_type_id=$this->testTypeId";
 		$resultset = query_associative_all($query_string, $row_count);
 		$retval = array();
 		foreach($resultset as $record)
@@ -1410,13 +1409,7 @@ class Measure
 	public static $RANGE_NUMERIC = 2;
 	public static $RANGE_MULTI = 3;
 	public static $RANGE_AUTOCOMPLETE = 4;
-	//nc40
-        public static $RANGE_FREETEXT = 5;
-        //-nc40
-        
-        # nc50
-        public static $RANGE_SUBTYPE = 6;
-        
+	
 	public static function getObject($record)
 	{
 		# Converts a measure record in DB into a Measure object
@@ -1440,20 +1433,7 @@ class Measure
 		}
 		else
 		{
-                    /*
-                    if(strpos($this->name, "\$sub") !== false)
-                    {
-                        $encName = $this->name;
-                        $start_tag = "\$sub*";
-                        $end_tag = "/\$";
-                        $subm_end = strpos($encName, $end_tag);
-                        $decName = substr($encName, $subm_end + 2);
-                        return $decName;
-                    }
-                    else
-                    */
 			return $this->name;
-                    
 		}
 	}
 	
@@ -1471,106 +1451,19 @@ class Measure
 		{
 			return Measure::$RANGE_MULTI;
 		}	
-		else if(strpos($this->range, "/") !== false)
+		else	if(strpos($this->range, "/") !== false)
 		{
 			return Measure::$RANGE_OPTIONS;
 		}
-                //nc40
-		else if(strpos($this->range, "\$freetext\$") !== false)
-                {
-                    return Measure::$RANGE_FREETEXT;
-                }
-		//-nc40
-                
+		
+			
+		
 		else 
 		{
 			return Measure::$RANGE_ERROR;
 		}
 	}
 	
-        #nc50
-        public function checkIfSubmeasure()
-        {
-                if(strpos($this->name, "\$sub") !== false)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
-        }
-        
-        #nc50
-        public function truncateSubmeasureTag()
-        {
-            $encName = $this->name;
-            $start_tag = "\$sub*";
-            $end_tag = "/\$";
-            $subm_end = strpos($encName, $end_tag);
-            $decName = substr($encName, $subm_end + 2);
-            return $decName;
-        }
-        
-        # nc50
-        public function getSubmeasureParent()
-        {
-            $encName = $this->name;
-            $start_tag = "\$sub*";
-            $end_tag = "/\$";
-            $subm_end = strpos($encName, $end_tag);
-            $parent = substr($encName, 5, $end_tag - 5);
-            $parent_int = intval($parent);
-            return $parent_int;
-        }
-        
-        #nc50
-        public function getSubmeasuresAsObj()
-        {
-            $id = $this->measureId;
-            $tagID = "\$sub*".$id."/\$";
-            $submeasureList = array();
-             $query_string =
-			"SELECT * FROM measure ";
-		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$recordset = query_associative_all($query_string, $row_count);
-                DbUtil::switchRestore($saved_db);
-                foreach( $recordset as $record ) 
-                {
-				$measureName = $record['name'];
-                                $smID = intval($record['measure_id']);
-                                if(strpos($measureName, $tagID) !== false)
-                                {
-                                    //echo "<br>---".strpos($measureName, $tagID);
-                                    $smObj = Measure::getById($record['measure_id']);
-                                    array_push($submeasureList, $smObj);
-                                }
-		}
-                return $submeasureList;
-        }
-        
-        public function getSubmeasures()
-        {
-            $id = $this->measureId;
-            $tagID = "\$sub*".$id."/\$";
-            $submeasureList = array();
-             $query_string =
-			"SELECT * FROM measure ";
-		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$recordset = query_associative_one($query_string);
-                DbUtil::switchRestore($saved_db);
-                foreach( $recordset as $record ) 
-                {
-				$measureName = $record['name'];
-                                $smID = intval($record['measure_id']);
-                                if(strpos($measureName, $tagID) !== false)
-                                {
-                                    array_push($submeasureList, $smID);
-                                }
-		}
-                return $submeasureList;
-        }
-        
 	public function getRangeValues($patient=null)
 	{
 		# Returns range values in a list
@@ -1611,10 +1504,6 @@ class Measure
 				$retval[$key]=str_replace("#","_",$value);
 				}
 				break;
-                                
-                        case Measure::$RANGE_FREETEXT:
-				$retval = "Free Text Measure Type";
-				break;
 		}
 		return $retval;
 	}
@@ -1627,8 +1516,7 @@ class Measure
 		(
 			$this->getRangeType() == Measure::$RANGE_OPTIONS ||
 			$this->getRangeType() == Measure::$RANGE_MULTI ||
-			$this->getRangeType() == Measure::$RANGE_AUTOCOMPLETE ||
-                        $this->getRangeType() == Measure::$RANGE_FREETEXT
+			$this->getRangeType() == Measure::$RANGE_AUTOCOMPLETE
 		)
 		{
 			$range_parts = explode("/", $this->range);
@@ -1652,7 +1540,6 @@ class Measure
 		}
 		
 		return $range_parts;
-                
 	}
 	
 	public function getUnits()
@@ -2679,111 +2566,15 @@ class Test
 			# Results not yet entered
 			return "";
 		$retval = substr($this->result, 0, -1*$PATIENT_HASH_LENGTH);
-                # nc44
-                $testt = $retval;
-                    //$test2 = strstr($testt, $);
-                    $del_tag = "##";
-                    $start_tag = "[$]";
-                    $end_tag = "[/$]";
-                    $comma = ',';
-                    //$testtt = str_replace("[$]two[/$],", "", $testt);
-                    $del_count = substr_count($testt, $del_tag);
-                    //echo $ft_count;
-                    $k = 0;
-                    //echo "-".$del_count."-";
-                    while($k < $del_count)
-                    {
-                       $del_beg = strpos($testt, $del_tag);
-                        if($testt[$del_beg] == "[" && $testt[$del_beg + 1] == "$")
-                        {
-                            $del_end = strpos($testt, $end_tag, $del_beg);
-                            //$ft_sub = substr($testt, $ft_beg + 3, $ft_end - $ft_beg - 3);
-                            $res_left = substr($testt, 0, $del_beg);
-                            $res_right = substr($testt, $del_end + 5);
-                            
-                        }
-                        else
-                        {
-                            $del_end = strpos($testt, $comma, $del_beg);
-                            //$ft_sub = substr($testt, $ft_beg + 2, $ft_end - $ft_beg - 3);
-                            $res_left = substr($testt, 0, $del_beg);
-                            $res_right = substr($testt, $del_end + 1);
-                        }
-                        //echo "<br>".$ft_left."--".$ft_right."<br>";
-                        $testt = $res_left.$res_right;
-                        //array_push($freetext_results, $ft_sub);
-                        $k++;
-                    }
-                    //echo $testt;
-                    $retval = $testt;
 		return $retval;
 	}
 	
-        public function getResultWithoutHash2()
-	{
-		global $PATIENT_HASH_LENGTH;
-		if(trim($this->result) == "")
-			# Results not yet entered
-			return "";
-		$retval = substr($this->result, 0, -1*$PATIENT_HASH_LENGTH);
-		return $retval;
-	}
-        
-        public function getHashInResult()
-	{
-		global $PATIENT_HASH_LENGTH;
-		if(trim($this->result) == "")
-			# Results not yet entered
-			return "";
-		$retval = substr($this->result, -1*$PATIENT_HASH_LENGTH);
-                return $retval;
-        }
 	public function getMeasureList() {
 		$testType = TestType::getById($this->testTypeId);
-		$measure_list = $testType->getMeasures();
-                $submeasure_list = array();
-                $comb_measure_list = array();
-               // print_r($measure_list);
-                
-                foreach($measure_list as $measure)
-                {
-                    
-                    $submeasure_list = $measure->getSubmeasuresAsObj();
-                    //echo "<br>".count($submeasure_list);
-                    //print_r($submeasure_list);
-                    $submeasure_count = count($submeasure_list);
-                    
-                    if($measure->checkIfSubmeasure() == 1)
-                    {
-                        continue;
-                    }
-                        
-                    if($submeasure_count == 0)
-                    {
-                        array_push($comb_measure_list, $measure);
-                    }
-                    else
-                    {
-                        array_push($comb_measure_list, $measure);
-                        foreach($submeasure_list as $submeasure)
-                           array_push($comb_measure_list, $submeasure); 
-                    }
-                }
-                $measure_list = $comb_measure_list;
-		for($i = 0; $i < count($measure_list); $i++) {
-			$curr_measure = $measure_list[$i];
-                        if(strpos($curr_measure->name, "\$sub") !== false)
-                                                            {
-                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
-                                                                
-                                                            }
-                                                            else
-                                                            {
-                                                                $decName = $curr_measure->name;
-                                                            }
-                                            
-                        
-			$retval .= "<br>".$decName."<br>";
+		$measureList = $testType->getMeasures();
+		for($i = 0; $i < count($measureList); $i++) {
+			$curr_measure = $measureList[$i];
+			$retval .= "<br>".$curr_measure->name."<br>";
 		}
 		return $retval;
 	}	
@@ -2793,424 +2584,94 @@ class Test
 		# Get measure, unit pairs for this test
 		$test_type = TestType::getById($this->testTypeId);
 		$measure_list = $test_type->getMeasures();
-                //print_r($measure_list);
-                $submeasure_list = array();
-                $comb_measure_list = array();
-               // print_r($measure_list);
-                
-                foreach($measure_list as $measure)
-                {
-                    
-                    $submeasure_list = $measure->getSubmeasuresAsObj();
-                    //echo "<br>".count($submeasure_list);
-                    //print_r($submeasure_list);
-                    $submeasure_count = count($submeasure_list);
-                    
-                    if($measure->checkIfSubmeasure() == 1)
-                    {
-                        continue;
-                    }
-                        
-                    if($submeasure_count == 0)
-                    {
-                        array_push($comb_measure_list, $measure);
-                    }
-                    else
-                    {
-                        array_push($comb_measure_list, $measure);
-                        foreach($submeasure_list as $submeasure)
-                           array_push($comb_measure_list, $submeasure); 
-                    }
-                }
-                $measure_list = $comb_measure_list;
-		$result_csv = $this->getResultWithoutHash();
-                //$result_csv = $this->getResultWithoutHash();
-                //echo "<br>";
-                //echo $result_csv;
-                //echo "<br>";
-                if(strpos($result_csv, "[$]") === false)
-                {
-                    $result_list = explode(",", $result_csv);
-                }
-                else
-                {
-                    //$testt = "one,[$]two[/$],[$]twotwo[/$],three";
-                    $testt = $result_csv;
-                    //$test2 = strstr($testt, $);
-                    $start_tag = "[$]";
-                    $end_tag = "[/$]";
-                    //$testtt = str_replace("[$]two[/$],", "", $testt);
-                    $freetext_results = array();
-                    $ft_count = substr_count($testt, $start_tag);
-                    //echo $ft_count;
-                    $k = 0;
-                    while($k < $ft_count)
-                    {
-                        $ft_beg = strpos($testt, $start_tag);
-                        $ft_end = strpos($testt, $end_tag);
-                        $ft_sub = substr($testt, $ft_beg + 3, $ft_end - $ft_beg - 3);
-                        $ft_left = substr($testt, 0, $ft_beg);
-                        $ft_right = substr($testt, $ft_end + 5);
-                        //echo "<br>".$ft_left."--".$ft_right."<br>";
-                        $testt = $ft_left.$ft_right;
-                        array_push($freetext_results, $ft_sub);
-                        $k++;
-                    }
-                    //echo $freetext_results."<br>".$testt;
-                    //$testtt = str_replace($subb, "", $testt, 1);
-                    //echo "$testto<br>$subb<br>";
-                    $result_csv = $testt;
-                    if(strpos($testt, ",") == 0)
-                            $result_csv = substr($testt, 1, strlen($testt)); 
-                    $result_list = explode(",", $result_csv);
-                    //echo "<br>";
-                    //print_r($result_list);
-                    //echo "<br>";
-                }
-                $retval = "";
+		//$result_csv = $this->getResultWithoutHash();
+                $result_csv = $this->getResultWithoutHash();
+		$result_list = explode(",", $result_csv);
+		$retval = "";
                 //NC3065
                 //echo print_r($measure_list);
                 //echo "<br>";
                 //echo $result_csv;
                 //echo "<br>";
                 //echo print_r($result_list,true);
-                //echo "Num->".count($measure_list);
+                echo "Num->".count($measure_list);
 		//-NC3065
-                $j = 0;
-                $i = 0;
-                $c = 0;
-                //for($i = 0; $i < count($measure_list); $i++) {
-                while($c < count($measure_list)) {
+                for($i = 0; $i < count($measure_list); $i++) {
 			# Pretty print
-			$curr_measure = $measure_list[$c];
-			if($curr_measure->getRangeType() != Measure::$RANGE_FREETEXT)
-                        {
-                            if(isset($result_list[$i]))
-                            {    
-                                //echo "Num->".$i;
-                                    # If matching result value exists (e.g. after a new measure was added to this test type)
-                                    if(count($measure_list) == 1)
-                                    {
-                                            # Only one measure: Do not print measure name
-                                            if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE) {
-                                                    $result_string = "";
-                                                    $value_list = explode("_", $result_list[$i]);
-                                                    foreach($value_list as $value) {
-                                                            if(trim($value) == "")
-                                                                    continue;
-                                                            $result_string .= $value."<br>";
-                                                    }
-                                                    $result_string = substr($result_string, 0, -4);
-                                                    $retval .= "<br>".$result_string."&nbsp;";
-                                            }
-                                            else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
-                                            {
-                                                    if($result_list[$i] != $curr_measure->unit)
-                                                            $retval .= "<br><b>".$result_list[$i]."</b> &nbsp;";
-                                                    else
-                                                            $retval .= "<br>".$result_list[$i]."&nbsp;";
-                                            }
-                                            else
-                                            {
-                                                    $retval .= "<br>".$result_list[$i]."&nbsp;";
-                                            }
-                                    }
-                                    else
-                                    {
-                                            # Print measure name with each result value
-                                         if(strpos($curr_measure->name, "\$sub") !== false)
-                                                            {
-                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
-                                                                
-                                                            }
-                                                            else
-                                                            {
-                                                                $decName = $curr_measure->name;
-                                                            }
-                                            $retval .= "<br>".$decName.":"."&nbsp;";
-                                        
-                                            if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE)
-                                            {
-                                                    $result_string = "";
-                                                    $value_list = str_replace("_", ",", $result_list[$i]);
-                                                    $retval .= "<b>".$value_list."</b>";
-                                            }
-                                            else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
-                                            {
-                                                    if($result_list[$i]!=$curr_measure->unit)
-                                                            $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;";
-                                                    else
-                                                            $retval .= $result_list[$i]."&nbsp;";
-                                            }
-                                            else
-                                                    $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;";
-                                    }
-
-                                    if($show_range === true)
-                                    {
-                                            $retval .= $curr_measure->getRangeString();
-                                    }
-                                    if($i != count($measure_list) - 1)
-                                    {
-                                            $retval .= "<br>";
-                                    }
-                            }
-                            else
-                            {
-                                    # Matching result value not found: Show "-"
-                                    if(count($measure_list) == 1)
-                                    {
-                                            if(strpos($curr_measure->name, "\$sub") !== false)
-                                                            {
-                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
-                                                                
-                                                            }
-                                                            else
-                                                            {
-                                                                $decName = $curr_measure->name;
-                                                            }
-                                            $retval .= $decName."&nbsp;";
-                                    }
-                                    $retval .= " - <br>";
-                            }
-                            $i++;
-                        }
-                        else
-                        {
-                            $ft_result = $freetext_results[$j];
-
-                            if(count($measure_list) == 1)
-                            {
-                                $retval .= "<br>".$ft_result."&nbsp;";   
-                            }
-                            else
-                            {
-                                if(strpos($curr_measure->name, "\$sub") !== false)
-                                                            {
-                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
-                                                                
-                                                            }
-                                                            else
-                                                            {
-                                                                $decName = $curr_measure->name;
-                                                            }
-                                $retval .= "<br>".$decName.":"."&nbsp;"."<b>".$ft_result."</b>"."&nbsp;";
-                            }
-                            if($show_range === true)
-                                        {
-                                                $retval .= $curr_measure->getRangeString();
-                                        }
-                                        if($i != count($measure_list) - 1)
-                                        {
-                                                $retval .= "<br>";
-                                        }
-                            $j++;
-                            
-                        }$c++;
-		}//end
-		//$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
+			$curr_measure = $measure_list[$i];
+			if(isset($result_list[$i]))
+			{    
+                            //echo "Num->".$i;
+				# If matching result value exists (e.g. after a new measure was added to this test type)
+				if(count($measure_list) == 1)
+				{
+					# Only one measure: Do not print measure name
+					if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE) {
+						$result_string = "";
+						$value_list = explode("_", $result_list[$i]);
+						foreach($value_list as $value) {
+							if(trim($value) == "")
+								continue;
+							$result_string .= $value."<br>";
+						}
+						$result_string = substr($result_string, 0, -4);
+						$retval .= "<br>".$result_string."&nbsp;";
+					}
+					else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
+					{
+						if($result_list[$i] != $curr_measure->unit)
+							$retval .= "<br><b>".$result_list[$i]."</b> &nbsp;";
+						else
+							$retval .= "<br>".$result_list[$i]."&nbsp;";
+					}
+					else
+					{
+						$retval .= "<br>".$result_list[$i]."&nbsp;";
+					}
+				}
+				else
+				{
+					# Print measure name with each result value
+					$retval .= "<br>".$curr_measure->name."&nbsp;";
+					if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE)
+					{
+						$result_string = "";
+						$value_list = str_replace("_", ",", $result_list[$i]);
+						$retval .= ":<br>".$value_list."<br>";
+					}
+					else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
+					{
+						if($result_list[$i]!=$curr_measure->unit)
+							$retval .= "<b>".$result_list[$i]."</b> &nbsp;";
+						else
+							$retval .= $result_list[$i]."&nbsp;";
+					}
+					else
+						$retval .= $result_list[$i]."&nbsp;";
+				}
+				if($show_range === true)
+				{
+					$retval .= $curr_measure->getRangeString();
+				}
+				if($i != count($measure_list) - 1)
+				{
+					$retval .= "<br>";
+				}
+			}
+			else
+			{
+				# Matching result value not found: Show "-"
+				if(count($measure_list) == 1)
+				{
+					$retval .= $curr_measure->name."&nbsp;";
+				}
+				$retval .= " - <br>";
+			}
+		}
+		$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
 		return $retval;
 	}
 	
-        public function decodeResultWithoutMeasures($show_range=false) {
-        
-            # Converts stored result value(s) for showing on front-end
-		# Get measure, unit pairs for this test
-		$test_type = TestType::getById($this->testTypeId);
-		$measure_list = $test_type->getMeasures();
-                //print_r($measure_list);
-                $submeasure_list = array();
-                $comb_measure_list = array();
-               // print_r($measure_list);
-                
-                foreach($measure_list as $measure)
-                {
-                    
-                    $submeasure_list = $measure->getSubmeasuresAsObj();
-                    //echo "<br>".count($submeasure_list);
-                    //print_r($submeasure_list);
-                    $submeasure_count = count($submeasure_list);
-                    
-                    if($measure->checkIfSubmeasure() == 1)
-                    {
-                        continue;
-                    }
-                        
-                    if($submeasure_count == 0)
-                    {
-                        array_push($comb_measure_list, $measure);
-                    }
-                    else
-                    {
-                        array_push($comb_measure_list, $measure);
-                        foreach($submeasure_list as $submeasure)
-                           array_push($comb_measure_list, $submeasure); 
-                    }
-                }
-                $measure_list = $comb_measure_list;
-		$result_csv = $this->getResultWithoutHash();
-                //$result_csv = $this->getResultWithoutHash();
-                //echo "<br>";
-                //echo $result_csv;
-                //echo "<br>";
-                if(strpos($result_csv, "[$]") === false)
-                {
-                    $result_list = explode(",", $result_csv);
-                }
-                else
-                {
-                    //$testt = "one,[$]two[/$],[$]twotwo[/$],three";
-                    $testt = $result_csv;
-                    //$test2 = strstr($testt, $);
-                    $start_tag = "[$]";
-                    $end_tag = "[/$]";
-                    //$testtt = str_replace("[$]two[/$],", "", $testt);
-                    $freetext_results = array();
-                    $ft_count = substr_count($testt, $start_tag);
-                    //echo $ft_count;
-                    $k = 0;
-                    while($k < $ft_count)
-                    {
-                        $ft_beg = strpos($testt, $start_tag);
-                        $ft_end = strpos($testt, $end_tag);
-                        $ft_sub = substr($testt, $ft_beg + 3, $ft_end - $ft_beg - 3);
-                        $ft_left = substr($testt, 0, $ft_beg);
-                        $ft_right = substr($testt, $ft_end + 5);
-                        //echo "<br>".$ft_left."--".$ft_right."<br>";
-                        $testt = $ft_left.$ft_right;
-                        array_push($freetext_results, $ft_sub);
-                        $k++;
-                    }
-                    //echo $freetext_results."<br>".$testt;
-                    //$testtt = str_replace($subb, "", $testt, 1);
-                    //echo "$testto<br>$subb<br>";
-                    $result_csv = $testt;
-                    if(strpos($testt, ",") == 0)
-                            $result_csv = substr($testt, 1, strlen($testt)); 
-                    $result_list = explode(",", $result_csv);
-                    //echo "<br>";
-                    //print_r($result_list);
-                    //echo "<br>";
-                }
-                $retval = "";
-                //NC3065
-                //echo print_r($measure_list);
-                //echo "<br>";
-                //echo $result_csv;
-                //echo "<br>";
-                //echo print_r($result_list,true);
-                //echo "Num->".count($measure_list);
-		//-NC3065
-                $j = 0;
-                $i = 0;
-                $c = 0;
-                //for($i = 0; $i < count($measure_list); $i++) {
-                while($c < count($measure_list)) {
-			# Pretty print
-			$curr_measure = $measure_list[$c];
-			if($curr_measure->getRangeType() != Measure::$RANGE_FREETEXT)
-                        {
-                            if(isset($result_list[$i]))
-                            {    
-                                //echo "Num->".$i;
-                                    # If matching result value exists (e.g. after a new measure was added to this test type)
-                                    if(count($measure_list) == 1)
-                                    {
-                                            # Only one measure: Do not print measure name
-                                            if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE) {
-                                                    $result_string = "";
-                                                    $value_list = explode("_", $result_list[$i]);
-                                                    foreach($value_list as $value) {
-                                                            if(trim($value) == "")
-                                                                    continue;
-                                                            $result_string .= $value."<br>";
-                                                    }
-                                                    $result_string = substr($result_string, 0, -4);
-                                                    $retval .= "<br>".$result_string."&nbsp;";
-                                            }
-                                            else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
-                                            {
-                                                    if($result_list[$i] != $curr_measure->unit)
-                                                            $retval .= "<br><b>".$result_list[$i]."</b> &nbsp;<br>";
-                                                    else
-                                                            $retval .= "<br>".$result_list[$i]."&nbsp;<br>";
-                                            }
-                                            else
-                                            {
-                                                    $retval .= "<br>".$result_list[$i]."&nbsp;<br>";
-                                            }
-                                    }
-                                    else
-                                    {
-                                            # Print measure name with each result value
-                                         
-                                        
-                                            if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE)
-                                            {
-                                                    $result_string = "";
-                                                    $value_list = str_replace("_", ",", $result_list[$i]);
-                                                    $retval .= "<b>".$value_list."</b>";
-                                            }
-                                            else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
-                                            {
-                                                    if($result_list[$i]!=$curr_measure->unit)
-                                                            $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;<br>";
-                                                    else
-                                                            $retval .= $result_list[$i]."&nbsp;<br>";
-                                            }
-                                            else
-                                                    $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;<br>";
-                                    }
-
-                                    if($show_range === true)
-                                    {
-                                            $retval .= $curr_measure->getRangeString();
-                                    }
-                                    if($i != count($measure_list) - 1)
-                                    {
-                                            $retval .= "<br>";
-                                    }
-                            }
-                            else
-                            {
-                                    # Matching result value not found: Show "-"
-                                    if(count($measure_list) == 1)
-                                    {
-                                            
-                                    }
-                                    $retval .= " - <br>";
-                            }
-                            $i++;
-                        }
-                        else
-                        {
-                            $ft_result = $freetext_results[$j];
-
-                            if(count($measure_list) == 1)
-                            {
-                                $retval .= "<br>".$ft_result."&nbsp;<br>";   
-                            }
-                            else
-                            {
-                                 $retval .= "<br>".$ft_result."&nbsp;<br>"; 
-                            }
-                            if($show_range === true)
-                                        {
-                                                $retval .= $curr_measure->getRangeString();
-                                        }
-                                        if($i != count($measure_list) - 1)
-                                        {
-                                                $retval .= "<br>";
-                                        }
-                            $j++;
-                            
-                        }$c++;
-		}//end
-		//$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
-		return $retval;
-        }
-        
-        /*
 	public function decodeResultWithoutMeasures($show_range=false) {
 		# Converts stored result value(s) for showing on front-end
 		$test_type = TestType::getById($this->testTypeId);
@@ -3301,8 +2762,7 @@ class Test
 		$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
 		return $retval;
 	}
-	*/
-        
+	
 	public function getComments()
 	{
 		if(trim($this->comments) == "" || $this->comments == null)
@@ -3328,7 +2788,6 @@ class Test
 			$retval[] = Test::getObject($record);
 		return $retval;
 	}
-        
 	
 	public function verifyAndUpdate($hash_value)
 	{
@@ -5532,16 +4991,6 @@ function add_lab_config_with_id($lab_config)
 	return $lab_config_id;
 }
 
-function enable_new_test($lab_config_id, $test_type_id)
-{
-    $saved_db = DbUtil::switchToLabConfigRevamp();
-    $query_ins= 
-					"INSERT INTO lab_config_test_type(lab_config_id, test_type_id) ".
-					"VALUES ($lab_config_id, $test_type_id)";
-    query_blind($query_ins);
-    DbUtil::switchRestore($saved_db);
-}
-
 function update_lab_config($updated_entry, $updated_specimen_list=null, $updated_test_list=null)
 {
 	# Updates a lab configuration record
@@ -6518,7 +5967,7 @@ function update_specimen_type($updated_entry, $new_test_list)
 	DbUtil::switchRestore($saved_db);
 }
 
-function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat, $specimen_list = array())
+function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_panel, $specimen_list=array(), $lab_config_id, $hide_patient_name)
 {
 	global $con;
 	$test_name = mysql_real_escape_string($test_name, $con);
@@ -6529,29 +5978,21 @@ function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_p
 	# Adds a new test type in DB with compatible specimens in 'specimen_list'
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$is_panel_num = 1;
-        
 	if($is_panel == false)
 	{
 		$is_panel_num = 0;
 	}
-        
-        if($prevalenceThreshold == "")
-            $prevalenceThreshold = 70;
-        
-        if($targetTat == "")
-            $targetTat = 24;
-        
 	if($clinical_data=="")
 	{
 	$query_string = 
-		"INSERT INTO test_type(name, description,test_category_id, is_panel, hide_patient_name, prevalence_threshold, target_tat) ".
-		"VALUES ('$test_name', '$test_descr','$cat_code', '$is_panel_num', '$hide_patient_name', $prevalenceThreshold, $targetTat)";
+		"INSERT INTO test_type(name, description,test_category_id, is_panel, hide_patient_name) ".
+		"VALUES ('$test_name', '$test_descr','$cat_code', '$is_panel_num', '$hide_patient_name')";
 	}
 	else
 	{
 	$query_string = 
-		"INSERT INTO test_type(name, description,clinical_data, test_category_id, is_panel, hide_patient_name, prevalence_threshold, target_tat) ".
-		"VALUES ('$test_name', '$test_descr','$clinical_data', '$cat_code', '$is_panel_num', '$hide_patient_name', $prevalenceThreshold, $targetTat)";
+		"INSERT INTO test_type(name, description,clinical_data, test_category_id, is_panel, hide_patient_name) ".
+		"VALUES ('$test_name', '$test_descr','$clinical_data', '$cat_code', '$is_panel_num', '$hide_patient_name')";
 	}
 	query_insert_one($query_string);
 	$test_type_id = get_max_test_type_id();
@@ -6682,17 +6123,13 @@ function add_measure($measure, $range, $unit)
 # Functions for fetching data from catalog
 #
 
-function get_specimen_types_catalog($lab_config_id=null, $reff=null)
+function get_specimen_types_catalog($lab_config_id=null)
 {
 	# Returns a list of all specimen types available in catalog
 	global $CATALOG_TRANSLATION;
         //NC3065
-        //global $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_COUNTRYDIR;
-        if($reff == 1)
-        {
-            $user = get_user_by_id($_SESSION['user_id']);
-            $lab_config_id = $user->labConfigId;
-        }
+        $user = get_user_by_id($_SESSION['user_id']);
+        $lab_config_id = $user->labConfigId;
         //-NC3065
 
 	if($lab_config_id == null)
@@ -6716,21 +6153,17 @@ function get_specimen_types_catalog($lab_config_id=null, $reff=null)
 	return $retval;
 }
 
-function get_test_types_catalog($lab_config_id=null, $reff=null)
+function get_test_types_catalog($lab_config_id=null)
 {
 	# Returns a list of all test types available in catalog
 	global $CATALOG_TRANSLATION;
         //NC3065
-               // global $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_COUNTRYDIR;
-        if($reff == 1 && $reff != 2)
-        {
-            $user = get_user_by_id($_SESSION['user_id']);
-            $lab_config_id = $user->labConfigId;
-        }
+        $user = get_user_by_id($_SESSION['user_id']);
+        $lab_config_id = $user->labConfigId;
         //-NC3065
 	if($lab_config_id == null)
 		return;
-	//else
+	else
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_ttypes =
 		"SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name";
@@ -6781,40 +6214,6 @@ function getDoctorNames()
 			$doc_name=substr($doc_name,$pos+2);
 		$retval[]=$doc_name;
 	}
-	return $retval;
-}
-
-function get_test_categories_data($lab_config_id) {
-	
-        $saved_db = DbUtil::switchToLabConfig($lab_config_id);		
-        $query_string = "SELECT test_category_id, name FROM test_category";
-	$resultset = query_associative_all($query_string, $row_count);
-	$retval = array();
-        $i = 0;
-        
-	foreach($resultset as $record)
-	{
-            $retval[$i] = array(2);
-            $retval[$i][0] = $record['test_category_id'];
-            $retval[$i][1] = $record['name'];
-            $i++;
-	}
-	DbUtil::switchRestore($saved_db);
-	return $retval;
-}
-
-
-function get_test_ids_by_category($cat, $lab_config_id) {
-	
-        $saved_db = DbUtil::switchToLabConfig($lab_config_id);		
-        $query_string = "SELECT test_type_id FROM test_type WHERE test_category_id = $cat";
-	$resultset = query_associative_all($query_string, $row_count);
-	$retval = array();
-	foreach($resultset as $record)
-	{
-            array_push($retval, $record['test_type_id']);
-	}
-	DbUtil::switchRestore($saved_db);
 	return $retval;
 }
 
@@ -8254,7 +7653,6 @@ class GlobalMeasure
 	public static $RANGE_NUMERIC = 2;
 	public static $RANGE_MULTI = 3;
 	public static $RANGE_AUTOCOMPLETE = 4;
-
 	
 	public static function getObject($record) {
 		# Converts a measure record in DB into a Measure object
@@ -9523,251 +8921,4 @@ function getLabIdFromGlobalPatientId($patientId, $country) {
 	}
 }
 
-# nc40
-function getTestCountGroupedConfig($lab_config_id)
-{
-		/*$query_string =
-			"SELECT * FROM report_disease ".
-			"WHERE lab_config_id = 9999009";
-                 * 
-                 */
-                $nineID = 9999009;
-                $query_string = "SELECT * FROM report_config WHERE landscape = $nineID";
-		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$record = query_associative_one($query_string);
-                if($record == '')
-                {
-                    /*
-                    $query_string_add = "INSERT INTO report_disease (group_by_age, group_by_gender, age_groups, measure_groups, measure_id, lab_config_id, test_type_id) VALUES (1, 1, '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+', '0', 1, 9999009, 1)";
-                    query_insert_one($query_string_add);
-                    $record = query_associative_one($query_string);
-                     
-                     */
-                    $query_string_add = "INSERT INTO report_config (header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields, test_type_id, title, landscape ) VALUES ('Grouped Test Count Report Configuration', '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+', '0', '1', '1', '1', '1', '0', '$nineID' , '0', $nineID)";
-                    query_insert_one($query_string_add);
-                    $record = query_insert_one($query_string);
-                    $query_string = "SELECT * FROM report_config WHERE landscape = $nineID";
-                        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
-                        $record = query_associative_one($query_string);
-                }
-                
-                
-		DbUtil::switchRestore($saved_db);
-                $retval = array();
-                /*$byAge = $configArray['group_by_age'];
-                $age_group_list = decodeAgeGroups($configArray['age_groups']);
-                $byGender = $configArray['group_by_gender'];
-                $bySection = $configArray['measure_id'];
-                $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending */
-                
-                $retval['group_by_age'] = intval($record['p_fields']); //group_by_age
-                $retval['age_groups'] = $record['footer']; //age_groups
-                $retval['group_by_gender'] = intval($record['s_fields']); //group_by_gender
-                $retval['measure_id'] = intval($record['t_fields']); //group_by_section
-                $retval['test_type_id'] = intval($record['p_custom_fields']); //combo
-                
-		return $retval;
-                
-}
-
-# nc40
-function decodeAgeGroups($ageGroups)
-	{
-		# Returns the age_group field as a PHP list
-		$age_parts = explode(",", $ageGroups);
-		$retval = array();
-		foreach($age_parts as $age_part)
-		{
-			if(trim($age_part) == "")
-				continue;
-			$age_bounds = explode(":", $age_part);
-			$retval[] = $age_bounds;
-		}
-		return $retval;
-	}
-
- # nc40       
-function getSpecimenCountGroupedConfig($lab_config_id)
-{
-                $nineID = 9999019;
-                $query_string = "SELECT * FROM report_config WHERE landscape = $nineID";
-		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$record = query_associative_one($query_string);
-                if($record == '')
-                {
-                    /*
-                    $query_string_add = "INSERT INTO report_disease (group_by_age, group_by_gender, age_groups, measure_groups, measure_id, lab_config_id, test_type_id) VALUES (1, 1, '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+', '0', 1, 9999009, 1)";
-                    query_insert_one($query_string_add);
-                    $record = query_associative_one($query_string);
-                     
-                     */
-                    $query_string_add = "INSERT INTO report_config (header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields, test_type_id, title, landscape ) VALUES ('Grouped Specimen Count Report Configuration', '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+', '0', '1', '1', '1', '1', '0', '$nineID' , '0', $nineID)";
-                    query_insert_one($query_string_add);
-                    $record = query_insert_one($query_string);
-                    $query_string = "SELECT * FROM report_config WHERE landscape = $nineID";
-                        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
-                        $record = query_associative_one($query_string);
-                }
-                
-                
-		DbUtil::switchRestore($saved_db);
-                $retval = array();
-                /*$byAge = $configArray['group_by_age'];
-                $age_group_list = decodeAgeGroups($configArray['age_groups']);
-                $byGender = $configArray['group_by_gender'];
-                $bySection = $configArray['measure_id'];
-                $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending */
-                
-                $retval['group_by_age'] = intval($record['p_fields']); //group_by_age
-                $retval['age_groups'] = $record['footer']; //age_groups
-                $retval['group_by_gender'] = intval($record['s_fields']); //group_by_gender
-                $retval['measure_id'] = intval($record['t_fields']); //group_by_section
-                $retval['test_type_id'] = intval($record['p_custom_fields']); //combo
-                
-		return $retval;
-}
-
-# nc40
-function updateGroupedReportsConfig($byAge, $byGender, $ageGroups, $bySection, $combo, $entryID, $lab_config_id)
-	{
-                $saved_db = DbUtil::switchToLabConfig($lab_config_id);		
-                
-                if($entryID == 9999019)
-                    $header = "Grouped Specimen Count Report Configuration";
-                else
-                    $header = "Grouped Test Count Report Configuration";
-                
-                # Remove existing entry
-		$query_string =
-			"DELETE FROM report_config ".
-			"WHERE landscape = $entryID ";
-			
-		query_blind($query_string);
-		
-                # Add updated entry
-		$query_string = 
-			"INSERT INTO report_config( ".
-				"header, ".
-				"footer, ".
-				"margins, ".
-				"p_fields, ".
-				"s_fields, ".
-				"t_fields, ".
-				"p_custom_fields, ".
-                                "s_custom_fields, ".
-                                "test_type_id, ".
-                                "title, ".
-                                "landscape ".
-			") ".
-			"VALUES ( ".
-				"'$header', ".
-				"'$ageGroups', ".
-				"'0', ".
-				"'$byAge', ".
-				"'$byGender', ".
-				"'$bySection', ".
-				"'$combo', ".
-                                "'0', ".
-                                "'$entryID', ".
-                                "'0', ".
-                                "$entryID ".
-			")";
-		query_insert_one($query_string);
-		DbUtil::switchRestore($saved_db);
-	}
-        
-        #nc44
-        function getTestRecordsByDate($date, $test_type_id)
-	{
-		global $con;
-		$test_type_id = mysql_real_escape_string($test_type_id, $con);
-		$date = mysql_real_escape_string($date, $con);
-		$query_string =
-			"SELECT * FROM test ".
-			"WHERE test_type_id=$test_type_id ".
-			"AND ts > FROM_UNIXTIME($date) ";
-		$retval = array();
-		$resultset = query_associative_all($query_string, $row_count);
-		foreach($resultset as $record)
-			$retval[] = Test::getObject($record);
-		return $retval;
-	}
-        
-        function updateTestRecordByIds($test_id, $result)
-	{
-            //$count_tests = count($test_ids);
-            //for($i = 0; $i < $count_tests; $i++)
-            //{
-		$query_string =
-			"UPDATE test SET result='$result' ".
-			"WHERE test_id=$test_id ";
-                query_update($query_string);
-            //}
-	}
-
-        function getTestRecordsByDatee($date)
-	{
-		# Returns all test records added on that day
-		global $con;
-		$test_type_id = mysql_real_escape_string($test_type_id, $con);
-		$date = mysql_real_escape_string($date, $con);
-		$query_string =
-			"SELECT * FROM test ".
-			"Where ts > From_UNIXTIME($date) ";
-			//"AND result<>''";
-		$retval = array();
-		$resultset = query_associative_all($query_string, $row_count);
-                
-		foreach($resultset as $record)
-			$retval[] = $record['test_id'];
-		return $retval;
-	}
-        
-        function get_test_date_by_id($test_type_id, $lab_config_id=null)
-{
-	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
-	# Returns test type name string
-	global $CATALOG_TRANSLATION;
-	if($CATALOG_TRANSLATION === true)
-	return LangUtil::getTestName($test_type_id);
-	else
-	{
-		$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
-		$query_string = 
-			"SELECT date(ts) FROM test_type ".
-			"WHERE test_type_id=$test_type_id LIMIT 1";
-		$record = query_associative_one($query_string);
-		DbUtil::switchRestore($saved_db);
-		if($record == null)
-			return LangUtil::$generalTerms['NOTKNOWN'];
-		else
-			return $record['date(ts)'];
-	}
-}
-
-function getSubmeasureIDs($id)
-        {
-            //$id = $this->measureId;
-            $tagID = "\$sub*".$id."/\$";
-            $submeasureList = array();
-             $query_string =
-			"SELECT * FROM measure ";
-		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$recordset = query_associative_all($query_string);
-                DbUtil::switchRestore($saved_db);
-                foreach( $recordset as $record ) 
-                {
-				$measureName = $record['name'];
-                                $smID = intval($record['measure_id']);
-                                if(strpos($measureName, $tagID) !== false)
-                                {
-                                    array_push($submeasureList, $smID);
-                                }
-		}
-                return $submeasureList;
-        }
-        
-        
 ?>

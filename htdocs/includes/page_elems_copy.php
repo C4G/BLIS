@@ -804,8 +804,6 @@ class PageElems
 					<?php
 						# Fetch all test measures
 						$measure_id_list = get_test_type_measures($test_type->testTypeId);
-                                                sort($measure_id_list);
-                                                //print_r($measure_id_list);
 						foreach($measure_id_list as $measure_id)
 						{
 							$measure = get_measure_by_id($measure_id);
@@ -814,17 +812,7 @@ class PageElems
 									break;
 								}
 							else if($measure!=NULL)
-                                                        {
-                                                            if(strpos($measure->getName(), "\$sub") !== false)
-                                                            {
-                                                                $decName = $measure->truncateSubmeasureTag();
-                                                                echo "&nbsp&nbsp&nbsp&nbsp;".$decName."<br>";
-                                                            }
-                                                            else
-                                                            {
-                                                                echo $measure->getName()."<br>";
-                                                            }
-                                                        }
+									echo $measure->getName()."<br>";
 						}
 					?>
 					</td>
@@ -2391,11 +2379,6 @@ class PageElems
 					<?php echo LangUtil::$pageTerms['MSG_PRINTHISTORY']; ?>
 				</a>
 			</p>
-                        <p>
-				<a href='viz_test_history.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>' title='Click to Generate Test History Report Visualization for this Patient' target='_blank'>
-					<?php echo " View Report Visualization"; ?>
-				</a>
-			</p>
 			<!--<p><a href='#'>Export as XML</a></p>-->
 			</div>
 		<?php
@@ -2615,13 +2598,7 @@ class PageElems
 					<?php
 				}
 			}
-			$viz_url = "viz_test_history.php?location=".$_SESSION['lab_config_id']."&patient_id=".$specimen->patientId."&yf=$date_parts[0]&mf=$date_parts[1]&df=$date_parts[2]&yt=$date_parts[0]&mt=$date_parts[1]&dt=$date_parts[2]";
 			?>
-                                        <p>
-				<a href='<?php echo $viz_url; ?>' title='Click to Generate Test History Report Visualization for this Patient' target='_blank'>
-					<?php echo " View Report Visualization"; ?>
-				</a>
-			</p>
 		</div>
 		<?php
 	}
@@ -4351,20 +4328,11 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			return;
 		}
 		# Fetch all test types
-		//if($lab_config_id == "")
-                //{
-			//$test_list = get_test_types_catalog(true);
-                  //  $reff = 1;
-		//	$test_list = get_test_types_catalog($lab_config_id, $reff);
-                //}
-                  //     else
-                //{
-                //NC3065
-                $reff = 1;
-		$test_list = get_test_types_catalog($lab_config_id, $reff );
-                 //-NC3065
-               // }
-                $current_test_list = array();
+		if($lab_config_id == "")
+			$test_list = get_test_types_catalog(true);
+		else
+			$test_list = get_test_types_catalog($lab_config_id);
+		$current_test_list = array();
 		if($lab_config_id != "")
 			$current_test_list = get_lab_config_test_types($lab_config_id)
 		# For each test type, create a check box. Check it if test already in lab configuration
@@ -4406,78 +4374,6 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		<?php
 	}
 	
-        //NC3065
-        public function getTestTypeCheckboxes_dir($lab_config_id=null, $allCompatibleCheckingOn=true)
-	{
-		# Returns a set of checkboxes with existing test types checked, if allCompatibleCheckingOn is set to true,
-		# else only returns checkboxes with available test tpe names
-		$lab_config = get_lab_config_by_id($lab_config_id);
-		if($lab_config == null && $lab_config_id != "")
-		{
-			?>
-			<div class='sidetip_nopos'>
-			ERROR: Lab configuration not found
-			</div>
-			<?php
-			return;
-		}
-		# Fetch all test types
-		//if($lab_config_id == "")
-                //{
-			//$test_list = get_test_types_catalog(true);
-                  //  $reff = 1;
-		//	$test_list = get_test_types_catalog($lab_config_id, $reff);
-                //}
-                  //     else
-                //{
-                //NC3065
-                $reff = 2;
-		$test_list = get_test_types_catalog($lab_config_id, $reff );
-                 //-NC3065
-               // }
-                $current_test_list = array();
-		if($lab_config_id != "")
-			$current_test_list = get_lab_config_test_types($lab_config_id)
-		# For each test type, create a check box. Check it if test already in lab configuration
-		?>
-		<table class='hor-minimalist-b' style='width:700px;'>
-			<tbody>
-			<tr>
-			<?php
-			$count = 0;
-			foreach($test_list as $key=>$value)
-			{
-				$test_type_id = $key;
-				$test_name = $value;
-				$count++;
-				?>
-				<td><input type='checkbox' class='ttype_entry' name='t_type_<?php echo $key; ?>' id='t_type_<?php echo $key; ?>'
-				<?php
-				if($allCompatibleCheckingOn==true) {
-					if(in_array($test_type_id, $current_test_list))
-					{
-						echo " checked ><span class='clean-ok'>$test_name</span>";
-
-					}
-					else
-						echo ">$test_name";
-				}
-				else
-					echo ">$test_name";
-				?>
-				</input></td>
-				
-				<?php
-				if($count % 3 == 0)
-					echo "</tr><tr>";
-			}
-			?>
-			</tbody>
-		</table>
-		<?php
-	}
-        //-NC3065
-        
         public function getSearchFieldsCheckboxes($lab_config_id=null)
 	{
 		# Returns a set of checkboxes with existing fields types checked.
@@ -4507,11 +4403,26 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		?>
 		<table class='hor-minimalist-b' style='width:700px;'>
 			<tbody>
-			
+			<tr>
+				<td><input type='checkbox' class='sfields_entry' name='sfields_pid' id='sfields_pid' value='1'
+				<?php
+					if($sfields['pid'] != 0)
+					{
+						echo " checked ><span class='clean-ok'>Patient ID</span>";
+					}
+					else
+                                        {
+						echo ">Patient ID";
+                                        }
+				?>
+				</input></td>
+				
+			</tr>
+                        
                         <tr>
 				<td><input type='checkbox' class='sfields_entry' name='sfields_daily_num' id='sfields_daily_num' value='1'
 				<?php
-					if($sfields['daily_num'] == 12 || $sfields['daily_num'] == 11 || $sfields['daily_num'] == 10)
+					if($sfields['daily_num'] != 0)
 					{
 						echo " checked ><span class='clean-ok'>Patient Number</span>";
 					}
@@ -4521,10 +4432,45 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                                         }
 				?>
 				</input></td>
-                                <br>
-                                <td><input type='checkbox' class='sfields_entry' name='sfields_age' id='sfields_age' value='1'
+				
+			</tr>
+                        
+                        <tr>
+				<td><input type='checkbox' class='sfields_entry' name='sfields_p_addl' id='sfields_p_addl' value='1'
 				<?php
-					if($sfields['age'] == 12 || $sfields['age'] == 11 || $sfields['age'] == 10)
+					if($sfields['p_addl'] != 0)
+					{
+						echo " checked ><span class='clean-ok'>Additional ID (patient)</span>";
+					}
+					else
+                                        {
+						echo ">Additional ID (patient)";
+                                        }
+				?>
+				</input></td>
+				
+			</tr>
+                        
+                        <tr>
+				<td><input type='checkbox' class='sfields_entry' name='sfields_pname' id='sfields_pname' value='1'
+				<?php
+					if($sfields['pname'] != 0)
+					{
+						echo " checked ><span class='clean-ok'>Patient Name</span>";
+					}
+					else
+                                        {
+						echo ">Patient Name";
+                                        }
+				?>
+				</input></td>
+				
+			</tr>
+                        
+                        <tr>
+				<td><input type='checkbox' class='sfields_entry' name='sfields_age' id='sfields_age' value='1'
+				<?php
+					if($sfields['age'] != 0)
 					{
 						echo " checked ><span class='clean-ok'>Patient's Age</span>";
 					}
@@ -4536,6 +4482,40 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</input></td>
 				
 			</tr>
+                        
+                        <tr>
+				<td><input type='checkbox' class='sfields_entry' name='sfields_sex' id='sfields_sex' value='1'
+				<?php
+					if($sfields['sex'] != 0)
+					{
+						echo " checked ><span class='clean-ok'>Patient's Gender</span>";
+					}
+					else
+                                        {
+						echo ">Patient's Gender";
+                                        }
+				?>
+				</input></td>
+				
+			</tr>
+                        
+                        <tr>
+				<td><input type='checkbox' class='sfields_entry' name='sfields_dob' id='sfields_dob' value='1'
+				<?php
+					if($sfields['dob'] != 0)
+					{
+						echo " checked ><span class='clean-ok'>Patient's Date of Birth</span>";
+					}
+					else
+                                        {
+						echo ">Patient's Date of Birth";
+                                        }
+				?>
+				</input></td>
+				
+			</tr>
+                        
+                       
                         
 			</tbody>
 		</table>
@@ -4641,348 +4621,6 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		}
 	}
 	
-        public function getGroupedCountReportConfigureForm($lab_config)
-        {
-            $configArray = getTestCountGroupedConfig($lab_config->id);
-            $byAge = $configArray['group_by_age'];
-            $ageGroups = $configArray['age_groups'];
-            $byGender = $configArray['group_by_gender'];
-            $bySection = $configArray['measure_id'];
-            $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending
-            
-            $sp_configArray = getSpecimenCountGroupedConfig($lab_config->id);
-            $sp_byAge = $sp_configArray['group_by_age'];
-            $sp_ageGroups = $sp_configArray['age_groups'];
-            $sp_byGender = $sp_configArray['group_by_gender'];
-            $sp_bySection = $sp_configArray['measure_id'];
-            $sp_combo = $sp_configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending 
-            
-            ?>
-            <input type='hidden' name='lab_config_id' value='<?php echo $lab_config->id; ?>'></input>
-		<div class='pretty_box' style='width:700px;'>
-		<table cellspacing='5px'>
-                    <th></th>
-                    <th>Test Count (Grouped) Report Settings:</th>
-                    </tr>
-			<tbody>
-                            <tr valign='top'>
-					<td><?php echo "Group By Lab Section"; ?></td>
-					<td>
-						<input type='radio' id='rsection' name='rsection' value='y' <?php
-						if($bySection == 1)
-							echo " checked ";
-						?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
-						&nbsp;&nbsp;&nbsp;
-						<input type='radio' id='rsection' name='rsection' value='n' <?php
-						if($bySection == 0)
-							echo " checked ";
-						?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
-					</td>
-				</tr>
-				<tr valign='top'>
-					<td><?php echo LangUtil::$pageTerms['GROUP_BYGENDER']; ?></td>
-					<td>
-						<input type='radio' id='rgender' name='rgender' value='y' <?php
-						if($byGender == 1)
-							echo " checked ";
-						?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
-						&nbsp;&nbsp;&nbsp;
-						<input type='radio' id='rgender' name='rgender' value='n' <?php
-						if($byGender == 0)
-							echo " checked ";
-						?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
-					</td>
-				</tr>
-				<tr valign='top'>
-					<td><?php echo LangUtil::$pageTerms['GROUP_BYAGE']; ?></td>
-					<td>
-						<input type='radio' id='rage' name='rage' value='y'<?php
-						if($byAge == 1)
-							echo " checked ";
-						?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
-						&nbsp;&nbsp;&nbsp;
-						<input type='radio' id='rage' name='rage' value='n'<?php
-						if($byAge == 0)
-							echo " checked ";
-						?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
-					</td>
-				</tr>
-				<tr valign='top' id='agegrouprow' <?php
-						//if($byAge == 0)
-							//echo " style='display:none' ";
-						?>>
-					<td><?php echo LangUtil::$pageTerms['RANGE_AGE']; ?> (<?php echo LangUtil::$generalTerms['YEARS']; ?>)</td>
-					<td>
-						<div id='t_agegrouplist'>
-							<span id='t_agegrouplist_inner'>
-							<?php
-							
-								# Group by age enabled. Shoe prefilled form fields.
-                                                            $age_parts = explode(",", $ageGroups);
-								foreach($age_parts as $age_part)
-								{
-									if(trim($age_part) == "")
-										continue;
-									$age_bounds = explode(":", $age_part);
-									?>
-									<input type='text' name='age_l[]' class='range_field' value='<?php echo $age_bounds[0]; ?>'></input>-<input type='text' name='age_u[]' class='range_field' value='<?php echo $age_bounds[1]; ?>'></input>&nbsp;&nbsp;&nbsp;
-									<?php
-								}
-							
-							?>
-							</span>
-							<br>
-							<a href='javascript:t_agegrouplist_append();'><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a>
-						</div>
-					</td>
-				</tr>
-                                <tr valign='top'>
-					<td><?php echo "Counts to Display"; ?></td>
-					<td>
-						<input type='radio' id='rcombo' name='rcombo' value='1'<?php
-						if($combo == 1)
-							echo " checked ";
-						?>><?php echo "All registered tests"; ?></input>
-						<br>
-						<input type='radio' id='rcombo' name='rcombo' value='2'<?php
-						if($combo == 2)
-							echo " checked ";
-						?>><?php echo "Only completed tests"; ?></input>
-                                                <br>
-                                                <input type='radio' id='rcombo' name='rcombo' value='3'<?php
-						if($combo == 3)
-							echo " checked ";
-						?>><?php echo "Both completed and pending tests (separated by a slash)"; ?></input>
-					</td>
-				</tr>
-                                <tr>
-                                <th></th>
-                                 <th><br>Specimen Count (Grouped) Report Settings:</th>
-                                 </tr>
-                                <tr valign='top'>
-					<td><?php echo LangUtil::$pageTerms['GROUP_BYGENDER']; ?></td>
-					<td>
-						<input type='radio' id='sp_rgender' name='sp_rgender' value='y' <?php
-						if($sp_byGender == 1)
-							echo " checked ";
-						?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
-						&nbsp;&nbsp;&nbsp;
-						<input type='radio' id='sp_rgender' name='sp_rgender' value='n' <?php
-						if($sp_byGender == 0)
-							echo " checked ";
-						?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
-					</td>
-				</tr>
-				<tr valign='top'>
-					<td><?php echo LangUtil::$pageTerms['GROUP_BYAGE']; ?></td>
-					<td>
-						<input type='radio' id='sp_rage' name='sp_rage' value='y'<?php
-						if($sp_byAge == 1)
-							echo " checked ";
-						?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
-						&nbsp;&nbsp;&nbsp;
-						<input type='radio' id='sp_rage' name='sp_rage' value='n'<?php
-						if($sp_byAge == 0)
-							echo " checked ";
-						?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
-					</td>
-				</tr>
-				<tr valign='top' id='sp_agegrouprow' <?php
-						//if($sp_byAge == 0)
-						//	echo " style='display:none' ";
-						?>>
-					<td><?php echo LangUtil::$pageTerms['RANGE_AGE']; ?> (<?php echo LangUtil::$generalTerms['YEARS']; ?>)</td>
-					<td>
-						<div id='s_agegrouplist'>
-							<span id='s_agegrouplist_inner'>
-							<?php
-							
-								# Group by age enabled. Shoe prefilled form fields.
-                                                            $sp_age_parts = explode(",", $sp_ageGroups);
-								foreach($sp_age_parts as $age_part)
-								{
-									if(trim($age_part) == "")
-										continue;
-									$age_bounds = explode(":", $age_part);
-									?>
-									<input type='text' name='sp_age_l[]' class='range_field' value='<?php echo $age_bounds[0]; ?>'></input>-<input type='text' name='sp_age_u[]' class='range_field' value='<?php echo $age_bounds[1]; ?>'></input>&nbsp;&nbsp;&nbsp;
-									<?php
-								}
-							
-							?>
-							</span>
-							<br>
-							<a href='javascript:s_agegrouplist_append();'><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a>
-						</div>
-					</td>
-				</tr>
-                                
-                                <tr valign='top'>
-					<td></td>
-					<td>
-						<br>
-						<input type='button' id='rsubmit' onclick='javascript:grouped_checkandsubmit();' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT'];?>'></input>
-						&nbsp;&nbsp;&nbsp;
-						<span id='grouped_count_progress_spinner' style='display:none'>
-							<?php $this->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
-						</span>
-					</td>
-				</tr>
-
-                                </tbody>
-		</table>
-		</div>
-            <?php
-        }
-        
-        public function getGroupedCountReportSummary($lab_config)
-        {
-            $configArray = getTestCountGroupedConfig($lab_config->id);
-            $byAge = $configArray['group_by_age'];
-            $ageGroups = $configArray['age_groups'];
-            $byGender = $configArray['group_by_gender'];
-            $bySection = $configArray['measure_id'];
-            $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending
-            
-            
-            $sp_configArray = getSpecimenCountGroupedConfig($lab_config->id);
-            $sp_byAge = $sp_configArray['group_by_age'];
-            $sp_ageGroups = $sp_configArray['age_groups'];
-            $sp_byGender = $sp_configArray['group_by_gender'];
-            $sp_bySection = $sp_configArray['measure_id'];
-            $sp_combo = $sp_configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending
-            
-            ?>
-		<div class='pretty_box' style='width:700px;'>
-		<table class='hor-minimalist-b'>
-                    <tr>
-                    <th></th>
-                    <th><b>Test Count (Grouped) Report Settings:</b></th>
-                    </tr>
-			<tbody>
-                            <tr valign='top'>
-					<td><?php echo "Group By Lab Section"; ?></td>
-					<td>
-						<?php
-						if($bySection == 1)
-							echo LangUtil::$generalTerms['YES'];
-						else
-							echo LangUtil::$generalTerms['NO']; 
-						?>
-					</td>
-				</tr>
-				<tr valign='top'>
-					<td><?php echo LangUtil::$pageTerms['GROUP_BYGENDER']; ?></td>
-					<td>
-						<?php
-						if($byGender == 1)
-							echo LangUtil::$generalTerms['YES'];
-						else
-							echo LangUtil::$generalTerms['NO']; 
-						?>
-					</td>
-				</tr>
-				<tr valign='top'>
-					<td><?php echo LangUtil::$pageTerms['GROUP_BYAGE']; ?></td>
-					<td>
-						<?php
-						if($byAge == 1)
-							echo LangUtil::$generalTerms['YES']; 
-						else
-							echo LangUtil::$generalTerms['NO']; 
-						?>
-					</td>
-				</tr>
-				<tr valign='top' <?php
-						if($byAge == 0)
-							echo " style='display:none' ";
-						?>>
-					<td><?php echo LangUtil::$pageTerms['RANGE_AGE']; ?> (<?php echo LangUtil::$generalTerms['YEARS']; ?>)</td>
-					<td>
-						<?php
-						# Group by age enabled
-                                                $age_parts = explode(",", $ageGroups);
-						foreach($age_parts as $age_part)
-						{
-							if(trim($age_part) == "")
-								continue;
-							$age_bounds = explode(":", $age_part);
-							echo $age_bounds[0]."-".$age_bounds[1];
-							echo "&nbsp;&nbsp;&nbsp;";
-						}
-					
-					?>
-					</td>
-				</tr>
-                                <tr valign='top'>
-					<td><?php echo "Counts to Display"; ?></td>
-					<td>
-						<?php
-						if($combo == 1)
-							echo "All registered tests";
-						else if($combo == 3)
-							echo "Both completed and pending tests (separated by a slash)"; 
-                                                else
-                                                    echo "Only completed tests";
-                                                    
-						?>
-					</td>
-				</tr>
-                                <tr>
-                                <th></th>
-                                 <th><b>Specimen Count (Grouped) Report Settings:</b></th>
-                                 </tr>
-				<tr valign='top'>
-					<td><?php echo LangUtil::$pageTerms['GROUP_BYGENDER']; ?></td>
-					<td>
-						<?php
-						if($sp_byGender == 1)
-							echo LangUtil::$generalTerms['YES'];
-						else
-							echo LangUtil::$generalTerms['NO']; 
-						?>
-					</td>
-				</tr>
-				<tr valign='top'>
-					<td><?php echo LangUtil::$pageTerms['GROUP_BYAGE']; ?></td>
-					<td>
-						<?php
-						if($sp_byAge == 1)
-							echo LangUtil::$generalTerms['YES']; 
-						else
-							echo LangUtil::$generalTerms['NO']; 
-						?>
-					</td>
-				</tr>
-				<tr valign='top' <?php
-						if($sp_byAge == 0)
-							echo " style='display:none' ";
-						?>>
-					<td><?php echo LangUtil::$pageTerms['RANGE_AGE']; ?> (<?php echo LangUtil::$generalTerms['YEARS']; ?>)</td>
-					<td>
-						<?php
-						# Group by age enabled
-                                                $sp_age_parts = explode(",", $sp_ageGroups);
-						foreach($sp_age_parts as $age_part)
-						{
-							if(trim($age_part) == "")
-								continue;
-							$age_bounds = explode(":", $age_part);
-							echo $age_bounds[0]."-".$age_bounds[1];
-							echo "&nbsp;&nbsp;&nbsp;";
-						}
-					
-					?>
-					</td>
-				</tr>
-                                
-                                </tbody>
-		</table>
-		</div>
-		<?php
-        }
-        
-        
 	public function getAggregateReportConfigureForm($lab_config)
 	{
 		# Returns HTML form elements for configuring aggregate reports
@@ -5102,15 +4740,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									if(count($measure_list) != 1)
 									{
 										# Show measure names if more than one.
-                                                                            if($measure->checkIfSubmeasure() == 1)
-                                                                            {
-                                                                                $decName = $measure->truncateSubmeasureTag();
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                $decName = $measure->getName();
-                                                                            }
-										echo $decName."&nbsp;&nbsp;&nbsp;";
+										echo $measure->getName()."&nbsp;&nbsp;&nbsp;";
 									}
 									$range_bounds = explode(":", $measure->range);
 									$span_id = $test_type->testTypeId."_".$measure_count;
@@ -5135,8 +4765,6 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 												if(trim($slot_part) == "")
 													continue;
 												$slot_bounds = explode(":", $slot_part);
-                                                                                                if($slot_bounds[0] == "\$freetext$$")
-												continue;
 												?>
 												<input type='text' class='range_field' name='<?php echo $field_name_lower; ?>[]' value='<?php echo $slot_bounds[0]; ?>'></input>-<input type='text' class='range_field' name='<?php echo $field_name_upper; ?>[]' value='<?php echo $slot_bounds[1]; ?>'></input>&nbsp;&nbsp;&nbsp;
 												<?php
@@ -5180,8 +4808,6 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</div>
 		<?php
 	}
-        
-        
 	
 	public function getInfectionReportConfigureForm()
 	{
@@ -5460,15 +5086,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									if(count($measure_list) != 1)
 									{
 										# Show measure names if more than one.
-                                                                            if($measure->checkIfSubmeasure() == 1)
-                                                                            {
-                                                                                $decName = $measure->truncateSubmeasureTag();
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                $decName = $measure->getName();
-                                                                            }
-										echo $decName."&nbsp;&nbsp;&nbsp;";
+										echo $measure->getName()."&nbsp;&nbsp;&nbsp;";
 									}
 									$range_bounds = explode(":", $measure->range);
 									if($disease_report == null)
@@ -5485,8 +5103,6 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 											if(trim($slot_part) == "")
 												continue;
 											$slot_bounds = explode(":", $slot_part);
-                                                                                        if($slot_bounds[0] == "\$freetext$$")
-                                                                                            continue;
 											echo $slot_bounds[0]."-".$slot_bounds[1]; 
 											echo "&nbsp;&nbsp;&nbsp;";
 										}
@@ -6697,16 +6313,16 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></td>
 								<td>
 									<?php
-									if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
+									if($lab_config->dailyNum != 0)
 										echo " In use ";
 									else
 										echo "Not in use";
-									if($lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
+									if($lab_config->dailyNum == 2)
 									{
 										echo " (Mandatory field) ";
 										echo "&nbsp;&nbsp;";
 									}
-									if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
+									if($lab_config->dailyNum != 0)
 									{
 										echo "&nbsp;&nbsp;".LangUtil::$generalTerms['MSG_RESET'].": "; 
 										switch($lab_config->dailyNumReset)
@@ -6771,11 +6387,11 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['AGE']; ?></td>
 								<td>
 								<?php
-									if($lab_config->age == 1 || $lab_config->age == 2 || $lab_config->age == 11 || $lab_config->age == 12)
+									if($lab_config->age != 0)
 										echo " In use ";
 									else
 										echo "Not in use";
-									if($lab_config->age == 2 || $lab_config->age == 12)
+									if($lab_config->age == 2)
 										echo " (Mandatory field) ";
 								?>
 								</td>
@@ -6902,7 +6518,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<option value='1'><?php echo LangUtil::$generalTerms['PATIENT_NAME']; ?></option>
 				<?php
 			}
-			if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
+			if($lab_config->dailyNum != 0)
 			{
 				?>
 				<option value='3'><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></option>
@@ -6932,7 +6548,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<option value='1'><?php echo LangUtil::$generalTerms['PATIENT_NAME']; ?></option>
 				<?php
 			}
-			if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
+			if($lab_config->dailyNum != 0)
 			{
 				?>
 				<option value='3'><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></option>

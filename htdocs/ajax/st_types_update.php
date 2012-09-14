@@ -1,3 +1,4 @@
+
 <?php
 #
 # (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
@@ -6,13 +7,15 @@
 #
 
 include("../users/accesslist.php");
-if( !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList)) ) {
+if( !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList))
+    && !(isSuperAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $superAdminPageList))
+    && !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList)) ) {
 	displayForbiddenMessage();
 }
 
 $lab_config_id = $_REQUEST['lid'];
-$specimen_type_list = get_specimen_types_catalog();
-$test_type_list = get_test_types_catalog();
+$specimen_type_list = get_specimen_types_catalog($lab_config_id);
+$test_type_list = get_test_types_catalog($lab_config_id);
 $updated_specimen_list = array();
 $updated_test_list = array();
 $lab_config = LabConfig::getById($lab_config_id);

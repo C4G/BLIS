@@ -15,6 +15,10 @@ include("includes/script_elems.php");
 include("includes/page_elems.php");
 LangUtil::setPageId("reports");
 
+include("../users/accesslist.php");
+ if(!(isLoggedIn(get_user_by_id($_SESSION['user_id']))))
+	header( 'Location: home.php' );
+
 $date_from = "";
 $date_to = "";
 $hidePatientName = 0;
@@ -813,6 +817,36 @@ else
 						$test_type = TestType::getById($test->testTypeId);
 						$measure_list = $test_type->getMeasures();
 						
+                                                $submeasure_list = array();
+                $comb_measure_list = array();
+               // print_r($measure_list);
+                
+                foreach($measure_list as $measure)
+                {
+                    
+                    $submeasure_list = $measure->getSubmeasuresAsObj();
+                    //echo "<br>".count($submeasure_list);
+                    //print_r($submeasure_list);
+                    $submeasure_count = count($submeasure_list);
+                    
+                    if($measure->checkIfSubmeasure() == 1)
+                    {
+                        continue;
+                    }
+                        
+                    if($submeasure_count == 0)
+                    {
+                        array_push($comb_measure_list, $measure);
+                    }
+                    else
+                    {
+                        array_push($comb_measure_list, $measure);
+                        foreach($submeasure_list as $submeasure)
+                           array_push($comb_measure_list, $submeasure); 
+                    }
+                }
+                $measure_list = $comb_measure_list;
+                                                
 						foreach($measure_list as $measure) {
 							echo "<br>";
 							$type=$measure->getRangeType();
@@ -1132,7 +1166,11 @@ else
 						echo $test->decodeResultWithoutMeasures();
 					}
 					else
-						echo $test->decodeResults();
+                                            
+                                            //NC3065
+						echo $test->decodeResult();
+                                                //echo $test->decodeResults();
+                                            //NC3065
 					echo "<br>";
 				}
 				

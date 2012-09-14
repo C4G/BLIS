@@ -25,6 +25,36 @@ foreach($test_list as $test_entry)
 	$result_value_valid = true;
 	$result_csv = "";
 	$comments_csv = "";
+        $submeasure_list = array();
+                $comb_measure_list = array();
+               // print_r($measure_list);
+                
+                foreach($measure_list as $measure)
+                {
+                    
+                    $submeasure_list = $measure->getSubmeasuresAsObj();
+                    //echo "<br>".count($submeasure_list);
+                    //print_r($submeasure_list);
+                    $submeasure_count = count($submeasure_list);
+                    
+                    if($measure->checkIfSubmeasure() == 1)
+                    {
+                        continue;
+                    }
+                        
+                    if($submeasure_count == 0)
+                    {
+                        array_push($comb_measure_list, $measure);
+                    }
+                    else
+                    {
+                        array_push($comb_measure_list, $measure);
+                        foreach($submeasure_list as $submeasure)
+                           array_push($comb_measure_list, $submeasure); 
+                    }
+                }
+                $measure_list = $comb_measure_list;
+                $comment_value = "";
 	foreach($measure_list as $measure)
 	{
 		$result_field_name = 'result_'.$test_type->testTypeId."_".$measure->measureId;
@@ -38,17 +68,41 @@ foreach($test_list as $test_entry)
 			$result_value_valid = false;
 		}
 		else { 
-			if ( strstr($result_value, ",") ) 
+			/*if ( strstr($result_value, ",") ) 
 				$result_csv .= str_replace(",","_",$result_value);
 			else
 				$result_csv .= $result_value."_";
+                         */
+                    $range_typee = $measure->getRangeType();
+                    if($range_typee == Measure::$RANGE_FREETEXT)
+                    {
+                        $result_csv = $result_csv."[$]".$result_value."[/$]_";
+                    }
+                    else if($range_typee == Measure::$RANGE_AUTOCOMPLETE)
+                    {
+                        $result_csv = $result_csv.$result_value;
+                    }
+                    else
+                    {
+                        $result_csv = $result_csv.$result_value."_";
+                    }
+                         
 		}	
 		# replace last underscore with "," to separate multiple measures results
 		$result_csv = substr($result_csv, 0, strlen($result_csv) - 1);
 		$result_csv .= ",";
 		
-		if ( !($comment_value == "None") ) {
-			$comment_csv .= $measure->name.":".$comment_value.", ";
+		if ( $comment_value != "None" &&  $comment_value != "") {
+                    if($measure->checkIfSubmeasure() == 1)
+                                    {
+                                        $decName = $measure->truncateSubmeasureTag();
+                                       
+                                    }
+                                    else
+                                    {
+					$decName = $measure->getName();
+                                    }
+			$comment_csv .= $decName.":".$comment_value.", ";
 		}
 	}
 	if($result_value_valid === true)
@@ -57,7 +111,9 @@ foreach($test_list as $test_entry)
 		$comment_csv = substr($comment_csv,0,strlen($comment_csv)-2); //Remove the extra comma and space at the end
 		$comment_csv = preg_replace("/[^a-zA-z0-9,+.;:_\s]/", "", $comment_csv);
 		# Update verified results to DB
-		$result_csv = preg_replace("/[^a-zA-Z0-9,+.;:_\s]/", "", $result_csv);
+                //NC3065
+		//$result_csv = preg_replace("/[^a-zA-Z0-9,+.;:_\s]/", "", $result_csv);
+                //-NC3065
 		if($test_entry->result == "")
 		{
 			# Test result not yet entered

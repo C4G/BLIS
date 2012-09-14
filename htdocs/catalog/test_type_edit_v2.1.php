@@ -52,66 +52,11 @@ if($test_type == null)
 	return;
 }
 # Fetch all measures currently on this test type
-//$measure_list = $test_type->getMeasureIds();
-$measure_list = array();
-$measure_list_objs = $test_type->getMeasures();
-                //print_r($measure_list);
-                $submeasure_list_objs = array();
-                
-                $comb_measure_list = array();
-               // print_r($measure_list);
-                
-                foreach($measure_list_objs as $measure)
-                {
-                    
-                    $submeasure_list_objs = $measure->getSubmeasuresAsObj();
-                    //echo "<br>".count($submeasure_list);
-                    //print_r($submeasure_list);
-                    $submeasure_count = count($submeasure_list_objs);
-                    
-                    if($measure->checkIfSubmeasure() == 1)
-                    {
-                        continue;
-                    }
-                        
-                    if($submeasure_count == 0)
-                    {
-                        array_push($comb_measure_list, $measure);
-                    }
-                    else
-                    {
-                        array_push($comb_measure_list, $measure);
-                        foreach($submeasure_list_objs as $submeasure)
-                           array_push($comb_measure_list, $submeasure); 
-                    }
-                }
-                
-                $measure_list_ids = array();
-                //echo "<pre>";
-                //print_r($comb_measure_list);
-                //echo "</pre>";
-                foreach($comb_measure_list as $measure)
-                {
-                    array_push($measure_list_ids, $measure->measureId);
-                }
-                /*
-                echo "<pre>";
-                print_r($measure_list);
-                
-                print_r($measure_list_ids);
-                echo "</pre>";
-                */
-                $measure_list = $measure_list_ids;
+$measure_list = $test_type->getMeasureIds();
 # Display test type info table
 $page_elems->getTestTypeInfo($test_type->name, true);
 ?>
 <script type='text/javascript'>
-
-var num_submeasures = new Array(100);
-var len = 100;
- while (--len >= 0) {
-        num_submeasures[len] = 0;
-    }
 var num_measures = 0;
 
 var num_ranges = new Array();
@@ -150,9 +95,7 @@ function toggle_range_type(select_elem)
 	else if(select_elem.value == <?php echo Measure::$RANGE_NUMERIC; ?>)
 		$('#val_'+elem_id).show();
 	else if(select_elem.value == <?php echo Measure::$RANGE_AUTOCOMPLETE; ?>)
-		$('#autocomplete_'+elem_id).show();
-        else if(select_elem.value == <?php echo Measure::$RANGE_FREETEXT; ?>)
-		$('#freetext_'+elem_id).show();
+		$('#autocomplete_'+elem_id).show();	
 }
 
 
@@ -166,7 +109,7 @@ function toggle_range_type(select_elem)
 		$('#new_val_'+elem_id).show();
 	else if(select_elem.value == <?php echo Measure::$RANGE_AUTOCOMPLETE; ?>)
 		$('#new_autocomplete_'+elem_id).show();	
-        else if(select_elem.value == <?php echo Measure::$RANGE_FREETEXT; ?>)
+        else if(select_elem.value == <?php echo Measure::$RANGE_FREEETEXT; ?>)
 		$('#new_freetext_'+elem_id).show();	
 }
 
@@ -540,20 +483,11 @@ function update_ttype()
 	}
 }
 
-
-
 function add_new_measure()
 {
 	num_measures++;
 	$('#new_mrow_'+num_measures).show();
 }
-
-function add_new_submeasure(mrow_num)
-{
-	num_submeasures[mrow_num]++;
-	$('#smrow_'+mrow_num+'_'+num_submeasures[mrow_num]).show();
-}
-
 
  function add_new_option_field(mrow_num)
 {
@@ -864,30 +798,7 @@ function isInputNumber(evt) {
 								echo "<td align='center'>";
 								echo "<input type=checkbox name='delete_".$curr_measure->measureId."'  />";
 								echo "</td><td>";
-                                                                
-                                                                
-                                                                $encName = $curr_measure->name;
-                                                                $start_tag = "\$sub*";
-                                                                $end_tag = "/\$";
-                                                                if(strpos($encName, $start_tag) !==false)
-                                                                {
-                                                                    $subm_end = strpos($encName, $end_tag);
-                                                                    $decName = substr($encName, $subm_end + 2);
-                                                                    $parent = substr($encName, 5, $end_tag - 5);
-                                                                    $parent_int = intval($parent);
-                                                                 
-                                                                }
-                                                                else
-                                                                {
-                                                                    $decName = $encName;
-                                                                    $parent_int = 0;
-                                                                }
-                                                                ?>
-                                                                    <input type='hidden' name='sm_id[]' value='<?php echo $parent_int; ?>'></input>
-                                                                <?php
-                                                                if(strpos($encName, $start_tag) !==false)
-                                                                        echo "Sub:";
-								echo "<input type='text' name='measure[]' value='$decName' />";
+								echo "<input type='text' name='measure[]' value='$curr_measure->name' />";
 								echo "</td>";
 								echo "<td>";
 								$range_string = $curr_measure->range;
@@ -903,14 +814,14 @@ function isInputNumber(evt) {
 										break;
 									case Measure::$RANGE_AUTOCOMPLETE:
 										$range_values = explode("_", $range_string);
-										break;
+                                                                                break;
                                                                         case Measure::$RANGE_FREETEXT:
-										$range_values = array("","");
-										break;
+										$range_values = "Free Text";
+										break;									
 								}
 								?>
 								<!--<select class='range_select' id='type_'<?php echo $i; ?>' name='mtype[]' onchange='javascript:add_label(<?php echo $i; ?>);'>-->
-									<select class='range_select' id='<?php echo $i; ?>' name='mtype[]'>
+								<select class='range_select' id='<?php echo $i; ?>' name='mtype[]'>
 									<option value='<?php echo Measure::$RANGE_NUMERIC; ?>' <?php 
 									if($range_type == Measure::$RANGE_NUMERIC)
 										echo " selected='selected' ";
@@ -920,10 +831,12 @@ function isInputNumber(evt) {
 									if($range_type == Measure::$RANGE_OPTIONS)
 										echo " selected='selected' ";
 									?>><?php echo LangUtil::$generalTerms['RANGE_ALPHANUM']; ?></option>
-									<option value='<?php echo Measure::$RANGE_AUTOCOMPLETE; ?>' <?php 
+									
+                                                                        <option value='<?php echo Measure::$RANGE_AUTOCOMPLETE; ?>' <?php 
 									if($range_type == Measure::$RANGE_AUTOCOMPLETE)
 										echo " selected='selected' ";
 									?>><?php echo LangUtil::$generalTerms['RANGE_AUTOCOMPLETE']; ?></option>
+                                                                        
                                                                         <option value='<?php echo Measure::$RANGE_FREETEXT; ?>' <?php 
 									if($range_type == Measure::$RANGE_FREETEXT)
 										echo " selected='selected' ";
@@ -956,9 +869,9 @@ function isInputNumber(evt) {
 											
 											<input type='text' class='range_field' name='range_l_<?php echo $i; ?>[]' value='<?php echo $lower_range; ?>' /> :
 											<input type='text' class='range_field' name='range_u_<?php echo $i; ?>[]' value='<?php echo $upper_range; ?>' />
-											<input type='text' class='range_field' name='gender_<?php echo $i; ?>[]' value='B'/>
-											<input type='text' class='range_field' name='age_l_<?php echo $i; ?>[]' value='0'/>
-											<input type='text' class='range_field' name='age_u_<?php echo $i; ?>[]' value='100'/>
+											<input type='text' class='gender_field' name='gender_<?php echo $i; ?>[]' value='B'/>
+											<input type='text' class='age_field' name='age_l_<?php echo $i; ?>[]' value='0'/>
+											<input type='text' class='age_field' name='age_u_<?php echo $i; ?>[]' value='100'/>
 											<br>
 											
 										</span>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo LangUtil::$generalTerms['RANGE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender &nbsp;&nbsp;Age_Range
@@ -1033,9 +946,9 @@ function isInputNumber(evt) {
                                                                 <span id='freetext_<?php echo $i; ?>' class='values_section_<?php echo $i; ?>'
 								<?php if($range_type != Measure::$RANGE_FREETEXT) echo " style='display:none' "; ?>
 								>
-									<span id='freetext_list_<?php echo $i; ?>'>
-										<?php echo "<small>Will appear as a text box for result entry</small>"?>
-									</span>
+									<span id='freeetext_list_<?php echo $i; ?>'>
+                                                                        <?php echo "<small>Will be available as a text box for result entry</small>"?>
+                                                                        </span>
 								</span>
 								<?php
 								echo "</td>";
@@ -1047,7 +960,7 @@ function isInputNumber(evt) {
 							}
 							}
 							# Space for adding new measures
-							$max_num_measures = 8;
+							$max_num_measures = 20;
 							for($i = 1; $i <= $max_num_measures; $i += 1)
 							{
 								echo "<tr valign='top' id='new_mrow_$i' ";
@@ -1062,11 +975,6 @@ function isInputNumber(evt) {
 							//	echo "<input type=checkbox name='delete_".$curr_measure->name."'  />";
 								echo "</td><td>";
 								echo "<input type='text' name='new_measure[]' value='' />";
-                                                                echo "<br>";
-                                        ?>
-                                        <small><a id='new_submeasure_link' href='javascript:add_new_submeasure(<?php echo $i; ?>);'><?php echo 'Add Sub Measure'; ?> &raquo;</a></small>
-                                        <?php
-                                                                
 								echo "</td>";
 								echo "<td>";
 								?>
@@ -1082,7 +990,7 @@ function isInputNumber(evt) {
 								?>
 								<span id='new_val_new_<?php echo $i; ?>' class='new_values_section_new_<?php echo $i; ?>'>
 									<div id='numeric_range_<?php echo $i; ?>' name=numeric_range_<?php echo $i; ?>'>
-									<span id='new_num eric_<?php echo $i; ?>'>
+									<span id='new_numeric_<?php echo $i; ?>'>
 											<input type='text' class='range_field' name='new_range_l_<?php echo $i; ?>[]' value='' /> :
 											<input type='text' class='range_field' name='new_range_u_<?php echo $i; ?>[]' value='' />
 											<input type='text' class='range_field' name='new_gender_<?php echo $i; ?>[]' value='B'/>
@@ -1103,115 +1011,27 @@ function isInputNumber(evt) {
 										<input type='text' class='range_field' name='new_alpharange_<?php echo $i; ?>[]' value='' />
 									</span>
 									<br>
-									<small><a href="javascript:add_new_option_field('<?php echo $i; ?>');"><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a></small>
+									<small><a href="javascript:add_new_option_field('<?php echo $i; ?>');"><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a>
 								</span>
 								<span id='new_autocomplete_new_<?php echo $i; ?>' style='display:none' class='new_values_section_new_<?php echo $i; ?>'>
 									<span id='new_autocomplete_list_new_<?php echo $i; ?>'>
 										<input type='text' class='uniform_width' name='new_autocomplete_<?php echo $i; ?>[]' value='' /><br>
 										<input type='text' class='uniform_width' name='new_autocomplete_<?php echo $i; ?>[]' value='' /><br>
 									</span>
-									<small><a href="javascript:add_new_autocomplete_field('<?php echo $i; ?>');"><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a></small>
+									<small><a href="javascript:add_new_autocomplete_field('<?php echo $i; ?>');"><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a>
 								</span>
                                                                 <span id='new_freetext_new_<?php echo $i; ?>' style='display:none' class='new_values_section_new_<?php echo $i; ?>'>
-									<span id='new_freetext_list_new_<?php echo $i; ?>'>
-                                                                    		<?php echo "<small>Will appear as a text box for result entry</small>"?>
-									</span>
-								</span>
+                                                                    <span id='new_freeetext_list_new_<?php echo $i; ?>'>
+                                                                        <?php echo "<small>Will be available as a text box for result entry</small>"?>
+                                                                    </span>
+                                                                </span>
 								<?php
 								echo "</td>";
 								echo "<td id='unit_$i'>";
 								echo "<input type='text' name='new_unit[]' value='' />";
 								echo "</td>";
 								echo "</tr>";
-                                                                
-                                                                
-                                        # submeasures
-                                        
-                                        $max_num_submeasures = 5;
-                                        $us = '_';
-                                    for($y = 1; $y <= $max_num_submeasures; $y += 1)
-                                    {
-                                            echo "<tr valign='top' id='smrow_$i$us$y' style='display:none;'";
-                                            
-                                            echo ">";
-                                            
-                                            echo "<td align='center'>";
-							//	echo "<input type=checkbox name='delete_".$curr_measure->name."'  />";
-								echo "</td>";
-                                            
-                                            echo "<td>";
-                                            ?>
-                                            Sub: <input type='text' name='submeasure[<?php echo $i; ?>][]' value='' />
-                                            <?php
-                                            echo "</td>";
-                                            echo "<td>";
-                                            ?>
-                                            <select class='range_select' id='<?php echo $i.$us.$y; ?>' name='smtype[<?php echo $i; ?>][]'>
-                                                    <option value='<?php echo Measure::$RANGE_NUMERIC; ?>'><?php echo LangUtil::$generalTerms['RANGE_NUMERIC']; ?></option>
-                                                    <option value='<?php echo Measure::$RANGE_OPTIONS; ?>'><?php echo LangUtil::$generalTerms['RANGE_ALPHANUM']; ?></option>
-                                                    <option value='<?php echo Measure::$RANGE_AUTOCOMPLETE; ?>'><?php echo LangUtil::$generalTerms['RANGE_AUTOCOMPLETE']; ?></option>
-                                                    <option value='<?php echo Measure::$RANGE_FREETEXT; ?>'><?php echo "Free Text" ?></option>
-
-                                            </select>
-                                            <?php
-                                            echo "</td>";
-                                            echo "<td>";
-                                            ?>
-                                            <span id='val_<?php echo $i.$us.$y; ?>' class='values_section_<?php echo $i.$us.$y; ?>'>
-                                                    <span id='numeric_<?php echo $i.$us.$y; ?>'>
-
-                                                            <input type='text' class='range_field' name='range_l_<?php echo $i.$us.$y; ?>[]' value='' /> :
-                                                            <input type='text' class='range_field' name='range_u_<?php echo $i.$us.$y; ?>[]' value=''/>
-                                                            <input type='text' class='range_field' name='gender_<?php echo $i.$us.$y; ?>[]' value='B'/>
-                                                            <input type='text' class='range_field'  name='agerange_l_<?php echo $i.$us.$y; ?>[]' id='agerange_l_<?php echo $i.$us.$y; ?>[]' value='0' /> :
-                                                            <input type='text' class='range_field' name='agerange_u_<?php echo $i.$us.$y; ?>[]' id='agerange_u_<?php echo $i.$us.$y; ?>[]' value='100' />
-                                                            <br>
-                                                    </span>
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;<?php echo LangUtil::$generalTerms['RANGE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender &nbsp;&nbsp;Age_Range
-                                                            <br>
-                                                    <small><a href="javascript:add_new_range_field('<?php echo $i.$us.$y; ?>', '0');"><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a></small>
-                                                    <br><br>
-                                            </span>
-                                            <span id='alpha_<?php echo $i.$us.$y; ?>' style='display:none' class='values_section_<?php echo $i.$us.$y; ?>'>
-                                                    <span id='alpha_list_<?php echo $i.$us.$y; ?>'>
-                                                            <input type='text' class='range_field' name='alpharange_<?php echo $i.$us.$y; ?>[]' value='' /> /
-                                                            <input type='text' class='range_field' name='alpharange_<?php echo $i.$us.$y; ?>[]' value='' />
-                                                    </span>
-                                                    <br>
-                                                    <small><a href="javascript:add_new_option_field('<?php echo $i.$us.$y; ?>');"><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a></small>
-                                            </span>
-                                            <span id='autocomplete_<?php echo $i.$us.$y; ?>' style='display:none' class='values_section_<?php echo $i.$us.$y; ?>'>
-                                                    <span id='autocomplete_list_<?php echo $i.$us.$y; ?>'>
-                                                            <input type='text' class='uniform_width' name='autocomplete_<?php echo $i.$us.$y; ?>[]' value='' /><br>
-                                                            <input type='text' class='uniform_width' name='autocomplete_<?php echo $i.$us.$y; ?>[]' value='' /><br>
-                                                    </span>
-                                                    <small><a href="javascript:add_new_autocomplete_field('<?php echo $i.$us.$y; ?>');"><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a></small>
-                                            </span>
-                                            <span id='freetext_<?php echo $i.$us.$y; ?>' style='display:none' class='values_section_<?php echo $i.$us.$y; ?>'>
-                                                    <span id='freeetext_list_<?php echo $i.$us.$y; ?>'>
-                                                            <?php echo "<small>Will appear as a text box for result entry</small>"?>
-                                                    </span>
-                                            </span>
-                                            <?php
-                                            echo "</td>";
-                                            echo "<td id='unit_$i$us$y'>";
-                                            ?>
-                                            <input type='text' name='sunit[<?php echo $i; ?>][]' value='' />
-                                            <?php
-                                            echo "</td>";
-                                            echo "</tr>";
-                                            ?>
-                                            <div id='new_subentries' style='display:none;'>
-                                            </div>
-                                            
-
-                                            
-                                        <?php
-                                        }// end of submeasures for each measure
-                                        ?>
-                                        
-                                      <?php  
-							}// end of new measures
+							}
 						?>
 						</table>
 						<a id='new_measure_link' href='javascript:add_new_measure();'><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a>

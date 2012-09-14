@@ -127,7 +127,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				<th><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></th>
 				<?php
 			}
-			if($lab_config->dailyNum != 0)
+			if($lab_config->dailyNum >= 11)
 			{
 				?>
 				<th><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></th>
@@ -140,11 +140,20 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				<?php
 			}
 			?>
-			<?php #TODO: Add check if user has patient name/private data access here ?>
+			<?php  #TODO: Add check if user has patient name/private data access here ?>
+                        
 			<th><?php echo LangUtil::$generalTerms['NAME']; ?></th>
 			<th><?php echo LangUtil::$generalTerms['GENDER']; ?></th>
+                        
+                        <?php
+			if($lab_config->age >= 11)
+			{
+				?>
+				<th><?php echo LangUtil::$generalTerms['AGE']; ?></th>
+				<?php
+			}?>
 			
-			<?php
+                        <?php
 			if(strpos($_SERVER["HTTP_REFERER"], "search.php") !== false)
 			{
 				# Show status of most recently registered specimens
@@ -170,11 +179,12 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				</td>
 				<?php
 			}
-			if($lab_config->dailyNum != 0)
+			if($lab_config->dailyNum >= 11)
 			{
-				$daily_num = "-";
+				//$daily_num = "-".$lab_config->dailyNum;
+                                $daily_num = "-";
 				//if($a == 3)
-				if(false)
+				if(true)
 				{
 					# Fetch specimen corresponding to this patient and daily_num
 					$query_string =
@@ -210,7 +220,16 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			<td>
 				<?php echo $patient->sex; ?>
 			</td>
-			
+			<?php
+                        if($lab_config->age >= 11)
+			{
+				?>
+				<td>
+					<?php echo $patient->getAge(); ?>
+				</td>
+				<?php
+			}?>
+                        
 			<?php
 			if(strpos($_SERVER["HTTP_REFERER"], "search.php") !== false)
 			{

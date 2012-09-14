@@ -8,7 +8,8 @@ include("lang/lang_xml2php.php");
 
 $specimen_name = $_REQUEST['specimen_name'];
 $specimen_descr = $_REQUEST['specimen_descr'];
-$test_type_list = get_test_types_catalog();
+$reff = 1;
+$test_type_list = get_test_types_catalog($lab_conifg_id, $reff);
 $added_test_list = array();
 foreach($test_type_list as $key=>$value)
 {

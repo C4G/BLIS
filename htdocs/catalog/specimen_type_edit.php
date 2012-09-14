@@ -91,7 +91,7 @@ $page_elems->getSpecimenTypeInfo($specimen_type->name, true);
 			<tr valign='top'>
 				<td><?php echo LangUtil::$generalTerms['COMPATIBLE_TESTS']; ?><?php $page_elems->getAsterisk(); ?> [<a href='#test_help' rel='facebox'>?</a>] </td>
 				<td>
-					<?php $page_elems->getTestTypeCheckboxes($lab_config_id); ?>
+					<?php $page_elems->getTestTypeCheckboxes(); ?>
 					<br>
 				</td>
 			</tr>

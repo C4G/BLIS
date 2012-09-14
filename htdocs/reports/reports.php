@@ -46,6 +46,18 @@ db_get_current();
 	$page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
 ?>
 </div>
+<div class='reports_subdiv_help' id='testcount_grouped_div_help' style='display:none'>
+<?php
+	$tips_string = "Select Date Interval to view number of Tests Performed over the specified duration, grouped by age, gender and lab section.";
+	$page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
+?>
+</div>
+<div class='reports_subdiv_help' id='specimencount_grouped_div_help' style='display:none'>
+<?php
+	$tips_string = "Select Date Interval to view number of Specimens Analyzed over the specified duration, grouped by age and gender.";
+	$page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
+?>
+</div>
 <div class='reports_subdiv_help' id='print_div_help' style='display:none'>
 <?php
 	$tips_string = LangUtil::$pageTerms['TIPS_TESTRECORDS'];
@@ -291,6 +303,27 @@ function show_tests_done_form()
 	$('.menu_option').removeClass('current_menu_option');
 	$('#tests_done_menu').addClass('current_menu_option');
 }
+
+function show_testcount_grouped_form()
+{
+	$('.reports_subdiv').hide();
+	$('.reports_subdiv_help').hide();
+	$('#testcount_grouped_div').show();
+	$('#testcount_grouped_help').show();
+	$('.menu_option').removeClass('current_menu_option');
+	$('#testcount_grouped_menu').addClass('current_menu_option');
+}
+
+function show_specimencount_grouped_form()
+{
+	$('.reports_subdiv').hide();
+	$('.reports_subdiv_help').hide();
+	$('#specimencount_grouped_div').show();
+	$('#specimencount_grouped_help').show();
+	$('.menu_option').removeClass('current_menu_option');
+	$('#specimencount_grouped_menu').addClass('current_menu_option');
+}
+
 
 function show_print_form()
 {
@@ -662,6 +695,7 @@ function get_pending_report()
 	}
 }
 
+
 function get_tests_done_report()
 {	
 	var location = $("#location4").attr("value");
@@ -705,6 +739,7 @@ function get_tests_done_report()
 	$('#tests_done_progress_spinner').show();
 	$('#tests_done_form').submit();
 }
+
 function get_doctor_stats()
 {
 	var location = $("#location7").attr("value");
@@ -812,6 +847,115 @@ function get_tests_done_report2()
 	$('#specimen_count_progress_spinner').show();
 	$('#tests_done_form').submit();
 }
+
+function get_testcount_grouped()
+{
+	
+	var location = $("#location7").attr("value");
+	var yyyy_from = $("#yyyy_from7").attr("value");
+	var mm_from = $("#mm_from7").attr("value");
+	var dd_from = $("#dd_from7").attr("value");
+	var yyyy_to = $("#yyyy_to7").attr("value");
+	var mm_to = $("#mm_to7").attr("value");
+	var dd_to = $("#dd_to7").attr("value");
+	
+		$("#location44").attr("value", location);
+	$("#yyyy_from44").attr("value", yyyy_from);
+	$("#mm_from44").attr("value", mm_from);
+	$("#dd_from44").attr("value", dd_from);
+	$("#yyyy_to44").attr("value", yyyy_to);
+	$("#mm_to44").attr("value", mm_to);
+	$("#dd_to44").attr("value", dd_to);
+	
+	if(location == "")
+	{
+		alert("<?php echo LangUtil::$generalTerms['TIPS_SELECTSITE']; ?>");
+		return;
+	}
+	else if(checkDate(yyyy_from, mm_from, dd_from) == false)
+	{
+		alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
+		return;
+	}
+	else if(checkDate(yyyy_to, mm_to, dd_to) == false)
+	{
+		alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
+		return;
+	}
+	if(
+		isNaN(yyyy_from) || 
+		isNaN(yyyy_to) ||
+		isNaN(mm_from) ||
+		isNaN(mm_to) ||
+		isNaN(dd_from) ||
+		isNaN(dd_to)
+		)
+	{
+		$("#mm_from44").val("");
+		$("#dd_from44").val("");
+		$("#yyyy_from44").val("");
+		$("#mm_to44").val("");
+		$("#dd_to44").val("");
+		$("#yyyy_to44").val("");
+	}
+	//$('#specimen_count_progress_spinner').show();
+	$('#testcount_grouped_form').submit();
+}
+
+function get_specimencount_grouped()
+{
+	
+	var location = $("#location7").attr("value");
+	var yyyy_from = $("#yyyy_from7").attr("value");
+	var mm_from = $("#mm_from7").attr("value");
+	var dd_from = $("#dd_from7").attr("value");
+	var yyyy_to = $("#yyyy_to7").attr("value");
+	var mm_to = $("#mm_to7").attr("value");
+	var dd_to = $("#dd_to7").attr("value");
+	
+		$("#location444").attr("value", location);
+	$("#yyyy_from444").attr("value", yyyy_from);
+	$("#mm_from444").attr("value", mm_from);
+	$("#dd_from444").attr("value", dd_from);
+	$("#yyyy_to444").attr("value", yyyy_to);
+	$("#mm_to444").attr("value", mm_to);
+	$("#dd_to444").attr("value", dd_to);
+	
+	if(location == "")
+	{
+		alert("<?php echo LangUtil::$generalTerms['TIPS_SELECTSITE']; ?>");
+		return;
+	}
+	else if(checkDate(yyyy_from, mm_from, dd_from) == false)
+	{
+		alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
+		return;
+	}
+	else if(checkDate(yyyy_to, mm_to, dd_to) == false)
+	{
+		alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
+		return;
+	}
+	if(
+		isNaN(yyyy_from) || 
+		isNaN(yyyy_to) ||
+		isNaN(mm_from) ||
+		isNaN(mm_to) ||
+		isNaN(dd_from) ||
+		isNaN(dd_to)
+		)
+	{
+		$("#mm_from44").val("");
+		$("#dd_from44").val("");
+		$("#yyyy_from44").val("");
+		$("#mm_to44").val("");
+		$("#dd_to44").val("");
+		$("#yyyy_to44").val("");
+	}
+	//$('#specimen_count_progress_spinner').show();
+	$('#specimencount_grouped_form').submit();
+}
+
 
 function get_tat_report()
 {
@@ -948,6 +1092,16 @@ function get_count_report()
 	{
 	
 	get_doctor_stats();
+	}
+        else if(count_type==4)
+	{
+	
+            get_testcount_grouped();
+	}
+        else if(count_type==5)
+	{
+	
+            get_specimencount_grouped();
 	}
 }
 
@@ -1843,6 +1997,138 @@ function show_custom_report_form(report_id)
 		</form>
 	</div>
 	
+        <div id='testcount_grouped_div' style='display:none;' class='reports_subdiv'>
+		<b>Test Count Report</b>
+		<br><br>
+		<form name="testcount_grouped_form" id="testcount_grouped_form" action="reports_testcount_grouped.php" method='post' target='_blank'>
+		<table cellpadding="4px">
+		<?php
+			$site_list = get_site_list($_SESSION['user_id']);
+			if(count($site_list) == 1)
+			{
+				foreach($site_list as $key=>$value)
+					echo "<input type='hidden' name='location' id='location44' value='$key'></input>";
+			}
+			else
+			{
+			?>
+			<tr>
+					<td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
+					<td>
+						<select name='location' id='location44' class='uniform_width'>
+						<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
+						<?php
+							$page_elems->getSiteOptions();
+						?>
+						</select>
+					</td>
+				</tr>
+			<?php
+			}
+			?>
+				<tr valign='top'>
+					<td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?> </td>
+					<td>
+					<?php
+						$name_list = array("yyyy_from", "mm_from", "dd_from");
+						$id_list = array("yyyy_from44", "mm_from44", "dd_from44");
+						$value_list = $monthago_array;
+						$page_elems->getDatePicker($name_list, $id_list, $value_list);
+					?>
+					</td>
+				</tr>
+				<tr valign='top'>
+					<td><?php echo LangUtil::$generalTerms['TO_DATE']; ?> </td>
+					<td>
+					<?php
+						$name_list = array("yyyy_to", "mm_to", "dd_to");
+						$id_list = array("yyyy_to44", "mm_to44", "dd_to44");
+						$value_list = $today_array;
+						$page_elems->getDatePicker($name_list, $id_list, $value_list);
+					?>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+					<br>
+						<input type='button' id='testcount_grouped_submit_button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick="javascript:get_tests_done_report();" ></input>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<span id='tests_done_progress_spinner' style='display:none'>
+							<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
+						</span>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+            
+        <div id='specimencount_grouped_div' style='display:none;' class='reports_subdiv'>
+		<b>Test Count Report</b>
+		<br><br>
+		<form name="specimencount_grouped_form" id="specimencount_grouped_form" action="reports_specimencount_grouped.php" method='post' target='_blank'>
+		<table cellpadding="4px">
+		<?php
+			$site_list = get_site_list($_SESSION['user_id']);
+			if(count($site_list) == 1)
+			{
+				foreach($site_list as $key=>$value)
+					echo "<input type='hidden' name='location' id='location444' value='$key'></input>";
+			}
+			else
+			{
+			?>
+			<tr>
+					<td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
+					<td>
+						<select name='location' id='location444' class='uniform_width'>
+						<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
+						<?php
+							$page_elems->getSiteOptions();
+						?>
+						</select>
+					</td>
+				</tr>
+			<?php
+			}
+			?>
+				<tr valign='top'>
+					<td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?> </td>
+					<td>
+					<?php
+						$name_list = array("yyyy_from", "mm_from", "dd_from");
+						$id_list = array("yyyy_from444", "mm_from444", "dd_from444");
+						$value_list = $monthago_array;
+						$page_elems->getDatePicker($name_list, $id_list, $value_list);
+					?>
+					</td>
+				</tr>
+				<tr valign='top'>
+					<td><?php echo LangUtil::$generalTerms['TO_DATE']; ?> </td>
+					<td>
+					<?php
+						$name_list = array("yyyy_to", "mm_to", "dd_to");
+						$id_list = array("yyyy_to444", "mm_to444", "dd_to444");
+						$value_list = $today_array;
+						$page_elems->getDatePicker($name_list, $id_list, $value_list);
+					?>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+					<br>
+						<input type='button' id='specimencount_grouped_submit_button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick="javascript:get_tests_done_report();" ></input>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<span id='tests_done_progress_spinner' style='display:none'>
+							<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
+						</span>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+            
 	<div id='tat_div' style='display:none;' class='reports_subdiv'>
 		<b><?php echo LangUtil::$pageTerms['MENU_TAT']; ?></b>
 		<br><br>
@@ -2130,13 +2416,21 @@ function show_custom_report_form(report_id)
 					<td><?php echo LangUtil::$pageTerms['COUNT_TYPE']; ?></td>
 					<td>
 						<input type='radio' id='count_type' name='count_type' value='2' checked>
-							<?php echo LangUtil::$pageTerms['COUNT_TEST']; ?>
+							<?php echo LangUtil::$pageTerms['COUNT_TEST']." (Ungrouped)"; ?>
 						</input>
 						<br>
+                                                <input type='radio' id='count_type' name='count_type' value='4' checked>
+							<?php echo LangUtil::$pageTerms['COUNT_TEST']." (Grouped)"; ?>
+						</input>
+                                                <br>
 						<input type='radio' id='count_type' name='count_type' value='1'>
-							<?php echo LangUtil::$pageTerms['COUNT_SPECIMEN']; ?>
+							<?php echo LangUtil::$pageTerms['COUNT_SPECIMEN']." (Ungrouped)"; ?>
 						</input>
 						<br>
+                                                <input type='radio' id='count_type' name='count_type' value='5'>
+							<?php echo LangUtil::$pageTerms['COUNT_SPECIMEN']." (Grouped)"; ?>
+						</input>
+                                                <br>
 						<input type='radio' id='count_type' name='count_type' value='3'>
 							<?php echo "Doctor Statistics" ?>
 						</input>

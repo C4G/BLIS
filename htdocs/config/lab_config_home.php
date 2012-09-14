@@ -124,6 +124,27 @@ $script_elems->enableJQueryForm();
 		?>
 	</ul>
 	</div>
+
+        <!--NC3065-->
+        
+        <div id='search_config' class='right_pane' style='display:none;margin-left:10px;'>
+	<ul>	
+		<?php
+		
+			echo "<li>";
+			echo " Toggle Patient Number or Patient's Age to be displayed as part of Search Results";
+			echo "</li>";
+                        echo "<li>";
+			echo " Choosing to display Patient Number and/or Patient's Age as part of Search results slows down the time taken to search ";
+			echo "</li>";
+                        
+                        
+		
+		?>
+	</ul>
+	</div>
+        
+        <!---NC3065-->
 	
 	<div id='SetupNet' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
@@ -306,6 +327,15 @@ $(document).ready(function(){
 		right_load(8, 'agg_report_div');
 		<?php
 	}
+        else if(isset($_REQUEST['grouped_count_update']))
+	{
+		# Show custom field updated message
+		?>
+		$('#grouped_count_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('grouped_count_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+		$('#grouped_count_msg').show();
+		right_load(36, 'grouped_count_div');
+		<?php
+	}
 	else if(isset($_REQUEST['miscupdate']))
 	{
 		# Show general settings updated message
@@ -332,6 +362,17 @@ $(document).ready(function(){
 		right_load(4, 'fields_div');
 		<?php
 	}
+        //NC3065
+        else if(isset($_REQUEST['sfcupdate']))
+	{
+		# Show other fields updated message
+		?>
+		$('#searchfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('searchfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+		$('#searchfield_msg').show();
+		right_load(21, 'search_div');
+		<?php
+	}
+        //-NC3065
 	else if(isset($_REQUEST['rcfgupdate']))
 	{
 		# Show report config updated message
@@ -543,6 +584,19 @@ function toggle_disease_report()
 		$('#agg_edit_link').html("<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>");
 }
 
+
+function toggle_grouped_count_report()
+{
+	$('#grouped_count_report_summary').toggle();
+	$('#grouped_count_report_form_div').toggle();
+	var curr_link_text = $('#grouped_count_edit_link').html();
+	if(curr_link_text == "<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>")
+		$('#grouped_count_edit_link').html("<?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?>");
+	else
+		$('#grouped_count_edit_link').html("<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>");
+}
+
+
 function toggle_ofield_div()
 {
 	$('#ofield_summary').toggle();
@@ -655,6 +709,20 @@ function agg_checkandsubmit()
 	});
 }
 
+function grouped_checkandsubmit()
+{
+	//Validate
+	//TODO
+	//All okay
+	$('#grouped_count_progress_spinner').show();
+	$('#grouped_count_report_form').ajaxSubmit({
+		success: function() {
+			$('#grouped_count_progress_spinner').hide();
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&grouped_count_update=1";
+		}
+	});
+}
+
 function agg_preview()
 {
 	// Shows preview of infection report in a separate window
@@ -672,6 +740,18 @@ function agegrouplist_append()
 {
 	var html_code = "&nbsp;&nbsp;<input type='text' name='age_l[]' class='range_field'></input>-<input type='text' name='age_u[]' class='range_field'></input>";
 	$('#agegrouplist_inner').append(html_code);
+}
+
+function t_agegrouplist_append()
+{
+	var html_code = "&nbsp;&nbsp;<input type='text' name='age_l[]' class='range_field'></input>-<input type='text' name='age_u[]' class='range_field'></input>";
+	$('#t_agegrouplist_inner').append(html_code);
+}
+
+function s_agegrouplist_append()
+{
+	var html_code = "&nbsp;&nbsp;<input type='text' name='sp_age_l[]' class='range_field'></input>-<input type='text' name='sp_age_u[]' class='range_field'></input>";
+	$('#s_agegrouplist_inner').append(html_code);
 }
 
 function add_slot(span_id, field_name1, field_name2)
@@ -736,6 +816,19 @@ function submit_otherfields()
 		}
 	});
 }
+
+//NC3065
+function submit_searchconfig()
+{
+	$('#searchfields_progress').show();
+	$('#searchfields_form').ajaxSubmit({
+		success: function() {
+			$('#searchfields_progress').hide();
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&sfcupdate=1";
+		}
+	});
+}
+//-NC3065
 
 function backup_data()
 {
@@ -914,11 +1007,16 @@ function right_load_1(option_num, div_id)
 					-<a href='remarks_edit.php?id=<?php echo $_REQUEST['id']; ?>'><?php echo "Results Interpretation"; ?></a>
 					<br><br>
 				</div>
-
+                                
+                                <a id='option21' class='menu_option' href="javascript:right_load(21, 'search_div');"><?php echo "Search" ?></a>
+                                <br><br>
+                                
 				<a id='report' class='menu_option' href="javascript:report_setup();"><?php echo LangUtil::$pageTerms['Reports']; ?> </a>
 				<br><br></li>
 				<div id='report_setup' name='report_setup' style='display:none;'>
 					-<a id='option8' class='menu_option' href="javascript:right_load(8, 'agg_report_div');"><?php echo LangUtil::$pageTerms['MENU_INFECTION']; ?></a>
+					<br><br>
+                                        -<a id='option36' class='menu_option' href="javascript:right_load(36, 'grouped_count_div');"><?php echo "Test/Specimen Grouped Reports"; ?></a>
 					<br><br>
 					-<a id='option11' class='menu_option' href="javascript:right_load(11, 'report_config_div');"><?php echo LangUtil::$pageTerms['MENU_REPORTCONFIG']; ?></a>
 					<br><br>
@@ -999,18 +1097,62 @@ function right_load_1(option_num, div_id)
 					<small><a id='ttype_link' href='javascript:ttype_toggle();'><?php echo LangUtil::$generalTerms['CMD_SHOW']; ?></a></small>
 					<div class='pretty_box' id='ttype_box' style='display:none'>
 					<b><u><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></u></b>
-						<?php $page_elems->getTestTypeCheckboxes($lab_config->id); ?>
+                                        
+                                        <?php
+                                        //NC3065
+                                        
+                                        $user = get_user_by_id($_SESSION['user_id']);
+                                        if(is_super_admin($user) || is_country_dir($user))
+                                        {
+                                            $page_elems->getTestTypeCheckboxes_dir($lab_config->id);
+                                        }
+                                        else
+                                        {
+                                            $page_elems->getTestTypeCheckboxes($lab_config->id); 
+                                        }
+                                        //NC3065
+					?>
+                                        
+                                         <?php //$page_elems->getTestTypeCheckboxes($lab_config->id); ?>
+                                        
 					</div>
 					<br><br>
 					<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='checkandsubmit_st_types()'>
 					</input>
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					<span id='st_types_progress' style='display:none;'>
+                                  
 						<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
 					</span>
 					</form>
 				</div>
-				
+			
+                                <!--NC3065-->
+                                
+                                <div class='right_pane' id='search_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;"><a rel='facebox' href='#search_config'>Page Help</a></p>
+					<b><?php echo "Configure Fields for search results"; ?></b>
+					<br><br>
+                                        <div id='searchfield_msg' class='clean-orange' style='display:none;width:350px;'>
+					</div>
+					<form id='searchfields_form' name='searchfields_form' action='ajax/search_config_update.php' method='post'>
+					<input type='hidden' name='lab_config_id' value='<?php echo $lab_config->id; ?>'></input>					
+						<?php $page_elems->getSearchFieldsCheckboxes($lab_config->id); ?>
+					<br><br>
+					<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='submit_searchconfig()'>
+					</input>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<!--span id='st_types_progress' style='display:none;'-->
+                                        <span id='searchfields_progress' style='display:none;'>
+
+						<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
+					</span>
+					</form>
+				</div>
+                                
+                                <!--NC3065-->
+
+                            
 				<div class='right_pane' id='users_div' style='display:none;margin-left:10px;'>
 					<?php
 					$reload_url = "lab_config_home.php?id=$lab_config_id";
@@ -1114,7 +1256,8 @@ function right_load_1(option_num, div_id)
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></td>
 								<td>
 									<input type='checkbox' name='use_dnum' id='use_dnum'<?php
-									if($lab_config->dailyNum != 0)
+									
+                                                                        if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 12)
 										echo " checked ";
 									?>>
 									</input>
@@ -1123,12 +1266,12 @@ function right_load_1(option_num, div_id)
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_dnum_radio' value='Y'<?php
-										if($lab_config->dailyNum == 2)
+										if($lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
 											echo " checked ";
 										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_dnum_radio' value='N' <?php
-										if($lab_config->dailyNum != 2)
+										if($lab_config->dailyNum != 2 && $lab_config->dailyNum != 12)
 											echo " checked ";
 										?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
 										&nbsp;&nbsp;
@@ -1213,7 +1356,8 @@ function right_load_1(option_num, div_id)
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['AGE']; ?></td>
 								<td>
 									<input type='checkbox' name='use_age' id='use_age'<?php
-									if($lab_config->age != 0)
+                                                                        if($lab_config->age == 1 || $lab_config->age == 2 || $lab_config->age == 11 || $lab_config->age == 12)
+									
 										echo " checked ";
 									?>>
 									</input>
@@ -1222,12 +1366,12 @@ function right_load_1(option_num, div_id)
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_age_radio' value='Y'<?php
-										if($lab_config->age == 2)
+										if($lab_config->age == 2 || $lab_config->age == 12)
 											echo " checked ";
 										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_age_radio' value='N' <?php
-										if($lab_config->age != 2)
+										if($lab_config->age != 2 && $lab_config->age != 12)
 											echo " checked ";
 										?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
@@ -1706,6 +1850,25 @@ function right_load_1(option_num, div_id)
 					</div>
 				</div>
 				
+                                <div class='right_pane' id='grouped_count_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;"><a rel='facebox' href='#IR_rc'>Page Help</a></p>
+					<b><?php echo "Test/Specimen Count Grouped Reports"; ?></b>
+					 | <a href='javascript:toggle_grouped_count_report();' id='grouped_count_edit_link'><?php echo LangUtil::$generalTerms['CMD_EDIT']; ?></a>
+					<br><br>
+					<div id='grouped_count_msg' class='clean-orange' style='display:none;width:350px;'>
+					</div>
+					<br>
+					<div id='grouped_count_report_summary'>
+						<?php echo $page_elems->getGroupedCountReportSummary($lab_config); ?>
+					</div>
+					<div id='grouped_count_report_form_div' style='display:none;'>
+						<form id='grouped_count_report_form' name='grouped_count_report_form' action='ajax/grouped_count_reports_update.php' method='post'>
+							<?php $page_elems->getGroupedCountReportConfigureForm($lab_config); ?>
+						</form>	
+						
+					</div>
+				</div>
+                                
 				<div class='right_pane' id='misc_div' style='display:none;margin-left:10px;'>
 					<b><?php echo LangUtil::$pageTerms['MENU_GENERAL']; ?></b>
 					<br><br>

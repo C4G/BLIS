@@ -10,7 +10,7 @@ $saved_session = SessionUtil::save();
 
 $card_num = $_REQUEST['card_num']; # DB key
 $addl_id = $_REQUEST['addl_id'];
-$name=ucwords(strtolower($_REQUEST['name']));
+$name = ucwords(strtolower($_REQUEST['name']));
 $age = $_REQUEST['age'];
 $age_param = $_REQUEST['agep'];
 $receipt_yyyy = $_REQUEST['receipt_yyyy'];

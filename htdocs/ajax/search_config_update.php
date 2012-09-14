@@ -20,6 +20,7 @@ if($lab_config == null)
 	return;
 }
 
+/*
 # Patient related fields
 $use_pid = 0;
 $use_addl_id_patient = 0;
@@ -63,37 +64,9 @@ if(isset($_REQUEST['use_p_addl']))
 }
 if(isset($_REQUEST['use_dnum']))
 {
-	if($lab_config->dailyNum >= 10)
-        {
-            $use_daily_num = 11;
-        }
-        else
-        {
-            $use_daily_num = 1;
-        }
+	$use_daily_num = 1;
 	if($_REQUEST['use_dnum_radio'] == 'Y')
-        {
-            if($lab_config->dailyNum >= 10)
-            {
-                $use_daily_num = 12;
-            }
-            else
-            {
-                $use_daily_num = 2;
-            }
-        }
-}
-else
-{
-    if($lab_config->dailyNum >= 10)
-        {
-            $use_daily_num = 10;
-        }
-        else
-        {
-            $use_daily_num = 0;
-        }
-	
+		$use_daily_num = 2;	
 }
 if(isset($_REQUEST['use_pname']))
 {
@@ -109,37 +82,9 @@ if(isset($_REQUEST['use_sex']))
 }
 if(isset($_REQUEST['use_age']))
 {
-	if($lab_config->age >= 10)
-        {
-            $use_age = 11;
-        }
-        else
-        {
-            $use_age = 1;
-        }
+	$use_age = 1;
 	if($_REQUEST['use_age_radio'] == 'Y')
-        {
-            if($lab_config->age >= 10)
-            {
-                $use_age = 12;
-            }
-            else
-            {
-                $use_age = 2;
-            }
-        }
-}
-else
-{
-    if($lab_config->dailyNum >= 10)
-        {
-            $use_daily_num = 10;
-        }
-        else
-        {
-            $use_daily_num = 0;
-        }
-	
+		$use_age = 2;
 }
 if(isset($_REQUEST['use_dob']))
 {
@@ -220,4 +165,108 @@ $lab_config->updateDoctor($use_doctor);
 //$lab_config->updateHidePatientName($show_pname);
 
 SessionUtil::restore($saved_session);
+*/
+
+$f_pid = 0;
+$f_p_addl = 0;
+$f_daily_num = 0;
+$f_pname = 0;
+$f_sex = 0;
+$f_age = 0;
+$f_dob = 0;
+/*
+if($_REQUEST['sfields_pid']==1)
+{
+	$f_pid = 1;
+}
+ 
+if(isset($_REQUEST['sfields_p_addl']))
+{
+	$f_p_addl = 1;
+}*/
+
+if(isset($_REQUEST['sfields_daily_num']))
+{
+     if($lab_config->dailyNum >= 10)
+    {
+	$f_daily_num = $lab_config->dailyNum;
+    }
+    else
+    {
+         $f_daily_num = $lab_config->dailyNum + 10;
+    }
+}
+else
+{
+    if($lab_config->dailyNum >= 10)
+    {
+        $f_daily_num = $lab_config->dailyNum - 10;
+    }
+    else
+    {
+        $f_daily_num = $lab_config->dailyNum;
+    }
+}
+if(isset($_REQUEST['sfields_age']))
+{
+     if($lab_config->age >= 10)
+    {
+	$f_age = $lab_config->age;
+    }
+    else
+    {
+         $f_age = $lab_config->age + 10;
+    }
+}
+else
+{
+    if($lab_config->age >= 10)
+    {
+        $f_age = $lab_config->age - 10;
+    }
+    else
+    {
+        $f_age = $lab_config->age;
+    }
+}
+/*
+if(isset($_REQUEST['sfields_pname']))
+{
+	$f_pname = 1;
+}
+if(isset($_REQUEST['sfields_sex']))
+{
+	$f_sex = 1;
+}
+if(isset($_REQUEST['sfields_age']))
+{
+	$f_age = 1;
+}
+if(isset($_REQUEST['sfields_dob']))
+{
+	$f_dob = 1;
+}
+
+if($lab_config->pid != $f_pid)
+	$lab_config->updatePid($f_pid);
+if($lab_config->patientAddl != $f_p_addl)
+	$lab_config->updatePatientAddl($f_p_addl);
+*/
+ //if($lab_config->dailyNum != $f_daily_num)
+    $lab_config->updateDailyNum($f_daily_num);
+    $lab_config->updateAge($f_age);
+
+  /*
+ if($lab_config->sex != $f_sex)
+	$lab_config->updateSex($f_sex);
+if($lab_config->age != $f_age)
+	$lab_config->updateAge($f_age);
+if($lab_config->dob != $f_dob)
+	$lab_config->updateDob($f_dob);
+if($lab_config->pname != $f_pname)
+	$lab_config->updatePname($f_pname);
+*/
+SessionUtil::restore($saved_session);
+
 ?>
+ 

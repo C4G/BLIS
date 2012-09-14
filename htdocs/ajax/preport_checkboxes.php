@@ -55,7 +55,7 @@ if(count($specimen_list) == 0)
 			
 			<th><?php echo LangUtil::$generalTerms['PATIENT']; ?></th>
 			<?php
-			if($lab_config->dailyNum != 0)
+			if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
 			{
 			?>
 				<th><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></th>
@@ -89,7 +89,7 @@ foreach($specimen_list as $specimen)
 		<?php echo $patient->getName(); ?>
 	</td>
 	<?php
-			if($lab_config->dailyNum != 0)
+			if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
 			{
 			?>
 				<td><?php echo $specimen->getDailyNumFull(); ?></td>

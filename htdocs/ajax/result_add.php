@@ -19,7 +19,7 @@ $comment = $_REQUEST['comments'];
 $comment_1=$_REQUEST['comments_1'];
 $dd_to=$_REQUEST['dd_to'];
 $mm_to=$_REQUEST['mm_to'];
-$yyy_to=$_REQUEST['yyyy_to'];
+$yyyy_to=$_REQUEST['yyyy_to'];
 
 if($comment!=="" && $comment_1!="")
 {
@@ -39,6 +39,37 @@ $comments=$comment;
 $result_values = $_REQUEST['result'];
 $measure_count = 0;
 $measure_list = $test_type->getMeasures();
+
+$submeasure_list = array();
+                $comb_measure_list = array();
+               // print_r($measure_list);
+                
+                foreach($measure_list as $measure)
+                {
+                    
+                    $submeasure_list = $measure->getSubmeasuresAsObj();
+                    //echo "<br>".count($submeasure_list);
+                    //print_r($submeasure_list);
+                    $submeasure_count = count($submeasure_list);
+                    
+                    if($measure->checkIfSubmeasure() == 1)
+                    {
+                        continue;
+                    }
+                        
+                    if($submeasure_count == 0)
+                    {
+                        array_push($comb_measure_list, $measure);
+                    }
+                    else
+                    {
+                        array_push($comb_measure_list, $measure);
+                        foreach($submeasure_list as $submeasure)
+                           array_push($comb_measure_list, $submeasure); 
+                    }
+                }
+                $measure_list = $comb_measure_list;
+
 foreach($measure_list as $measure)
 {
 	$range_type = $measure->getRangeType();
@@ -53,7 +84,15 @@ foreach($measure_list as $measure)
 				continue;
 				$value_string .= $value."_";
 		}
+                if( substr($value_string, -1) == "_")
+                        $value_string = substr($value_string, 0, -1);
 		$result_values[$measure_count] = $value_string;
+	}
+        else if($range_type == Measure::$RANGE_FREETEXT)
+	{
+		$result_value = $result_values[$measure_count];
+		$result_value = "[\$]".$result_value."[\/\$]";
+		$result_values[$measure_count] = $result_value;
 	}
 	$measure_count++;
 }
@@ -73,7 +112,10 @@ foreach($result_values as $result_val)
 }
 $result_csv = implode(",", $result_values).",";
 $user_id = $_SESSION['user_id'];
-$ts = mktime(0,0,0,$mm_to,$dd_to,$yyyy_to);
+//NC3065
+$unix_ts = mktime(0,0,0,$mm_to,$dd_to,$yyyy_to);
+$ts =date("Y-m-d H:i:s", $unix_ts);
+//-NC3065
 add_test_result($test_id, $result_csv, $comments, "", $user_id, $ts, $patient->getHashValue());
 update_specimen_status($specimen_id);
 $test_list = get_tests_by_specimen_id($specimen_id);
