@@ -158,7 +158,7 @@ $lab_config_list = get_lab_configs($admin_user_id);
 <small><a href='javascript:update_database_submit();'><?php echo 'Update All Labs Data from Backups'; ?></a> | </small>
 */
 ?>
-<small><a rel='facebox' href='update.php'><?php echo 'Update To New Version'; ?></a></small>
+<small><a rel='facebox' href='update/blis_update.php'><?php echo 'Update To New Version'; ?></a></small>
 <span id='update_database_progress' style='display:none'>
 	<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
 </span>

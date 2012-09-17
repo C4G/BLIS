@@ -10888,5 +10888,60 @@ class Inventory
         
 }
 
+/*****************************************
+********** Update Process ****************
+*****************************************/
+function checkVersionDataTable()
+{
+   $saved_db = DbUtil::switchToGlobal();
+		
+   $query = "SELECT * FROM version_data WHERE version = 'start_entry' LIMIT 1";
+   $record = query_associative_one($query);
+   if(!$record)
+   {
+       $code = 0;   #version entry doesnt exist
+       DbUtil::switchRestore($saved_db);
+       return $code;
+   }
+   
+   DbUtil::switchRestore($saved_db);
+   return $record; 
+}
+
+function setVersionDataFlag($fl, $vers)
+{
+   $code = 0;
+   
+   $saved_db = DbUtil::switchToGlobal();
+   
+   $query = "SELECT * FROM version_Data WHERE version = '$vers' LIMIT 1";
+   $record = query_associative_one($query);
+   
+   if(!$record)
+   {
+       $code = 1;   #version entry doesnt exist
+       DbUtil::switchRestore($saved_db);
+       return $code;
+   }
+   else
+   {
+       $code = 2; #version entry exists
+   }
+   
+   $query = "UPDATE version_data SET flag = $fl WHERE version = '$vers'";
+   $ret = query_blind($query);
+   if(!$ret)
+   {
+       $code = 3; #Error during updation of flag
+   }
+   else
+   {
+       $code = 4;
+   }
+   DbUtil::switchRestore($saved_db);
+   return $code; 
+}
+
+
 
 ?>
