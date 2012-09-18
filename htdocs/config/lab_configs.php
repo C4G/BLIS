@@ -140,6 +140,11 @@ if(isset($_REQUEST['msg']))
 <?php 
 $admin_user_id = $_SESSION['user_id'];
 $lab_config_list = get_lab_configs($admin_user_id);
+$user_obj = get_user_by_id($user_id);
+if(is_country_dir($user_obj))
+{
+        $lab_config_list = get_country_lab_configs($user_id);
+}
 ?>
 <div id='lab_config_list'>
 	<?php $page_elems->getLabConfigTable($lab_config_list);  ?>

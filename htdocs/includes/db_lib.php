@@ -6501,7 +6501,45 @@ function get_lab_configs($admin_user_id = "")
 	return $retval;
 }
 
-function get_lab_config_num_patients($lab_config_id)
+function get_country_lab_configs($user_id)
+{
+	# Returns all lab configs present in DB and accessible by admin-level user
+	# If admin_user_id not supplied, all stored lab configs are returned
+    $usr_c = get_username_by_id($user_id);
+            $usr_c = strtolower($usr_c);
+            $usr_c = ucfirst($usr_c);
+            $usr_cs = substr($usr_c, 0, strpos($usr_c, "_"));
+            
+
+	$saved_db = DbUtil::switchToGlobal();
+	$user = null;
+	
+		# Fetch lab configs stored in DB
+		$query_configs = "SELECT * FROM lab_config ORDER BY name";
+	
+	
+	$retval = array();
+	$resultset = query_associative_all($query_configs, $row_count);
+	if($resultset == null)
+	{
+		DbUtil::switchRestore($saved_db);
+		return $retval;
+	}
+        $i = 0;
+	foreach($resultset as $record)
+	{
+            if(strcasecmp($record['country'], $usr_cs) == 0)
+            {
+                //echo "******************";
+		$retval[$i] = LabConfig::getObject($record);
+                $i++;
+            }
+	}
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+}
+   
+            function get_lab_config_num_patients($lab_config_id)
 {
 	global $con;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
@@ -6604,7 +6642,15 @@ function get_site_list($user_id)
 	$user = get_user_by_id($user_id);
 	$retval = array();
 	//if($user->isAdmin())
-	if(is_admin($user))
+        if(is_country_dir($user))
+        {
+            $lab_config_list = get_country_lab_configs($user_id);
+            foreach($lab_config_list as $lab_config)
+		{
+			$retval[$lab_config->id] = $lab_config->getSiteName();
+		}
+        }
+	else if(is_admin($user))
 	{
 		# Admin level user
 		# Return all owned/accessible lab configurations
