@@ -25,6 +25,18 @@ $script_elems->enableLatencyRecord();
     background-color: #FEEFB3;
     background-image: url('../includes/img/knob_attention.png');
 }
+.update_error {
+    
+    border: 1px solid;
+    width: 350px;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('../includes/img/knob_cancel.png');
+}
 </style>
 
 <script type='text/javascript'>
@@ -34,7 +46,7 @@ $(document).ready(function(){
 		type : 'POST',
 		url : 'update/check_version.php',
 		success : function(data) {
-			if ( data=="show" ) 
+			if ( data=='1' ) 
                         {
                             $('#update_div').show();
 			}
@@ -44,7 +56,7 @@ $(document).ready(function(){
 			}
 		}
 	});
-    $('#update_div').show();
+    //$('#update_div').show();
 });
 
 function blis_update()
@@ -83,11 +95,22 @@ echo LangUtil::getPageTerm("TIPS_BLISINTRO");
 ?>
 
 <br><br>
+<?php
+# If technician user, show lab workflow
+if($_SESSION['user_level'] == $LIS_ADMIN || $_SESSION['user_level'] == $LIS_SUPERADMIN || $_SESSION['user_level'] == $LIS_COUNTRYDIR)
+{
+?>
+    <div id="update_error_188_div" style="display:none;" class="update_error">
+    Update Error! Report error #188 to naomichopra@gatech.edu.
+    </div>
 
-<div id="update_div" style="display:none;" class="warning">
-   <a rel='facebox' id='stype_link' href='javascript:blis_update();'>Click here to complete update to version <?php echo $VERSION ?></a>
-</div>
+    <div id="update_div" style="display:none;" class="warning">
+    <a rel='facebox' id='update_link' href='javascript:blis_update();'>Click here to complete update to version <?php echo $VERSION ?></a>
+    </div>
 
+<?php
+}
+?>
 <?php
 # If technician user, show lab workflow
 if($_SESSION['user_level'] == $LIS_TECH_RW || $_SESSION['user_level'] == $LIS_TECH_SHOWPNAME || $_SESSION['user_level'] == $LIS_TECH_RO)
