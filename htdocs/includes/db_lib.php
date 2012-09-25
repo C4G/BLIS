@@ -5178,6 +5178,29 @@ function search_patients_by_name($q)
 	return $patient_list;
 }
 
+
+function search_patients_by_name_dyn($q, $cap, $counter)
+{
+	# Searches for patients with similar name
+	global $con;
+        $offset = $cap * ($counter - 1);
+	$q = mysql_real_escape_string($q, $con);
+	$query_string = 
+		"SELECT * FROM patient ".
+		"WHERE name LIKE '$q%' ORDER BY name ASC LIMIT $offset,$cap";
+	$resultset = query_associative_all($query_string, $row_count);
+	$patient_list = array();
+	if(count($resultset) > 0)
+	{
+		foreach($resultset as $record)
+		{
+			$patient_list[] = Patient::getObject($record);
+		}
+	}
+	return $patient_list;
+}
+
+
 function search_patients_by_addlid($q)
 {
 	global $con;
