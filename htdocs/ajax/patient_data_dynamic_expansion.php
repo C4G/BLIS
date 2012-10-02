@@ -116,8 +116,9 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 }
 # Build HTML table
 ?>
-<table class='hor-minimalist-c' id='patientListTable' name='patientListTable'>
-	<thead>
+<table class='hor-minimalist-cy' id='patientListTable' name='patientListTable'>
+        <thead style="display: none">
+
 		<tr valign='top'>
 			<?php
 			if($lab_config->pid != 0)
@@ -162,8 +163,9 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			<th></th>
 			<th></th>
 		</tr>
+
 	</thead>
-	<tbody>
+		<tbody>
 	<?php
 	foreach($patient_list as $patient)
 	{
@@ -173,7 +175,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			if($lab_config->pid != 0)
 			{
 				?>
-				<td>
+				<td class="idtd">
 					<?php echo $patient->getSurrogateId(); ?>
 				</td>
 				<?php
@@ -213,17 +215,17 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				<?php
 			}
 			?>
-			<td>
+			<td class="nametd">
 				<?php echo $patient->name; ?>
 			</td>
-			<td>
+			<td class="sextd">
 				<?php echo $patient->sex; ?>
 			</td>
 			<?php
                         if($lab_config->age >= 11)
 			{
 				?>
-				<td>
+				<td class="agetd">
 					<?php echo $patient->getAge(); ?>
 				</td>
 				<?php
@@ -296,16 +298,17 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 	?>
 	</tbody>
 </table>
-
+<div class ="more_link">
    <?php 
         if(isset($_REQUEST['l']))
         { 
-            $next_link = "ajax/patient_data_dynamic.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter+1); 
+            $next_link = "ajax/patient_data_dynamic_expansion.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter+1); 
         }
         else
         {
-            $next_link = "ajax/patent_data_dynamic.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&result_cap=".$result_cap."&result_counter=".($result_counter+1);             
+            $next_link = "ajax/patent_data_dynamic_expansion.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&result_cap=".$result_cap."&result_counter=".($result_counter+1);             
         }
 
     ?>
                 <a onclick="javascript:get_next('<?php echo $next_link; ?>', '<?php echo $result_counter + 1; ?>');">More</a>
+</div>
