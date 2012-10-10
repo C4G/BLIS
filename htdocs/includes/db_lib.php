@@ -1150,6 +1150,7 @@ class TestType
 	public $hidePatientName;
 	public $prevalenceThreshold;
 	public $targetTat;
+        public $costToPatient;
 	
 	public static function getObject($record)
 	{
@@ -1165,6 +1166,7 @@ class TestType
 		$test_type->hidePatientName = $record['hide_patient_name'];
 		$test_type->prevalenceThreshold = $record['prevalence_threshold'];
 		$test_type->targetTat = $record['target_tat'];
+                $test_type->costToPatient = $record['costToPatient'];
 		if($record['is_panel'] != null && $record['is_panel'] == 1)
 		{
 			$test_type->isPanel = true;
@@ -1305,6 +1307,17 @@ class TestType
 		$retval = $record['hide_patient_name'];
 		return $retval;
 	}
+        
+        public function getCostToPatient($test_type_id) {
+		global $con;
+		$test_type_id = mysql_real_escape_string($test_type_id, $con);
+		$query_string = 
+			"SELECT costToPatient FROM test_type WHERE test_type_id=$test_type_id";
+		$record = query_associative_one($query_string);
+		$retval = $record['costToPatient'];
+		return $retval;
+        }
+        
 }
 
 class SpecimenType
