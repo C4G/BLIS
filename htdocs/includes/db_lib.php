@@ -5883,6 +5883,18 @@ function enable_new_test($lab_config_id, $test_type_id)
     DbUtil::switchRestore($saved_db);
 }
 
+function update_billing_config($billing_status, $lab_id)
+{
+        # Updates the billing field of a lab configuration record
+        $saved_db = DbUtil::switchToGlobal();
+        $query_string =
+                "UPDATE lab_config ".
+                "SET uses_billing=$billing_status, ".
+                "WHERE lab_config_id=$lab_id";
+        query_blind($query_string);
+        DbUtil::switchRestore($saved_db);
+}
+
 function update_lab_config($updated_entry, $updated_specimen_list=null, $updated_test_list=null)
 {
 	# Updates a lab configuration record

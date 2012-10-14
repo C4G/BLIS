@@ -209,7 +209,6 @@ if($lab_config == null)
 
 $(document).ready(function(){
         $("#inventory_div").load("view_stocks.php");;
-        $("#billing_div").load("toggle_billing.php");
 	$("input[name='rage']").change(function() {
 		toggle_agegrouplist();
 	});
@@ -238,12 +237,6 @@ $(document).ready(function(){
 		right_load(15, 'inventory_div');
 		<?
 	}
-        else if(isset($_REQUEST['show_b']))
-        {
-                ?>
-                right_load(22, 'billing_div');
-                <?
-        }
 	else if(isset($_REQUEST['set_locale']))
 	{
 		$locale = $_REQUEST['locale'];
@@ -503,11 +496,6 @@ function inventory_load()
 {
     //$("#inventory_div").load("view_stock.php");
     right_load(15, 'inventory_div');
-}
-
-function billing_load()
-{
-    right_load(22, 'billing_div');
 }
 
 function performUpdate()
@@ -1286,6 +1274,14 @@ function right_load_1(option_num, div_id)
 				</div>
                                 
                                 <div class='right_pane' id='billing_div' style='display:none;margin-left:10px;'>
+                                         
+                                    <p style="text-align: right;"><a rel='facebox' href='#Tests_config'>Page Help</a></p>
+                                    <form id='billing_form' name='billing_form' action='ajax/billing_update.php' method='post'>
+                                        <input type='hidden' name='lid' value='<?php echo $lab_config->id; ?>'></input>
+                                        <input type="checkbox" value="enable_billing" name="enable_billing"/><?php echo LangUtil::$generalTerms['ENABLE_BILLING']; ?>
+                                        <br>
+                                        <input type="submit" value="Update" />
+                                    </form>
                                 </div>
 				
 				<div class='right_pane' id='fields_div' style='display:none;margin-left:10px;'>
