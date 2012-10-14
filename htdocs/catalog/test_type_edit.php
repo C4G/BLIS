@@ -731,6 +731,18 @@ function isInputNumber(evt) {
 
 	return true;
 }
+
+function isInputCurrency(evt) {
+        var characterCode = (evt.which) ? evt.which : event.keyCode
+        // 31 is the upper bound of non-printable characters
+        // numbers are between 48 and 57
+        // 46 is a decimal '.'
+        // 44 is a comma ','
+        if (characterCode > 31 && (characterCode < 48 || characterCode > 57) && characterCode != 46 && characterCode != 44)
+                return false;
+
+        return true;
+}
 </script>
 <style type='text/css'>
 .range_field {
@@ -1260,6 +1272,11 @@ function isInputNumber(evt) {
 				<td><input id='targetTat' name='targetTat' type='text' size='3' maxLength='3' onkeypress="return isInputNumber(event);" value=<?php echo $test_type->targetTat; ?> />
 				</td>
 			</tr>
+                        <tr valign='top'>
+                                <td>Cost to Patient</td>
+                                <td><input id='costToPatient' name='costToPatient' type='number' size='10' maxLength='10' onkeypress="return isInputCurrency(event);" value='<?php echo $test_type->costToPatient; ?>' />
+                                </td>
+                        </tr>
 			
 			<tr valign='top'>
 				<td></td>

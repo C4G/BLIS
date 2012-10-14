@@ -206,3 +206,8 @@ RewriteRule ^edit_lot\.php$ inventory/edit_lot.php
 RewriteRule ^view_stock\.php$ inventory/view_stock.php
 RewriteRule ^view_stocks\.php$ inventory/view_stocks.php
 RewriteRule ^stock_lots\.php$ inventory/stock_lots.php
+
+## /billing folder
+RewriteRule ^view_bill\.php$ billing/view_bill.php
+RewriteRule ^view_bills\.php$ billing/view_bills.php
+RewriteRule ^toggle_billing\.php$ billing/toggle_billing.php

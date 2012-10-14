@@ -209,6 +209,7 @@ if($lab_config == null)
 
 $(document).ready(function(){
         $("#inventory_div").load("view_stocks.php");;
+        $("#billing_div").load("toggle_billing.php");
 	$("input[name='rage']").change(function() {
 		toggle_agegrouplist();
 	});
@@ -237,6 +238,12 @@ $(document).ready(function(){
 		right_load(15, 'inventory_div');
 		<?
 	}
+        else if(isset($_REQUEST['show_b']))
+        {
+                ?>
+                right_load(22, 'billing_div');
+                <?
+        }
 	else if(isset($_REQUEST['set_locale']))
 	{
 		$locale = $_REQUEST['locale'];
@@ -496,6 +503,11 @@ function inventory_load()
 {
     //$("#inventory_div").load("view_stock.php");
     right_load(15, 'inventory_div');
+}
+
+function billing_load()
+{
+    right_load(22, 'billing_div');
 }
 
 function performUpdate()
@@ -1099,6 +1111,9 @@ function right_load_1(option_num, div_id)
 
 				<a id='option15' class='menu_option' href="javascript:right_load(15, 'inventory_div');"><?php echo LangUtil::$pageTerms['Inventory']; ?></a>
 				<br><br>
+                                
+                                <a id='option22' class='menu_option' href="javascript:right_load(22, 'billing_div');"><?php echo LangUtil::$pageTerms['Billing']; ?></a>
+                                <br><br>
 				
 				<a id='option3' class='menu_option' href="javascript:right_load(3, 'users_div');"><?php echo LangUtil::$pageTerms['MENU_USERS']; ?></a>
 				<br><br>
@@ -1269,6 +1284,9 @@ function right_load_1(option_num, div_id)
 					
 				<div class='right_pane' id='inventory_div' style='display:none;margin-left:10px;'>
 				</div>
+                                
+                                <div class='right_pane' id='billing_div' style='display:none;margin-left:10px;'>
+                                </div>
 				
 				<div class='right_pane' id='fields_div' style='display:none;margin-left:10px;'>
 					<p style="text-align: right;"><a rel='facebox' href='#RegistrationFields_config'>Page Help</a></p>

@@ -1308,6 +1308,7 @@ class TestType
 		return $retval;
 	}
         
+        # Returns the cost of the test, to be billed to the patient.
         public function getCostToPatient($test_type_id) {
 		global $con;
 		$test_type_id = mysql_real_escape_string($test_type_id, $con);
@@ -6964,6 +6965,7 @@ function update_test_type($updated_entry, $new_specimen_list,$lab_config_id)
 		"hide_patient_name='$updated_entry->hide_patient_name', ".
 		"prevalence_threshold=$updated_entry->prevalenceThreshold, ".
 		"target_tat=$updated_entry->targetTat ".
+                "costToPatient=$updated_entry->costToPatient ".
 		"WHERE test_type_id=$updated_entry->testTypeId";
 	}
 	else {
@@ -6976,9 +6978,10 @@ function update_test_type($updated_entry, $new_specimen_list,$lab_config_id)
 		"hide_patient_name='$updated_entry->hide_patient_name', ".
 		"prevalence_threshold=$updated_entry->prevalenceThreshold, ".
 		"target_tat=$updated_entry->targetTat ".
+                "costToPatient=$updated_entry->costToPatient ".
 		"WHERE test_type_id=$updated_entry->testTypeId";
 	}
-	query_blind($query_string);
+	
 	# Delete entries for removed compatible specimens
 	$existing_list = get_compatible_specimens($updated_entry->testTypeId);
 	foreach($existing_list as $specimen_type_id)

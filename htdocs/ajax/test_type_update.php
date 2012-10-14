@@ -44,6 +44,8 @@ $updated_entry->hide_patient_name=$_REQUEST['hidePatientName'];
 $updated_entry->prevalenceThreshold=$_REQUEST['prevalenceThreshold'];
 $updated_entry->targetTat=$_REQUEST['targetTat'];
 $updated_entry->testCategoryId = $cat_code;
+$updated_entry->costToPatient = $_REQUEST['costToPatient'];
+
 # Update tests measures and ranges
 $is_panel = false;
 $added_measures_list = array();

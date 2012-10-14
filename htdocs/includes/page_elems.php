@@ -929,6 +929,11 @@ class PageElems
 					<td>Target TAT</td>
 					<td><?php echo $test_type->targetTat; ?></td>
 				</tr>
+                                
+                                <tr valign='top'>
+                                        <td>Cost To Patient</td>
+                                        <td><?php echo $test_type->costToPatient; ?></td>
+                                </tr>
 			
 			</tbody>
 		</table>
