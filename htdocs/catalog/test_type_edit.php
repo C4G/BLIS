@@ -44,6 +44,9 @@ $page_elems->getSideTip("Tips", $tips_string);
 
 <?php
 $test_type = get_test_type_by_id($_REQUEST['tid']);
+$lab_config_id = $_SESSION['lab_config_id'];
+$costToPatient = get_cost_of_test_type($lab_config_id, $test_type->testTypeId);
+
 if($test_type == null)
 {
 ?>
@@ -1274,7 +1277,7 @@ function isInputCurrency(evt) {
 			</tr>
                         <tr valign='top'>
                                 <td>Cost to Patient</td>
-                                <td><input id='costToPatient' name='costToPatient' type='number' size='10' maxLength='10' onkeypress="return isInputCurrency(event);" value='<?php echo $test_type->costToPatient; ?>' />
+                                <td><input id='costToPatient' name='costToPatient' type='number' size='10' maxLength='10' onkeypress="return isInputCurrency(event);" value='<?php echo $costToPatient; ?>' />
                                 </td>
                         </tr>
 			

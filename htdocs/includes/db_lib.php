@@ -1150,7 +1150,6 @@ class TestType
 	public $hidePatientName;
 	public $prevalenceThreshold;
 	public $targetTat;
-        public $costToPatient;
 	
 	public static function getObject($record)
 	{
@@ -1166,7 +1165,6 @@ class TestType
 		$test_type->hidePatientName = $record['hide_patient_name'];
 		$test_type->prevalenceThreshold = $record['prevalence_threshold'];
 		$test_type->targetTat = $record['target_tat'];
-                $test_type->costToPatient = $record['costToPatient'];
 		if($record['is_panel'] != null && $record['is_panel'] == 1)
 		{
 			$test_type->isPanel = true;
@@ -1307,18 +1305,6 @@ class TestType
 		$retval = $record['hide_patient_name'];
 		return $retval;
 	}
-        
-        # Returns the cost of the test, to be billed to the patient.
-        public function getCostToPatient($test_type_id) {
-		global $con;
-		$test_type_id = mysql_real_escape_string($test_type_id, $con);
-		$query_string = 
-			"SELECT costToPatient FROM test_type WHERE test_type_id=$test_type_id";
-		$record = query_associative_one($query_string);
-		$retval = $record['costToPatient'];
-		return $retval;
-        }
-        
 }
 
 class SpecimenType
@@ -5883,18 +5869,6 @@ function enable_new_test($lab_config_id, $test_type_id)
     DbUtil::switchRestore($saved_db);
 }
 
-function update_billing_config($billing_status, $lab_id)
-{
-        # Updates the billing field of a lab configuration record
-        $saved_db = DbUtil::switchToGlobal();
-        $query_string =
-                "UPDATE lab_config ".
-                "SET uses_billing=$billing_status, ".
-                "WHERE lab_config_id=$lab_id";
-        query_blind($query_string);
-        DbUtil::switchRestore($saved_db);
-}
-
 function update_lab_config($updated_entry, $updated_specimen_list=null, $updated_test_list=null)
 {
 	# Updates a lab configuration record
@@ -6977,7 +6951,6 @@ function update_test_type($updated_entry, $new_specimen_list,$lab_config_id)
 		"hide_patient_name='$updated_entry->hide_patient_name', ".
 		"prevalence_threshold=$updated_entry->prevalenceThreshold, ".
 		"target_tat=$updated_entry->targetTat ".
-                "costToPatient=$updated_entry->costToPatient ".
 		"WHERE test_type_id=$updated_entry->testTypeId";
 	}
 	else {
@@ -6990,10 +6963,9 @@ function update_test_type($updated_entry, $new_specimen_list,$lab_config_id)
 		"hide_patient_name='$updated_entry->hide_patient_name', ".
 		"prevalence_threshold=$updated_entry->prevalenceThreshold, ".
 		"target_tat=$updated_entry->targetTat ".
-                "costToPatient=$updated_entry->costToPatient ".
 		"WHERE test_type_id=$updated_entry->testTypeId";
 	}
-	
+	query_blind($query_string);
 	# Delete entries for removed compatible specimens
 	$existing_list = get_compatible_specimens($updated_entry->testTypeId);
 	foreach($existing_list as $specimen_type_id)
@@ -10622,7 +10594,31 @@ function check_removal_record($lid, $sp)
             return $recordset['val'];
 }
 
+function update_cost_of_test_type($newCost, $test_type_id, $lid)
+{
+    $lab_config_id = $lid;
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+    
+    $query_string = "UPDATE test_type_costs set amount=$newCost WHERE test_type_id=$test_type_id";
+    
+    $result = query_update($query_string);
+    
+    DbUtil::switchRestore($saved_db);
+}
 
+function get_cost_of_test_type($lid, $test_type_id)
+{
+    $lab_config_id = $lid;
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+    
+    $query_string = "SELECT amount from test_type_costs WHERE test_type_id=$test_type_id";
+    $result = query_associative_one($query_string);
+   
+    DbUtil::switchRestore($saved_db);
+    return $result['amount'];
+}
 
 /***************************************************
  * Test Removal Module ENDS
