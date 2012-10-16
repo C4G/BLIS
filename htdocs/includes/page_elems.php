@@ -930,7 +930,7 @@ class PageElems
 					<td><?php echo $test_type->targetTat; ?></td>
 				</tr>
                                 
-                                <tr valign='top'>
+                                <tr valign='top' <?php is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none;'") ?>>
                                         <td>Cost To Patient</td>
                                         <td><?php echo get_cost_of_test_type($_SESSION['lab_config_id'], $test_type->testTypeId); ?></td>
                                 </tr>

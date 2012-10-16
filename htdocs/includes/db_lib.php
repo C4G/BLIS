@@ -10620,6 +10620,75 @@ function get_cost_of_test_type($lid, $test_type_id)
     return $result['amount'];
 }
 
+function enable_billing($lid)
+{
+    $lab_config_id = $lid;
+    
+    $misc_array = get_misc_from_lab_config_settings($lab_config_id);
+    
+    if ($misc_array[0] == "1") { // Billing is already enabled, we don't need to do anything.
+        return;
+    }
+    
+    $misc_array[0] = "1";
+    $misc_string = implode("$", $misc_array);
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+    
+    $query_string = "UPDATE lab_config_settings SET misc=$misc_string WHERE id=$lab_config_id";
+    query_update($query_string);
+   
+    DbUtil::switchRestore($saved_db);
+}
+
+function disable_billing($lid)
+{
+    $lab_config_id = $lid;
+    
+    $misc_array = get_misc_from_lab_config_settings($lab_config_id);
+    
+    if ($misc_Array[0] == "0") { // If the flag is already set to 0, we have nothing to do here
+        return;
+    }
+    
+    $misc_array[0] = "0";
+    $misc_string = implode("$", $misc_array);
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+    
+    $query_string = "UPDATE lab_config_settings SET misc='$misc_string' WHERE id=$lab_config_id";
+
+    query_update($query_string);
+   
+    DbUtil::switchRestore($saved_db);
+}
+
+function is_billing_enabled($lid)
+{
+    $lab_config_id = $lid;
+    
+    $misc_array = explode("$", get_misc_from_lab_config_settings($lab_config_id));
+
+    if ($misc_array[0] == "1") { // If the flag is already set to 1, we have nothing to do here
+        return true;
+    }
+    return false;
+}
+
+// Misc is a field of text containing values delimited by the $ character.
+// Misc index 0 is the billing enabled flag for the laboratory.
+function get_misc_from_lab_config_settings($lid)
+{
+    $lab_config_id = $lid;
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+    
+    $query_string = "SELECT misc from lab_config_settings WHERE id=$lab_config_id";
+    $result = query_associative_one($query_string);
+    
+    DbUtil::switchRestore($saved_db);
+    return $result['misc'];
+}
 /***************************************************
  * Test Removal Module ENDS
 ***************************************************/

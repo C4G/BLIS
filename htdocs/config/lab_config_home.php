@@ -312,6 +312,14 @@ $(document).ready(function(){
 		right_load(2, 'st_types_div');
 		<?php
 	}
+        else if(isset($_REQUEST['billingupdate']))
+        {
+                ?>
+                $('#billing_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('billing_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+		$('#billing_msg').show();
+                right_load(22, 'billing_div');
+                <?php
+        }
 	else if(isset($_REQUEST['adupdate']))
 	{
 		# Show custom field updated message
@@ -749,6 +757,19 @@ function checkandsubmit_st_types()
 	});
 }
 
+function submit_billing_update()
+{
+        //Do we need to validate here?  Seems that there's only two possibilities...
+        //Maybe if someone spoofs a post in the url...
+        //Submit stuff to the db here.
+        $('#billing_progress').show();
+	$('#billing_form').ajaxSubmit({success:function(){
+			$('#billing_progress').hide();
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&billingupdate=1";
+		}
+	});
+}
+
 function delete_config()
 {
 	var url_string ='ajax/lab_config_delete.php?id=<?php echo $lab_config->id; ?>';
@@ -1100,7 +1121,7 @@ function right_load_1(option_num, div_id)
 				<a id='option15' class='menu_option' href="javascript:right_load(15, 'inventory_div');"><?php echo LangUtil::$pageTerms['Inventory']; ?></a>
 				<br><br>
                                 
-                                <a id='option22' class='menu_option' href="javascript:right_load(22, 'billing_div');"><?php echo LangUtil::$pageTerms['Billing']; ?></a>
+                                <a id='option22' class='menu_option' href="javascript:right_load(22, 'billing_div');"><?php echo Billing; ?></a>
                                 <br><br>
 				
 				<a id='option3' class='menu_option' href="javascript:right_load(3, 'users_div');"><?php echo LangUtil::$pageTerms['MENU_USERS']; ?></a>
@@ -1276,11 +1297,25 @@ function right_load_1(option_num, div_id)
                                 <div class='right_pane' id='billing_div' style='display:none;margin-left:10px;'>
                                          
                                     <p style="text-align: right;"><a rel='facebox' href='#Tests_config'>Page Help</a></p>
+                                    <div id='billing_msg' class='clean-orange' style='display:none;width:350px;'>
+                                    </div>
                                     <form id='billing_form' name='billing_form' action='ajax/billing_update.php' method='post'>
                                         <input type='hidden' name='lid' value='<?php echo $lab_config->id; ?>'></input>
-                                        <input type="checkbox" value="enable_billing" name="enable_billing"/><?php echo LangUtil::$generalTerms['ENABLE_BILLING']; ?>
+                                        <div class="pretty_box">
+                                        <?php
+                                            if (is_billing_enabled($_SESSION['lab_config_id'])) {
+                                                $checkbox = "checked";
+                                            } else {
+                                                $checkbox = "";
+                                            }
+                                        ?>
+                                        <input type="checkbox" value="enable_billing" name="enable_billing" <?php echo $checkbox ?>/><?php echo "Enable Billing"; ?>
+                                        </div>
                                         <br>
-                                        <input type="submit" value="Update" />
+                                        <input type="button" value="Update" onclick="submit_billing_update()" />
+                                        <span id='billing_progress' style='display:none;'>
+                                            <?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
+					</span>
                                     </form>
                                 </div>
 				

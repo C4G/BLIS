@@ -1275,7 +1275,8 @@ function isInputCurrency(evt) {
 				<td><input id='targetTat' name='targetTat' type='text' size='3' maxLength='3' onkeypress="return isInputNumber(event);" value=<?php echo $test_type->targetTat; ?> />
 				</td>
 			</tr>
-                        <tr valign='top'>
+                        
+                        <tr valign='top' <?php is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none;'") ?>>
                                 <td>Cost to Patient</td>
                                 <td><input id='costToPatient' name='costToPatient' type='number' size='10' maxLength='10' onkeypress="return isInputCurrency(event);" value='<?php echo $costToPatient; ?>' />
                                 </td>
