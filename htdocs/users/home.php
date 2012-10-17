@@ -12,6 +12,78 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), $profile_tip);
 # Attaches record.js to this HTML
 $script_elems->enableLatencyRecord();
 ?>
+<style type='text/css'>
+.warning {
+    
+    border: 1px solid;
+    width: 350px;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url('../includes/img/knob_attention.png');
+}
+.update_error {
+    
+    border: 1px solid;
+    width: 350px;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('../includes/img/knob_cancel.png');
+}
+</style>
+
+<script type='text/javascript'>
+
+$(document).ready(function(){
+    $.ajax({
+		type : 'POST',
+		url : 'update/check_version.php',
+		success : function(data) {
+			if ( data=='1' ) 
+                        {
+                            $('#update_div').show();
+			}
+			else 
+                        {
+                             $('#update_div').hide();
+			}
+		}
+	});
+    //$('#update_div').show();
+});
+
+function blis_update()
+{
+    
+    $.ajax({
+		type : 'POST',
+		url : 'update/bliss_update.php',
+		success : function(data) {
+			if ( data=="true" ) {
+                            $('#update_failure').hide();
+                            $('#update_spinner').hide();
+                            $('#update_success').show();
+			}
+			else {
+                                $('#update_success').hide();
+
+                                $('#update_spinner').hide();
+				$('#update_failure').show();
+			}
+		}
+	});
+        
+    //$('#update_button').show();
+}
+
+</script>
 
 <br>
 <span class='page_title'><?php echo LangUtil::getTitle(); ?></span>
@@ -23,7 +95,22 @@ echo LangUtil::getPageTerm("TIPS_BLISINTRO");
 ?>
 
 <br><br>
+<?php
+# If technician user, show lab workflow
+if($_SESSION['user_level'] == $LIS_ADMIN || $_SESSION['user_level'] == $LIS_SUPERADMIN || $_SESSION['user_level'] == $LIS_COUNTRYDIR)
+{
+?>
+    <div id="update_error_188_div" style="display:none;" class="update_error">
+    Update Error! Report error #188 to naomichopra@gatech.edu.
+    </div>
 
+    <div id="update_div" style="display:none;" class="warning">
+    <a rel='facebox' id='update_link' href='javascript:blis_update();'>Click here to complete update to version <?php echo $VERSION ?></a>
+    </div>
+
+<?php
+}
+?>
 <?php
 # If technician user, show lab workflow
 if($_SESSION['user_level'] == $LIS_TECH_RW || $_SESSION['user_level'] == $LIS_TECH_SHOWPNAME || $_SESSION['user_level'] == $LIS_TECH_RO)

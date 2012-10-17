@@ -11052,5 +11052,89 @@ class Inventory
         
 }
 
+/*****************************************
+********** Update Process ****************
+*****************************************/
+function checkVersionDataTable()
+{
+   $saved_db = DbUtil::switchToGlobal();
+		
+   /*$query = "SELECT * FROM version_data WHERE version = 'start_entry' LIMIT 1";
+   $record = query_associative_one($query);
+   if(!$record)
+   {
+       $code = 0;   #version entry doesnt exist
+       DbUtil::switchRestore($saved_db);
+       return $code;
+   }
+   */
+   $code = 0;
+   $query = "select 1 from version_data";
+   $record = query_blind($query);
+   if($record !== FALSE)
+   {
+       $code = 1;   #version_data table exists
+   }
+   DbUtil::switchRestore($saved_db);
+   return $code; 
+}
+
+function checkVersionDataEntry($vers)
+{
+   $saved_db = DbUtil::switchToGlobal();
+		
+   $query = "SELECT * FROM version_data WHERE version = '$vers' LIMIT 1";
+   $record = query_associative_one($query);
+   if(!$record)
+   {
+       $code = 0;   #version entry doesnt exist
+   }
+   else if($record['flag'] == 0)
+   {
+       $code = 1;  #version entry exists but update procedure incomplete
+   }
+   else if($record['flag'] > 0)
+   {
+       $code = 2;  #version entry exists and update procedure complete
+   }
+   DbUtil::switchRestore($saved_db);
+   return $code; 
+}
+
+function setVersionDataFlag($fl, $vers)
+{
+   $code = 0;
+   
+   $saved_db = DbUtil::switchToGlobal();
+   
+   $query = "SELECT * FROM version_Data WHERE version = '$vers' LIMIT 1";
+   $record = query_associative_one($query);
+   
+   if(!$record)
+   {
+       $code = 1;   #version entry doesnt exist
+       DbUtil::switchRestore($saved_db);
+       return $code;
+   }
+   else
+   {
+       $code = 2; #version entry exists
+   }
+   
+   $query = "UPDATE version_data SET flag = $fl WHERE version = '$vers'";
+   $ret = query_blind($query);
+   if(!$ret)
+   {
+       $code = 3; #Error during updation of flag
+   }
+   else
+   {
+       $code = 4;
+   }
+   DbUtil::switchRestore($saved_db);
+   return $code; 
+}
+
+
 
 ?>

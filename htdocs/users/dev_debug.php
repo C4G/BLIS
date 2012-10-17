@@ -5,9 +5,12 @@
  * and open the template in the editor.
  */
     include("redirect.php");
-include("includes/header.php");
-include("../includes/ajax_lib.php");
-echo exec('scc.bat');
+    //include("includes/header.php");
+include("../includes/db_lib.php");
+
+echo checkVersionDataTable();
+//echo setVersionDataFlag(1, '2.2');
+//echo exec('scc.bat');
 /*
 $uiLog = new UILog();
 $uiLog->id = 'id';
