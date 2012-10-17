@@ -10594,101 +10594,233 @@ function check_removal_record($lid, $sp)
             return $recordset['val'];
 }
 
-function update_cost_of_test_type($newCost, $test_type_id, $lid)
+function get_date_of_latest_test_type_cost_update($test_type_id)
 {
-    $lab_config_id = $lid;
+    $lab_config_id = $_SESSION['lab_config_id'];
     
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
     
-    $query_string = "UPDATE test_type_costs set amount=$newCost WHERE test_type_id=$test_type_id";
+    $query_string = "SELECT earliest_date_valid FROM test_type_costs WHERE test_type_id=$test_type_id ORDER BY earliest_date_valid DESC LIMIT 1";
     
-    $result = query_update($query_string);
-    
+    $result = query_associative_one($query_string);
+            
     DbUtil::switchRestore($saved_db);
+    
+    return $result['earliest_date_valid'];
 }
 
-function get_cost_of_test_type($lid, $test_type_id)
+function insert_new_cost_of_test_type($cost, $test_type_id)
+{    
+    $date = get_date_of_latest_test_type_cost_update($test_type_id);
+    $formatted_date = strtotime(date("Y-m-d", strtotime($date)));
+    $today = strtotime(date("Y-m-d"));
+    if ($formatted_date == $today) {
+        $now = date("Y-m-d");
+        $lab_config_id = $_SESSION['lab_config_id'];
+
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+        $query_string = "UPDATE test_type_costs SET amount=$cost WHERE test_type_id=$test_type_id AND earliest_date_valid >= $now";
+
+        query_update($query_string);
+
+        DbUtil::switchRestore($saved_db);
+    } else {
+        $lab_config_id = $_SESSION['lab_config_id'];
+
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+        $query_string = "INSERT INTO test_type_costs (amount, test_type_id) VALUES ($cost, $test_type_id)";
+        query_insert_one($query_string);
+
+        DbUtil::switchRestore($saved_db);
+    }
+    
+    return 1;
+}
+
+function get_latest_cost_of_test_type($test_type_id)
 {
-    $lab_config_id = $lid;
+    $lab_config_id = $_SESSION['lab_config_id'];
     
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
     
-    $query_string = "SELECT amount from test_type_costs WHERE test_type_id=$test_type_id";
+    $query_string = "SELECT amount FROM test_type_costs WHERE ".
+                    "test_type_id=$test_type_id ORDER BY earliest_date_valid DESC LIMIT 1";
     $result = query_associative_one($query_string);
    
     DbUtil::switchRestore($saved_db);
     return $result['amount'];
 }
 
-function enable_billing($lid)
+function get_cost_of_test_type_for_closest_date($date, $test_type_id)
 {
-    $lab_config_id = $lid;
-    
-    $misc_array = get_misc_from_lab_config_settings($lab_config_id);
-    
-    if ($misc_array[0] == "1") { // Billing is already enabled, we don't need to do anything.
-        return;
-    }
-    
-    $misc_array[0] = "1";
-    $misc_string = implode("$", $misc_array);
+    $lab_config_id = $_SESSION['lab_config_id'];
     
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
     
-    $query_string = "UPDATE lab_config_settings SET misc=$misc_string WHERE id=$lab_config_id";
-    query_update($query_string);
+    $query_string = "SELECT amount FROM test_type_costs WHERE test_type_id=$test_type_id ".
+                    "AND earliest_date_valid <= $date ORDER BY earliest_valid_date DESC LIMIT 1";
+    
+    $result = query_associative_one($query_string);
    
     DbUtil::switchRestore($saved_db);
+    return $result['amount'];
 }
 
-function disable_billing($lid)
+function get_all_tests_for_patient_and_date_range($patient_id, $small_date, $large_date)
 {
-    $lab_config_id = $lid;
-    
-    $misc_array = get_misc_from_lab_config_settings($lab_config_id);
-    
-    if ($misc_Array[0] == "0") { // If the flag is already set to 0, we have nothing to do here
-        return;
-    }
-    
-    $misc_array[0] = "0";
-    $misc_string = implode("$", $misc_array);
+    $lab_config_id = $_SESSION['lab_config_id'];
     
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
     
-    $query_string = "UPDATE lab_config_settings SET misc='$misc_string' WHERE id=$lab_config_id";
-
-    query_update($query_string);
-   
+    $query_string = "SELECT DISTINCT test_id FROM test WHERE specimen_id IN (SELECT specimen_id FROM specimen WHERE patient_id=$patient_id AND DATE(date_collected) <= $large_date AND DATE(date_collected) >= $small_date)";
+    
+    $result = query_associative_one($query_string);
+    
     DbUtil::switchRestore($saved_db);
+    return $result['test_id'];
+}
+
+function get_test_names_and_costs_from_ids($id_array)
+{
+    $name_array = array();
+    $cost_array = array();
+    if (!empty($id_array)) {
+        foreach ($id_array as $id) {
+            $name_array[] = get_test_name_by_id($id);
+            $date = get_test_date_by_id($id);
+            $cost = get_cost_of_test_type_for_closest_date(date("Y-m-d", $date), get_test_type_id_from_test_id($id));
+            $cost_array[] = $cost;
+        }
+    }
+    $ret_array = array();
+    $ret_array['costs'] = $cost_array;
+    $ret_array['names'] = $name_array;
+    
+    return $ret_array;
+}
+
+function generate_bill_data_for_patient_and_date_range($patient_id, $first_date, $second_date)
+{
+    $test_ids = get_all_tests_for_patient_and_date_range($patient_id, $first_date, $second_date);
+    $names_and_costs = get_test_names_and_costs_from_ids($test_ids);
+    $bill_total = array_sum($names_and_costs['costs']);
+    $bill_fields = array();
+    $bill_fields['total'] = $bill_total;
+    $bill_fields['names'] = $names_and_costs['names'];
+    $bill_fields['costs'] = $names_and_costs['costs'];
+    
+    return $bill_fields;
+}
+
+function get_test_type_id_from_test_id($test_id)
+{
+    $lab_config_id = $_SESSION['lab_config_id'];
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+    
+    $query_string = "SELECT test_type_id FROM test WHERE test_id=$test_id";
+    
+    $result = query_associative_one($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    return $result['test_type_id'];
+}
+
+function insert_lab_config_settings_billing($enabled, $currency_name)
+{
+    $id = 3; // ID for billing settings
+    
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+    
+    $query_string = "SELECT count(*) as val from lab_config_settings WHERE id = $id";
+    $recordset = query_associative_one($query_string);
+    
+    if($recordset[val] != 0)
+        return 0;
+    
+    $remarks = "Billing Settings";
+    $query_string = "INSERT INTO lab_config_settings (id, flag1, setting1, remarks) ".
+                            "VALUES ($id, $enabled, '$currency_name', '$remarks')";
+    query_insert_one($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    return 1;
+}
+
+function get_lab_config_settings_billing()
+{
+    insert_lab_config_settings_billing(1, "Dollars");
+    $id = 3; // ID for billing settings
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+    $query_string = "SELECT * from lab_config_settings WHERE id = $id";
+    $recordset = query_associative_one($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    $retval = array();
+    
+    // barcode settings = type, width, height, font_size
+    
+    $retval['enabled'] = $recordset['flag1'];
+    $retval['currency_name'] = $recordset['setting1'];
+    
+    return $retval;
+}
+
+function update_lab_config_settings_billing($enable, $currency_name)
+{
+    insert_lab_config_settings_billing(1, "Dollars");
+    $id = 3; // ID for billing settings
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+    
+    if($enable != 0)
+        $enable = 1;    
+        
+    $query_string = "UPDATE lab_config_settings SET flag1 = $enable, setting1 = '$currency_name' WHERE id = $id";
+            query_update($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    return 1;
+}
+
+function enable_billing()
+{
+    $current_state = get_lab_config_settings_billing();
+    update_lab_config_settings_billing(1, $current_state['currency_name']);
+    
+    return 1;
+}
+
+function disable_billing()
+{
+    $current_state = get_lab_config_settings_billing();
+    update_lab_config_settings_billing(0, $current_state['currency_name']);
+    
+    return 1;
 }
 
 function is_billing_enabled($lid)
 {
-    $lab_config_id = $lid;
-    
-    $misc_array = explode("$", get_misc_from_lab_config_settings($lab_config_id));
+    $current_state = get_lab_config_settings_billing();
 
-    if ($misc_array[0] == "1") { // If the flag is already set to 1, we have nothing to do here
+    if ($current_state['enabled'] == "1") {
         return true;
     }
     return false;
 }
 
-// Misc is a field of text containing values delimited by the $ character.
-// Misc index 0 is the billing enabled flag for the laboratory.
-function get_misc_from_lab_config_settings($lid)
-{
-    $lab_config_id = $lid;
-    
-    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
-    
-    $query_string = "SELECT misc from lab_config_settings WHERE id=$lab_config_id";
-    $result = query_associative_one($query_string);
-    
-    DbUtil::switchRestore($saved_db);
-    return $result['misc'];
-}
 /***************************************************
  * Test Removal Module ENDS
 ***************************************************/

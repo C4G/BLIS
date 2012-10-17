@@ -69,6 +69,7 @@ RewriteRule ^reports_test\.php$ reports/reports_test.php
 RewriteRule ^reports_patient\.php$ reports/reports_patient.php
 RewriteRule ^report_prevalence_agg\.php$ reports/report_prevalence_agg.php
 RewriteRule ^reports_tat_aggregate\.php$ reports/reports_tat_aggregate.php
+RewriteRule ^reports_billing\.php$ reports/reports_billing.php
 #-Currently unused php report files-
 RewriteRule ^reports_session\.php$ reports/reports_session.php
 RewriteRule ^reports_tat_org\.php$ reports/reports_tat_org.php
