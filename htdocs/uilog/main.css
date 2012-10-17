@@ -1,0 +1,44 @@
+/* 
+    Document   : main
+    Created on : Aug 14, 2012, 6:20:12 PM
+    Author     : Naomi
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+body {font: normal 16px/1.5em helvetica, arial, sans-serif}
+
+#container {
+	width:1100px;
+}
+
+#header {
+	text-align:center;
+	background: #777;
+	color:#fff;
+	height:50px;
+	padding:5px
+}
+
+#content {
+	float:right;
+	width:860px;
+	padding: 5px
+}
+
+#sidebar {
+	float:left;
+	width:220px;
+        height:500px;
+	background:#eee;
+        padding: 5px
+}
+
+#footer {
+	clear:both;
+	text-align:center;
+	background: #555;
+	color:#fff;
+	height:50px;
+	padding:5px
+}

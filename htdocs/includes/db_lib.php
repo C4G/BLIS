@@ -4514,6 +4514,53 @@ class UILog
 
         fclose($fd);
     }
+    
+    public function readUILog($vers, $mode = 0, $filename = "")
+    {
+        $row = -1;
+        $csvdata = array();
+        if($mode == 0)
+        {
+            $verss = str_replace('.','-',$vers);
+            $logfilename = "../../local/UILog_".$verss.".csv";
+        }
+        else
+        {
+            $logfilename = "../../local/".$filename;
+        }
+        if (($handle = fopen($logfilename, "r")) !== FALSE)
+        {
+            while (($data = fgetcsv($handle, ",")) !== FALSE) 
+            {
+                $row++;
+                if($row == 0)
+                        continue;
+                $csvdata[$row] = array();
+                $csvdata[$row] = $data;
+            }
+            fclose($handle);
+        }
+        return $csvdata;
+    }
+    
+    public function getLogsByID($id, $datefrom = NULL, $dateto = NULL)
+    {
+        $csvdata = apc_fetch('csvdata');
+        $log = array();
+        foreach($csvdata as $data)
+        {
+            if($data[1] == $id)
+            {
+                $level = get_level_by_id($data[4]);
+                $uname = get_username_by_id($data[4]);
+                $data[4] = $uname."(".$level.")";
+                $labconfig_obj = get_lab_config_by_id($data[5]);
+                $data[5] = $labconfig_obj->name;
+                array_push ($log, $data);
+            }
+        }
+        return $log;
+    }
 }
 
 
