@@ -30,15 +30,53 @@ $script_elems->enableTableSorter();
 $script_elems->enableLatencyRecord();
     $lid = $_SESSION['$lab_config_id'];
 ?>
-
+<style>
+    #barcodeSearch
+    {       
+        border:1px solid #a1a1a1;
+        padding:10px 10px; 
+        width:600px;
+        border-radius:10px;
+    }
+ 
+    #barcode_search_result
+    {
+        font-size: 13px;
+        padding:10px 40px
+    }
+    
+</style>
 <script type='text/javascript'>
 	$(document).ready(function(){
+             $("#barcode_search_field").focus();
+
 			$('#current_inventory').tablesorter();
 	});
 
+function getBarcodeSearchResults()
+{
+    var code = $('#barcode_search_field').val();
+    if(code == '')
+    {
+        $('#error_empty').show();
+        return;
+    }
+    //alert(code);
+    var url = "inventory/get_barcode_scan_results.php?code="+code;
+    $('#barcode_search_result').load(url);
+}
 </script>
 <p style="text-align: right;"><a rel='facebox' href='#view_stocks_help'>Page Help</a></p>
-<a href='inv_new_reagent.php'> <?php echo "Add Reagent" ; ?></a> &nbsp;|&nbsp;<b> <?php echo LangUtil::$pageTerms['Current_Inventory']; ?></b>
+<div id="barcodeSearch" >
+Barcode Scan Search: <input type="text" id="barcode_search_field" name="barcode_search_field" />
+<input type="button" id="barcode_search_button" name="barcode_search_button" value="Search" onclick='getBarcodeSearchResults()' /> <div id="error_empty" style="display: none;"><small>&nbsp;Cannot be empty</small></div>    
+<div id="barcode_search_result">
+
+</div>
+
+</div>
+<br>
+<a href='inv_new_reagent.php'> <?php echo "Add Reagent" ; ?></a> &nbsp;|&nbsp;<a href='generate_barcode.php'> <?php echo "Generate Barcodes" ; ?></a> &nbsp;| &nbsp;<b> <?php echo LangUtil::$pageTerms['Current_Inventory']; ?></b>
 <table class='tablesorter' id='current_inventory'  style='width:600px'>
 	<thead>
 		<tr align='center'>
@@ -135,5 +173,7 @@ $script_elems->enableLatencyRecord();
 </div>
 
 <?php
+$script_elems->bindEnterToClick("#barcode_search_field", "#barcode_search_button");
+
 include("includes/footer.php");
 ?>

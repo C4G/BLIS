@@ -2,7 +2,7 @@
 #
 # (c) C4G, Santosh Vempala, Ruban Monu, Amol Shintre and Naomi Chopra
 # Admin Stock Management Page to add new stock
-# Sneds POST request to stock_details.php 
+# Sends POST request to stock_details.php 
 #
 
 include("../users/accesslist.php");

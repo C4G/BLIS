@@ -5200,6 +5200,18 @@ function search_patients_by_name_dyn($q, $cap, $counter)
 	return $patient_list;
 }
 
+function search_patients_by_name_count($q)
+{
+	# Searches for patients with similar name
+	global $con;
+	$q = mysql_real_escape_string($q, $con);
+	$query_string = 
+		"SELECT count(*) as val FROM patient ".
+		"WHERE name LIKE '$q%'";
+	$resultset = query_associative_one($query_string);
+	return $resultset['val'];
+}
+
 
 function search_patients_by_addlid($q)
 {
@@ -10622,6 +10634,88 @@ function check_removal_record($lid, $sp)
 /***************************************************
  * Test Removal Module ENDS
 ***************************************************/
+
+## Barcode Module Settings ##
+
+function getBarcodeTypes()
+{
+    $types = "ean8, ean13, code11, code39, code128, codabar,std25, int25, code93";
+    $codeList = explode(",", $types);
+    return($codeList);
+}
+
+function insert_lab_config_settings_barcode($type, $width, $height, $textsize, $enable)
+{
+    $id = 1; // ID for barcode settings
+    
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+    
+    $query_string = "SELECT count(*) as val from lab_config_settings WHERE id = $id";
+    $recordset = query_associative_one($query_string);        
+    
+    if($recordset[val] != 0)
+        return 0;
+    
+    $remarks = "Barcode Settings";
+    $query_string = "INSERT INTO lab_config_settings (id, flag1, flag2, flag3, flag4, setting1, remarks) ".
+                            "VALUES ($id, $enable, $width, $height, $textsize, '$type', '$remarks')";
+            query_insert_one($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    return 1;
+}
+
+function get_lab_config_settings_barcode()
+{
+    insert_lab_config_settings_barcode('code39', 2, 30, 11, 1);
+    $id = 1; // ID for barcode settings
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+    $query_string = "SELECT * from lab_config_settings WHERE id = $id";
+    $recordset = query_associative_one($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    $retval = array();
+    
+    // barcode settings = type, width, height, font_size
+    
+    $retval['enabled'] = $recordset['flag1'];
+    $retval['width'] = $recordset['flag2'];
+    $retval['height'] = $recordset['flag3'];
+    $retval['textsize'] = $recordset['flag4'];
+    $retval['type'] = $recordset['setting1'];
+    
+    return $retval;
+}
+
+function update_lab_config_settings_barcode($type, $width, $height, $textsize, $enable)
+{
+    insert_lab_config_settings_barcode('code39', 2, 30, 11, 1);
+    $id = 1; // ID for barcode settings
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+    
+    if($enable != 0)
+        $enable = 1;    
+        
+    $query_string = "UPDATE lab_config_settings SET flag1 = $enable, flag2 = $width, flag3 = $height, flag4 = $textsize, setting1 = '$type' WHERE id = $id";
+            query_update($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    return 1;
+}
+
+
+##  Barcode Module Setings Ends  ##
+
 
 function putUILog($id, $info, $file, $tag1, $tag2, $tag3)
 {

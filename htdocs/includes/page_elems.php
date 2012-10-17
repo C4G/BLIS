@@ -4667,9 +4667,123 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</input></td>
 				
 			</tr>
+                       
                         
 			</tbody>
 		</table>
+                <br><br>
+                Number of Results Per Page: 
+                                <?php 
+                                echo "<select id='sfields_resultsPerPage'>";
+                                $i = 1;
+			while($i < 101) 
+                        {
+                            if($sfields['rpp'] == $i)
+				echo "<option selected value='".$i."'>".$i."</option>";
+                            else
+                                echo "<option value='".$i."'>".$i."</option>";
+                            $i++;
+			}
+			echo "</select>";?>
+                        
+		<?php
+	}
+        
+        public function getBarcodeFields($lab_config_id=null)
+	{
+		# Returns a set of checkboxes with existing fields types checked.
+		
+		$lab_config = get_lab_config_by_id($lab_config_id);
+		if($lab_config == null && $lab_config_id != "")
+		{
+			?>
+			<div class='sidetip_nopos'>
+			ERROR: Lab configuration not found
+			</div>
+			<?php
+			return;
+		}
+		# Fetch all specimen types
+		//if($lab_config_id == "")
+			//$specimen_list = get_specimen_types_catalog();
+		//else
+			//$specimen_list = get_search_fields($lab_config_id);
+                        $brfields = get_lab_config_settings_barcode();
+                       //"SELECT pid, p_addl, daily_num, pname, age, sex, dob FROM lab_config WHERE lab_config_id=$lab_config_id";
+
+		//$current_specimen_list = array();
+		//if($lab_config_id != "")
+		//	$current_specimen_list = get_lab_config_specimen_types($lab_config_id);
+		# For each specimen type, create a check box. Check it if specimen already in lab configuration
+		?>
+                <table>
+                    <tr>
+                        <td>Encoding Format: </td>
+                                 <td>
+                                <?php //$sfields['rpp']= '45';
+                                echo "<select id='brfields_type'>";
+                                $codeTypes = getBarcodeTypes();
+                                foreach ($codeTypes as $type)
+                                {
+                                    if($brfields['type'] == $i)
+                                    echo "<option selected value='".$type."'>".$type."</option>";
+                                    else
+                                    echo "<option value='".$type."'>".$type."</option>";
+                                }
+                                echo "</select>";?></td>
+                    </tr>
+                    <tr>
+                               <td> Barcode Width: 
+                                   </td>
+                                   <td>
+                                <?php //$sfields['rpp']= '45';
+                                echo "<select id='brfields_width'>";
+                                $i = 1;
+                                while($i < 11) 
+                                {
+                                    if($brfields['width'] == $i)
+                                    echo "<option selected value='".$i."'>".$i."</option>";
+                                    else
+                                    echo "<option value='".$i."'>".$i."</option>";
+                                    $i++;
+                                }
+                                echo "</select>";?>
+                                   </td>
+                        </tr>
+                        <tr>
+                                 <td>Barcode Height:</td>
+                                 <td>
+                                <?php //$sfields['rpp']= '45';
+                                echo "<select id='brfields_height'>";
+                                $i = 5;
+                                while($i < 81) 
+                                {
+                                    if($brfields['height'] == $i)
+                                    echo "<option selected value='".$i."'>".$i."</option>";
+                                    else
+                                    echo "<option value='".$i."'>".$i."</option>";
+                                    $i++;
+                                }
+                                echo "</select>";?>
+                                </td>
+                           </tr>
+                          <tr>
+                              <td>Text Size:</td>
+                                 <td>
+                                <?php //$sfields['rpp']= '45';
+                                echo "<select id='brfields_textsize'>";
+                                $i = 5;
+                                while($i < 40) 
+                                {
+                                    if($brfields['textsize'] == $i)
+                                    echo "<option selected value='".$i."'>".$i."</option>";
+                                    else
+                                    echo "<option value='".$i."'>".$i."</option>";
+                                    $i++;
+                                }
+                                echo "</select>";?></td>
+                          </tr>
+                    </table>
 		<?php
 	}
         

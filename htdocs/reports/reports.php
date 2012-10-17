@@ -1257,7 +1257,7 @@ function search_patient_history()
 		return;
 	}
 	$('#test_history_progress_spinner').show();
-	var url = 'ajax/search_p_2.php';
+	var url = 'ajax/search_p_dyn.php';
 	$("#phistory_list").load(url, 
 		{q: pid, a: search_attrib, l: location }, 
 		function()

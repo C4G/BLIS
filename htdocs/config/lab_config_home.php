@@ -146,6 +146,27 @@ $script_elems->enableJQueryForm();
 	</ul>
 	</div>
         
+        <div id='barcode_config' class='right_pane' style='display:none;margin-left:10px;'>
+	<ul>	
+		<?php
+		
+			echo "<li>";
+			echo " Configure your settings for barcode formats";
+			echo "</li>";
+                        echo "<li>";
+			echo " Width and Height are the dimensions of the bars ";
+			echo "</li>";
+                        echo "<li>";
+			echo " Text size os the for the code printed underneath the barcodes";
+			echo "</li>";
+                       
+                        
+                        
+		
+		?>
+	</ul>
+	</div>
+        
         <!---NC3065-->
 	
 	<div id='SetupNet' class='right_pane' style='display:none;margin-left:10px;'>
@@ -373,6 +394,15 @@ $(document).ready(function(){
 		$('#searchfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('searchfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#searchfield_msg').show();
 		right_load(21, 'search_div');
+		<?php
+	}
+        else if(isset($_REQUEST['brcupdate']))
+	{
+		# Show other fields updated message
+		?>
+		$('#barcodefield_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('barcodefield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+		$('#barcodefield_msg').show();
+		right_load(28, 'barcode_div');
 		<?php
 	}
         //-NC3065
@@ -901,6 +931,16 @@ function submit_searchconfig()
 		}
 	});
 }
+function submit_barcodeconfig()
+{
+	$('#barcodefields_progress').show();
+	$('#barcodefields_form').ajaxSubmit({
+		success: function() {
+			$('#barcodefields_progress').hide();
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&brcupdate=1";
+		}
+	});
+}
 //-NC3065
 
 function backup_data()
@@ -1099,7 +1139,8 @@ function right_load_1(option_num, div_id)
 
 				<a id='option15' class='menu_option' href="javascript:right_load(15, 'inventory_div');"><?php echo LangUtil::$pageTerms['Inventory']; ?></a>
 				<br><br>
-				
+				<a id='option28' class='menu_option' href="javascript:right_load(28, 'barcode_div');"><?php echo "Barcode Settings"; ?></a>
+				<br><br>
 				<a id='option3' class='menu_option' href="javascript:right_load(3, 'users_div');"><?php echo LangUtil::$pageTerms['MENU_USERS']; ?></a>
 				<br><br>
 				<a id='option4' class='menu_option' href="javascript:right_load(4, 'fields_div');"><?php echo LangUtil::$pageTerms['MENU_CUSTOM']; ?></a>
@@ -1240,6 +1281,28 @@ function right_load_1(option_num, div_id)
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					<!--span id='st_types_progress' style='display:none;'-->
                                         <span id='searchfields_progress' style='display:none;'>
+
+						<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
+					</span>
+					</form>
+				</div>
+                                
+                                <div class='right_pane' id='barcode_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;"><a rel='facebox' href='#barcode_config'>Page Help</a></p>
+					<b><?php echo "Configure Barcode Format Settings"; ?></b>
+					<br><br>
+                                        <div id='barcodefield_msg' class='clean-orange' style='display:none;width:350px;'>
+					</div>
+					<form id='barocdefields_form' name='barcodefields_form' action='barcode/barcode_config_update.php' method='post'>
+					<input type='hidden' name='lab_config_id' value='<?php echo $lab_config->id; ?>'></input>					
+						<?php $page_elems->getBarcodeFields($lab_config->id);
+                                                //$page_elems->getSearchFieldsCheckboxes($lab_config->id); ?>
+					<br><br>
+					<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='submit_barcodeconfig()'>
+					</input>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<!--span id='st_types_progress' style='display:none;'-->
+                                        <span id='barcodefields_progress' style='display:none;'>
 
 						<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
 					</span>

@@ -13,7 +13,7 @@ $script_elems = new ScriptElems();
 
 $saved_session = SessionUtil::save();
 $dynamic_fetch = 1;
-
+$rcap = 10;
 ?>
 <style type="text/css">
 .customers
@@ -96,22 +96,124 @@ background-color:#EAF2D3;
 	/*color: red;*/
 }
 
+
+.hor-minimalist-cs
+{
+	/*font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;*/
+	font-size: 13px;
+	background: #fff;
+	/*margin: 45px;*/
+	/*width: 480px;*/
+	width: auto;
+	border-collapse: collapse;
+	text-align: center;
+}
+.hor-minimalist-cs th
+{
+	font-size: 13px;
+	font-weight: normal;
+	/*color: #039;*/
+	padding: 10px 8px;
+	border-bottom: 2px solid #6678b1;
+}
+.hor-minimalist-cs td
+{
+	border-bottom: 1px solid #ccc;
+	/*color: #669;*/
+	padding: 6px 8px;
+}
+.hor-minimalist-cs tbody tr:hover td
+{
+	/*color: red; /*#009;*/
+}
+
+.hor-minimalist-chh
+{
+	/*font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;*/
+	font-size: 14px;
+	background: #fff;
+	/*margin: 45px;*/
+	/*width: 480px;*/
+	width: auto;
+	border-collapse: collapse;
+	text-align: left;
+}
+.hor-minimalist-chh th
+{
+	font-size: 14px;
+	font-weight: normal;
+	/*color: #039;*/
+	padding: 10px 8px;
+	border-bottom: 2px solid #6678b1;
+}
+.hor-minimalist-chh td
+{
+	border-bottom: 1px solid #ccc;
+	/*color: #669;*/
+	padding: 6px 8px;
+}
+.hor-minimalist-chh tbody tr:hover td
+{
+	/*color: red; /*#009;*/
+}
+
+
 </style>
 <script type='text/javascript'>
-$(document).ready(function(){
-	
-        
-       
+    $(document).ready(function(){
+        url_string = 'ajax/get_result_count.php?a='+'<?php echo $_REQUEST['a']; ?>'+'&q='+'<?php echo $_REQUEST['q']; ?>';
+        //var cap = '<?php echo $_REQUEST['result_cap']; ?>';
+        //console.log(cap);
+        $.ajax({ 
+		url: url_string, 
+                async : false,
+		success: function(count){
+                    var icount = parseInt(count);
+                     if(icount < 10/*parseInt('<?php echo $_REQUEST['result_cap']; ?>')*/)
+                        {
+                                $('.more_link').hide();
+                                if(icount == 1)
+                                    {
+                                        $('#result_counts').html('1/1 Result');
+                                        
+                                    }
+                                else
+                                    {
+                                        $('#result_counts').html(count + '/' + count + ' Results');
+                                    }
+
+                        }
+                        else
+                        {
+                                $('#result_counts').html('10/' + count + ' Results');
+                                $('#tot').html(count);
+                                var rem = icount - 10;
+                                $('#rem').html(rem);
+                        }
+                    
+
+               }
+	});
+
 });
 
-function get_next(url, sno)
+function get_next(url, sno, cap)
 {
+    var rem = parseInt($('#rem').html()); 
+    var tot = parseInt($('#tot').html());
+     rem = rem - 10;
+    $('#rem').html(rem);
+    var displayed = tot - rem;
+    if(displayed > tot)
+        displayed = tot;
+    $('#result_counts').html(displayed + '/' + tot + ' Results');
     $('.more_link').hide();
+    url = url + '&rem=' + rem;
     var div_name = 'resultset'+sno;
     var html_content = "<div id='"+div_name+"'</div>";
     $('#data_table').append(html_content);
     $('#'+div_name).load(url);
-}
+}   
 </script>
 <?php
 /*
@@ -124,6 +226,11 @@ $uiinfo = "op=".$_REQUEST['a']."&qr=".$_REQUEST['q'];
 putUILog('search_p', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 ?>
+<div id="rem" style="display: none;"></div>
+<div id="tot" style="display: none;"></div>
+
+                <font color="grey"><small><div id="result_counts" style="float: right; padding-right: 16px">0 results</div></small></font>
+                <br>
 
 <div id="data_table">
     <div id ="resultset1">
@@ -239,8 +346,9 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 }
 # Build HTML table
 ?>
-<table class='hor-minimalist-cy' id='patientListTable' name='patientListTable'>
-	<thead style="display: none;">
+
+<table class='hor-minimalist-cs' id='patientListTable' name='patientListTable'>
+	<thead >
 		<tr valign='top'>
 			<?php
 			if($lab_config->pid != 0)
@@ -431,22 +539,9 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
         }
 
     ?>
-                <a onclick="javascript:get_next('<?php echo $next_link; ?>', '<?php echo $result_counter + 1; ?>');">More</a>
+                <a onclick="javascript:get_next('<?php echo $next_link; ?>', '<?php echo $result_counter + 1; ?>', '<?php echo $result_cap; ?>');">More</a>
 </div>
 </div>                
-</div>
-                
-<div id="data_variables" style="display: none;">
-    <form id="data_variables_form">
-        <input type="hidden" id="result_cap" name="result_cap" value="<?php echo $result_cap; ?>"></input>
-        <input type="hidden" id="result_counter" name="result_counter" value="<?php echo $result_counter+1; ?>"></input>
-        <input type="hidden" id="q" name="q" value="<?php echo $_REQUEST['q']; ?>"></input>
-        <input type="hidden" id="a" name="a" value="<?php echo $_REQUEST['a']; ?>"></input>
-        <?php if(isset($_REQUEST['l']))
-        { ?>
-        <input type="hidden" id="l" name="l" value="<?php echo $_REQUEST['l']; ?>"></input>
-        <?php } ?>
-    </form>
 </div>
 <?php
 # Switch back context

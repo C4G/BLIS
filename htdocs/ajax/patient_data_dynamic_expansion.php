@@ -17,7 +17,6 @@ else
     $result_counter = $_REQUEST['result_counter'];
 
 
-
 $a = $_REQUEST['a'];
 $saved_db = "";
 $lab_config = null;
@@ -69,35 +68,6 @@ else if($a == 3)
 	# Fetch by daily number
 	$patient_list = search_patients_by_dailynum("-".$q);
 }
-if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null) )
-{
-	?>
-	<br>
-	<div class='sidetip_nopos'>
-	<?php
-	echo LangUtil::$pageTerms['MSG_NOMATCH']." -";
-	if($a == 0)
-		echo " ".LangUtil::$generalTerms['PATIENT_ID']." ";
-	else if($a == 1)
-		echo " ".LangUtil::$generalTerms['NAME']." ";
-	else if($a == 2)
-		echo " ".LangUtil::$generalTerms['ADDL_ID']." ";
-	?>
-	<b><?php echo $q; ?></b>
-	<?php
-	//if(strpos($_SERVER['HTTP_REFERER'], "find_patient.php") !== false)
-	if(false)
-	{
-		?>
-		&nbsp;&nbsp;<a href='new_patient.php'><?php echo LangUtil::$pageTerms['ADD_NEW_PATIENT']; ?> &raquo;</a>
-		<?php
-	}
-	?>
-	</div>
-	<?php
-	SessionUtil::restore($saved_session);
-	return;
-}
 //DB Merging - Currently disabled 
 else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient != null) ) {
 	?>
@@ -116,7 +86,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 }
 # Build HTML table
 ?>
-<table class='hor-minimalist-cy' id='patientListTable' name='patientListTable'>
+<table class='hor-minimalist-cs' id='patientListTable' name='patientListTable'>
         <thead style="display: none">
 
 		<tr valign='top'>
@@ -167,6 +137,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 	</thead>
 		<tbody>
 	<?php
+        if(count($patient_list) > 0)
 	foreach($patient_list as $patient)
 	{
 	?>
@@ -298,6 +269,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 	?>
 	</tbody>
 </table>
+                <?php if($_REQUEST['rem'] > 0) {?>
 <div class ="more_link">
    <?php 
         if(isset($_REQUEST['l']))
@@ -310,5 +282,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
         }
 
     ?>
-                <a onclick="javascript:get_next('<?php echo $next_link; ?>', '<?php echo $result_counter + 1; ?>');">More</a>
+                <a onclick="javascript:get_next('<?php echo $next_link; ?>', '<?php echo $result_counter + 1; ?>', '<?php echo $result_cap; ?>');">More</a>
+                
 </div>
+                <?php } ?>
