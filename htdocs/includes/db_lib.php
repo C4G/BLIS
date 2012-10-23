@@ -29,6 +29,10 @@ require_once("debug_lib.php");
 require_once("date_lib.php");
 //require_once("user_lib.php");
 
+// PDF Modules
+require_once('../tcpdf/config/lang/eng.php');
+require_once('../tcpdf/tcpdf.php');
+
 
 #
 # Entity classes for database backend
@@ -10655,42 +10659,52 @@ function get_latest_cost_of_test_type($test_type_id)
 
 function get_cost_of_test_type_for_closest_date($date, $test_type_id)
 {
+    $date = date("Y-m-d H:i:s", strtotime($date));
+    
     $lab_config_id = $_SESSION['lab_config_id'];
     
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
-    
-    $query_string = "SELECT amount FROM test_type_costs WHERE test_type_id=$test_type_id ".
-                    "AND earliest_date_valid <= $date ORDER BY earliest_valid_date DESC LIMIT 1";
+
+    // Get all instances of prices for this test type, then filter the date in php.  More reliable way to compare dates.
+    $query_string = "SELECT amount, earliest_date_valid FROM test_type_costs WHERE test_type_id=$test_type_id AND earliest_date_valid<='$date' ORDER BY earliest_date_valid DESC LIMIT 1";
     
     $result = query_associative_one($query_string);
-   
+    
     DbUtil::switchRestore($saved_db);
-    return $result['amount'];
+
+    return $result;
 }
 
 function get_all_tests_for_patient_and_date_range($patient_id, $small_date, $large_date)
 {
     $lab_config_id = $_SESSION['lab_config_id'];
     
+    $large_date = date("Y-m-d H:i:s", strtotime($large_date));
+    $small_date = date("Y-m-d H:i:s", strtotime($small_date));
+    
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
     
-    $query_string = "SELECT DISTINCT test_id FROM test WHERE specimen_id IN (SELECT specimen_id FROM specimen WHERE patient_id=$patient_id AND DATE(date_collected) <= $large_date AND DATE(date_collected) >= $small_date)";
+    $query_string = "SELECT DISTINCT test_id, ts FROM test WHERE specimen_id IN (SELECT specimen_id FROM specimen WHERE patient_id=$patient_id) AND ts<='$large_date' AND ts>='$small_date'";
     
-    $result = query_associative_one($query_string);
+    $result = query_associative_all($query_string, $_count);
     
     DbUtil::switchRestore($saved_db);
-    return $result['test_id'];
+    
+    return $result;
 }
 
 function get_test_names_and_costs_from_ids($id_array)
 {
     $name_array = array();
     $cost_array = array();
+    $ids = array();
     if (!empty($id_array)) {
         foreach ($id_array as $id) {
-            $name_array[] = get_test_name_by_id($id);
-            $date = get_test_date_by_id($id);
-            $cost = get_cost_of_test_type_for_closest_date(date("Y-m-d", $date), get_test_type_id_from_test_id($id));
+            $test_type_id = get_test_type_id_from_test_id($id);
+            $ids[] = $test_type_id;
+            $name_array[] = get_test_name_by_id($test_type_id);
+            $date = get_test_date_by_id($test_type_id);
+            $cost = get_latest_cost_of_test_type($test_type_id);
             $cost_array[] = $cost;
         }
     }
@@ -10703,13 +10717,22 @@ function get_test_names_and_costs_from_ids($id_array)
 
 function generate_bill_data_for_patient_and_date_range($patient_id, $first_date, $second_date)
 {
-    $test_ids = get_all_tests_for_patient_and_date_range($patient_id, $first_date, $second_date);
+    $test_info = get_all_tests_for_patient_and_date_range($patient_id, $first_date, $second_date);
+
+    $test_ids = array();
+    $test_dates = array();
+    foreach ($test_info as $test) {
+        $test_ids[] = $test['test_id'];
+        $test_dates[] = date("Y-m-d", strtotime($test['ts']));
+    }
+    
     $names_and_costs = get_test_names_and_costs_from_ids($test_ids);
     $bill_total = array_sum($names_and_costs['costs']);
     $bill_fields = array();
     $bill_fields['total'] = $bill_total;
     $bill_fields['names'] = $names_and_costs['names'];
     $bill_fields['costs'] = $names_and_costs['costs'];
+    $bill_fields['dates'] = $test_dates;
     
     return $bill_fields;
 }
@@ -10728,6 +10751,10 @@ function get_test_type_id_from_test_id($test_id)
     
     return $result['test_type_id'];
 }
+
+/***************************
+ * Billing Functions
+ ***************************/
 
 function insert_lab_config_settings_billing($enabled, $currency_name)
 {
@@ -10755,7 +10782,7 @@ function insert_lab_config_settings_billing($enabled, $currency_name)
 
 function get_lab_config_settings_billing()
 {
-    insert_lab_config_settings_billing(1, "Dollars");
+    insert_lab_config_settings_billing(1, "USD");
     $id = 3; // ID for billing settings
     $lab_config_id = $_SESSION['lab_config_id'];
             
@@ -10778,7 +10805,7 @@ function get_lab_config_settings_billing()
 
 function update_lab_config_settings_billing($enable, $currency_name)
 {
-    insert_lab_config_settings_billing(1, "Dollars");
+    insert_lab_config_settings_billing(1, "USD");
     $id = 3; // ID for billing settings
     $lab_config_id = $_SESSION['lab_config_id'];
             
@@ -10793,6 +10820,13 @@ function update_lab_config_settings_billing($enable, $currency_name)
     DbUtil::switchRestore($saved_db);
     
     return 1;
+}
+
+function get_currency_type_from_lab_config_settings()
+{
+    $settings = get_lab_config_settings_billing();
+    
+    return $settings['currency_name'];
 }
 
 function enable_billing()
@@ -10820,6 +10854,25 @@ function is_billing_enabled($lid)
     }
     return false;
 }
+
+/***************************************************
+ * PDF Rendering Functions
+ **************************************************/
+function render_pdf_from_html($html, $page_title, $page_author)
+{
+    // This currently only renders a one-page document.  Any longer will break it.  TODO: Look into this.
+
+    // Instantiate the pdf
+    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    
+    // set document information
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetAuthor('BLIS');
+    $pdf->SetTitle($page_title);
+    $pdf->SetSubject($page_title);
+    $pdf->SetKeywords("TCPDF, PDF, example, test, guide, $page_title, BLIS, html");
+}
+
 
 /***************************************************
  * Test Removal Module ENDS

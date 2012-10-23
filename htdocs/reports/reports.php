@@ -1637,12 +1637,7 @@ function show_custom_report_form(report_id)
 				?>>
 					<a href='javascript:show_pending_tests_form();'><?php echo LangUtil::$pageTerms['MENU_PENDINGTESTS']; ?></a>
 				</li>
-                                <li class='menu_option' id='billing_report_menu' <?php
-                                if(is_billing_enabled($_SESSION['lab_config_id']) == false)
-                                        echo " style='display:none;' ";
-                                ?>>
-                                        <a href='javascript:show_billing_form();'><?php echo "Patient Bills"; ?></a>
-                                </li>
+
 				
 				<?php
 				# Space for menu entries corresponding to a new daily report

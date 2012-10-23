@@ -932,7 +932,7 @@ class PageElems
 
                                 <tr valign='top' <?php is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none;'") ?>>
                                         <td>Cost To Patient</td>
-                                        <td><?php print(get_latest_cost_of_test_type($test_type->testTypeId)); ?></td>
+                                        <td><?php print(get_latest_cost_of_test_type($test_type->testTypeId)); echo " " . get_currency_type_from_lab_config_settings(); ?></td>
                                 </tr>
 			
 			</tbody>

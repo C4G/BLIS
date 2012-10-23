@@ -12,6 +12,7 @@ putUILog('test_type_edit', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 
 
 
 $script_elems->enableJQueryForm();
+$script_elems->enableJQueryMask();
 $script_elems->enableTokenInput();
 
 # Helper function
@@ -190,6 +191,12 @@ function add_autocomplete_field(mrow_num)
 
 function update_ttype()
 {
+        var money_pattern = new RegExp("^[0-9]{1,3}\.[0-9]{2}$");
+        if(money_pattern.test($('#costToPatient').attr("value").trim()) == false)
+        {
+                alert("<?php echo 'costToPatient is not formatted properly.'; ?>");
+                return;
+        }
 	if($('#name').attr("value").trim() == "")
 	{
 		alert("<?php echo LangUtil::$pageTerms['TIPS_MISSING_TESTNAME']; ?>");
@@ -644,7 +651,7 @@ function removeRowFromTable()
 function validateRow()
 {
   	var tbl = document.getElementById('tblSample');
-    var lastRow = tbl.rows.length - 1;
+        var lastRow = tbl.rows.length - 1;
 	var i=0;
 	var clinical_data;
 	var aLeft= new Array();
@@ -1279,7 +1286,8 @@ function isInputCurrency(evt) {
                         <tr valign='top' <?php is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none;'") ?>>
                                 <td>Cost to Patient</td>
                                 <input type="hidden" name='costToPatient_old' value='<?php echo $costToPatient; ?>' />
-                                <td><input id='costToPatient' name='costToPatient' type='number' size='10' maxLength='10' onkeypress="return isInputCurrency(event);" value='<?php echo $costToPatient; ?>' />
+                                <td><input id='costToPatient' name='costToPatient' type='number' size='10' maxLength='10' value='<?php echo $costToPatient; ?>' />
+                                    <?php echo get_currency_type_from_lab_config_settings(); ?>
                                 </td>
                         </tr>
 			
