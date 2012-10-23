@@ -1308,11 +1308,19 @@ function right_load_1(option_num, div_id)
                                             } else {
                                                 $checkbox = "";
                                             }
+                                            $old_currency = get_currency_type_from_lab_config_settings();
                                         ?>
                                         <input type="checkbox" value="enable_billing" name="enable_billing" <?php echo $checkbox ?>/><?php echo "Enable Billing"; ?>
+                                        <br><br>
+                                        <?php echo "Currency name (symbol):"; ?>
+                                        <br><input type="radio" value="XAF-FCFA" name="currency" <?php echo get_selected_if_currency_is_used("XAF"); ?>/>XAF (FCFA)
+                                        <br><input type="radio" value="UGX-USh" name="currency" <?php echo get_selected_if_currency_is_used("UGX"); ?>/>UGX (USh)
+                                        <br><input type="radio" value="TZS-TZS" name="currency" <?php echo get_selected_if_currency_is_used("TZS"); ?>/>TZS (TZS)
+                                        <br><input type="radio" value="USD-$" name="currency" <?php echo get_selected_if_currency_is_used("USD"); ?>/>USD ($)
                                         </div>
                                         <br>
                                         <input type="button" value="Update" onclick="submit_billing_update()" />
+
                                         <span id='billing_progress' style='display:none;'>
                                             <?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
 					</span>

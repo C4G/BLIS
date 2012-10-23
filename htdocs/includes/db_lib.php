@@ -10829,6 +10829,26 @@ function get_currency_type_from_lab_config_settings()
     return $settings['currency_name'];
 }
 
+function update_currency_type_in_lab_config_settings($new_currency)
+{
+    $settings = get_lab_config_settings_billing();
+    
+    update_lab_config_settings_billing($settings['enable'], $new_currency);
+    
+    return 1;
+}
+
+function get_selected_if_currency_is_used($currency)
+{
+    $currency_set = get_currency_type_from_lab_config_settings();
+    
+    if ($currency_set == $currency) {
+        return "checked";
+    } else {
+        return "";
+    }
+}
+
 function enable_billing()
 {
     $current_state = get_lab_config_settings_billing();
