@@ -57,8 +57,5 @@ $stock = Inventory::getLot($lid, $code[0], $code[2]);
                         <td><?php echo "Update"."&nbsp;&nbsp;&nbsp;&nbsp;"; ?></td><td><?php echo "<a href='use_stock.php?id=".$reag['id']."&lot=".$stock['lot']."'> Update Stock</a>";
                                                                                             ?></td>
                 </tr>
-                <tr>
-                        <td><?php echo "Action"."&nbsp;&nbsp;&nbsp;&nbsp;"; ?></td><td></td>
-                       
-		</tr>
+                
 	</tbody>

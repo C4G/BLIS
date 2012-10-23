@@ -13,9 +13,18 @@ $script_elems = new ScriptElems();
 
 $saved_session = SessionUtil::save();
 $dynamic_fetch = 1;
-$rcap = 10;
+$search_settings = get_lab_config_settings_search();
+$rcap = $search_settings['results_per_page'];
 ?>
 <style type="text/css">
+    .prev_link{
+        position: relative;
+        float: left;
+    }
+    .next_link{
+        position: relative;
+        float: right;
+    }
 .customers
 {
 font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;

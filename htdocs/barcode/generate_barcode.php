@@ -4,6 +4,7 @@ include("includes/header.php");
 include("barcode_lib.php");
 
 $barcodeSettings = get_lab_config_settings_barcode();
+//  print_r($barcodeSettings);
 $code_type = $barcodeSettings['type']; //"code39";
 $bar_width = $barcodeSettings['width']; //2;
 $bar_height = $barcodeSettings['height']; //40;
@@ -11,9 +12,15 @@ $font_size = $barcodeSettings['textsize']; //11;
 
 ?>
 <style>
-    img {
-    float: right;
+    .remove {
+        position: relative;
+    float: left;
 }
+
+.barcodes {
+    
+}
+
 </style>
 <script type="text/javascript">
     $(document).ready(function(){
@@ -30,13 +37,14 @@ function getBarcode()
     count = count + 1;
     $('#count').html(count);  
     var div = "bar"+count;
+        generateRemoveLink(div);
+
     generateBarcode(div, code);
-    generateRemoveLink(div);
 }
 
 function generateBarcode(div, code)
 {
-    var content = "<br><br><div id='"+div+"'></div>";
+    var content = "<div class='barcodes' id='"+div+"'></div>";
     $('#barcodeList').append(content);
         $("#"+div).barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'css'});
 
@@ -46,7 +54,8 @@ function generateRemoveLink(div)
 {
     var divR = div+"Remove";
     var oc = "hide_div('"+div+"')";
-    var content = "<div float class='remove' id ='"+divR+"' >"+"<img src='includes/img/knob_cancel.png' alt='Remove' onclick=\""+oc+"\";' />"+"</div>";
+    //var content = "<div float class='remove' id ='"+divR+"' >"+"<img src='includes/img/knob_cancel.png' alt='Remove' onclick=\""+oc+"\";' />"+"</div>";
+    var content = "<br><br><div float class='remove' id ='"+divR+"' >"+"<a onclick=\""+oc+"\"' >Remove</a>"+"</div>";
     $('#barcodeList').append(content);
 }
 
@@ -130,7 +139,8 @@ function get_next(url, sno, cap)
 
 function hide_div(div)
 {
-    $('#'+div).hide();
+    $('#'+div).remove();
+     $('#'+div+'Remove').remove();
 }
 function export_to_pdf(div_id)
 {
@@ -151,9 +161,10 @@ function export_to_pdf(div_id)
 Code: <input type="text" id="code" name="code"></input>
 <input type="button" onclick='getBarcode();' value="Generate">  
 <input type="button" value="Print" onclick="PrintElem('#barcodeList')" />
+<!--
 <input type='button' onclick="javascript:export_as_word('barcodeList');" value='<?php echo LangUtil::$generalTerms['CMD_EXPORTWORD']; ?>'></input>
 <input type='button' onclick="javascript:export_as_pdf2('barcodeList');" value='<?php echo LangUtil::$generalTerms['CMD_EXPORTPDF']; ?>'></input>
-
+-->
 <form name='word_format_form' id='word_format_form' action='export_word.php' method='post' target='_blank'>
 	<input type='hidden' name='data' value='' id='word_data' />
 </form>

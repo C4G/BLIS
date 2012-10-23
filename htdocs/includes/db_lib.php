@@ -10686,7 +10686,7 @@ function check_removal_record($lid, $sp)
 
 function getBarcodeTypes()
 {
-    $types = "ean8, ean13, code11, code39, code128, codabar,std25, int25, code93";
+    $types = "ean8,ean13,code11,code39,code128,codabar,std25,int25,code93";
     $codeList = explode(",", $types);
     return($codeList);
 }
@@ -10763,6 +10763,73 @@ function update_lab_config_settings_barcode($type, $width, $height, $textsize, $
 
 ##  Barcode Module Setings Ends  ##
 
+## Search Settings ##
+
+
+function insert_lab_config_settings_search($num)
+{
+    $id = 2; // ID for search settings
+    
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+    
+    $query_string = "SELECT count(*) as val from lab_config_settings WHERE id = $id";
+    $recordset = query_associative_one($query_string);        
+    
+    if($recordset[val] != 0)
+        return 0;
+    $remarks = "Search Settings";
+    $query_string = "INSERT INTO lab_config_settings (id, flag1, remarks) ".
+                            "VALUES ($id, $num, '$remarks')";
+            query_insert_one($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    return 1;
+}
+
+function get_lab_config_settings_search()
+{
+    insert_lab_config_settings_search(20);
+    $id = 2; // ID for search settings
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+    $query_string = "SELECT * from lab_config_settings WHERE id = $id";
+    $recordset = query_associative_one($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    $retval = array();
+    
+    // search settings = results_per_page
+    
+    $retval['results_per_page'] = $recordset['flag1'];
+    
+    
+    return $retval;
+}
+
+function update_lab_config_settings_search($num)
+{
+    insert_lab_config_settings_search(20);
+    $id = 2; // ID for search settings
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+        
+    $query_string = "UPDATE lab_config_settings SET flag1 = $num WHERE id = $id";
+            query_update($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    return 1;
+}
+
+
+## Search Settings End ##
 
 function putUILog($id, $info, $file, $tag1, $tag2, $tag3)
 {

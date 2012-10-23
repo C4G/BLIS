@@ -1293,7 +1293,7 @@ function right_load_1(option_num, div_id)
 					<br><br>
                                         <div id='barcodefield_msg' class='clean-orange' style='display:none;width:350px;'>
 					</div>
-					<form id='barocdefields_form' name='barcodefields_form' action='barcode/barcode_config_update.php' method='post'>
+					<form id='barcodefields_form' name='barcodefields_form' action='ajax/update_barcode_settings.php' method='post'>
 					<input type='hidden' name='lab_config_id' value='<?php echo $lab_config->id; ?>'></input>					
 						<?php $page_elems->getBarcodeFields($lab_config->id);
                                                 //$page_elems->getSearchFieldsCheckboxes($lab_config->id); ?>

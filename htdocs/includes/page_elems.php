@@ -4629,6 +4629,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		//else
 			//$specimen_list = get_search_fields($lab_config_id);
                         $sfields = get_search_fields($lab_config_id);
+                        $ssfields = get_lab_config_settings_search();
                        //"SELECT pid, p_addl, daily_num, pname, age, sex, dob FROM lab_config WHERE lab_config_id=$lab_config_id";
 
 		//$current_specimen_list = array();
@@ -4674,11 +4675,11 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                 <br><br>
                 Number of Results Per Page: 
                                 <?php 
-                                echo "<select id='sfields_resultsPerPage'>";
+                                echo "<select name='sfields_resultsPerPage' id='sfields_resultsPerPage'>";
                                 $i = 1;
 			while($i < 101) 
                         {
-                            if($sfields['rpp'] == $i)
+                            if($ssfields['results_per_page'] == $i)
 				echo "<option selected value='".$i."'>".$i."</option>";
                             else
                                 echo "<option value='".$i."'>".$i."</option>";
@@ -4709,6 +4710,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		//else
 			//$specimen_list = get_search_fields($lab_config_id);
                         $brfields = get_lab_config_settings_barcode();
+                        //print_r($brfields);
                        //"SELECT pid, p_addl, daily_num, pname, age, sex, dob FROM lab_config WHERE lab_config_id=$lab_config_id";
 
 		//$current_specimen_list = array();
@@ -4721,11 +4723,11 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                         <td>Encoding Format: </td>
                                  <td>
                                 <?php //$sfields['rpp']= '45';
-                                echo "<select id='brfields_type'>";
+                                echo "<select id='brfields_type' name='brfields_type'>";
                                 $codeTypes = getBarcodeTypes();
                                 foreach ($codeTypes as $type)
                                 {
-                                    if($brfields['type'] == $i)
+                                    if($brfields['type'] == $type)
                                     echo "<option selected value='".$type."'>".$type."</option>";
                                     else
                                     echo "<option value='".$type."'>".$type."</option>";
@@ -4737,7 +4739,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                                    </td>
                                    <td>
                                 <?php //$sfields['rpp']= '45';
-                                echo "<select id='brfields_width'>";
+                                echo "<select id='brfields_width' name='brfields_width'>";
                                 $i = 1;
                                 while($i < 11) 
                                 {
@@ -4754,7 +4756,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                                  <td>Barcode Height:</td>
                                  <td>
                                 <?php //$sfields['rpp']= '45';
-                                echo "<select id='brfields_height'>";
+                                echo "<select id='brfields_height' name='brfields_height'>";
                                 $i = 5;
                                 while($i < 81) 
                                 {
@@ -4771,7 +4773,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                               <td>Text Size:</td>
                                  <td>
                                 <?php //$sfields['rpp']= '45';
-                                echo "<select id='brfields_textsize'>";
+                                echo "<select id='brfields_textsize' name='brfields_textsize'>";
                                 $i = 5;
                                 while($i < 40) 
                                 {

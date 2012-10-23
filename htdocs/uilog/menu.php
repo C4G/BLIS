@@ -49,7 +49,7 @@ function load_file(id)
                 <br>
                 <a id='option1' href="counts.php" target='_blank'><?php echo "Counts"; ?></a>
                 <br>
-                <a id='option1' href="javascript:load_file('test');"><?php echo "Test Link"; ?></a>
+                <!--<a id='option1' href="javascript:load_file('test');"><?php echo "Test Link"; ?></a>-->
 
 	</div>
 	

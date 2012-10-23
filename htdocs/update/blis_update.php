@@ -34,9 +34,14 @@ else {
 
 function runUpdate($lab_config_id) {
         
-        # v2.2 Update
-	$db_name = "blis_".$lab_config_id;
-        $ufile = "db_update_v2-2";
+        # revamp update
+        $db_name = "blis_revamp";
+        $ufile = "db_update_revamp";
+        blis_db_update($lab_config_id, $db_name, $ufile);
+        
+        # lab update
+        $db_name = "blis_".$lab_config_id;
+        $ufile = "db_update_lab";
         blis_db_update($lab_config_id, $db_name, $ufile);
 }
 
