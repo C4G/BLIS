@@ -29,6 +29,10 @@ require_once("debug_lib.php");
 require_once("date_lib.php");
 //require_once("user_lib.php");
 
+// PDF Modules
+require_once('../tcpdf/config/lang/eng.php');
+require_once('../tcpdf/tcpdf.php');
+
 
 #
 # Entity classes for database backend
@@ -10676,6 +10680,332 @@ function check_removal_record($lid, $sp)
             return $recordset['val'];
 }
 
+function get_date_of_latest_test_type_cost_update($test_type_id)
+{
+    $lab_config_id = $_SESSION['lab_config_id'];
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+    
+    $query_string = "SELECT earliest_date_valid FROM test_type_costs WHERE test_type_id=$test_type_id ORDER BY earliest_date_valid DESC LIMIT 1";
+    
+    $result = query_associative_one($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    return $result['earliest_date_valid'];
+}
+
+function instantiate_new_cost_of_test_type($cost, $test_type_id)
+{
+    $lab_config_id = $_SESSION['lab_config_id'];
+        
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+    
+    $query_string = "SELECT count(*) AS val FROM test_type_costs WHERE test_type_id=$test_type_id";
+    
+    $count = query_associative_one($query_string);
+    
+    DbUtil::switchRestore($saved_db);
+    
+    if ($count['val'] != 0) {
+        return 0;
+    }
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+    $query_string = "INSERT INTO test_type_costs (amount, test_type_id) VALUES ($cost, $test_type_id)";
+
+    query_insert_one($query_string);
+
+    DbUtil::switchRestore($saved_db);
+    
+    return 1;
+}
+
+function insert_new_cost_of_test_type($cost, $test_type_id)
+{
+    $lab_config_id = $_SESSION['lab_config_id'];
+
+    $date = get_date_of_latest_test_type_cost_update($test_type_id);
+    $formatted_date = strtotime(date("Y-m-d", strtotime($date)));
+    $today = strtotime(date("Y-m-d"));
+    if ($formatted_date == $today) {
+        $now = date("Y-m-d");
+
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+        $query_string = "UPDATE test_type_costs SET amount=$cost WHERE test_type_id=$test_type_id AND earliest_date_valid >= $now";
+
+        query_update($query_string);
+
+        DbUtil::switchRestore($saved_db);
+    } else {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+        $query_string = "INSERT INTO test_type_costs (amount, test_type_id) VALUES ($cost, $test_type_id)";
+        query_insert_one($query_string);
+
+        DbUtil::switchRestore($saved_db);
+    }
+    
+    return 1;
+}
+
+function get_latest_cost_of_test_type($test_type_id)
+{
+    instantiate_new_cost_of_test_type(0.00, $test_type_id);
+
+    $lab_config_id = $_SESSION['lab_config_id'];
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+    
+    $query_string = "SELECT amount FROM test_type_costs WHERE ".
+                    "test_type_id=$test_type_id ORDER BY earliest_date_valid DESC LIMIT 1";
+    $result = query_associative_one($query_string);
+   
+    DbUtil::switchRestore($saved_db);
+    return $result['amount'];
+}
+
+function get_cost_of_test_type_for_closest_date($date, $test_type_id)
+{
+    instantiate_new_cost_of_test_type(0.00, $test_type_id);
+    
+    $date = date("Y-m-d H:i:s", strtotime($date));
+    
+    $lab_config_id = $_SESSION['lab_config_id'];
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+    // Get all instances of prices for this test type, then filter the date in php.  More reliable way to compare dates.
+    $query_string = "SELECT amount, earliest_date_valid FROM test_type_costs WHERE test_type_id=$test_type_id AND earliest_date_valid<='$date' ORDER BY earliest_date_valid DESC LIMIT 1";
+    
+    $result = query_associative_one($query_string);
+    
+    DbUtil::switchRestore($saved_db);
+
+    return $result;
+}
+
+function get_all_tests_for_patient_and_date_range($patient_id, $small_date, $large_date)
+{
+    $lab_config_id = $_SESSION['lab_config_id'];
+    
+    $large_date = date("Y-m-d H:i:s", strtotime($large_date));
+    $small_date = date("Y-m-d H:i:s", strtotime($small_date));
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+    
+    $query_string = "SELECT DISTINCT test_id, ts FROM test WHERE specimen_id IN (SELECT specimen_id FROM specimen WHERE patient_id=$patient_id) AND ts<='$large_date' AND ts>='$small_date'";
+    
+    $result = query_associative_all($query_string, $_count);
+    
+    DbUtil::switchRestore($saved_db);
+    
+    return $result;
+}
+
+function get_test_names_and_costs_from_ids($id_array)
+{
+    $name_array = array();
+    $cost_array = array();
+    $ids = array();
+    if (!empty($id_array)) {
+        foreach ($id_array as $id) {
+            $test_type_id = get_test_type_id_from_test_id($id);
+            $ids[] = $test_type_id;
+            $name_array[] = get_test_name_by_id($test_type_id);
+            $date = get_test_date_by_id($test_type_id);
+            $cost = get_latest_cost_of_test_type($test_type_id);
+            $cost_array[] = $cost;
+        }
+    }
+    $ret_array = array();
+    $ret_array['costs'] = $cost_array;
+    $ret_array['names'] = $name_array;
+    
+    return $ret_array;
+}
+
+function generate_bill_data_for_patient_and_date_range($patient_id, $first_date, $second_date)
+{
+    $test_info = get_all_tests_for_patient_and_date_range($patient_id, $first_date, $second_date);
+
+    $test_ids = array();
+    $test_dates = array();
+    foreach ($test_info as $test) {
+        $test_ids[] = $test['test_id'];
+        $test_dates[] = date("Y-m-d", strtotime($test['ts']));
+    }
+    
+    $names_and_costs = get_test_names_and_costs_from_ids($test_ids);
+    $bill_total = array_sum($names_and_costs['costs']);
+    $bill_fields = array();
+    $bill_fields['total'] = $bill_total;
+    $bill_fields['names'] = $names_and_costs['names'];
+    $bill_fields['costs'] = $names_and_costs['costs'];
+    $bill_fields['dates'] = $test_dates;
+    
+    return $bill_fields;
+}
+
+function get_test_type_id_from_test_id($test_id)
+{
+    $lab_config_id = $_SESSION['lab_config_id'];
+    
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+    
+    $query_string = "SELECT test_type_id FROM test WHERE test_id=$test_id";
+    
+    $result = query_associative_one($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    return $result['test_type_id'];
+}
+
+/***************************
+ * Billing Functions
+ ***************************/
+
+function insert_lab_config_settings_billing($enabled, $currency_name, $currency_symbol)
+{
+    $id = 3; // ID for billing settings
+    
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+    
+    $query_string = "SELECT count(*) as val from lab_config_settings WHERE id = $id";
+    $recordset = query_associative_one($query_string);
+    
+    if($recordset[val] != 0)
+        return 0;
+    
+    $remarks = "Billing Settings";
+    $query_string = "INSERT INTO lab_config_settings (id, flag1, setting1, remarks) ".
+                            "VALUES ($id, $enabled, $currency_name+$currency_symbol, '$remarks')";
+    query_insert_one($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    return 1;
+}
+
+function get_lab_config_settings_billing()
+{
+    insert_lab_config_settings_billing(1, "USD", "$");
+    $id = 3; // ID for billing settings
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+    $query_string = "SELECT * from lab_config_settings WHERE id = $id";
+    $recordset = query_associative_one($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    $retval = array();
+    
+    // barcode settings = type, width, height, font_size
+    
+    $retval['enabled'] = $recordset['flag1'];
+    $setting_1 = explode("+", $recordset['setting1']);
+    $retval['currency_name'] = $setting_1[0];
+    $retval['currency_symbol'] = $setting_1[1];
+    
+    return $retval;
+}
+
+function update_lab_config_settings_billing($enable, $currency_name, $currency_symbol)
+{
+    insert_lab_config_settings_billing(1, "USD", "$");
+    $id = 3; // ID for billing settings
+    $lab_config_id = $_SESSION['lab_config_id'];
+            
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+    
+    if($enable != 0)
+        $enable = 1;
+        
+    $query_string = "UPDATE lab_config_settings SET flag1 = $enable, setting1 = '$currency_name" . "+" . "$currency_symbol' WHERE id = $id";
+            query_update($query_string);
+            
+    DbUtil::switchRestore($saved_db);
+    
+    return 1;
+}
+
+function get_currency_type_from_lab_config_settings()
+{
+    $settings = get_lab_config_settings_billing();
+    
+    return $settings['currency_name'];
+}
+
+function update_currency_type_in_lab_config_settings($new_currency)
+{
+    $settings = get_lab_config_settings_billing();
+    
+    update_lab_config_settings_billing($settings['enable'], $new_currency);
+    
+    return 1;
+}
+
+function get_selected_if_currency_is_used($currency)
+{
+    $currency_set = get_currency_type_from_lab_config_settings();
+    
+    if ($currency_set == $currency) {
+        return "checked";
+    } else {
+        return "";
+    }
+}
+
+function enable_billing()
+{
+    $current_state = get_lab_config_settings_billing();
+    update_lab_config_settings_billing(1, $current_state['currency_name']);
+    
+    return 1;
+}
+
+function disable_billing()
+{
+    $current_state = get_lab_config_settings_billing();
+    update_lab_config_settings_billing(0, $current_state['currency_name']);
+    
+    return 1;
+}
+
+function is_billing_enabled($lid)
+{
+    $current_state = get_lab_config_settings_billing();
+
+    if ($current_state['enabled'] == "1") {
+        return true;
+    }
+    return false;
+}
+
+/***************************************************
+ * PDF Rendering Functions
+ **************************************************/
+function render_pdf_from_html($html, $page_title, $page_author)
+{
+    // This currently only renders a one-page document.  Any longer will break it.  TODO: Look into this.
+
+    // Instantiate the pdf
+    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    
+    // set document information
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetAuthor('BLIS');
+    $pdf->SetTitle($page_title);
+    $pdf->SetSubject($page_title);
+    $pdf->SetKeywords("TCPDF, PDF, example, test, guide, $page_title, BLIS, html");
+}
 
 
 /***************************************************

@@ -25,6 +25,7 @@ class ScriptElems
 	public $enabledDragTable = false;
 	public $enabledEditInPlace = false;
 	public $enabledAutocomplete = false;
+        public $enabledJQueryMask = false;
 	
 	public function enableJQuery()
 	{
@@ -258,6 +259,17 @@ class ScriptElems
 		<?php
 		}
 		$this->enabledJQueryForm = true;
+	}
+        
+        public function enableJQueryMask()
+	{
+		if($this->enabledJQueryMask === false)
+		{
+		?>
+                        <script type="text/javascript" src="js/jquery.maskedinput-1.3.js"></script>
+		<?php
+		}
+		$this->enabledJQueryMask = true;
 	}
 	
 	public function enableJQueryValidate()

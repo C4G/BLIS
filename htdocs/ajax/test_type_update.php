@@ -44,6 +44,10 @@ $updated_entry->hide_patient_name=$_REQUEST['hidePatientName'];
 $updated_entry->prevalenceThreshold=$_REQUEST['prevalenceThreshold'];
 $updated_entry->targetTat=$_REQUEST['targetTat'];
 $updated_entry->testCategoryId = $cat_code;
+
+$newCostToPatient = $_REQUEST['costToPatient'];
+$oldCostToPatient = $_REQUEST['costToPatient_old'];
+
 # Update tests measures and ranges
 $is_panel = false;
 $added_measures_list = array();
@@ -751,6 +755,9 @@ foreach($catalog_specimen_list as $specimen_typeid=>$specimen_name)
 }
 
 update_test_type($updated_entry, $specimen_list ,$lab_config_id);
+if ($newCostToPatient != $oldCostToPatient) {
+    insert_new_cost_of_test_type($newCostToPatient, $updated_entry->testTypeId);
+}
 
 # Add entries for newly listed/measures to 'test_type_measure' map table
 if($_REQUEST['ispanel'] == 1)

@@ -333,6 +333,14 @@ $(document).ready(function(){
 		right_load(2, 'st_types_div');
 		<?php
 	}
+        else if(isset($_REQUEST['billingupdate']))
+        {
+                ?>
+                $('#billing_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('billing_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+		$('#billing_msg').show();
+                right_load(22, 'billing_div');
+                <?php
+        }
 	else if(isset($_REQUEST['adupdate']))
 	{
 		# Show custom field updated message
@@ -775,6 +783,19 @@ function checkandsubmit_st_types()
 	$('#st_types_form').ajaxSubmit({success:function(){
 			$('#st_types_progress').hide();
 			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&stupdate=1";
+		}
+	});
+}
+
+function submit_billing_update()
+{
+        //Do we need to validate here?  Seems that there's only two possibilities...
+        //Maybe if someone spoofs a post in the url...
+        //Submit stuff to the db here.
+        $('#billing_progress').show();
+	$('#billing_form').ajaxSubmit({success:function(){
+			$('#billing_progress').hide();
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&billingupdate=1";
 		}
 	});
 }
@@ -1332,6 +1353,39 @@ function right_load_1(option_num, div_id)
 					
 				<div class='right_pane' id='inventory_div' style='display:none;margin-left:10px;'>
 				</div>
+                                
+                                <div class='right_pane' id='billing_div' style='display:none;margin-left:10px;'>
+                                         
+                                    <p style="text-align: right;"><a rel='facebox' href='#Tests_config'>Page Help</a></p>
+                                    <div id='billing_msg' class='clean-orange' style='display:none;width:350px;'>
+                                    </div>
+                                    <form id='billing_form' name='billing_form' action='ajax/billing_update.php' method='post'>
+                                        <input type='hidden' name='lid' value='<?php echo $lab_config->id; ?>'></input>
+                                        <div class="pretty_box">
+                                        <?php
+                                            if (is_billing_enabled($_SESSION['lab_config_id'])) {
+                                                $checkbox = "checked";
+                                            } else {
+                                                $checkbox = "";
+                                            }
+                                            $old_currency = get_currency_type_from_lab_config_settings();
+                                        ?>
+                                        <input type="checkbox" value="enable_billing" name="enable_billing" <?php echo $checkbox ?>/><?php echo "Enable Billing"; ?>
+                                        <br><br>
+                                        <?php echo "Currency name (symbol):"; ?>
+                                        <br><input type="radio" value="XAF-FCFA" name="currency" <?php echo get_selected_if_currency_is_used("XAF"); ?>/>XAF (FCFA)
+                                        <br><input type="radio" value="UGX-USh" name="currency" <?php echo get_selected_if_currency_is_used("UGX"); ?>/>UGX (USh)
+                                        <br><input type="radio" value="TZS-TZS" name="currency" <?php echo get_selected_if_currency_is_used("TZS"); ?>/>TZS (TZS)
+                                        <br><input type="radio" value="USD-$" name="currency" <?php echo get_selected_if_currency_is_used("USD"); ?>/>USD ($)
+                                        </div>
+                                        <br>
+                                        <input type="button" value="Update" onclick="submit_billing_update()" />
+
+                                        <span id='billing_progress' style='display:none;'>
+                                            <?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
+					</span>
+                                    </form>
+                                </div>
 				
 				<div class='right_pane' id='fields_div' style='display:none;margin-left:10px;'>
 					<p style="text-align: right;"><a rel='facebox' href='#RegistrationFields_config'>Page Help</a></p>

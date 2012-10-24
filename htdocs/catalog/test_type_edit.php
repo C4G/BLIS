@@ -12,6 +12,7 @@ putUILog('test_type_edit', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 
 
 
 $script_elems->enableJQueryForm();
+$script_elems->enableJQueryMask();
 $script_elems->enableTokenInput();
 
 # Helper function
@@ -44,6 +45,9 @@ $page_elems->getSideTip("Tips", $tips_string);
 
 <?php
 $test_type = get_test_type_by_id($_REQUEST['tid']);
+$lab_config_id = $_SESSION['lab_config_id'];
+$costToPatient = get_latest_cost_of_test_type($test_type->testTypeId);
+
 if($test_type == null)
 {
 ?>
@@ -187,6 +191,12 @@ function add_autocomplete_field(mrow_num)
 
 function update_ttype()
 {
+        var money_pattern = new RegExp("^[0-9]{1,3}\.[0-9]{2}$");
+        if(money_pattern.test($('#costToPatient').attr("value").trim()) == false)
+        {
+                alert("<?php echo 'costToPatient is not formatted properly.'; ?>");
+                return;
+        }
 	if($('#name').attr("value").trim() == "")
 	{
 		alert("<?php echo LangUtil::$pageTerms['TIPS_MISSING_TESTNAME']; ?>");
@@ -641,7 +651,7 @@ function removeRowFromTable()
 function validateRow()
 {
   	var tbl = document.getElementById('tblSample');
-    var lastRow = tbl.rows.length - 1;
+        var lastRow = tbl.rows.length - 1;
 	var i=0;
 	var clinical_data;
 	var aLeft= new Array();
@@ -730,6 +740,18 @@ function isInputNumber(evt) {
 		return false;
 
 	return true;
+}
+
+function isInputCurrency(evt) {
+        var characterCode = (evt.which) ? evt.which : event.keyCode
+        // 31 is the upper bound of non-printable characters
+        // numbers are between 48 and 57
+        // 46 is a decimal '.'
+        // 44 is a comma ','
+        if (characterCode > 31 && (characterCode < 48 || characterCode > 57) && characterCode != 46 && characterCode != 44)
+                return false;
+
+        return true;
 }
 </script>
 <style type='text/css'>
@@ -1260,6 +1282,14 @@ function isInputNumber(evt) {
 				<td><input id='targetTat' name='targetTat' type='text' size='3' maxLength='3' onkeypress="return isInputNumber(event);" value=<?php echo $test_type->targetTat; ?> />
 				</td>
 			</tr>
+                        
+                        <tr valign='top' <?php is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none;'") ?>>
+                                <td>Cost to Patient</td>
+                                <input type="hidden" name='costToPatient_old' value='<?php echo $costToPatient; ?>' />
+                                <td><input id='costToPatient' name='costToPatient' type='number' size='10' maxLength='10' value='<?php echo $costToPatient; ?>' />
+                                    <?php echo get_currency_type_from_lab_config_settings(); ?>
+                                </td>
+                        </tr>
 			
 			<tr valign='top'>
 				<td></td>

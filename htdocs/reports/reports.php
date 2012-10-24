@@ -382,7 +382,15 @@ function show_specimen_count_form()
 	$('#specimen_count_menu').addClass('current_menu_option');
 }
 
-
+function show_billing_form()
+{
+	$('.reports_subdiv').hide();
+	$('.reports_subdiv_help').hide();
+	$('#billing_report_div').show();
+	$('#billing_report_div_help').show();
+      	$('.menu_option').removeClass('current_menu_option');
+        $('#billing_report_menu').addClass('current_menu_option');
+}
 
 function show_test_history_form()
 {
@@ -1629,6 +1637,7 @@ function show_custom_report_form(report_id)
 				?>>
 					<a href='javascript:show_pending_tests_form();'><?php echo LangUtil::$pageTerms['MENU_PENDINGTESTS']; ?></a>
 				</li>
+
 				
 				<?php
 				# Space for menu entries corresponding to a new daily report
@@ -3012,20 +3021,18 @@ function show_custom_report_form(report_id)
 			</tbody>
 		</table>
 	</div>
-	
-	<div id='stock_report_div' class='reports_subdiv' style='display:none'>
-		<b>Inventory</b>
-              
+            
+	<div id='daily_report_div' class='reports_subdiv' style='display:none'>
+		<b><?php echo LangUtil::$pageTerms['MENU_DAILYLOGS']; ?></b>
 		<br><br>
-		<form id='stock_report_form' action='current_inventory.php' method='post'>
-		<table>
+		<table cellpadding='4px'>
 			<tbody>
 			<?php
 			$site_list = get_site_list($_SESSION['user_id']);
 			if(count($site_list) == 1)
 			{
 				foreach($site_list as $key=>$value)
-					echo "<input type='hidden' name='location' id='location15' value='$key'></input>";
+					echo "<input type='hidden' name='location' id='location13' value='$key'></input>";
 			}
 			else
 			{
@@ -3033,7 +3040,7 @@ function show_custom_report_form(report_id)
 				<tr class="location_row" id="location_row">
 					<td><?php echo LangUtil::$generalTerms['FACILITY']; ?> &nbsp;&nbsp;&nbsp;</td>
 					<td>
-						<select name='location' id='location15' class='uniform_width'>
+						<select name='location' id='location13' class='uniform_width' onchange='handleChange(this)'>
 						<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
 						<?php
 							$page_elems->getSiteOptions();
@@ -3044,60 +3051,109 @@ function show_custom_report_form(report_id)
 			<?php
 			}
 			?>
-			<tr>
-			<td>Reagent Name</td>
-			<td>
-			<?php $retval= array();
-			$retval1=get_reagent_name();
-			?>
-			<select name='reagent_name' id='reagent_name' class='uniform_width'>
-			<option  VALUE='ALL'>All</option>
-			<?php
-			foreach($retval1 as $value)
-						echo "<option  VALUE='$value'>$value</option>";
-			?>
-						</select>		
-		
-			
-			</td>
-			</tr>
-				<tr class="sdate_row" id="sdate_row" valign='top'>
-					<td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?> </td>
+				<tr>
+					<td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?></td>
 					<td>
-					<?php
-						$name_list = array("yyyy_from", "mm_from", "dd_from");
-						$id_list = array("yyyy_from15", "mm_from15", "dd_from15");
-						$value_list = $monthago_array;
-						$page_elems->getDatePicker($name_list, $id_list, $value_list);
+					<?php		
+					$today = date("Y-m-d");
+					$value_list = explode("-", $today);
+					$name_list = array("daily_yyyy", "daily_mm", "daily_dd");
+					$id_list = $name_list;
+					$page_elems->getDatePicker($name_list, $id_list, $value_list, true);
 					?>
 					</td>
 				</tr>
-				<tr class="edate_row" id="edate_row" valign='top'>
-					<td><?php echo LangUtil::$generalTerms['TO_DATE']; ?>&nbsp;&nbsp;&nbsp;</td>
+				
+				<tr>
+					<td><?php echo LangUtil::$generalTerms['TO_DATE']; ?></td>
 					<td>
-					<?php
-						$name_list = array("yyyy_to", "mm_to", "dd_to");
-						$id_list = array("yyyy_to15", "mm_to15", "dd_to15");
-						$value_list = $today_array;
-						$page_elems->getDatePicker($name_list, $id_list, $value_list);
+					<?php		
+					$name_list = array("daily_yyyy_to", "daily_mm_to", "daily_dd_to");
+					$id_list = $name_list;
+					$page_elems->getDatePicker($name_list, $id_list, $value_list, true);
 					?>
+					</td>
+				</tr>
+				
+				<tr valign='top'>
+					<td><?php echo LangUtil::$generalTerms['RECORDS']; ?> &nbsp;&nbsp;&nbsp;</td>
+					<td>
+						<input type='radio' name='rectype13' value='1' checked>
+							<?php echo LangUtil::$generalTerms['RECORDS_TEST']; ?>
+						</input>
+						<br>
+						<input type='radio' name='rectype13' value='2'>
+							<?php echo LangUtil::$generalTerms['RECORDS_PATIENT']; ?>
+						</input>
+					</td>
+				</tr>
+				<tr id='cat_row13'>
+					<td><?php echo LangUtil::$generalTerms['LAB_SECTION']; ?> &nbsp;&nbsp;&nbsp;</td>
+					<td>
+						<select name='cat_code' id='cat_code13' class='uniform_width'>
+							<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
+							<?php
+							if( is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) )
+								$page_elems->getTestCategoryCountrySelect();
+							else {
+								$page_elems->getTestCategorySelect();
+							}
+							?>
+						</select>
+					</td>
+				</tr>
+				<tr id='ttype_row13'>
+					<td><?php echo LangUtil::$generalTerms['TEST']; ?></td>
+					<td>
+						<select name='ttype' id='ttype13' class='uniform_width'>
+							<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
+						</select>
+					</td>
+				</tr>
+				
+				<tr>
+					<td></td>
+					<td>
+						<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='javascript:print_daily_log()'></input>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div id='billing_report_div' class='reports_subdiv' style='display:none'>
+		<b><?php echo "Bill Generation"; ?></b>
+		<br><br>
+		<form name='preport_form' id='preport_form'>
+			<table cellpadding='4px'>
+			
+				<tr>
+					<td>
+					<select name='p_attrib' id='p_attrib15'>
+						<option value='1'><?php echo LangUtil::$generalTerms['PATIENT_NAME']; ?></option>
+						<option value='2'><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></option>
+						<option value='0'><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></option>
+					</select>
+					</td>
+					<td>
+						<input type='text' name='patient_id' id='patient_id15' class='uniform_width'></input>
 					</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
-						<br>
-						<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='javascript:get_stock_report()'></input>
+						<input type='button' id='submit_button15' name='preport_button' value='<?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?>' onclick='search_preport();'></input>
 						&nbsp;&nbsp;&nbsp;
-						<span id='stock_report_progress_spinner'  style='display:none;'>
-							<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
+						<span id='preport_progress_spinner'  style='display:none;'>
+							<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SEARCHING']); ?>
 						</span>
 					</td>
 				</tr>
-			</tbody>
-		</table>
-		</form>
-	</div>	
+			</table>
+			<br>
+			<div id='preport_list'>
+			</div>
+	</div>
 	
 	<div id='prevalance_aggregate_div' class='reports_subdiv' style='display:none'>
 		<b><?php echo LangUtil::$pageTerms['MENU_INFECTIONSUMMARY'];  ?></b>
