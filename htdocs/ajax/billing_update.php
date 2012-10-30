@@ -9,8 +9,11 @@ if($lab_config == null)
 	return;
 
 if ($_REQUEST['enable_billing']) {
-    enable_billing($lab_config_id);
+    enable_billing();
 } else {
-    disable_billing($lab_config_id);
+    disable_billing();
 }
+
+update_currency_name_in_lab_config_settings($_REQUEST['currency_name']);
+update_currency_delimiter_in_lab_config_settings($_REQUEST['currency_delimiter']);
 ?>

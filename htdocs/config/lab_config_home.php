@@ -1374,11 +1374,13 @@ function right_load_1(option_num, div_id)
                                         ?>
                                         <input type="checkbox" value="enable_billing" name="enable_billing" <?php echo $checkbox ?>/><?php echo "Enable Billing"; ?>
                                         <br><br>
-                                        <?php echo "Currency name (symbol):"; ?>
-                                        <br><input type="radio" value="XAF-FCFA" name="currency" <?php echo get_selected_if_currency_is_used("XAF"); ?>/>XAF (FCFA)
-                                        <br><input type="radio" value="UGX-USh" name="currency" <?php echo get_selected_if_currency_is_used("UGX"); ?>/>UGX (USh)
-                                        <br><input type="radio" value="TZS-TZS" name="currency" <?php echo get_selected_if_currency_is_used("TZS"); ?>/>TZS (TZS)
-                                        <br><input type="radio" value="USD-$" name="currency" <?php echo get_selected_if_currency_is_used("USD"); ?>/>USD ($)
+                                        <?php echo "Currency Name:"; ?>
+                                        <input type="text" name="currency_name" value="<?php echo get_currency_type_from_lab_config_settings() ?>" />
+                                        <br><br>
+                                        <?php echo "Currency Delimiter:"; ?>
+                                        <input type="text" name="currency_delimiter" value="<?php echo get_currency_delimiter_from_lab_config_settings() ?>" size="1" maxlength="1" />
+                                        <br><br>
+                                        Currency will display as: 00<?php echo get_currency_delimiter_from_lab_config_settings(); ?>00 <?php echo get_currency_type_from_lab_config_settings() ?>
                                         </div>
                                         <br>
                                         <input type="button" value="Update" onclick="submit_billing_update()" />
