@@ -166,7 +166,7 @@ function fetch_specimen()
 		alert("Please enter a valid name.");
 		return;
 	}
-	var url = 'ajax/result_entry_patient.php';
+	var url = 'ajax/result_entry_patient_dyn.php';
 	$("#fetched_patient_entry").load(url, 
 		{a: specimen_id, t: attrib}, 
 		function() 

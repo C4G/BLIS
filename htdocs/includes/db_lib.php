@@ -5209,6 +5209,43 @@ function search_patients_by_id($q)
 	return $patient_list;
 }
 
+
+function search_patients_by_id_dyn($q, $cap, $counter)
+{
+	# Searches for patients with similar name
+	global $con;
+        $offset = $cap * ($counter - 1);
+	$q = mysql_real_escape_string($q, $con);
+	$query_string = 
+		"SELECT * FROM patient ".
+		"WHERE surr_id='$q' ORDER BY ts DESC LIMIT $offset,$cap";
+	$resultset = query_associative_all($query_string, $row_count);
+	$patient_list = array();
+	if(count($resultset) > 0)
+	{
+		foreach($resultset as $record)
+		{
+			$patient_list[] = Patient::getObject($record);
+		}
+	}
+	return $patient_list;
+}
+
+
+
+function search_patients_by_id_count($q)
+{
+	# Searches for patients with similar name
+	global $con;
+	$q = mysql_real_escape_string($q, $con);
+	$query_string = 
+		"SELECT count(*) as val FROM patient ".
+		"WHERE surr_id LIKE '%$q%'";
+	$resultset = query_associative_one($query_string);
+	return $resultset['val'];
+}
+
+
 function search_patients_by_name($q)
 {
 	# Searches for patients with similar name
@@ -5251,6 +5288,8 @@ function search_patients_by_name_dyn($q, $cap, $counter)
 	return $patient_list;
 }
 
+
+
 function search_patients_by_name_count($q)
 {
 	# Searches for patients with similar name
@@ -5284,6 +5323,42 @@ function search_patients_by_addlid($q)
 	return $patient_list;
 }
 
+
+function search_patients_by_addlid_dyn($q, $cap, $counter)
+{
+	# Searches for patients with similar name
+	global $con;
+        $offset = $cap * ($counter - 1);
+	$q = mysql_real_escape_string($q, $con);
+	$query_string = 
+		"SELECT * FROM patient ".
+		"WHERE addl_id LIKE '%$q%' ORDER BY addl_id ASC LIMIT $offset,$cap";
+	$resultset = query_associative_all($query_string, $row_count);
+	$patient_list = array();
+	if(count($resultset) > 0)
+	{
+		foreach($resultset as $record)
+		{
+			$patient_list[] = Patient::getObject($record);
+		}
+	}
+	return $patient_list;
+}
+
+
+
+function search_patients_by_addlid_count($q)
+{
+	# Searches for patients with similar name
+	global $con;
+	$q = mysql_real_escape_string($q, $con);
+	$query_string = 
+		"SELECT count(*) as val FROM patient ".
+		"WHERE addl_id LIKE '%$q%'";
+	$resultset = query_associative_one($query_string);
+	return $resultset['val'];
+}
+
 function search_patients_by_dailynum($q)
 {
 	global $con;
@@ -5301,6 +5376,41 @@ function search_patients_by_dailynum($q)
 	}
 	return $patient_list;
 }
+
+
+function search_patients_by_dailynum_dyn($q, $cap, $counter)
+{
+	# Searches for patients with similar name
+	global $con;
+        $offset = $cap * ($counter - 1);
+	$q = mysql_real_escape_string($q, $con);
+	$query_string = 
+		"SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' ORDER BY date_collected DESC LIMIT $offset,$cap";
+	$resultset = query_associative_all($query_string, $row_count);
+        $patient_list = array();
+	if(count($resultset) > 0)
+	{
+		foreach($resultset as $record)
+		{
+			$patient_list[] = Patient::getById($record['patient_id']);
+		}
+	}
+	return $patient_list;
+}
+
+
+
+function search_patients_by_dailynum_count($q)
+{
+	# Searches for patients with similar name
+	global $con;
+	$q = mysql_real_escape_string($q, $con);
+	$query_string = 
+		"SELECT count(DISTINCT patient_id) as val FROM specimen WHERE daily_num LIKE '%$q'";
+	$resultset = query_associative_one($query_string);
+	return $resultset['val'];
+}
+
 
 function search_specimens_by_id($q)
 {
@@ -5321,6 +5431,8 @@ function search_specimens_by_id($q)
 	}
 	return $specimen_list;
 }
+
+
 
 function search_specimens_by_addlid($q)
 {

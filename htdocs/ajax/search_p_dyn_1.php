@@ -331,15 +331,7 @@ $patient_list = array();
 if($a == 0)
 {
 	# Fetch by patient ID
-    if($dynamic_fetch == 0)
-        {
 	$patient_list = search_patients_by_id($q);
-        }
-        else
-        {
-            $patient_list = search_patients_by_id_dyn($q, $result_cap, $result_counter);
-        }
-        
 }
 else if($a == 1)
 {
@@ -363,26 +355,12 @@ else if($a == 1)
 else if($a == 2)
 {
 	# Fetch by additional ID
-     if($dynamic_fetch == 0)
-        {
 	$patient_list = search_patients_by_addlid($q);
-        }
-        else
-        {
-            $patient_list = search_patients_by_addlid_dyn($q, $result_cap, $result_counter);
-        }
 }
 else if($a == 3)
 {
 	# Fetch by daily number
-    if($dynamic_fetch == 0)
-        {
 	$patient_list = search_patients_by_dailynum("-".$q);
-        }
-        else
-        {
-            $patient_list = search_patients_by_dailynum_dyn("-".$q, $result_cap, $result_counter);
-        }
 }
 if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null) )
 {
@@ -623,19 +601,19 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
     <?php 
         if(isset($_REQUEST['l']))
         { 
-            $next_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter+1); 
+            $next_link = "ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter+1); 
         }
         else
         {
-            $next_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&result_cap=".$result_cap."&result_counter=".($result_counter+1);             
+            $next_link = "ajax/patent_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&result_cap=".$result_cap."&result_counter=".($result_counter+1);             
         }
         if(isset($_REQUEST['l']))
         { 
-            $prev_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1); 
+            $prev_link = "ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1); 
         }
         else
         {
-            $prev_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1);             
+            $prev_link = "ajax/patent_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1);             
         }
     ?>
 <div class="prev_link">                       
