@@ -63,7 +63,7 @@ function patient_search()
 		return;
 	}
 	$('#patient_search_spinner').show();
-	var url = 'ajax/search_p.php';
+	var url = 'ajax/search_p_dyn.php';
 	$("#patient_search_results").load(url, 
 		{q: patient_id, a: search_attrib }, 
 		function()
