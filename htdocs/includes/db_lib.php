@@ -10903,13 +10903,12 @@ function get_all_tests_for_patient_and_date_range($patient_id, $small_date, $lar
 {
     $lab_config_id = $_SESSION['lab_config_id'];
     
-    $large_date = date("Y-m-d H:i:s", strtotime($large_date));
+    $large_date = date("Y-m-d H:i:s", strtotime($large_date) + 86400); // Gives us a range from the day we want to the next day.
     $small_date = date("Y-m-d H:i:s", strtotime($small_date));
     
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
     
     $query_string = "SELECT DISTINCT test_id, ts FROM test WHERE specimen_id IN (SELECT specimen_id FROM specimen WHERE patient_id=$patient_id) AND ts<='$large_date' AND ts>='$small_date'";
-    
     $result = query_associative_all($query_string, $_count);
     
     DbUtil::switchRestore($saved_db);
