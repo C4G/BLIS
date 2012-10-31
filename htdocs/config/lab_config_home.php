@@ -65,6 +65,16 @@ $script_elems->enableJQueryForm();
 	</ul>
 </div>
 
+<div id='Billing_config' class='right_pane' style='display:none;margin-left:10px;'>
+    <u>This has the following options</u>
+    <ul>
+        <li>Enable Billing: Toggles whether or not your lab uses the billing engine.</li>
+        <li>Currency Name: Denotes what name will be used when printing monetary amounts in the billing engine.</li>
+        <li>Currency Delimiter: Denotes what is used to separate 'dollars' from 
+            'cents' when printing monetary amounts in the billing engine.  For example, the '.' in 10.50</li>
+    </ul>
+</div>
+
 <div id='IR_rc' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
 			<li><?php echo LangUtil::$pageTerms['TIPS_INFECTIONREPORT']; ?></li>
@@ -789,8 +799,6 @@ function checkandsubmit_st_types()
 
 function submit_billing_update()
 {
-        //Do we need to validate here?  Seems that there's only two possibilities...
-        //Maybe if someone spoofs a post in the url...
         //Submit stuff to the db here.
         $('#billing_progress').show();
 	$('#billing_form').ajaxSubmit({success:function(){
@@ -1358,7 +1366,7 @@ function right_load_1(option_num, div_id)
                                 
                                 <div class='right_pane' id='billing_div' style='display:none;margin-left:10px;'>
                                          
-                                    <p style="text-align: right;"><a rel='facebox' href='#Tests_config'>Page Help</a></p>
+                                    <p style="text-align: right;"><a rel='facebox' href='#Billing_config'>Page Help</a></p>
                                     <div id='billing_msg' class='clean-orange' style='display:none;width:350px;'>
                                     </div>
                                     <form id='billing_form' name='billing_form' action='ajax/billing_update.php' method='post'>
