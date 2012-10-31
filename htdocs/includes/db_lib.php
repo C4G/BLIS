@@ -10987,6 +10987,9 @@ function format_number_to_money($number)
     
     $cents_as_whole_number = get_cents_as_whole_number($cents);
     
+    if ($cents_as_whole_number < 10)
+        $cents_as_whole_number = "0" . strval($cents_as_whole_number);
+    
     return $dollars . get_currency_delimiter_from_lab_config_settings() . $cents_as_whole_number . " " . get_currency_type_from_lab_config_settings();
 }
 

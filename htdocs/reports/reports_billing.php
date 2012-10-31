@@ -790,13 +790,13 @@ if(count($billing_info['names']) != 0)
     <tr>
         <td><?php echo $billing_info['dates'][$i] ?></td>
         <td><?php echo $billing_info['names'][$i] ?></td>
-        <td><?php echo "$" . $billing_info['costs'][$i] ?></td>
+        <td><?php echo format_number_to_money($billing_info['costs'][$i]) ?></td>
     </tr>
         <?php } ?>
     <tr>
         <td></td>
         <td>BILL TOTAL</td>
-        <td><?php echo "$" . number_format($billing_info['total'], 2) ?></td>
+        <td><?php echo format_number_to_money($billing_info['total']) ?></td>
     </tr>
 </table>
     <?php
