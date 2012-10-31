@@ -10980,6 +10980,21 @@ function get_test_type_id_from_test_id($test_id)
  * Billing Functions
  ***************************/
 
+function format_number_to_money($number)
+{
+    $dollars = floor($number);
+    $cents = $number - $dollars;
+    
+    $cents_as_whole_number = get_cents_as_whole_number($cents);
+    
+    return $dollars . get_currency_delimiter_from_lab_config_settings() . $cents_as_whole_number . " " . get_currency_type_from_lab_config_settings();
+}
+
+function get_cents_as_whole_number($cents)
+{
+    return $cents * (pow(10, strlen($cents) - 2));
+}
+
 function insert_lab_config_settings_billing($enabled, $currency_name, $currency_delimiter)
 {
     $id = 3; // ID for billing settings

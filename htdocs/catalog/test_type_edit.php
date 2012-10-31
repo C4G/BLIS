@@ -47,6 +47,8 @@ $page_elems->getSideTip("Tips", $tips_string);
 $test_type = get_test_type_by_id($_REQUEST['tid']);
 $lab_config_id = $_SESSION['lab_config_id'];
 $costToPatient = get_latest_cost_of_test_type($test_type->testTypeId);
+$cost_to_patient_dollars = floor($costToPatient);
+$cost_to_patient_cents = $costToPatient - $cost_to_patient_dollars;
 
 if($test_type == null)
 {
@@ -191,12 +193,6 @@ function add_autocomplete_field(mrow_num)
 
 function update_ttype()
 {
-        var money_pattern = new RegExp("^[0-9]{1,3}\.[0-9]{2}$");
-        if(money_pattern.test($('#costToPatient').attr("value").trim()) == false)
-        {
-                alert("<?php echo 'costToPatient is not formatted properly.'; ?>");
-                return;
-        }
 	if($('#name').attr("value").trim() == "")
 	{
 		alert("<?php echo LangUtil::$pageTerms['TIPS_MISSING_TESTNAME']; ?>");
@@ -1285,8 +1281,11 @@ function isInputCurrency(evt) {
                         
                         <tr valign='top' <?php is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none;'") ?>>
                                 <td>Cost to Patient</td>
-                                <input type="hidden" name='costToPatient_old' value='<?php echo $costToPatient; ?>' />
-                                <td><input id='costToPatient' name='costToPatient' type='number' size='10' maxLength='10' value='<?php echo $costToPatient; ?>' />
+                                <input type="hidden" name='cost_to_patient_dollars_old' value='<?php echo $cost_to_patient_dollars; ?>' />
+                                <input type="hidden" name='cost_to_patient_cents_old' value='<?php echo $cost_to_patient_cents; ?>' />
+                                <td><input id='cost_to_patient_dollars' name='cost_to_patient_dollars' type='number' size='4' maxLength='4' onkeypress="return isInputNumber(event);" value='<?php echo $cost_to_patient_dollars; ?>' />
+                                    <?php echo get_currency_delimiter_from_lab_config_settings(); ?>
+                                    <input id='cost_to_patient_dollars' name='cost_to_patient_cents' type='number' size='2' maxLength='2' onkeypress="return isInputNumber(event);" value='<?php echo get_cents_as_whole_number($cost_to_patient_cents); ?>' />
                                     <?php echo get_currency_type_from_lab_config_settings(); ?>
                                 </td>
                         </tr>

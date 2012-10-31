@@ -45,7 +45,10 @@ $updated_entry->prevalenceThreshold=$_REQUEST['prevalenceThreshold'];
 $updated_entry->targetTat=$_REQUEST['targetTat'];
 $updated_entry->testCategoryId = $cat_code;
 
-$newCostToPatient = $_REQUEST['costToPatient'];
+$cost_cents_initial = $_REQUEST['cost_to_patient_cents'];
+$cost_cents = $cost_cents_initial / pow(10, strlen($cost_cents_initial));
+
+$newCostToPatient = $_REQUEST['cost_to_patient_dollars'] + $cost_cents;
 $oldCostToPatient = $_REQUEST['costToPatient_old'];
 
 # Update tests measures and ranges
