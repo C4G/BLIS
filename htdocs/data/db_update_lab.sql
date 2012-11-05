@@ -558,3 +558,9 @@ CREATE TABLE IF NOT EXISTS `worksheet_custom_userfield` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+CREATE TABLE `test_type_costs` (
+  `earliest_date_valid` timestamp NOT NULL,
+  `test_type_id` int(11) NOT NULL,
+  `amount` decimal(10, 2) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+

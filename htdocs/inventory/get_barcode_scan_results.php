@@ -7,6 +7,9 @@ include("barcode/barcode_lib.php");
 LangUtil::setPageId("stocks");
 
 $code = explode("$", $_REQUEST['code']);
+$uiinfo = "code=".$_REQUEST['code'];
+putUILog('get_barcode_scan_results', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 $lid = $_SESSION['$lab_config_id'];
 //echo $code[0]."--".$code[1].'--'.$code[2];
 $r_id = $code[0];

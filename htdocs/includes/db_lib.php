@@ -5240,7 +5240,7 @@ function search_patients_by_id_count($q)
 	$q = mysql_real_escape_string($q, $con);
 	$query_string = 
 		"SELECT count(*) as val FROM patient ".
-		"WHERE surr_id LIKE '%$q%'";
+		"WHERE surr_id LIKE '$q'";
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
@@ -11562,7 +11562,7 @@ class Inventory
 }
 
 /*****************************************
-********** Update Process ****************
+********** New Update Process ****************
 *****************************************/
 function checkVersionDataTable()
 {
@@ -11610,6 +11610,26 @@ function checkVersionDataEntry($vers)
    return $code; 
 }
 
+function checkVersionDataEntryExists($vers)
+{
+   $saved_db = DbUtil::switchToGlobal();
+		
+   $query = "SELECT * FROM version_data WHERE version = '$vers' LIMIT 1";
+   $record = query_associative_one($query);
+   if(!$record)
+   {
+       $code = 0;   #version entry doesnt exist
+   }
+   else
+   {
+       $code = 1;  #version entry exists implying db update has been completed and update procedure incomplete
+   }
+   
+   DbUtil::switchRestore($saved_db);
+   return $code; 
+}
+
+
 function setVersionDataFlag($fl, $vers)
 {
    $code = 0;
@@ -11642,6 +11662,21 @@ function setVersionDataFlag($fl, $vers)
    }
    DbUtil::switchRestore($saved_db);
    return $code; 
+}
+function insertVersionDataEntry()
+{
+   
+   $saved_db = DbUtil::switchToGlobal();
+   global $VERSION;
+   $vers = $VERSION;
+   $status = 1;
+   $uid = $_SESSION['user_id'];
+   $query_string = "INSERT INTO version_data (version, status, user_id, i_ts) ".
+                            "VALUES ('$vers', $status, $uid, NOW())";
+   query_insert_one($query_string);
+   
+   
+   DbUtil::switchRestore($saved_db);
 }
 
 

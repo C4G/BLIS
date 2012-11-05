@@ -1187,10 +1187,10 @@ function right_load_1(option_num, div_id)
 				?>
 				
 				<a href='export_config?id=<?php echo $_REQUEST['id']; ?>' target='_blank'><?php echo LangUtil::$pageTerms['MENU_EXPORTCONFIG']; ?></a><br><br></li>
-			
+                                <div id ="update_link_old" style="display:none;">
 				<a id='option39' class='menu_option' href="javascript:right_load(39, 'blis_update_div');">Update to New Version</a>
 				<br><br>
-				
+				</div>
 				<?php /* Enable for Data Merging
 				<a rel='facebox' id='option18' class='menu_option' href="updateCountryDbAtLocalUI.php">Update National Database</a>
 				</ul>

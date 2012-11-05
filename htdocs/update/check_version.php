@@ -7,6 +7,6 @@ include("../includes/user_lib.php");
 LangUtil::setPageId("update");
 global $VERSION;
 $vers = $VERSION;
-$check = checkVersionDataEntry($vers);
+$check = checkVersionDataEntryExists($vers);
 echo $check;
 ?>

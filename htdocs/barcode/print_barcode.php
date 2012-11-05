@@ -9,6 +9,10 @@ $bar_height = 40;
 $font_size = 11;
 
 $gencode = $_REQUEST['gencode'];
+
+$uiinfo = "code=".$_REQUEST['gencode'];
+putUILog('print_barcode', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 ?>
 <style>
     img {

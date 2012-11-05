@@ -14,6 +14,9 @@ $dynamic = 1;
 $search_settings = get_lab_config_settings_search();
 $rcap = $search_settings['results_per_page'];
 $lab_config = LabConfig::getById($_SESSION['lab_config_id']);
+$uiinfo = "op=".$_REQUEST['t']."&qr=".$_REQUEST['a'];
+putUILog('result_entry_patient_dyn', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+
 ?>
 <style type="text/css">
     .prev_link{

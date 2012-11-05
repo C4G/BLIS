@@ -281,7 +281,7 @@ $q = str_ireplace("<script>", "&lt;script&gt;", $name);
 $q = strip_tags($q);
 */
 $uiinfo = "op=".$_REQUEST['a']."&qr=".$_REQUEST['q'];
-putUILog('search_p', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+putUILog('search_p_dyn', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 ?>
 <div id="rcap" style="display: none;"><?php echo $rcap; ?></div>

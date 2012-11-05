@@ -9,7 +9,7 @@ $code_type = $barcodeSettings['type']; //"code39";
 $bar_width = $barcodeSettings['width']; //2;
 $bar_height = $barcodeSettings['height']; //40;
 $font_size = $barcodeSettings['textsize']; //11;
-
+putUILog('generate_barcode', '-', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 ?>
 <style>
     .remove {

@@ -19,21 +19,16 @@ LangUtil::setPageId("update");
 $user = get_user_by_id($_SESSION['user_id']);
 
 if ( is_super_admin($user) || is_country_dir($user) ) {
-	$labConfigList = get_lab_configs($user->userId);
-	foreach($labConfigList as $labConfig) {
-		$labConfigId = $labConfig->id;
-		runUpdate($labConfigId);
-	}
+	//$labConfigList = get_lab_configs($user->userId);
+	//foreach($labConfigList as $labConfig) {
+		//$labConfigId = $labConfig->id;
+		//runUpdate($labConfigId);
+//          }
 	//runGlobalUpdate();
 }
 else {
-	$labConfigId = $_SESSION['lab_config_id'];
-	runUpdate($labConfigId);
-	//runGlobalUpdate();
-}
-
-function runUpdate($lab_config_id) {
-        
+	$lab_config_id = $_SESSION['lab_config_id'];
+	//runUpdate($labConfigId);
         # revamp update
         $db_name = "blis_revamp";
         $ufile = "db_update_revamp";
@@ -43,7 +38,27 @@ function runUpdate($lab_config_id) {
         $db_name = "blis_".$lab_config_id;
         $ufile = "db_update_lab";
         blis_db_update($lab_config_id, $db_name, $ufile);
+        
+        insertVersionDataEntry();
+	//runGlobalUpdate();
 }
+/*
+function runUpdate($lab_config_id) {
+        
+        # revamp update
+        $db_name = "blis_revamp";
+        $ufile = "db_update_revamp_test";
+        blis_db_update($lab_config_id, $db_name, $ufile);
+        
+        # lab update
+        $db_name = "blis_".$lab_config_id;
+        $ufile = "db_update_lab_test";
+        blis_db_update($lab_config_id, $db_name, $ufile);
+        
+        insertVersionDataEntry();
+}*/
+
+//echo "Updated";
 
 echo "true";
 ?>

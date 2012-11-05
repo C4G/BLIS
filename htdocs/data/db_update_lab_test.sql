@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS `mmmm` (
+  `id` int(11) NOT NULL auto_increment,
+  `r_id` int(11) NOT NULL default '0',
+  `vr_id` varchar(45) collate latin1_general_ci NOT NULL default '0',
+  `i1` int(11) NOT NULL default '0',
+  `i2` int(11) NOT NULL default '0',
+  `i3` int(11) NOT NULL default '0',
+  `i4` int(11) NOT NULL default '0',
+  `i5` int(11) NOT NULL default '0',
+  `v1` varchar(500) collate latin1_general_ci NOT NULL default '0',
+  `v2` varchar(500) collate latin1_general_ci NOT NULL default '0',
+  `v3` varchar(500) collate latin1_general_ci NOT NULL default '0',
+  `v4` varchar(500) collate latin1_general_ci NOT NULL default '0',
+  `v5` varchar(500) collate latin1_general_ci NOT NULL default '0',
+  `dt1` datetime default NULL,
+  `dt2` datetime default NULL,
+  `dt3` datetime default NULL,
+  `d1` date default NULL,
+  `d2` date default NULL,
+  `d3` date default NULL,
+  `ts` timestamp NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;

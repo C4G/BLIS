@@ -132,3 +132,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   `lang_id` varchar(45) NOT NULL,
   UNIQUE KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `version_data` (
+  `id` int(11) NOT NULL auto_increment,
+  `version` varchar(45) collate latin1_general_ci NOT NULL,
+  `status` int(11) default NULL,
+  `user_id` int(11) default NULL,
+  `remarks` varchar(250) collate latin1_general_ci default NULL,
+  `i_ts` timestamp NULL default NULL,
+  `u_ts` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+

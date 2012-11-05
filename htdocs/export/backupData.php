@@ -222,7 +222,7 @@ if( file_exists($log_file1) ) {
 	else 
 		$logFile = $log_file1;
 	copy($logFile, $copyDestination);
-	unlink($logFile);
+	//unlink($logFile);
 }
 
 if( file_exists($log_file2) ) {
@@ -244,7 +244,7 @@ if( file_exists($log_file2) ) {
 	else 
 		$logFile = $log_file2;
 	copy($logFile, $copyDestination);
-	unlink($logFile);
+	//unlink($logFile);
 }
 if( file_exists($log_file3) ) {
 	$copyDestination = $destination."log_".$lab_config_id."_revamp_updates.sql";
@@ -265,10 +265,49 @@ if( file_exists($log_file3) ) {
 	else 
 		$logFile = $log_file3;
 	copy($logFile, $copyDestination);
-	unlink($logFile);
+	//unlink($logFile);
 
 }
 
+
+$versions = array();
+$vstr = "2-2,2-3";
+$versions = explode(',', $vstr);
+$uilog_files = array();
+
+foreach($versions as $vr)
+{
+    $uilog_files[] = "../../local/UILog_".$vr.".csv";
+}
+
+$i = 0;
+
+foreach($uilog_files as $log_file3)
+{
+if( file_exists($log_file3) ) {
+        $vers = $versions[$i];
+	$copyDestination = $destination."UILog_".$vers.".csv";
+	if($backupType == "encrypted") { 
+		$fileHandle = fopen($log_file3, "r");
+		$logFile = $log_file1.".enc";
+		$fileWriteHandle = fopen($logFile, "w");
+
+		while(!feof($fileHandle)) {
+			$line = fgets($fileHandle);
+			$return = openssl_public_encrypt($line, $encLine, $publicKey);
+			fwrite($fileWriteHandle, $encLine);
+		}
+		fclose($fileWriteHandle);
+		fclose($fileHandle);
+		$copyDestination = $copyDestination.".enc";
+	}
+	else 
+		$logFile = $log_file3;
+	copy($logFile, $copyDestination);
+	//unlink($logFile);
+}
+$i++;
+}
 # All okay
 $str = "Backup folder created as ".$toScreenDestination." under main BLIS directory.<br>Please copy this folder to your disk as backup";
 echo $str;
