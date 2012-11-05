@@ -10903,13 +10903,12 @@ function get_all_tests_for_patient_and_date_range($patient_id, $small_date, $lar
 {
     $lab_config_id = $_SESSION['lab_config_id'];
     
-    $large_date = date("Y-m-d H:i:s", strtotime($large_date));
+    $large_date = date("Y-m-d H:i:s", strtotime($large_date) + 86400); // Gives us a range from the day we want to the next day.
     $small_date = date("Y-m-d H:i:s", strtotime($small_date));
     
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
     
     $query_string = "SELECT DISTINCT test_id, ts FROM test WHERE specimen_id IN (SELECT specimen_id FROM specimen WHERE patient_id=$patient_id) AND ts<='$large_date' AND ts>='$small_date'";
-    
     $result = query_associative_all($query_string, $_count);
     
     DbUtil::switchRestore($saved_db);
@@ -10980,7 +10979,25 @@ function get_test_type_id_from_test_id($test_id)
  * Billing Functions
  ***************************/
 
-function insert_lab_config_settings_billing($enabled, $currency_name, $currency_symbol)
+function format_number_to_money($number)
+{
+    $dollars = floor($number);
+    $cents = $number - $dollars;
+    
+    $cents_as_whole_number = get_cents_as_whole_number($cents);
+    
+    if ($cents_as_whole_number < 10)
+        $cents_as_whole_number = "0" . strval($cents_as_whole_number);
+    
+    return $dollars . get_currency_delimiter_from_lab_config_settings() . $cents_as_whole_number . " " . get_currency_type_from_lab_config_settings();
+}
+
+function get_cents_as_whole_number($cents)
+{
+    return $cents * (pow(10, strlen($cents) - 2));
+}
+
+function insert_lab_config_settings_billing($enabled, $currency_name, $currency_delimiter)
 {
     $id = 3; // ID for billing settings
     
@@ -10995,8 +11012,9 @@ function insert_lab_config_settings_billing($enabled, $currency_name, $currency_
         return 0;
     
     $remarks = "Billing Settings";
-    $query_string = "INSERT INTO lab_config_settings (id, flag1, setting1, remarks) ".
-                            "VALUES ($id, $enabled, $currency_name+$currency_symbol, '$remarks')";
+    
+    $query_string = "INSERT INTO lab_config_settings (id, flag1, setting1, setting2, remarks) ".
+                            "VALUES ($id, $enabled, '$currency_name', '$currency_delimiter', '$remarks')";
     query_insert_one($query_string);
             
     DbUtil::switchRestore($saved_db);
@@ -11006,7 +11024,7 @@ function insert_lab_config_settings_billing($enabled, $currency_name, $currency_
 
 function get_lab_config_settings_billing()
 {
-    insert_lab_config_settings_billing(1, "USD", "$");
+    insert_lab_config_settings_billing(1, "USD", ".");
     $id = 3; // ID for billing settings
     $lab_config_id = $_SESSION['lab_config_id'];
             
@@ -11022,16 +11040,19 @@ function get_lab_config_settings_billing()
     // barcode settings = type, width, height, font_size
     
     $retval['enabled'] = $recordset['flag1'];
-    $setting_1 = explode("+", $recordset['setting1']);
-    $retval['currency_name'] = $setting_1[0];
-    $retval['currency_symbol'] = $setting_1[1];
+    $retval['currency_name'] = $recordset['setting1'];
+    $retval['currency_delimiter'] = $recordset['setting2'];
     
     return $retval;
 }
 
-function update_lab_config_settings_billing($enable, $currency_name, $currency_symbol)
+function update_lab_config_settings_billing($new_settings)
 {
-    insert_lab_config_settings_billing(1, "USD", "$");
+    $enable = $new_settings['enabled'];
+    $currency_name = $new_settings['currency_name'];
+    $currency_delimiter = $new_settings['currency_delimiter'];
+    
+    insert_lab_config_settings_billing(1, "USD", ".");
     $id = 3; // ID for billing settings
     $lab_config_id = $_SESSION['lab_config_id'];
             
@@ -11040,8 +11061,8 @@ function update_lab_config_settings_billing($enable, $currency_name, $currency_s
     if($enable != 0)
         $enable = 1;
         
-    $query_string = "UPDATE lab_config_settings SET flag1 = $enable, setting1 = '$currency_name" . "+" . "$currency_symbol' WHERE id = $id";
-            query_update($query_string);
+    $query_string = "UPDATE lab_config_settings SET flag1=$enable, setting1='$currency_name', setting2='$currency_delimiter' WHERE id=$id";
+    query_update($query_string);
             
     DbUtil::switchRestore($saved_db);
     
@@ -11055,11 +11076,31 @@ function get_currency_type_from_lab_config_settings()
     return $settings['currency_name'];
 }
 
-function update_currency_type_in_lab_config_settings($new_currency)
+function get_currency_delimiter_from_lab_config_settings()
 {
     $settings = get_lab_config_settings_billing();
     
-    update_lab_config_settings_billing($settings['enable'], $new_currency);
+    return $settings['currency_delimiter'];
+}
+
+function update_currency_name_in_lab_config_settings($new_currency)
+{
+    $settings = get_lab_config_settings_billing();
+    
+    $settings['currency_name'] = $new_currency;
+   
+    update_lab_config_settings_billing($settings);
+    
+    return 1;
+}
+
+function update_currency_delimiter_in_lab_config_settings($new_delimiter)
+{
+    $settings = get_lab_config_settings_billing();
+    
+    $settings['currency_delimiter'] = $new_delimiter;
+    
+    update_lab_config_settings_billing($settings);
     
     return 1;
 }
@@ -11078,7 +11119,9 @@ function get_selected_if_currency_is_used($currency)
 function enable_billing()
 {
     $current_state = get_lab_config_settings_billing();
-    update_lab_config_settings_billing(1, $current_state['currency_name']);
+    $current_state['enabled'] = 1;
+    
+    update_lab_config_settings_billing($current_state);
     
     return 1;
 }
@@ -11086,7 +11129,9 @@ function enable_billing()
 function disable_billing()
 {
     $current_state = get_lab_config_settings_billing();
-    update_lab_config_settings_billing(0, $current_state['currency_name']);
+    $current_state['enabled'] = 0;
+    
+    update_lab_config_settings_billing($current_state);
     
     return 1;
 }
@@ -11678,7 +11723,4 @@ function insertVersionDataEntry()
    
    DbUtil::switchRestore($saved_db);
 }
-
-
-
 ?>

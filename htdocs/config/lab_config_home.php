@@ -65,6 +65,16 @@ $script_elems->enableJQueryForm();
 	</ul>
 </div>
 
+<div id='Billing_config' class='right_pane' style='display:none;margin-left:10px;'>
+    <u>This has the following options</u>
+    <ul>
+        <li>Enable Billing: Toggles whether or not your lab uses the billing engine.</li>
+        <li>Currency Name: Denotes what name will be used when printing monetary amounts in the billing engine.</li>
+        <li>Currency Delimiter: Denotes what is used to separate 'dollars' from 
+            'cents' when printing monetary amounts in the billing engine.  For example, the '.' in 10.50</li>
+    </ul>
+</div>
+
 <div id='IR_rc' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
 			<li><?php echo LangUtil::$pageTerms['TIPS_INFECTIONREPORT']; ?></li>
@@ -789,8 +799,6 @@ function checkandsubmit_st_types()
 
 function submit_billing_update()
 {
-        //Do we need to validate here?  Seems that there's only two possibilities...
-        //Maybe if someone spoofs a post in the url...
         //Submit stuff to the db here.
         $('#billing_progress').show();
 	$('#billing_form').ajaxSubmit({success:function(){
@@ -1187,7 +1195,7 @@ function right_load_1(option_num, div_id)
 				?>
 				
 				<a href='export_config?id=<?php echo $_REQUEST['id']; ?>' target='_blank'><?php echo LangUtil::$pageTerms['MENU_EXPORTCONFIG']; ?></a><br><br></li>
-                                <div id ="update_link_old" style="display:none;">
+                                <div id="old_update_div" style="display:none;">
 				<a id='option39' class='menu_option' href="javascript:right_load(39, 'blis_update_div');">Update to New Version</a>
 				<br><br>
 				</div>
@@ -1358,7 +1366,7 @@ function right_load_1(option_num, div_id)
                                 
                                 <div class='right_pane' id='billing_div' style='display:none;margin-left:10px;'>
                                          
-                                    <p style="text-align: right;"><a rel='facebox' href='#Tests_config'>Page Help</a></p>
+                                    <p style="text-align: right;"><a rel='facebox' href='#Billing_config'>Page Help</a></p>
                                     <div id='billing_msg' class='clean-orange' style='display:none;width:350px;'>
                                     </div>
                                     <form id='billing_form' name='billing_form' action='ajax/billing_update.php' method='post'>
@@ -1374,11 +1382,13 @@ function right_load_1(option_num, div_id)
                                         ?>
                                         <input type="checkbox" value="enable_billing" name="enable_billing" <?php echo $checkbox ?>/><?php echo "Enable Billing"; ?>
                                         <br><br>
-                                        <?php echo "Currency name (symbol):"; ?>
-                                        <br><input type="radio" value="XAF-FCFA" name="currency" <?php echo get_selected_if_currency_is_used("XAF"); ?>/>XAF (FCFA)
-                                        <br><input type="radio" value="UGX-USh" name="currency" <?php echo get_selected_if_currency_is_used("UGX"); ?>/>UGX (USh)
-                                        <br><input type="radio" value="TZS-TZS" name="currency" <?php echo get_selected_if_currency_is_used("TZS"); ?>/>TZS (TZS)
-                                        <br><input type="radio" value="USD-$" name="currency" <?php echo get_selected_if_currency_is_used("USD"); ?>/>USD ($)
+                                        <?php echo "Currency Name:"; ?>
+                                        <input type="text" name="currency_name" value="<?php echo get_currency_type_from_lab_config_settings() ?>" />
+                                        <br><br>
+                                        <?php echo "Currency Delimiter:"; ?>
+                                        <input type="text" name="currency_delimiter" value="<?php echo get_currency_delimiter_from_lab_config_settings() ?>" size="1" maxlength="1" />
+                                        <br><br>
+                                        Currency will display as: 00<?php echo get_currency_delimiter_from_lab_config_settings(); ?>00 <?php echo get_currency_type_from_lab_config_settings() ?>
                                         </div>
                                         <br>
                                         <input type="button" value="Update" onclick="submit_billing_update()" />
