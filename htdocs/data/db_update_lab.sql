@@ -558,9 +558,36 @@ CREATE TABLE IF NOT EXISTS `worksheet_custom_userfield` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE `test_type_costs` (
+CREATE TABLE IF NOT EXISTS `test_type_costs` (
   `earliest_date_valid` timestamp NOT NULL,
   `test_type_id` int(11) NOT NULL,
   `amount` decimal(10, 2) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
+CREATE TABLE IF NOT EXISTS `lab_config_settings` (
+  `id` int(11) NOT NULL,
+  `flag1` int(11) default NULL,
+  `flag2` int(11) default NULL,
+  `flag3` int(11) default NULL,
+  `flag4` int(11) default NULL,
+  `setting1` varchar(200) collate latin1_general_ci default NULL,
+  `setting2` varchar(200) collate latin1_general_ci default NULL,
+  `setting3` varchar(200) collate latin1_general_ci default NULL,
+  `setting4` varchar(200) collate latin1_general_ci default NULL,
+  `misc` varchar(500) collate latin1_general_ci default NULL,
+  `remarks` varchar(500) collate latin1_general_ci default NULL,
+  `ts` timestamp NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+CREATE TABLE IF NOT EXISTS `numeric_interpretation` (
+  `range_u` int(10) default NULL,
+  `range_l` int(10) default NULL,
+  `age_u` int(10) default NULL,
+  `age_l` int(10) default NULL,
+  `gender` varchar(40) default NULL,
+  `description` varchar(40) default NULL,
+  `measure_id` int(10) unsigned NOT NULL,
+  `id` int(10) NOT NULL auto_increment,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
