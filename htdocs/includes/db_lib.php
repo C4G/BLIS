@@ -5240,7 +5240,7 @@ function search_patients_by_id_count($q)
 	$q = mysql_real_escape_string($q, $con);
 	$query_string = 
 		"SELECT count(*) as val FROM patient ".
-		"WHERE surr_id LIKE '$q'";
+		"WHERE surr_id LIKE '%$q%'";
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
@@ -7076,7 +7076,7 @@ function update_specimen_type($updated_entry, $new_test_list)
 	DbUtil::switchRestore($saved_db);
 }
 
-function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat, $specimen_list = array())
+function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat, $cost, $specimen_list = array())
 {
 	global $con;
 	$test_name = mysql_real_escape_string($test_name, $con);
@@ -7084,6 +7084,7 @@ function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_p
 	$cat = mysql_real_escape_string($cat_code, $con);
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	$hide_patient_name = mysql_real_escape_string($hide_patient_name, $con);
+        $cost_to_patient = mysql_real_escape_string($cost, $con);
 	# Adds a new test type in DB with compatible specimens in 'specimen_list'
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$is_panel_num = 1;
@@ -7091,8 +7092,7 @@ function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_p
 	if($is_panel == false)
 	{
 		$is_panel_num = 0;
-	}
-        
+	}       
         if($prevalenceThreshold == "")
             $prevalenceThreshold = 70;
         
@@ -11607,7 +11607,7 @@ class Inventory
 }
 
 /*****************************************
-********** New Update Process ****************
+********** Update Process ****************
 *****************************************/
 function checkVersionDataTable()
 {
@@ -11655,26 +11655,6 @@ function checkVersionDataEntry($vers)
    return $code; 
 }
 
-function checkVersionDataEntryExists($vers)
-{
-   $saved_db = DbUtil::switchToGlobal();
-		
-   $query = "SELECT * FROM version_data WHERE version = '$vers' LIMIT 1";
-   $record = query_associative_one($query);
-   if(!$record)
-   {
-       $code = 0;   #version entry doesnt exist
-   }
-   else
-   {
-       $code = 1;  #version entry exists implying db update has been completed and update procedure incomplete
-   }
-   
-   DbUtil::switchRestore($saved_db);
-   return $code; 
-}
-
-
 function setVersionDataFlag($fl, $vers)
 {
    $code = 0;
@@ -11707,20 +11687,5 @@ function setVersionDataFlag($fl, $vers)
    }
    DbUtil::switchRestore($saved_db);
    return $code; 
-}
-function insertVersionDataEntry()
-{
-   
-   $saved_db = DbUtil::switchToGlobal();
-   global $VERSION;
-   $vers = $VERSION;
-   $status = 1;
-   $uid = $_SESSION['user_id'];
-   $query_string = "INSERT INTO version_data (version, status, user_id, i_ts) ".
-                            "VALUES ('$vers', $status, $uid, NOW())";
-   query_insert_one($query_string);
-   
-   
-   DbUtil::switchRestore($saved_db);
 }
 ?>

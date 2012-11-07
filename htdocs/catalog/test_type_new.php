@@ -760,6 +760,15 @@ function isInputNumber(evt) {
 		<td><input id='targetTat' name='targetTat' type='text' size='3' maxLength='3' onkeypress="return isInputNumber(event);" />
 		</td>
 	</tr>
+        <tr valign='top' <?php if (!is_billing_enabled($_SESSION['lab_config_id'])) {echo "style='display:none;'";} ?>>
+		<td>Cost To Patient</td>
+                <td>
+                    <input id='cost_to_patient_dollars' name='cost_to_patient_dollars' type='number' size='4' maxLength='4' onkeypress="return isInputNumber(event);" value='0' />
+                    <?php echo get_currency_delimiter_from_lab_config_settings(); ?>
+                    <input id='cost_to_patient_dollars' name='cost_to_patient_cents' type='number' size='2' maxLength='2' onkeypress="return isInputNumber(event);" value='00' />
+                    <?php echo get_currency_type_from_lab_config_settings(); ?>
+                </td>
+	</tr>        
 	<td>
 	</td>
 	<td>

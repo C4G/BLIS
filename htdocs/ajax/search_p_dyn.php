@@ -281,7 +281,7 @@ $q = str_ireplace("<script>", "&lt;script&gt;", $name);
 $q = strip_tags($q);
 */
 $uiinfo = "op=".$_REQUEST['a']."&qr=".$_REQUEST['q'];
-putUILog('search_p_dyn', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+putUILog('search_p', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 ?>
 <div id="rcap" style="display: none;"><?php echo $rcap; ?></div>
@@ -597,10 +597,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					<td>
 					<a href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'>Select Tests</a>
 										</td>
-                                       <td <?php //(is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none'")) ?> >
+                                        <td <?php (is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none'")) ?> >
                                        
-                                            <a  target='_blank' href=<?php echo $billing_url_string; ?>' title='Click to generate a bill for this patient'>Generate Bill</a>
-                                        </td>                                      
+                                            <a href=<?php echo $billing_url_string; ?>' title='Click to generate a bill for this patient'>Generate Bill</a>
+                                        </td>                                   
 					<td>					
 					<?php
 				}

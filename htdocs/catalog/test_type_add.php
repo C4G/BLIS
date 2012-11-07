@@ -15,6 +15,13 @@ $cat_code = $_REQUEST['cat_code'];
 $hide_patient_name = $_REQUEST['hidePatientName'];
 $prevalenceThreshold=$_REQUEST['prevalenceThreshold'];
 $targetTat=$_REQUEST['targetTat'];
+
+if (is_billing_enabled($_SESSION['lab_config_id'])) {
+    $cost_cents_initial = $_REQUEST['cost_to_patient_cents'];
+    $cost_cents = $cost_cents_initial / pow(10, strlen($cost_cents_initial));
+
+    $newCostToPatient = $_REQUEST['cost_to_patient_dollars'] + $cost_cents;
+}
 if($cat_code == -1)
 {
 	# Add new test category to catalog
@@ -286,12 +293,16 @@ $test_type_id = "";
 if(count($specimen_list) != 0)
 {
 	# Add entries to 'specimen_test' map table
-	  $test_type_id = add_test_type($test_name, $test_descr, $test_clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat, $specimen_list);
+	  $test_type_id = add_test_type($test_name, $test_descr, $test_clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat, $newCostToPatient, $specimen_list);
 }
 else
 {
 	# No specimens selected. Add test anyway
-	  $test_type_id = add_test_type($test_name, $test_descr, $test_clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat);
+	  $test_type_id = add_test_type($test_name, $test_descr, $test_clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat, $newCostToPatient);
+}
+
+if($newCostToPatient > 0 && is_billing_enabled($_SESSION['lab_config_id'])) { // If the cost is greater than 0, we go ahead and add the cost.  If not, there's no reason to make another sql call here.  It'll be done elsewhere.
+    instantiate_new_cost_of_test_type($newCostToPatient, $test_type_id);
 }
 
 enable_new_test($_SESSION['lab_config_id'], $test_type_id);
