@@ -10994,7 +10994,7 @@ function format_number_to_money($number)
 
 function get_cents_as_whole_number($cents)
 {
-    return $cents * (pow(10, strlen($cents) - 2));
+    return $cents * (pow(10, strlen($cents) - 1));
 }
 
 function insert_lab_config_settings_billing($enabled, $currency_name, $currency_delimiter)
