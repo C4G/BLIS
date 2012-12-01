@@ -293,12 +293,12 @@ $test_type_id = "";
 if(count($specimen_list) != 0)
 {
 	# Add entries to 'specimen_test' map table
-	  $test_type_id = add_test_type($test_name, $test_descr, $test_clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat, $specimen_list);
+	  $test_type_id = add_test_type($test_name, $test_descr, $test_clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat, $newCostToPatient, $specimen_list);
 }
 else
 {
 	# No specimens selected. Add test anyway
-	  $test_type_id = add_test_type($test_name, $test_descr, $test_clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat);
+	  $test_type_id = add_test_type($test_name, $test_descr, $test_clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat, $newCostToPatient);
 }
 
 if($newCostToPatient > 0 && is_billing_enabled($_SESSION['lab_config_id'])) { // If the cost is greater than 0, we go ahead and add the cost.  If not, there's no reason to make another sql call here.  It'll be done elsewhere.

@@ -597,7 +597,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					<td>
 					<a href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'>Select Tests</a>
 										</td>
-                                        <td <?php (is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none'")) ?> >
+                                       <td <?php //(is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none'")) ?> >
                                        
                                             <a  target='_blank' href=<?php echo $billing_url_string; ?>' title='Click to generate a bill for this patient'>Generate Bill</a>
                                         </td>                                      

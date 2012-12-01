@@ -46,7 +46,7 @@ $updated_entry->targetTat=$_REQUEST['targetTat'];
 $updated_entry->testCategoryId = $cat_code;
 
 $cost_cents_initial = $_REQUEST['cost_to_patient_cents'];
-$cost_cents = $cost_cents_initial / pow(10, strlen($cost_cents_initial));
+$cost_cents = get_cents_from_whole_number($cost_cents_initial);
 
 $newCostToPatient = $_REQUEST['cost_to_patient_dollars'] + $cost_cents;
 $oldCostToPatient = $_REQUEST['costToPatient_old'];
