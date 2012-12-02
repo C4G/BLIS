@@ -8,7 +8,9 @@
     //include("includes/header.php");
 include("../includes/db_lib.php");
 
-echo checkVersionDataTable();
+
+
+//echo checkVersionDataTable();
 //echo setVersionDataFlag(1, '2.2');
 //echo exec('scc.bat');
 /*

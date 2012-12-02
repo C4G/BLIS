@@ -11732,4 +11732,21 @@ function insertVersionDataEntry()
    DbUtil::switchRestore($saved_db);
 }
 
+#### BARCODE FUNCTIONS ####
+
+function getPatientBarcode($patient_id)
+{
+    $patientClass = new Patient();
+    $patient = $patientClass->getById($patient_id);
+}
+
+function getSpecimenBarcode()
+{
+    
+}
+
+
+
+###########################
+
 ?>
