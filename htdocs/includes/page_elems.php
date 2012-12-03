@@ -7139,6 +7139,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	
 	public function getPatientSearchAttribSelect($hide_patient_name=false)
 	{
+            $userrr = get_user_by_id($_SESSION['user_id']);
+
 		global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_CLERK;
 		if
 		(
@@ -7147,7 +7149,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			$_SESSION['user_level'] == $LIS_CLERK
 		)
 		{
-			$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
+			$lab_config = LabConfig::getById($_SESSION['lab_config_id']); 
+                        $patientBarcodeSearch = patientSearchBarcodeCheck();
 			if($hide_patient_name === false && $lab_config->pname != 0)
 			{
 				?>
@@ -7172,12 +7175,19 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<option value='2'><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></option>
 				<?php
 			}
+                        if($patientBarcodeSearch != 0 && is_country_dir($userrr) != 1 && is_super_admin($userrr) != 1 )
+			{
+				?>
+				<option value='9'><?php echo 'Barcode Search'; ?></option>
+				<?php
+			}
 		}
 		else if(User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level']))
 		{
 			# Lab admin
 			$lab_config_list = get_lab_configs($_SESSION['user_id']);
 			$lab_config = $lab_config_list[0];
+                        $patientBarcodeSearch = patientSearchBarcodeCheck();
 			if($lab_config->pname != 0)
 			{
 				?>
@@ -7202,15 +7212,28 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<option value='2'><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></option>
 				<?php
 			}
+                        if($patientBarcodeSearch != 0 && is_country_dir($userrr) != 1 && is_super_admin($userrr) != 1 )
+			{
+				?>
+				<option value='9'><?php echo 'Barcode Search'; ?></option>
+				<?php
+			}
 		}
 		else
 		{
+                                            $patientBarcodeSearch = patientSearchBarcodeCheck();
+
 			# Show all options
 			?>
 			<option value='1'><?php echo LangUtil::$generalTerms['PATIENT_NAME']; ?></option>
 			<option value='3'><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></option>
 			<option value='0'><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></option>
 			<option value='2'><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></option>
+                         <?php 
+                         if($patientBarcodeSearch != 0 && is_country_dir($userrr) != 1 && is_super_admin($userrr) != 1 ){ ?>
+                        				<option value='9'><?php echo 'Barcode Search'; ?></option>
+                                                        <?php } ?>
+
 			<?php
 		}
 	}

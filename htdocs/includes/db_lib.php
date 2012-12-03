@@ -11734,18 +11734,89 @@ function insertVersionDataEntry()
 
 #### BARCODE FUNCTIONS ####
 
-function getPatientBarcode($patient_id)
+
+function getPatientBarcodeDelim()
 {
-    $patientClass = new Patient();
-    $patient = $patientClass->getById($patient_id);
+    $delim = 'X';
+    return $delim;
 }
 
-function getSpecimenBarcode()
+function getSpecimenBarcodeDelim()
+{
+    $delim = 'X';
+    return $delim;
+}
+
+function getInventoryBarcodeDelim()
+{
+    $delim = 'X';
+    return $delim;
+}
+
+function patientReportBarcodeCheck()
+{
+    return 1;
+}
+
+function specimenBarcodeCheck()
+{
+    return 1;
+}
+
+function patientSearchBarcodeCheck()
+{
+    return 1;
+}
+
+function specimenSearchBarcodeCheck()
+{
+    return 1;
+}
+
+function getPatientFromBarcode($patient_code)
+{
+    $pdelim = getPatientBarcodeDelim();
+    $pieces = explode($pdelim, $patient_code);
+    $patient_id = $pieces[1];
+    $patientClass = new Patient();
+    $patient = $patientClass->getById($patient_id);
+    return $patient;
+}
+
+function search_patients_by_db_id_count($patient_code)
+{
+    $patient = getPatientFromBarcode($patient_code);
+    $count = 0;
+    if($patient != NULL)
+        $count = 1;
+    return $count;
+}
+
+function getSpecimenFromBarcode()
 {
     
 }
 
+function getPatientBarcodeCode($patient_id, $labconfig_id)
+{
+    $pdelim = getPatientBarcodeDelim();
+    $pcode = $labconfig_id.$pdelim.$patient_id;
+    return $pcode;
+}
 
+function getSpecimenBarcodeCode($specimen_id, $labconfig_id)
+{
+    $sdelim = getSpecimenBarcodeDelim();
+    $scode = $labconfig_id.$sdelim.$specimen_id;
+    return $scode;
+}
+
+function getInventoryBarcodeCode($inventory_id, $labconfig_id)
+{
+    $idelim = getInventoryBarcodeDelim();
+    $icode = $labconfig_id.$idelim.$inventory_id;
+    return $icode;
+}
 
 ###########################
 

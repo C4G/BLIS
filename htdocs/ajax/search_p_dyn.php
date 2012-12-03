@@ -384,6 +384,19 @@ else if($a == 3)
             $patient_list = search_patients_by_dailynum_dyn("-".$q, $result_cap, $result_counter);
         }
 }
+else if($a == 9)
+{
+	# Fetch by db id
+    if($dynamic_fetch == 0)
+        {
+	$patient_l = getPatientFromBarcode($q);
+        }
+        else
+        {
+	$patient_l = getPatientFromBarcode($q);
+        }
+        $patient_list[0] = $patient_l;
+}
 if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null) )
 {
 	?>
@@ -397,8 +410,16 @@ if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null
 		echo " ".LangUtil::$generalTerms['NAME']." ";
 	else if($a == 2)
 		echo " ".LangUtil::$generalTerms['ADDL_ID']." ";
-	?>
-	<b><?php echo $q; ?></b>
+	
+                if($a == 9)
+                {
+                    echo 'Try searching by Patient Name';
+                }
+                else
+                {
+                    echo '<b>'.$q.'</b>';
+                }
+        ?>
 	<?php
 	//if(strpos($_SERVER['HTTP_REFERER'], "find_patient.php") !== false)
 	if(false)
