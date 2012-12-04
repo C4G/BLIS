@@ -56,6 +56,17 @@ if($attrib_type == 5)
                     "OR status_code_id=".Specimen::$STATUS_REFERRED." ) ".
                     "ORDER BY date_collected DESC";
     }
+    else if($attrib_type == 9)
+    {
+        $decoded = decodeSpecimenBarcode($attrib_value);
+            # Search by patient specimen id
+            $query_string = 
+                    "SELECT count(specimen_id) as val FROM specimen ".
+                    "WHERE specimen_id = $decoded[1] ".
+                    "AND ( status_code_id=".Specimen::$STATUS_PENDING." ".
+                    "OR status_code_id=".Specimen::$STATUS_REFERRED." ) ".
+                    "ORDER BY date_collected DESC";
+    }
     
 $resultset = query_associative_one($query_string);
 	$count = $resultset['val'];

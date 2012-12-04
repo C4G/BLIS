@@ -300,8 +300,21 @@ else
                     "OR status_code_id=".Specimen::$STATUS_REFERRED." ) ".
                     "ORDER BY date_collected DESC LIMIT 0,$rcap";
     } 
+    else if($attrib_type == 9)
+    {
+            # Search by patient specimen id
+                $decoded = decodeSpecimenBarcode($attrib_value);
+            $query_string = 
+                    "SELECT specimen_id FROM specimen ".
+                    "WHERE specimen_id = $decoded[1] ".
+                    "AND ( status_code_id=".Specimen::$STATUS_PENDING." ".
+                    "OR status_code_id=".Specimen::$STATUS_REFERRED." ) ".
+                    "ORDER BY date_collected DESC LIMIT 0,$rcap";
+            
+    } 
 }
 $resultset = query_associative_all($query_string, $row_count);
+
 if(count($resultset) == 0 || $resultset == null)
 {
 	?>
@@ -313,8 +326,16 @@ if(count($resultset) == 0 || $resultset == null)
 		echo " ".LangUtil::$generalTerms['PATIENT_NAME']." ";
 	else if($attrib_type == 3)
 		echo " ".LangUtil::$generalTerms['PATIENT_DAILYNUM']." ";
+        if($attrib_type == 9)
+        {
+            echo LangUtil::$pageTerms['MSG_PENDINGNOTFOUND'];
+            echo '<br>'.'Try searching by patient name';
+        }
+        else
+        {
 	echo "<b>".$attrib_value."</b>";
 	echo " - ".LangUtil::$pageTerms['MSG_PENDINGNOTFOUND'];
+        }
 	?>
 	</div>
 	<?php
