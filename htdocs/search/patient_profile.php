@@ -43,12 +43,13 @@ function print_specimen_barcode(pid, sid)
     $.ajax({
 		type: "GET",
 		url: url,
+                async: false,
 		success: function(data) {
                          code = data;
 
 		}
 	});
-    $("#specimenBarcodeDiv").barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'css'});         
+    $("#specimenBarcodeDiv").barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'bmp'});         
     Popup($('#specimenBarcodeDiv').html());
 }
 
