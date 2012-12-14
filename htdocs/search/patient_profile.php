@@ -36,6 +36,22 @@ function toggle_profile_divs()
 	$('#profile_update_form').resetForm();
 }
 
+function print_specimen_barcode(pid, sid)
+{
+    s_id = parseInt(sid);
+    url = "ajax/getSpecimenBarcode.php?sid="+sid;
+    $.ajax({
+		type: "GET",
+		url: url,
+		success: function(data) {
+                         code = data;
+
+		}
+	});
+    $("#specimenBarcodeDiv").barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'css'});         
+    Popup($('#specimenBarcodeDiv').html());
+}
+
 function print_patient_barcode()
 {
     Popup($('#patientBarcodeDiv').html());
@@ -53,7 +69,6 @@ function Popup(data)
         mywindow.print();
         mywindow.close();
         //mywindow.document.show
-        showAllLinks('remove');
         return true;
     }
 
