@@ -2259,7 +2259,9 @@ class PageElems
 	{
 		# Returns HTML table row containing specimen info
 		# Called by getPatientHistory() function
+                $specimenBarcode = specimenBarcodeCheck();
 		?>
+                        
 		<tr valign='top'>
 			<?php
 			if($_SESSION['s_addl'] != 0)
@@ -2304,6 +2306,15 @@ class PageElems
 			
 			?>
 			<td><a href="javascript:get_report(<?php echo $pid;?>,<?php echo $sid;?> )">Report</a> </td>
+                        <?php
+                            if($specimenBarcode)
+                            {
+                            ?>
+                                <td><a href="javascript:print_specimen_barcode(<?php echo $pid;?>,<?php echo $sid;?> )">Print Barcode</a> </td>
+                            <? 
+                            }
+                                
+                        ?>
 		</tr>
 		<?php
 	}
@@ -2340,6 +2351,7 @@ class PageElems
 	{
 		# Returns HTML table displaying patient test history
                 $admin = 0;
+                $specimenBarcode = specimenBarcodeCheck();
                 if(is_admin(get_user_by_id($_SESSION['user_id']))) {
                     $admin = 1;}
                 $rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
@@ -2388,6 +2400,15 @@ class PageElems
 					<th><?php echo LangUtil::$generalTerms['SP_STATUS']; ?></th>
 					<th></th>
 					<th></th>
+                                        <?php
+                            if($specimenBarcode)
+                            {
+                            ?>
+                                 <th></th>
+                            <? 
+                            }
+                                
+                        ?>
 				</tr>
 			</thead>
 			<tbody>
@@ -2508,6 +2529,7 @@ class PageElems
 	public function getPatientTaskList($patient_id)
 	{
 		# Lists patient-profile related tasks in a tips box
+            $patientBarcodes = patientBarcodeCheck();
 		global $LIS_TECH_RO, $DISABLE_UPDATE_PATIENT_PROFILE;
 		if($_SESSION['user_level'] != $LIS_TECH_RO)
 		{
@@ -2536,6 +2558,19 @@ class PageElems
 					<?php echo LangUtil::$pageTerms['MSG_PRINTHISTORY']; ?>
 				</a>
 			</p>
+                        <?php
+			if($patientBarcodes == 1)
+			{
+				?>
+				<p>
+					<a href='javascript:print_patient_barcode();' title='Click to Print Patient Barcode'>
+						<?php echo "Print Patient Barcode" ?>
+					</a>
+					
+				</p>
+				<?php
+			}
+			?>
                        
 			<!--<p><a href='#'>Export as XML</a></p>-->
 			</div>

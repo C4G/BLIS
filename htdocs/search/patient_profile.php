@@ -5,6 +5,7 @@
 #
 include("redirect.php");
 include("includes/header.php");
+include("barcode/barcode_lib.php");
 LangUtil::setPageId("patient_profile");
 
 putUILog('patient_profile', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
@@ -14,14 +15,47 @@ $script_elems->enableJQueryForm();
 $script_elems->enableDatePicker();
 $script_elems->enableTableSorter();
 $script_elems->enableLatencyRecord();
+
+$barcodeSettings = get_lab_config_settings_barcode();
+//  print_r($barcodeSettings);
+$code_type = $barcodeSettings['type']; //"code39";
+$bar_width = $barcodeSettings['width']; //2;
+$bar_height = $barcodeSettings['height']; //40;
+$font_size = $barcodeSettings['textsize']; //11;
 ?>
 <script type='text/javascript'>
+$(document).ready(function(){
+    var code = $('#patientID').val();
+    $("#patientBarcodeDiv").barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'bmp'});         
+    
+});
 function toggle_profile_divs()
 {
 	$('#profile_div').toggle();
 	$('#profile_update_div').toggle();
 	$('#profile_update_form').resetForm();
 }
+
+function print_patient_barcode()
+{
+    Popup($('#patientBarcodeDiv').html());
+}
+
+function Popup(data) 
+    {
+        var mywindow = window.open('', 'my div', 'height=400,width=600');
+        mywindow.document.write('<html><head><title>Barcode</title>');
+        /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+        mywindow.document.write('</head><body >');
+        mywindow.document.write(data);
+        mywindow.document.write('</body></html>');
+
+        mywindow.print();
+        mywindow.close();
+        //mywindow.document.show
+        showAllLinks('remove');
+        return true;
+    }
 
 function update_profile()
 {
@@ -121,4 +155,11 @@ function update_profile()
 <br>
 <b><?php echo LangUtil::$generalTerms['CMD_THISTORY']; ?></b><br>
 <?php $page_elems->getPatientHistory($pid); ?>
+<div id="barcodeData" style="display:none;">
+<input type="text" id="patientID" value='<?php echo encodePatientBarcode($_REQUEST['pid'],0); ?>' />
+<br><br>
+<div id="patientBarcodeDiv"></div>
+<br><br>
+<div id="specimenBarcodeDiv"></div>
+</div>
 <?php include("includes/footer.php"); ?>

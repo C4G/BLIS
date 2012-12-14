@@ -11758,6 +11758,11 @@ function patientReportBarcodeCheck()
     return 1;
 }
 
+function patientBarcodeCheck()
+{
+    return 1;
+}
+
 function specimenBarcodeCheck()
 {
     return 1;
@@ -11819,6 +11824,8 @@ function decodePatientBarcode($patient_code)
 function encodePatientBarcode($patient_id, $labconfig_id) //getPatientBarcodeCode($patient_id, $labconfig_id)
 {
     $pdelim = getPatientBarcodeDelim();
+    if($labconfig_id == 0)
+        $labconfig_id = $_SESSION['lab_config_id'];
     $pcode = $labconfig_id.$pdelim.$patient_id;
     return $pcode;
 }
@@ -11826,6 +11833,8 @@ function encodePatientBarcode($patient_id, $labconfig_id) //getPatientBarcodeCod
 function encodeSpecimenBarcode($specimen_id, $labconfig_id)
 {
     $sdelim = getSpecimenBarcodeDelim();
+     if($labconfig_id == 0)
+        $labconfig_id = $_SESSION['lab_config_id'];
     $scode = $labconfig_id.$sdelim.$specimen_id;
     return $scode;
 }
