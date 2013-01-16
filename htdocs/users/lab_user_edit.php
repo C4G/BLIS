@@ -36,6 +36,16 @@ function goback()
 
 function update_lab_user()
 {
+
+	// Begin email address test
+	var email_regex = new RegExp(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i);
+
+	if (!(email_regex.test($('#email').attr("value"))) && $('#email').attr("value") != '') {
+		alert("Invalid email supplied.  Please enter an email in the form abcd@efgh.ijk or leave the field blank.");
+		return;
+	}
+	// End email address test
+
 	var username = $('#username').attr('value');
 	var pwd = $('#pwd').attr('value');
 	var email = $('#email').attr('value');
@@ -64,7 +74,21 @@ function update_lab_user()
 
 $(document).ready(function(){
 	$('#lang_id').attr("value", "<?php echo $user->langId; ?>");
+
+	$('#phone').keypress(function(event) {
+    var code = (event.keyCode ? event.keyCode : event.which);
+    if (!(
+            (code >= 48 && code <= 57) // "[0-9]"
+            || (code == 46) // "."
+			|| (code == 45) // "-"
+			|| (code == 40) // ")"
+			|| (code == 41) // "("
+			|| (code == 32) // " "
+        ))
+        event.preventDefault();
+	});
 });
+
 </script>
 <br>
 <a href='javascript:goback();'><?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a> |<b><?php echo LangUtil::$pageTerms['EDIT_LAB_USER']; ?></b>

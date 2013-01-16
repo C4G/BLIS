@@ -70,6 +70,16 @@ function add_lab_user()
 		$('#error_msg').show();
 		return;
 	}
+
+	// Begin email address test
+	var email_regex = new RegExp(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i);
+
+	if(!email_regex.test(email) && !(email == '')) {
+		alert("Invalid email supplied.  Please enter an email in the form abcd@efgh.ijk or leave the field blank.");
+		return;
+	}
+	// End email address test
+
 	$('#error_msg').hide();
 	var url_string = 'ajax/lab_user_add.php';
 	//var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&ut='+ut+'&lid=<?php echo $lab_config_id; ?>&lang='+lang_id+"&fn_reports="+fn_reports+"&fn_results="+fn_results+"&fn_regn="+fn_regn;
