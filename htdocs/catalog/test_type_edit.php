@@ -226,10 +226,12 @@ function update_ttype()
 					var range_l_elems = $("input[name='range_l_"+(j+1)+"[]']");
 					
 					var range_u_elems = $("input[name='range_u_"+(j+1)+"[]']");
+
 					for(var k = 0; k < range_l_elems.length; k++)
 					{
 						var range_l = range_l_elems[k].value;
 						var range_u = range_u_elems[k].value;
+
 						if(isNaN(range_l))
 						{
 							
@@ -259,7 +261,7 @@ function update_ttype()
 							alert("Upper bound cannot be less than or equal to lower bound");
 							return;
 						}
-						
+
 						if($("#agerange_l_"+(j+1)+"_"+k).is(":disabled") == true)
 						{
 							continue;
@@ -887,27 +889,28 @@ function isInputCurrency(evt) {
 								echo "</td><td>";
                                                                 
                                                                 
-                                                                $encName = $curr_measure->name;
-                                                                $start_tag = "\$sub*";
-                                                                $end_tag = "/\$";
-                                                                if(strpos($encName, $start_tag) !==false)
-                                                                {
-                                                                    $subm_end = strpos($encName, $end_tag);
-                                                                    $decName = substr($encName, $subm_end + 2);
-                                                                    $parent = substr($encName, 5, $end_tag - 5);
-                                                                    $parent_int = intval($parent);
-                                                                 
-                                                                }
-                                                                else
-                                                                {
-                                                                    $decName = $encName;
-                                                                    $parent_int = 0;
-                                                                }
-                                                                ?>
-                                                                    <input type='hidden' name='sm_id[]' value='<?php echo $parent_int; ?>'></input>
-                                                                <?php
-                                                                if(strpos($encName, $start_tag) !==false)
-                                                                        echo "Sub:";
+								$encName = $curr_measure->name;
+								$start_tag = "\$sub*";
+								$end_tag = "/\$";
+								if(strpos($encName, $start_tag) !==false)
+								{
+									$subm_end = strpos($encName, $end_tag);
+									$decName = substr($encName, $subm_end + 2);
+									$parent = substr($encName, 5, $end_tag - 5);
+									$parent_int = intval($parent);
+
+								}
+								else
+								{
+									$decName = $encName;
+									$parent_int = 0;
+								}
+								?>
+									<input type='hidden' name='sm_id[]' value='<?php echo $parent_int; ?>'></input>
+								<?php
+								if(strpos($encName, $start_tag) !==false)
+										echo "Sub:";
+
 								echo "<input type='text' name='measure[]' value='$decName' />";
 								echo "</td>";
 								echo "<td>";
@@ -1263,7 +1266,7 @@ function isInputCurrency(evt) {
 					</select>
 				</td>		
 			</tr>
-			
+
 			<tr valign='top'>
 				<td>Prevalence Threshold </td>
 				<td><input id='prevalenceThreshold' name='prevalenceThreshold' type='text' size='3' maxLength='3' onkeypress="return isInputNumber(event);" value=<?php echo $test_type->prevalenceThreshold; ?> />
@@ -1272,24 +1275,28 @@ function isInputCurrency(evt) {
 					</span>
 				</td>
 			</tr>
-			
+
 			<tr valign='top'>
 				<td>Target TAT</td>
 				<td><input id='targetTat' name='targetTat' type='text' size='3' maxLength='3' onkeypress="return isInputNumber(event);" value=<?php echo $test_type->targetTat; ?> />
 				</td>
 			</tr>
-                        
-                        <tr valign='top' <?php is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none;'") ?>>
-                                <td>Cost to Patient</td>
-                                <input type="hidden" name='cost_to_patient_dollars_old' value='<?php echo $cost_to_patient_dollars; ?>' />
-                                <input type="hidden" name='cost_to_patient_cents_old' value='<?php echo $cost_to_patient_cents; ?>' />
-                                <td><input id='cost_to_patient_dollars' name='cost_to_patient_dollars' type='number' size='4' maxLength='4' onkeypress="return isInputNumber(event);" value='<?php echo $cost_to_patient_dollars; ?>' />
-                                    <?php echo get_currency_delimiter_from_lab_config_settings(); ?>
-                                    <input id='cost_to_patient_dollars' name='cost_to_patient_cents' type='number' size='2' maxLength='2' onkeypress="return isInputNumber(event);" value='<?php echo get_cents_as_whole_number($cost_to_patient_cents); ?>' />
-                                    <?php echo get_currency_type_from_lab_config_settings(); ?>
-                                </td>
-                        </tr>
-			
+
+			<tr valign='top' <?php is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none;'") ?>>
+				<td>Cost to Patient</td>
+
+				<input type="hidden" name='cost_to_patient_dollars_old' value='<?php echo $cost_to_patient_dollars; ?>' />
+				<input type="hidden" name='cost_to_patient_cents_old' value='<?php echo $cost_to_patient_cents; ?>' />
+
+				<td>
+					<input id='cost_to_patient_dollars' name='cost_to_patient_dollars' type='text' size='4' maxLength='4' onkeypress="return isInputNumber(event);" value='<?php echo $cost_to_patient_dollars; ?>' />
+					<?php echo get_currency_delimiter_from_lab_config_settings(); ?>
+
+					<input id='cost_to_patient_dollars' name='cost_to_patient_cents' type='text' size='2' maxLength='2' onkeypress="return isInputNumber(event);" value='<?php echo get_cents_as_whole_number($cost_to_patient_cents); ?>' />
+					<?php echo get_currency_type_from_lab_config_settings(); ?>
+				</td>
+			</tr>
+
 			<tr valign='top'>
 				<td></td>
 				<td>

@@ -362,12 +362,13 @@ function reset_new_patient()
 		<td>Date of Registration</td>
 		<td>
 		<?php
+
 		$today1 = date("Y-m-d");
 		$today_array1 = explode("-", $today1);
-					$name_list1 = array("receipt_yyyy", "receipt_mm", "receipt_dd");
-					$id_list1 = array("receipt_yyyy", "receipt_mm", "receipt_dd");
-					$value_list1 = array($today_array1[0], $today_array1[1], $today_array1[2]);
-					$page_elems->getDatePicker($name_list1, $id_list1, $value_list1, true);
+		$name_list1 = array("receipt_yyyy", "receipt_mm", "receipt_dd");
+		$id_list1 = array("receipt_yyyy", "receipt_mm", "receipt_dd");
+		$value_list1 = array($today_array1[0], $today_array1[1], $today_array1[2]);
+		$page_elems->getDatePicker($name_list1, $id_list1, $value_list1, true);
 		
 		?>
 		</td>

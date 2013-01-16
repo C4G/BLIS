@@ -110,9 +110,9 @@ class PageElems
 		{
 			# Show only date fields and not datepicker
 			?>
-			<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' value="<?php echo $value_list[$order_list[0]]; ?>" size='4' maxlength='4' />-
-			<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' value="<?php echo $value_list[$order_list[1]]; ?>" size='4' maxlength='4' />-
-			<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' value="<?php echo $value_list[$order_list[2]]; ?>" size='4' maxlength='4' />
+			<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[0]]; ?>" size='2' maxlength='2' />-
+			<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[1]]; ?>" size='2' maxlength='2' />-
+			<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[2]]; ?>" size='4' maxlength='4' />
 			<?php
 			if($show_format == true)
 			{
@@ -130,6 +130,17 @@ class PageElems
 		}
 		?>
 		<SCRIPT type="text/javascript" charset="utf-8">
+		    <!--
+			function isNumberKey(evt)
+			{
+				var charCode = (evt.which) ? evt.which : event.keyCode
+				if (charCode > 31 && (charCode < 48 || charCode > 57))
+					return false;
+
+					return true;
+			}
+			//-->
+
 		Date.format = '<?php echo $date_format_js; ?>';
 		$(function()
 		{
@@ -189,9 +200,9 @@ class PageElems
 		}
 		</style>
 		
-		<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' value="<?php echo $value_list[$order_list[0]]; ?>" size='4' maxlength='4' />-
-		<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' value="<?php echo $value_list[$order_list[1]]; ?>" size='4'  maxlength='4' />-
-		<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' value="<?php echo $value_list[$order_list[2]]; ?>" size='4'  maxlength='4' />
+		<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[0]]; ?>" size='2'  maxlength='2' />-
+		<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[1]]; ?>" size='2'  maxlength='2' />-
+		<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[2]]; ?>" size='4'  maxlength='4' />
 		
 		<INPUT name="<?php echo $picker_id; ?>" id="<?php echo $picker_id; ?>" class="date-pick dp-applied" style='display:none'/>
 		
@@ -256,9 +267,22 @@ class PageElems
 		}
 		$date_format_js_parts = explode("-", $date_format_js);
 		?>
-		<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' value="<?php echo $value_list[$order_list[0]]; ?>" size='4' maxlength='4' />-
-		<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' value="<?php echo $value_list[$order_list[1]]; ?>" size='4'  maxlength='4' />-
-		<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' value="<?php echo $value_list[$order_list[2]]; ?>" size='4'  maxlength='4' />
+		<!-- Handling for non-numeric input -->
+		<SCRIPT type="text/javascript" charset="utf-8">
+		    <!--
+			function isNumberKey(evt)
+			{
+				var charCode = (evt.which) ? evt.which : event.keyCode
+				if (charCode > 31 && (charCode < 48 || charCode > 57))
+					return false;
+
+					return true;
+			}
+			//-->
+		</SCRIPT>
+		<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[0]]; ?>" size='2'  maxlength='2' />-
+		<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[1]]; ?>" size='2'  maxlength='2' />-
+		<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[2]]; ?>" size='4'  maxlength='4' />
 		<?php
 		if($show_format == true)
 		{
