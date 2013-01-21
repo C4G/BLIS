@@ -135,6 +135,9 @@ RewriteRule ^updateNationalDatabaseUI\.php$ export/updateNationalDatabaseUI.php
 RewriteRule ^exportNationalDatabaseUI\.php$ export/exportNationalDatabaseUI.php
 RewriteRule ^backupData\.php$ export/backupData.php
 RewriteRule ^backupDataUI\.php$ export/backupDataUI.php
+RewriteRule ^import_data_director\.php$ export/import_data_director.php
+RewriteRule ^lab_backups\.php$ export/lab_backups.php
+
 
 ## /users folder
 RewriteRule ^edit_profile\.php$ users/edit_profile.php
