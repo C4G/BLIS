@@ -817,7 +817,6 @@ class LabConfig
 	}
 }
 
-
 class ReportConfig
 {
 	public $labConfigId;
@@ -1141,7 +1140,6 @@ class ReportConfig
 		DbUtil::switchRestore($saved_db);
 	}
 }
-
 
 class TestType
 {
@@ -2222,7 +2220,6 @@ class Patient
 		query_update($query_string);
 	}
 }
-
 
 class Specimen
 {
@@ -3708,7 +3705,6 @@ class SpecimenCustomData
 	}
 }
 
-
 class PatientCustomData
 {
 	public $fieldId;
@@ -4322,7 +4318,6 @@ class ReferenceRange
 	}
 }
 
-
 class DbUtil
 {
 	public static function switchToGlobal()
@@ -4447,7 +4442,6 @@ class SessionUtil
 	}
 }
 
-
 class UILog
 {
     // Name of the file where the message logs will be appended.
@@ -4566,8 +4560,6 @@ class UILog
         return $log;
     }
 }
-
-
 
 class UserStats
 {
@@ -4812,6 +4804,325 @@ class UserStats
     }
 }
 
+class Bill
+{
+	#Used to combine payments into a logical grouping, and provide a quick method for users to see if a patient has
+	#been billed for a particular test or set of tests.
+	
+	private $id;
+	private $patientId;
+	private $paidInFull;
+	#Discount Type can be NONE, FLAT, or PERCENT.
+	#Default is NONE.
+	private $discountType;
+	private $discount;
+	
+	function Bill($patientId)
+	{
+		$this->paidInFull = FALSE;
+		$this->disableDiscount(); // $this->discountType = 'NONE' and $this->discount = '0.0'
+		$this->patientId = $patientId;
+	}
+	
+	public function create($lab_config_id)
+	{
+		$patientId = $this->patientId;
+		$paidInFull = $this->paidInFull;
+		$discountType = $this->discountType;
+		$discount = $this->discount;
+
+		$query_string = "INSERT INTO `bills` (`patient_id`, `paid_in_full`, `discount_type`, `discount`)
+							VALUES ($patientId, $paidInFull, $discountType, $discount)";
+							
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_insert_one($query_string);
+		
+		$this->id = get_last_insert_id();
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	public function save($lab_config_id)
+	{
+		$id = $this->id;
+		$patientId = $this->patientId;
+		$paidInFull = $this->paidInFull;
+		$discountType = $this->discountType;
+		$discount = $this->discount;
+
+		$query_string = "UPDATE `bills` SET `patient_id` = $patientId,
+											`paid_in_full` = $paidInfull,
+											`discount_type` = $discountType,
+											`discount` = $discount
+						WHERE `id` = $id";
+							
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_update($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	public static function loadFromId($billId, $lab_config_id)
+	{
+		$id = $billId;
+		
+		$query_string = "SELECT * FROM `bills` WHERE `id` = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		$retVal = query_associative_one($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		$bill = new Bill($retVal['patient_id']);
+		
+		$bill->id = $id;
+		$bill->paidInFull = $retVal['paidInFull'];
+		$bill->discountType = $retVal['discountType'];
+		$bill->discount = $retVal['discount'];
+		
+		return $bill;
+	}
+	
+	public function enableFlatDiscount()
+	{
+		$this->discountType = "FLAT";
+		return 1;
+	}
+	
+	public function enablePercentDiscount()
+	{
+		$this->discountType = "PERCENT";
+		return 1;
+	}
+	
+	public function disableDiscount()
+	{
+		$this->discountType = "NONE";
+		$this->setDiscountAmount(0.0);
+		return 1;
+	}
+	
+	public function setDiscountAmount($amount)
+	{
+		if (!is_numeric($amount))
+		{
+			# Passed in something that was not a number.
+			return 0;
+		}
+		
+		#Ensure that whatever we got is in numeric form.
+		$amount = floatval($amount);
+		
+		if ($amount < 0)
+		{
+			# Passed in a negative value, which we aren't going to allow.
+			return 0;
+		}
+		
+		# TODO: Handle values > 100 only if discount type is percentage.
+
+		# If it gets this far, we have a good numeric value to add.
+		$this->discount = $amount;
+		return 1;
+	}
+		
+	public static function createBillForTests($tests, $lab_config_id)
+	{
+		# Create a new bill and associate all of the desired tests with it.
+		$bill = new Bill(Specimen::getById($tests[0]->specimenId)->patientId); // This is wonky...
+		$bill->create($lab_config_id);
+
+		foreach($tests as $test)
+		{
+			$bill->createAssociationWithTest($test->testId, $lab_config_id);
+		}
+	}
+	
+	public function createAssociationWithTest($testId, $lab_config_id)
+	{
+		# Create an entry in the bills_tests_associations table to show that this bill contains the test denoted by the id.
+		$id = $this->id;
+
+		$query_string = "INSERT INTO `bills_test_associations` (`bill_id`, `test_id`)
+														VALUES ($id, $test_id)";
+
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_insert_one($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	public static function hasTestBeenBilled($testId, $lab_config_id)
+	{
+		$query_string = "SELECT COUNT(*) FROM `bills_test_associations WHERE `test_id` = $testId";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		$retVal = query_associative_one($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		if (isset($retVal[0]))
+		{
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	public function hasBillBeenFullyPaid($lab_config_id)
+	{
+		if ($this->paidInFull) # If this flag has been toggled, there's no reason to make another DB query.
+		{
+			return TRUE;
+		}
+		# Return true if there are enough payments associated with this bill to fully cover its cost.
+		$bill_amount = $this->amount;
+		
+		$payments_total = 0.0;
+		
+		$payments = Payment::loadAllPaymentsForBill($this->id, $lab_config_id);
+		
+		foreach($payments as $payment)
+		{
+			$payments_total += $payment->amount;
+		}
+		
+		if ($payments_total == $bill_amount)
+		{
+			$bill->paidInFull = TRUE;
+			$bill->save($lab_config_id);
+			return TRUE;
+		} else if ($payments_total < $bill_amount)
+		{
+			return FALSE;
+		} else
+		{
+			// I'm really not sure how we want to handle if the bill was OVER-paid.  TODO: Ask Naomi/Santosh at some point.
+			// For now, I'm just calling it fully paid.
+			$bill->paidInFull = TRUE;
+			$bill->save($lab_config_id);
+			return TRUE;
+		}
+	}
+}
+
+class Payment
+{
+	#Records the payment of a bill
+	
+	public $id;
+	public $amount;
+	public $billId;
+	
+	function Payment($amount, $billId)
+	{
+		$this->amount = $amount;
+		$this->billId = $billId;
+	}
+	
+	public function create($lab_config_id)
+	{
+		$amount = $this->amount;
+		$billId = $this->billId;
+
+		$query_string = "INSERT INTO `payments` (`amount`, `bill_id`)
+							VALUES ($amount, $billId)";
+							
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_insert_one($query_string);
+		
+		$this->id = get_last_insert_id();
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	public function save($lab_config_id)
+	{
+		$id = $this->id;
+		$amount = $this->amount;
+		$billId = $this->billId;
+
+		$query_string = "UPDATE `payments` SET `amount` = $amount,
+											   `bill_id` = $billId
+						WHERE `id` = $id";
+							
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_update($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	public static function loadFromId($id, $lab_config_id)
+	{
+		$query_string = "SELECT * FROM `payments` WHERE `id` = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		$retVal = query_associative_one($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		$payment = new Payment($retVal['patient_id']);
+		
+		$payment->id = $id;
+		$payment->amount = $retVal['amount'];
+		$payment->billId = $retVal['bill_id'];
+		
+		return $payment;
+	}
+	
+	public static function loadAllPaymentsForBill($bill, $lab_config_id)
+	{
+		$billId = $bill->id;
+		
+		$query_string = "SELECT id FROM `payments` WHERE `bill_id` = $billId";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		$retVal = query_associative_all($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		$payments = array();
+		
+		if (count($retVal != 0))
+		{
+			foreach ($retVal as $val)
+			{
+				$payments.append(Payment::loadFromId($val, $lab_config_id));
+			}
+			return $payments;
+		} else
+		{
+			return 0;
+		}
+	}
+	
+	public static function createNewPaymentForBill($bill, $amount, $lab_config_id)
+	{
+		$payment = new Payment($amount, $bill->id);
+		
+		$payment->create($lab_config_id);
+		
+		return $payment;
+	}
+}
 #
 # Functions for managing user profiles and login
 #
@@ -7084,7 +7395,7 @@ function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_p
 	$cat = mysql_real_escape_string($cat_code, $con);
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	$hide_patient_name = mysql_real_escape_string($hide_patient_name, $con);
-        $cost_to_patient = mysql_real_escape_string($cost, $con);
+    $cost_to_patient = mysql_real_escape_string($cost, $con);
 	# Adds a new test type in DB with compatible specimens in 'specimen_list'
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$is_panel_num = 1;
@@ -11152,6 +11463,54 @@ function is_billing_enabled($lid)
         return true;
     }
     return false;
+}
+
+/***************************************************
+ * Payment Functions
+***************************************************/
+
+/**
+ * create_payment
+ * creates a new payment in the database
+ * @parameter amount: the amount of the payment
+ * @parameter specimen_id: the specimen referenced by the payment
+ */
+function create_payment_for_specimen($amount, $specimen_id)
+{
+	// Create a payment entry in the database
+	$lab_config_id = $_SESSION['lab_config_id'];
+
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+
+    $query_string = "INSERT INTO payments (amount) VALUES ($amount)";
+    query_insert_one($query_string);
+
+	$payment_id = mysql_insert_id();
+
+	$query_string = "INSERT INTO payment_specimen_assoc (payment_id, specimen_id) VALUES ($payment_id, $specimen_id)";
+	query_insert_one($query_string);
+
+    DbUtil::switchRestore($saved_db);
+}
+
+/**
+ * load_payment
+ * load a payment from the database
+ * @parameter payment_id: the id of the payment we want to load
+ */
+function load_payment_by_id($payment_id)
+{
+	// Load payment information for a particular payment id
+}
+
+function load_payments_for_patient($patient_id)
+{
+	// Load all payments for a particular patient.
+}
+
+function get_payment_status_of_specimen($specimen_id)
+{
+	// Returns string ('unpaid', 'paid') for specimen.
 }
 
 /***************************************************
