@@ -214,3 +214,6 @@ RewriteRule ^barcode_lib\.php$ barcode/barcode_lib.php
 RewriteRule ^export_to_pdf\.php$ barcode/tcpdf/export_to_pdf.php
 RewriteRule ^print_barcode\.php$ barcode/print_barcode.php
 RewriteRule ^get_barcode\.php$ barcode/get_barcode.php
+
+## /billing folder
+RewriteRule ^bill_generator\.php$ billing/bill_generator.php
