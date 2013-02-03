@@ -375,12 +375,12 @@ class PageElems
 			<tbody>
 			<th>#</th>
 			<?php 
-				echo "<th>".LangUtil::$generalTerms['NAME']."</th><th>".LangUtil::$generalTerms['CMD_EDIT']."</th>"; 
+				echo "<th>".LangUtil::$generalTerms['NAME']."</th><th></th>"; 
 				foreach($resultset as $record) {
 					$testName = $record['test_name'];
 					echo "<tr><td>".$record['test_id']."</td>";
 					echo "<td>".$testName."</td>";
-					echo "<td><a href=test_type_edit_agg.php?tid=".$record['test_id'].">".LangUtil::$generalTerms['CMD_EDIT']."</a></td>";
+					echo "<td><a href=test_type_edit_dir.php?tid=".$record['test_id'].">".LangUtil::$generalTerms['CMD_VIEW']."/".LangUtil::$generalTerms['CMD_EDIT']."</a></td>";
 					echo "</tr>";
 				}
 			?>
@@ -430,10 +430,12 @@ class PageElems
 			<tbody>
 			<th>#</th>
 			<?php 
-				echo "<th>".LangUtil::$generalTerms['NAME']."</th>"; 
+				echo "<th>".LangUtil::$generalTerms['NAME']."</th><th></th>"; 
 				foreach($resultset as $record) {
 					echo "<tr><td>".$record['test_category_id']."</td>";
 					echo "<td>".$record['test_category_name']."</td>";
+                                        echo "<td><a href=lab_section_edit_dir.php?tid=".$record['test_category_id'].">".LangUtil::$generalTerms['CMD_VIEW']."/".LangUtil::$generalTerms['CMD_EDIT']."</a></td>";
+
 					echo "</tr>";
 				}
 			?>
@@ -483,16 +485,17 @@ class PageElems
 	}
 	
 	public function getTestNamesSelector() {
-		#Return table which includes dropdowns of specimens configured in all labs in the country
+		#Return table which includes dropdowns of test types configured in all labs in the country
 		echo "<table>";
 		$count = 1;
-		$siteList = get_site_list($_SESSION['user_id']);
-		foreach($siteList as $labConfigId => $labName) {
-			echo "<tr><td>".$labName."</td>";
+		//$siteList = get_site_list($_SESSION['user_id']);
+                $config_list = get_lab_configs_imported();
+		foreach($config_list as $lab_config) {
+			echo "<tr><td>".$lab_config->name."</td>";
 			echo "<td><select id='testNameSelect$count'>";
-			$testTypeList = get_test_types_by_site($labConfigId);
+			$testTypeList = get_test_types_by_site($lab_config->id);
 			foreach($testTypeList as $testType) {
-				echo "<option value='$labConfigId:$testType->testTypeId'>".$testType->getName()."</option>";
+				echo "<option value='$lab_config->id:$testType->testTypeId'>".$testType->getName()."</option>";
 			}
 			echo "</select></td></tr>";
 			$count++;
@@ -510,6 +513,45 @@ class PageElems
 		<tr>
 		<td></td>		
 		<td><input type="button" id="submit" type="submit" onclick="submitTestNames();" value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>" size="20" />
+		<?
+	}
+        
+        public function getTestNamesSelectorForEdit($mapping) {
+		#Return table which includes dropdowns of test types configured in all labs in the country
+		print_r($mapping);
+                ?>
+                  
+                <table class='hor-minimalist-a'>
+                <tr>
+                <td><b>Country Test Name:</b></td>
+		<td><input type="text" id="commonTestName" size="50" value></input>
+		<div id='commonTestNameError' style='display:none'>
+			<label class="error" id="commonTestNameErrorLabel"><small><font color="red"><?php echo LangUtil::getGeneralTerm("MSG_REQDFIELD"); ?></font></small></label>
+		</div>
+		</td>
+                </tr>
+                <tr><td></td></tr>
+                <?php
+		$count = 1;
+		//$siteList = get_site_list($_SESSION['user_id']);
+                $config_list = get_lab_configs_imported();
+		foreach($config_list as $lab_config) {
+			echo "<tr><td>".$lab_config->name."</td>";
+			echo "<td><select id='testNameSelect$count' >";
+			$testTypeList = get_test_types_by_site($lab_config->id);
+			foreach($testTypeList as $testType) {
+				echo "<option value='$labConfigId:$testType->testTypeId'>".$testType->getName()."</option>";
+			}
+			echo "</select></td></tr>";
+			$count++;
+		}
+		//echo "<tr><td></td><td></td>";
+		echo "</tr>";
+		 ?>
+		
+		<tr>
+		<td></td>		
+		<td><input type="button" id="submit" type="submit" onclick="submitTestNames();" value="<?php echo LangUtil::$generalTerms['CMD_UPDATE']; ?>" size="20" />
 		<?
 	}
 	
@@ -531,13 +573,13 @@ class PageElems
 		#Return table which includes dropdowns of test categories configured in all labs in the country
 		echo "<table>";
 		$count = 1;
-		$siteList = get_site_list($_SESSION['user_id']);
-		foreach($siteList as $labConfigId => $labName) {
-			echo "<tr><td>".$labName."</td>";
-			echo "<td><select id='testCategoryNameSelect$count'>";
-			$testCategoriesList = get_test_categories($labConfigId);
+		 $config_list = get_lab_configs_imported();
+		foreach($config_list as $lab_config) {
+			echo "<tr><td>".$lab_config->name."</td>";
+			echo "<td><select id='C'>";
+			$testCategoriesList = get_test_categories($lab_config->id);
 			foreach( $testCategoriesList as $testCategoryId => $testCategoryName ) {
-				echo "<option value='$labConfigId:$testCategoryId'>".$testCategoryName."</option>";
+				echo "<option value='$lab_config->id:$testCategoryId'>".$testCategoryName."</option>";
 			}
 			echo "</select></td></tr>";
 			$count++;
@@ -941,7 +983,23 @@ class PageElems
 
 	}
 	
-	public function getTestTypeInfoAggregate($testTypeMapping, $show_db_name=false)
+	public function getTestTypeInfoAggregateDir($testTypeMapping, $show_db_name=false)
+	{
+		# Returns HTML for displaying test type information
+		$test_type = getAggregateTestTypeByName($testTypeMapping->name);
+		?>
+		<table class='hor-minimalist-b'>
+			<tbody>
+				<tr>
+					<td><?php echo LangUtil::$generalTerms['NAME']; ?></td>
+					<td><?php echo $test_type->name; ?></td>
+				</tr>				
+			</tbody>
+		</table>
+		<?php
+	}
+        
+        public function getTestTypeInfoAggregate($testTypeMapping, $show_db_name=false)
 	{
 		# Returns HTML for displaying test type information
 		$test_type = getAggregateTestTypeByName($testTypeMapping->name);
@@ -1401,14 +1459,16 @@ class PageElems
 					<th>
 						<?php echo LangUtil::$generalTerms['LAB_MGR']; ?>
 					</th>
-					<th>
+                                        <th>
+                                        </th>
+					<!--<th>
 					</th>
 					<th>
 					</th>
 					<th>
 					</th>
 					<th>
-					</th>
+					</th>-->
 				</tr>
 			</thead>
 			<tbody>
@@ -1430,7 +1490,11 @@ class PageElems
 					<td>
 						<?php echo get_username_by_id($lab_config->adminUserId); ?>
 					</td>
-					<td>
+                                        <td>
+ 						<a href='exportLabConfiguration.php?id=<?php echo $lab_config->id; ?>' title='Click to Export Lab Configuration'><?php echo "Export Lab Configuration"; ?></a>
+                                           
+                                        </td>
+					<!--<td>
 						<a rel='facebox' href='lab_config_status.php?id=<?php echo $lab_config->id; ?>' title='Click to view pending tests at the lab'><?php echo LangUtil::$generalTerms['LAB_STATUS']; ?></a>
 					</td>
 					<td>
@@ -1438,7 +1502,7 @@ class PageElems
 					</td>
 					<td>
 						<a href='switchto_tech.php?id=<?php echo $lab_config->id; ?>' title='Click to perform technician tasks in this lab'><?php echo LangUtil::$generalTerms['SWITCH_TOTECH']; ?></a>
-					</td>
+					</td>-->
 					<!--
 					<td>
 						<a 
@@ -1459,6 +1523,95 @@ class PageElems
 		<?php
 	}
 	
+        public function getLabConfigTableImported($lab_config_list)
+	{
+		# Returns HTML table of site/locations
+		# Called from lab_configs.php
+		if(count($lab_config_list) == 0)
+		{
+			echo "<div class='sidetip_nopos'>".LangUtil::$generalTerms['MSG_NOTFOUND']."</div>";
+			return;
+		}
+		?>
+		<table class='hor-minimalist-b' style='width:950px;'>
+			<thead>
+				<tr valign='top'>
+					<th>
+						#
+					</th>
+					<th>
+						<?php echo LangUtil::$generalTerms['FACILITY']; ?>
+					</th>
+					<th>
+						<?php echo LangUtil::$generalTerms['LOCATION']; ?>
+					</th>
+					<th>
+						<?php echo LangUtil::$generalTerms['LAB_MGR']; ?>
+					</th>
+					<th>
+                                            <?php echo "Last Import Date"; ?>
+					</th>
+                                        <th>
+                                        </th>
+					
+				</tr>
+			</thead>
+			<tbody>
+		<?php
+		$count = 1;
+		foreach($lab_config_list as $lab_config)
+		{
+			?>
+				<tr valign='top'>
+					<td>
+						<?php echo $count; ?>.
+					</td>
+					<!--<td>
+						<a href='lab_config_home.php?id=<?php echo $lab_config->id; ?>' title='Click to Manage Lab Configuration'><?php echo $lab_config->name; ?></a>
+					</td>-->
+                                        
+					<td>
+						<?php echo $lab_config->name; ?>
+					</td>
+                                        <td>
+						<?php echo $lab_config->location; ?>
+					</td>
+					<td>
+						<?php echo get_username_by_id($lab_config->adminUserId); ?>
+					</td>
+                                        <td>
+                                               <?php echo get_last_import_date($lab_config->id); ?>
+                                        </td>
+					<td>
+						<a rel='facebox' href='lab_config_status.php?id=<?php echo $lab_config->id; ?>' title='Click to view pending tests at the lab'><?php echo LangUtil::$generalTerms['LAB_STATUS']; ?></a>
+					</td>
+                                        
+					<!--<td>
+						<a href='lab_config_home.php?id=<?php echo $lab_config->id; ?>' title='Click to Manage Lab Configuration'><?php echo LangUtil::$generalTerms['MANAGE']; ?></a>
+					</td>
+					<td>
+						<a href='switchto_tech.php?id=<?php echo $lab_config->id; ?>' title='Click to perform technician tasks in this lab'><?php echo LangUtil::$generalTerms['SWITCH_TOTECH']; ?></a>
+					</td>-->
+					<!--
+					<td>
+						<a 
+							href="javascript:delete_lab_config('<?php #echo $lab_config->getSiteName(); ?>', <?php #echo $lab_config->id; ?>);" 
+							title='Click to Delete Lab Configuration'
+						>
+							Delete
+						</a>
+					</td>
+					-->
+				</tr>
+			<?php
+			$count++;
+		}
+		?>
+			</tbody>
+		</table>
+		<?php
+	}
+        
 	public function getLabAdminTable($lab_admin_list)
 	{
 		# Returns HTML table of lab admin accounts

@@ -44,16 +44,11 @@ $(document).ready(function(){
 		load_right_pane('master_catalog_div');
 		<?php
 	}
-        else {
-		?>
-		load_right_pane('test_types_div');
-		<?php
-	}
 	?>
 });
 
 function submitTestNames() {
-	var count = <?php echo count(get_lab_configs_imported()); ?>;
+	var count = <?php echo count(get_site_list($_SESSION['user_id'])); ?>;
 	if( $('#commonTestName').val() == "") {
 		$('#commonTestNameError').show();
 		return;
@@ -84,7 +79,7 @@ function submitTestNames() {
 }
 
 function submitTestCategoryNames() {
-var count = <?php echo count(get_lab_configs_imported()); ?>;
+	var count = <?php echo count(get_site_list($_SESSION['user_id'])); ?>;
 	if( $('#commonTestCategoryName').val() == "") {
 		$('#commonTestCategoryNameError').show();
 		return;
@@ -185,7 +180,12 @@ function hide_right_pane()
 <table cellpadding='10px'>
 <tr valign='top'>
 <td id='left_pane' class='left_menu' width='150'>
-    
+    <!--
+<a href="javascript:load_right_pane('specimen_types_div');" class='menu_option' id='specimen_types_div_menu'>
+	<?php echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?>
+</a>
+<br><br>
+    -->
 <a href="javascript:load_right_pane('test_types_div');" class='menu_option' id='test_types_div_menu'>
 	<?php echo LangUtil::$generalTerms['TEST_TYPES']; ?>
 </a>
@@ -194,13 +194,22 @@ function hide_right_pane()
 	<?php echo LangUtil::$generalTerms['LAB_SECTION']; ?>
 </a>
 <br><br>
+<!--
+<a href="javascript:load_right_pane('measures_div');" class='menu_option' id='measures_div_menu'>
+	<?php echo LangUtil::$generalTerms['MEASURES']; ?>
+</a>
+<br><br>
 
+<a href="javascript:load_right_pane('master_catalog_div');" class='menu_option' id='master_catalog_div_menu'>
+	<?php echo "Master Test Catalog"; ?>
+</a>
+-->
 </td>
 <td id='right_pane'>
 	<div id='test_types_div' class='content_div' style='display:none;'>
 		<form id="testNamesSelector">
 		<?php $page_elems->getTestNamesSelector(); ?>
-		<span id='progress_test_spinner' style='display:none'><?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?></span>
+		<div id='progress_test_spinner' style='display:none'><?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
 		</td>
 		</tr>
 		</table>
@@ -213,7 +222,21 @@ function hide_right_pane()
 		</div>
 	</div>
 	
-	
+	<div id='specimen_types_div' class='content_div' style='display:none;'>
+		<form id="specimenNamesSelector">
+		<?php $page_elems->getSpecimenNamesSelector(); ?>
+		<span id='progress_specimen_spinner' style='display:none'><?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?></span>
+		</td>
+		</tr>
+		</table>
+		</form>
+		<hr>
+		<br>
+		<div id='global_specimen_types_div'>
+			<b>Currently Added Country Wide Specimen</b><br><br>
+			<?php $page_elems->getSpecimenTypesCountryLevel(); ?>
+		</div>
+	</div>
 	
 	<div id='test_category_types_div' class='content_div' style='display:none;'>
 		<form id="testCategoryNamesSelector">
@@ -231,7 +254,32 @@ function hide_right_pane()
 		</div>
 	</div>
 	
-	
+	<div id='measures_div' class='content_div' style='display:none;'>
+		<form id="measureSelector">
+		<?php $page_elems->getMeasuresSelector(); ?>
+		<span id='progress_tc_spinner' style='display:none;'><?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?></span>
+		</td>
+		</tr>
+		</table>
+		</form>
+		<hr>
+		<br>
+		<div id='global_measures_div'>
+			<b>Currently Associated Measures</b><br><br>
+			<?php $page_elems->getMeasuresCountryLevel(); ?>
+		</div>
+	</div>
+                    
+        <div id='master_catalog_div' class='content_div' style='display:none;'>
+		<form id="measureSelector">
+		<?php $page_elems->getMasterCatalog(); ?>
+		<span id='progress_tc_spinner' style='display:none;'><?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?></span>
+		</td>
+		</tr>
+		</table>
+		</form>
+		<br>
+	</div>
 </td>
 </tr>
 </table>

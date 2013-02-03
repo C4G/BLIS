@@ -6650,6 +6650,58 @@ function get_lab_config_id($user_id)
 	DbUtil::switchRestore($saved_db);	
 	return $id;
 }
+
+/* Import Configuration function */
+function get_lab_configs_imported()
+{
+    $saved_db = DbUtil::switchToGlobal();
+    $query_configs = "SELECT distinct lab_config_id from import_log";
+    $retval = array();
+	$resultset = query_associative_all($query_configs, $row_count);
+	if($resultset == null)
+	{
+		DbUtil::switchRestore($saved_db);
+		return $retval;
+	}
+        
+	foreach($resultset as $record)
+	{
+		$retval[] = LabConfig::getById($record['lab_config_id']);
+	}
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+}
+
+function get_last_import_date($id)
+{
+    $saved_db = DbUtil::switchToGlobal();
+    $query_configs = "SELECT * from import_log where lab_config_id = $id ORDER BY ts DESC";
+    $resultset = query_associative_one($query_configs);
+    return $resultset['ts'];
+}
+
+function get_test_mapping_list_by_string($string)
+{
+    //echo "<pre>";
+    $m1 = array();
+    $m2 = array();
+    $m1 = explode(";",$string);
+    //print_r($m1);
+    for($i = 0; $i < count($m1); $i++)
+    {
+        if($m1[$i] != 'null' && $m1[$i] != 'undefined')
+        {
+            //$m2[] = array();
+            $temp = explode(":", $m1[$i]);
+            $m2[$temp[0]] = $temp[1];
+        }
+    }
+       // print_r($m2);
+    //echo "</pre>";
+    return $m2;
+
+}
+
 function get_lab_configs($admin_user_id = "")
 {
 	# Returns all lab configs present in DB and accessible by admin-level user
@@ -7395,6 +7447,29 @@ function get_test_categories($lab_config_id=null) {
 	DbUtil::switchRestore($saved_db);
 	return $retval;
 }
+
+function get_test_categories2($lab_config_id=null) {
+	global $con;
+	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	# Returns a list of all test categories available in catalog
+	global $CATALOG_TRANSLATION;
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	$query_string = "SELECT test_category_id, name FROM test_category";
+	$resultset = query_associative_all($query_string, $row_count);
+	$retval = array();
+        if($row_count == 0)
+            return;
+	foreach($resultset as $record)
+	{
+		if($CATALOG_TRANSLATION === true)
+			$retval[$record['test_category_id']] = LangUtil::getLabSectionName($record['test_category_id']);
+		else
+			$retval[$record['test_category_id']] = $record['name'];
+	}
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+}
+
 
 function get_test_category_name_by_id($cat_id)
 {
@@ -8738,6 +8813,24 @@ class TestTypeMapping {
 			"SELECT * FROM test_mapping WHERE test_id=$testTypeId LIMIT 1";
 		$record = query_associative_one($query_string);
 		return TestTypeMapping::getObject($record);
+	}
+        
+        public static function getTestTypeById($testTypeId, $user_id) {
+		# Returns global test type record in DB
+		$saved_db = DbUtil::switchToGlobal();
+		$query_string =
+			"SELECT * FROM test_mapping WHERE test_id=$testTypeId AND user_id=$user_id LIMIT 1";
+		$record = query_associative_one($query_string);
+		return TestTypeMapping::getObject($record);
+	}
+        
+        public static function getTestCatById($testTypeId, $user_id) {
+		# Returns global test type record in DB
+		$saved_db = DbUtil::switchToGlobal();
+		$query_string =
+			"SELECT * FROM test_category_mapping WHERE test_category_id=$testTypeId AND user_id=$user_id LIMIT 1";
+		$record = query_associative_one($query_string);
+		return $record;
 	}
 	
 	public function getMeasures()

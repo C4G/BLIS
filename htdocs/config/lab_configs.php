@@ -142,8 +142,19 @@ if(isset($_REQUEST['msg']))
 <?php 
 $admin_user_id = $_SESSION['user_id'];
 $lab_config_list = get_lab_configs($admin_user_id);
+$lab_config_list_imported = get_lab_configs_imported();
+//print_r($lab_config_list);
+//echo "<br>";
+//print_r($lab_config_list_imported);
 ?>
+<div id='lab_config_list_imported'>
+       <br>
+    <b>Lab Configs Imported</b>
+	<?php $page_elems->getLabConfigTableImported($lab_config_list_imported);  ?>
+</div>
+    <br>
 <div id='lab_config_list'>
+    <b>Lab Configs Created</b>
 	<?php $page_elems->getLabConfigTable($lab_config_list);  ?>
 </div>
 <br>

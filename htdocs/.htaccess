@@ -90,6 +90,8 @@ RewriteRule ^test_type_updated\.php$ catalog/test_type_updated.php
 RewriteRule ^test_type_delete\.php$ catalog/test_type_delete.php
 RewriteRule ^country_catalog\.php$ catalog/country_catalog.php
 RewriteRule ^test_type_edit_agg\.php$ catalog/test_type_edit_agg.php
+RewriteRule ^test_type_edit_dir\.php$ catalog/test_type_edit_dir.php
+RewriteRule ^lab_section_edit_dir\.php$ catalog/lab_section_edit_dir.php
 RewriteRule ^test_type_updated_agg\.php$ catalog/test_type_updated_agg.php
 
 
