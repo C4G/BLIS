@@ -2595,7 +2595,7 @@ class Test
 		}
 		global $con;
 		$test_id = mysql_real_escape_string($test_id, $con);
-		$query_string = "SELECT * FROM test WHERE test_id=$test_id";
+		$query_string = "SELECT * FROM test WHERE `test_id` = $test_id";
 		$record = query_associative_one($query_string);
 		return Test::getObject($record);
 	}
@@ -3388,18 +3388,30 @@ class Test
 			return LangUtil::$generalTerms['DONE'];
 	}
 
-        public function getTestRegDate()
-        {
-                $query_string =
-			"SELECT date_collected FROM specimen ".
-			"WHERE specimen_id = ( ".
-			"SELECT specimen_id FROM test WHERE test_id = $this->testId".
-                        ")";
-			//"AND result<>''";
+	public function getTestRegDate()
+	{
+		$query_string =
+		"SELECT date_collected FROM specimen ".
+		"WHERE specimen_id = ( ".
+		"SELECT specimen_id FROM test WHERE test_id = $this->testId".
+					")";
+		//"AND result<>''";
 		$resultset = query_associative_one($query_string, $row_count);
-                $retval = $resultset['date_collected'];
+		$retval = $resultset['date_collected'];
 		return $retval;
-        }
+	}
+	
+	public static function convertArrayOfIdsToObjects($testIds)
+	{
+		$test_objs = array();
+		foreach ($testIds as $testId)
+		{
+			$test_objs[] = Test::getById($testId);
+		}
+		return $test_objs;
+	}
+	
+	
 }
 
 class CustomField
@@ -4812,27 +4824,26 @@ class Bill
 	private $id;
 	private $patientId;
 	private $paidInFull;
-	#Discount Type can be NONE, FLAT, or PERCENT.
-	#Default is NONE.
-	private $discountType;
-	private $discount;
 	
 	function Bill($patientId)
 	{
 		$this->paidInFull = FALSE;
-		$this->disableDiscount(); // $this->discountType = 'NONE' and $this->discount = '0.0'
 		$this->patientId = $patientId;
 	}
 	
 	public function create($lab_config_id)
 	{
 		$patientId = $this->patientId;
-		$paidInFull = $this->paidInFull;
-		$discountType = $this->discountType;
-		$discount = $this->discount;
 
-		$query_string = "INSERT INTO `bills` (`patient_id`, `paid_in_full`, `discount_type`, `discount`)
-							VALUES ($patientId, $paidInFull, $discountType, $discount)";
+		if ($this->paidInFull)
+		{
+			$paidInFull = 1;
+		} else
+		{
+			$paidInFull = 0;
+		}
+
+		$query_string = "INSERT INTO `bills` (`patient_id`, `paid_in_full`)	VALUES ($patientId, $paidInFull)";
 							
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		
@@ -4850,13 +4861,9 @@ class Bill
 		$id = $this->id;
 		$patientId = $this->patientId;
 		$paidInFull = $this->paidInFull;
-		$discountType = $this->discountType;
-		$discount = $this->discount;
 
 		$query_string = "UPDATE `bills` SET `patient_id` = $patientId,
-											`paid_in_full` = $paidInfull,
-											`discount_type` = $discountType,
-											`discount` = $discount
+											`paid_in_full` = $paidInfull
 						WHERE `id` = $id";
 							
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
@@ -4884,82 +4891,36 @@ class Bill
 		
 		$bill->id = $id;
 		$bill->paidInFull = $retVal['paidInFull'];
-		$bill->discountType = $retVal['discountType'];
-		$bill->discount = $retVal['discount'];
 		
 		return $bill;
 	}
 	
-	public function enableFlatDiscount()
+	public function getId()
 	{
-		$this->discountType = "FLAT";
-		return 1;
+		return $this->id;
 	}
 	
-	public function enablePercentDiscount()
+	public function getPatientId()
 	{
-		$this->discountType = "PERCENT";
-		return 1;
+		return $this->patientId;
 	}
 	
-	public function disableDiscount()
-	{
-		$this->discountType = "NONE";
-		$this->setDiscountAmount(0.0);
-		return 1;
-	}
-	
-	public function setDiscountAmount($amount)
-	{
-		if (!is_numeric($amount))
-		{
-			# Passed in something that was not a number.
-			return 0;
-		}
-		
-		#Ensure that whatever we got is in numeric form.
-		$amount = floatval($amount);
-		
-		if ($amount < 0)
-		{
-			# Passed in a negative value, which we aren't going to allow.
-			return 0;
-		}
-		
-		# TODO: Handle values > 100 only if discount type is percentage.
-
-		# If it gets this far, we have a good numeric value to add.
-		$this->discount = $amount;
-		return 1;
-	}
-		
 	public static function createBillForTests($tests, $lab_config_id)
 	{
 		# Create a new bill and associate all of the desired tests with it.
-		$bill = new Bill(Specimen::getById($tests[0]->specimenId)->patientId); // This is wonky...
+		// The way we call the bill constructor here is awkward and assumes that the tests are all for the same patient.
+		// While that's true for now, it's not necessarily going to stay that way, so this may need to be revisited. -Robert.
+
+		$bill = new Bill(Specimen::getById($tests[0]->specimenId)->patientId);
 		$bill->create($lab_config_id);
 
 		foreach($tests as $test)
 		{
-			$bill->createAssociationWithTest($test->testId, $lab_config_id);
+			$association = new BillsTestsAssociationObject($bill->id, $test->testId);
+			$association->create($lab_config_id);
 		}
-	}
-	
-	public function createAssociationWithTest($testId, $lab_config_id)
-	{
-		# Create an entry in the bills_tests_associations table to show that this bill contains the test denoted by the id.
-		$id = $this->id;
-
-		$query_string = "INSERT INTO `bills_test_associations` (`bill_id`, `test_id`)
-														VALUES ($id, $test_id)";
-
-		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		
-		query_insert_one($query_string);
-		
-		DbUtil::switchRestore($saved_db);
-		
-		return 1;
+		return $bill;
 	}
 	
 	public static function hasTestBeenBilled($testId, $lab_config_id)
@@ -5013,6 +4974,163 @@ class Bill
 			$bill->save($lab_config_id);
 			return TRUE;
 		}
+	}
+	
+	public function getAllAssociationsForBill($lab_config_id)
+	{
+		$id = $this->id;
+		
+		$query_string = "SELECT id FROM `bills_test_association` WHERE `bill_id` = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		$retVal = query_associative_all($query_string, $_COUNT);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		$associations = array();
+		foreach($retVal as $entry)
+		{
+			$associations[] = BillsTestsAssociationObject::loadFromId($entry['id'], $lab_config_id);
+		}
+		return $associations;
+	}
+}
+
+class BillsTestsAssociationObject
+{
+	# Used to associate tests with a bill.  Also provides a place to apply discounts to a test,
+	#  since we don't want to modify the existing test table structure.
+	
+	// Constants for discount assignments.
+	const NONE = 1000;
+	const PERCENT = 1001;
+	const FLAT = 1002;
+	
+	private $id;
+	private $billId;
+	private $testId;
+	private $discountType;
+	private $discount;
+	
+	function BillsTestsAssociationObject($billId, $testId)
+	{
+		$this->billId = $billId;
+		$this->testId = $testId;
+		$this->discountType = self::NONE;
+		$this->discount = 0.00;
+	}
+	
+	function create($lab_config_id)
+	{
+		$billId = $this->billId;
+		$testId = $this->testId;
+		$discountType = $this->discountType;
+		$discountAmount = $this->discount;
+		
+		$query_string = "INSERT INTO `bills_test_association` (bill_id, test_id, discount_type, discount_amount)
+							VALUES ($billId, $testId, $discountType, $discountAmount)";
+							
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_insert_one($query_string);
+		
+		$this->id = get_last_insert_id();
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	function save($lab_config_id)
+	{
+		$id = $this->id;
+		$billId = $this->billId;
+		$testId = $this->testId;
+		$discountType = $this->discountType;
+		$discountAmount = $this->discount;
+		
+		$query_string = "UPDATE `bills_test_association` SET `bill_id` = $billId,
+															 `test_id` = $testId,
+															 `discount_type` = $discountType,
+															 `discount_amount` = $discountAmount
+						WHERE `id` = $id";
+
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_update($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	function loadFromId($id, $lab_config_id)
+	{
+		
+		$query_string = "SELECT * FROM `bills_test_association` WHERE `id` = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		$retVal = query_associative_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+		
+		$association = new BillsTestsAssociationObject($retVal['bill_id'], $retVal['test_id']);
+
+		$association->id = $id;
+		$association->discountType = $retVal['discount_type'];
+		$association->discount = $retVal['discount_amount'];
+		
+		return $association;
+	}
+	
+	public function getTestId()
+	{
+		return $this->testId;
+	}
+	
+	public function enableFlatDiscount()
+	{
+		$this->discountType = self::FLAT;
+		return 1;
+	}
+	
+	public function enablePercentDiscount()
+	{
+		$this->discountType = self::PERCENT;
+		return 1;
+	}
+	
+	public function disableDiscount()
+	{
+		$this->discountType = self::NONE;
+		$this->setDiscountAmount(0.0);
+		return 1;
+	}
+	
+	public function setDiscountAmount($amount)
+	{
+		if (!is_numeric($amount))
+		{
+			# Passed in something that was not a number.
+			return 0;
+		}
+		
+		#Ensure that whatever we got is in numeric form.
+		$amount = floatval($amount);
+		
+		if ($amount < 0)
+		{
+			# Passed in a negative value, which we aren't going to allow.
+			return 0;
+		}
+		
+		# TODO: Handle values > 100 only if discount type is percentage.
+
+		# If it gets this far, we have a good numeric value to add.
+		$this->discount = $amount;
+		return 1;
 	}
 }
 
@@ -5491,6 +5609,7 @@ return $patient_list;
 
 
 }
+
 function get_patient_by_id($pid)
 {
 	global $con;
@@ -5520,7 +5639,6 @@ function search_patients_by_id($q)
 	return $patient_list;
 }
 
-
 function search_patients_by_id_dyn($q, $cap, $counter)
 {
 	# Searches for patients with similar name
@@ -5542,8 +5660,6 @@ function search_patients_by_id_dyn($q, $cap, $counter)
 	return $patient_list;
 }
 
-
-
 function search_patients_by_id_count($q)
 {
 	# Searches for patients with similar name
@@ -5555,7 +5671,6 @@ function search_patients_by_id_count($q)
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
-
 
 function search_patients_by_name($q)
 {
@@ -5576,7 +5691,6 @@ function search_patients_by_name($q)
 	}
 	return $patient_list;
 }
-
 
 function search_patients_by_name_dyn($q, $cap, $counter)
 {
@@ -5599,8 +5713,6 @@ function search_patients_by_name_dyn($q, $cap, $counter)
 	return $patient_list;
 }
 
-
-
 function search_patients_by_name_count($q)
 {
 	# Searches for patients with similar name
@@ -5612,7 +5724,6 @@ function search_patients_by_name_count($q)
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
-
 
 function search_patients_by_addlid($q)
 {
@@ -5634,7 +5745,6 @@ function search_patients_by_addlid($q)
 	return $patient_list;
 }
 
-
 function search_patients_by_addlid_dyn($q, $cap, $counter)
 {
 	# Searches for patients with similar name
@@ -5655,8 +5765,6 @@ function search_patients_by_addlid_dyn($q, $cap, $counter)
 	}
 	return $patient_list;
 }
-
-
 
 function search_patients_by_addlid_count($q)
 {
@@ -5688,7 +5796,6 @@ function search_patients_by_dailynum($q)
 	return $patient_list;
 }
 
-
 function search_patients_by_dailynum_dyn($q, $cap, $counter)
 {
 	# Searches for patients with similar name
@@ -5709,8 +5816,6 @@ function search_patients_by_dailynum_dyn($q, $cap, $counter)
 	return $patient_list;
 }
 
-
-
 function search_patients_by_dailynum_count($q)
 {
 	# Searches for patients with similar name
@@ -5721,7 +5826,6 @@ function search_patients_by_dailynum_count($q)
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
-
 
 function search_specimens_by_id($q)
 {
@@ -5742,8 +5846,6 @@ function search_specimens_by_id($q)
 	}
 	return $specimen_list;
 }
-
-
 
 function search_specimens_by_addlid($q)
 {
@@ -5942,7 +6044,6 @@ fclose($fh);
 	# Addition of custom fields: done from calling function/page	
 	return true;
 }
-
 
 #
 # Functions for handling specimen/test-related data
@@ -6301,7 +6402,6 @@ function get_specimens_by_session($session_num)
 	return $retval;
 }
 
-
 #
 # Functions for adding lab configuration (site) related data
 #
@@ -6536,6 +6636,7 @@ function get_stock_details($entry_id)
 	DbUtil::switchRestore($saved_db);
 	return $retval;
 }
+
 function add_new_stock($name,$lot_number,$expiry_date,$manufacture,$supplier,$quantity_supplied,$unit , $cost_per_unit,$ts) {
 	# Adds a new stock or update the quantity of the stock
 	
@@ -6611,6 +6712,7 @@ function add_new_stock($name,$lot_number,$expiry_date,$manufacture,$supplier,$qu
 		DbUtil::switchRestore($saved_db);
 	}
 }
+
 function get_stock_count()
 {
 	$saved_db = DbUtil::switchToLabConfigRevamp();
@@ -6628,6 +6730,7 @@ function get_stock_count()
 	DbUtil::switchRestore($saved_db);
 	return $retval;
 }
+
 function get_stock_out_details()
 {
 $saved_db = DbUtil::switchToLabConfigRevamp();
@@ -6658,6 +6761,7 @@ $query_string =
 		return $retval;
 DbUtil::switchRestore($saved_db);
 }
+
 function get_current_inventory_byName($date_to,$date_from, $name)
 {
 	$saved_db = DbUtil::switchToLabConfigRevamp();
@@ -6820,7 +6924,6 @@ function update_stocks($name, $lot_number, $quant, $receiver, $remarks, $ts)
 	}
 }
 
-
 /////////////////////////////////
 // This is end of stock module //
 /////////////////////////////////
@@ -6879,7 +6982,6 @@ function create_lab_config_tables($lab_config_id, $db_name)
 	}
 }
 
-
 function blis_db_update($lab_config_id, $db_name, $ufile)
 {
 	# Creates empty tables for a new lab configuration
@@ -6895,7 +6997,6 @@ function blis_db_update($lab_config_id, $db_name, $ufile)
 		query_blind($sql_command.";");
 	}
 }
-
 
 function create_lab_config_revamp_tables($lab_config_id, $revamp_db_name)
 {
@@ -6927,11 +7028,9 @@ function set_lab_config_db_name($lab_config_id, $db_name)
 	DbUtil::switchRestore($saved_db);
 }
 
-
 #
 # Functions for fetching lab configuration (site) related data
 #
-
 function get_lab_config_by_id($lab_config_id)
 {
 	global $con;
@@ -7357,11 +7456,9 @@ function get_specimen_types_by_site($lab_config_id="")
 	return $retval;
 }
 
-
 #
 # Functions for adding data to catalog
 #
-
 function add_specimen_type($specimen_name, $specimen_descr, $test_list=array())
 {
 	global $con;
@@ -7610,7 +7707,6 @@ function add_measure($measure, $range, $unit)
 #
 # Functions for fetching data from catalog
 #
-
 function get_specimen_types_catalog($lab_config_id=null, $reff=null)
 {
 	# Returns a list of all specimen types available in catalog
@@ -7696,7 +7792,6 @@ function get_search_fields($lab_config_id=null)
 }
 
 //NC3065
-
 function getDoctorNames()
 {
 	$query_string = "SELECT doctor FROM specimen WHERE date_collected >'2010-08-11'";
@@ -7731,7 +7826,6 @@ function get_test_categories_data($lab_config_id) {
 	DbUtil::switchRestore($saved_db);
 	return $retval;
 }
-
 
 function get_test_ids_by_category($cat, $lab_config_id) {
 	
@@ -7957,8 +8051,6 @@ function get_specimen_name_by_id($specimen_type_id)
 			return $record['name'];
 	}
 }
-
-
 
 function get_test_name_by_id($test_type_id, $lab_config_id=null)
 {
@@ -11296,12 +11388,11 @@ function get_cost_of_test_type_for_closest_date($date, $test_type_id)
     instantiate_new_cost_of_test_type(0.00, $test_type_id);
     
     $date = date("Y-m-d H:i:s", strtotime($date));
-    
+	
     $lab_config_id = $_SESSION['lab_config_id'];
     
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
 
-    // Get all instances of prices for this test type, then filter the date in php.  More reliable way to compare dates.
     $query_string = "SELECT amount, earliest_date_valid FROM test_type_costs WHERE test_type_id=$test_type_id AND earliest_date_valid<='$date' ORDER BY earliest_date_valid DESC LIMIT 1";
     
     $result = query_associative_one($query_string);
@@ -11348,6 +11439,13 @@ function get_test_names_and_costs_from_ids($id_array)
     $ret_array['names'] = $name_array;
     
     return $ret_array;
+}
+
+function get_cost_of_test($test)
+{
+	$cost = get_cost_of_test_type_for_closest_date($test->timestamp, $test->testTypeId);
+	
+	return $cost;
 }
 
 function generate_bill_data_for_patient_and_date_range($patient_id, $first_date, $second_date)
@@ -11564,54 +11662,6 @@ function is_billing_enabled($lid)
         return true;
     }
     return false;
-}
-
-/***************************************************
- * Payment Functions
-***************************************************/
-
-/**
- * create_payment
- * creates a new payment in the database
- * @parameter amount: the amount of the payment
- * @parameter specimen_id: the specimen referenced by the payment
- */
-function create_payment_for_specimen($amount, $specimen_id)
-{
-	// Create a payment entry in the database
-	$lab_config_id = $_SESSION['lab_config_id'];
-
-    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
-
-    $query_string = "INSERT INTO payments (amount) VALUES ($amount)";
-    query_insert_one($query_string);
-
-	$payment_id = mysql_insert_id();
-
-	$query_string = "INSERT INTO payment_specimen_assoc (payment_id, specimen_id) VALUES ($payment_id, $specimen_id)";
-	query_insert_one($query_string);
-
-    DbUtil::switchRestore($saved_db);
-}
-
-/**
- * load_payment
- * load a payment from the database
- * @parameter payment_id: the id of the payment we want to load
- */
-function load_payment_by_id($payment_id)
-{
-	// Load payment information for a particular payment id
-}
-
-function load_payments_for_patient($patient_id)
-{
-	// Load all payments for a particular patient.
-}
-
-function get_payment_status_of_specimen($specimen_id)
-{
-	// Returns string ('unpaid', 'paid') for specimen.
 }
 
 /***************************************************

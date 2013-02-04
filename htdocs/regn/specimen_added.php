@@ -8,6 +8,8 @@ include("includes/header.php");
 LangUtil::setPageId("specimen_added");
 
 $session_num = $_REQUEST['snum'];
+$script_elems->enableTableSorter();
+
 
 //$session_num = get_session_current_number();
 $specimen_list = get_specimens_by_session($session_num);
