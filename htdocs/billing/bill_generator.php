@@ -6,6 +6,7 @@
 include("../includes/db_lib.php");
 include("../includes/script_elems.php");
 include("../includes/page_elems.php");
+
 $script_elems = new ScriptElems();
 $page_elems = new PageElems();
 
@@ -17,38 +18,69 @@ $script_elems->enableJQueryForm();
 		<title>
 		</title>
 		<script type='text/javascript'>
+			$("#generate_bill_button").click(function() {
+				var url = "bill_review.php";
+				$('#submit_progress').show();
+				$("#bill_generator_form").ajaxSubmit({
+					success: function(data)
+					{
+						alert(data);
+						$('#submit_progress').hide();
+						window.location = url + "?bill_id=" + data;
+					}
+				});
+			});
 		</script>
 		<?php include("../includes/styles.php"); ?>
 	</head>
 	<body>
-		<form name='bill_generator_form' action=''>
-		<input type='hidden' value='<?php echo $_SESSION['pid']; ?>'><?php
-		$specimens = search_specimens_by_patient_id($_SESSION['pid']);
-		if (!empty($specimens))
+		<form name='bill_generator_form' id='bill_generator_form' action='create_new_bill.php'>
+		<input type='hidden' name='patient_id' value='<?php echo $_SESSION['pid']; ?>'><?php
+		$tests = get_all_tests_for_patient_and_date_range($_SESSION['pid'], "January 1, 1969", "today");
+		if (!empty($tests))
 		{
-		?><table class='tablesorter' id='billing_popup_table' style="border-collapse: separate;">
+		?><table class='tablesorter' id='billing_popup_table' style="border-collapse: separate; width: 700px;">
 			<thead>
 				<tr valign='top'>
-					<th class='billing_popup_header'>Specimen Date</th>
-					<th class='billing_popup_header'>Specimen Name</th>
-					<th class='billing_popup_header'>Specimen Cost</th>
-					<th class='billing_popup_header'>Select for Billing</th>
+					<th id='billing_popup_date' style='width: 75px;'>Test Date</th>
+					<th id='billing_popup_name'>Test Name</th>
+					<th id='billing_popup_specimen_type'>Specimen Type</th>
+					<th id='billing_popup_cost'>Test Cost</th>
+					<th id='billing_popup_select' style='width: 100px;'>Select for Billing</th>
 				</tr>
 			</thead><?php
-			foreach ($specimens as $specimen)
+			foreach ($tests as $test)
 			{
-			$style_string = "style='background-color:grey; color:white;'";
+			$test = Test::getById($test['test_id']); // We only loaded an id and timestamp, and we want more information.
+
+			$specimen = Specimen::getById($test->specimenId);
+			
+			$testHasBeenBilled = Bill::hasTestBeenBilled($test->test_id, $_SESSION['lab_config_id']);
+			
+			if ($testHasBeenBilled)
+			{
+				$style_string = "style='background-color:grey; color:white;'";
+			} else
+			{
+				$style_string = "";
+			}
+			$cost = get_cost_of_test($test);
 			?><tr>
-				<td <?php echo $style_string ?>><?php echo $specimen->getDateReported()?></td>
-				<td <?php echo $style_string ?>><?php echo $specimen->getTypeName()?></td>
-				<td <?php echo $style_string ?>><?php echo $specimen->getCost()?></td>
-				<td <?php echo $style_string ?>><input type='checkbox' <?php echo "checked" ?>></input></td>
+				<td <?php echo $style_string ?>><?php echo date("Y-m-d", strtotime($test->timestamp)); ?></td>
+				<td <?php echo $style_string ?>><?php echo get_test_name_by_id($test->testTypeId); ?></td>
+				<td <?php echo $style_string ?>><?php echo $specimen->getTypeName(); ?></td>
+				<td <?php echo $style_string ?>><?php echo $cost["amount"]; ?></td>
+				<td <?php echo $style_string ?>><input name='test_checkboxes[]' type='checkbox' <?php echo ($testHasBeenBilled ? "checked" : ""); ?> value='<?php echo $test->testId ?>'></input> <?php echo ($testHasBeenBilled ? "<a href='someLink.php'>View Bill</a>" : "");  ?></td>
 			</tr><?php
 			}
-		?></table>
-		<input type='submit' value='Generate Bill' />
-		&nbsp
-		<input type='submit' value='Enter Payment' /><?php
+		?><tr>
+			<td colspan='4'></td>
+			<td align='center'><input id='generate_bill_button' name='generate_bill_button' type='button' value='Generate Bill'/></td>
+		</tr></table>
+		<span id='submit_progress' style='display:none;'>
+			<?php echo $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
+		</span>
+		<?php
 		} else
 		{
 			echo "There are no specimens registered for this patient.";
