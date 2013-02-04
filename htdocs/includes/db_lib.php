@@ -4995,6 +4995,18 @@ class Bill
 		}
 		return $associations;
 	}
+
+	public function getBillTotal($lab_config_id)
+	{
+		$associations = $this->getAllAssociationsForBill($lab_config_id);
+
+		$runningTotal = 0.00;
+		foreach($associations as $assoc)
+		{
+			$runningTotal += $assoc->getDiscountedTotal();
+		}
+		return $runningTotal;
+	}
 }
 
 class BillsTestsAssociationObject
@@ -5085,27 +5097,96 @@ class BillsTestsAssociationObject
 		return $association;
 	}
 	
+	public function getId()
+	{
+		return $this->id;
+	}
+	
+	public function getDiscountedTotal()
+	{
+		switch($this->discountType)
+		{
+		case self::NONE:
+			$unformatted_cost = $this->getCostOfTest();
+			break;
+		case self::FLAT:
+			$unformatted_cost = $this->getCostOfTest() - $this->discount;
+			break;
+		case self::PERCENT:
+			$unformatted_cost = $this->getCostOfTest() * (1 - ($this->discount / 100));
+			break;
+		default:
+			// Shouldn't get here.
+			break;
+		}
+		$cost = (floor($unformatted_cost * 100)) / 100;
+		return $unformatted_cost;
+	}
+	
+	public function getCostOfTest()
+	{
+		$test = Test::getById($this->testId);
+		$cost = get_cost_of_test($test);
+		$cost = $cost['amount'];
+		return floatVal($cost);
+	}
+	
 	public function getTestId()
 	{
 		return $this->testId;
 	}
 	
-	public function enableFlatDiscount()
+	public function getBillId()
 	{
-		$this->discountType = self::FLAT;
-		return 1;
+		return $this->billId;
 	}
 	
-	public function enablePercentDiscount()
+	public function getDiscountAmount()
 	{
-		$this->discountType = self::PERCENT;
-		return 1;
+		return $this->discount;
 	}
 	
-	public function disableDiscount()
+	public function isFlatDiscount()
 	{
-		$this->discountType = self::NONE;
-		$this->setDiscountAmount(0.0);
+		if ($this->discountType == self::FLAT)
+		{
+			return TRUE;
+		} else
+		{
+			return FALSE;
+		}
+	}
+
+	public function isPercentDiscount()
+	{
+		if ($this->discountType == self::PERCENT)
+		{
+			return TRUE;
+		} else
+		{
+			return FALSE;
+		}
+	}
+
+	public function isDiscountDisabled()
+	{
+		if ($this->discountType == self::NONE)
+		{
+			return TRUE;
+		} else
+		{
+			return FALSE;
+		}
+	}
+	
+	public function setDiscountType($discount_type)
+	{
+		if ($discount_type < 100 or $discount_type > 1002)
+		{
+			return 0;
+		}
+		$this->discountType = $discount_type;
+
 		return 1;
 	}
 	
@@ -5125,8 +5206,28 @@ class BillsTestsAssociationObject
 			# Passed in a negative value, which we aren't going to allow.
 			return 0;
 		}
-		
-		# TODO: Handle values > 100 only if discount type is percentage.
+
+		switch ($this->discountType)
+		{
+		case self::NONE:
+			break; // Shouldn't happen.
+		case self::PERCENT:
+			if ($amount > 100)
+			{
+				# Passed in a value greater than 100 for a percentage discount, which we aren't going to allow.
+				return 0;
+			}
+			break;
+		case self::FLAT:
+			if ($amount > $this->getCostOfTest())
+			{
+				# Passed in a value greater than the cost of the test, which we aren't going to allow.
+				return 0;
+			}
+			break;
+		default:
+			break; // shouldn't happen.
+		}
 
 		# If it gets this far, we have a good numeric value to add.
 		$this->discount = $amount;
@@ -11388,6 +11489,34 @@ function get_test_type_id_from_test_id($test_id)
 /***************************
  * Billing Functions
  ***************************/
+ 
+function functional_number_to_editable_money($number)
+{
+	$string = get_currency_delimiter_from_lab_config_settings(); // i.e. get DDD(.)CC
+	
+	$dollars = floor($number); // i.e. get (DDD).CC
+	$cents = $number - $dollars; // i.e. get DDD.(CC)
+	
+	$cents_as_whole_number = get_cents_as_whole_number($cents); // turn 0.(CC) into (CC).0
+	
+	$string = $dollars . $string . $cents; // i.e. (DDD)(.)(CC) = DDD.CC
+	
+	return $string;
+}
+
+function editable_money_to_functional_number($string)
+{
+	$delimiter = get_currency_delimiter_from_lab_config_settings();
+	
+	$values = explode($delimiter, $string);
+	$dollars = $values[0];
+	$cents = $values[1];
+	
+	$numeric_cents = get_cents_from_whole_number($cents); // turn (CC).0 into 0.(CC)
+	$numeric_dollars = intval($dollars); // force dealing with an int to ensure no type problems arise.
+	
+	return $numeric_dollars + $nuermic_cents;
+}
 
 function format_number_to_money($number)
 {
@@ -11404,12 +11533,12 @@ function format_number_to_money($number)
 
 function get_cents_as_whole_number($cents)
 {
-    return $cents * 100;
+    return floor($cents * 100);
 }
 
 function get_cents_from_whole_number($cents)
 {
-	$cost_cents = ltrim($cents, "0"); // Remove any leading zeroes in case the user typed 01 or similar.
+	$cost_cents = floor(ltrim($cents, "0")); // Remove any leading zeroes in case the user typed 01 or similar.
 	
 	return $cost_cents / 100;
 }
