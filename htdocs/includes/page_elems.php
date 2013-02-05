@@ -300,10 +300,11 @@ class PageElems
 	
 	public function getSiteOptionsCheckBoxes($checkBoxName) 
 	{
-		$site_list = get_site_list($_SESSION['user_id']);
-		foreach($site_list as $key => $value) {
-			$strippedLabName = substr($value,0,strpos($value,'-')-1);
-			echo "<br><input type='checkbox' name='$checkBoxName' id='$checkBoxName' value='$key'>$strippedLabName</input>";
+		//$site_list = get_site_list($_SESSION['user_id']);
+                $config_list = get_lab_configs_imported();
+		foreach($config_list as $lab_config) {
+			$strippedLabName = substr($lab_config->name,0,strpos($lab_config->name,'-')-1);
+			echo "<br><input type='checkbox' name='$checkBoxName' id='$checkBoxName' value='$lab_config->id'>$strippedLabName</input>";
 		}
 	}
 	public function getAdminUserOptions()
@@ -576,7 +577,7 @@ class PageElems
 		 $config_list = get_lab_configs_imported();
 		foreach($config_list as $lab_config) {
 			echo "<tr><td>".$lab_config->name."</td>";
-			echo "<td><select id='C'>";
+			echo "<td><select id='testCategoryNameSelect$count'>";
 			$testCategoriesList = get_test_categories($lab_config->id);
 			foreach( $testCategoriesList as $testCategoryId => $testCategoryName ) {
 				echo "<option value='$lab_config->id:$testCategoryId'>".$testCategoryName."</option>";

@@ -169,9 +169,13 @@ $cat_code = $_REQUEST['cat_code'];
 $labNames = "";
 
 if( count($lab_config_ids) == 1 && $lab_config_ids[0] == 0 ) {
-	$sites_list = get_site_list($_SESSION['user_id']);
-	foreach($sites_list as $key => $value)
-		$site_list[] = $key;
+	//$sites_list = get_site_list($_SESSION['user_id']);
+        $config_list = get_lab_configs_imported();
+	foreach($config_list as $lab_config) {
+	//foreach($sites_list as $key => $value)
+		//$site_list[] = $key;
+            $site_list[] = $lab_config->id;
+        }
 }
 else if ( count($lab_config_ids) == 1 )
 	$site_list = $lab_config_ids;
@@ -182,11 +186,13 @@ foreach($site_list as $labConfigId)
 	$labNames .= LabConfig::getById($labConfigId)->name.", ";
 
 $labNames = substr($labNames, 0, strlen($labNames)-2);
+//print_r($labNames);
 //$selected_test_ids = $lab_config->getTestTypeIds();
 
 if($cat_code != 0) {
 	# Fetch all tests belonging to this category (aka lab section)
 	$cat_test_types = TestTypeMapping::getByCategory($cat_code);
+        print_r($cat_test_types);
 	$selected_test_ids = array();
 	foreach( $cat_test_types as $test_type )
 		$selected_test_ids[] = $test_type->testId;

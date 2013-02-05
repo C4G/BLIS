@@ -73,6 +73,8 @@ RewriteRule ^reports_billing\.php$ reports/reports_billing.php
 #-Currently unused php report files-
 RewriteRule ^reports_session\.php$ reports/reports_session.php
 RewriteRule ^reports_tat_org\.php$ reports/reports_tat_org.php
+RewriteRule ^geo_report_prevalence_dir\.php$ reports/geo_report_prevalence_dir.php
+
 
 ## /catalog folder
 RewriteRule ^catalog\.php$ catalog/catalog.php
