@@ -47,7 +47,8 @@ $REPORT_ID_ARRAY = array(
 	"reports_print.php" => 3,
 	"reports_dailyspecimens.php" => 4,
 	"reports_dailypatients.php" => 6,
-	"worksheet.php" => 5
+	"worksheet.php" => 5,
+	"reports_billing_specific.php" => 7
 );
 
 # Default max width of the window (in pixels)
