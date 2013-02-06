@@ -29,9 +29,9 @@ $script_elems->enableTableSorter();
 					$("#bill_total").hide().html(decoded_resp["b"]).fadeIn('fast');
 				});
 			}
-			function print_bill(id)
+			function print_bill(id, lab_id)
 			{
-				var url = "reports_billing_specific.php?bill_id=" + id;
+				var url = "reports_billing_specific.php?bill_id=" + id + "&lab_config_id=" + lab_id;
 				window.open(url, '_blank');
 				window.focus();
 			}
@@ -89,7 +89,7 @@ $script_elems->enableTableSorter();
 					<td>Bill Total: <div id="bill_total" ><?php echo format_number_to_money($bill->getBillTotal($lab_config_id)); ?></div></td>
 				</tr>
 			</table>
-			<input type='button' value='Print Bill' onclick="javascript:print_bill(<?php echo $bill->getId(); ?>)"\>
+			<input type='button' value='Print Bill' onclick="javascript:print_bill(<?php echo $bill->getId() . ", " . $lab_config_id; ?>)"\>
 		</form>
 	</body>
 </html>

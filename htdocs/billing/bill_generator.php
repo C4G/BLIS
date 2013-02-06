@@ -24,7 +24,6 @@ $script_elems->enableJQueryForm();
 				$("#bill_generator_form").ajaxSubmit({
 					success: function(data)
 					{
-						alert(data);
 						$('#submit_progress').hide();
 						window.location = url + "?bill_id=" + data;
 					}
@@ -46,7 +45,7 @@ $script_elems->enableJQueryForm();
 					<th id='billing_popup_name'>Test Name</th>
 					<th id='billing_popup_specimen_type'>Specimen Type</th>
 					<th id='billing_popup_cost'>Test Cost</th>
-					<th id='billing_popup_select' style='width: 100px;'>Select for Billing</th>
+					<th id='billing_popup_select' style='width: 110px;'>Select for Billing</th>
 				</tr>
 			</thead><?php
 			foreach ($tests as $test)
@@ -54,8 +53,8 @@ $script_elems->enableJQueryForm();
 			$test = Test::getById($test['test_id']); // We only loaded an id and timestamp, and we want more information.
 
 			$specimen = Specimen::getById($test->specimenId);
-			
-			$testHasBeenBilled = Bill::hasTestBeenBilled($test->test_id, $_SESSION['lab_config_id']);
+
+			$testHasBeenBilled = Bill::hasTestBeenBilled($test->testId, $_SESSION['lab_config_id']);
 			
 			if ($testHasBeenBilled)
 			{
@@ -70,7 +69,15 @@ $script_elems->enableJQueryForm();
 				<td <?php echo $style_string ?>><?php echo get_test_name_by_id($test->testTypeId); ?></td>
 				<td <?php echo $style_string ?>><?php echo $specimen->getTypeName(); ?></td>
 				<td <?php echo $style_string ?>><?php echo $cost["amount"]; ?></td>
-				<td <?php echo $style_string ?>><input name='test_checkboxes[]' type='checkbox' <?php echo ($testHasBeenBilled ? "checked" : ""); ?> value='<?php echo $test->testId ?>'></input> <?php echo ($testHasBeenBilled ? "<a href='someLink.php'>View Bill</a>" : "");  ?></td>
+				<?php if ($testHasBeenBilled)
+				{ 
+					$assoc = BillsTestsAssociationObject::loadByTestId($test->testId, $_SESSION['lab_config_id']);
+					?>
+					<td> <a href="bill_review.php?bill_id=<?php echo $assoc->getBillId() ?>">View Associated Bill</a> </td>
+				<?php } else
+				{ ?>
+					<td <?php echo $style_string ?>><input name='test_checkboxes[]' type='checkbox' value='<?php echo $test->testId ?>'></input></td>
+				<?php } ?>
 			</tr><?php
 			}
 		?><tr>

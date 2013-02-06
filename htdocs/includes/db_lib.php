@@ -1307,6 +1307,19 @@ class TestType
 		$retval = $record['hide_patient_name'];
 		return $retval;
 	}
+	
+	public static function getNameById($id)
+	{
+		$query_string = "SELECT name FROM `test_type` WHERE `test_type_id` = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+
+		$retVal = query_associative_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+		
+		return $retVal['name'];
+	}
 }
 
 class SpecimenType
@@ -3411,7 +3424,13 @@ class Test
 		return $test_objs;
 	}
 	
-	
+	// Returns the name associated with the test type this is an instance of.
+	public function getTestName()
+	{
+		$id = $this->testTypeId;
+		
+		return TestType::getNameById($id);
+	}
 }
 
 class CustomField
@@ -4925,15 +4944,15 @@ class Bill
 	
 	public static function hasTestBeenBilled($testId, $lab_config_id)
 	{
-		$query_string = "SELECT COUNT(*) FROM `bills_test_associations WHERE `test_id` = $testId";
+		$query_string = "SELECT COUNT(*) FROM `bills_test_association` WHERE `test_id` = $testId";
 		
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		
 		$retVal = query_associative_one($query_string);
 		
 		DbUtil::switchRestore($saved_db);
-		
-		if (isset($retVal[0]))
+
+		if ($retVal["COUNT(*)"] > 0)
 		{
 			return TRUE;
 		}
@@ -5006,6 +5025,13 @@ class Bill
 			$runningTotal += $assoc->getDiscountedTotal();
 		}
 		return $runningTotal;
+	}
+	
+	public function getFormattedTotal($lab_config_id)
+	{
+		$cost = $this->getBillTotal($lab_config_id);
+		
+		return format_number_to_money($cost);
 	}
 }
 
@@ -5083,7 +5109,7 @@ class BillsTestsAssociationObject
 		$query_string = "SELECT * FROM `bills_test_association` WHERE `id` = $id";
 		
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		
+
 		$retVal = query_associative_one($query_string);
 
 		DbUtil::switchRestore($saved_db);
@@ -5134,6 +5160,15 @@ class BillsTestsAssociationObject
 	public function getTestId()
 	{
 		return $this->testId;
+	}
+	
+	public function getTest()
+	{
+		$id = $this->testId;
+		
+		$test = Test::loadById($id);
+		
+		return $test;
 	}
 	
 	public function getBillId()
@@ -5232,6 +5267,63 @@ class BillsTestsAssociationObject
 		# If it gets this far, we have a good numeric value to add.
 		$this->discount = $amount;
 		return 1;
+	}
+	
+	public function loadByTestId($testId, $lab_config_id)
+	{
+		$query_string = "SELECT id FROM `bills_test_association` WHERE `test_id` = $testId";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+		$retVal = query_associative_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+		
+		$association = self::loadFromId($retVal['id'], $lab_config_id);
+		
+		return $association;
+	}
+	
+	// Return the name for the test this object references.
+	public function getTestName()
+	{
+		$id = $this->testId;
+
+		$query_string = "SELECT name FROM test_type WHERE test_type_id = (SELECT test_type_id FROM test WHERE test_id = $id)";
+		
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+
+		$retVal = query_associative_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+
+		return $retVal['name'];
+	}
+	
+	// Return the date for the test this object references.
+	public function getTestDate()
+	{
+		$id = $this->testId;
+
+		$query_string = "SELECT ts FROM test WHERE test_id = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+
+		$retVal = query_associative_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+
+		$date = $retVal['ts'];
+		
+		return date("Y-m-d", strtotime($date));
+	}
+	
+	// Return the cost for the test this object references, formatted accordingly.
+	public function getFormattedTestCost()
+	{
+		$cost = $this->getCostOfTest();
+		
+		return format_number_to_money($cost);
 	}
 }
 
