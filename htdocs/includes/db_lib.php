@@ -5321,7 +5321,7 @@ class BillsTestsAssociationObject
 	// Return the cost for the test this object references, formatted accordingly.
 	public function getFormattedTestCost()
 	{
-		$cost = $this->getCostOfTest();
+		$cost = $this->getDiscountedTotal();
 		
 		return format_number_to_money($cost);
 	}
