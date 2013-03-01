@@ -214,3 +214,13 @@ RewriteRule ^barcode_lib\.php$ barcode/barcode_lib.php
 RewriteRule ^export_to_pdf\.php$ barcode/tcpdf/export_to_pdf.php
 RewriteRule ^print_barcode\.php$ barcode/print_barcode.php
 RewriteRule ^get_barcode\.php$ barcode/get_barcode.php
+
+## /billing folder
+RewriteRule ^bill_generator\.php$ billing/bill_generator.php
+RewriteRule ^bill_review\.php$ billing/bill_review.php
+RewriteRule ^create_new_bill\.php$ billing/create_new_bill.php
+RewriteRule ^update_discount_for_association\.php$ billing/update_discount_for_association.php
+
+## /director folder
+RewriteRule ^lab_pin\.php$ director/lab_pin.php
+RewriteRule ^geo_report_dir\.php$ director/geo_report_dir.php

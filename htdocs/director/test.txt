@@ -1,0 +1,9 @@
+CREATE  TABLE `blis_revamp`.`map_coordinates` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `lab_id` INT(11) NOT NULL ,
+  `coordinates` VARCHAR(100) NULL ,
+  `user_id` INT(11) NULL ,
+  `flag` INT(11) NULL DEFAULT 1 ,
+  `country` VARCHAR(110) NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
