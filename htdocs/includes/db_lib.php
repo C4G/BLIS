@@ -11732,4 +11732,89 @@ function insertVersionDataEntry()
    DbUtil::switchRestore($saved_db);
 }
 
+/*
+* Returns a list of all labs under a certain director
+*/
+function get_labs_for_director($director)
+{
+	$lab_config_id = $_SESSION['lab_config_id'];
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	
+	$query_string = "SELECT lab_config_id FROM lab_config_access WHERE user_id = $director";
+	
+	$retVal = query_associative_all($query_string, $_COUNT);
+	DbUtil::switchRestore($saved_db);
+
+	return $retVal;
+}
+
+/*
+* Returns the name of a lab, based on its id
+*/
+function get_lab_name_by_id_revamp($lab_id)
+{
+	$lab_config_id = $_SESSION['lab_config_id'];
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	
+	$query_string = "SELECT name FROM lab_config WHERE lab_config_id = $lab_id";
+	
+	$retVal = query_associative_all($query_string, $_COUNT);
+	DbUtil::switchRestore($saved_db);
+
+	return $retVal;
+}
+
+/*
+* Returns whether or not a lab has been placed on the director map.
+*/
+function is_lab_placed($lab, $user)
+{	
+	$lab_config_id = $_SESSION['lab_config_id'];
+	
+	$query_string = "SELECT coordinates FROM map_coordinates WHERE lab_id = $lab AND user_id = $user";
+	
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	$retVal = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
+
+	if (!is_null($retVal['coordinates']))
+	{
+		return $retVal['coordinates'];
+	}
+	return NULL;
+}
+
+/*
+* Updates (or if there is no entry to update, creates) an entry with the x and y coordinates of a laboratory.
+*/
+function create_or_update_map_coords_entry($lab_id, $dir_id, $x, $y)
+{
+	$lab_config_id = $_SESSION['lab_config_id'];
+	$coordinate_string = "(" . $x . ", " . $y . ")";
+	
+	// Check and see if an entry exists.
+	$query_string = "SELECT COUNT(*) FROM map_coordinates WHERE lab_id = $lab_id AND user_id = $dir_id";
+	
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	$retVal = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
+	
+	if ($retVal["COUNT(*)"] > 0)
+	{
+		$query_string = "UPDATE map_coordinates SET coordinates = '$coordinate_string' WHERE lab_id = $lab_id AND user_id = $dir_id";
+
+		$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+		$retVal = query_update($query_string);
+		DbUtil::switchRestore($saved_db);
+
+	} else
+	{
+		$query_string = "INSERT INTO map_coordinates (coordinates, lab_id, user_id) VALUES ('$coordinate_string', $lab_id, $dir_id)";
+		
+		$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+		$retVal = query_insert_one($query_string);
+		DbUtil::switchRestore($saved_db);
+	}
+}
+
 ?>
