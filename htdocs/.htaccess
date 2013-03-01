@@ -242,3 +242,6 @@ RewriteRule ^bill_review\.php$ billing/bill_review.php
 RewriteRule ^create_new_bill\.php$ billing/create_new_bill.php
 RewriteRule ^update_discount_for_association\.php$ billing/update_discount_for_association.php
 
+## /director folder
+RewriteRule ^lab_pin\.php$ director/lab_pin.php
+RewriteRule ^geo_report_dir\.php$ director/geo_report_dir.php
