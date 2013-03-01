@@ -5,10 +5,20 @@ include("includes/db_lib.php");
 include("includes/header.php"); 
 
 // Load all laboratories that will be seen for this particular page.
-// TODO: For now, hardcoded for testing.  Replace when the time comes.
 
-$placed_labs = array("buea", "buenma", "another_lab");
-$unplaced_labs = array("capital", "montainlab", "oceanlab");
+$director_id = $_SESSION['user_id'];
+
+$lab_array = get_labs_for_director($director_id);
+
+$labs = array();
+
+foreach ($lab_array as $lab)
+{
+	$lab_id = $lab["lab_config_id"];
+	$lab_name = get_lab_name_by_id_revamp($lab_id);
+	$coords = is_lab_placed($lab_id, $director_id);
+	$labs[$lab_name[0]["name"]] = array($lab_id, $lab_name[0]["name"], $coords);
+}
 
 ?>
 <html>
@@ -43,111 +53,169 @@ $unplaced_labs = array("capital", "montainlab", "oceanlab");
 				var rsrGroups = [Cameroon];
 				// Finish drawing the Cameroon map.
 				
-				var label = rsr.text(450, 160, "Unplaced Labs").attr({
+				var label = rsr.text(450, 40, "Unplaced Labs").attr({
 					"font-size": 20,
 					"text-anchor": 'start'
 				});
 
-				var box = rsr.rect(425, 175, 250, 50 + (45 * <?php echo count($unplaced_labs) - 1; ?>)).attr({
+				var box = rsr.rect(425, 60, 250, 50 + (50 * <?php echo count($labs) - 1; ?>)).attr({
 					fill: "none",
 					stroke: "black"
 				});
+				
 				<?php
-				// Create a circle and drag handler for each lab not yet set.
-				for ($i = 0; $i < count($unplaced_labs); $i++)
+				// Create a circle and drag handler for each lab already set.  Place them at the appropriate coords.
+				$i = -1;
+				foreach ($labs as $lab)
 				{
+					$coords = $lab[2];
+					if (isset($coords))
+					{
+						?>var placed = 1;<?php
+						$exploded_coords = explode(",", $coords);
+						$xCoord = trim(str_replace("(", "", $exploded_coords[0]));
+						$yCoord = trim(str_replace(")", "", $exploded_coords[1]));
+					} else
+					{
+						?>var placed = 0;<?php
+						$i++;
+					}
 				?>
-					// Get a random color for the circle.
+					//Get a random color for the circle.
 					var mycolor = getRandomColorHex()
 
-					// Create the circle.
-					var circ<?php echo $i; ?> = rsr.circle(450, 200 + (45 * <?php echo $i; ?>), 20).attr({
-						fill: mycolor,
-						stroke: "black",
-						"fill-opacity": 0.5
-					});
+					//Create the circle.
+					if (placed == 1)
+					{
+						var circ<?php echo $lab[0]; ?> = rsr.circle(<?php echo $xCoord; ?>, <?php echo $yCoord; ?>, 20).attr({
+							fill: mycolor,
+							stroke: "black",
+							"fill-opacity": 0.5
+						});
+					} else
+					{
+						var circ<?php echo $lab[0]; ?> = rsr.circle(450, 95 + (45 * <?php echo $i; ?>), 20).attr({
+							fill: mycolor,
+							stroke: "black",
+							"fill-opacity": 0.5
+						});
+					}
 					
-					// Give the circle a name, so we know what to save in the db.
-					circ<?php echo $i; ?>.data('name', '<?php echo $unplaced_labs[$i]; ?>');
-					// Give the circle a state variable for set or unset.
-					circ<?php echo $i; ?>.data('isset', false);
+					//Label for the lab circle.
+				
+					if (placed == 1)
+					{
+						var txt<?php echo $lab[0]; ?> = rsr.text(<?php echo $xCoord; ?> + 15, <?php echo $yCoord; ?> - 25, "<?php echo $lab[1]; ?>").attr({
+							"font-size": 15,
+							"text-anchor": 'start'
+						});
+					} else
+					{
+						var txt<?php echo $lab[0]; ?> = rsr.text(465, 70 + (45 * <?php echo $i; ?>), "<?php echo $lab[1]; ?>").attr({
+							"font-size": 15,
+							"text-anchor": 'start'
+						});
+					}
 					
-					// Label for the lab circle.
-					var txt<?php echo $i; ?> = rsr.text(495, 200 + (45 * <?php echo $i; ?>), "<?php echo $unplaced_labs[$i]; ?>").attr({
-						"font-size": 20,
-						"text-anchor": 'start'
-					});
+					//Place a dot in the center of the circle
+				
+					if (placed == 1)
+					{
+						var dot<?php echo $lab[0]; ?> = rsr.circle(<?php echo $xCoord; ?>, <?php echo $yCoord; ?>, 1).attr({
+							fill: "black"
+						});
+					} else
+					{
+						var dot<?php echo $lab[0]; ?> = rsr.circle(450, 95 + (45 * <?php echo $i; ?>), 1).attr({
+							fill: "black"
+						});
+					}
 					
-					// Place a dot in the center of the circle
-					var dot<?php echo $i; ?> = rsr.circle(450, 200 + (45 * <?php echo $i; ?>), 1).attr({
-						fill: "black"
-					});
+					//Link the circles and text.
+					var set<?php echo $lab[0]; ?> = rsr.set();
+					set<?php echo $lab[0]; ?>.push(circ<?php echo $lab[0]; ?>);
+					set<?php echo $lab[0]; ?>.push(txt<?php echo $lab[0]; ?>);
+					set<?php echo $lab[0]; ?>.push(dot<?php echo $lab[0]; ?>);
 					
-					// Link the circles and text.
-					var set<?php echo $i; ?> = rsr.set();
-					set<?php echo $i; ?>.push(circ<?php echo $i; ?>);
-					set<?php echo $i; ?>.push(txt<?php echo $i; ?>);
-					set<?php echo $i; ?>.push(dot<?php echo $i; ?>);
-					
-					// Movement functions for the circles
-					circ<?php echo $i; ?>_start = function () {
+					//Movement functions for the circles
+				 	circ<?php echo $lab[0]; ?>_start = function () {
 						this.ox = this.attr("cx");
 						this.oy = this.attr("cy");
 					}
 					
-					circ<?php echo $i; ?>_move = function (dx, dy) {
-						set<?php echo $i; ?>.attr({cx: this.ox + dx});
-						set<?php echo $i; ?>.attr({cy: this.oy + dy});
+					circ<?php echo $lab[0]; ?>_move = function (dx, dy) {
+						set<?php echo $lab[0]; ?>.attr({cx: this.ox + dx});
+						set<?php echo $lab[0]; ?>.attr({cy: this.oy + dy});
+						set<?php echo $lab[0]; ?>.attr({x: this.ox + dx + 15});
+						set<?php echo $lab[0]; ?>.attr({y: this.oy + dy - 25});
 					}
 					
-					circ<?php echo $i; ?>_up = function () {
-						if (this.ox < 400 && this.oy < 500)
-						{
-							this.data('isset', false);
-						}
+					circ<?php echo $lab[0]; ?>_up = function () {
 						var xVal = this.attr("cx");
 						var yVal = this.attr("cy");
-						// if the circle has been dragged onto the map, we want to hide the text from the list and collapse the new empty space.
-						if (xVal < 400 && yVal < 500)
+						//	if the circle has been dragged onto the map, we want to hide the text from the list and collapse the new empty space.
+						if (xVal < 400 && yVal < 500 && xVal > 0 & yVal > 0)
 						{
-							if (!(this.data('isset')))
-							{
-								txt<?php echo $i; ?>.hide();
-							} else {
-								this.hover(circ<?php echo $i; ?>_in, circ<?php echo $i; ?>_out);
-							}
-							// Call whatever ajax will save the position for this lab.
-							// Then remove the name from the list of unplaced labs and redraw.
+							var dataObj = {};
+							
+							dataObj['xCoord'] = xVal;
+							dataObj['yCoord'] = yVal;
+							dataObj['labId'] = <?php echo $lab[0]; ?>;
+							dataObj['directorId'] = <?php echo $director_id; ?>;
+
+							$('#update_coord_progress').show();
+							
+							//Save the position for this lab.
+							$.ajax({
+								url: "update_lab_coords.php",
+								type: "POST",
+								data: dataObj,
+								success: function(data) {
+									$('#update_coord_progress').hide();
+									$('#update_coord_success').animate({opacity: 1}, 0);
+									setTimeout(function() {
+										$('#update_coord_success').animate({opacity: 0}, 500);
+									}, 1500);	
+								},
+								failure: function(data) {
+									$('#update_coord_progress').hide();
+									$('#update_coord_failure').animate({opacity: 1}, 0);
+									setTimeout(function() {
+										$('#update_coord_failure').animate({opacity: 0}, 1000);
+									}, 3000);
+								}
+							});
+
+								
 						} else
 						{
-							// If they didn't place the circle in the lab, we snap the circle back to the list.
-							set<?php echo $i; ?>.attr({cx: this.ox});
-							set<?php echo $i; ?>.attr({cy: this.oy});
+							//If they didn't place the circle on the map, we snap the circle back to its original position.
+							set<?php echo $lab[0]; ?>.attr({cx: this.ox});
+							set<?php echo $lab[0]; ?>.attr({cy: this.oy});
+							set<?php echo $lab[0]; ?>.attr({x: this.ox + 15});
+							set<?php echo $lab[0]; ?>.attr({y: this.oy - 25});
 						}
-					// this is where we want to save the location.
 					}
 					
-					// Create drag handler for the circle.
-					circ<?php echo $i; ?>.drag(circ<?php echo $i; ?>_move, circ<?php echo $i; ?>_start, circ<?php echo $i; ?>_up);
-				<?php
-				}
-				?>
-				
-				// Shows where on the image the mouse is.  TODO: Remove before deploy.
-				$('#rsr').mousemove(function(event) {
-					var posx = event.pageX - $(document).scrollLeft() - $('#rsr').offset().left;
-					var posy = event.pageY - $(document).scrollTop() - $('#rsr').offset().top;
-					
-					$('#coords').html("(" + posx + ", " + posy + ")");
-				});
+					//Create drag handler for the circle.
+					circ<?php echo $lab[0]; ?>.drag(circ<?php echo $lab[0]; ?>_move, circ<?php echo $lab[0]; ?>_start, circ<?php echo $lab[0]; ?>_up);
+				  <?php
+				  }
+				  ?>
 			});
 			
 		</script>
 	</head>
 	<body>
-		<div id='coords'>
-		(#, #)
-		</div>
+		<span id='update_coord_progress' style='display:none;'>
+			<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
+		</span>
+		<span id='update_coord_success' style='opacity:0;'>
+			Location Updated!
+		</span>
+		<span id='update_coord_failure' style='opacity:0;'>
+			Location Not Updated.  Click or drag the circle again to retry!
+		</span>
 		<br />
 		<div id='rsr' style=" float: inherit"></div>
 		<div id="lab_box">
