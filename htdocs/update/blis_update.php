@@ -25,6 +25,10 @@ if ( is_super_admin($user) || is_country_dir($user) ) {
 		//runUpdate($labConfigId);
 //          }
 	//runGlobalUpdate();
+    $db_name = "blis_revamp";
+        $ufile = "db_update_revamp";
+        blis_db_update($lab_config_id, $db_name, $ufile);
+        insertVersionDataEntry();
 }
 else {
 	$lab_config_id = $_SESSION['lab_config_id'];
