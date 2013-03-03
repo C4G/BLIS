@@ -27,6 +27,8 @@ p{display:inline-block;}
 <script type="text/javascript" src="js/g.line-min.js"></script>
 <script type="text/javascript" src="js/g.pie-min.js"></script>
 
+<script type="text/javascript" src="facebox/facebox.js"></script>
+
 
 <script type="text/javascript">    
  var  jdat = "";
@@ -1098,8 +1100,10 @@ function pauseClick()
 }
 
 </script>  
-<p style="text-align: right;"><a rel='facebox' href='#SpecimenType_tc'>Page Help</a></p>
+    <div id="page_help" style="float:right;" ><p style="text-align: right;"><a rel='facebox' href='#SpecimenType_tc'>Page Help</a></p>
+</div>
 <div id="reportcontent">
+
          <div id='rsr' style=" float: inherit"></div>
                   <div id='right_section'></div>
 </div>
@@ -1145,9 +1149,13 @@ function pauseClick()
         
   <div id='SpecimenType_tc' class='right_pane' style='display:none;margin-left:10px;'>
 		<ul>
-			<li><?php echo LangUtil::$pageTerms['TIPS_TC_SPECIMENTYPE_1']; ?></li>
-			<li><?php echo LangUtil::$pageTerms['TIPS_TC_SPECIMENTYPE_2']; ?></li>
-			<li><?php echo LangUtil::$pageTerms['TIPS_TC_SPECIMENTYPE_3']; ?></li>
+			<li>Labs are displayed on the country map marked by black dots</li>
+			<li>These locations can be edited from Location Settings in the Reports section</li>
+			<li>The red circle surrounding the labs show the extent of prevalence of infection in those locations</li>
+                        <li>The radius of the circle is proportional to the prevalence rate</li>
+                        <li>Hovering your mouse pointer over these locations will display the prevalence stats next to the map</li>
+                        <li>You can view the trend of prevalence rate over time (weekly) by pressing the play button</li>
+                        <li>You can manually slide the bar at the bottom to view prevalence stats for specific weeks</li>
 		</ul>
 	</div>      
         
