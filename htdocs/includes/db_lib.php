@@ -13194,7 +13194,7 @@ function is_lab_placed($lab, $user)
 function create_or_update_map_coords_entry($lab_id, $dir_id, $x, $y)
 {
 	$lab_config_id = $_SESSION['lab_config_id'];
-	$coordinate_string = "(" . $x . ", " . $y . ")";
+	$coordinate_string = $x . "," . $y;
 	
 	// Check and see if an entry exists.
 	$query_string = "SELECT COUNT(*) FROM map_coordinates WHERE lab_id = $lab_id AND user_id = $dir_id";
@@ -13219,6 +13219,14 @@ function create_or_update_map_coords_entry($lab_id, $dir_id, $x, $y)
 		$retVal = query_insert_one($query_string);
 		DbUtil::switchRestore($saved_db);
 	}
+}
+
+function get_country_from_user_id()
+{
+    $usr_c = get_username_by_id($_SESSION['user_id']);
+    $usr_c = strtolower($usr_c);
+    $usr_cs = substr($usr_c, 0, strpos($usr_c, "_"));
+    return $usr_cs; 
 }
 
 ?>
