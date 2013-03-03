@@ -15,6 +15,9 @@ RewriteEngine on
 #
 Options -Indexes
 
+#Set max upload size in PHP
+php_value upload_max_filesize 100M
+
 #
 # Redirect old links to new ones
 #
@@ -73,8 +76,18 @@ RewriteRule ^reports_billing\.php$ reports/reports_billing.php
 #-Currently unused php report files-
 RewriteRule ^reports_session\.php$ reports/reports_session.php
 RewriteRule ^reports_tat_org\.php$ reports/reports_tat_org.php
-RewriteRule ^geo_report_prevalence_dir\.php$ reports/geo_report_prevalence_dir.php
-
+RewriteRule ^geo_report_dir_prev_cameroon\.php$ reports/geo_report_dir_prev_cameroon.php
+RewriteRule ^geo_report_dir_tat_cameroon\.php$ reports/geo_report_dir_tat_cameroon.php
+RewriteRule ^geo_report_dir_prev_ghana\.php$ reports/geo_report_dir_prev_ghana.php
+RewriteRule ^geo_report_dir_tat_ghana\.php$ reports/geo_report_dir_tat_ghana.php
+RewriteRule ^geo_report_dir_prev_drc\.php$ reports/geo_report_dir_prev_drc.php
+RewriteRule ^geo_report_dir_tat_drc\.php$ reports/geo_report_dir_tat_drc.php
+RewriteRule ^geo_report_dir_prev_uganda\.php$ reports/geo_report_dir_prev_uganda.php
+RewriteRule ^geo_report_dir_tat_uganda\.php$ reports/geo_report_dir_tat_uganda.php
+RewriteRule ^geo_report_dir_prev_tanzania\.php$ reports/geo_report_dir_prev_tanzania.php
+RewriteRule ^geo_report_dir_tat_tanzania\.php$ reports/geo_report_dir_tat_tanzania.php
+RewriteRule ^geo_report_dir_prev\.php$ reports/geo_report_dir_prev.php
+RewriteRule ^geo_report_dir_tat\.php$ reports/geo_report_dir_tat.php
 
 ## /catalog folder
 RewriteRule ^catalog\.php$ catalog/catalog.php

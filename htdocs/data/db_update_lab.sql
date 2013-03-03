@@ -591,3 +591,28 @@ CREATE TABLE IF NOT EXISTS `numeric_interpretation` (
   `id` int(10) NOT NULL auto_increment,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `bills` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `patient_id` int(11) unsigned NOT NULL,
+  `paid_in_full` bit(1) NOT NULL default '\0',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+CREATE TABLE IF NOT EXISTS `bills_test_association` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `bill_id` int(11) unsigned NOT NULL,
+  `test_id` int(11) unsigned NOT NULL,
+  `discount_type` int(4) unsigned NOT NULL default '1000',
+  `discount_amount` decimal(10,2) unsigned NOT NULL default '0.00',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+CREATE TABLE IF NOT EXISTS `payments` (
+  `id` int(11) NOT NULL auto_increment,
+  `amount` decimal(10,2) NOT NULL default '0.00',
+  `bill_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;

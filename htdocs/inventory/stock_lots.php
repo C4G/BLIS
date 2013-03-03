@@ -17,7 +17,7 @@ $script_elems->enableTableSorter();
     $reag = Inventory::getReagentById($lid, $r_id);
     $view_use = 1;
     putUILog('stock_lots', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
-$barcode_seperator = '%';
+$barcode_seperator = '$';
 
 $code_type = "code39";
 $bar_width = 2;

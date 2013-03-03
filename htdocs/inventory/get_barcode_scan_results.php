@@ -14,7 +14,10 @@ $lid = $_SESSION['$lab_config_id'];
 //echo $code[0]."--".$code[1].'--'.$code[2];
 $r_id = $code[0];
 $reag = Inventory::getReagentById($lid, $r_id);
-$stock = Inventory::getLot($lid, $code[0], $code[2]);
+unset($stock);
+$stock = Inventory::getLot2($lid, $code[0], $code[2]);
+if($stock != -1)
+{
 ?>
 <table id='barcode_search_result_table'  >
 	<tbody>
@@ -62,3 +65,11 @@ $stock = Inventory::getLot($lid, $code[0], $code[2]);
                 </tr>
                 
 	</tbody>
+</table>
+<?php
+}
+else
+{
+    echo "Not Found";
+}
+?>

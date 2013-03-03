@@ -144,3 +144,40 @@ CREATE TABLE IF NOT EXISTS `version_data` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
+CREATE TABLE IF NOT EXISTS `import_log` (
+  `id` int(11) NOT NULL auto_increment,
+  `lab_config_id` int(10) NOT NULL,
+  `successful` int(1) default NULL,
+  `flag` int(1) default NULL,
+  `user_id` int(11) default NULL,
+  `country` varchar(100) collate latin1_general_ci default NULL,
+  `lab_name` varchar(100) collate latin1_general_ci default NULL,
+  `db_name` varchar(100) collate latin1_general_ci default NULL,
+  `remarks` varchar(250) collate latin1_general_ci default NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS `version_data` (
+  `id` int(11) NOT NULL auto_increment,
+  `version` varchar(45) collate latin1_general_ci NOT NULL,
+  `status` int(11) default NULL,
+  `user_id` int(11) default NULL,
+  `remarks` varchar(250) collate latin1_general_ci default NULL,
+  `i_ts` timestamp NULL default NULL,
+  `u_ts` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS `map_coordinates` (
+  `id` int(11) NOT NULL auto_increment,
+  `lab_id` int(11) NOT NULL,
+  `coordinates` varchar(100) collate latin1_general_ci default NULL,
+  `user_id` int(11) default NULL,
+  `flag` int(11) default '1',
+  `country` varchar(110) collate latin1_general_ci default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+

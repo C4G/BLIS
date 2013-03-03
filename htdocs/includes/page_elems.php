@@ -302,6 +302,8 @@ class PageElems
 	{
 		//$site_list = get_site_list($_SESSION['user_id']);
                 $config_list = get_lab_configs_imported();
+                echo "<br><input type='checkbox' name='$checkBoxName' id='$checkBoxName' value='0' checked>All</input>";
+
 		foreach($config_list as $lab_config) {
 			$strippedLabName = substr($lab_config->name,0,strpos($lab_config->name,'-')-1);
 			echo "<br><input type='checkbox' name='$checkBoxName' id='$checkBoxName' value='$lab_config->id'>$strippedLabName</input>";
@@ -478,7 +480,8 @@ class PageElems
 		$query = "SELECT * FROM test_mapping WHERE user_id = $userId";
 		$resultset = query_associative_all($query, $row_count);
 		foreach($resultset as $record) {
-				$key = $record['lab_id_test_id'];
+				//$key = $record['lab_id_test_id'];
+                                $key = $record['test_id'];
 				$value = $record['test_name']; 
 				echo "<option value='$key'>$value</option>";
 		}

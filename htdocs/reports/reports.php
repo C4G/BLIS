@@ -1648,8 +1648,8 @@ function show_custom_report_form(report_id)
 			<?php } else { ?>
 				<?php echo "Report Settings"; ?>
 				<ul>
-					<li class='menu_option' id='infection_report_settings' >
-					<a href='javascript: show_selection("infection_report_settings");'><?php echo "Infection Report"; ?></a>
+					<li class='menu_option' id='location_settings' >
+					<a href='javascript: show_selection("location_settings");'><?php echo "Location Settings"; ?></a>
 					</li>
 				</ul>
 			<?php } echo LangUtil::$pageTerms['MENU_AGGREPORTS']; ?>
@@ -1663,9 +1663,9 @@ function show_custom_report_form(report_id)
 						<li class='menu_option' id='tat_menu'>
 							<a href='javascript:show_selection("tat_aggregate");'><?php echo LangUtil::$pageTerms['MENU_TAT']; ?></a>
 						</li>
-						<li class='menu_option' id='disease_report_menu'>
+						<!--<li class='menu_option' id='disease_report_menu'>
 							<a href='javascript:show_selection("infection_aggregate");'><?php echo LangUtil::$pageTerms['MENU_INFECTIONREPORT']; ?></a>
-						</li>
+						</li>-->
 					<?php } else { ?>
 						<li class='menu_option' id='summary_menu'>
 							<a href='javascript:show_selection("summary");'><?php echo LangUtil::$pageTerms['MENU_INFECTIONSUMMARY']; ?></a>
@@ -2300,7 +2300,7 @@ function show_custom_report_form(report_id)
 	<div id='tat_aggregate_div' style='display:none;' class='reports_subdiv'>
 		<b><?php echo LangUtil::$pageTerms['MENU_TAT']; ?></b>
 		<br><br>
-		<form name="tat_aggregate_form" id="tat_aggregate_form" action="reports_tat_aggregate.php" method='post'>
+                <form name="tat_aggregate_form" id="tat_aggregate_form" action="geo_report_dir_tat.php" method='post'>
 			<table cellpadding="4px">
 				<tr valign='top'>
 					<td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?> </td>
@@ -2324,27 +2324,28 @@ function show_custom_report_form(report_id)
 					?>
 					</td>
 				</tr>
-				<tr id='testType'>
-					<td><?php echo LangUtil::$generalTerms['TEST_TYPE']; ?></td>
+				
+                                <tr id='testType'>
+					<td><?php echo LangUtil::$generalTerms['TEST']; ?></td>
 					<td>
-						<select name='ttype' id='ttype' class='uniform_width' onchange='changeAvailableLocations(this)'>
-							<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
-							<?php
-								$page_elems->getTestTypesCountrySelect();
-							?>
+						<select name='testTypeCountry' id='testTypeCountry' class='uniform_width' onchange='changeAvailableLocations(this)'>
+							<!--<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>-->
+						<?php
+							$page_elems->getTestTypesCountrySelect();
+						?>
 						</select>
 					</td>
 				</tr>
-				<tr class="location_row_aggregate" id="location_row_aggregate" valign='top'>
+				<tr class="location_row_aggregate" id="location_row_aggregate">
 					<td><?php echo LangUtil::$generalTerms['FACILITY']; ?> &nbsp;&nbsp;&nbsp;</td>
 					<td id='locationAggregation'>
-						<input type='checkbox' name='locationAgg' id='locationAgg' value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></input>
+						<!--<input type='checkbox' name='locationAgg' id='locationAgg' value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></input>-->
 						<?php
 							$page_elems->getSiteOptionsCheckBoxes("locationAgg[]");
 						?>
 					</td>
 				</tr>
-				<tr valign='top'>
+				<!--<tr valign='top'>
 					<td><?php echo LangUtil::$pageTerms['MSG_INCLUDEPENDING']; ?> </td>
 					<td>
 						<input type='radio' value='Y' name='pending'><?php echo LangUtil::$generalTerms['YES']; ?></input>
@@ -2360,7 +2361,7 @@ function show_custom_report_form(report_id)
 						<option value='d'><?php echo LangUtil::$pageTerms['PROGRESSION_D']; ?></option>
 					</select>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td></td>
 					<td>
@@ -3153,15 +3154,14 @@ function show_custom_report_form(report_id)
 			<br>
 			<div id='preport_list'>
 			</div>
+                        </form>
 	</div>
 	
 	<div id='prevalance_aggregate_div' class='reports_subdiv' style='display:none'>
 		<b><?php echo LangUtil::$pageTerms['MENU_INFECTIONSUMMARY'];  ?></b>
 		<br><br>
-		<form id='country_aggregate_form' action='report_prevalence_agg.php' method='post'>
-		<table>
-			<tbody>
-			<tr valign='top'>
+                <form name="country_aggregate_form" id="country_aggregate_form" action="geo_report_dir_prev.php" method='post'>
+			<table>
 				<tr class="sdate_row" id="sdate_row" valign='top'>
 					<td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?> </td>
 					<td>
@@ -3184,25 +3184,19 @@ function show_custom_report_form(report_id)
 					?>
 					</td>
 				</tr>
+                               
 				<tr id='ttype_row16'>
 					<td><?php echo LangUtil::$generalTerms['TEST']; ?></td>
 					<td>
 						<select name='testTypeCountry' id='testTypeCountry' class='uniform_width' onchange='changeAvailableLocations(this)'>
-							<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
+							<!--<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>-->
 						<?php
 							$page_elems->getTestTypesCountrySelect();
 						?>
 						</select>
 					</td>
 				</tr>
-				<tr id='labSection_row' style='display:none;'>
-					<td><?php echo LangUtil::$generalTerms['LAB_SECTION']; ?> </td>
-					<td>
-						<select name='labSectionCountry' id='labSectionCountry' class='uniform_width'>
-							<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
-						</select>
-					</td>
-				</tr>
+				
 				<tr class="location_row_aggregate" id="location_row_aggregate">
 					<td><?php echo LangUtil::$generalTerms['FACILITY']; ?> &nbsp;&nbsp;&nbsp;</td>
 					<td id='locationAggregation'>
@@ -3214,7 +3208,7 @@ function show_custom_report_form(report_id)
 						?>
 						</select> */
 						?>
-						<input type='checkbox' name='locationAgg' id='locationAgg' value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></input>
+						<!--<input type='checkbox' name='locationAgg' id='locationAgg' value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></input>-->
 						<?php
 							$page_elems->getSiteOptionsCheckBoxes("locationAgg[]");
 						?>
@@ -3224,20 +3218,14 @@ function show_custom_report_form(report_id)
 					<td></td>
 					<td>
 						<br>
-						<input type='button' 
-							   style='color:white; background-color:#3B5998; border-style:none; font-weight:bold; font-size:14px; height:28px; width:65px; cursor:pointer;' 
-							   id='submit_button' 
-							   value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>'
-							   onclick='javascript:get_aggregate_report()'>
-						</input>
+                                                <input type='button' id='prev_submit_button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick="javascript:get_aggregate_report();" ></input>
+						
 						&nbsp;&nbsp;&nbsp;
 						<span id='aggregate_report_progress_spinner'  style='display:none;'>
 							<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
 						</span>
 					</td>
 				</tr>
-			</tr>
-			</tbody>
 		</table>
 		</form>
 	</div>

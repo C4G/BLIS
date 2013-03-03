@@ -62,6 +62,7 @@ function getBarcodeSearchResults()
         return;
     }
     //alert(code);
+    $('#barcode_search_result').html('');
     var url = "inventory/get_barcode_scan_results.php?code="+code;
     $('#barcode_search_result').load(url);
 }
