@@ -13220,13 +13220,4 @@ function create_or_update_map_coords_entry($lab_id, $dir_id, $x, $y)
 		DbUtil::switchRestore($saved_db);
 	}
 }
-
-function get_country_from_user_id()
-{
-    $usr_c = get_username_by_id($_SESSION['user_id']);
-    $usr_c = strtolower($usr_c);
-    $usr_cs = substr($usr_c, 0, strpos($usr_c, "_"));
-    return $usr_cs; 
-}
-
 ?>
