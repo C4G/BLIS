@@ -36,17 +36,17 @@ foreach ($lab_array as $lab)
 		num = pad.substring(0, pad.length - num.length) + num;
 		return '#' + num;
 	}
-	
+
 	$(document).ready(function() {
 		// Start drawing the Map.
-		
+
 		<?php
 
 		include($country_name . "_svg");
 		?>
 
 		$("#map_title").text(map_text); // Sets map title
-		
+
 		var label = rsr.text(650, 40, "Unplaced Labs").attr({
 			"font-size": 20,
 			"text-anchor": 'start'
@@ -56,7 +56,7 @@ foreach ($lab_array as $lab)
 			fill: "none",
 			stroke: "black"
 		});
-		
+
 		<?php
 		// Create a circle and drag handler for each lab already set.  Place them at the appropriate coords.
 		$i = -1;
@@ -94,9 +94,9 @@ foreach ($lab_array as $lab)
 					"fill-opacity": 0.5
 				});
 			}
-			
+
 			//Label for the lab circle.
-			
+
 			if (placed == 1)
 			{
 				var txt<?php echo $lab[0]; ?> = rsr.text(<?php echo $xCoord; ?> + 15, <?php echo $yCoord; ?> - 25, "<?php echo $lab[1]; ?>").attr({
@@ -110,7 +110,7 @@ foreach ($lab_array as $lab)
 					"text-anchor": 'start'
 				});
 			}
-			
+
 			//Place a dot in the center of the circle
 			if (placed == 1)
 			{
@@ -123,26 +123,26 @@ foreach ($lab_array as $lab)
 					fill: "black"
 				});
 			}
-			
+
 			//Link the circles and text.
 			var set<?php echo $lab[0]; ?> = rsr.set();
 			set<?php echo $lab[0]; ?>.push(circ<?php echo $lab[0]; ?>);
 			set<?php echo $lab[0]; ?>.push(txt<?php echo $lab[0]; ?>);
 			set<?php echo $lab[0]; ?>.push(dot<?php echo $lab[0]; ?>);
-			
+
 			//Movement functions for the circles
 			circ<?php echo $lab[0]; ?>_start = function () {
 				this.ox = this.attr("cx");
 				this.oy = this.attr("cy");
 			}
-			
+
 			circ<?php echo $lab[0]; ?>_move = function (dx, dy) {
 				set<?php echo $lab[0]; ?>.attr({cx: this.ox + dx});
 				set<?php echo $lab[0]; ?>.attr({cy: this.oy + dy});
 				set<?php echo $lab[0]; ?>.attr({x: this.ox + dx + 15});
 				set<?php echo $lab[0]; ?>.attr({y: this.oy + dy - 25});
 			}
-			
+
 			circ<?php echo $lab[0]; ?>_up = function () {
 				var xVal = this.attr("cx");
 				var yVal = this.attr("cy");
@@ -150,14 +150,14 @@ foreach ($lab_array as $lab)
 				if (xVal < 650 && yVal < 600 && xVal > 0 & yVal > 0)
 				{
 					var dataObj = {};
-					
+
 					dataObj['xCoord'] = xVal;
 					dataObj['yCoord'] = yVal;
 					dataObj['labId'] = <?php echo $lab[0]; ?>;
 					dataObj['directorId'] = <?php echo $director_id; ?>;
 
 					$('#update_coord_progress').show();
-					
+
 					//Save the position for this lab.
 					$.ajax({
 						url: "update_lab_coords.php",
@@ -168,7 +168,7 @@ foreach ($lab_array as $lab)
 							$('#update_coord_success').animate({opacity: 1}, 0);
 							setTimeout(function() {
 								$('#update_coord_success').animate({opacity: 0}, 500);
-							}, 1500);	
+							}, 1500);
 						},
 						failure: function(data) {
 							$('#update_coord_progress').hide();
@@ -179,7 +179,7 @@ foreach ($lab_array as $lab)
 						}
 					});
 
-					
+
 				} else
 				{
 					//If they didn't place the circle on the map, we snap the circle back to its original position.
@@ -189,7 +189,7 @@ foreach ($lab_array as $lab)
 					set<?php echo $lab[0]; ?>.attr({y: this.oy - 25});
 				}
 			}
-			
+
 			//Create drag handler for the circle.
 			circ<?php echo $lab[0]; ?>.drag(circ<?php echo $lab[0]; ?>_move, circ<?php echo $lab[0]; ?>_start, circ<?php echo $lab[0]; ?>_up);
 			<?php
