@@ -244,5 +244,4 @@ RewriteRule ^update_discount_for_association\.php$ billing/update_discount_for_a
 
 ## /director folder
 RewriteRule ^lab_pin\.php$ director/lab_pin.php
-RewriteRule ^geo_report_dir\.php$ director/geo_report_dir.php
 RewriteRule ^update_lab_coords\.php$ director/update_lab_coords.php
