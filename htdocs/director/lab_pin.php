@@ -41,7 +41,7 @@ foreach ($lab_array as $lab)
 		// Start drawing the Map.
 		
 		<?php
-		$country_name = "ghana";
+
 		include($country_name . "_svg");
 		?>
 
