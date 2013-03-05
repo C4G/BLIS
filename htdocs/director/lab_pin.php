@@ -49,7 +49,7 @@ foreach ($lab_array as $lab)
 					"text-anchor": 'start'
 				});
 
-				var box = rsr.rect(625, 60, 250, 50 + (50 * <?php echo count($labs) - 1; ?>)).attr({
+				var box = rsr.rect(625, 60, 250, 60 + (60 * <?php echo count($labs) - 1; ?>)).attr({
 					fill: "none",
 					stroke: "black"
 				});
@@ -60,15 +60,15 @@ foreach ($lab_array as $lab)
 				foreach ($labs as $lab)
 				{
 					$coords = $lab[2];
-					if (isset($coords))
+					if ($coords != NULL)
 					{
-						?>var placed = 1;<?php
+						$placed = True;
 						$exploded_coords = explode(",", $coords);
 						$xCoord = trim(str_replace("(", "", $exploded_coords[0]));
 						$yCoord = trim(str_replace(")", "", $exploded_coords[1]));
 					} else
 					{
-						?>var placed = 0;<?php
+						$placed = False;
 						$i++;
 					}
 					?>
@@ -76,50 +76,50 @@ foreach ($lab_array as $lab)
 					var mycolor = getRandomColorHex();
 
 					//Create the circle.
-					if (placed == 1)
-					{
+					<?php if ($placed)
+					{ ?>
 						var circ<?php echo $lab[0]; ?> = rsr.circle(<?php echo $xCoord; ?>, <?php echo $yCoord; ?>, 20).attr({
 							fill: mycolor,
 							stroke: "black",
 							"fill-opacity": 0.5
 						});
-					} else
-					{
+					<?php } else
+					{ ?>
 						var circ<?php echo $lab[0]; ?> = rsr.circle(650, 95 + (45 * <?php echo $i; ?>), 20).attr({
 							fill: mycolor,
 							stroke: "black",
 							"fill-opacity": 0.5
 						});
-					}
+					<?php } ?>
 
 					//Label for the lab circle.
 
-					if (placed == 1)
-					{
+					<?php if ($placed)
+					{ ?>
 						var txt<?php echo $lab[0]; ?> = rsr.text(<?php echo $xCoord; ?> + 15, <?php echo $yCoord; ?> - 25, "<?php echo $lab[1]; ?>").attr({
 							"font-size": 15,
 							"text-anchor": 'start'
 						});
-					} else
-					{
+					<?php } else
+					{ ?>
 						var txt<?php echo $lab[0]; ?> = rsr.text(665, 70 + (45 * <?php echo $i; ?>), "<?php echo $lab[1]; ?>").attr({
 							"font-size": 15,
 							"text-anchor": 'start'
 						});
-					}
+					<?php } ?>
 
 					//Place a dot in the center of the circle
-					if (placed == 1)
-					{
+					<?php if ($placed)
+					{ ?>
 						var dot<?php echo $lab[0]; ?> = rsr.circle(<?php echo $xCoord; ?>, <?php echo $yCoord; ?>, 1).attr({
 							fill: "black"
 						});
-					} else
-					{
+					<?php } else
+					{ ?>
 						var dot<?php echo $lab[0]; ?> = rsr.circle(650, 95 + (45 * <?php echo $i; ?>), 1).attr({
 							fill: "black"
 						});
-					}
+					<?php } ?>
 
 					//Link the circles and text.
 					var set<?php echo $lab[0]; ?> = rsr.set();
