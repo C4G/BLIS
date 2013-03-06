@@ -23,6 +23,7 @@ $bar_width = $barcodeSettings['width']; //2;
 $bar_height = $barcodeSettings['height']; //40;
 $font_size = $barcodeSettings['textsize']; //11;
 ?>
+<script type="text/javascript" src="facebox/facebox.js"></script>
 <script type='text/javascript'>
 $(document).ready(function(){
     var code = $('#patientID').val();

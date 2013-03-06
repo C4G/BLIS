@@ -1,14 +1,11 @@
 <?php
-
 include("redirect.php");
-include("includes/db_lib.php");
-include("includes/header.php"); 
+include("includes/header.php");
 
 // Load all laboratories that will be seen for this particular page.
-
 $director_id = $_SESSION['user_id'];
 
-$lab_array = get_labs_for_director($director_id);
+$lab_array = get_lab_configs_imported($director_id);
 
 $country_name = get_country_from_user_id();
 
@@ -16,17 +13,17 @@ $labs = array();
 
 foreach ($lab_array as $lab)
 {
-	$lab_id = $lab["lab_config_id"];
-	$lab_name = get_lab_name_by_id_revamp($lab_id);
-	$coords = is_lab_placed($lab_id, $director_id);
-	$labs[$lab_name[0]["name"]] = array($lab_id, $lab_name[0]["name"], $coords);
+	if ($lab != NULL) // If the lab doesn't match in the db, it returns null, and that breaks the js.
+	{
+		$lab_id = $lab->id;
+		$lab_name = $lab->name;
+		$coords = is_lab_placed($lab_id, $director_id);
+		$labs[$lab_name] = array($lab_id, $lab_name, $coords);
+	}
 }
 
 ?>
-<html>
-	<head>
 		<script src="js/raphael-min.js"></script>
-		<script src="js/jquery-1.3.2.min.js"></script>
 
 		<script type="text/javascript">
 			function getRandomColorHex()
@@ -52,7 +49,7 @@ foreach ($lab_array as $lab)
 					"text-anchor": 'start'
 				});
 
-				var box = rsr.rect(625, 60, 250, 50 + (50 * <?php echo count($labs) - 1; ?>)).attr({
+				var box = rsr.rect(625, 60, 250, 60 + (60 * <?php echo count($labs) - 1; ?>)).attr({
 					fill: "none",
 					stroke: "black"
 				});
@@ -63,66 +60,66 @@ foreach ($lab_array as $lab)
 				foreach ($labs as $lab)
 				{
 					$coords = $lab[2];
-					if (isset($coords))
+					if ($coords != NULL)
 					{
-						?>var placed = 1;<?php
+						$placed = True;
 						$exploded_coords = explode(",", $coords);
 						$xCoord = trim(str_replace("(", "", $exploded_coords[0]));
-							$yCoord = trim(str_replace(")", "", $exploded_coords[1]));
-						} else
-						{
-							?>var placed = 0;<?php
-							$i++;
-						}
-						?>
+						$yCoord = trim(str_replace(")", "", $exploded_coords[1]));
+					} else
+					{
+						$placed = False;
+						$i++;
+					}
+					?>
 					//Get a random color for the circle.
-					var mycolor = getRandomColorHex()
+					var mycolor = getRandomColorHex();
 
 					//Create the circle.
-					if (placed == 1)
-					{
+					<?php if ($placed)
+					{ ?>
 						var circ<?php echo $lab[0]; ?> = rsr.circle(<?php echo $xCoord; ?>, <?php echo $yCoord; ?>, 20).attr({
 							fill: mycolor,
 							stroke: "black",
 							"fill-opacity": 0.5
 						});
-					} else
-					{
+					<?php } else
+					{ ?>
 						var circ<?php echo $lab[0]; ?> = rsr.circle(650, 95 + (45 * <?php echo $i; ?>), 20).attr({
 							fill: mycolor,
 							stroke: "black",
 							"fill-opacity": 0.5
 						});
-					}
+					<?php } ?>
 
 					//Label for the lab circle.
 
-					if (placed == 1)
-					{
+					<?php if ($placed)
+					{ ?>
 						var txt<?php echo $lab[0]; ?> = rsr.text(<?php echo $xCoord; ?> + 15, <?php echo $yCoord; ?> - 25, "<?php echo $lab[1]; ?>").attr({
 							"font-size": 15,
 							"text-anchor": 'start'
 						});
-					} else
-					{
+					<?php } else
+					{ ?>
 						var txt<?php echo $lab[0]; ?> = rsr.text(665, 70 + (45 * <?php echo $i; ?>), "<?php echo $lab[1]; ?>").attr({
 							"font-size": 15,
 							"text-anchor": 'start'
 						});
-					}
+					<?php } ?>
 
 					//Place a dot in the center of the circle
-					if (placed == 1)
-					{
+					<?php if ($placed)
+					{ ?>
 						var dot<?php echo $lab[0]; ?> = rsr.circle(<?php echo $xCoord; ?>, <?php echo $yCoord; ?>, 1).attr({
 							fill: "black"
 						});
-					} else
-					{
+					<?php } else
+					{ ?>
 						var dot<?php echo $lab[0]; ?> = rsr.circle(650, 95 + (45 * <?php echo $i; ?>), 1).attr({
 							fill: "black"
 						});
-					}
+					<?php } ?>
 
 					//Link the circles and text.
 					var set<?php echo $lab[0]; ?> = rsr.set();
@@ -198,8 +195,11 @@ foreach ($lab_array as $lab)
 			});
 
 		</script>
-	</head>
-	<body>
+
+
+		<div id='callback_link'>
+			<a href='reports.php'>&#60;&#60;&#60; BACK</a>
+		</div>
 		<span id='map_title'></span>
 
 		<br />
@@ -218,8 +218,8 @@ foreach ($lab_array as $lab)
 
 		<div id='rsr' style=" float: inherit"></div>
 		<div id="lab_box"></div>
-	</body>
-</html>
+
+
 
 <?php
 

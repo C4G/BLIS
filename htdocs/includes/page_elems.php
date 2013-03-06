@@ -2766,6 +2766,15 @@ class PageElems
 			}
 			?>
 			<!--<p><a href='#'>Export as XML</a></p>-->
+				<?php
+				if (is_billing_enabled($_SESSION['lab_config_id']))
+					{ ?>
+				<p>
+					<a rel='facebox' href='bill_generator.php?location=<?php echo$_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>' title='Click to generate a billing statement for this Patient' target='_blank'>
+						<?php echo "Billing Report" ?>
+					</a>
+				</p>
+				<?php } ?>
 			</div>
 		<?php
 		}
