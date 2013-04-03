@@ -1765,7 +1765,7 @@
 		</term>
 		<term>
 			<key>MSG_PWDMINLENGTH</key>
-			<value>Min password length is 3</value>
+			<value>Min password length is 8</value>
 		</term>
 		<term>
 			<key>MSG_PROFILEUPDATED</key>

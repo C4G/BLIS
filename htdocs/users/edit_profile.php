@@ -4,7 +4,7 @@
 #
 
 include("redirect.php");
-include("includes/header.php"); 
+include("includes/header.php");
 LangUtil::setPageId("edit_profile");
 
 $pwd_tip = LangUtil::getPageTerm("TIPS_CASEPWD");
@@ -70,6 +70,7 @@ function check_entry_pwd()
 	var pwd_len = pwd.length;
 	var pwd2_len = pwd2.length;
 	var error_flag = false;
+	var pwd_min_length = 8;
 	if(old_pwd == "")
 	{
 		$('#curr_pwd_error').show();
@@ -111,7 +112,7 @@ function check_entry_pwd()
 	}
 	if(!error_flag)
 	{
-		if((pwd_len != 0 && pwd2_len != 0) && pwd_len < 3)
+		if((pwd_len != 0 && pwd2_len != 0) && pwd_len < pwd_min_length)
 		{
 			$('#pwd_len_error').show();
 			error_flag = true;
@@ -256,6 +257,27 @@ else if(isset($_REQUEST['pupdateerr']))
 <tr>
 <td><br></td>
 <td><input type="button" value="<?php echo LangUtil::$generalTerms["CMD_UPDATE"]; ?>" onclick="javascript:check_entry_pwd();"/>&nbsp;&nbsp;</td>
+</tr>
+<tr>
+	<td>
+		<span id="pwd_chg_reminder" class="error_string">
+			<?php
+				if ($user_profile->is_password_due_for_change())
+				{
+					echo "Your password is due to be changed.";
+				} else
+				{
+					if ($user_profile->get_days_until_next_pass_change() == 1)
+					{
+						echo "Password change due in 1 day.";
+					} else if ($user_profile->get_days_until_next_pass_change() <= 55)
+ 					{
+						echo "Password change due in " . $user_profile->get_days_until_next_pass_change() . " days.";
+					}
+				}
+			?>
+		</span>
+	</td>
 </tr>
 
 </table>

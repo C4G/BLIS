@@ -51,6 +51,7 @@ class User
 	public $labConfigId;
 	public $langId;
 	public $country;
+	public $last_password_update;
 	
 	public static function getObject($record)
 	{
@@ -68,6 +69,7 @@ class User
 		$user->phone = $record['phone'];
 		$user->createdBy = $record['created_by'];
 		$user->labConfigId = $record['lab_config_id'];
+		$user->last_password_update = $record['last_password_update'];
 		if(isset($record['lang_id']))
 			$user->langId = $record['lang_id'];
 		else
@@ -87,6 +89,40 @@ class User
 			return true;
 		else
 			return false;
+	}
+
+	// Returns the number of days since the password for this user was last changed.
+	public function get_days_since_last_pass_change()
+	{
+		$time_since_last_pass_change = time() - $this->last_password_update;
+		return floor($time_since_last_pass_change / 60 / 60 / 24); // seconds / seconds in minute / minutes in hour / hours in day
+	}
+
+	// Returns the reccomended number of days until the next password change for this user.
+	public function get_days_until_next_pass_change()
+	{
+		$days_since_last_pass_change = $this->get_days_since_last_pass_change();
+		return ceil(60 - $days_since_last_pass_change);
+	}
+
+	// If the password for this user is within '$days' of expiring, returns true, else false.
+	public function is_password_older_than_days($days)
+	{
+		if ($this->get_days_since_last_pass_change() >= $days)
+		{
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	// Returns true if the age of the password is equal to or greater than 60.
+	public function is_password_due_for_change()
+	{
+		if ($this->get_days_since_last_pass_change() >= 60)
+		{
+			return TRUE;
+		}
+		return FALSE;
 	}
 }
 
@@ -5469,9 +5505,10 @@ function change_user_password($username, $password)
 	$username = mysql_real_escape_string($username, $con);
 	$saved_db = DbUtil::switchToGlobal();
 	$password = encrypt_password($password);
+	$password_update_time = time();
 	$query_string =
 		"UPDATE user ".
-		"SET password='$password' ".
+		"SET password='$password', last_password_update=$password_update_time ".
 		"WHERE username='$username'";
 	query_blind($query_string);
 	DbUtil::switchRestore($saved_db);

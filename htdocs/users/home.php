@@ -7,6 +7,7 @@ LangUtil::setPageId("home");
 $page_elems = new PageElems();
 $profile_tip = LangUtil::getPageTerm("TIPS_PWD");
 $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), $profile_tip);
+$user = get_user_by_id($_SESSION['user_id']);
 
 # Enable JavaScript for recording user props and latency values
 # Attaches record.js to this HTML
@@ -109,7 +110,22 @@ function blis_update()
 <?php 
 echo LangUtil::getPageTerm("WELCOME").", " . $_SESSION['username'] . ".<br><br>";
 echo LangUtil::getPageTerm("TIPS_BLISINTRO");
+?>
+<br />
+<br />
+<?php
 
+if ($user->is_password_older_than_days(55)) // We want this to return TRUE when the password is within 5 days of expiring.
+{
+    if ($user->get_days_until_next_pass_change() <= 0)
+    {
+        echo "<span class='error_string'>Your password is due to be changed.</span>";
+    } else
+    {
+        $days = $user->get_days_since_last_pass_change();
+        echo "<span class='error_string'>Your password hasn't been changed in $days days.</span>";
+    }
+}
 ?>
 <br><br>
     <div id="update_div2" style="display:none;" class="warning">
