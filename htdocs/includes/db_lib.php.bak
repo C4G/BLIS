@@ -817,7 +817,6 @@ class LabConfig
 	}
 }
 
-
 class ReportConfig
 {
 	public $labConfigId;
@@ -1142,7 +1141,6 @@ class ReportConfig
 	}
 }
 
-
 class TestType
 {
 	public $testTypeId;
@@ -1308,6 +1306,19 @@ class TestType
 		$record = query_associative_one($query_string);
 		$retval = $record['hide_patient_name'];
 		return $retval;
+	}
+	
+	public static function getNameById($id)
+	{
+		$query_string = "SELECT name FROM `test_type` WHERE `test_type_id` = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+
+		$retVal = query_associative_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+		
+		return $retVal['name'];
 	}
 }
 
@@ -2223,7 +2234,6 @@ class Patient
 	}
 }
 
-
 class Specimen
 {
 	public $specimenId;
@@ -2598,7 +2608,7 @@ class Test
 		}
 		global $con;
 		$test_id = mysql_real_escape_string($test_id, $con);
-		$query_string = "SELECT * FROM test WHERE test_id=$test_id";
+		$query_string = "SELECT * FROM test WHERE `test_id` = $test_id";
 		$record = query_associative_one($query_string);
 		return Test::getObject($record);
 	}
@@ -3391,18 +3401,36 @@ class Test
 			return LangUtil::$generalTerms['DONE'];
 	}
 
-        public function getTestRegDate()
-        {
-                $query_string =
-			"SELECT date_collected FROM specimen ".
-			"WHERE specimen_id = ( ".
-			"SELECT specimen_id FROM test WHERE test_id = $this->testId".
-                        ")";
-			//"AND result<>''";
+	public function getTestRegDate()
+	{
+		$query_string =
+		"SELECT date_collected FROM specimen ".
+		"WHERE specimen_id = ( ".
+		"SELECT specimen_id FROM test WHERE test_id = $this->testId".
+					")";
+		//"AND result<>''";
 		$resultset = query_associative_one($query_string, $row_count);
-                $retval = $resultset['date_collected'];
+		$retval = $resultset['date_collected'];
 		return $retval;
-        }
+	}
+	
+	public static function convertArrayOfIdsToObjects($testIds)
+	{
+		$test_objs = array();
+		foreach ($testIds as $testId)
+		{
+			$test_objs[] = Test::getById($testId);
+		}
+		return $test_objs;
+	}
+	
+	// Returns the name associated with the test type this is an instance of.
+	public function getTestName()
+	{
+		$id = $this->testTypeId;
+		
+		return TestType::getNameById($id);
+	}
 }
 
 class CustomField
@@ -3707,7 +3735,6 @@ class SpecimenCustomData
 		}
 	}
 }
-
 
 class PatientCustomData
 {
@@ -4322,7 +4349,6 @@ class ReferenceRange
 	}
 }
 
-
 class DbUtil
 {
 	public static function switchToGlobal()
@@ -4447,7 +4473,6 @@ class SessionUtil
 	}
 }
 
-
 class UILog
 {
     // Name of the file where the message logs will be appended.
@@ -4566,8 +4591,6 @@ class UILog
         return $log;
     }
 }
-
-
 
 class UserStats
 {
@@ -4812,6 +4835,605 @@ class UserStats
     }
 }
 
+class Bill
+{
+	#Used to combine payments into a logical grouping, and provide a quick method for users to see if a patient has
+	#been billed for a particular test or set of tests.
+	
+	private $id;
+	private $patientId;
+	private $paidInFull;
+	
+	function Bill($patientId)
+	{
+		$this->paidInFull = FALSE;
+		$this->patientId = $patientId;
+	}
+	
+	public function create($lab_config_id)
+	{
+		$patientId = $this->patientId;
+
+		if ($this->paidInFull)
+		{
+			$paidInFull = 1;
+		} else
+		{
+			$paidInFull = 0;
+		}
+
+		$query_string = "INSERT INTO `bills` (`patient_id`, `paid_in_full`)	VALUES ($patientId, $paidInFull)";
+							
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_insert_one($query_string);
+		
+		$this->id = get_last_insert_id();
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	public function save($lab_config_id)
+	{
+		$id = $this->id;
+		$patientId = $this->patientId;
+		$paidInFull = $this->paidInFull;
+
+		$query_string = "UPDATE `bills` SET `patient_id` = $patientId,
+											`paid_in_full` = $paidInfull
+						WHERE `id` = $id";
+							
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_update($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	public static function loadFromId($billId, $lab_config_id)
+	{
+		$id = $billId;
+		
+		$query_string = "SELECT * FROM `bills` WHERE `id` = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		$retVal = query_associative_one($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		$bill = new Bill($retVal['patient_id']);
+		
+		$bill->id = $id;
+		$bill->paidInFull = $retVal['paidInFull'];
+		
+		return $bill;
+	}
+	
+	public function getId()
+	{
+		return $this->id;
+	}
+	
+	public function getPatientId()
+	{
+		return $this->patientId;
+	}
+	
+	public static function createBillForTests($tests, $lab_config_id)
+	{
+		# Create a new bill and associate all of the desired tests with it.
+		// The way we call the bill constructor here is awkward and assumes that the tests are all for the same patient.
+		// While that's true for now, it's not necessarily going to stay that way, so this may need to be revisited. -Robert.
+
+		$bill = new Bill(Specimen::getById($tests[0]->specimenId)->patientId);
+		$bill->create($lab_config_id);
+
+		foreach($tests as $test)
+		{
+			$association = new BillsTestsAssociationObject($bill->id, $test->testId);
+			$association->create($lab_config_id);
+		}
+		
+		return $bill;
+	}
+	
+	public static function hasTestBeenBilled($testId, $lab_config_id)
+	{
+		$query_string = "SELECT COUNT(*) FROM `bills_test_association` WHERE `test_id` = $testId";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		$retVal = query_associative_one($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+
+		if ($retVal["COUNT(*)"] > 0)
+		{
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	public function hasBillBeenFullyPaid($lab_config_id)
+	{
+		if ($this->paidInFull) # If this flag has been toggled, there's no reason to make another DB query.
+		{
+			return TRUE;
+		}
+		# Return true if there are enough payments associated with this bill to fully cover its cost.
+		$bill_amount = $this->amount;
+		
+		$payments_total = 0.0;
+		
+		$payments = Payment::loadAllPaymentsForBill($this->id, $lab_config_id);
+		
+		foreach($payments as $payment)
+		{
+			$payments_total += $payment->amount;
+		}
+		
+		if ($payments_total == $bill_amount)
+		{
+			$bill->paidInFull = TRUE;
+			$bill->save($lab_config_id);
+			return TRUE;
+		} else if ($payments_total < $bill_amount)
+		{
+			return FALSE;
+		} else
+		{
+			// I'm really not sure how we want to handle if the bill was OVER-paid.  TODO: Ask Naomi/Santosh at some point.
+			// For now, I'm just calling it fully paid.
+			$bill->paidInFull = TRUE;
+			$bill->save($lab_config_id);
+			return TRUE;
+		}
+	}
+	
+	public function getAllAssociationsForBill($lab_config_id)
+	{
+		$id = $this->id;
+		
+		$query_string = "SELECT id FROM `bills_test_association` WHERE `bill_id` = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		$retVal = query_associative_all($query_string, $_COUNT);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		$associations = array();
+		foreach($retVal as $entry)
+		{
+			$associations[] = BillsTestsAssociationObject::loadFromId($entry['id'], $lab_config_id);
+		}
+		return $associations;
+	}
+
+	public function getBillTotal($lab_config_id)
+	{
+		$associations = $this->getAllAssociationsForBill($lab_config_id);
+
+		$runningTotal = 0.00;
+		foreach($associations as $assoc)
+		{
+			$runningTotal += $assoc->getDiscountedTotal();
+		}
+		return $runningTotal;
+	}
+	
+	public function getFormattedTotal($lab_config_id)
+	{
+		$cost = $this->getBillTotal($lab_config_id);
+		
+		return format_number_to_money($cost);
+	}
+}
+
+class BillsTestsAssociationObject
+{
+	# Used to associate tests with a bill.  Also provides a place to apply discounts to a test,
+	#  since we don't want to modify the existing test table structure.
+	
+	// Constants for discount assignments.
+	const NONE = 1000;
+	const PERCENT = 1001;
+	const FLAT = 1002;
+	
+	private $id;
+	private $billId;
+	private $testId;
+	private $discountType;
+	private $discount;
+	
+	function BillsTestsAssociationObject($billId, $testId)
+	{
+		$this->billId = $billId;
+		$this->testId = $testId;
+		$this->discountType = self::NONE;
+		$this->discount = 0.00;
+	}
+	
+	function create($lab_config_id)
+	{
+		$billId = $this->billId;
+		$testId = $this->testId;
+		$discountType = $this->discountType;
+		$discountAmount = $this->discount;
+		
+		$query_string = "INSERT INTO `bills_test_association` (bill_id, test_id, discount_type, discount_amount)
+							VALUES ($billId, $testId, $discountType, $discountAmount)";
+							
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_insert_one($query_string);
+		
+		$this->id = get_last_insert_id();
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	function save($lab_config_id)
+	{
+		$id = $this->id;
+		$billId = $this->billId;
+		$testId = $this->testId;
+		$discountType = $this->discountType;
+		$discountAmount = $this->discount;
+		
+		$query_string = "UPDATE `bills_test_association` SET `bill_id` = $billId,
+															 `test_id` = $testId,
+															 `discount_type` = $discountType,
+															 `discount_amount` = $discountAmount
+						WHERE `id` = $id";
+
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_update($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	function loadFromId($id, $lab_config_id)
+	{
+		
+		$query_string = "SELECT * FROM `bills_test_association` WHERE `id` = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+		$retVal = query_associative_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+		
+		$association = new BillsTestsAssociationObject($retVal['bill_id'], $retVal['test_id']);
+
+		$association->id = $id;
+		$association->discountType = $retVal['discount_type'];
+		$association->discount = $retVal['discount_amount'];
+		
+		return $association;
+	}
+	
+	public function getId()
+	{
+		return $this->id;
+	}
+	
+	public function getDiscountedTotal()
+	{
+		switch($this->discountType)
+		{
+		case self::NONE:
+			$unformatted_cost = $this->getCostOfTest();
+			break;
+		case self::FLAT:
+			$unformatted_cost = $this->getCostOfTest() - $this->discount;
+			break;
+		case self::PERCENT:
+			$unformatted_cost = $this->getCostOfTest() * (1 - ($this->discount / 100));
+			break;
+		default:
+			// Shouldn't get here.
+			break;
+		}
+		$cost = (floor($unformatted_cost * 100)) / 100;
+		return $unformatted_cost;
+	}
+	
+	public function getCostOfTest()
+	{
+		$test = Test::getById($this->testId);
+		$cost = get_cost_of_test($test);
+		$cost = $cost['amount'];
+		return floatVal($cost);
+	}
+	
+	public function getTestId()
+	{
+		return $this->testId;
+	}
+	
+	public function getTest()
+	{
+		$id = $this->testId;
+		
+		$test = Test::loadById($id);
+		
+		return $test;
+	}
+	
+	public function getBillId()
+	{
+		return $this->billId;
+	}
+	
+	public function getDiscountAmount()
+	{
+		return $this->discount;
+	}
+	
+	public function isFlatDiscount()
+	{
+		if ($this->discountType == self::FLAT)
+		{
+			return TRUE;
+		} else
+		{
+			return FALSE;
+		}
+	}
+
+	public function isPercentDiscount()
+	{
+		if ($this->discountType == self::PERCENT)
+		{
+			return TRUE;
+		} else
+		{
+			return FALSE;
+		}
+	}
+
+	public function isDiscountDisabled()
+	{
+		if ($this->discountType == self::NONE)
+		{
+			return TRUE;
+		} else
+		{
+			return FALSE;
+		}
+	}
+	
+	public function setDiscountType($discount_type)
+	{
+		if ($discount_type < 100 or $discount_type > 1002)
+		{
+			return 0;
+		}
+		$this->discountType = $discount_type;
+
+		return 1;
+	}
+	
+	public function setDiscountAmount($amount)
+	{
+		if (!is_numeric($amount))
+		{
+			# Passed in something that was not a number.
+			return 0;
+		}
+		
+		#Ensure that whatever we got is in numeric form.
+		$amount = floatval($amount);
+		
+		if ($amount < 0)
+		{
+			# Passed in a negative value, which we aren't going to allow.
+			return 0;
+		}
+
+		switch ($this->discountType)
+		{
+		case self::NONE:
+			break; // Shouldn't happen.
+		case self::PERCENT:
+			if ($amount > 100)
+			{
+				# Passed in a value greater than 100 for a percentage discount, which we aren't going to allow.
+				return 0;
+			}
+			break;
+		case self::FLAT:
+			if ($amount > $this->getCostOfTest())
+			{
+				# Passed in a value greater than the cost of the test, which we aren't going to allow.
+				return 0;
+			}
+			break;
+		default:
+			break; // shouldn't happen.
+		}
+
+		# If it gets this far, we have a good numeric value to add.
+		$this->discount = $amount;
+		return 1;
+	}
+	
+	public function loadByTestId($testId, $lab_config_id)
+	{
+		$query_string = "SELECT id FROM `bills_test_association` WHERE `test_id` = $testId";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+		$retVal = query_associative_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+		
+		$association = self::loadFromId($retVal['id'], $lab_config_id);
+		
+		return $association;
+	}
+	
+	// Return the name for the test this object references.
+	public function getTestName()
+	{
+		$id = $this->testId;
+
+		$query_string = "SELECT name FROM test_type WHERE test_type_id = (SELECT test_type_id FROM test WHERE test_id = $id)";
+		
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+
+		$retVal = query_associative_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+
+		return $retVal['name'];
+	}
+	
+	// Return the date for the test this object references.
+	public function getTestDate()
+	{
+		$id = $this->testId;
+
+		$query_string = "SELECT ts FROM test WHERE test_id = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+
+		$retVal = query_associative_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+
+		$date = $retVal['ts'];
+		
+		return date("Y-m-d", strtotime($date));
+	}
+	
+	// Return the cost for the test this object references, formatted accordingly.
+	public function getFormattedTestCost()
+	{
+		$cost = $this->getDiscountedTotal();
+		
+		return format_number_to_money($cost);
+	}
+}
+
+class Payment
+{
+	#Records the payment of a bill
+	
+	public $id;
+	public $amount;
+	public $billId;
+	
+	function Payment($amount, $billId)
+	{
+		$this->amount = $amount;
+		$this->billId = $billId;
+	}
+	
+	public function create($lab_config_id)
+	{
+		$amount = $this->amount;
+		$billId = $this->billId;
+
+		$query_string = "INSERT INTO `payments` (`amount`, `bill_id`)
+							VALUES ($amount, $billId)";
+							
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_insert_one($query_string);
+		
+		$this->id = get_last_insert_id();
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	public function save($lab_config_id)
+	{
+		$id = $this->id;
+		$amount = $this->amount;
+		$billId = $this->billId;
+
+		$query_string = "UPDATE `payments` SET `amount` = $amount,
+											   `bill_id` = $billId
+						WHERE `id` = $id";
+							
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		query_update($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		return 1;
+	}
+	
+	public static function loadFromId($id, $lab_config_id)
+	{
+		$query_string = "SELECT * FROM `payments` WHERE `id` = $id";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		$retVal = query_associative_one($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		$payment = new Payment($retVal['patient_id']);
+		
+		$payment->id = $id;
+		$payment->amount = $retVal['amount'];
+		$payment->billId = $retVal['bill_id'];
+		
+		return $payment;
+	}
+	
+	public static function loadAllPaymentsForBill($bill, $lab_config_id)
+	{
+		$billId = $bill->id;
+		
+		$query_string = "SELECT id FROM `payments` WHERE `bill_id` = $billId";
+		
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		
+		$retVal = query_associative_all($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		
+		$payments = array();
+		
+		if (count($retVal != 0))
+		{
+			foreach ($retVal as $val)
+			{
+				$payments.append(Payment::loadFromId($val, $lab_config_id));
+			}
+			return $payments;
+		} else
+		{
+			return 0;
+		}
+	}
+	
+	public static function createNewPaymentForBill($bill, $amount, $lab_config_id)
+	{
+		$payment = new Payment($amount, $bill->id);
+		
+		$payment->create($lab_config_id);
+		
+		return $payment;
+	}
+}
 #
 # Functions for managing user profiles and login
 #
@@ -5180,6 +5802,7 @@ return $patient_list;
 
 
 }
+
 function get_patient_by_id($pid)
 {
 	global $con;
@@ -5209,7 +5832,6 @@ function search_patients_by_id($q)
 	return $patient_list;
 }
 
-
 function search_patients_by_id_dyn($q, $cap, $counter)
 {
 	# Searches for patients with similar name
@@ -5231,8 +5853,6 @@ function search_patients_by_id_dyn($q, $cap, $counter)
 	return $patient_list;
 }
 
-
-
 function search_patients_by_id_count($q)
 {
 	# Searches for patients with similar name
@@ -5244,7 +5864,6 @@ function search_patients_by_id_count($q)
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
-
 
 function search_patients_by_name($q)
 {
@@ -5265,7 +5884,6 @@ function search_patients_by_name($q)
 	}
 	return $patient_list;
 }
-
 
 function search_patients_by_name_dyn($q, $cap, $counter)
 {
@@ -5288,8 +5906,6 @@ function search_patients_by_name_dyn($q, $cap, $counter)
 	return $patient_list;
 }
 
-
-
 function search_patients_by_name_count($q)
 {
 	# Searches for patients with similar name
@@ -5301,7 +5917,6 @@ function search_patients_by_name_count($q)
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
-
 
 function search_patients_by_addlid($q)
 {
@@ -5323,7 +5938,6 @@ function search_patients_by_addlid($q)
 	return $patient_list;
 }
 
-
 function search_patients_by_addlid_dyn($q, $cap, $counter)
 {
 	# Searches for patients with similar name
@@ -5344,8 +5958,6 @@ function search_patients_by_addlid_dyn($q, $cap, $counter)
 	}
 	return $patient_list;
 }
-
-
 
 function search_patients_by_addlid_count($q)
 {
@@ -5377,7 +5989,6 @@ function search_patients_by_dailynum($q)
 	return $patient_list;
 }
 
-
 function search_patients_by_dailynum_dyn($q, $cap, $counter)
 {
 	# Searches for patients with similar name
@@ -5398,8 +6009,6 @@ function search_patients_by_dailynum_dyn($q, $cap, $counter)
 	return $patient_list;
 }
 
-
-
 function search_patients_by_dailynum_count($q)
 {
 	# Searches for patients with similar name
@@ -5410,7 +6019,6 @@ function search_patients_by_dailynum_count($q)
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
-
 
 function search_specimens_by_id($q)
 {
@@ -5431,8 +6039,6 @@ function search_specimens_by_id($q)
 	}
 	return $specimen_list;
 }
-
-
 
 function search_specimens_by_addlid($q)
 {
@@ -5631,7 +6237,6 @@ fclose($fh);
 	# Addition of custom fields: done from calling function/page	
 	return true;
 }
-
 
 #
 # Functions for handling specimen/test-related data
@@ -5990,7 +6595,6 @@ function get_specimens_by_session($session_num)
 	return $retval;
 }
 
-
 #
 # Functions for adding lab configuration (site) related data
 #
@@ -6225,6 +6829,7 @@ function get_stock_details($entry_id)
 	DbUtil::switchRestore($saved_db);
 	return $retval;
 }
+
 function add_new_stock($name,$lot_number,$expiry_date,$manufacture,$supplier,$quantity_supplied,$unit , $cost_per_unit,$ts) {
 	# Adds a new stock or update the quantity of the stock
 	
@@ -6300,6 +6905,7 @@ function add_new_stock($name,$lot_number,$expiry_date,$manufacture,$supplier,$qu
 		DbUtil::switchRestore($saved_db);
 	}
 }
+
 function get_stock_count()
 {
 	$saved_db = DbUtil::switchToLabConfigRevamp();
@@ -6317,6 +6923,7 @@ function get_stock_count()
 	DbUtil::switchRestore($saved_db);
 	return $retval;
 }
+
 function get_stock_out_details()
 {
 $saved_db = DbUtil::switchToLabConfigRevamp();
@@ -6347,6 +6954,7 @@ $query_string =
 		return $retval;
 DbUtil::switchRestore($saved_db);
 }
+
 function get_current_inventory_byName($date_to,$date_from, $name)
 {
 	$saved_db = DbUtil::switchToLabConfigRevamp();
@@ -6509,7 +7117,6 @@ function update_stocks($name, $lot_number, $quant, $receiver, $remarks, $ts)
 	}
 }
 
-
 /////////////////////////////////
 // This is end of stock module //
 /////////////////////////////////
@@ -6568,7 +7175,6 @@ function create_lab_config_tables($lab_config_id, $db_name)
 	}
 }
 
-
 function blis_db_update($lab_config_id, $db_name, $ufile)
 {
 	# Creates empty tables for a new lab configuration
@@ -6584,7 +7190,6 @@ function blis_db_update($lab_config_id, $db_name, $ufile)
 		query_blind($sql_command.";");
 	}
 }
-
 
 function create_lab_config_revamp_tables($lab_config_id, $revamp_db_name)
 {
@@ -6616,11 +7221,9 @@ function set_lab_config_db_name($lab_config_id, $db_name)
 	DbUtil::switchRestore($saved_db);
 }
 
-
 #
 # Functions for fetching lab configuration (site) related data
 #
-
 function get_lab_config_by_id($lab_config_id)
 {
 	global $con;
@@ -6650,6 +7253,66 @@ function get_lab_config_id($user_id)
 	DbUtil::switchRestore($saved_db);	
 	return $id;
 }
+
+/* Import Configuration function */
+function  insert_import_entry($id)
+{
+    $saved_db = DbUtil::switchToGlobal();
+    $query_configs = "INSERT INTO import_log (lab_config_id) values ($id)";
+    $resultset = query_associative_one($query_configs);
+    return 1;
+}
+
+function get_lab_configs_imported()
+{
+    $saved_db = DbUtil::switchToGlobal();
+    $query_configs = "SELECT distinct lab_config_id from import_log";
+    $retval = array();
+	$resultset = query_associative_all($query_configs, $row_count);
+	if($resultset == null)
+	{
+		DbUtil::switchRestore($saved_db);
+		return $retval;
+	}
+        
+	foreach($resultset as $record)
+	{
+		$retval[] = LabConfig::getById($record['lab_config_id']);
+	}
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+}
+
+function get_last_import_date($id)
+{
+    $saved_db = DbUtil::switchToGlobal();
+    $query_configs = "SELECT * from import_log where lab_config_id = $id ORDER BY ts DESC";
+    $resultset = query_associative_one($query_configs);
+    return $resultset['ts'];
+}
+
+function get_test_mapping_list_by_string($string)
+{
+    //echo "<pre>";
+    $m1 = array();
+    $m2 = array();
+    $m1 = explode(";",$string);
+    //print_r($m1);
+    for($i = 0; $i < count($m1); $i++)
+    {
+        if($m1[$i] != 'null' && $m1[$i] != 'undefined')
+        {
+            //$m2[] = array();
+            $temp = explode(":", $m1[$i]);
+            $m2[$temp[0]] = $temp[1];
+        }
+    }
+       // print_r($m2);
+    //echo "</pre>";
+    return $m2;
+
+}
+
 function get_lab_configs($admin_user_id = "")
 {
 	# Returns all lab configs present in DB and accessible by admin-level user
@@ -6986,11 +7649,9 @@ function get_specimen_types_by_site($lab_config_id="")
 	return $retval;
 }
 
-
 #
 # Functions for adding data to catalog
 #
-
 function add_specimen_type($specimen_name, $specimen_descr, $test_list=array())
 {
 	global $con;
@@ -7084,6 +7745,7 @@ function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_p
 	$cat = mysql_real_escape_string($cat_code, $con);
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	$hide_patient_name = mysql_real_escape_string($hide_patient_name, $con);
+    $cost_to_patient = mysql_real_escape_string($cost, $con);
 	# Adds a new test type in DB with compatible specimens in 'specimen_list'
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$is_panel_num = 1;
@@ -7091,8 +7753,7 @@ function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_p
 	if($is_panel == false)
 	{
 		$is_panel_num = 0;
-	}
-        
+	}       
         if($prevalenceThreshold == "")
             $prevalenceThreshold = 70;
         
@@ -7239,7 +7900,6 @@ function add_measure($measure, $range, $unit)
 #
 # Functions for fetching data from catalog
 #
-
 function get_specimen_types_catalog($lab_config_id=null, $reff=null)
 {
 	# Returns a list of all specimen types available in catalog
@@ -7325,7 +7985,6 @@ function get_search_fields($lab_config_id=null)
 }
 
 //NC3065
-
 function getDoctorNames()
 {
 	$query_string = "SELECT doctor FROM specimen WHERE date_collected >'2010-08-11'";
@@ -7361,7 +8020,6 @@ function get_test_categories_data($lab_config_id) {
 	return $retval;
 }
 
-
 function get_test_ids_by_category($cat, $lab_config_id) {
 	
         $saved_db = DbUtil::switchToLabConfig($lab_config_id);		
@@ -7395,6 +8053,29 @@ function get_test_categories($lab_config_id=null) {
 	DbUtil::switchRestore($saved_db);
 	return $retval;
 }
+
+function get_test_categories2($lab_config_id=null) {
+	global $con;
+	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	# Returns a list of all test categories available in catalog
+	global $CATALOG_TRANSLATION;
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	$query_string = "SELECT test_category_id, name FROM test_category";
+	$resultset = query_associative_all($query_string, $row_count);
+	$retval = array();
+        if($row_count == 0)
+            return;
+	foreach($resultset as $record)
+	{
+		if($CATALOG_TRANSLATION === true)
+			$retval[$record['test_category_id']] = LangUtil::getLabSectionName($record['test_category_id']);
+		else
+			$retval[$record['test_category_id']] = $record['name'];
+	}
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+}
+
 
 function get_test_category_name_by_id($cat_id)
 {
@@ -7563,8 +8244,6 @@ function get_specimen_name_by_id($specimen_type_id)
 			return $record['name'];
 	}
 }
-
-
 
 function get_test_name_by_id($test_type_id, $lab_config_id=null)
 {
@@ -8738,6 +9417,24 @@ class TestTypeMapping {
 			"SELECT * FROM test_mapping WHERE test_id=$testTypeId LIMIT 1";
 		$record = query_associative_one($query_string);
 		return TestTypeMapping::getObject($record);
+	}
+        
+        public static function getTestTypeById($testTypeId, $user_id) {
+		# Returns global test type record in DB
+		$saved_db = DbUtil::switchToGlobal();
+		$query_string =
+			"SELECT * FROM test_mapping WHERE test_id=$testTypeId AND user_id=$user_id LIMIT 1";
+		$record = query_associative_one($query_string);
+		return TestTypeMapping::getObject($record);
+	}
+        
+        public static function getTestCatById($testTypeId, $user_id) {
+		# Returns global test type record in DB
+		$saved_db = DbUtil::switchToGlobal();
+		$query_string =
+			"SELECT * FROM test_category_mapping WHERE test_category_id=$testTypeId AND user_id=$user_id LIMIT 1";
+		$record = query_associative_one($query_string);
+		return $record;
 	}
 	
 	public function getMeasures()
@@ -10884,12 +11581,11 @@ function get_cost_of_test_type_for_closest_date($date, $test_type_id)
     instantiate_new_cost_of_test_type(0.00, $test_type_id);
     
     $date = date("Y-m-d H:i:s", strtotime($date));
-    
+	
     $lab_config_id = $_SESSION['lab_config_id'];
     
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
 
-    // Get all instances of prices for this test type, then filter the date in php.  More reliable way to compare dates.
     $query_string = "SELECT amount, earliest_date_valid FROM test_type_costs WHERE test_type_id=$test_type_id AND earliest_date_valid<='$date' ORDER BY earliest_date_valid DESC LIMIT 1";
     
     $result = query_associative_one($query_string);
@@ -10938,6 +11634,13 @@ function get_test_names_and_costs_from_ids($id_array)
     return $ret_array;
 }
 
+function get_cost_of_test($test)
+{
+	$cost = get_cost_of_test_type_for_closest_date($test->timestamp, $test->testTypeId);
+	
+	return $cost;
+}
+
 function generate_bill_data_for_patient_and_date_range($patient_id, $first_date, $second_date)
 {
     $test_info = get_all_tests_for_patient_and_date_range($patient_id, $first_date, $second_date);
@@ -10978,6 +11681,34 @@ function get_test_type_id_from_test_id($test_id)
 /***************************
  * Billing Functions
  ***************************/
+ 
+function functional_number_to_editable_money($number)
+{
+	$string = get_currency_delimiter_from_lab_config_settings(); // i.e. get DDD(.)CC
+	
+	$dollars = floor($number); // i.e. get (DDD).CC
+	$cents = $number - $dollars; // i.e. get DDD.(CC)
+	
+	$cents_as_whole_number = get_cents_as_whole_number($cents); // turn 0.(CC) into (CC).0
+	
+	$string = $dollars . $string . $cents; // i.e. (DDD)(.)(CC) = DDD.CC
+	
+	return $string;
+}
+
+function editable_money_to_functional_number($string)
+{
+	$delimiter = get_currency_delimiter_from_lab_config_settings();
+	
+	$values = explode($delimiter, $string);
+	$dollars = $values[0];
+	$cents = $values[1];
+	
+	$numeric_cents = get_cents_from_whole_number($cents); // turn (CC).0 into 0.(CC)
+	$numeric_dollars = intval($dollars); // force dealing with an int to ensure no type problems arise.
+	
+	return $numeric_dollars + $nuermic_cents;
+}
 
 function format_number_to_money($number)
 {
@@ -10994,8 +11725,16 @@ function format_number_to_money($number)
 
 function get_cents_as_whole_number($cents)
 {
-    return $cents * (pow(10, strlen($cents) - 2));
+    return floor($cents * 100);
 }
+
+function get_cents_from_whole_number($cents)
+{
+	$cost_cents = floor(ltrim($cents, "0")); // Remove any leading zeroes in case the user typed 01 or similar.
+	
+	return $cost_cents / 100;
+}
+
 
 function insert_lab_config_settings_billing($enabled, $currency_name, $currency_delimiter)
 {
@@ -11464,6 +12203,7 @@ class Inventory
             
             $query_string = "SELECT * from inv_usage where reagent_id = $r_id AND lot = '$lot'";
             $recordset = query_associative_all($query_string, $row_count);
+            if(isset($recordset))
             foreach($recordset as $rec)
                 $quantity = $quantity - $rec['quantity_used']; 
             
@@ -11503,6 +12243,25 @@ class Inventory
             DbUtil::switchRestore($saved_db);
             
             return $recordset;
+        }
+        
+        public function getLot2($lid, $r_id, $lot)
+        {
+            $lab_config_id = $lid;
+            
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+            
+            $query_string = "SELECT count(*) as val from inv_supply WHERE reagent_id = $r_id AND lot = '$lot'";
+            $rc = query_associative_one($query_string);            
+            
+            $query_string = "SELECT * from inv_supply WHERE reagent_id = $r_id AND lot = '$lot'";
+            $recordset = query_associative_one($query_string);
+            
+            DbUtil::switchRestore($saved_db);
+            if($rc['val'] > 0)
+                return $recordset;
+            else
+                return -1;
         }
         
         public function getAllReagents($lid)
@@ -11723,5 +12482,963 @@ function insertVersionDataEntry()
    
    DbUtil::switchRestore($saved_db);
 }
+
+#### BARCODE FUNCTIONS ####
+
+
+function getPatientBarcodeDelim()
+{
+    $delim = 'X';
+    return $delim;
+}
+
+function getSpecimenBarcodeDelim()
+{
+    $delim = 'X';
+    return $delim;
+}
+
+function getInventoryBarcodeDelim()
+{
+    $delim = 'X';
+    return $delim;
+}
+
+function patientReportBarcodeCheck()
+{
+    return 1;
+}
+
+function patientBarcodeCheck()
+{
+    return 1;
+}
+
+function specimenBarcodeCheck()
+{
+    return 1;
+}
+
+function patientSearchBarcodeCheck()
+{
+    return 1;
+}
+
+function specimenSearchBarcodeCheck()
+{
+    return 1;
+}
+
+function getPatientFromBarcode($patient_code)
+{
+    $pieces = decodePatientBarcode($patient_code);
+    $patient_id = $pieces[1];
+    $patientClass = new Patient();
+    $patient = $patientClass->getById($patient_id);
+    return $patient;
+}
+
+function search_patients_by_db_id_count($patient_code)
+{
+    $patient = getPatientFromBarcode($patient_code);
+    $count = 0;
+    if($patient != NULL)
+        $count = 1;
+    return $count;
+}
+
+function getSpecimenFromBarcode($specimen_code)
+{
+    $pieces = decodeSpecimenBarcode($specimen_code);
+    $specimen_id = $pieces[1];
+    $patientClass = new Patient();
+    $patient = $patientClass->getById($patient_id);
+    return $patient;
+}
+
+function decodeSpecimenBarcode($specimen_code)
+{
+    $specimen_code = strtoupper($specimen_code);
+     $sdelim = getSpecimenBarcodeDelim();
+     $pieces = explode($sdelim, $specimen_code);
+     return $pieces;
+}
+
+function decodePatientBarcode($patient_code)
+{
+    $patient_code = strtoupper($patient_code);
+     $pdelim = getPatientBarcodeDelim();
+     $pieces = explode($pdelim, $patient_code);
+     return $pieces;
+}
+
+function encodePatientBarcode($patient_id, $labconfig_id) //getPatientBarcodeCode($patient_id, $labconfig_id)
+{
+    $pdelim = getPatientBarcodeDelim();
+    if($labconfig_id == 0)
+        $labconfig_id = $_SESSION['lab_config_id'];
+    $pcode = $labconfig_id.$pdelim.$patient_id;
+    return $pcode;
+}
+
+function encodeSpecimenBarcode($specimen_id, $labconfig_id)
+{
+    $sdelim = getSpecimenBarcodeDelim();
+     if($labconfig_id == 0)
+        $labconfig_id = $_SESSION['lab_config_id'];
+    $scode = $labconfig_id.$sdelim.$specimen_id;
+    return $scode;
+}
+
+function encodeInventoryBarcode($inventory_id, $labconfig_id)
+{
+    $idelim = getInventoryBarcodeDelim();
+    $icode = $labconfig_id.$idelim.$inventory_id;
+    return $icode;
+}
+
+###########################
+
+/////  Functions for country director reports ////
+
+function get_tat_data_per_test_per_lab_dir_new($test_type_id, $lab_config_id, $date_from, $date_to, $include_pending)
+ {
+    global $DEFAULT_PENDING_TAT; # Default TAT value for pending tests (in days)
+    $i = 7;
+                    $lab_config = LabConfig::getById($lab_config_id);
+                date_default_timezone_set('UTC');
+		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
+		/////////////////////////$resultset = get_completed_tests_by_type($test_type_id, $date_from, $date_to);
+		# {resultentry_ts, specimen_id, date_collected_ts}
+		$progression_val = array();
+		$progression_count = array();
+                $cc = 1;
+		$date_from_parts = explode("-", $date_from);		
+		$date_to_parts = explode("-", $date_to);
+		$date_ts = mktime(0, 0, 0, $date_from_parts[1], $date_from_parts[2], $date_from_parts[0]);
+		$date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
+		
+		while($date_ts<=$date_to_ts) {     
+			$second_day_ts= mktime(0, 0, 0, $date_from_parts[1],$date_from_parts[2]+$i,$date_from_parts[0]);
+			$date_fromp=date("Y-m-d", $date_ts);
+			$date_top=date("Y-m-d", $second_day_ts);
+                        $resultset = get_completed_tests_by_type($test_type_id, $date_fromp, $date_top);
+                        $progression_val[$date_ts]= 0;
+				//$percentile_count[$week_ts] = array();
+				//$percentile_count[$week_ts][] = $date_diff;
+				$progression_count[$date_ts] = 0;
+                        foreach($resultset as $record) {
+			$date_collected = $record['date_collected'];
+			//$week_collected = date("W", $date_collected);
+			//$year_collected = date("Y", $date_collected);
+			//$week_ts = week_to_date2($week_collected, $year_collected);
+			//$week_ts_datetime = date("Y-m-d H:i:s", $week_ts);
+			$date_r_ts = $record['ts'];
+			$date_diff = ($date_r_ts - $date_collected);
+                        if($date_diff < 0)
+                            $date_diff = 0;
+			if(!isset($progression_val[$date_ts])) {
+                        //if($progression_val[$week_ts] == 0) {
+				//$progression_val[$week_ts] = array();
+				$progression_val[$date_ts]= $date_diff;
+				//$percentile_count[$week_ts] = array();
+				//$percentile_count[$week_ts][] = $date_diff;
+				$progression_count[$date_ts] = 1;
+				//$goal_tat[$week_ts] = $lab_config->getGoalTatValue($test_type_id, $week_ts_datetime);
+				//$progression_val[$week_ts][3] = array();
+				//$progression_val[$week_ts][4] = array();
+			}
+			else {
+                            
+				$progression_val[$date_ts] += $date_diff;
+				//$percentile_count[$week_ts][] = $date_diff;
+				$progression_count[$date_ts] += 1;
+                                //$formattedValue = round($value[0],2);
+                                //$formattedDate = bcmul($key,1000);
+                                //ksort($stat_list); 
+			}
+			
+                    }
+                        
+                        $date_ts = $second_day_ts;
+                        $i=$i+7;
+                }
+                                
+                $cc = 1;
+		$rstat = array();
+		foreach($progression_val as $key=>$value) {
+			# Find average value
+                        if($progression_count[$key] == 0)
+                        {
+                            $rstat[$cc][1] = 0;
+                        }
+                        else
+                        {
+			$progression_val[$key] = $value/$progression_count[$key];
+			# Convert from sec timestamp to days
+			$progression_val[$key] = ($progression_val[$key]/(60*60*24));
+                        $rstat[$cc][1] = round($progression_val[$key],2);
+                        }
+                        $rstat[$cc][0] =  date('d M Y', $key);
+                                //ksort($stat_list); 
+                        $cc++;
+			# Determine percentile value
+			//$progression_val[$key][1] = getPercentile2($percentile_count[$key], $percentile_tofind);
+			# Convert from sec timestamp to days
+			//$progression_val[$key][1] = $progression_val[$key][1]/(60*60*24);
+			//$progression_val[$key][2] = $goal_tat[$key];
+		}
+		DbUtil::switchRestore($saved_db);
+		# Return {week=>[avg tat, percentile tat, goal tat, [overdue specimen_ids], [pending specimen_ids]]}
+                //foreach($progression_val as )
+		return $rstat;
+}
+
+function get_prevalence_data_per_test_per_lab_dir($test_type_id, $lab_config_id, $date_from, $date_to, $gender=null)
+
+{
+   $i=7;		
+		# Fetch all test types with one measure having discrete P/N range
+		$retval = array();
+                					$lab_config = LabConfig::getById($lab_config_id);
+
+		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
+		$date_from_parts = explode("-", $date_from);		
+		$date_to_parts = explode("-", $date_to);
+		$date_ts = mktime(0, 0, 0, $date_from_parts[1], $date_from_parts[2], $date_from_parts[0]);
+		$date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
+		
+		while($date_ts<=$date_to_ts) {     
+			$second_day_ts= mktime(0, 0, 0, $date_from_parts[1],$date_from_parts[2]+$i,$date_from_parts[0]);
+			$date_fromp=date("Y-m-d", $date_ts);
+			$date_top=date("Y-m-d", $second_day_ts);
+		
+			if($gender=='M'||$gender=='F') { 
+				$query_string = 
+						"SELECT COUNT(*) AS count_val  FROM test t, patient p, specimen s ".
+						"WHERE t.test_type_id=$test_type_id ".
+						"AND p.patient_id=s.patient_id ".
+						"AND p.sex LIKE '$gender' ".
+						"AND t.specimen_id=s.specimen_id ".
+						"AND (s.date_collected BETWEEN '$date_fromp' AND '$date_top') ".
+						"AND  (t.result LIKE 'N,%' OR t.result LIKE 'n�gatif,%' OR t.result LIKE 'negatif,%' OR t.result LIKE 'n,%' OR t.result LIKE 'negative,%')";
+			}
+			else {
+				$query_string = 
+				"SELECT COUNT(*) AS count_val  FROM test t, specimen s ".
+				"WHERE t.test_type_id=$test_type_id ".
+				"AND t.specimen_id=s.specimen_id ".
+				"AND ( s.date_collected BETWEEN '$date_fromp' AND '$date_top' )".
+				"AND  (result LIKE 'N,%' OR result LIKE 'n�gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
+
+				}
+			$record = query_associative_one($query_string);
+			$count_negative = $record['count_val'];
+			
+			$query_string = 
+				"SELECT COUNT(*) AS count_val  FROM test t, specimen s ".
+				"WHERE t.test_type_id=$test_type_id ".
+				"AND t.specimen_id=s.specimen_id ".
+				"AND result!=''".
+				"AND ( s.date_collected BETWEEN '$date_fromp' AND '$date_top' )";
+			$record = query_associative_one($query_string);
+			$count_all = $record['count_val'];
+			/*if($count_all != 0)*/
+				$retval[$date_ts] = array($count_all, $count_negative);
+			
+		$date_ts = $second_day_ts;
+		$i=$i+7;
+			
+					
+
+	}
+        $rstat = array();
+        $cc=1;
+		foreach($retval as $key=>$value) {
+			# Find average value
+			# Convert from sec timestamp to days
+                        $rstat[$cc][1] = $value[0];
+                                                $rstat[$cc][2] = $value[1];
+
+                        $rstat[$cc][0] =  date('d M Y', $key);
+                                //ksort($stat_list); 
+                        $cc++;
+			# Determine percentile value
+			//$progression_val[$key][1] = getPercentile2($percentile_count[$key], $percentile_tofind);
+			# Convert from sec timestamp to days
+			//$progression_val[$key][1] = $progression_val[$key][1]/(60*60*24);
+			//$progression_val[$key][2] = $goal_tat[$key];
+		}
+		DbUtil::switchRestore($saved_db);
+		
+		return $rstat;
+	
+}
+
+function get_prevalence_data_per_test_per_lab_dir22($test_type_id, $lab_config_id, $date_from, $date_to)
+{
+        $retval = array();
+    //$testTypeMapping = TestTypeMapping::getTestTypeById($test_type_id, $_SESSION['user_id']);
+    //$mapping_list = array();
+    //$mapping_list = get_test_mapping_list_by_string($testTypeMapping->labIdTestId);
+    //print_r($mapping_list);
+
+                          //  foreach( $lab_config_id as $key) {
+					$lab_config = LabConfig::getById($lab_config_id);
+                                        //print_r($lab_config);
+					//$test_type_id = $mapping_list[$lab_config->id];
+					$saved_db = DbUtil::switchToLabConfig($lab_config->id);	
+					
+					# For particular test type, fetch negative records
+			
+						$query_string = 
+							"SELECT COUNT(*) AS count_val FROM test t, specimen s ".
+							"WHERE t.test_type_id=$test_type_id ".
+							"AND t.specimen_id=s.specimen_id ".
+							"AND ( s.date_collected BETWEEN '$date_from' AND '$date_to' ) ".
+							"AND (result LIKE 'N,%' OR result LIKE 'n�gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
+						$record = query_associative_one($query_string);
+						$count_negative = intval($record['count_val']);
+						$query_string = 
+							"SELECT COUNT(*) AS count_val FROM test t, specimen s ".
+							"WHERE t.test_type_id=$test_type_id ".
+							"AND t.specimen_id=s.specimen_id ".
+							"AND result!=''".
+							"AND ( s.date_collected BETWEEN '$date_from' AND '$date_to' )";
+							//echo($query_string);
+						$record = query_associative_one($query_string);
+						$count_all = intval($record['count_val']);
+						# If total tests is 0, ignore
+						if($count_all == 0)
+							continue;
+						$testName = get_test_name_by_id($test_type_id);
+						$labName = $lab_config->name;
+						$query_string = 
+							"SELECT prevalence_threshold FROM test_type ".
+							"WHERE test_type_id=$test_type_id ";
+						$record = query_associative_one($query_string);
+						$threshold = intval($record['prevalence_threshold']);
+						
+						$retval[$labName] = array( $count_all, $count_negative, $threshold );
+                               // }
+                                DbUtil::switchRestore($saved_db);		
+				return $retval;
+}
+
+function getPercentile2($list, $ile_value)
+	{
+		# Returns the percentile value from the given list
+		$num_values = count($list);
+		sort($list);
+		$mark = ceil(round($ile_value/100, 2) * $num_values);
+		return $list[$mark-1];
+	}
+
+function get_tat_data_per_test_per_lab_dir2($test_type_id, $lab_config_id, $date_from, $date_to, $include_pending)
+{
+    # Calculates monthly progression of TAT values for a given test type and time period
+		global $DEFAULT_PENDING_TAT; # Default TAT value for pending tests (in days)
+                $lab_config = LabConfig::getById($lab_config_id);
+		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
+		$resultset = get_completed_tests_by_type($test_type_id, $date_from, $date_to);
+		# {resultentry_ts, specimen_id, date_collected_ts}
+		//print_r($resultset);
+                $progression_val = array();
+		$progression_count = array();
+		$percentile_tofind = 90;
+		$percentile_count = array();
+		$goal_val = array();
+		# Build list as {month=>[avg tat, percentile tat, goal tat, [overdue specimen_ids], [pending specimen_ids]]}
+		# For completed tests
+		foreach($resultset as $record)
+		{
+			$date_collected = $record['date_collected'];
+			$date_collected_parsed = date("Y-m-d", $date_collected);
+			$date_collected_parts = explode("-", $date_collected_parsed);
+			$month_ts = mktime(0, 0, 0, $date_collected_parts[1], 0, $date_collected_parts[0]);
+			$month_ts_datetime = date("Y-m-d H:i:s", $month_ts);
+			$date_ts = $record['ts'];
+			$date_diff = ($date_ts - $date_collected);
+			if(!isset($progression_val[$month_ts]))
+			{
+				$goal_tat[$month_ts] = $lab_config->getGoalTatValue($test_type_id, $month_ts_datetime);
+				$progression_val[$month_ts] = array();
+				$progression_val[$month_ts][0] = $date_diff;
+				$percentile_count[$month_ts] = array();
+				$percentile_count[$month_ts][] = $date_diff;
+				$progression_count[$month_ts] = 1;
+				$progression_val[$month_ts][3] = array();
+				$progression_val[$month_ts][4] = array();
+			}
+			else
+			{
+				$progression_val[$month_ts][0] += $date_diff;
+				$percentile_count[$month_ts][] = $date_diff;
+				$progression_count[$month_ts] += 1;
+			}
+			
+		}
+		if($include_pending === true)
+		{
+			$pending_tat_value = $lab_config->getPendingTatValue(); # in hours
+			# Update the above list {month=>[avg tat, percentile tat, goal tat, [overdue specimen_ids], [pending specimen_ids]]}
+			# For pending tests in this time duration
+			$resultset_pending = get_pendingtat_tests_by_type($test_type_id, $date_from, $date_to);
+			$num_pending = count($resultset_pending);
+			foreach($resultset_pending as $record)
+			{
+				$date_collected = $record['date_collected'];
+				$date_collected_parsed = date("Y-m-d", $date_collected);
+				$date_collected_parts = explode("-", $date_collected_parsed);
+				$month_ts = mktime(0, 0, 0, $date_collected_parts[1], 0, $date_collected_parts[0]);
+				$month_ts_datetime = date("Y-m-d H:i:s", $month_ts);
+				$date_diff = $pending_tat_value*60*60;
+				if(!isset($progression_val[$month_ts]))
+				{
+					$goal_tat[$month_ts] = $lab_config->getGoalTatValue($test_type_id, $month_ts_datetime);
+					$progression_val[$month_ts] = array();
+					$progression_val[$month_ts][0] = $date_diff;
+					$percentile_count[$month_ts] = array();
+					$percentile_count[$month_ts][] = $date_diff;
+					$progression_count[$month_ts] = 1;
+					$progression_val[$month_ts][3] = array();
+					$progression_val[$month_ts][4] = array();
+				}
+				else
+				{
+					$progression_val[$month_ts][0] += $date_diff;
+					$percentile_count[$month_ts][] = $date_diff;
+					$progression_count[$month_ts] += 1;
+				}
+				# Add to list of TAT pending specimens
+				$progression_val[$month_ts][4][] = $record['specimen_id'];
+			}
+		}
+		foreach($progression_val as $key=>$value)
+		{
+			# Find average value
+			$progression_val[$key][0] = $value[0]/$progression_count[$key];
+			# Convert from sec timestamp to days
+			$progression_val[$key][0] = ($progression_val[$key][0]/(60*60*24));
+			# Determine percentile value
+			$progression_val[$key][1] = getPercentile2($percentile_count[$key], $percentile_tofind);
+			# Convert from sec timestamp to days
+			$progression_val[$key][1] = $progression_val[$key][1]/(60*60*24);
+			$progression_val[$key][2] = $goal_tat[$key];
+		}		
+		DbUtil::switchRestore($saved_db);
+		return $progression_val;
+}
+
+
+function week_to_date2($week_num, $year)
+{
+	# Returns timestamp for the first day of the week
+	# TODO: Move this to /includes/date_lib.php
+	$week = $week_num;
+	$Jan1 = mktime (1, 1, 1, 1, 1, $year);
+	$iYearFirstWeekNum = (int) strftime("%W",mktime (1, 1, 1, 1, 1, $year));
+	if ($iYearFirstWeekNum == 1)
+	{
+		$week = $week - 1;
+	}
+	$weekdayJan1 = date ('w', $Jan1);
+	$FirstMonday = strtotime(((4-$weekdayJan1)%7-3) . ' days', $Jan1);
+	$CurrentMondayTS = strtotime(($week) . ' weeks', $FirstMonday);
+	return ($CurrentMondayTS);
+}
+
+function get_tat_data_per_test_per_lab_dir($test_type_id, $lab_config_id, $date_from, $date_to, $include_pending)
+ {
+    global $DEFAULT_PENDING_TAT; # Default TAT value for pending tests (in days)
+                    $lab_config = LabConfig::getById($lab_config_id);
+                date_default_timezone_set('UTC');
+		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
+		$resultset = get_completed_tests_by_type($test_type_id, $date_from, $date_to);
+		# {resultentry_ts, specimen_id, date_collected_ts}
+		$progression_val = array();
+		$progression_count = array();
+                $cc = 1;
+		//$percentile_tofind = 90;
+		//$percentile_count = array();
+		//$goal_val = array();
+		# Return {week=>[avg tat, percentile tat, goal tat, [overdue specimen_ids], [pending specimen_ids]]}
+                echo "!".$date_to."!";
+                $from_e = explode('-',$date_from);
+                $to_e = explode('-',$date_to);
+                $start_ts = mktime(1, 1, 1, $from_e[1], $from_e[2], $from_e[0]);
+                $end_ts = mktime(1, 1, 1, $to_e[1], $to_e[2], $to_e[0]);
+                $week_start_ts = date("W", $start_ts);
+		$year_start_ts = date("Y", $start_ts);
+                $startingWeek = week_to_date2($week_start_ts, $year_start_ts);
+                $week_end_ts = date("W", $end_ts);
+		$year_end_ts = date("Y", $end_ts);
+                $endingWeek = week_to_date2($week_end_ts, $year_end_ts);
+                
+                $weekDiff = mktime(1, 1, 1, 1, 1, 2000) - mktime(1, 1, 1, 1, 10, 2000);
+                
+                $wc = 0;
+                $currentWeek = $startingWeek;
+                $currentTS = $startingWeek;
+                echo "sTS=".$startingWeek;
+                echo "cTS=".$endingWeek;
+                while($currentWeek != $endingWeek)
+                {
+                    $wc++;
+                    $currentTS = $currentTS + $weekDiff;
+                    $week_currentTS = date("W", $currentTS);
+                    $year_currentTS = date("Y", $currentTS);
+                    $currentWeek = week_to_date2($week_currentTS, $year_currentTS);
+                    $progression_count[$currentWeek] = 0;
+                    $progression_val[$currentWeek]= 0;
+                    $wc++;
+                }
+                echo "WC=".$wc;
+		foreach($resultset as $record) {
+			$date_collected = $record['date_collected'];
+			$week_collected = date("W", $date_collected);
+			$year_collected = date("Y", $date_collected);
+			$week_ts = week_to_date2($week_collected, $year_collected);
+			$week_ts_datetime = date("Y-m-d H:i:s", $week_ts);
+			$date_ts = $record['ts'];
+			$date_diff = ($date_ts - $date_collected);
+                        if($date_diff < 0)
+                            $date_diff = 0;
+			//if(!isset($progression_val[$week_ts])) {
+                        if($progression_val[$week_ts] == 0) {
+				//$progression_val[$week_ts] = array();
+				$progression_val[$week_ts]= $date_diff;
+				//$percentile_count[$week_ts] = array();
+				//$percentile_count[$week_ts][] = $date_diff;
+				$progression_count[$week_ts] = 1;
+				//$goal_tat[$week_ts] = $lab_config->getGoalTatValue($test_type_id, $week_ts_datetime);
+				//$progression_val[$week_ts][3] = array();
+				//$progression_val[$week_ts][4] = array();
+			}
+			else {
+                            
+				$progression_val[$week_ts] += $date_diff;
+				//$percentile_count[$week_ts][] = $date_diff;
+				$progression_count[$week_ts] += 1;
+                                //$formattedValue = round($value[0],2);
+                                //$formattedDate = bcmul($key,1000);
+                                //ksort($stat_list); 
+			}
+			
+		}
+		if($include_pending === true) {
+			$pending_tat_value = $lab_config->getPendingTatValue(); # in hours
+			# Update the above list {week=>[avg tat, percentile tat, goal tat, [overdue specimen_ids], [pending specimen_ids]]}
+			# For pending tests in this time duration
+			$resultset_pending = get_pendingtat_tests_by_type($test_type_id, $date_from, $date_to);
+			$num_pending = count($resultset_pending);
+			foreach($resultset_pending as $record) {
+			
+				$date_collected = $record['date_collected'];
+				$week_collected = date("W", $date_collected);
+				$year_collected = date("Y", $date_collected);
+				$week_ts = week_to_date2($week_collected, $year_collected);
+				$week_ts_datetime = date("Y-m-d H:i:s", $week_ts);
+				$date_ts = $record['ts'];
+				$date_diff = $pending_tat_value*60*60;;
+				if(!isset($progression_val[$week_ts]))
+				{
+					//$progression_val[$week_ts] = array();
+					$progression_val[$week_ts] = $date_diff;
+					//$percentile_count[$week_ts] = array();
+					//$percentile_count[$week_ts][] = $date_diff;
+					$progression_count[$week_ts] = 1;
+					//$goal_tat[$week_ts] = $lab_config->getGoalTatValue($test_type_id, $week_ts_datetime);
+					//$progression_val[$week_ts][3] = array();
+					//$progression_val[$week_ts][4] = array();
+				}
+				else
+				{
+                                    if($date_diff > 0)
+					$progression_val[$week_ts] += $date_diff;
+					//$percentile_count[$week_ts][] = $date_diff;
+					$progression_count[$week_ts] += 1;
+				}
+				# Add to list of TAT pending specimens
+			}
+		}
+                $rstat = array();
+                $wa = 7;
+                $wc = 0;
+		foreach($progression_val as $key=>$value) {
+			# Find average value
+			$progression_val[$key] = $value/$progression_count[$key];
+			# Convert from sec timestamp to days
+			$progression_val[$key] = ($progression_val[$key]/(60*60*24));
+                        $rstat[$cc][1] = round($progression_val[$key],2);
+                        $rstat[$cc][0] =  date('d M Y', $key);
+                                //ksort($stat_list); 
+                        $cc++;
+			# Determine percentile value
+			//$progression_val[$key][1] = getPercentile2($percentile_count[$key], $percentile_tofind);
+			# Convert from sec timestamp to days
+			//$progression_val[$key][1] = $progression_val[$key][1]/(60*60*24);
+			//$progression_val[$key][2] = $goal_tat[$key];
+		}
+		DbUtil::switchRestore($saved_db);
+		# Return {week=>[avg tat, percentile tat, goal tat, [overdue specimen_ids], [pending specimen_ids]]}
+                //foreach($progression_val as )
+		return $rstat;
+}
+
+function get_country_from_user_id()
+{
+    $usr_c = get_username_by_id($_SESSION['user_id']);
+    $usr_c = strtolower($usr_c);
+    //$usr_c = ucfirst($usr_c);
+    $usr_cs = substr($usr_c, 0, strpos($usr_c, "_"));
+    return $usr_cs; 
+}
+
+function get_coordinates($lab_id)
+{
+    $saved_db = DbUtil::switchToGlobal();
+    $query_configs = "SELECT * from map_coordinates WHERE lab_id = $lab_id";
+    $retval = array();
+	$resultset = query_associative_one($query_configs);
+	if($resultset == null)
+	{
+		DbUtil::switchRestore($saved_db);
+                $retval[0] = -1;
+                $retval[1] = -1;
+		return $retval;
+	}
+        
+	$retval = explode(',', $resultset['coordinates']);
+       
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+}
+
+function getGlobalTestName($tid)
+{
+    $saved_db = DbUtil::switchToGlobal();
+    $query_configs = "SELECT * from test_mapping WHERE test_id = $tid";
+    
+	$resultset = query_associative_one($query_configs);
+	if($resultset == null)
+	{
+		DbUtil::switchRestore($saved_db);
+                $retval = 'Unknown';
+		return $retval;
+	}
+        
+	$retval = $resultset['test_name'];
+       
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+}
+
+//////////////////////////////////////////////////
+
+/*
+* Returns a list of all labs under a certain director
+*/
+function get_labs_for_director($director)
+{
+	$lab_config_id = $_SESSION['lab_config_id'];
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	
+	$query_string = "SELECT lab_config_id FROM lab_config_access WHERE user_id = $director";
+	
+	$retVal = query_associative_all($query_string, $_COUNT);
+	DbUtil::switchRestore($saved_db);
+
+	return $retVal;
+}
+
+/*
+* Returns the name of a lab, based on its id
+*/
+function get_lab_name_by_id_revamp($lab_id)
+{
+	$lab_config_id = $_SESSION['lab_config_id'];
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	
+	$query_string = "SELECT name FROM lab_config WHERE lab_config_id = $lab_id";
+	
+	$retVal = query_associative_all($query_string, $_COUNT);
+	DbUtil::switchRestore($saved_db);
+
+	return $retVal;
+}
+
+/*
+* Returns whether or not a lab has been placed on the director map.
+*/
+function is_lab_placed($lab, $user)
+{	
+	$lab_config_id = $_SESSION['lab_config_id'];
+	
+	$query_string = "SELECT coordinates FROM map_coordinates WHERE lab_id = $lab AND user_id = $user";
+	
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	$retVal = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
+
+	if (!is_null($retVal['coordinates']))
+	{
+		return $retVal['coordinates'];
+	}
+	return NULL;
+}
+
+/*
+* Updates (or if there is no entry to update, creates) an entry with the x and y coordinates of a laboratory.
+*/
+function create_or_update_map_coords_entry($lab_id, $dir_id, $x, $y)
+{
+	$lab_config_id = $_SESSION['lab_config_id'];
+	$coordinate_string = $x . "," . $y;
+	
+	// Check and see if an entry exists.
+	$query_string = "SELECT COUNT(*) FROM map_coordinates WHERE lab_id = $lab_id AND user_id = $dir_id";
+	
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	$retVal = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
+	
+	if ($retVal["COUNT(*)"] > 0)
+	{
+		$query_string = "UPDATE map_coordinates SET coordinates = '$coordinate_string' WHERE lab_id = $lab_id AND user_id = $dir_id";
+
+		$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+		$retVal = query_update($query_string);
+		DbUtil::switchRestore($saved_db);
+
+	} else
+	{
+		$query_string = "INSERT INTO map_coordinates (coordinates, lab_id, user_id) VALUES ('$coordinate_string', $lab_id, $dir_id)";
+		
+		$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+		$retVal = query_insert_one($query_string);
+		DbUtil::switchRestore($saved_db);
+	}
+}
+
+
+function db_analysis_ratings($lb)
+{
+	if($lb == 128)
+	{
+		// entries from 2010-05-17 to 2012-05-21
+		$labdb = "blis_128";
+		$lastdate = mktime( 0, 0, 0, 05, 21, 2012 );
+		$day = 26;
+		$yr = 2010;
+		$mth = 04;
+	}
+	else if($lb == 129)
+	{
+		// entries from 2010-05-11 to 2013-04-25
+		$labdb = "blis_129";
+		$lastdate = mktime( 0, 0, 0, 04, 25, 2012 );
+		$day = 26;
+		$yr = 2010;
+		$mth = 04;
+	}
+	else if($lb == 153)
+	{
+		// entries from 2011-12-20 to 2013-4-24
+		$labdb = "blis_153";
+		$lastdate = mktime( 0, 0, 0, 08, 30, 2013 );
+		$day = 1;
+		$yr = 2011;
+		$mth = 10;
+	}
+	else if($lb == 1006)
+	{
+		// NO data
+		// entries from 2012-06-16 to 2013-04-28
+		$labdb = "blis_1006";
+		$lastdate = mktime( 0, 0, 0, 04, 28, 2013);
+		$day = 11;
+		$yr = 2012;
+		$mth = 6;
+	}
+	else if($lb == 131)
+	{
+		// entries from 2010-05-11 to 2013-04-29
+		$labdb = "blis_131";
+		$lastdate = mktime( 0, 0, 0, 07, 09, 2012);
+		$day = 26;
+		$yr = 2010;
+		$mth = 4;
+	}
+	$ic = 1;
+	while(1)
+	{
+		$c1 = 0;
+		$c2 = 0;
+		$c3 = 0;
+		$c4 = 0;
+		$c5 = 0;
+		$c6 = 0;
+		$startdate = mktime( 0, 0, 0, $mth, $day, $yr );
+		$enddate = mktime( 0, 0, 0, $mth, $day + 7, $yr );
+		$query_string = "SELECT * FROM $labdb.user_rating where ts >= FROM_UNIXTIME($startdate) AND ts < FROM_UNIXTIME($enddate)";
+		$retVal = query_associative_all($query_string, $count);
+		foreach($retVal as $row)
+		{
+			if($row['rating'] == 1)
+				$c1++;
+			else if($row['rating'] == 2)
+				$c2++;
+			else if($row['rating'] == 3)
+				$c3++;
+			else if($row['rating'] == 4)
+				$c4++;
+			else if($row['rating'] == 5)
+				$c5++;
+			else if($row['rating'] == 6)
+				$c6++;
+		}
+		echo $ic.",".date( 'Y-m-d', $startdate ).",".date( 'Y-m-d', $enddate ).",";
+		echo $c1.",".$c2.",".$c3.",".$c4.",".$c5.",".$c6;
+		//echo $retVal["COUNT(*)"];
+		echo "<br>";
+		if($lastdate <= $enddate)
+			break;
+		$day = $day + 7;
+		$ic++;
+	}
+}
+
+function db_analysis_patients($lb)
+{
+	if($lb == 128)
+	{
+		// entries from 2010-05-17 to 2013-04-26
+		$labdb = "blis_128";
+		$lastdate = mktime( 0, 0, 0, 04, 26, 2013 );
+		$day = 17;
+		$yr = 2010;
+		$mth = 05;
+	}
+	else if($lb == 129)
+	{
+		// entries from 2010-05-11 to 2013-04-25
+		$labdb = "blis_129";
+		$lastdate = mktime( 0, 0, 0, 04, 25, 2013 );
+		$day = 10;
+		$yr = 2010;
+		$mth = 05;
+	}
+	else if($lb == 153)
+	{
+		// entries from 2011-12-20 to 2013-4-24
+		$labdb = "blis_153";
+		$lastdate = mktime( 0, 0, 0, 04, 24, 2013 );
+		$day = 19;
+		$yr = 2011;
+		$mth = 12;
+	}
+	else if($lb == 1006)
+	{
+		// entries from 2012-06-16 to 2013-04-28
+		$labdb = "blis_1006";
+		$lastdate = mktime( 0, 0, 0, 04, 28, 2013);
+		$day = 11;
+		$yr = 2012;
+		$mth = 06;
+	}
+	else if($lb == 131)
+	{
+		// entries from 2010-05-11 to 2013-04-29
+		$labdb = "blis_131";
+		$lastdate = mktime( 0, 0, 0, 04, 28, 2013);
+		$day = 10;
+		$yr = 2010;
+		$mth = 05;
+	}
+	$ic = 1;
+	while(1)
+	{
+		
+		$startdate = mktime( 0, 0, 0, $mth, $day, $yr );
+		$enddate = mktime( 0, 0, 0, $mth, $day + 7, $yr );
+		$query_string = "SELECT COUNT(*) FROM $labdb.patient where ts >= FROM_UNIXTIME($startdate) AND ts < FROM_UNIXTIME($enddate)";
+		$retVal = query_associative_one($query_string);
+		echo $ic.",".date( 'Y-m-d', $startdate ).",".date( 'Y-m-d', $enddate ).",";
+		echo $retVal["COUNT(*)"];
+		echo "<br>";
+		if($lastdate <= $enddate)
+			break;
+		$day = $day + 7;
+		$ic++;
+	}
+}
+
+function db_analysis_tests($lb)
+{
+	if($lb == 128)
+	{
+		// entries from 2010-05-18 to 2013-04-27
+		$labdb = "blis_128";
+		$lastdate = mktime( 0, 0, 0, 04, 27, 2013 );
+		$day = 17;
+		$yr = 2010;
+		$mth = 05;
+	}
+	else if($lb == 129)
+	{
+		// entries from 2010-05-11 to 2013-04-26
+		$labdb = "blis_129";
+		$lastdate = mktime( 0, 0, 0, 04, 26, 2013 );
+		$day = 10;
+		$yr = 2010;
+		$mth = 05;
+	}
+	else if($lb == 153)
+	{
+		// entries from 2011-12-20 to 2013-4-24
+		$labdb = "blis_153";
+		$lastdate = mktime( 0, 0, 0, 04, 24, 2013 );
+		$day = 19;
+		$yr = 2011;
+		$mth = 12;
+	}
+	else if($lb == 1006)
+	{
+		// entries from 2012-06-16 to 2013-04-28
+		$labdb = "blis_1006";
+		$lastdate = mktime( 0, 0, 0, 04, 28, 2013);
+		$day = 11;
+		$yr = 2012;
+		$mth = 06;
+	}
+	else if($lb == 131)
+	{
+		// entries from 2010-05-11 to 2013-04-29
+		$labdb = "blis_131";
+		$lastdate = mktime( 0, 0, 0, 04, 28, 2013);
+		$day = 10;
+		$yr = 2010;
+		$mth = 05;
+	}
+	$ic = 1;
+	while(1)
+	{
+		
+		$startdate = mktime( 0, 0, 0, $mth, $day, $yr );
+		$enddate = mktime( 0, 0, 0, $mth, $day+7, $yr );
+		$query_string = "SELECT COUNT(*) FROM $labdb.test where ts >= FROM_UNIXTIME($startdate) AND ts < FROM_UNIXTIME($enddate)";
+		$retVal = query_associative_one($query_string);
+		echo $ic.",".date( 'Y-m-d', $startdate ).",".date( 'Y-m-d', $enddate ).",";
+		echo $retVal["COUNT(*)"];
+		echo "<br>";
+		if($lastdate <= $enddate)
+			break;
+		$day = $day + 7;
+		//$mth++;
+		$ic++;
+	}
+}
+
 
 ?>
