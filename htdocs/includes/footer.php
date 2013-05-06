@@ -38,15 +38,15 @@ LangUtil::setPageId("footer");
 		<?php
 		if($_SESSION['locale'] == "en")
 		{
-			echo "<a href='userguide/blis_user_guide_en/index.html' target='_blank' >User Guide |</a>";
+			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank' >User Guide |</a>";
 		}
 		else if($_SESSION['locale'] == "fr")
 		{
-			echo "<a href='userguide/blis_user_guide_fr/index.html' target='_blank' >Guide de l'utilisateur |</a>";
+			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank' >Guide de l'utilisateur |</a>";
 		}
 		else
 		{
-			echo "<a href='userguide/blis_user_guide_en/index.html' target='_blank'>User Guide |</a>";
+			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank'>User Guide |</a>";
 		}
 		?>
 		

@@ -10,7 +10,7 @@ class PageElems
 {
 	public function getSideTip($heading, $contents)
 	{
-		$html_code = 
+		$html_code =
 			"<div class='sidetip'>".
 			"<b>".$heading."</b><br><br>".$contents.
 			"</div>";
@@ -61,7 +61,7 @@ class PageElems
 		</small>
 		<?php
 	}
-	 
+	
 	public function getDatePicker($name_list, $id_list, $value_list, $show_format=true, $lab_config=null)
 	{
 		# Returns a date picker element based on passed parameters
@@ -110,9 +110,9 @@ class PageElems
 		{
 			# Show only date fields and not datepicker
 			?>
-			<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' value="<?php echo $value_list[$order_list[0]]; ?>" size='4' maxlength='4' />-
-			<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' value="<?php echo $value_list[$order_list[1]]; ?>" size='4' maxlength='4' />-
-			<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' value="<?php echo $value_list[$order_list[2]]; ?>" size='4' maxlength='4' />
+			<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[0]]; ?>" size='2' maxlength='2' />-
+			<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[1]]; ?>" size='2' maxlength='2' />-
+			<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[2]]; ?>" size='4' maxlength='4' />
 			<?php
 			if($show_format == true)
 			{
@@ -130,6 +130,17 @@ class PageElems
 		}
 		?>
 		<SCRIPT type="text/javascript" charset="utf-8">
+		    <!--
+			function isNumberKey(evt)
+			{
+				var charCode = (evt.which) ? evt.which : event.keyCode
+				if (charCode > 31 && (charCode < 48 || charCode > 57))
+					return false;
+
+					return true;
+			}
+			//-->
+
 		Date.format = '<?php echo $date_format_js; ?>';
 		$(function()
 		{
@@ -174,7 +185,7 @@ class PageElems
 			display: block;
 			text-indent: -2000px;
 			overflow: hidden;
-			background: url('includes/img/calendar_icon.gif') no-repeat; 
+			background: url('includes/img/calendar_icon.gif') no-repeat;
 		}
 		a.dp-choose-date.dp-disabled {
 			background-position: 0 -20px;
@@ -189,9 +200,9 @@ class PageElems
 		}
 		</style>
 		
-		<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' value="<?php echo $value_list[$order_list[0]]; ?>" size='4' maxlength='4' />-
-		<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' value="<?php echo $value_list[$order_list[1]]; ?>" size='4'  maxlength='4' />-
-		<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' value="<?php echo $value_list[$order_list[2]]; ?>" size='4'  maxlength='4' />
+		<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[0]]; ?>" size='2'  maxlength='2' />-
+		<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[1]]; ?>" size='2'  maxlength='2' />-
+		<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[2]]; ?>" size='4'  maxlength='4' />
 		
 		<INPUT name="<?php echo $picker_id; ?>" id="<?php echo $picker_id; ?>" class="date-pick dp-applied" style='display:none'/>
 		
@@ -256,9 +267,22 @@ class PageElems
 		}
 		$date_format_js_parts = explode("-", $date_format_js);
 		?>
-		<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' value="<?php echo $value_list[$order_list[0]]; ?>" size='4' maxlength='4' />-
-		<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' value="<?php echo $value_list[$order_list[1]]; ?>" size='4'  maxlength='4' />-
-		<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' value="<?php echo $value_list[$order_list[2]]; ?>" size='4'  maxlength='4' />
+		<!-- Handling for non-numeric input -->
+		<SCRIPT type="text/javascript" charset="utf-8">
+		    <!--
+			function isNumberKey(evt)
+			{
+				var charCode = (evt.which) ? evt.which : event.keyCode
+				if (charCode > 31 && (charCode < 48 || charCode > 57))
+					return false;
+
+					return true;
+			}
+			//-->
+		</SCRIPT>
+		<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[0]]; ?>" size='2'  maxlength='2' />-
+		<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[1]]; ?>" size='2'  maxlength='2' />-
+		<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[2]]; ?>" size='4'  maxlength='4' />
 		<?php
 		if($show_format == true)
 		{
@@ -298,15 +322,15 @@ class PageElems
 		}
 	}
 	
-	public function getSiteOptionsCheckBoxes($checkBoxName) 
+	public function getSiteOptionsCheckBoxes($checkBoxName)
 	{
 		//$site_list = get_site_list($_SESSION['user_id']);
                 $config_list = get_lab_configs_imported();
                 echo "<br><input type='checkbox' name='$checkBoxName' id='$checkBoxName' value='0' checked>All</input>";
 
 		foreach($config_list as $lab_config) {
-			$strippedLabName = substr($lab_config->name,0,strpos($lab_config->name,'-')-1);
-			echo "<br><input type='checkbox' name='$checkBoxName' id='$checkBoxName' value='$lab_config->id'>$strippedLabName</input>";
+			//$strippedLabName = substr($lab_config->name,0,strpos($lab_config->name,'-')-1);
+			echo "<br><input type='checkbox' name='$checkBoxName' id='$checkBoxName' value='$lab_config->id'>$lab_config->name</input>";
 		}
 	}
 	public function getAdminUserOptions()
@@ -367,7 +391,7 @@ class PageElems
 	}
 	
 	public function getTestTypesCountryLevel() {
-		# Returns test types available for aggregation 
+		# Returns test types available for aggregation
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 		$user_id = $_SESSION['user_id'];
 		$query = "SELECT * FROM test_mapping where user_id =".$user_id;
@@ -397,7 +421,7 @@ class PageElems
 	}
 	
 	public function getSpecimenTypesCountryLevel() {
-		# Returns specimen types available for aggregation 
+		# Returns specimen types available for aggregation
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 		$user_id = $_SESSION['user_id'];
 		$query = "SELECT * FROM specimen_mapping where user_id =".$user_id;
@@ -407,7 +431,7 @@ class PageElems
 			<table class='hor-minimalist-b'>
 			<tbody>
 			<th>#</th>
-			<?php echo "<th>".LangUtil::$generalTerms['NAME']."</th>"; 
+			<?php echo "<th>".LangUtil::$generalTerms['NAME']."</th>";
 			foreach($resultset as $record) {
 				echo "<tr><td>".$record['specimen_id']."</td><td>".$record['specimen_name']."</td></tr>";
 			}
@@ -422,7 +446,7 @@ class PageElems
 	}
 	
 	public function getTestCategoryTypesCountryLevel() {
-		# Returns test category types available for aggregation 
+		# Returns test category types available for aggregation
 		$saved_db = DbUtil::switchToGlobal();
 		$user_id = $_SESSION['user_id'];
 		$query = "SELECT * FROM test_category_mapping where user_id =".$user_id;
@@ -567,7 +591,7 @@ class PageElems
 		$resultset = query_associative_all($query, $row_count);
 		foreach($resultset as $record) {
 				$key = $record['lab_id_specimen_id'];
-				$value = $record['specimen_name']; 
+				$value = $record['specimen_name'];
 				echo "<option value='$key'>$value</option>";
 		}
 		DbUtil::switchRestore($saved_db);
@@ -611,7 +635,7 @@ class PageElems
 		$resultset = query_associative_all($query, $row_count);
 		foreach($resultset as $record) {
 				$key = $record['test_category_id'];
-				$value = $record['test_category_name']; 
+				$value = $record['test_category_name'];
 				echo "<option value='$key'>$value</option>";
 		}
 		DbUtil::switchRestore($saved_db);
@@ -659,7 +683,7 @@ class PageElems
 			<table class='hor-minimalist-b'>
 			<tbody>
 			<th>#</th>
-			<?php 
+			<?php
 				echo "<th>".LangUtil::$generalTerms['NAME']."</th>";
 				foreach($resultset as $record) {
 					$measureName = $record['measure_name'];
@@ -692,14 +716,14 @@ class PageElems
                         echo "<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
 			echo "<td>".$labName."</td></tr>";
                         $space = 1;
-                        
+
                     }
                     if($space == 1)
                         echo "<tr><td></td><td></td><td></td></tr>";
                     //echo "<pre>";
                     //print_r($ttype_list);
-                    //echo "</pre>"; 
-                    
+                    //echo "</pre>";
+
 			//echo "<td><select id='measureNameSelect$count'>";
 			//$measuresList = getMeasuresByLab($labConfigId);
 			//foreach($measuresList as $measure) {
@@ -716,7 +740,7 @@ class PageElems
 		
 	<?php
 	}
-        
+
 	public function getSpecimenNamesSelector() {
 		#Return table which includes dropdowns of specimens configured in all labs in the country
 		echo "<table>";
@@ -816,7 +840,7 @@ class PageElems
 			return 0;
 	}
 	
-	public function getTestCategoryCountrySelect($lab_config_id=null) 
+	public function getTestCategoryCountrySelect($lab_config_id=null)
 	{
 		#Returns a set of drop down options for test categories in catalog of all labs in a country
 		$site_list = get_site_list($_SESSION['user_id']);
@@ -826,7 +850,7 @@ class PageElems
 		{
 			$cat_list = get_test_categories($lab_config_id);
 			foreach($cat_list as $key => $value) {
-				if ( !in_array($value, $final_cat_list) ) 
+				if ( !in_array($value, $final_cat_list) )
 					$final_cat_list[] = $value;
 				else
 					continue;
@@ -873,7 +897,7 @@ class PageElems
 		}
 	}
 	
-        
+
 	public function getTestTypeInfo($test_name, $show_db_name=false)
 	{
 		# Returns HTML for displaying test type information
@@ -888,7 +912,7 @@ class PageElems
 						if($show_db_name === true)
 							echo $test_type->name;
 						else
-							echo $test_type->getName(); 
+							echo $test_type->getName();
 						?>
 					</td>
 				</tr>
@@ -965,7 +989,7 @@ class PageElems
 						}
 						?>
 					</td>
-				</tr> 
+				</tr>
 				<tr valign='top'>
 					<td>Prevalence Threshold</td>
 					<td><?php echo $test_type->prevalenceThreshold; ?></td>
@@ -1258,7 +1282,7 @@ class PageElems
 			"view reports for the lab assigned to the account ".
 			"</td></tr></table>".
 			"</div>";
-		$html_code .= 
+		$html_code .=
 			LangUtil::$generalTerms['USERNAME'].
 			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
 			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
@@ -1283,7 +1307,7 @@ class PageElems
 		}
 		$html_code .= "</span>";
 		$html_code .= "<a href='javascript:add_row();'>Add another&raquo;</a>";
-		$html_code .= 
+		$html_code .=
 			"<script type='text/javascript'>".
 			"var entry_count=".($num_entries)."; ".
 			"function add_row() {".
@@ -1359,7 +1383,7 @@ class PageElems
 		$test_id=$test[1];
 		
 		?>
-		<script type="text/javascript"> 
+		<script type="text/javascript">
 		$(document).ready(function() {
 			$("#<?php echo $id; ?>").tokenInput("<?php echo $json_url; ?>", {
 				hintText: "<?php echo $hint_text; ?>",
@@ -1400,7 +1424,7 @@ class PageElems
 		$test=explode("_",$id);
 		$test_id=$test[1];
 		?>
-		<script type="text/javascript"> 
+		<script type="text/javascript">
 		$(document).ready(function() {
 			$("#<?php echo $id; ?>").tokenInput("<?php echo $json_url; ?>", {
 				hintText: "<?php echo $hint_text; ?>",
@@ -1509,8 +1533,8 @@ class PageElems
 					</td>-->
 					<!--
 					<td>
-						<a 
-							href="javascript:delete_lab_config('<?php #echo $lab_config->getSiteName(); ?>', <?php #echo $lab_config->id; ?>);" 
+						<a
+							href="javascript:delete_lab_config('<?php #echo $lab_config->getSiteName(); ?>', <?php #echo $lab_config->id; ?>);"
 							title='Click to Delete Lab Configuration'
 						>
 							Delete
@@ -1664,8 +1688,8 @@ class PageElems
 						<?php echo $lab_admin->actualName; ?>
 					</td>
 					<td>
-						<?php 
-						$lab_list = $this->listOwnedLabs($lab_admin->userId); 
+						<?php
+						$lab_list = $this->listOwnedLabs($lab_admin->userId);
 						echo $lab_list;
 						?>
 						<br>
@@ -1919,7 +1943,7 @@ class PageElems
 				<tr valign='top'>
 					<td>Group By Gender</td>
 					<td>
-					<?php 
+					<?php
 					if($report->groupByGender == 1)
 						echo " Yes ";
 					else
@@ -1930,7 +1954,7 @@ class PageElems
 				<tr valign='top'>
 					<td>Group By Age</td>
 					<td>
-					<?php 
+					<?php
 					if($report->groupByAge == 1)
 						echo " Yes ";
 					else
@@ -1945,7 +1969,7 @@ class PageElems
 				<tr valign='top'>
 					<td>Age Slots (years)</td>
 					<td>
-						<?php 
+						<?php
 						$slot_count = 0;
 						foreach($report->ageSlots as $age_slot)
 						{
@@ -2088,7 +2112,7 @@ class PageElems
 		if($patient == null)
 		{
 		?>
-			<div class='sidetip_nopos'> 
+			<div class='sidetip_nopos'>
 				<?php echo LangUtil::$generalTerms['PATIENT']." ".LangUtil::$generalTerms['MSG_NOTFOUND']; ?>
 			</div>
 		<?php
@@ -2132,8 +2156,8 @@ class PageElems
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['AGE']; ?></u></td>
 					<td>
-						<?php 
-							echo $patient->getAge(); 
+						<?php
+							echo $patient->getAge();
 						?>
 					</td>
 				</tr>
@@ -2144,12 +2168,12 @@ class PageElems
 				?>
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['DOB']; ?></u></td>
-					<td><?php 
+					<td><?php
 							echo $patient->getDob();
 						?>
 					</td>
 				</tr>
-				<?php 
+				<?php
 				}
 				# Custom fields here
 				$custom_data_list = get_custom_data_patient($patient->patientId);
@@ -2163,11 +2187,11 @@ class PageElems
 					
 					?>
 					<tr>
-						<td><u><?php 
+						<td><u><?php
 						
 						echo $field_name; ?></u></td>
 						<td>
-							<?php 
+							<?php
 							echo $custom_data->getFieldValueString($lab_config->id , 2);
 							?>
 						</td>
@@ -2246,7 +2270,7 @@ class PageElems
 				<tr>
 					<td><u title='Enter either Age or Date of Birth'><?php echo LangUtil::$generalTerms['AGE']; ?></u></td>
 					<td>
-						<?php 
+						<?php
 						if($patient->age != null and $patient->age != "" and $patient->age != "0")
 						{
 						?>
@@ -2268,7 +2292,7 @@ class PageElems
 				</tr>
 				<tr valign='top'>
 					<td><u title='Enter either Age or Date of Birth'><?php echo LangUtil::$generalTerms['DOB']; ?></u></td>
-					<td><?php 
+					<td><?php
 						$value_list = array();
 						$name_list = array();
 						$id_list = array();
@@ -2312,8 +2336,8 @@ class PageElems
 						?>
 					</td>
 				</tr>
-				<?php 
-				# Custom fields here 
+				<?php
+				# Custom fields here
 				$custom_field_list = get_custom_fields_patient();
 				$custom_data_list = get_custom_data_patient($patient->patientId);
 				$custom_data_map = array();
@@ -2327,12 +2351,12 @@ class PageElems
 					<tr valign='top'>
 						<td><u><?php echo $custom_field->fieldName; ?></u></td>
 						<td>
-						<?php 
+						<?php
 							if(isset($custom_data_map[$custom_field->id]))
 								$field_value = $custom_data_map[$custom_field->id];
-							else 
+							else
 								$field_value = "";
-							$this->getCustomFormField($custom_field, $field_value); 
+							$this->getCustomFormField($custom_field, $field_value);
 						?>
 						</td>
 					</tr>
@@ -2360,7 +2384,7 @@ class PageElems
 	{
 		# Returns HTML table row containing specimen info
 		# Called by getPatientHistory() function
-                
+
 		?>
 		<form name="f1" id="f1">
 		
@@ -2390,12 +2414,12 @@ class PageElems
                                         }
                                         else
                                         {
-                                            echo $specimen->getStatus(); 
+                                            echo $specimen->getStatus();
                                         }
                                      }
                                      else
                                      {
-                                         echo $specimen->getStatus(); 
+                                         echo $specimen->getStatus();
                                      }
                                 ?>
 			</td>
@@ -2445,12 +2469,12 @@ class PageElems
                                         }
                                         else
                                         {
-                                            echo $specimen->getStatus(); 
+                                            echo $specimen->getStatus();
                                         }
                                      }
                                      else
                                      {
-                                         echo $specimen->getStatus(); 
+                                         echo $specimen->getStatus();
                                      }
                                 ?>
 			</td>
@@ -2519,7 +2543,7 @@ class PageElems
                     $rem_specs[] = $rem_rec['r_id'];
                     $rem_remarks[] = $rem_rec['remarks'];
                 }
-            
+
 		$specimen_list = get_specimens_by_patient_id($pid);
 		if(count($specimen_list) == 0)
 		{
@@ -2536,7 +2560,7 @@ class PageElems
 		});
 		
 		function get_report(pid,sid)
-		{ 
+		{
 			var url_string = "report_onetesthistory.php?ppid="+pid+"&spid="+sid;
 	window.open(url_string);
 		}
@@ -2577,7 +2601,7 @@ class PageElems
                                 if(in_array($specimen->specimenId, $rem_specs))
                                     continue;
                             }
-				$this->getSpecimenInfoRow($specimen, $rem_specs, $admin); 
+				$this->getSpecimenInfoRow($specimen, $rem_specs, $admin);
 			}
 			?>
 			</tbody>
@@ -2600,7 +2624,7 @@ class PageElems
                     $rem_specs[] = $rem_rec['r_id'];
                     $rem_remarks[] = $rem_rec['remarks'];
                 }
-                
+
 		$specimen_list = get_specimens_by_patient_id($pid);
 		if(count($specimen_list) == 0)
 		{
@@ -2645,8 +2669,8 @@ class PageElems
                                 if(in_array($specimen->specimenId, $rem_specs))
                                     continue;
                             }
-                            
-				$this->getSelectSpecimenInfoRow($specimen, $rem_specs, $admin); 
+
+				$this->getSelectSpecimenInfoRow($specimen, $rem_specs, $admin);
 			}
 			?>
 			</tbody>
@@ -2664,7 +2688,7 @@ class PageElems
 				</a>
 	<?php		
 	}
-        
+
         public function getDeleteOptions($patient_id)
 	{
 	?><!--'reports_testhistory.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>'-->
@@ -2673,7 +2697,7 @@ class PageElems
 				</a>
 	<?php		
 	}
-        
+
         public function getUnDeleteOptions($patient_id)
 	{
 	?><!--'reports_testhistory.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>'-->
@@ -2681,6 +2705,19 @@ class PageElems
 					<?php echo "Retrieve Deleted Specimens"; ?>
 				</a>
 	<?php		
+	}
+	
+	public function getPostSpecimenEntryTaskList($patient_id)
+	{
+		?>
+			<div class='sidetip_nopos'>
+				<p>
+					<a rel='facebox' href='bill_generator.php?location=<?php echo$_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>' title='Click to generate a billing statement for this Patient' target='_blank'>
+						<?php echo "Billing Report" ?>
+					</a>
+				</p>
+			</div>
+		<?php
 	}
 
 	public function getPatientTaskList($patient_id)
@@ -2728,8 +2765,16 @@ class PageElems
 				<?php
 			}
 			?>
-                       
 			<!--<p><a href='#'>Export as XML</a></p>-->
+				<?php
+				if (is_billing_enabled($_SESSION['lab_config_id']))
+					{ ?>
+				<p>
+					<a rel='facebox' href='bill_generator.php?location=<?php echo$_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>' title='Click to generate a billing statement for this Patient' target='_blank'>
+						<?php echo "Billing Report" ?>
+					</a>
+				</p>
+				<?php } ?>
 			</div>
 		<?php
 		}
@@ -2791,7 +2836,7 @@ class PageElems
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['PATIENT']; ?></u></td>
 					<td>
-						<?php 
+						<?php
 						$patient = Patient::getById($specimen->patientId);
 						echo $patient->getName()." (".$patient->sex." ".$patient->getAge().")";
 						?>
@@ -2831,7 +2876,7 @@ class PageElems
 					<tr>
 						<td><u><?php echo LangUtil::$generalTerms['DOCTOR']; ?></u></td>
 						<td>
-						<?php 
+						<?php
 						if(trim($specimen->doctor) == "")
 						{
 							echo "-";
@@ -2846,7 +2891,7 @@ class PageElems
 					<?php
 				}
 				?>
-				<?php 
+				<?php
 				# Custom fields here
 				$custom_data_list = get_custom_data_specimen($specimen->specimenId);
 				foreach($custom_data_list as $custom_data)
@@ -2868,7 +2913,7 @@ class PageElems
 				# Show referred-out hospital name if specimen was referred out and/or returned back
 				if
 				(
-					$specimen->statusCodeId == Specimen::$STATUS_REFERRED || 
+					$specimen->statusCodeId == Specimen::$STATUS_REFERRED ||
 					$specimen->statusCodeId == Specimen::$STATUS_RETURNED
 				)
 				{
@@ -2876,7 +2921,7 @@ class PageElems
 					<tr>
 						<td><u><?php echo LangUtil::$generalTerms['REF_TO']; ?></u></td>
 						<td>
-						<?php 
+						<?php
 						if(trim($specimen->referredToName) == "")
 						{
 							echo "Not Known";
@@ -2895,13 +2940,13 @@ class PageElems
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['SP_STATUS']; ?></u></td>
 					<td>
-					<?php 
+					<?php
 					
-					echo $specimen->getStatus(); 
+					echo $specimen->getStatus();
 					$result1="Completed";
 					$result= $specimen->getStatus();
-					?> <a href='specimen_result.php?sid=<?php echo $specimen->specimenId;?>' 
-					<?php if(strcmp($result,$result1)==0){ ?> style='display:none;' <?php }?> 
+					?> <a href='specimen_result.php?sid=<?php echo $specimen->specimenId;?>'
+					<?php if(strcmp($result,$result1)==0){ ?> style='display:none;' <?php }?>
 				
 					title='Click to Enter result values for this Specimen'><?php echo LangUtil::$generalTerms['ENTER_RESULTS']; ?></a>
 					
@@ -2928,13 +2973,13 @@ class PageElems
 			<p><a href='<?php echo $report_url; ?>' title='Click to Generate Specimen Report' target='_blank'><?php echo LangUtil::$generalTerms['CMD_GETREPORT']; ?></a></p>
 			<p><a href='reports_specimenlog.php?location=<?php echo $_SESSION['lab_config_id']; ?>&specimen_id=<?php echo $specimen_id; ?>' title='Click to View a Log of Actions Performed on this Specimen' target='_blank'><?php echo LangUtil::$generalTerms['CMD_TRACK']; ?></a></p>
 			<?php
-			if($_SESSION['user_level'] != $LIS_CLERK) 
+			if($_SESSION['user_level'] != $LIS_CLERK)
 			{
 				$user = get_user_by_id($_SESSION['user_level']);
 				if
 				(
 					$specimen->statusCodeId == Specimen::$STATUS_TOVERIFY ||
-					$specimen->statusCodeId == Specimen::$STATUS_DONE 
+					$specimen->statusCodeId == Specimen::$STATUS_DONE
 				)
 				{
 					?>
@@ -2949,7 +2994,7 @@ class PageElems
 				}
 			}
 			?>
-                                
+
 		</div>
 		<?php
 	}
@@ -2959,7 +3004,7 @@ class PageElems
 		# Displays list of all tests registered for a specimen w/ status/results
 		$test_list = get_tests_by_specimen_id($sid);
 		if(count($test_list) == 0)
-		{ 
+		{
 			?>
 			<br>
 			<div class='sidetip_nopos'><?php echo LangUtil::$pageTerms['TIPS_NOTESTSREGD']; ?></div>
@@ -3011,7 +3056,7 @@ class PageElems
 				if($test->isPending())
 					echo LangUtil::$generalTerms['PENDING_RESULTS'];
 				else
-					echo $test->decodeResult(); 
+					echo $test->decodeResult();
 				?>
 			</td>
 			<td>
@@ -3151,7 +3196,7 @@ public function getInventory($retval) {
 				<td><?php echo $value[1];?></td>
 			</tr>
 		<?php
-			} 
+			}
 		?>
 		</tbody>
 	</table>
@@ -3186,9 +3231,9 @@ public function getTestsDoneStatsTable($stat_list)
 			$tests_pending_count = $value[1];
 			?>
 			<tr>
-			<td><?php 
+			<td><?php
 					if( is_numeric($test_type_id) )
-						echo get_test_name_by_id($test_type_id); 
+						echo get_test_name_by_id($test_type_id);
 					else
 						echo $test_type_id;
 			?></td>
@@ -3204,7 +3249,7 @@ public function getTestsDoneStatsTable($stat_list)
 	}
 	public function getDoctorStatsTable($stat_list, $dateFrom = null, $dateTo = null, $location = null)
 	{
-	 
+	
 		# Returns HTML table showing number of specimens handled
 		# Called from reports_specimencount.php
 		?>
@@ -3236,7 +3281,7 @@ public function getTestsDoneStatsTable($stat_list)
 
 			?>
 			<tr>
-				<td><form id='updateDoctorNameForm<?php echo $count; ?>' name='updateDoctorName<?php echo $count; ?>' action='ajax/UpdateDoctorNames.php?id=<?php echo $count; ?>' method='POST'> 
+				<td><form id='updateDoctorNameForm<?php echo $count; ?>' name='updateDoctorName<?php echo $count; ?>' action='ajax/UpdateDoctorNames.php?id=<?php echo $count; ?>' method='POST'>
 					<input type='hidden' id='dateFrom' name='dateFrom' value=<?php echo $dateFrom; ?>
 					<input type='hidden' id='dateTo' name='dateTo' value=<?php echo $dateTo; ?>
 					<input type='hidden' id='location' name='location' value=<?php echo $location; ?>
@@ -3361,22 +3406,22 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 		<table class='tablesorter' id='infection_table'>
 		<thead>
 			<tr>
-				<?php 
+				<?php
 				if ( $multipleIndividualLabs ) { ?>
 					<th>Lab Name</th>
-				<?php 
-				} 
+				<?php
+				}
 				else {
 				?>
 					<th><?php echo LangUtil::$generalTerms['TEST_TYPE']; ?></th>
-				<?php 
-				} 
+				<?php
+				}
 				?>
 				<th><?php echo LangUtil::$pageTerms['TOTAL_SPECIMENS']; ?></th>
 				<th><?php echo LangUtil::$pageTerms['TESTED_P']; ?></th>
 				<th><?php echo LangUtil::$pageTerms['TESTED_N']; ?></th>
 				<th><?php echo LangUtil::$generalTerms['PREVALENCE_RATE']." (%)"; ?></th>
-				<?php 
+				<?php
 					if ( $viewTrendsEnabled ) {
 						echo "<th>View Trends</th>";
 					}
@@ -3395,32 +3440,32 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 			$colorCode = "green";
 			if($count_all != 0) {
 				$infection_rate = round((($count_all-$count_negative)/$count_all)*100, 2);
-				if ( $infection_rate >= $threshold ) 
+				if ( $infection_rate >= $threshold )
 					$colorCode = "red";
 				else if ( $infection_rate >= intval($threshold*0.8) )
 					$colorCode = "darkorange";
 			}
 			?>
 			<tr>
-				<?php 
+				<?php
 				if ( $multipleIndividualLabs ) { ?>
 					<td><?php echo $value[2]; ?></td>
-				<?php 
-				} 
+				<?php
+				}
 				else {
 				?>
 					<td><?php echo $test_type_name ?></td>
-				<?php 
-				} 
+				<?php
+				}
 				?>
 				<td><?php echo $count_all; ?></td>
 				<td><?php echo $count_all-$count_negative; ?></td>
 				<td><?php echo $count_negative; ?></td>
-				<?php 
+				<?php
 					echo "<td style='color:$colorCode;'>$infection_rate</td>";
 					if ( $viewTrendsEnabled ) { ?>
 						<td><a href='javascript:viewTrendsIndividual(<?php echo json_encode($test_type_name);?>,<?php echo json_encode($lab_config_id);?>,<?php echo json_encode($date_from);?>,<?php echo json_encode($date_to);?>);'>View Trends</a></td>
-				<?php 
+				<?php
 					}
 				?>
 			</tr>
@@ -3640,7 +3685,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 	}
 	
 	function getStockForm($count)
-	{ 
+	{
 	$name_request="txtRow".$count."1";
 $lot_number_request="txtRow".$count."2";
 $expiry_date_request="txtRow".$count."3";
@@ -3735,7 +3780,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		# Returns HTML for new specimen form
 		LangUtil::setPageId("new_specimen");
 		$form_name = 'specimenform_'.$form_num;
-		$form_id = $form_name; 
+		$form_id = $form_name;
 		$form_class = 'specimenform_class';
 		$testbox_id = $form_id.'_testbox';
 		$stype_id = $form_id.'_stype';
@@ -3779,10 +3824,10 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</td>
 				<td>   </td>
 				<td>
-					<select 
-						name='stype' 
-						id='<?php echo $stype_id; ?>' 
-						onchange="javascript:get_testbox('<?php echo $testbox_id; ?>', '<?php echo $stype_id; ?>');" 
+					<select
+						name='stype'
+						id='<?php echo $stype_id; ?>'
+						onchange="javascript:get_testbox('<?php echo $testbox_id; ?>', '<?php echo $stype_id; ?>');"
 						class='uniform_width'
 					>
 						option value="">-<?php echo LangUtil::$generalTerms['CMD_SELECT']; ?>-</option>
@@ -3807,7 +3852,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				echo " style='display:none;' ";
 			?>>
 				<td>
-					<label for='sid'>DB Key 
+					<label for='sid'>DB Key
 					<?php if($_SESSION['sid'] == 2) $this->getAsterisk(); ?></label>
 				</td>
 				<td>   </td>
@@ -3848,7 +3893,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					$name_list = array("receipt_yyyy", "receipt_mm", "receipt_dd");
 					$id_list = array($form_id."_receipt_yyyy", $form_id."_receipt_mm", $form_id."_receipt_dd");
 					$value_list = array($today_array[0], $today_array[1], $today_array[2]);
-					$this->getDatePicker($name_list, $id_list, $value_list, true); 
+					$this->getDatePicker($name_list, $id_list, $value_list, true);
 					?>
 				</td>
 			</tr>
@@ -3864,7 +3909,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					$name_list = array("collect_yyyy", "collect_mm", "collect_dd");
 					$id_list = array($form_id."_collect_yyyy", $form_id."_collect_mm", $form_id."_collect_dd");
 					$value_list = array($today_array[0], $today_array[1], $today_array[2]);
-					$this->getDatePicker($name_list, $id_list, $value_list, false); 
+					$this->getDatePicker($name_list, $id_list, $value_list, false);
 					?>
 				</td>
 			</tr>
@@ -3946,7 +3991,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			?>>
 				<td><label for='doctor' valign='top'><?php echo LangUtil::$generalTerms['DOCTOR']; ?><?php if($_SESSION['doctor'] == 2) $this->getAsterisk(); ?></label></label>
 				</td>
-				<td> 
+				<td>
 					<SELECT name='title' id='<?php echo $doc_row_id; ?>_title'>
 					<?php
 					$labtitlefieldoptions = get_custom_fields_labtitle(1);
@@ -4112,7 +4157,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<td><?php echo get_specimen_name_by_id($specimen->specimenTypeId); ?></td>
 					<td><?php echo DateLib::mysqlToString($specimen->dateCollected)." ".$specimen->timeCollected; ?></td>
 					<td>
-						<?php 
+						<?php
 						foreach($test_list as $test)
 						{
 							echo get_test_name_by_id($test->testTypeId);
@@ -4161,10 +4206,10 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				?>
 				<tr valign='top'>
 					<td>
-						<?php 
+						<?php
 						if($key != 0)
 						{
-							echo get_test_name_by_id($key, $lab_config_id); 
+							echo get_test_name_by_id($key, $lab_config_id);
 						}
 						else
 						{
@@ -4174,7 +4219,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						<input type='hidden' name='ttype[]' value='<?php echo $key; ?>'></input>
 					</td>
 					<td>
-						<input type='text' name='tat[]' 
+						<input type='text' name='tat[]'
 						value='<?php
 						if($curr_tat_value != null)
 						{	
@@ -4240,10 +4285,10 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				?>
 				<tr valign='top'>
 					<td>
-						<?php 
+						<?php
 						if($key != 0)
 						{
-							echo get_test_name_by_id($key, $lab_config_id); 
+							echo get_test_name_by_id($key, $lab_config_id);
 						}
 						else
 						{
@@ -4805,7 +4850,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		<?php
 	}
         //-NC3065
-        
+
         public function getSearchFieldsCheckboxes($lab_config_id=null)
 	{
 		# Returns a set of checkboxes with existing fields types checked.
@@ -4865,16 +4910,16 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</input></td>
 				
 			</tr>
-                       
-                        
+
+
 			</tbody>
 		</table>
                 <br><br>
-                Number of Results Per Page: 
-                                <?php 
+                Number of Results Per Page:
+                                <?php
                                 echo "<select name='sfields_resultsPerPage' id='sfields_resultsPerPage'>";
                                 $i = 1;
-			while($i < 101) 
+			while($i < 101)
                         {
                             if($ssfields['results_per_page'] == $i)
 				echo "<option selected value='".$i."'>".$i."</option>";
@@ -4883,10 +4928,10 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                             $i++;
 			}
 			echo "</select>";?>
-                        
+
 		<?php
 	}
-        
+
         public function getBarcodeFields($lab_config_id=null)
 	{
 		# Returns a set of checkboxes with existing fields types checked.
@@ -4932,13 +4977,13 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                                 echo "</select>";?></td>
                     </tr>
                     <tr>
-                               <td> Barcode Width: 
+                               <td> Barcode Width:
                                    </td>
                                    <td>
                                 <?php //$sfields['rpp']= '45';
                                 echo "<select id='brfields_width' name='brfields_width'>";
                                 $i = 1;
-                                while($i < 11) 
+                                while($i < 11)
                                 {
                                     if($brfields['width'] == $i)
                                     echo "<option selected value='".$i."'>".$i."</option>";
@@ -4955,7 +5000,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                                 <?php //$sfields['rpp']= '45';
                                 echo "<select id='brfields_height' name='brfields_height'>";
                                 $i = 5;
-                                while($i < 81) 
+                                while($i < 81)
                                 {
                                     if($brfields['height'] == $i)
                                     echo "<option selected value='".$i."'>".$i."</option>";
@@ -4972,7 +5017,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                                 <?php //$sfields['rpp']= '45';
                                 echo "<select id='brfields_textsize' name='brfields_textsize'>";
                                 $i = 5;
-                                while($i < 40) 
+                                while($i < 40)
                                 {
                                     if($brfields['textsize'] == $i)
                                     echo "<option selected value='".$i."'>".$i."</option>";
@@ -4985,7 +5030,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                     </table>
 		<?php
 	}
-        
+
 	public function getMeasureCheckboxes($lab_config_id="")
 	{
 		# Returns a set of checkboxes with existing test types checked
@@ -5024,7 +5069,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				*/
 				?>
 				>
-				<?php 
+				<?php
 				/*
 				if(in_array($test_type_id, $current_test_list))
 				{
@@ -5093,14 +5138,14 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
             $byGender = $configArray['group_by_gender'];
             $bySection = $configArray['measure_id'];
             $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending
-            
+
             $sp_configArray = getSpecimenCountGroupedConfig($lab_config->id);
             $sp_byAge = $sp_configArray['group_by_age'];
             $sp_ageGroups = $sp_configArray['age_groups'];
             $sp_byGender = $sp_configArray['group_by_gender'];
             $sp_bySection = $sp_configArray['measure_id'];
-            $sp_combo = $sp_configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending 
-            
+            $sp_combo = $sp_configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending
+
             ?>
             <input type='hidden' name='lab_config_id' value='<?php echo $lab_config->id; ?>'></input>
 		<div class='pretty_box' style='width:700px;'>
@@ -5260,7 +5305,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						</div>
 					</td>
 				</tr>
-                                
+
                                 <tr valign='top'>
 					<td></td>
 					<td>
@@ -5278,7 +5323,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</div>
             <?php
         }
-        
+
         public function getGroupedCountReportSummary($lab_config)
         {
             $configArray = getTestCountGroupedConfig($lab_config->id);
@@ -5287,15 +5332,15 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
             $byGender = $configArray['group_by_gender'];
             $bySection = $configArray['measure_id'];
             $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending
-            
-            
+
+
             $sp_configArray = getSpecimenCountGroupedConfig($lab_config->id);
             $sp_byAge = $sp_configArray['group_by_age'];
             $sp_ageGroups = $sp_configArray['age_groups'];
             $sp_byGender = $sp_configArray['group_by_gender'];
             $sp_bySection = $sp_configArray['measure_id'];
             $sp_combo = $sp_configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending
-            
+
             ?>
 		<div class='pretty_box' style='width:700px;'>
 		<table class='hor-minimalist-b'>
@@ -5311,7 +5356,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						if($bySection == 1)
 							echo LangUtil::$generalTerms['YES'];
 						else
-							echo LangUtil::$generalTerms['NO']; 
+							echo LangUtil::$generalTerms['NO'];
 						?>
 					</td>
 				</tr>
@@ -5322,7 +5367,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						if($byGender == 1)
 							echo LangUtil::$generalTerms['YES'];
 						else
-							echo LangUtil::$generalTerms['NO']; 
+							echo LangUtil::$generalTerms['NO'];
 						?>
 					</td>
 				</tr>
@@ -5331,9 +5376,9 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<td>
 						<?php
 						if($byAge == 1)
-							echo LangUtil::$generalTerms['YES']; 
+							echo LangUtil::$generalTerms['YES'];
 						else
-							echo LangUtil::$generalTerms['NO']; 
+							echo LangUtil::$generalTerms['NO'];
 						?>
 					</td>
 				</tr>
@@ -5365,10 +5410,10 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						if($combo == 1)
 							echo "All registered tests";
 						else if($combo == 3)
-							echo "Both completed and pending tests (separated by a slash)"; 
+							echo "Both completed and pending tests (separated by a slash)";
                                                 else
                                                     echo "Only completed tests";
-                                                    
+
 						?>
 					</td>
 				</tr>
@@ -5383,7 +5428,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						if($sp_byGender == 1)
 							echo LangUtil::$generalTerms['YES'];
 						else
-							echo LangUtil::$generalTerms['NO']; 
+							echo LangUtil::$generalTerms['NO'];
 						?>
 					</td>
 				</tr>
@@ -5392,9 +5437,9 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<td>
 						<?php
 						if($sp_byAge == 1)
-							echo LangUtil::$generalTerms['YES']; 
+							echo LangUtil::$generalTerms['YES'];
 						else
-							echo LangUtil::$generalTerms['NO']; 
+							echo LangUtil::$generalTerms['NO'];
 						?>
 					</td>
 				</tr>
@@ -5419,14 +5464,14 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					?>
 					</td>
 				</tr>
-                                
+
                                 </tbody>
 		</table>
 		</div>
 		<?php
         }
-        
-        
+
+
 	public function getAggregateReportConfigureForm($lab_config)
 	{
 		# Returns HTML form elements for configuring aggregate reports
@@ -5624,8 +5669,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</div>
 		<?php
 	}
-        
-        
+
+
 	
 	public function getInfectionReportConfigureForm()
 	{
@@ -5832,7 +5877,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						if($site_settings->groupByGender == 1)
 							echo LangUtil::$generalTerms['YES'];
 						else
-							echo LangUtil::$generalTerms['NO']; 
+							echo LangUtil::$generalTerms['NO'];
 						?>
 					</td>
 				</tr>
@@ -5841,9 +5886,9 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<td>
 						<?php
 						if($site_settings->groupByAge == 1)
-							echo LangUtil::$generalTerms['YES']; 
+							echo LangUtil::$generalTerms['YES'];
 						else
-							echo LangUtil::$generalTerms['NO']; 
+							echo LangUtil::$generalTerms['NO'];
 						?>
 					</td>
 				</tr>
@@ -5931,7 +5976,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 											$slot_bounds = explode(":", $slot_part);
                                                                                         if($slot_bounds[0] == "\$freetext$$")
                                                                                             continue;
-											echo $slot_bounds[0]."-".$slot_bounds[1]; 
+											echo $slot_bounds[0]."-".$slot_bounds[1];
 											echo "&nbsp;&nbsp;&nbsp;";
 										}
 									}
@@ -5972,7 +6017,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						if($site_settings->groupByGender == 1)
 							echo LangUtil::$generalTerms['YES'];
 						else
-							echo LangUtil::$generalTerms['NO']; 
+							echo LangUtil::$generalTerms['NO'];
 						?>
 					</td>
 				</tr>
@@ -5981,9 +6026,9 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<td>
 						<?php
 						if($site_settings->groupByAge == 1)
-							echo LangUtil::$generalTerms['YES']; 
+							echo LangUtil::$generalTerms['YES'];
 						else
-							echo LangUtil::$generalTerms['NO']; 
+							echo LangUtil::$generalTerms['NO'];
 						?>
 					</td>
 				</tr>
@@ -6061,7 +6106,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 											if(trim($slot_part) == "")
 												continue;
 											$slot_bounds = explode(":", $slot_part);
-											echo $slot_bounds[0]."-".$slot_bounds[1]; 
+											echo $slot_bounds[0]."-".$slot_bounds[1];
 											echo "&nbsp;&nbsp;&nbsp;";
 										}
 									}
@@ -6310,7 +6355,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td></td>
 			</tr>
 			<?php
-			# Patient custom fields 
+			# Patient custom fields
 			$lab_config = LabConfig::getById($report_config->labConfigId);
 			if( $lab_config ) {
 				$custom_field_list = $lab_config->getPatientCustomFields();
@@ -6366,9 +6411,9 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							echo " checked ";
 						?>>
 					</input>
-					<?php 
+					<?php
 					# For the user "specimen ID" is now stored in aux_id field
-					echo LangUtil::$generalTerms['SPECIMEN_ID']; 
+					echo LangUtil::$generalTerms['SPECIMEN_ID'];
 					?>
 				</td>
 			</tr>
@@ -6443,7 +6488,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				
 			</tr>			
 			<?php
-			# Specimen custom fields 
+			# Specimen custom fields
 			$lab_config = LabConfig::getById($report_config->labConfigId);
 			if( $lab_config ) {
 				$custom_field_list = $lab_config->getSpecimenCustomFields();
@@ -6454,7 +6499,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					
 				if($report_config->reportId == 6)
 					echo " style='display:none;' ";
-				?>> 
+				?>>
 						<td>
 							<input type='checkbox' name='s_custom_<?php echo $custom_field->id; ?>' <?php
 								if(in_array($custom_field->id, $report_config->specimenCustomFields))
@@ -6705,7 +6750,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td><?php echo LangUtil::$generalTerms['LANDSCAPE']; ?></td>
 				<td>
 					<?php
-					if($report_config->landscape == true) 
+					if($report_config->landscape == true)
 						echo LangUtil::$generalTerms['YES'];
 					else
 						echo LangUtil::$generalTerms['NO'];
@@ -6716,7 +6761,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>Clinical Data</td>
 				<td>
 					<?php
-					if($report_config->useClinicalData == 1) 
+					if($report_config->useClinicalData == 1)
 						echo LangUtil::$generalTerms['YES'];
 					else
 						echo LangUtil::$generalTerms['NO'];
@@ -6731,31 +6776,31 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			</tr>
 			<?php # Patient main fields ?>
 			<tr valign='top'>
-				<?php 
+				<?php
 				if($report_config->usePatientId == 1)
 				{
 					echo "<td>";
-					echo LangUtil::$generalTerms['PATIENT_ID']; 
+					echo LangUtil::$generalTerms['PATIENT_ID'];
 					echo "</td>";
 				}
 				?>
 			</tr>
 			<tr valign='top'>
-				<?php 
+				<?php
 				if($report_config->useDailyNum == 1)
 				{
 					echo "<td>";
-					echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; 
+					echo LangUtil::$generalTerms['PATIENT_DAILYNUM'];
 					echo "</td>";
 				}
 				?>
 			</tr>
 			<tr valign='top'>
-				<?php 
+				<?php
 				if($report_config->usePatientAddlId == 1)
 				{
 					echo "<td>";
-					echo LangUtil::$generalTerms['ADDL_ID']; 
+					echo LangUtil::$generalTerms['ADDL_ID'];
 					echo "</td>";
 				}
 				?>
@@ -6764,7 +6809,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useGender == 1)
-						echo LangUtil::$generalTerms['GENDER']; 
+						echo LangUtil::$generalTerms['GENDER'];
 					?>
 				</td>			
 			</tr>
@@ -6772,7 +6817,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useAge == 1)
-						echo LangUtil::$generalTerms['AGE']; 
+						echo LangUtil::$generalTerms['AGE'];
 					?>
 				</td>
 			</tr>
@@ -6780,7 +6825,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useDob == 1)
-						echo LangUtil::$generalTerms['DOB']; 
+						echo LangUtil::$generalTerms['DOB'];
 					?>
 				</td>
 			</tr>
@@ -6788,7 +6833,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->usePatientName == 1)
-						echo LangUtil::$generalTerms['NAME']; 
+						echo LangUtil::$generalTerms['NAME'];
 					?>
 				</td>
 			</tr>
@@ -6796,7 +6841,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useTest == 1)
-						echo LangUtil::$generalTerms['TEST']; 
+						echo LangUtil::$generalTerms['TEST'];
 					?>
 				</td>
 			</tr>
@@ -6809,7 +6854,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</td>
 			</tr>
 			<?php
-			# Patient custom fields 
+			# Patient custom fields
 			$lab_config = LabConfig::getById($report_config->labConfigId);
 			$custom_field_list = $lab_config->getPatientCustomFields();
 			foreach($custom_field_list as $custom_field)
@@ -6819,7 +6864,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<td>
 						<?php
 						if(in_array($custom_field->id, $report_config->patientCustomFields))
-							echo $custom_field->fieldName; 
+							echo $custom_field->fieldName;
 						?>
 					</td>
 				</tr>
@@ -6842,7 +6887,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<?php
 					if($report_config->useSpecimenAddlId == 1)
 						# For the user "specimen ID" is now stored in aux_id field
-						echo LangUtil::$generalTerms['SPECIMEN_ID']; 
+						echo LangUtil::$generalTerms['SPECIMEN_ID'];
 					?>
 				</td>
 			</tr>
@@ -6853,7 +6898,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useSpecimenName == 1)
-						echo LangUtil::$generalTerms['SPECIMEN_TYPE']; 
+						echo LangUtil::$generalTerms['SPECIMEN_TYPE'];
 					?>
 				</td>
 			</tr>
@@ -6864,7 +6909,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useDateRecvd == 1)
-						echo LangUtil::$generalTerms['R_DATE']; 
+						echo LangUtil::$generalTerms['R_DATE'];
 					?>
 				</td>
 				
@@ -6876,7 +6921,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useComments == 1)
-						echo LangUtil::$generalTerms['COMMENTS']; 
+						echo LangUtil::$generalTerms['COMMENTS'];
 					?>
 				</td>
 			</tr>
@@ -6887,7 +6932,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useReferredTo == 1)
-						echo LangUtil::$generalTerms['REF_OUT']; 
+						echo LangUtil::$generalTerms['REF_OUT'];
 					?>
 				</td>
 				
@@ -6899,13 +6944,13 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useDoctor == 1)
-						echo LangUtil::$generalTerms['DOCTOR']; 
+						echo LangUtil::$generalTerms['DOCTOR'];
 					?>
 				</td>
 				
 			</tr>				
 			<?php
-			# Specimen custom fields 
+			# Specimen custom fields
 			$lab_config = LabConfig::getById($report_config->labConfigId);
 			$custom_field_list = $lab_config->getSpecimenCustomFields();
 			foreach($custom_field_list as $custom_field)
@@ -6918,7 +6963,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<td>
 						<?php
 						if(in_array($custom_field->id, $report_config->specimenCustomFields))
-							echo $custom_field->fieldName; 
+							echo $custom_field->fieldName;
 						?>
 					</td>
 				</tr>
@@ -6941,7 +6986,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useTestName == 1)
-						echo LangUtil::$generalTerms['TEST_TYPE']; 
+						echo LangUtil::$generalTerms['TEST_TYPE'];
 					?>
 				</td>
 			</tr>
@@ -6952,7 +6997,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useMeasures == 1)
-						echo LangUtil::$generalTerms['MEASURES']; 
+						echo LangUtil::$generalTerms['MEASURES'];
 					?>
 				</td>
 			</tr>
@@ -6963,7 +7008,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useResults == 1)
-						echo LangUtil::$generalTerms['RESULTS']; 
+						echo LangUtil::$generalTerms['RESULTS'];
 					?>
 				</td>
 			</tr>
@@ -6975,7 +7020,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 						if($report_config->useRange == 1)
-							echo LangUtil::$generalTerms['RANGE']; 
+							echo LangUtil::$generalTerms['RANGE'];
 					?>
 				</td>
 			</tr>
@@ -6986,7 +7031,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useRemarks == 1)
-						echo LangUtil::$generalTerms['RESULT_COMMENTS']; 
+						echo LangUtil::$generalTerms['RESULT_COMMENTS'];
 					?>
 				</td>
 			</tr>
@@ -6997,7 +7042,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useEntryDate == 1)
-						echo LangUtil::$generalTerms['E_DATE']; 
+						echo LangUtil::$generalTerms['E_DATE'];
 					?>
 				</td>
 				
@@ -7009,7 +7054,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useEnteredBy == 1)
-						echo LangUtil::$generalTerms['ENTERED_BY']; 
+						echo LangUtil::$generalTerms['ENTERED_BY'];
 					?>
 				</td>
 			</tr>
@@ -7020,7 +7065,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useVerifiedBy == 1)
-						echo LangUtil::$generalTerms['VERIFIED_BY']; 
+						echo LangUtil::$generalTerms['VERIFIED_BY'];
 					?>
 				</td>
 				
@@ -7033,7 +7078,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<?php
 					if($report_config->useStatus == 1)
-						echo LangUtil::$generalTerms['SP_STATUS']; 
+						echo LangUtil::$generalTerms['SP_STATUS'];
 					?>
 				</td>
 				
@@ -7152,7 +7197,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									}
 									if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
 									{
-										echo "&nbsp;&nbsp;".LangUtil::$generalTerms['MSG_RESET'].": "; 
+										echo "&nbsp;&nbsp;".LangUtil::$generalTerms['MSG_RESET'].": ";
 										switch($lab_config->dailyNumReset)
 										{
 											case LabConfig::$RESET_DAILY:
@@ -7225,7 +7270,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 								</td>
 							</tr>
 							<?php
-							# Hide patient name flag: Hidden 
+							# Hide patient name flag: Hidden
 							# Option moved to technician account profile from v0.8.2
 							/*
 							<tr>
@@ -7595,7 +7640,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td></td>
 			</tr>
 			<?php
-			# Patient custom fields 
+			# Patient custom fields
 			$custom_field_list = $lab_config->getPatientCustomFields();
 			foreach($custom_field_list as $custom_field)
 			{
@@ -7619,9 +7664,9 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<input type='checkbox' name='s_field_1' >
 					</input>
-					<?php 
+					<?php
 					# For the user "specimen ID" is now stored in aux_id field
-					echo LangUtil::$generalTerms['SPECIMEN_ID']; 
+					echo LangUtil::$generalTerms['SPECIMEN_ID'];
 					?>
 				</td>
 			</tr>
@@ -7666,7 +7711,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				
 			</tr>			
 			<?php
-			# Specimen custom fields 
+			# Specimen custom fields
 			$custom_field_list = $lab_config->getSpecimenCustomFields();
 			foreach($custom_field_list as $custom_field)
 			{

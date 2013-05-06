@@ -1,378 +1,156 @@
-CREATE TABLE `comment` (
-   `id` int(10) unsigned not null auto_increment,
-   `username` varchar(45) not null,
-   `page` varchar(45) not null,
-   `comment` varchar(150) not null,
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=4;
-
-CREATE TABLE `custom_field_type` (
-   `id` int(11) unsigned not null auto_increment,
-   `field_type` varchar(45),
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-CREATE TABLE `delay_measures` (
-   `User_Id` varchar(50) not null,
-   `IP_Address` varchar(16) not null,
-   `Latency` int(11) not null default '0',
-   `Recorded_At` datetime not null default '0000-00-00 00:00:00',
-   `Page_Name` varchar(45),
-   `Request_URI` varchar(100)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `lab_config` (
-   `lab_config_id` int(10) unsigned not null auto_increment,
-   `name` varchar(45) not null,
-   `location` varchar(45) not null,
-   `admin_user_id` int(10) unsigned not null, 
-   `id_mode` INTEGER UNSIGNED NOT NULL DEFAULT 2, 
-   `db_name` varchar(45),
-   PRIMARY KEY (`lab_config_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-CREATE TABLE `lab_config_access` (
-  `user_id` INTEGER UNSIGNED NOT NULL,
-  `lab_config_id` INTEGER UNSIGNED NOT NULL,
-  PRIMARY KEY (`user_id`, `lab_config_id`)
-) ENGINE = InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `lab_config_specimen_type` (
-   `lab_config_id` int(10) unsigned not null,
-   `specimen_type_id` int(10) unsigned not null
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `lab_config_test_type` (
-   `lab_config_id` int(10) unsigned not null,
-   `test_type_id` int(10) unsigned not null
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `measure` (
-   `measure_id` int(11) unsigned not null auto_increment,
-   `name` varchar(45) not null,
-   `unit_id` int(10) unsigned,
-   `range` varchar(500) not null,
-   `description` varchar(500),
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   `unit` varchar(30),
-   PRIMARY KEY (`measure_id`),
-   KEY `unit_id` (`unit_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-CREATE TABLE `patient` (
-   `patient_id` int(11) unsigned not null,
-   `addl_id` varchar(40),
-   `name` varchar(45),
-   `sex` char(1) not null,
-   `age` decimal(10,0),
-   `dob` date, 
-   `partial_dob` VARCHAR(45), 
-   `created_by` int(11) unsigned,
-   `surr_id` VARCHAR(45),
-   `hash_value` VARCHAR(100),
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   PRIMARY KEY (`patient_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `patient_custom_data` (
-   `id` int(11) unsigned not null auto_increment,
-   `field_id` int(11) unsigned not null,
-   `patient_id` int(11) unsigned not null,
-   `field_value` varchar(45) not null,
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   PRIMARY KEY (`id`),
-   KEY `field_id` (`field_id`),
-   KEY `patient_id` (`patient_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-
-CREATE TABLE `patient_custom_field` (
-   `id` int(11) unsigned not null auto_increment,
-   `field_name` varchar(45) not null,
-   `field_options` varchar(45) not null,
-   `field_type_id` int(11) unsigned not null,
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   PRIMARY KEY (`id`),
-   KEY `field_type_id` (`field_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-CREATE TABLE `patient_daily` (
-   `datestring` varchar(45) not null,
-   `count` int(10) unsigned not null
-) ENGINE=InnoDB;
-
-CREATE TABLE `reference_range` (
-  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `measure_id` INTEGER UNSIGNED NOT NULL,
-  `age_min` VARCHAR(45),
-  `age_max` VARCHAR(45),
-  `sex` VARCHAR(10),
-  `range_lower` VARCHAR(45) NOT NULL,
-  `range_upper` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
-CREATE TABLE `report_config` (
-   `report_id` int(10) unsigned not null AUTO_INCREMENT,
-   `header` varchar(500) not null,
-   `footer` varchar(250) not null default '',
-   `margins` varchar(45) not null default '2,0,10,0',
-   `p_fields` varchar(45) not null default '1,1,1,1,1,1,1',
-   `s_fields` varchar(45) not null default '1,1,1,1,1,1',
-   `t_fields` varchar(45) not null default '1,0,1,1,1,0,1,1',
-   `p_custom_fields` varchar(45) not null,
-   `s_custom_fields` varchar(45) not null,
-   `test_type_id` VARCHAR(45) not null default '0',
-   `title` VARCHAR(250) NOT NULL DEFAULT '',
-   `landscape` int(10) unsigned not null default 0,
-   PRIMARY KEY (`report_id`)
-) ENGINE=InnoDB;
-
-INSERT INTO `report_config` (`report_id`, `header`, `footer`, `margins`, `p_fields`, `s_fields`, `t_fields`, `p_custom_fields`, `s_custom_fields`) VALUES 
-('1', 'Patient Report', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
-('2', 'Specimen Report', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
-('3', 'Test Records', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
-('4', 'Daily Log - Specimens', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
-('5', 'Worksheet', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
-('6', 'Daily Log - Patients', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', '');
-
-CREATE TABLE  `report_disease` (
+CREATE TABLE IF NOT EXISTS `comment` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `group_by_age` int(10) unsigned NOT NULL,
-  `group_by_gender` int(10) unsigned NOT NULL,
-  `age_groups` varchar(500) default NULL,
-  `measure_groups` varchar(500) default NULL,
-  `measure_id` int(10) unsigned NOT NULL,
-  `lab_config_id` int(10) unsigned NOT NULL,
-  `test_type_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY  USING BTREE (`id`)
-) ENGINE=InnoDB;
-
-CREATE TABLE `specimen` (
-   `specimen_id` int(10) unsigned not null,
-   `patient_id` int(11) unsigned not null,
-   `specimen_type_id` int(11) unsigned not null,
-   `user_id` int(11) unsigned,
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   `status_code_id` int(11) unsigned,
-   `referred_to` int(11) unsigned,
-   `comments` varchar(450),
-   `aux_id` varchar(45),
-   `date_collected` date not null,
-   `date_recvd` date,
-   `session_num` VARCHAR(45),
-   `time_collected` VARCHAR(45),
-   `report_to` INTEGER UNSIGNED, 
-   `doctor` VARCHAR(45), 
-   `date_reported` DATETIME, 
-   `referred_to_name` VARCHAR(70), 
-   `daily_num` varchar(45) not null DEFAULT '',
-   PRIMARY KEY (`specimen_id`)
+  `username` varchar(45) NOT NULL default '',
+  `page` varchar(45) NOT NULL default '',
+  `comment` varchar(150) NOT NULL default '',
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `specimen_custom_data` (
-   `id` int(11) unsigned not null auto_increment,
-   `field_id` int(11) unsigned not null,
-   `specimen_id` int(10) unsigned not null,
-   `field_value` varchar(45) not null,
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   PRIMARY KEY (`id`),
-   KEY `field_id` (`field_id`),
-   KEY `specimen_id` (`specimen_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
-CREATE TABLE `specimen_custom_field` (
-   `id` int(11) unsigned not null auto_increment,
-   `field_name` varchar(45) not null,
-   `field_options` varchar(45) not null,
-   `field_type_id` int(11) unsigned not null,
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   PRIMARY KEY (`id`),
-   KEY `field_type_id` (`field_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-CREATE TABLE `specimen_test` (
-   `test_type_id` int(11) unsigned not null,
-   `specimen_type_id` int(11) unsigned not null,
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   KEY `test_type_id` (`test_type_id`),
-   KEY `specimen_type_id` (`specimen_type_id`)
+CREATE TABLE IF NOT EXISTS `custom_field_type` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `field_type` varchar(45) default NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `specimen_type` (
-   `specimen_type_id` int(11) unsigned not null auto_increment,
-   `name` varchar(45) not null,
-   `description` varchar(100),
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   `disabled` int(10) unsigned default 0,
-   PRIMARY KEY (`specimen_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
-CREATE TABLE `specimen_session` (
-  `session_num` VARCHAR(45) NOT NULL,
-  `count` INTEGER UNSIGNED NOT NULL DEFAULT 0,
-  PRIMARY KEY (`session_num`)
-) ENGINE=InnoDB;
-
-CREATE TABLE `stock_content` (
-   `name` VARCHAR(64),
-   `current_quantity` INT(11),
-   `date_of_use` date NOT NULL,
-   `receiver` VARCHAR(64),
-   `remarks` TEXT,
-   `lot_number` VARCHAR(64),
-   `new_balance` INT(11),
-   `user_name` VARCHAR(64)
-) ENGINE=InnoDB;
-
-CREATE TABLE `stock_details` (
-	`name` VARCHAR(64),
-	`lot_number` VARCHAR(64),
-	`expiry_date` VARCHAR(64),
-	`manufacturer` VARCHAR(64),
-	`quantity_ordered` INT(11),
-	`supplier` VARCHAR(64),
-	`date_of_reception` timestamp NOT NULL default CURRENT_TIMESTAMP,
-	`current_quantity` INT(11),
-	`date_of_supply` timestamp NOT NULL default CURRENT_TIMESTAMP,
-	`quantity_supplied` INT(11),
-	`unit` VARCHAR(10), 
-	`entry_id` INT(11), 
-	`cost_per_unit` DECIMAL(10,0),
-	`quantity_used` INT(10)
-) ENGINE=InnoDB;
-
-CREATE TABLE `test` (
-   `test_id` int(10) unsigned not null auto_increment,
-   `test_type_id` int(11) unsigned not null,
-   `result` varchar(201) not null,
-   `comments` varchar(200),
-   `user_id` int(11) unsigned,
-   `verified_by` int(11) unsigned,
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   `specimen_id` int(11) unsigned,
-   `date_verified` DATETIME,
-   PRIMARY KEY (`test_id`),
-   KEY `test_type_id` (`test_type_id`),
-   KEY `user_id` (`user_id`),
-   KEY `specimen_id` (`specimen_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-CREATE TABLE `test_category` (
-   `test_category_id` int(11) unsigned not null auto_increment,
-   `name` varchar(45) not null,
-   `description` varchar(100),
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   PRIMARY KEY (`test_category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-INSERT INTO `test_category` (`test_category_id`, `name`) VALUES(1, 'HIV');
-
-CREATE TABLE `test_type` (
-   `test_type_id` int(11) unsigned not null auto_increment,
-   `name` varchar(45) not null,
-   `description` varchar(100),
-   `test_category_id` int(11) unsigned not null,
-   `is_panel` INTEGER UNSIGNED, 
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   `disabled` INT(10) unsigned not null,
-   `clinical_data` longtext,
-   `hide_patient_name` int(1),
-   `prevalence_threshold` int(3) default 70,
-   `target_tat` int(3) default 24,
-   PRIMARY KEY (`test_type_id`),
-   KEY `test_category_id` (`test_category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-CREATE TABLE `test_type_measure` (
-   `test_type_id` int(11) unsigned not null,
-   `measure_id` int(11) unsigned not null,
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   KEY `test_type_id` (`test_type_id`),
-   KEY `measure_id` (`measure_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `unit` (
-   `unit_id` int(11) unsigned not null auto_increment,
-   `unit` varchar(45) not null,
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   PRIMARY KEY (`unit_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-CREATE TABLE `user` (
-   `user_id` int(11) unsigned not null auto_increment,
-   `username` varchar(45) not null,
-   `password` varchar(45) not null,
-   `actualname` varchar(45),
-   `email` varchar(45),
-   `created_by` int(11) unsigned,
-   `ts` timestamp not null default CURRENT_TIMESTAMP,
-   `lab_config_id` int(10) unsigned,
-   `level` int(10) unsigned,
-   `phone` varchar(45),
-   `lang_id` varchar(45),
-   PRIMARY KEY (`user_id`),
-   KEY `user_id_index` (`lab_config_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-CREATE TABLE `user_props` (
+CREATE TABLE IF NOT EXISTS `delay_measures` (
   `User_Id` varchar(50) NOT NULL default '',
-  `AppCodeName` varchar(25) NOT NULL default '',
-  `AppName` varchar(25) NOT NULL default '',
-  `AppVersion` varchar(25) NOT NULL default '',
-  `CookieEnabled` tinyint(1) NOT NULL default '0',
-  `Platform` varchar(20) NOT NULL default '',
-  `UserAgent` varchar(200) NOT NULL default '',
-  `SystemLanguage` varchar(15) NOT NULL default '',
-  `UserLanguage` varchar(15) NOT NULL default '',
-  `Language` varchar(15) NOT NULL default '',
-  `ScreenAvailHeight` int(11) NOT NULL default '0',
-  `ScreenAvailWidth` int(11) NOT NULL default '0',
-  `ScreenColorDepth` int(11) NOT NULL default '0',
-  `ScreenHeight` int(11) NOT NULL default '0',
-  `ScreenWidth` int(11) NOT NULL default '0',
-  `Recorded_At` datetime NOT NULL default '0000-00-00 00:00:00'
+  `IP_Address` varchar(16) NOT NULL default '',
+  `Latency` int(11) NOT NULL default '0',
+  `Recorded_At` datetime NOT NULL default '0000-00-00 00:00:00',
+  `Page_Name` varchar(45) default NULL,
+  `Request_URI` varchar(100) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `user_rating` (
-  `user_id` INTEGER UNSIGNED NOT NULL,
-  `rating` INTEGER UNSIGNED NOT NULL,
-  `ts` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`user_id`, `ts`)
-) ENGINE = InnoDB;
 
-CREATE TABLE `worksheet_custom` (
-  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NOT NULL,
-  `header` VARCHAR(500) NOT NULL,
-  `footer` VARCHAR(250) NOT NULL,
-  `title` VARCHAR(250) NOT NULL,
-  `p_fields` VARCHAR(100) NOT NULL,
-  `s_fields` VARCHAR(100) NOT NULL,
-  `t_fields` VARCHAR(100) NOT NULL,
-  `p_custom` VARCHAR(100) NOT NULL,
-  `s_custom` VARCHAR(100) NOT NULL,
-  `margins` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS `inv_reagent` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) collate latin1_general_ci NOT NULL,
+  `unit` varchar(45) collate latin1_general_ci NOT NULL default 'units',
+  `remarks` varchar(245) collate latin1_general_ci default NULL,
+  `created_by` varchar(10) collate latin1_general_ci NOT NULL default '0',
+  `assocation` varchar(10) collate latin1_general_ci default '0',
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-CREATE TABLE `worksheet_custom_test` (
-  `worksheet_id` INTEGER UNSIGNED NOT NULL,
-  `test_type_id` INTEGER UNSIGNED NOT NULL,
-  `measure_id` INTEGER UNSIGNED NOT NULL,
-  `width` VARCHAR(45) NOT NULL
-) ENGINE=InnoDB;
 
-CREATE TABLE `worksheet_custom_userfield` (
-	`worksheet_id` INT(10) UNSIGNED NOT NULL,
-	`name` VARCHAR(64) NOT NULL,
-	`width` INT(10) UNSIGNED NOT NULL,
-	`field_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT
-) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS `inv_supply` (
+  `id` int(11) NOT NULL auto_increment,
+  `reagent_id` int(11) NOT NULL,
+  `lot` varchar(100) collate latin1_general_ci NOT NULL,
+  `expiry_date` date default NULL,
+  `manufacturer` varchar(100) collate latin1_general_ci default NULL,
+  `supplier` varchar(100) collate latin1_general_ci default NULL,
+  `quantity_ordered` int(11) NOT NULL default '0',
+  `quantity_supplied` int(11) NOT NULL default '0',
+  `cost_per_unit` decimal(10,0) default NULL,
+  `user_id` int(11) NOT NULL default '0',
+  `date_of_order` date default NULL,
+  `date_of_supply` date default NULL,
+  `date_of_reception` date default NULL,
+  `remarks` varchar(250) collate latin1_general_ci default NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  KEY `reagent_id` (`reagent_id`),
+  CONSTRAINT `reagent_id` FOREIGN KEY (`reagent_id`) REFERENCES `inv_reagent` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-CREATE TABLE `misc` (
+
+CREATE TABLE IF NOT EXISTS `inv_usage` (
+  `id` int(11) NOT NULL auto_increment,
+  `reagent_id` int(11) NOT NULL,
+  `lot` varchar(100) collate latin1_general_ci NOT NULL,
+  `quantity_used` int(11) NOT NULL default '0',
+  `date_of_use` date NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `remarks` varchar(250) collate latin1_general_ci default NULL,
+  `ts` timestamp NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  KEY `reagent_id` (`reagent_id`),
+  KEY `reagent_id2` (`reagent_id`),
+  CONSTRAINT `reagent_id2` FOREIGN KEY (`reagent_id`) REFERENCES `inv_reagent` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS `lab_config` (
+  `lab_config_id` int(10) unsigned NOT NULL auto_increment,
+  `name` char(45) NOT NULL default '',
+  `location` char(45) NOT NULL default '',
+  `admin_user_id` int(10) unsigned NOT NULL default '0',
+  `db_name` char(45) NOT NULL default '',
+  `id_mode` int(10) unsigned NOT NULL default '2',
+  `p_addl` int(10) unsigned NOT NULL default '0',
+  `s_addl` int(10) unsigned NOT NULL default '0',
+  `daily_num` int(10) unsigned NOT NULL default '1',
+  `pid` int(10) unsigned NOT NULL default '2',
+  `pname` int(10) unsigned NOT NULL default '1',
+  `sex` int(10) unsigned NOT NULL default '2',
+  `age` int(10) unsigned NOT NULL default '1',
+  `dob` int(10) unsigned NOT NULL default '1',
+  `sid` int(10) unsigned NOT NULL default '2',
+  `refout` int(10) unsigned NOT NULL default '1',
+  `rdate` int(10) unsigned NOT NULL default '2',
+  `comm` int(10) unsigned NOT NULL default '1',
+  `dformat` varchar(45) NOT NULL default 'd-m-Y',
+  `dnum_reset` int(10) unsigned NOT NULL default '1',
+  `doctor` int(10) unsigned NOT NULL default '1',
+  PRIMARY KEY  (`lab_config_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED;
+
+
+CREATE TABLE IF NOT EXISTS `lab_config_access` (
+  `user_id` int(10) unsigned NOT NULL default '0',
+  `lab_config_id` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`user_id`,`lab_config_id`),
+  KEY `lab_config_id` (`lab_config_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `lab_config_specimen_type` (
+  `lab_config_id` int(10) unsigned NOT NULL default '0',
+  `specimen_type_id` int(10) unsigned NOT NULL default '0',
+  KEY `lab_config_id` (`lab_config_id`),
+  KEY `specimen_type_id` (`specimen_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `lab_config_test_type` (
+  `lab_config_id` int(10) unsigned NOT NULL default '0',
+  `test_type_id` int(10) unsigned NOT NULL default '0',
+  KEY `lab_config_id` (`lab_config_id`),
+  KEY `test_type_id` (`test_type_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `labtitle_custom_field` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `field_name` varchar(45) NOT NULL,
+  `field_options` varchar(200) NOT NULL,
+  `field_type_id` int(11) unsigned NOT NULL default '0',
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  KEY `field_type_id` (`field_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `measure` (
+  `measure_id` int(11) unsigned NOT NULL auto_increment,
+  `name` varchar(45) NOT NULL default '',
+  `unit_id` int(10) unsigned default NULL,
+  `range` varchar(500) default NULL,
+  `description` varchar(500) default NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `unit` varchar(30) default NULL,
+  PRIMARY KEY  (`measure_id`),
+  KEY `unit_id` (`unit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `misc` (
   `id` int(11) NOT NULL auto_increment,
   `r_id` int(11) NOT NULL default '0',
   `vr_id` varchar(45) collate latin1_general_ci NOT NULL default '0',
@@ -396,54 +174,67 @@ CREATE TABLE `misc` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-CREATE TABLE `inv_reagent` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(100) collate latin1_general_ci NOT NULL,
-  `unit` varchar(45) collate latin1_general_ci NOT NULL default 'units',
-  `remarks` varchar(245) collate latin1_general_ci default NULL,
-  `created_by` varchar(10) collate latin1_general_ci NOT NULL default '0',
-  `assocation` varchar(10) collate latin1_general_ci default '0',
-  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-CREATE TABLE `inv_supply` (
-  `id` int(11) NOT NULL auto_increment,
-  `reagent_id` int(11) NOT NULL,
-  `lot` varchar(100) collate latin1_general_ci NOT NULL,
-  `expiry_date` date default NULL,
-  `manufacturer` varchar(100) collate latin1_general_ci default NULL,
-  `supplier` varchar(100) collate latin1_general_ci default NULL,
-  `quantity_ordered` int(11) NOT NULL default '0',
-  `quantity_supplied` int(11) NOT NULL default '0',
-  `cost_per_unit` decimal(10,0) default NULL,
-  `user_id` int(11) NOT NULL default '0',
-  `date_of_order` date default NULL,
-  `date_of_supply` date default NULL,
-  `date_of_reception` date default NULL,
-  `remarks` varchar(250) collate latin1_general_ci default NULL,
-  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+CREATE TABLE IF NOT EXISTS `patient` (
+  `patient_id` int(11) unsigned NOT NULL default '0',
+  `addl_id` varchar(40) default NULL,
+  `name` varchar(45) default NULL,
+  `sex` char(1) NOT NULL default '',
+  `age` decimal(10,0) default NULL,
+  `dob` date default NULL,
+  `created_by` int(11) unsigned default NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `partial_dob` varchar(45) default NULL,
+  `surr_id` varchar(45) default NULL,
+  `hash_value` varchar(100) default NULL,
+  PRIMARY KEY  (`patient_id`),
+  KEY `created_by` (`created_by`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `patient_custom_data` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `field_id` int(11) unsigned NOT NULL default '0',
+  `patient_id` int(11) unsigned NOT NULL default '0',
+  `field_value` varchar(45) NOT NULL default '',
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
-  KEY `reagent_id` (`reagent_id`),
-  CONSTRAINT `reagent_id` FOREIGN KEY (`reagent_id`) REFERENCES `inv_reagent` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+  KEY `field_id` (`field_id`),
+  KEY `patient_id` (`patient_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `inv_usage` (
-  `id` int(11) NOT NULL auto_increment,
-  `reagent_id` int(11) NOT NULL,
-  `lot` varchar(100) collate latin1_general_ci NOT NULL,
-  `quantity_used` int(11) NOT NULL default '0',
-  `date_of_use` date NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `remarks` varchar(250) collate latin1_general_ci default NULL,
-  `ts` timestamp NULL default CURRENT_TIMESTAMP,
+
+CREATE TABLE IF NOT EXISTS `patient_custom_field` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `field_name` varchar(45) NOT NULL default '',
+  `field_options` varchar(45) NOT NULL default '',
+  `field_type_id` int(11) unsigned NOT NULL default '0',
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
-  KEY `reagent_id` (`reagent_id`),
-  KEY `reagent_id2` (`reagent_id`),
-  CONSTRAINT `reagent_id2` FOREIGN KEY (`reagent_id`) REFERENCES `inv_reagent` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+  KEY `field_type_id` (`field_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `removal_record` (
+
+CREATE TABLE IF NOT EXISTS `patient_daily` (
+  `datestring` varchar(45) NOT NULL,
+  `count` int(10) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `reference_range` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `measure_id` int(10) unsigned NOT NULL,
+  `age_min` varchar(45) default NULL,
+  `age_max` varchar(45) default NULL,
+  `sex` varchar(10) default NULL,
+  `range_lower` varchar(45) NOT NULL,
+  `range_upper` varchar(45) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `measure_id` (`measure_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `removal_record` (
   `id` int(11) NOT NULL auto_increment,
   `r_id` int(11) NOT NULL default '0',
   `vr_id` varchar(45) collate latin1_general_ci NOT NULL default '0',
@@ -454,3 +245,356 @@ CREATE TABLE `removal_record` (
   `ts` timestamp NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS `report_config` (
+  `report_id` int(10) unsigned NOT NULL auto_increment,
+  `header` varchar(500) NOT NULL default '',
+  `footer` varchar(500) NOT NULL default '-End-',
+  `margins` varchar(45) NOT NULL default '2,0,10,0',
+  `p_fields` varchar(45) NOT NULL default '1,1,1,1,1,1,1',
+  `s_fields` varchar(45) NOT NULL default '1,1,1,1,1,1',
+  `t_fields` varchar(45) NOT NULL default '1,0,1,1,1,0,1,1',
+  `p_custom_fields` varchar(45) NOT NULL default '',
+  `s_custom_fields` varchar(45) NOT NULL default '',
+  `test_type_id` varchar(45) NOT NULL default '0',
+  `title` varchar(500) NOT NULL default '',
+  `landscape` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`report_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `report_disease` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `group_by_age` int(10) unsigned NOT NULL,
+  `group_by_gender` int(10) unsigned NOT NULL,
+  `age_groups` varchar(500) default NULL,
+  `measure_groups` varchar(500) default NULL,
+  `measure_id` int(10) unsigned NOT NULL,
+  `lab_config_id` int(10) unsigned NOT NULL,
+  `test_type_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY  USING BTREE (`id`),
+  KEY `measure_id` (`measure_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `specimen` (
+  `specimen_id` int(10) unsigned NOT NULL default '0',
+  `patient_id` int(11) unsigned NOT NULL default '0',
+  `specimen_type_id` int(11) unsigned NOT NULL default '0',
+  `user_id` int(11) unsigned default NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `status_code_id` int(11) unsigned default NULL,
+  `referred_to` int(11) unsigned default NULL,
+  `comments` text,
+  `aux_id` varchar(45) default NULL,
+  `date_collected` date NOT NULL default '0000-00-00',
+  `date_recvd` date default NULL,
+  `session_num` varchar(45) default NULL,
+  `time_collected` varchar(45) default NULL,
+  `report_to` int(10) unsigned default NULL,
+  `doctor` varchar(45) default NULL,
+  `date_reported` datetime default NULL,
+  `referred_to_name` varchar(70) default NULL,
+  `daily_num` varchar(45) NOT NULL default '',
+  PRIMARY KEY  (`specimen_id`),
+  KEY `patient_id` (`patient_id`),
+  KEY `specimen_type_id` (`specimen_type_id`),
+  KEY `user_id` (`user_id`),
+  KEY `IDX_DATE` (`date_collected`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `specimen_custom_data` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `field_id` int(11) unsigned NOT NULL default '0',
+  `specimen_id` int(10) unsigned NOT NULL default '0',
+  `field_value` varchar(45) NOT NULL default '',
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  KEY `field_id` (`field_id`),
+  KEY `specimen_id` (`specimen_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `specimen_custom_field` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `field_name` varchar(45) NOT NULL default '',
+  `field_options` varchar(45) NOT NULL default '',
+  `field_type_id` int(11) unsigned NOT NULL default '0',
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  KEY `field_type_id` (`field_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `specimen_session` (
+  `session_num` varchar(45) NOT NULL default '',
+  `count` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`session_num`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `specimen_test` (
+  `test_type_id` int(11) unsigned NOT NULL default '0',
+  `specimen_type_id` int(11) unsigned NOT NULL default '0',
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  KEY `test_type_id` (`test_type_id`),
+  KEY `specimen_type_id` (`specimen_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Relates tests to the specimens that are compatible with thos';
+
+
+CREATE TABLE IF NOT EXISTS `specimen_type` (
+  `specimen_type_id` int(11) unsigned NOT NULL auto_increment,
+  `name` varchar(45) NOT NULL default '',
+  `description` varchar(100) default NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `disabled` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`specimen_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `stock_content` (
+  `name` varchar(40) default NULL,
+  `current_quantity` int(11) default NULL,
+  `date_of_use` date NOT NULL,
+  `receiver` varchar(40) default NULL,
+  `remarks` text,
+  `lot_number` varchar(40) default NULL,
+  `new_balance` int(11) default NULL,
+  `user_name` varchar(40) default NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `stock_details` (
+  `name` varchar(40) default NULL,
+  `lot_number` varchar(40) default NULL,
+  `expiry_date` varchar(40) default NULL,
+  `manufacturer` varchar(40) default NULL,
+  `quantity_ordered` int(11) default NULL,
+  `supplier` varchar(40) default NULL,
+  `date_of_reception` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `current_quantity` int(11) default NULL,
+  `date_of_supply` timestamp NOT NULL default '0000-00-00 00:00:00',
+  `quantity_supplied` int(11) default NULL,
+  `unit` varchar(10) default NULL,
+  `entry_id` int(11) default NULL,
+  `cost_per_unit` decimal(10,0) default '0',
+  `quantity_used` int(10) default '0',
+  UNIQUE KEY `entry_id` (`entry_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `test` (
+  `test_id` int(10) unsigned NOT NULL auto_increment,
+  `test_type_id` int(11) unsigned NOT NULL default '0',
+  `result` varchar(201) default NULL,
+  `comments` varchar(200) default NULL,
+  `user_id` int(11) unsigned default NULL,
+  `verified_by` int(11) unsigned default NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `specimen_id` int(11) unsigned default NULL,
+  `date_verified` datetime default NULL,
+  PRIMARY KEY  (`test_id`),
+  KEY `test_type_id` (`test_type_id`),
+  KEY `user_id` (`user_id`),
+  KEY `specimen_id` (`specimen_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `test_category` (
+  `test_category_id` int(11) unsigned NOT NULL auto_increment,
+  `name` varchar(45) NOT NULL default '',
+  `description` varchar(100) default NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`test_category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `test_type` (
+  `test_type_id` int(11) unsigned NOT NULL auto_increment,
+  `name` varchar(45) NOT NULL default '',
+  `description` varchar(100) default NULL,
+  `test_category_id` int(11) unsigned NOT NULL default '0',
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `is_panel` int(10) unsigned default NULL,
+  `disabled` int(10) unsigned NOT NULL default '0',
+  `clinical_data` longtext,
+  `hide_patient_name` int(1) default NULL,
+  `prevalence_threshold` int(3) default '70',
+  `target_tat` int(3) default '24',
+  PRIMARY KEY  (`test_type_id`),
+  KEY `test_category_id` (`test_category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `test_type_measure` (
+  `test_type_id` int(11) unsigned NOT NULL default '0',
+  `measure_id` int(11) unsigned NOT NULL default '0',
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  KEY `test_type_id` (`test_type_id`),
+  KEY `measure_id` (`measure_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `unit` (
+  `unit_id` int(11) unsigned NOT NULL auto_increment,
+  `unit` varchar(45) NOT NULL default '',
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`unit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `user` (
+  `user_id` int(11) unsigned NOT NULL auto_increment,
+  `username` varchar(45) NOT NULL default '',
+  `password` varchar(45) NOT NULL default '',
+  `actualname` varchar(45) default NULL,
+  `email` varchar(45) default NULL,
+  `created_by` int(11) unsigned default NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `lab_config_id` int(10) unsigned NOT NULL,
+  `level` int(10) unsigned default NULL,
+  `phone` varchar(45) default NULL,
+  `lang_id` varchar(45) NOT NULL default 'default',
+  PRIMARY KEY  (`user_id`),
+  KEY `user_id_index` USING BTREE (`lab_config_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Users are anybody that works in the lab.';
+
+
+CREATE TABLE IF NOT EXISTS `user_props` (
+  `User_Id` varchar(50) NOT NULL default '',
+  `AppCodeName` varchar(25) NOT NULL default '',
+  `AppName` varchar(25) NOT NULL default '',
+  `AppVersion` varchar(25) NOT NULL default '',
+  `CookieEnabled` tinyint(1) NOT NULL default '0',
+  `Platform` varchar(20) NOT NULL default '',
+  `UserAgent` varchar(200) NOT NULL default '',
+  `SystemLanguage` varchar(15) NOT NULL default '',
+  `UserLanguage` varchar(15) NOT NULL default '',
+  `Language` varchar(15) NOT NULL default '',
+  `ScreenAvailHeight` int(11) NOT NULL default '0',
+  `ScreenAvailWidth` int(11) NOT NULL default '0',
+  `ScreenColorDepth` int(11) NOT NULL default '0',
+  `ScreenHeight` int(11) NOT NULL default '0',
+  `ScreenWidth` int(11) NOT NULL default '0',
+  `Recorded_At` datetime NOT NULL default '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `user_rating` (
+  `user_id` int(10) unsigned NOT NULL,
+  `rating` int(10) unsigned NOT NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`user_id`,`ts`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `worksheet_custom` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL,
+  `header` varchar(500) NOT NULL,
+  `footer` varchar(500) NOT NULL,
+  `title` varchar(500) NOT NULL,
+  `p_fields` varchar(100) NOT NULL,
+  `s_fields` varchar(100) NOT NULL,
+  `t_fields` varchar(100) NOT NULL,
+  `p_custom` varchar(100) NOT NULL,
+  `s_custom` varchar(100) NOT NULL,
+  `margins` varchar(50) NOT NULL,
+  `id_fields` varchar(45) NOT NULL default '0,0,0',
+  `landscape` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `worksheet_custom_test` (
+  `worksheet_id` int(10) unsigned NOT NULL,
+  `test_type_id` int(10) unsigned NOT NULL,
+  `measure_id` int(10) unsigned NOT NULL,
+  `width` varchar(45) NOT NULL,
+  KEY `worksheet_id` (`worksheet_id`),
+  KEY `test_type_id` (`test_type_id`),
+  KEY `measure_id` (`measure_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `worksheet_custom_userfield` (
+  `worksheet_id` int(10) unsigned NOT NULL,
+  `name` varchar(70) NOT NULL default '',
+  `width` int(10) unsigned NOT NULL default '10',
+  `field_id` int(10) unsigned NOT NULL auto_increment,
+  KEY `Primary Key` (`field_id`),
+  KEY `worksheet_id` (`worksheet_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `test_type_costs` (
+  `earliest_date_valid` timestamp NOT NULL,
+  `test_type_id` int(11) NOT NULL,
+  `amount` decimal(10, 2) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+CREATE TABLE IF NOT EXISTS `lab_config_settings` (
+  `id` int(11) NOT NULL,
+  `flag1` int(11) default NULL,
+  `flag2` int(11) default NULL,
+  `flag3` int(11) default NULL,
+  `flag4` int(11) default NULL,
+  `setting1` varchar(200) collate latin1_general_ci default NULL,
+  `setting2` varchar(200) collate latin1_general_ci default NULL,
+  `setting3` varchar(200) collate latin1_general_ci default NULL,
+  `setting4` varchar(200) collate latin1_general_ci default NULL,
+  `misc` varchar(500) collate latin1_general_ci default NULL,
+  `remarks` varchar(500) collate latin1_general_ci default NULL,
+  `ts` timestamp NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+CREATE TABLE IF NOT EXISTS `numeric_interpretation` (
+  `range_u` int(10) default NULL,
+  `range_l` int(10) default NULL,
+  `age_u` int(10) default NULL,
+  `age_l` int(10) default NULL,
+  `gender` varchar(40) default NULL,
+  `description` varchar(40) default NULL,
+  `measure_id` int(10) unsigned NOT NULL,
+  `id` int(10) NOT NULL auto_increment,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `bills` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `patient_id` int(11) unsigned NOT NULL,
+  `paid_in_full` bit(1) NOT NULL default '\0',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+CREATE TABLE IF NOT EXISTS `bills_test_association` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `bill_id` int(11) unsigned NOT NULL,
+  `test_id` int(11) unsigned NOT NULL,
+  `discount_type` int(4) unsigned NOT NULL default '1000',
+  `discount_amount` decimal(10,2) unsigned NOT NULL default '0.00',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+CREATE TABLE IF NOT EXISTS `payments` (
+  `id` int(11) NOT NULL auto_increment,
+  `amount` decimal(10,2) NOT NULL default '0.00',
+  `bill_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+
+INSERT INTO `report_config` (`report_id`, `header`, `footer`, `margins`, `p_fields`, `s_fields`, `t_fields`, `p_custom_fields`, `s_custom_fields`) VALUES 
+('1', 'Patient Report', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
+('2', 'Specimen Report', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
+('3', 'Test Records', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
+('4', 'Daily Log - Specimens', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
+('5', 'Worksheet', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
+('6', 'Daily Log - Patients', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', '');
+
+INSERT INTO `test_category` (`test_category_id`, `name`) VALUES(1, 'HIV');

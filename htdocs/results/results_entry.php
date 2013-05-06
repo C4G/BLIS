@@ -47,7 +47,7 @@ $(document).ready(function(){
 	<?php 
 	if(isset($_REQUEST['ajax_response']))
 	{
-		#Rendering after Ajax response (workaround for dnamcally loading JS via Ajax)
+		#Rendering after Ajax response (workaround for dynamically loading JS via Ajax)
 	?>
 		$('#specimen_id').attr("value", "<?php echo $_REQUEST['sid_redirect'] ?>");
 	<?php

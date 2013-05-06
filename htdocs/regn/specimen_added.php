@@ -8,6 +8,8 @@ include("includes/header.php");
 LangUtil::setPageId("specimen_added");
 
 $session_num = $_REQUEST['snum'];
+$script_elems->enableTableSorter();
+
 
 //$session_num = get_session_current_number();
 $specimen_list = get_specimens_by_session($session_num);
@@ -38,8 +40,24 @@ if(count($specimen_list) == 0)
 	return;
 }
 $patient_id = $specimen_list[0]->patientId;
-$page_elems->getPatientInfo($patient_id);
 ?>
+<table cellpadding='4px'>
+	<tbody>
+		<tr valign='top'>
+			<td>
+				<?php $page_elems->getPatientInfo($patient_id); ?>
+			</td>
+			<td>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</td>
+			<td>
+				<?php $page_elems->getPostSpecimenEntryTaskList($patient_id); ?>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
 <br><br>
 <small><b><?php echo LangUtil::$generalTerms['SPECIMENS']; ?></b></small>
 <table cellpadding='4px'>

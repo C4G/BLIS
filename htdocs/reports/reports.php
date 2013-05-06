@@ -141,7 +141,7 @@ db_get_current();
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 }
 </style>
-
+<script type='text/javascript' src="facebox/facebox.js"></script>
 <script type='text/javascript'>
 $(document).ready(function(){
 	$("input[name='rage']").change(function() {
@@ -1649,7 +1649,7 @@ function show_custom_report_form(report_id)
 				<?php echo "Report Settings"; ?>
 				<ul>
 					<li class='menu_option' id='location_settings' >
-					<a href='javascript: show_selection("location_settings");'><?php echo "Location Settings"; ?></a>
+					<a href='lab_pin.php'><?php echo "Location Settings"; ?></a>
 					</li>
 				</ul>
 			<?php } echo LangUtil::$pageTerms['MENU_AGGREPORTS']; ?>
