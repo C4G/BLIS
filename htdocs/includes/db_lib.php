@@ -13438,4 +13438,993 @@ function db_analysis_tests($lb)
 		$ic++;
 	}
 }
+
+/* Functions used by API class member function */
+function api_get_patient_records($lab_config, $patient_id, $date_from, $date_to, $ip) {
+
+	$retval = array();
+
+	if($_REQUEST['ip'] == 0) {
+
+		# Do not include pending tests
+
+		$query_string =
+
+			"SELECT t.* FROM test t, specimen sp ".
+
+			"WHERE t.result <> '' ".
+
+			"AND t.specimen_id=sp.specimen_id ".
+
+			"AND sp.patient_id=$patient_id ";
+
+
+			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
+
+		$query_string .= "ORDER BY sp.date_collected DESC";
+
+	
+
+	}
+
+	else {
+
+		# Include pending tests
+
+		$query_string =
+
+			"SELECT t.* FROM test t, specimen sp ".
+
+			"WHERE t.specimen_id=sp.specimen_id ".
+
+			"AND sp.patient_id=$patient_id ";
+
+
+			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
+
+		$query_string .= "ORDER BY sp.date_collected DESC";		
+
+	
+
+	}
+
+	
+
+	$resultset = query_associative_all($query_string, $row_count);
+
+	
+
+	if(count($resultset) == 0 || $resultset == null)
+
+		return $retval;
+
+	
+
+	foreach($resultset as $record) {
+
+		$test = Test::getObject($record);
+
+		$hide_patient_name = TestType::toHidePatientName($test->testTypeId);
+
+		
+
+		if( $hide_patient_name == 1 )
+
+					$hidePatientName = 1;
+
+		
+
+		$specimen = get_specimen_by_id($test->specimenId);
+
+		$retval[] = array($test, $specimen, $hide_patient_name);		
+
+	}
+
+	
+
+	return $retval;
+
+}
+
+function api_decode_results($testObj)
+{
+    $rts = array();
+    $show_range = false;
+    //print_r($testObj);
+    //echo "-----------".$testObj->testTypeId."--------";
+    $test_type = TestType::getById($testObj->testTypeId);
+		$measure_list = $test_type->getMeasures();
+                //print_r($measure_list);
+                $submeasure_list = array();
+                $comb_measure_list = array();
+               // print_r($measure_list);
+                foreach($measure_list as $measure)
+                {
+                    
+                    $submeasure_list = $measure->getSubmeasuresAsObj();
+                    //echo "<br>".count($submeasure_list);
+                    //print_r($submeasure_list);
+                    $submeasure_count = count($submeasure_list);
+                    
+                    if($measure->checkIfSubmeasure() == 1)
+                    {
+                        continue;
+                    }
+                        
+                    if($submeasure_count == 0)
+                    {
+                        array_push($comb_measure_list, $measure);
+                    }
+                    else
+                    {
+                        array_push($comb_measure_list, $measure);
+                        foreach($submeasure_list as $submeasure)
+                           array_push($comb_measure_list, $submeasure); 
+                    }
+                }
+                $measure_list = $comb_measure_list;
+		$result_csv = $testObj->getResultWithoutHash();
+                //$result_csv = $this->getResultWithoutHash();
+                //echo "<br>";
+                //echo $result_csv;
+                //echo "<br>";
+                if(strpos($result_csv, "[$]") === false)
+                {
+                    $result_list = explode(",", $result_csv);
+                }
+                else
+                {
+                    //$testt = "one,[$]two[/$],[$]twotwo[/$],three";
+                    $testt = $result_csv;
+                    //$test2 = strstr($testt, $);
+                    $start_tag = "[$]";
+                    $end_tag = "[/$]";
+                    //$testtt = str_replace("[$]two[/$],", "", $testt);
+                    $freetext_results = array();
+                    $ft_count = substr_count($testt, $start_tag);
+                    //echo $ft_count;
+                    $k = 0;
+                    while($k < $ft_count)
+                    {
+                        $ft_beg = strpos($testt, $start_tag);
+                        $ft_end = strpos($testt, $end_tag);
+                        $ft_sub = substr($testt, $ft_beg + 3, $ft_end - $ft_beg - 3);
+                        $ft_left = substr($testt, 0, $ft_beg);
+                        $ft_right = substr($testt, $ft_end + 5);
+                        //echo "<br>".$ft_left."--".$ft_right."<br>";
+                        $testt = $ft_left.$ft_right;
+                        array_push($freetext_results, $ft_sub);
+                        $k++;
+                    }
+                    //echo $freetext_results."<br>".$testt;
+                    //$testtt = str_replace($subb, "", $testt, 1);
+                    //echo "$testto<br>$subb<br>";
+                    $result_csv = $testt;
+                    if(strpos($testt, ",") == 0)
+                            $result_csv = substr($testt, 1, strlen($testt)); 
+                    $result_list = explode(",", $result_csv);
+                    //echo "<br>";
+                    //print_r($result_list);
+                    //echo "<br>";
+                }
+                $retval = "";
+                //NC3065
+                //echo print_r($measure_list);
+                //echo "<br>";
+                //echo $result_csv;
+                //echo "<br>";
+                //echo print_r($result_list,true);
+                //echo "Num->".count($measure_list);
+		//-NC3065
+                $j = 0;
+                $i = 0;
+                $c = 0;
+                //for($i = 0; $i < count($measure_list); $i++) {
+                while($c < count($measure_list)) {
+			# Pretty print
+			$curr_measure = $measure_list[$c];
+			if($curr_measure->getRangeType() != Measure::$RANGE_FREETEXT)
+                        {
+                            if(isset($result_list[$i]))
+                            {    
+                                //echo "Num->".$i;
+                                    # If matching result value exists (e.g. after a new measure was added to this test type)
+                                    if(count($measure_list) == 1)
+                                    {
+                                            # Only one measure: Do not print measure name
+                                            if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE) {
+                                                    $result_string = "";
+                                                    $value_list = explode("_", $result_list[$i]);
+                                                    foreach($value_list as $value) {
+                                                            if(trim($value) == "")
+                                                                    continue;
+                                                            $result_string .= $value.",";
+                                                    }
+                                                    $result_string = substr($result_string, 0, -4);
+                                                    $retval .= "<br>".$result_string."&nbsp;";
+                                                    $rts[$curr_measure->name] = $result_string;
+                                            }
+                                            else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
+                                            {
+                                                    if($result_list[$i] != $curr_measure->unit)
+                                                            $retval .= "<br><b>".$result_list[$i]."</b> &nbsp;";
+                                                    else
+                                                            $retval .= "<br>".$result_list[$i]."&nbsp;";
+                                                    $rts[$curr_measure->name] = $result_list[$i];
+                                            }
+                                            else
+                                            {
+                                                    $retval .= "<br>".$result_list[$i]."&nbsp;";
+                                                    $rts[$curr_measure->name] = $result_list[$i];
+                                            }
+                                    }
+                                    else
+                                    {
+                                            # Print measure name with each result value
+                                         if(strpos($curr_measure->name, "\$sub") !== false)
+                                                            {
+                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
+                                                                
+                                                            }
+                                                            else
+                                                            {
+                                                                $decName = $curr_measure->name;
+                                                            }
+                                            $retval .= "<br>".$decName.":"."&nbsp;";
+                                        
+                                            if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE)
+                                            {
+                                                    $result_string = "";
+                                                    $value_list = str_replace("_", ",", $result_list[$i]);
+                                                    $retval .= "<b>".$value_list."</b>";
+                                                    $rts[$decName] = $value_list;
+                                            }
+                                            else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
+                                            {
+                                                    if($result_list[$i]!=$curr_measure->unit)
+                                                            $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;";
+                                                    else
+                                                            $retval .= $result_list[$i]."&nbsp;";
+                                                    $rts[$decName] = $result_list[$i];
+                                            }
+                                            else
+                                            {
+                                                    $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;";
+                                                     $rts[$decName] = $result_list[$i];
+                                            }
+                                            
+                                    }
+
+                                    if($show_range === true)
+                                    {
+                                            $retval .= $curr_measure->getRangeString();
+                                    }
+                                    if($i != count($measure_list) - 1)
+                                    {
+                                            $retval .= "<br>";
+                                    }
+                            }
+                            else
+                            {
+                                    # Matching result value not found: Show "-"
+                                    if(count($measure_list) == 1)
+                                    {
+                                            if(strpos($curr_measure->name, "\$sub") !== false)
+                                                            {
+                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
+                                                                
+                                                            }
+                                                            else
+                                                            {
+                                                                $decName = $curr_measure->name;
+                                                            }
+                                            $retval .= $decName."&nbsp;";
+                                    }
+                                    $retval .= " - <br>";
+                                     $rts[$decName] = "-";
+                            }
+                            $i++;
+                        }
+                        else
+                        {
+                            $ft_result = $freetext_results[$j];
+
+                            if(count($measure_list) == 1)
+                            {
+                                $retval .= "<br>".$ft_result."&nbsp;";   
+                            }
+                            else
+                            {
+                                if(strpos($curr_measure->name, "\$sub") !== false)
+                                                            {
+                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
+                                                                
+                                                            }
+                                                            else
+                                                            {
+                                                                $decName = $curr_measure->name;
+                                                            }
+                                $retval .= "<br>".$decName.":"."&nbsp;"."<b>".$ft_result."</b>"."&nbsp;";
+                            }
+                            if($show_range === true)
+                                        {
+                                                $retval .= $curr_measure->getRangeString();
+                                        }
+                                        if($i != count($measure_list) - 1)
+                                        {
+                                                $retval .= "<br>";
+                                        }
+                            $j++;
+                            
+                             $rts[$decName] = $ft_result;
+                            
+                        }$c++;
+		}//end
+		//$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
+		return $rts;
+	
+}
+
+ function check_api_token($tok)
+    {
+        print_r($_SESSION);
+        echo "<br>";
+        echo "<br>".$_SESSION['tok']." - ".$tok."<br>";
+        if(!isset($_SESSION['tok']))
+            return -2;
+        if($_SESSION['tok'] == $tok)
+        {
+            // valid token
+            return 1;
+        }
+        if($_SESSION['tok'] == -1)
+        {
+            // invalid session
+            return -2;
+        }
+        if($_SESSION['tok'] != $tok)
+        {
+            // invalid token
+            return -2;
+        }
+        
+       
+        
+            return -2;
+    }
+
+function is_admin_check($user)
+{
+	# Returns true for admin and superadmin level users
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_CLERK, $LIS_TECH_SHOWPNAME, $LIS_COUNTRYDIR;
+	if
+	(
+		$user->level == $LIS_TECH_RO || 
+		$user->level == $LIS_TECH_RW || 
+		$user->level == $LIS_CLERK || 
+		$user->level == $LIS_TECH_SHOWPNAME
+	)
+		return false;
+	return true;
+}    
+
+function is_super_admin_check($user)
+{
+	# Returns true for superadmin level users only
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN;
+	if($user->level == $LIS_SUPERADMIN)
+		return true;
+	return false;
+}
+
+function is_country_dir_check($user)
+{
+	# Returns true for superadmin level users only
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_COUNTRYDIR;
+	if($user->level == $LIS_COUNTRYDIR)
+		return true;
+	return false;
+}
+
+
+/* API starts here*/
+
+class API
+{
+    public static function test_api($data)
+    {
+        return "# API test String".$data." #";
+    }
+    
+   public function login($username, $password)
+    {
+       print_r($_SESSION);
+        global $con;
+	$username = mysql_real_escape_string($username, $con);
+	$saved_db = DbUtil::switchToGlobal();
+	$password = encrypt_password($password);
+	$query_string = 
+		"SELECT * FROM user ".
+		"WHERE username='$username' ".
+		"AND password='$password' LIMIT 1";
+	$record = query_associative_one($query_string);
+	# Return user profile (null if incorrect username/password)
+	DbUtil::switchRestore($saved_db);
+	//return User::getObject($record);
+        if($record == NULL)
+        {
+            return -1;
+        }
+        else
+        {
+            $tok = API::start_session($username, $password);
+            return $tok;
+        }
+    }
+    
+    
+    
+    public function start_session($username, $password)
+    {
+         session_start();
+        
+         $sid = session_id();
+         //$_SESSION['tok'] = $sid;
+        
+         $user = get_user_by_name($username);
+	$_SESSION['username'] = $username;
+	$_SESSION['user_id'] = $user->userId;
+	$_SESSION['user_actualname'] = $user->actualName;
+	$_SESSION['user_level'] = $user->level;
+        $_SESSION['level'] = $user->level;
+	$_SESSION['locale'] = $user->langId;
+        
+	if(is_admin_check($user))
+	{
+		
+		$lab_id=get_lab_config_id_admin($user->userId);
+		$_SESSION['lab_config_id'] = $lab_id;
+		$_SESSION['db_name'] = "blis_".$lab_id;
+		$_SESSION['dformat'] = $DEFAULT_DATE_FORMAT;
+		$_SESSION['country'] = $user->country;
+	}
+	else
+	{
+		$_SESSION['lab_config_id'] = $user->labConfigId;
+		echo $user->labConfigId;
+		$_SESSION['country'] = $user->country;
+		$lab_config = get_lab_config_by_id($user->labConfigId);
+		$_SESSION['db_name'] = $lab_config->dbName;
+		# Config values for registration fields
+		$_SESSION['p_addl'] = $lab_config->patientAddl;
+		$_SESSION['s_addl'] = $lab_config->specimenAddl;
+		$_SESSION['dnum'] = $lab_config->dailyNum;
+		$_SESSION['sid'] = $lab_config->sid;
+		$_SESSION['pid'] = $lab_config->pid;
+		$_SESSION['comm'] = $lab_config->comm;
+		$_SESSION['age'] = $lab_config->age;
+		$_SESSION['dob'] = $lab_config->dob;
+		$_SESSION['rdate'] = $lab_config->rdate;
+		$_SESSION['refout'] = $lab_config->refout;
+		$_SESSION['pname'] = $lab_config->pname;
+		$_SESSION['sex'] = $lab_config->sex;
+		$_SESSION['dformat'] = $lab_config->dateFormat;
+		$_SESSION['dnum_reset'] = $lab_config->dailyNumReset;
+		$_SESSION['doctor'] = $lab_config->doctor;
+		$_SESSION['pnamehide'] = $lab_config->hidePatientName;
+		if($SERVER == $ON_PORTABLE)
+			$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_".$lab_config->id."/";
+		else
+			$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
+	}
+	
+	
+	# Set session variables for recording latency/user props
+	$_SESSION['PROPS_RECORDED'] = false;
+	$_SESSION['DELAY_RECORDED'] = false;
+	#TODO: Add other session variables here
+	$_SESSION['user_role'] = "garbage";
+         return 1; 
+    }
+    
+    public function stop_session()
+    {
+         //$_SESSION['tok'] = -1;
+         //session_destroy();
+         return 1;
+    }
+    
+    public function search_patients($by, $str)
+    {
+        //by 1 = name, 2 = id, 3 = number
+        global $con;
+	$q = mysql_real_escape_string($str, $con);
+        
+        if($by == 2)
+         {
+             //$count = search_patients_by_id_count($q);
+             $patient_list = search_patients_by_id($q);
+             if(count($patient_list) > 0)
+                $ret = $patient_list;
+             else
+                $ret = 0;
+         }
+         else if($by == 1)
+         {
+             //$count = search_patients_by_name_count($q);
+             $patient_list = search_patients_by_name($q);
+             if(count($patient_list) > 0)
+                $ret = $patient_list;
+             else
+                $ret = 0;
+         }
+         else if($by == 3)
+         {
+             //$count = search_patients_by_dailynum_count($q);
+             $patient_list = search_patients_by_dailynum($q);
+             if(count($patient_list) > 0)
+                $ret = $patient_list;
+             else
+                $ret = 0;
+         }
+         else
+         {
+            return -1;
+         }
+         return $ret;
+         
+    }
+    
+    public function search_specimens($by, $str)
+    {
+        //by 3 = patient name, 2 = patient id, 1 = specimen_id
+        global $con;
+	$q = mysql_real_escape_string($str, $con);
+        
+        if($by == 1)
+         {
+             $patient_list = search_specimens_by_id($q);
+            if(count($patient_list) > 0)
+                $ret = $patient_list;
+            else
+                $ret = 0;
+         }
+         else if($by == 3)
+         {
+             $patient_list = search_specimens_by_patient_name($q);
+             if(count($patient_list) > 0)
+                $ret = $patient_list;
+             else
+                $ret = 0;
+         }
+         else if($by == 2)
+         {
+             $patient_list = search_specimens_by_patient_id($q);
+             if(count($patient_list) > 0)
+                $ret = $patient_list;
+             else
+                $ret = 0;
+         }
+         else
+         {
+            return -1;
+         }
+         return $ret;
+         
+    }
+    
+    public function get_tests($specimen_id)
+    {
+        $test_list = get_tests_by_specimen_id($specimen_id);
+        if(count($test_list) > 0)
+                $ret = $test_list;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    public function get_patient($patient_id)
+    {
+         /*$chk = check_api_token($tok);
+        if($chk != 1)
+        return $chk;*/
+        
+        $pat = get_patient_by_id($patient_id);
+        if($pat != 3)
+                $ret = $pat;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    public function get_specimen($specimen_id)
+    {
+        $spec = get_specimen_by_id($specimen_id);
+        if(count($spec) > 0)
+                $ret = $spec;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+     
+    public function get_specimen_catalog()
+    {
+        global $CATALOG_TRANSLATION;
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lab_config_id = $user->labConfigId;
+        }
+
+            if($lab_config_id == null)
+            {
+                $lab_config_id = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$query_stypes =
+		"SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name";
+	$resultset = query_associative_all($query_stypes, $row_count);
+	$retval = array();
+	if($resultset) {
+		foreach($resultset as $record)
+		{
+			if($CATALOG_TRANSLATION === true)
+				$retval[$record['specimen_type_id']] = LangUtil::getSpecimenName($record['specimen_type_id']);
+			else
+				$retval[$record['specimen_type_id']] = $record['name'];
+		}
+	}
+	DbUtil::switchRestore($saved_db);
+        $catalog = $retval;
+        if(count($catalog) > 0)
+                $ret = $catalog;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    
+    public function get_test_catalog()
+    {
+        global $CATALOG_TRANSLATION;
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lab_config_id = $user->labConfigId;
+        }
+
+            if($lab_config_id == null)
+            {
+                $lab_config_id = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$query_ttypes =
+		"SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name";
+	$resultset = query_associative_all($query_ttypes, $row_count);
+	$retval = array();
+	if($resultset) {
+		foreach($resultset as $record)
+		{
+			if($CATALOG_TRANSLATION === true)
+				$retval[$record['test_type_id']] = LangUtil::getTestName($record['test_type_id']);
+			else
+				$retval[$record['test_type_id']] = $record['name'];
+		}
+	}
+	DbUtil::switchRestore($saved_db);
+        $catalog = $retval;
+        if(count($catalog) > 0)
+                $ret = $catalog;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    
+    public function get_lab_sections()
+    {
+        /*$chk = check_api_token($tok);
+        if($chk != 1)
+        return $chk;*/
+        
+        global $CATALOG_TRANSLATION;
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lab_config_id = $user->labConfigId;
+        }
+
+            if($lab_config_id == null)
+            {
+                $lab_config_id = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$query_stypes =
+		"SELECT test_category_id, name, description FROM test_category";
+	$resultset = query_associative_all($query_stypes, $row_count);
+	$retval = array();
+        DbUtil::switchRestore($saved_db);
+	if($resultset) {
+            $ret = $resultset;
+	}
+        else
+             $ret = 0;
+	             
+        return $ret;
+    }
+    
+    public function get_test_type($test_type_id)
+    {
+        global $con;
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lab_config_id = $user->labConfigId;
+        }
+
+            if($lab_config_id == null)
+            {
+                $lab_config_id = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+		$test_type_id = mysql_real_escape_string($test_type_id, $con);
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		$query_string =
+			"SELECT * FROM test_type WHERE test_type_id=$test_type_id LIMIT 1";
+		$record = query_associative_one($query_string);
+		
+		$test_type = TestType::getObject($record);
+         
+        //print_r($test_type);
+                $ret = array();
+        if($test_type != null)
+                $ret['info'] = $test_type;
+             else
+                return 0;
+        $measure_list = array();
+
+         $measure_list_objs = $test_type->getMeasures();
+                //print_r($measure_list);
+                $submeasure_list_objs = array();
+                
+                $comb_measure_list = array();
+               // print_r($measure_list);
+                
+                foreach($measure_list_objs as $measure)
+                {
+                    
+                    $submeasure_list_objs = $measure->getSubmeasuresAsObj();
+                    //echo "<br>".count($submeasure_list);
+                    //print_r($submeasure_list);
+                    $submeasure_count = count($submeasure_list_objs);
+                    
+                    if($measure->checkIfSubmeasure() == 1)
+                    {
+                        continue;
+                    }
+                        
+                    if($submeasure_count == 0)
+                    {
+                        array_push($comb_measure_list, $measure);
+                    }
+                    else
+                    {
+                        array_push($comb_measure_list, $measure);
+                        foreach($submeasure_list_objs as $submeasure)
+                           array_push($comb_measure_list, $submeasure); 
+                    }
+                }
+                
+                $measure_list_ids = array();
+                //echo "<pre>";
+                //print_r($comb_measure_list);
+                //echo "</pre>";
+                foreach($comb_measure_list as $measure)
+                {
+                    array_push($measure_list_ids, $measure->measureId);
+                }
+                /*
+                echo "<pre>";
+                print_r($measure_list);
+                
+                print_r($measure_list_ids);
+                echo "</pre>";
+                */
+                $measure_list = $measure_list_ids;
+                //print_r($measure_list_objs);
+                $ret['measures'] = $measure_list_objs;
+             DbUtil::switchRestore($saved_db);
+        return $ret;
+    } 
+    
+    public function get_patient_results($patient_id, $date_from, $date_to, $ip)
+    {
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lab_config_id = $user->labConfigId;
+        }
+
+            if($lab_config_id == null)
+            {
+                $lab_config_id = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+        $recs = api_get_patient_records($lab_config, $patient_id, $date_from, $date_to, $ip);
+        //echo "<pre>";
+        //print_r($recs);
+        $rtt = array();
+        foreach($recs as $tobj)
+            $rtt[$tobj[0]->testId] = api_decode_results ($tobj[0]);
+        
+        return $rtt;
+            
+    }
+    
+    public function get_inventory()
+    {
+        //print_r($_SESSION);
+        /*
+        $chk = check_api_token($tok);
+        if($chk != 1)
+        return $chk;
+        */
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lid = $user->labConfigId;
+        }
+
+            if($lid == null)
+            {
+                $lid = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+         $reagents_list = Inventory::getAllReagents($lid);
+         $cc = 1;
+        foreach($reagents_list as $reagent) 
+        {
+            $quant = Inventory::getQuantity($lid, $reagent['id']);
+            // $uni = $reagent['unit'];
+             $spec[$cc]['id'] =  $reagent['id'];
+              $spec[$cc]['name'] =  $reagent['name'];
+               $spec[$cc]['unit'] =  $reagent['unit'];
+               $spec[$cc]['remarks'] =  $reagent['remarks'];
+               $spec[$cc]['quantity'] =  $quant;
+               $cc++;
+        }
+        //$spec = get_specimen_by_id($specimen_id);
+        if(count($spec) > 0)
+                $ret = $spec;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+   
+    public function get_stock_lots($r_id)
+    {
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lid = $user->labConfigId;
+        }
+
+            if($lid == null)
+            {
+                $lid = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+        $stocks_list = Inventory::getStocksList($lid, $r_id);
+    
+         $cc = 1;
+        foreach($stocks_list as $stock) 
+        {
+            $quant = Inventory::getQuantity($lid, $reagent['id']);
+            // $uni = $reagent['unit'];
+             $spec[$cc]['id'] = $stock['id'];
+              $spec[$cc]['lot'] =  $stock['lot'];
+               $spec[$cc]['manufacturer'] =  $stock['manufacturer'];
+                $spec[$cc]['supplier'] =  $stock['supplier'];
+                $spec[$cc]['date_of_reception'] =  $stock['date_of_reception'];
+               $spec[$cc]['remarks'] =  $stock['remarks'];
+               $dp = explode("-", $stock['expiry_date']);
+                            $e_date = $dp[2]."/".$dp[1]."/".$dp[0];
+               $spec[$cc]['expiry_date'] =  $e_date;             
+               $spec[$cc]['current_quantity'] =  Inventory::getLotQuantity($lid, $r_id, $stock['lot']);
+               $spec[$cc]['quantity_supplied'] =  $stock['quantity_suppied'];
+               $cc++;
+        }
+        
+        //$spec = get_specimen_by_id($specimen_id);
+        if(count($spec) > 0)
+                $ret = $spec;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    public function get_stock_usage($r_id, $lot)
+    {
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lid = $user->labConfigId;
+        }
+
+            if($lid == null)
+            {
+                $lid = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+        //$stocks_list = Inventory::getStocksList($lid, $r_id);
+        $lab_config_id = $lid;
+
+                    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+
+                    $query_string = "SELECT * from inv_usage WHERE reagent_id = $r_id AND lot = '$lot'";
+                    $recordset = query_associative_all($query_string, $row_count);
+
+                    DbUtil::switchRestore($saved_db);
+         $cc = 1;
+         //echo "-".$recordset."-";
+         //print_r($recordset);
+         $spec = array();
+        foreach($recordset as $stock) 
+        {
+            $quant = Inventory::getQuantity($lid, $reagent['id']);
+            // $uni = $reagent['unit'];
+             $spec[$cc]['id'] = $stock['id'];
+              $spec[$cc]['quantity_used'] =  $stock['quantity_used'];;
+               $spec[$cc]['user_id'] =  $stock['user_id'];
+               $spec[$cc]['remarks'] =  $reagent['remarks'];
+               $dp = explode("-", $stock['date_of_use']);
+                            $e_date = $dp[2]."/".$dp[1]."/".$dp[0];
+               $spec[$cc]['date_of_use'] =  $e_date;             
+               $cc++;
+        }
+        
+        //$spec = get_specimen_by_id($specimen_id);
+        if(count($spec) > 0)
+                $ret = $spec;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    public function get_test_cost($tid)
+    {
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lid = $user->labConfigId;
+        }
+
+            if($lid == null)
+            {
+                $lid = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+        //$stocks_list = Inventory::getStocksList($lid, $r_id);
+        $lab_config_id = $lid;
+
+                    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+
+                    $query_string = "SELECT * from test_type_costs WHERE test_type_id = $tid ORDER BY earliest_date_valid DESC LIMIT 1";
+                    $record = query_associative_one($query_string);
+
+                    DbUtil::switchRestore($saved_db);
+        
+        if($record != null)
+                $ret = $record['amount'];
+             else
+                $ret = -1;
+             
+        return $ret;
+    }
+}
+	
+
+/* API ends here */
 ?>
