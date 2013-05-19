@@ -149,12 +149,12 @@ $lab_config_list_imported = get_lab_configs_imported();
 ?>
 <div id='lab_config_list_imported'>
        <br>
-    <b>Lab Configs Imported</b>
+    <b>Lab Backups</b>
 	<?php $page_elems->getLabConfigTableImported($lab_config_list_imported);  ?>
 </div>
     <br>
 <div id='lab_config_list'>
-    <b>Lab Configs Created</b>
+    <b>Lab Config Templates</b>
 	<?php $page_elems->getLabConfigTable($lab_config_list);  ?>
 </div>
 <br>
