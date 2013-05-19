@@ -202,7 +202,7 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
             $matched_test_ids = array_intersect($cat_test_ids, $selected_test_ids);
             $selected_test_ids = array_values($matched_test_ids);
             $test_type_list = $selected_test_ids;
-            */
+            */ 
             $saved_db = DbUtil::switchToLabConfig($lab_config->id);
             $tests_done_list = array();
             $tests_list=array();
