@@ -7800,7 +7800,7 @@ function update_test_type($updated_entry, $new_specimen_list,$lab_config_id)
 		DbUtil::switchRestore($saved_db);
 		return;
 	}
-	if($lab_config_id=="128") {
+	if(0) {
 	$query_string =
 		"UPDATE test_type ".
 		"SET name='$updated_entry->name', ".

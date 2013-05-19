@@ -15,7 +15,7 @@ if($skipped==-1)
 	$rating=6;
 
 $query_string = 
-	"INSERT INTO user_rating (user_id, rating, comments) ".
+	"INSERT INTO user_feedback (user_id, rating, comments) ".
 	"VALUES ($user_id, $rating, '$comments')";
 echo $query_string;
 query_blind($query_string);
