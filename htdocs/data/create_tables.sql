@@ -589,6 +589,15 @@ CREATE TABLE IF NOT EXISTS `payments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 
+CREATE  TABLE IF NOT EXISTS `user_feedback` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `user_id` INT(11) NULL ,
+  `rating` INT(3) NULL ,
+  `comments` VARCHAR(500) NULL ,
+  `ts` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  PRIMARY KEY (`id`) );
+
+
 INSERT INTO `report_config` (`report_id`, `header`, `footer`, `margins`, `p_fields`, `s_fields`, `t_fields`, `p_custom_fields`, `s_custom_fields`) VALUES 
 ('1', 'Patient Report', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
 ('2', 'Specimen Report', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
