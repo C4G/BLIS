@@ -8,9 +8,14 @@ include("includes/header.php");
 include("barcode/barcode_lib.php");
 LangUtil::setPageId("patient_profile");
 
+
+
 putUILog('patient_profile', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 $pid = $_REQUEST['pid'];
+$isSpecDel = $_REQUEST['del'];
+$isUpdate = $_REQUEST['update'];
+
 $script_elems->enableJQueryForm();
 $script_elems->enableDatePicker();
 $script_elems->enableTableSorter();
@@ -27,9 +32,36 @@ $font_size = $barcodeSettings['textsize']; //11;
 <script type='text/javascript'>
 $(document).ready(function(){
     var code = $('#patientID').val();
-    $("#patientBarcodeDiv").barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'bmp'});         
-    
+    $("#patientBarcodeDiv").barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'bmp'});
+	<?php 
+		if($isUpdate==1){
+	?>
+		toggle_profile_divs();
+	<?php } ?>
+             
+
 });
+
+function retrieve_deleted(sid, category){
+	var params = "item_id="+sid+"&ret_cat="+category;
+	 $.ajax({
+		type: "POST",
+		url: "ajax/retrieve_deleted.php",
+		data: params,
+		success: function(msg) {
+			if(msg.indexOf("1")> -1){
+				location.href = location.href;
+			} else {
+				$("#target_div_id_del").html("Specimen cannot be Retrieved");
+			}
+			
+		}
+	}); 
+	
+}
+
+
+
 function toggle_profile_divs()
 {
 	$('#profile_div').toggle();
@@ -149,6 +181,13 @@ function update_profile()
 <br>
 <b><?php echo LangUtil::getTitle(); ?></b>
  | <a href='javascript:history.go(-1);'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>
+ &nbsp;&nbsp; <?php 
+    			if($isSpecDel){ 
+    		?>
+    			<span class='clean-orange' id='msg_box_specimen'>
+					<?php echo "Specimen Deleted Successfully" ?> &nbsp;&nbsp;<a href="javascript:toggle('msg_box_specimen');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>&nbsp;&nbsp;
+				</span>
+			<?php } ?>
 <br><br>
 <table>
 	<tr valign='top'>
@@ -170,6 +209,7 @@ function update_profile()
 	</tr>
 </table>
 <br>
+
 <b><?php echo LangUtil::$generalTerms['CMD_THISTORY']; ?></b><br>
 <?php $page_elems->getPatientHistory($pid); ?>
 <div id="barcodeData" style="display:none;">

@@ -130,6 +130,7 @@ if(isset($_SESSION['username']))
 	<?php echo LangUtil::getPageTerm("LOGGEDINAS"); ?>: <?php echo $_SESSION['username']; ?> | 
 	<a href='edit_profile.php'><?php echo LangUtil::$pageTerms['EDITPROFILE']; ?></a> | 
 	<?php
+	//echo "test".$_SESSION['admin_as_tech'];
 	if(isset($_SESSION['admin_as_tech']) && $_SESSION['admin_as_tech'] === true)
 	{
 		?>

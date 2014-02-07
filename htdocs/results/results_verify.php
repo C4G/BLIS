@@ -152,6 +152,7 @@ if(count($test_list) == 0)
 		$result_csv = explode(",", $test_entry->result);
 		$specimen = Specimen::getById($test_entry->specimenId);
 		$patient = Patient::getById($specimen->patientId);
+		if($patient != null){
 		?>
 		<tr valign='top'>
 			<input type='hidden' name='specimen_id[]' value='<?php echo $test_entry->specimenId; ?>'></input>
@@ -235,6 +236,7 @@ if(count($test_list) == 0)
 		</tr>
 		<?php
 		$i++;
+		}
 	}
 	?>
 	</tbody>

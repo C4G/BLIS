@@ -79,7 +79,12 @@ $specimen->dailyNum = $prefixed_dnum;
 if(isset($_REQUEST['ref_out']) && $_REQUEST['ref_out'] == "Y")
 {
 	$specimen->statusCodeId = Specimen::$STATUS_REFERRED;
-	$specimen->referredToName = $_REQUEST['ref_out_name'];
+	if(isset($_REQUEST['ref_out_name'])){
+		$specimen->referredToName = $_REQUEST['ref_out_name'];
+	} 
+	if(isset($_REQUEST['ref_from_name'])){
+		$specimen->referredFromName = $_REQUEST['ref_from_name'];
+	}
 }
 $specimen->referredTo = 0;
 $specimen->reportTo = $report_to;
@@ -113,6 +118,6 @@ foreach($tests_list as $test_type_id)
 	add_test($test);
 }
 commit_transaction();
-
+echo "Test";
 SessionUtil::restore($saved_session);
 ?>

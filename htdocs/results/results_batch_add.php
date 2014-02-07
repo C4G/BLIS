@@ -121,6 +121,13 @@ for($i = 0; $i < count($specimen_id_list); $i++) {
 	$test_list[] = $test;
 }
 ?>
+<<script type="text/javascript">
+function fetch_specimen3(specimen_id, test_id)
+{
+	var url = "related_tests_results_entry.php";
+	window.location = url+"?specimen_id="+specimen_id+"&test_id="+test_id;
+}
+</script>
 <br>
 <b><?php echo LangUtil::$pageTerms['MENU_BATCHRESULTS']; ?></b>: <?php echo $test_name;?>
  | <a href='results_entry.php'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>
@@ -150,6 +157,7 @@ for($i = 0; $i < count($specimen_id_list); $i++) {
 			?>
 			<th><?php echo LangUtil::$generalTerms['PATIENT']; ?></th>
 			<th><?php echo LangUtil::$generalTerms['SP_STATUS']; ?></th>			
+			<th></th>
 			<th></th>
 		</tr>
 	</thead>
@@ -219,6 +227,7 @@ for($i = 0; $i < count($specimen_id_list); $i++) {
 				}
 				?>
 			</td>
+			<td><a href="javascript:fetch_specimen3(<?php echo $specimen->specimenId;?>,<?php echo $test_type_id; ?>)">Related Tests for this specimen</a></td>
 		</tr>
 		<?php
 	}

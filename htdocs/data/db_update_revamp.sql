@@ -1,3 +1,10 @@
+CREATE TABLE IF NOT EXISTS `misc` (
+  `username` varchar(20) collate latin1_general_ci default NULL,
+  `action` varchar(40) collate latin1_general_ci default NULL,
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+insert into misc (username, action) values ("initial","password reset completed");
 
 CREATE TABLE IF NOT EXISTS `global_measures` (
   `user_id` int(11) NOT NULL default '0',

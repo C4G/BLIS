@@ -78,13 +78,14 @@ $margin_right = trim($_REQUEST['margin_right']);
 $margin_csv = $margin_top.",".$margin_bottom.",".$margin_left.",".$margin_right;
 
 # Patient main fields
-$patient_main_field_count = 9;
+$patient_main_field_count = 13;
 $patient_main_field_map = array();
 for($i = 0; $i < $patient_main_field_count; $i++)
 {
-	if(isset($_REQUEST['p_field_'.$i]))
+	//echo $_REQUEST['p_field_12'];
+	if(isset($_REQUEST['p_field_'.$i])){
 		$patient_main_field_map[$i] = 1;
-	else
+	}else
 		$patient_main_field_map[$i] = 0;
 }
 
@@ -125,6 +126,22 @@ foreach($_REQUEST as $key=>$value)
 		$key_parts = explode("_", $key);
 		$specimen_custom_field_map[] = $key_parts[2];
 	}
+}
+
+if($report_config->reportId == 1){
+	# Test main fields
+	if(isset($_REQUEST['f_field_0']))
+		$report_config->useRequesterName = 1;
+	else
+		$report_config->useRequesterName = 0;
+	
+	if(isset($_REQUEST['f_field_1']))
+		$report_config->useReferredTo = 1;
+	else
+		$report_config->useReferredTo = 0;
+	
+	
+	
 }
 
 # Update DB with this entry

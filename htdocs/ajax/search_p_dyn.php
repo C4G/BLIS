@@ -170,20 +170,22 @@ background-color:#EAF2D3;
 </style>
 <script type='text/javascript'>
     $(document).ready(function(){
-        url_string = 'ajax/get_result_count.php?a='+'<?php echo $_REQUEST['a']; ?>'+'&q='+'<?php echo $_REQUEST['q']; ?>';
+        var lab_section = <?php echo $_REQUEST['lab_section']; ?>;
+        url_string = 'ajax/get_result_count.php?a='+'<?php echo $_REQUEST['a']; ?>'+'&q='+'<?php echo $_REQUEST['q']; ?>'+'&labsection='+lab_section;
         var cap = parseInt($('#rcap').html());
         //console.log(cap);
                                         $('.prev_link').hide();
-
+		
         $.ajax({ 
 		url: url_string, 
                 async : false,
 		success: function(count){
                     var icount = parseInt(count);
+                    //alert(icount+"-"+count);
                      if(icount < cap/*parseInt('<?php echo $_REQUEST['result_cap']; ?>')*/)
                         {
                                 $('.next_link').hide();
-                                if(icount == 0)
+                                if(icount == 0 || icount=="NaN")
                                     {
                                         $('#page_counts').html('0/0 Page');
                                         $('#result_counts').html('0 Results');
@@ -201,7 +203,7 @@ background-color:#EAF2D3;
                         else
                         {
                                 $('#result_counts').html(count + ' Results');
-                                
+                                //alert(icount+"-"+cap);
                                 if(icount % cap == 0)
                                     var max_pages = parseInt(icount / cap);
                                 else
@@ -316,6 +318,8 @@ $saved_db = "";
 $lab_config = null;
 $q = $_REQUEST['q'];
 $q = strip_tags($q);
+// lab section fetch
+$lab_section = $_REQUEST['lab_section'];
 if(isset($_REQUEST['l']))
 {
 	# Save context
@@ -333,24 +337,26 @@ if($a == 0)
 	# Fetch by patient ID
     if($dynamic_fetch == 0)
         {
-	$patient_list = search_patients_by_id($q);
+	$patient_list = search_patients_by_id($q, $lab_section);
         }
         else
         {
-            $patient_list = search_patients_by_id_dyn($q, $result_cap, $result_counter);
+            $patient_list = search_patients_by_id_dyn($q, $result_cap, $result_counter, $lab_section);
         }
         
 }
 else if($a == 1)
 {
+	//echo "Fetch By Name";
 	# Fetch by patient name
         if($dynamic_fetch == 0)
         {
-            $patient_list = search_patients_by_name($q);
+            $patient_list = search_patients_by_name($q, $lab_section);
         }
         else
         {
-            $patient_list = search_patients_by_name_dyn($q, $result_cap, $result_counter);
+        	//echo "Fetch By Name section is ".$lab_section;
+            $patient_list = search_patients_by_name_dyn($q, $result_cap, $result_counter, $lab_section);
         }
 	//DB Merging - Currently Disabled 
 	# See if there's a patient by the exact same name in another lab
@@ -365,11 +371,11 @@ else if($a == 2)
 	# Fetch by additional ID
      if($dynamic_fetch == 0)
         {
-	$patient_list = search_patients_by_addlid($q);
+	$patient_list = search_patients_by_addlid($q, $lab_section);
         }
         else
         {
-            $patient_list = search_patients_by_addlid_dyn($q, $result_cap, $result_counter);
+            $patient_list = search_patients_by_addlid_dyn($q, $result_cap, $result_counter, $lab_section);
         }
 }
 else if($a == 3)
@@ -377,11 +383,11 @@ else if($a == 3)
 	# Fetch by daily number
     if($dynamic_fetch == 0)
         {
-	$patient_list = search_patients_by_dailynum("-".$q);
+	$patient_list = search_patients_by_dailynum("-".$q, $lab_section);
         }
         else
         {
-            $patient_list = search_patients_by_dailynum_dyn("-".$q, $result_cap, $result_counter);
+            $patient_list = search_patients_by_dailynum_dyn("-".$q, $result_cap, $result_counter, $lab_section);
         }
 }
 else if($a == 9)
@@ -452,6 +458,26 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 }
 # Build HTML table
 ?>
+	<script type="text/javascript">
+		function retrieve_deleted(sid, category){
+			var params = "item_id="+sid+"&ret_cat="+category;
+			 $.ajax({
+				type: "POST",
+				url: "ajax/retrieve_deleted.php",
+				data: params,
+				success: function(msg) {
+					if(msg.indexOf("1")> -1){
+						location.href = location.href;
+					} else {
+						$("#target_div_id_del").html("Patient cannot be Retrieved");
+					}
+					
+				}
+			}); 
+			
+		}
+
+		</script>
 
 <table class='hor-minimalist-cs' id='patientListTable' name='patientListTable'>
 	<thead >
@@ -499,7 +525,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			<th></th>
 			<th></th>
                         <th></th>
-
+			<?php if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+			?>
+				<th></th>
+			<?php }?>
 		</tr>
 	</thead>
 	<tbody>
@@ -609,18 +638,18 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					# Default to today for date range
 					$today = date("Y-m-d");
 					$today_parts = explode("-", $today);    
-					$url_string = "reports_testhistory.php?patient_id=".$patient->patientId."&location=".$_REQUEST['l']."&yf=".$today_parts[0]."&mf=".$today_parts[1]."&df=".$today_parts[2]."&yt=".$today_parts[0]."&mt=".$today_parts[1]."&dt=".$today_parts[2]."&ip=0";
-					$billing_url_string = "reports_billing.php?patient_id=".$patient->patientId."&location=".$_REQUEST['l']."&yf=".$today_parts[0]."&mf=".$today_parts[1]."&df=".$today_parts[2]."&yt=".$today_parts[0]."&mt=".$today_parts[1]."&dt=".$today_parts[2]."&ip=0";
+					$url_string = "reports_testhistory.php?patient_id=".$patient->patientId."&location=".$_REQUEST['l']."&yf=".$today_parts[0]."&mf=".$today_parts[1]."&df=".$today_parts[2]."&yt=".$today_parts[0]."&mt=".$today_parts[1]."&dt=".$today_parts[2]."&ip=0"."&labsection=".$lab_section;
+					$billing_url_string = "reports_billing.php?patient_id=".$patient->patientId."&location=".$_REQUEST['l']."&yf=".$today_parts[0]."&mf=".$today_parts[1]."&df=".$today_parts[2]."&yt=".$today_parts[0]."&mt=".$today_parts[1]."&dt=".$today_parts[2]."&ip=0"."&labsection=".$lab_section;
 
                                         ?>
 					<a href='<?php echo $url_string; ?>' title='Click to View Report for this Patient' target='_blank'><?php echo LangUtil::$generalTerms['CMD_VIEW']; ?> Report</a>
 					</td>
 					<td>
-					<a href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'>Select Tests</a>
+					<a href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>&labsection=<?php echo $lab_section?>' title='Click to View Patient Profile'>Select Tests</a>
 										</td>
                                         <td <?php (is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none'")) ?> >
                                        
-                                            <a  target='_blank' href=<?php echo $billing_url_string; ?>' title='Click to generate a bill for this patient'>Generate Bill</a>
+                                            <a  target='_blank' href=<?php echo $billing_url_string; ?> title='Click to generate a bill for this patient'>Generate Bill</a>
                                         </td>                                      
 					<td>					
 					<?php
@@ -635,6 +664,17 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				}
 				?>
 			</td>
+			
+			<?php if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+				
+			?>
+				<?php 
+				if(check_removal_record($_SESSION['lab_config_id'], $patient->patientId, "patient")){ ?>
+						<td><a href='javascript:retrieve_deleted(<?php echo $patient->patientId;?>, "patient")' title="Click to Retrieve the deleted patient" >Retrieve</a></td>
+			<?php } else {?>
+						<td></td>
+			<?php }
+			}?>
 		</tr>
 	<?php
 	}

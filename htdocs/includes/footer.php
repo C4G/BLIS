@@ -22,7 +22,7 @@
 # Closes any open database connections, and-
 # displays footer so the users know the page is done loading.
 #
-include("includes/db_close.php");
+include("db_close.php");
 LangUtil::setPageId("footer");
 ?>
 

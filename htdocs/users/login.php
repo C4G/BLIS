@@ -1,6 +1,9 @@
 <?php
+
 include("redirect.php");
 include("includes/stats_lib.php");
+include("includes/password_reset_need.php");
+
 
 $file = "../../BlisSetup.html";
 $content =<<<content
@@ -80,6 +83,15 @@ function unload()
 
 $(document).ready(function(){
 	load();
+	//alert( "You are running jQuery version: " + $.fn.jquery );
+	/* var passwordNeed = false;
+	$.ajax({
+		url : "ajax/password_rest_need.php",
+		success: function(data) {
+			if(data == 'need') passwordNeed = true;
+		},
+		dataType: "String"
+	}); */
 	$('#username').focus();
 });
 
@@ -131,6 +143,18 @@ function capLock(e)
 						echo "</td>";
 						echo "</tr>";
 					}
+					else if(isset($_REQUEST['errPR']))
+					{
+					# Incorrect username/password
+						echo "<tr valign='top'>";
+						echo "<td></td>";
+						echo "<td>";
+						echo "<span id='server_msg' class='error_string'>";
+						echo LangUtil::getPageTerm("MSG_ERR_PWDRST");
+											echo "</span><br>";
+						echo "</td>";
+						echo "</tr>";
+					}
 					else if(isset($_REQUEST['prompt']))
 					{
 						# User not logged in
@@ -175,11 +199,25 @@ function capLock(e)
 						<td>
 						</td>
 						<td>
-							<!--<a href='password_reset.php'>
+							<!-- <a href='password_reset.php'>
 								<small><?php echo LangUtil::getPageTerm("MSG_NEWPWD"); ?></small>
-							</a>-->
+							</a> -->
 						</td>
 					</tr>
+					<?php 
+					$password_reset_needed = password_reset_required();
+					if($password_reset_needed){
+					?>
+					<tr>
+						<td>
+						</td>
+						<td>
+							<a href='oneTime_password_reset.php'>
+								<small>Reset the Password</small>
+							</a>
+						</td>
+					</tr>
+					<?php }?>
 				</table>
 				</form>
 			</div>
@@ -190,6 +228,7 @@ function capLock(e)
 		</td>
 	</tr>
 </table>
+
 <?php $script_elems->bindEnterToClick("#password", "#login_button"); ?>
 <?php
 include("includes/footer.php");

@@ -129,7 +129,7 @@ $page_elems->getProgressSpinnerBig($spinner_message);
 
  <div id="update_failure" style="display:none;" class="update_error">
     Update Error! Please Try Again by clicking <a id='update_link' href='javascript:blis_update_t();'>here</a><br>
-    If still unsuccessful report error UE5 to naomichopra@gatech.edu
+    If still unsuccessful report error UE5 to arunkumargk@gatech.edu
     </div>
 
  <div id="update_success"  style="display:none;" class="update_success">

@@ -14,6 +14,6 @@ if ($_REQUEST['enable_billing']) {
     disable_billing();
 }
 
-update_currency_name_in_lab_config_settings($_REQUEST['currency_name']);
+update_currency_name_in_lab_config_settings($_REQUEST['default_currency']);
 update_currency_delimiter_in_lab_config_settings($_REQUEST['currency_delimiter']);
 ?>

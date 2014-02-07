@@ -23,6 +23,8 @@ php_value upload_max_filesize 100M
 #
 
 
+RewriteRule ^lang_update\.php$ Language/lang_update.php
+
 ## /config folder
 RewriteRule ^lab_configs\.php$ config/lab_configs.php
 RewriteRule ^lab_config_home\.php$ config/lab_config_home.php
@@ -56,6 +58,7 @@ RewriteRule ^reports_specimenlog\.php$ reports/reports_specimenlog.php
 RewriteRule ^reports_print\.php$ reports/reports_print.php
 RewriteRule ^reports_dailyspecimens\.php$ reports/reports_dailyspecimens.php
 RewriteRule ^reports_dailypatients\.php$ reports/reports_dailypatients.php
+RewriteRule ^reports_dailypatientBarcodes\.php$ reports/reports_dailypatientBarcodes.php
 RewriteRule ^reports_infection\.php$ reports/reports_infection.php
 RewriteRule ^doctor_stats\.php$ reports/doctor_stats.php
 RewriteRule ^reports_specimencount\.php$ reports/reports_specimencount.php
@@ -121,6 +124,7 @@ RewriteRule ^session_print\.php$ regn/session_print.php
 
 ## /results folder
 RewriteRule ^results_entry\.php$ results/results_entry.php
+RewriteRule ^related_tests_results_entry\.php$ results/related_tests_results_entry.php
 RewriteRule ^results_batch_add\.php$ results/results_batch_add.php
 RewriteRule ^results_verify\.php$ results/results_verify.php
 RewriteRule ^worksheet\.php$ results/worksheet.php
@@ -162,6 +166,7 @@ RewriteRule ^edit_profile\.php$ users/edit_profile.php
 RewriteRule ^change_profile\.php$ users/change_profile.php
 RewriteRule ^change_pwd\.php$ users/change_pwd.php
 RewriteRule ^password_reset\.php$ users/password_reset.php
+RewriteRule ^oneTime_password_reset\.php$ users/oneTime_password_reset.php
 RewriteRule ^lab_admins\.php$ users/lab_admins.php
 RewriteRule ^lab_admin_new\.php$ users/lab_admin_new.php
 RewriteRule ^lab_admin_edit\.php$ users/lab_admin_edit.php
@@ -174,6 +179,8 @@ RewriteRule ^validate\.php$ users/validate.php
 RewriteRule ^logout\.php$ users/logout.php
 RewriteRule ^home\.php$ users/home.php
 RewriteRule ^accesslist\.php$ users/accesslist.php
+
+RewriteRule ^passwordReset\.php$ users/passwordReset.php
 
 
 ## /feedback folder

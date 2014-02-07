@@ -22,8 +22,11 @@ function get_result_form($test_type, $test_id, $num_tests, $patient)
 	?>
 	<script type='text/javascript'>
 	$(document).ready(function() {
-	
-	})
+		$(".enable_check").each(function() {
+			toggle_form('<?php echo $curr_form_id; ?>', this);
+		});
+		
+	});
 	function update_remarks1()
 	{
 		var result_elems = $("input[name='result[]']").attr("value");
@@ -187,14 +190,15 @@ function get_result_form($test_type, $test_id, $num_tests, $patient)
 		if(stripos($measure->unit,",")===false)
 		echo $measure->unit;
 		
-		if($num_tests > 1 && $count == 0)
+		if($num_tests > 0 && $count == 0)
 		{
 			# Checkbox to skip results for this test type
 			?>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<small>
-			<input type='checkbox' id='<?php echo $curr_form_id; ?>_skip' title='Tick this box if results are not yet available and are to be entered later' onclick="javascript:toggle_form('<?php echo $curr_form_id; ?>', this);">
-			<?php echo LangUtil::$generalTerms['CMD_SKIP']; ?>
+			<input type='checkbox' id='<?php echo $curr_form_id; ?>_skip' class="enable_check" title='Tick this box if results are available and ready to enter' onclick="javascript:toggle_form('<?php echo $curr_form_id; ?>', this);">
+			<?php //echo LangUtil::$generalTerms['CMD_SKIP']; 
+			      echo "Enable Result Entry"; ?>
 			</input>
 			</small>
 			<?php
@@ -237,6 +241,14 @@ function get_result_form($test_type, $test_id, $num_tests, $patient)
 
 $form_id_list = array();
 $specimen_id = $_REQUEST['sid'];
+
+$test_id = -1 ;
+if(isset($_REQUEST['test_id'])) {
+	$test_id = $_REQUEST['test_id'];
+}
+
+
+
 if($specimen_id == "")
 {
 	echo "<span class='error_string'>".LangUtil::$generalTerms['SPECIMEN_ID']."  ".$specimen_id." ".LangUtil::$generalTerms['MSG_NOTFOUND'].".</span>";
@@ -320,8 +332,13 @@ else
 <table class='hor-minimalist-c'>
 <tbody>
 <?php
+$related_test_count = 0;
 foreach($test_list as $test)
 {
+	//echo "TEST ID is : ".$test_id."<br/>";
+	//echo "TEST TYPE ID is : ".$test->testTypeId."<br/>";
+	if($test_id != -1){
+		if( $test->testTypeId != $test_id){
 	?>
 	<tr valign='top'>
 		<td>
@@ -344,7 +361,42 @@ foreach($test_list as $test)
 			?>
 		</td>
 	</tr>
-<?php
+	<?php 
+		$related_test_count++;
+	}
+	}
+	else {
+	?>
+	<tr valign='top'>
+		<td>
+			<?php 
+			$test_type = get_test_type_by_id($test->testTypeId);
+			echo $test_type->getName(); 
+			?>
+		</td>
+		<td>
+			<?php
+			if($test->isPending() === false)
+			{
+				echo "(".LangUtil::$pageTerms['MSG_ALREADYENTERED'].") ";
+				echo $test->decodeResult();
+			}
+			else
+			{
+				get_result_form($test_type, $test->testId, count($test_list), $patient);
+			}
+			?>
+		</td>
+	</tr>
+	
+	<?php }
+	?>
+	<?php
+}
+
+if($test_id != -1 && $related_test_count==0){
+	echo "<span class='error_string'>".LangUtil::$generalTerms['SPECIMEN_ID']."  ".$specimen_id." ".LangUtil::$generalTerms['RELATED_TESTS_NOTFOUND'].".</span>";
+	return;
 }
 ?>
 </tbody>
@@ -352,8 +404,10 @@ foreach($test_list as $test)
 <br>
 <input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='javascript:submit_forms(<?php echo $specimen->specimenId; ?>);'></input>
 &nbsp;&nbsp;
+<?php if($test_id == -1){?>
 <a href='javascript:hide_result_form(<?php echo $specimen->specimenId; ?>);' class='result_cancel_link'><?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?></a>
 &nbsp;&nbsp;
+<?php }?>
 <span class='result_progress_spinner' style='display:none;'>
 <?php echo $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
 </span>

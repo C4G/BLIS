@@ -18,6 +18,8 @@ LangUtil::setPageId("update");
 
 $user = get_user_by_id($_SESSION['user_id']);
 
+$def = '';
+
 if ( is_super_admin($user) || is_country_dir($user) ) {
 	//$labConfigList = get_lab_configs($user->userId);
 	//foreach($labConfigList as $labConfig) {
@@ -28,6 +30,7 @@ if ( is_super_admin($user) || is_country_dir($user) ) {
     $db_name = "blis_revamp";
         $ufile = "db_update_revamp";
         blis_db_update($lab_config_id, $db_name, $ufile);
+        update_language_files();
         insertVersionDataEntry();
 }
 else {
@@ -40,10 +43,12 @@ else {
         
         # lab update
         $db_name = "blis_".$lab_config_id;
-        $ufile = "db_update_lab";
+        $ufile = "db_update_lab_2.7";
         blis_db_update($lab_config_id, $db_name, $ufile);
-        
+        update_language_files();
+        $def = default_currency_copy($lab_config_id);
         insertVersionDataEntry();
+        
 	//runGlobalUpdate();
 }
 /*
@@ -64,5 +69,6 @@ function runUpdate($lab_config_id) {
 
 //echo "Updated";
 
+//echo $def;
 echo "true";
 ?>

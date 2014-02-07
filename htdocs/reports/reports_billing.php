@@ -22,10 +22,34 @@ $date_to = "";
 $hidePatientName = 0;
 
 $view_viz = $_REQUEST['viz'];
-
+$lab_config_id = $_REQUEST['location'];
 // visualization parameters
 $chart_column_width = 360;
 
+$defaultCurrency = currencyConfig::getDefaultCurrency($lab_config_id);
+$defCurrencyIfnotSet = get_lab_config_settings_billing();
+if(is_null($defaultCurrency)){
+	$secondaryCurrencies = currencyConfig::getAllSecondaryCurrencies($lab_config_id, $defCurrencyIfnotSet); 
+} else {
+	$secondaryCurrencies = currencyConfig::getAllSecondaryCurrencies($lab_config_id, $defaultCurrency->getCurrencyTo());
+}
+// Currency Type
+if(isset($_REQUEST['CT'])) {
+	$currencyTo = $_REQUEST['CT']; 
+} else {
+	if(!is_null($defaultCurrency)){
+	$currencyTo = $defaultCurrency->getCurrencyTo();
+	} else {
+	$currencyTo = $defCurrencyIfnotSet;
+	}
+}
+$defaultFlag = 0;
+if(!is_null($defaultCurrency)){
+$exchange_rate = currencyConfig::getExchangeRateValue($lab_config_id, $defaultCurrency->getCurrencyTo(), $currencyTo);
+} else {
+$exchange_rate = 1;
+$defaultFlag = 1;
+}
 if(isset($_REQUEST['yf'])) {
 	$date_from = $_REQUEST['yf']."-".$_REQUEST['mf']."-".$_REQUEST['df'];
 	$date_to = $_REQUEST['yt']."-".$_REQUEST['mt']."-".$_REQUEST['dt'];
@@ -274,7 +298,7 @@ function is_result_parsable($cleaned_result){
 	return false;
 }
 
-$lab_config_id = $_REQUEST['location'];
+
 $patient_id = $_REQUEST['patient_id'];
 
 DbUtil::switchToLabConfig($lab_config_id);
@@ -356,8 +380,9 @@ function fetch_report() {
 	var mt = $('#mm_to').attr("value");
 	var dt = $('#dd_to').attr("value");
 	var ip = 0;
+	var currencyType = $("#default_currency").val();
 	$('#fetch_progress').show();
-	var url_string = "reports_billing.php?location=<?php echo $lab_config_id; ?>&patient_id=<?php echo $patient_id; ?>&yf="+yf+"&mf="+mf+"&df="+df+"&yt="+yt+"&mt="+mt+"&dt="+dt;
+	var url_string = "reports_billing.php?location=<?php echo $lab_config_id; ?>&patient_id=<?php echo $patient_id; ?>&yf="+yf+"&mf="+mf+"&df="+df+"&yt="+yt+"&mt="+mt+"&dt="+dt+"&CT="+currencyType;
 	window.location=url_string;
 }
 
@@ -502,6 +527,21 @@ $monthago_array = explode("-", $monthago_date);
 	</td>
 	</tr>
 	</table>
+	</td>
+	<td>&nbsp;&nbsp;
+	Currency Type &nbsp;
+	<select name='default_currency' id='default_currency'>
+    <?php 
+    foreach ($secondaryCurrencies as $currency){ 
+	if($currency->getCurrencyTo() == $currencyTo){
+	?>
+	<option value='<?php echo $currency->getCurrencyFrom(); ?>' selected><?php echo $currency->getCurrencyFrom(); ?></option>
+	<?php } 
+	else {
+    ?>
+      	<option value='<?php echo $currency->getCurrencyFrom(); ?>'><?php echo $currency->getCurrencyFrom(); ?></option>
+    <?php } 
+	}?>
 	</td>
 	<td>
 		<input type='button' onclick="javascript:fetch_report();" value='<?php echo LangUtil::$generalTerms['CMD_VIEW']; ?>'></input>
@@ -651,7 +691,12 @@ if($patient == null)
 else
 {
 	# Fetch billing entries to print in report
-	$billing_info = generate_bill_data_for_patient_and_date_range($patient_id, $date_from, $date_to);
+	$labsection = 0;
+	if(isset($_REQUEST['labsection'])){
+		$labsection = $_REQUEST['labsection'];
+	}
+
+	$billing_info = generate_bill_data_for_patient_and_date_range($patient_id, $date_from, $date_to, $labsection);
 	?>
 	<div id="printhead" name="printhead">
 		<?php
@@ -788,15 +833,27 @@ if(count($billing_info['names']) != 0)
     </tr>
         <?php for ($i = 0; $i < count($billing_info['names']); $i++) { ?>
     <tr>
-        <td><?php echo $billing_info['dates'][$i] ?></td>
-        <td><?php echo $billing_info['names'][$i] ?></td>
-        <td><?php echo format_number_to_money($billing_info['costs'][$i]) ?></td>
+        <td><?php echo $billing_info['dates'][$i]; ?></td>
+        <td><?php echo $billing_info['names'][$i]; ?></td>
+		
+		<?php 
+		if($defaultFlag != 1) { ?>
+        <td><?php 
+		//echo $exchange_rate->getExchangeRate(). " ";
+		echo format_number_to_money_currencyName(($billing_info['costs'][$i])*$exchange_rate->getExchangeRate(), $currencyTo); ?></td>
+		<?php } else {?>
+		<td><?php echo format_number_to_money(($billing_info['costs'][$i])); ?></td>
+		<?php } ?>
     </tr>
         <?php } ?>
     <tr>
         <td></td>
         <td>BILL TOTAL</td>
-        <td><?php echo format_number_to_money($billing_info['total']) ?></td>
+        <?php if($defaultFlag != 1) { ?>
+        <td><?php echo format_number_to_money_currencyName(($billing_info['costs'][$i])*$exchange_rate->getExchangeRate(), $currencyTo); ?></td>
+		<?php } else {?>
+		<td><?php echo format_number_to_money(($billing_info['costs'][$i])); ?></td>
+		<?php } ?>
     </tr>
 </table>
     <?php

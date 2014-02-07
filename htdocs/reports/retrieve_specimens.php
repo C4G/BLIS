@@ -22,7 +22,7 @@ putUILog('retrieve_specimens', 'X', basename($_SERVER['REQUEST_URI'], ".php"), '
 //$specimen_del= array();
 //$specimen_del = explode(",",$_REQUEST['specimen_array']);
 $specimen_list = get_specimens_by_patient_id($pid);
-$rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
+$rem_recs = get_removed_specimens($_SESSION['lab_config_id'],"specimen");
 $rem_specs = array();
                 $rem_remarks = array();
 foreach($rem_recs as $rem_rec)
@@ -46,6 +46,7 @@ foreach($rem_recs as $rem_rec)
 		
 		</script>
                 <form name="del" id="del" action='reports/ret_tests.php'  method='post'>
+                <input type='hidden' name='category' value='specimen' />
 
 		<table class='tablesorter' id='test_history_table'>
 			<thead>

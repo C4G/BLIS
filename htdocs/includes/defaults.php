@@ -6,7 +6,7 @@
 #
 
 # System version number displayed on page title and footer
-$VERSION = "2.4";
+$VERSION = "2.7";
 
 # Debug mode
 $DEBUG = false;
@@ -49,7 +49,8 @@ $REPORT_ID_ARRAY = array(
 	"reports_dailyspecimens.php" => 4,
 	"reports_dailypatients.php" => 6,
 	"worksheet.php" => 5,
-	"reports_billing_specific.php" => 7
+	"reports_billing_specific.php" => 7,
+	"reports_dailypatientBarcodes.php" => 77
 );
 
 # Default max width of the window (in pixels)

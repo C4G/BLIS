@@ -156,8 +156,17 @@ $(document).ready(function(){
 	$("#location10").change(function () { get_test_types_withall('location10', 't_type10') });
 	$("#location11").change(function () { get_usernames('location11', 'username11') });
 	$("input[name='rectype13']").change( function() {
-		$('#cat_row13').toggle();
-		$('#ttype_row13').toggle();
+		var recordType = $("input[name='rectype13']:checked").attr("value");
+		if(recordType == 1){
+			$('#cat_row13').show();
+			$('#ttype_row13').show();
+		} else if(recordType == 2) {
+			$('#cat_row13').show();
+			$('#ttype_row13').hide();
+		} else {
+			$('#cat_row13').hide();
+			$('#ttype_row13').hide();
+		}
 	});
 	$('#cat_code13').change( function() { get_test_types_bycat() });
 	$("#reportTypeSelect").change( function() {
@@ -232,6 +241,9 @@ $(document).ready(function(){
 		$('#report_updated_msg').show();
 		show_selection("infection_report_settings");
 	<?php } ?>
+
+	
+	$("#testRec").attr('checked',true);
 });
 
 function changeAvailableLocations(dropdown) {
@@ -1264,10 +1276,13 @@ function search_patient_history()
 		alert("<?php echo LangUtil::$generalTerms['TIPS_INCOMPLETEINFO']; ?>");
 		return;
 	}
+	var cat_code =  $('#cat_code_patient_report').attr("value");
+	//alert(cat_code); 
 	$('#test_history_progress_spinner').show();
 	var url = 'ajax/search_p_dyn.php';
+	//alert(search_attrib+" "+pid);
 	$("#phistory_list").load(url, 
-		{q: pid, a: search_attrib, l: location }, 
+		{q: pid, a: search_attrib, l: location, lab_section : cat_code }, 
 		function()
 		{
 			$('#test_history_progress_spinner').hide();
@@ -1423,7 +1438,7 @@ function get_specimen_log()
 	$('#specimen_log_form').submit();
 }
 
-function print_daily_patients()
+function print_daily_patientBarcodes()
 {
 	var l = $("#location13").attr("value");
 	var yf = $("#daily_yyyy").attr("value");
@@ -1438,7 +1453,28 @@ function print_daily_patients()
 		alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
 		return;
 	}
-	var url = "reports_dailypatients.php?yt="+yt+"&mt="+mt+"&dt="+dt+"&yf="+yf+"&mf="+mf+"&df="+df+"&l="+l;
+	var url = "reports_dailypatientBarcodes.php?yt="+yt+"&mt="+mt+"&dt="+dt+"&yf="+yf+"&mf="+mf+"&df="+df+"&l="+l;
+	window.open(url);
+}
+
+function print_daily_patients()
+{
+	var l = $("#location13").attr("value");
+	var yf = $("#daily_yyyy").attr("value");
+	var mf = $("#daily_mm").attr("value");
+	var df = $("#daily_dd").attr("value");
+	var yt = $("#daily_yyyy_to").attr("value");
+	var mt = $("#daily_mm_to").attr("value");
+	var dt = $("#daily_dd_to").attr("value");
+
+	var cat_code = $('#cat_code13').attr("value");
+	
+	if(checkDate(yt, mt, dt) == false || checkDate(yf, mf, df) == false)
+	{
+		alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
+		return;
+	}
+	var url = "reports_dailypatients.php?yt="+yt+"&mt="+mt+"&dt="+dt+"&yf="+yf+"&mf="+mf+"&df="+df+"&l="+l+"&labsec="+cat_code;
 	window.open(url);
 }
 
@@ -1472,9 +1508,12 @@ function print_daily_log()
 	{
 		print_daily_specimens();
 	}
-	else
+	else if (record_type == 2)
 	{
 		print_daily_patients();
+	}
+	else {
+		print_daily_patientBarcodes();
 	}
 }
 
@@ -1684,9 +1723,10 @@ function show_custom_report_form(report_id)
                                                 <li class='menu_option' id='user_stats_menu'>
 							<a href='javascript:show_selection("user_stats");'>User Statistics</a>
 						</li>
-                                                <?php } ?><li class='menu_option' id='stock_report_menu'>
+                                                <?php } ?>
+												<!--<li class='menu_option' id='stock_report_menu'>
 							<a href='javascript:show_selection("stock_report");'>Previous Inventory Data</a>
-						</li>
+						</li>-->
                                                 
 					<?php } ?>
 				<?php /*
@@ -2792,6 +2832,22 @@ function show_custom_report_form(report_id)
 						<input type='text' name='patient_id' id='patient_id8' class='uniform_width'></input>
 					</td>
 				</tr>
+				
+				<tr>
+					<td><?php echo LangUtil::$generalTerms['LAB_SECTION']; ?> &nbsp;&nbsp;&nbsp;</td>
+					<td>
+						<select name='cat_code_patient_report' id='cat_code_patient_report' class='uniform_width'>
+							<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
+							<?php
+							if( is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) )
+								$page_elems->getTestCategoryCountrySelect();
+							else {
+								$page_elems->getTestCategorySelect();
+							}
+							?>
+						</select>
+					</td>
+				</tr>
 				<tr>
 					<td></td>
 					<td>
@@ -2980,13 +3036,15 @@ function show_custom_report_form(report_id)
 				<tr valign='top'>
 					<td><?php echo LangUtil::$generalTerms['RECORDS']; ?> &nbsp;&nbsp;&nbsp;</td>
 					<td>
-						<input type='radio' name='rectype13' value='1' checked>
+						<input type='radio' name='rectype13' id='testRec' value='1' checked />
 							<?php echo LangUtil::$generalTerms['RECORDS_TEST']; ?>
-						</input>
 						<br>
-						<input type='radio' name='rectype13' value='2'>
+						<input type='radio' name='rectype13' value='2' />
 							<?php echo LangUtil::$generalTerms['RECORDS_PATIENT']; ?>
-						</input>
+						 <br/>
+						<input type='radio' name='rectype13' value='3' />
+							<?php echo LangUtil::$generalTerms['PATIENT_BARCODE']; ?>
+						
 					</td>
 				</tr>
 				<tr id='cat_row13'>
@@ -3085,6 +3143,9 @@ function show_custom_report_form(report_id)
 						<br>
 						<input type='radio' name='rectype13' value='2'>
 							<?php echo LangUtil::$generalTerms['RECORDS_PATIENT']; ?>
+						</input> <br/>
+						<input type='radio' name='rectype13' value='3'>
+							<?php echo LangUtil::$generalTerms['PATIENT_BARCODE']; ?>
 						</input>
 					</td>
 				</tr>

@@ -382,6 +382,10 @@ if($no_match === true)
 			{
 				echo "<th>".LangUtil::$generalTerms['REF_TO']."</th>";
 			}
+			if($report_config->useReferredToHospital == 1)
+			{
+				echo "<th>"."Referred From"."</th>";
+			}
 			if($report_config->useDoctor == 1)
 			{
 				echo "<th>".LangUtil::$generalTerms['DOCTOR']."</th>";
@@ -548,6 +552,10 @@ if($no_match === true)
 			if($report_config->useReferredTo == 1)
 			{
 				echo "<td>".$specimen->getReferredToName()."</td>";
+			}
+			if($report_config->useReferredToHospital == 1)
+			{
+				echo "<td>".$specimen->getReferredFromName()."</td>";
 			}
 			if($report_config->useDoctor == 1)
 			{

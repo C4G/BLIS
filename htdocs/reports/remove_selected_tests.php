@@ -36,7 +36,7 @@ putUILog('remove_selected_tests', 'X', basename($_SERVER['REQUEST_URI'], ".php")
 		
 		</script>
                 <form name="del" id="del" action='reports/rem_tests.php'  method='post'>
-
+		<input type='hidden' name='category' value='specimen' />
 		<table class='tablesorter' id='test_history_table'>
 			<thead>
 				<tr valign='top'>
@@ -85,7 +85,7 @@ putUILog('remove_selected_tests', 'X', basename($_SERVER['REQUEST_URI'], ".php")
                                 <td>
                                     <?php 
                                     $sid=$specimen->specimenId;
-                                    $ch = check_removal_record($lid, $sid);
+                                    $ch = check_removal_record($lid, $sid, "specimen");
                                         if($ch == 1)
                                         {
                                             echo "Already Removed";

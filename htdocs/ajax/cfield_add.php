@@ -43,4 +43,6 @@ $new_entry->fieldTypeId = $field_type;
 $new_entry->fieldOptions = $options_csv;
 
 CustomField::addNew($new_entry, $lab_config_id, $tabletype);
+FieldOrdering::deleteFieldOrderEntry($lab_config_id, 1);
+FieldOrdering::deleteFieldOrderEntry($lab_config_id, 2);
 ?>

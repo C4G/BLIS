@@ -116,6 +116,7 @@ $user_id = $_SESSION['user_id'];
 $unix_ts = mktime(0,0,0,$mm_to,$dd_to,$yyyy_to);
 $ts =date("Y-m-d H:i:s", $unix_ts);
 //-NC3065
+//echo $result_csv;
 add_test_result($test_id, $result_csv, $comments, "", $user_id, $ts, $patient->getHashValue());
 update_specimen_status($specimen_id);
 $test_list = get_tests_by_specimen_id($specimen_id);
@@ -195,8 +196,12 @@ else
 	}
 	echo "<br><br>";
 	?>
-	<a href='javascript:hide_result_confirmation(<?php echo $specimen_id; ?>);'><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>	
 	<?php
+			if(strpos($_SERVER["HTTP_REFERER"], "related_tests_results_entry.php") == false)
+			{
+	?>
+	<a href='javascript:hide_result_confirmation(<?php echo $specimen_id; ?>);'><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>	
+	<?php }
 }
 ?>
 </div>

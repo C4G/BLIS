@@ -21,6 +21,7 @@ foreach($test_list as $test_entry)
 {
 	$test_type = get_test_type_by_id($test_entry->testTypeId);
 	$comment_field_value = $_REQUEST[$comment_field_name];
+	//echo "comment_field"."-".$comment_field_value."<br/>";
 	$measure_list = $test_type->getMeasures();
 	$result_value_valid = true;
 	$result_csv = "";
@@ -55,17 +56,23 @@ foreach($test_list as $test_entry)
                 }
                 $measure_list = $comb_measure_list;
                 $comment_value = "";
+                //$test = 1;
 	foreach($measure_list as $measure)
 	{
 		$result_field_name = 'result_'.$test_type->testTypeId."_".$measure->measureId;
 		$comment_field_name = 'comments_'.$test_type->testTypeId."_".$measure->measureId;
+		
+		echo $result_field_name.'='.$_REQUEST[$result_field_name];
+		//$test++;
 		$result_value = $_REQUEST[$result_field_name];
 		$comment_value = $_REQUEST[$comment_field_name];
 		if( trim($result_value) == "" ) 
 		{
 			# Result value not provided / is empty:
 			# Do not update result value
+			//echo " : Not Savable Field "."<br/>";
 			$result_value_valid = false;
+			$result_csv .=",";
 		}
 		else { 
 			/*if ( strstr($result_value, ",") ) 
@@ -73,7 +80,9 @@ foreach($test_list as $test_entry)
 			else
 				$result_csv .= $result_value."_";
                          */
-                    $range_typee = $measure->getRangeType();
+			$result_value_valid = true;
+			//echo " : Savable Field "."<br/>";
+			        $range_typee = $measure->getRangeType();
                     if($range_typee == Measure::$RANGE_FREETEXT)
                     {
                         $result_csv = $result_csv."[$]".$result_value."[/$]_";
@@ -89,9 +98,10 @@ foreach($test_list as $test_entry)
                          
 		}	
 		# replace last underscore with "," to separate multiple measures results
+		//echo "Result CSV ".$result_csv;
 		$result_csv = substr($result_csv, 0, strlen($result_csv) - 1);
 		$result_csv .= ",";
-		
+		//echo "<br/> === ".$result_csv. " ===>".$result_value_valid."<br/>";
 		if ( $comment_value != "None" &&  $comment_value != "") {
                     if($measure->checkIfSubmeasure() == 1)
                                     {
@@ -104,6 +114,11 @@ foreach($test_list as $test_entry)
                                     }
 			$comment_csv .= $decName.":".$comment_value.", ";
 		}
+	}
+	// if at least one element present that can be saved
+	$result_csv_elements_present = explode(",",$result_csv);
+	if(count($result_csv_elements_present)>0){
+		$result_value_valid = true;
 	}
 	if($result_value_valid === true)
 	{
@@ -122,6 +137,7 @@ foreach($test_list as $test_entry)
 			$test_entry->comments = $comment_csv;
 			$test_entry->userId = $_SESSION['user_id'];
 			$test_entry->addResult($patient->getHashValue());
+			echo "TEST";
 		}
 		else
 		{
@@ -131,7 +147,10 @@ foreach($test_list as $test_entry)
 			$test_entry->verifiedBy = $_SESSION['user_id'];
 			$test_entry->dateVerified = date("Y-m-d H:i:s");
 			$test_entry->verifyAndUpdate($patient->getHashValue());
+			echo "TEST";
 		}
+	} else {
+		echo "TEST";
 	}
 }
 header("Location: specimen_info.php?sid=$specimen_id&re=1");

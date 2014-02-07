@@ -36,6 +36,7 @@ function query_update($query)
 	# Single update statement
 	global $con;
     mysql_query( $query, $con ) or die(mysql_error());
+    $LOG_QUERIES = true;
 	if($LOG_QUERIES == true)	
         {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
@@ -67,7 +68,7 @@ function query_alter($query)
         }
 }
 
-function query_associative_all( $query, &$row_count ) 
+function query_associative_all( $query, $row_count ) 
 {
     global $con;
 	if( !($result = mysql_query( $query, $con ) ) ) 
@@ -77,6 +78,7 @@ function query_associative_all( $query, &$row_count )
 	$row_count = mysql_num_rows( $result );
     $retval = array();
     while ( $row = mysql_fetch_assoc($result) ){ $retval[] = $row; }
+    $LOG_QUERIES = true;
 	if($LOG_QUERIES == true)
         {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
@@ -93,6 +95,7 @@ function query_associative_one( $query )
         return null;
     }
     $retval = mysql_fetch_assoc( $result );
+    $LOG_QUERIES = true;
 	if($LOG_QUERIES == true)
         {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
@@ -122,6 +125,7 @@ function query_empty_table( $table_name )
 	$query_string =
 		"DELETE FROM $table_name";
 	query_blind($query_string);
+	
 	if($LOG_QUERIES == true)	
         {
 		DebugLib::logQuery($query_string, db_get_current(), $_SESSION['username']);
@@ -281,6 +285,7 @@ function query_blind( $query )
 {
     global $con;
     $result = mysql_query( $query, $con );
+	$LOG_QUERIES = true;
 	if($LOG_QUERIES == true)
         {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);

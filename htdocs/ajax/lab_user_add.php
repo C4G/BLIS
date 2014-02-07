@@ -50,10 +50,12 @@ if($_REQUEST['fn_reports'] == 1)
 # Set whether technician can view patient name at results entry
 if($user_type != $LIS_CLERK)
 {
-	if($_REQUEST['showpname'] == 1)
-	{
-		$user_type = $LIS_TECH_SHOWPNAME;
-	}
+	//if($user_type != $LIS_ADMIN){
+		if($_REQUEST['showpname'] == 1)
+		{
+			$user_type = $LIS_TECH_SHOWPNAME;
+		}
+	//}
 }
 $user = new User();
 $user->username = $username;

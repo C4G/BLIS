@@ -10,6 +10,12 @@ LangUtil::setPageId("results_entry");
 
 $attrib_value = $_REQUEST['a'];
 $attrib_type = $_REQUEST['t'];
+
+$lab_section = 0; // All lab section by default
+if(isset($_REQUEST['labsec']))
+	$lab_section = $_REQUEST['labsec']; // change the value based on the query
+
+
 $dynamic = 1;
 $search_settings = get_lab_config_settings_search();
 $rcap = $search_settings['results_per_page'];
@@ -76,9 +82,10 @@ background-color:#EAF2D3;
 </style>
 <script type='text/javascript'>
     $(document).ready(function(){
-        url_string = 'ajax/result_data_count.php?a='+'<?php echo $_REQUEST['t']; ?>'+'&q='+'<?php echo $_REQUEST['a']; ?>';
+        url_string = 'ajax/result_data_count.php?a='+'<?php echo $_REQUEST['t']; ?>'+'&q='+'<?php echo $_REQUEST['a']; ?>'+'&labsec='+'<?php echo $lab_section; ?>';
         var cap = parseInt($('#rcap').html());
         //console.log(cap);
+        //alert(<?php echo $_REQUEST['t']; ?>+"-"+<?php echo $_REQUEST['a']; ?>);
                                         $('.prev_link').hide();
 
         $.ajax({ 
@@ -88,6 +95,7 @@ background-color:#EAF2D3;
                     var icount = parseInt(count);
                      if(icount < cap/*parseInt('<?php echo $_REQUEST['result_cap']; ?>')*/)
                         {
+                         		
                                 $('.next_link').hide();
                                 if(icount == 0)
                                     {
@@ -201,7 +209,7 @@ if($dynamic == 0)
                     "WHERE p.patient_id=s.patient_id ".
                     "AND s.aux_id='$attrib_value'".
                     "AND s.specimen_id=t.specimen_id ".
-                    "AND t.result = '' ";
+                    "AND t.result = '' AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen')";
     }
     if($attrib_type == 0)
     {
@@ -211,7 +219,7 @@ if($dynamic == 0)
                     "WHERE p.patient_id=s.patient_id ".
                     "AND p.surr_id='$attrib_value'".
                     "AND s.specimen_id=t.specimen_id ".
-                    "AND t.result = '' ";
+                    "AND t.result = '' AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen') ";
     }
     else if($attrib_type == 1)
     {
@@ -233,7 +241,7 @@ if($dynamic == 0)
                     "WHERE s.specimen_id=t.specimen_id ".
                     "AND t.result = '' ".
                     "AND s.patient_id=p.patient_id ".
-                    "AND p.name LIKE '%$attrib_value%'";
+                    "AND p.name LIKE '%$attrib_value%' AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen')";
     }
     else if($attrib_type == 3)
     {
@@ -242,7 +250,7 @@ if($dynamic == 0)
                     "SELECT specimen_id FROM specimen ".
                     "WHERE daily_num LIKE '%-$attrib_value' ".
                     "AND ( status_code_id=".Specimen::$STATUS_PENDING." ".
-                    "OR status_code_id=".Specimen::$STATUS_REFERRED." ) ".
+                    "OR status_code_id=".Specimen::$STATUS_REFERRED." ) AND specimen_id NOT IN (select r_id from removal_record where category='specimen')".
                     "ORDER BY date_collected DESC";
     }
 }
@@ -250,23 +258,44 @@ else
 {
     if($attrib_type == 5)
     {
+    	
             # Search by specimen aux ID
-            $query_string = 
+    	if($lab_section == 0) {
+    		$query_string = 
                     "SELECT s.specimen_id FROM specimen s, test t, patient p ".
                     "WHERE p.patient_id=s.patient_id ".
                     "AND s.aux_id='$attrib_value'".
-                    "AND s.specimen_id=t.specimen_id ".
+                    "AND s.specimen_id=t.specimen_id AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) ".
                     "AND t.result = '' LIMIT 0,$rcap ";
+    	} else {
+			$query_string =
+					"SELECT s.specimen_id FROM specimen s, test t, patient p ".
+					"WHERE p.patient_id=s.patient_id ".
+					"AND s.aux_id='$attrib_value'".
+					"AND s.specimen_id=t.specimen_id ".
+					"AND t.result = '' AND test_type_id IN
+					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) LIMIT 0,$rcap ";
+		}
     }
     if($attrib_type == 0)
     {
             # Search by patient ID
-            $query_string = 
+    	if($lab_section == 0) {
+    		$query_string = 
                     "SELECT s.specimen_id FROM specimen s, test t, patient p ".
                     "WHERE p.patient_id=s.patient_id ".
                     "AND p.surr_id='$attrib_value'".
-                    "AND s.specimen_id=t.specimen_id ".
+                    "AND s.specimen_id=t.specimen_id AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) ".
                     "AND t.result = '' LIMIT 0,$rcap ";
+    	} else {
+    		$query_string =
+					"SELECT s.specimen_id FROM specimen s, test t, patient p ".
+					"WHERE p.patient_id=s.patient_id ".
+					"AND p.surr_id='$attrib_value'".
+					"AND s.specimen_id=t.specimen_id ".
+					"AND t.result = '' AND test_type_id IN
+					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) LIMIT 0,$rcap ";
+    	}
     }
     else if($attrib_type == 1)
     {
@@ -283,36 +312,97 @@ else
                     <?php
                     return;
             }
+            
+            if($lab_section == 0) {
             $query_string = 
                     "SELECT s.specimen_id FROM specimen s, test t, patient p ".
                     "WHERE s.specimen_id=t.specimen_id ".
                     "AND t.result = '' ".
                     "AND s.patient_id=p.patient_id ".
-                    "AND p.name LIKE '%$attrib_value%' LIMIT 0,$rcap";
+                    "AND p.name LIKE '%$attrib_value%' AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) LIMIT 0,$rcap"; }
+            else {
+			$query_string =
+					"SELECT s.specimen_id FROM specimen s, test t, patient p ".
+					"WHERE s.specimen_id=t.specimen_id ".
+					"AND t.result = '' ".
+					"AND s.patient_id=p.patient_id AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) ".
+					"AND p.name LIKE '%$attrib_value%' AND test_type_id IN
+					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) LIMIT 0,$rcap";
+			}
     }
     else if($attrib_type == 3)
     {
             # Search by patient daily number
-            $query_string = 
+    	if($lab_section == 0) {
+    		$query_string = 
                     "SELECT specimen_id FROM specimen ".
                     "WHERE daily_num LIKE '%-$attrib_value' ".
                     "AND ( status_code_id=".Specimen::$STATUS_PENDING." ".
-                    "OR status_code_id=".Specimen::$STATUS_REFERRED." ) ".
+                    "OR status_code_id=".Specimen::$STATUS_REFERRED." ) AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) ".
                     "ORDER BY date_collected DESC LIMIT 0,$rcap";
+    	} else {
+			$query_string =
+					"SELECT s.specimen_id FROM specimen s, test t WHERE s.specimen_id = t.specimen_id AND ".
+					"daily_num LIKE '%-$attrib_value'".
+					"AND ( status_code_id=".Specimen::$STATUS_PENDING." ".
+					"OR status_code_id=".Specimen::$STATUS_REFERRED." ) AND t.test_type_id IN
+					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) ".
+					"ORDER BY date_collected DESC LIMIT 0,$rcap";
+    		
+    	}
     } 
     else if($attrib_type == 9)
     {
             # Search by patient specimen id
                 $decoded = decodeSpecimenBarcode($attrib_value);
-            $query_string = 
+                if($lab_section == 0) {
+
+				$query_string = 
                     "SELECT specimen_id FROM specimen ".
                     "WHERE specimen_id = $decoded[1] ".
                     "AND ( status_code_id=".Specimen::$STATUS_PENDING." ".
-                    "OR status_code_id=".Specimen::$STATUS_REFERRED." ) ".
+                    "OR status_code_id=".Specimen::$STATUS_REFERRED." ) AND specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) ".
                     "ORDER BY date_collected DESC LIMIT 0,$rcap";
-            
-    } 
+            	} else {
+					$query_string =
+						"SELECT s.specimen_id FROM specimen s, test t ".
+						"WHERE s.specimen_id = $decoded[1] AND s.specimen_id = t.specimen_id ".
+						"AND ( s.status_code_id=".Specimen::$STATUS_PENDING." ".
+						"OR s.status_code_id=".Specimen::$STATUS_REFERRED." ) ".
+						" AND t.test_type_id IN
+					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section)  ".
+						"AND specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) ".
+						"ORDER BY date_collected DESC LIMIT 0,$rcap";
+				}
+    }
+
+    else if($attrib_type == 10)
+    {
+    # Search by patient specimen id
+    	$decoded = decodePatientBarcode($attrib_value);
+    	if($lab_section == 0) {
+    
+		$query_string = 
+                    "SELECT s.specimen_id FROM specimen s, test t, patient p ".
+                    "WHERE p.patient_id=s.patient_id ".
+                    "AND p.surr_id='$decoded[1]'".
+                    "AND s.specimen_id=t.specimen_id ".
+                    "AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen') ";
+		
+            	} else {
+            $query_string =
+				"SELECT s.specimen_id FROM specimen s, test t, patient p ".
+				"WHERE p.patient_id=s.patient_id ".
+				"AND p.surr_id='$attrib_value'".
+				"AND s.specimen_id=t.specimen_id ".
+				"AND test_type_id IN
+				(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) LIMIT 0,$rcap ";
+
+			}
+        }
 }
+
+//echo $query_string;
 $resultset = query_associative_all($query_string, $row_count);
 
 if(count($resultset) == 0 || $resultset == null)
@@ -326,7 +416,7 @@ if(count($resultset) == 0 || $resultset == null)
 		echo " ".LangUtil::$generalTerms['PATIENT_NAME']." ";
 	else if($attrib_type == 3)
 		echo " ".LangUtil::$generalTerms['PATIENT_DAILYNUM']." ";
-        if($attrib_type == 9)
+        if($attrib_type == 9 || $attrib_type == 10)
         {
             echo LangUtil::$pageTerms['MSG_PENDINGNOTFOUND'];
             echo '<br>'.'Try searching by patient name';
@@ -369,19 +459,19 @@ $specimen_id_list = array_values(array_unique($specimen_id_list));
 			if($_SESSION['pid'] != 0)
 			{
 			?>
-				<th style='width:75px;'><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></th>
+				<th style='min-width:75px;max-width:75px;'><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></th>
 			<?php
 			}
 			if($_SESSION['dnum'] != 0)
 			{
 			?>
-				<th style='width:100px;'><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></th>
+				<th style='min-width:100px;max-width:100px;'><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></th>
 			<?php
 			}
 			if($_SESSION['p_addl'] != 0)
 			{
 			?>
-				<th style='width:75px;'><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></th>
+				<th style='min-width:75px;max-width:75px;'><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></th>
 			<?php
 			}
 			//if($_SESSION['sid'] != 0)
@@ -389,32 +479,33 @@ $specimen_id_list = array_values(array_unique($specimen_id_list));
 			if(false)
 			{
 			?>
-				<th style='width:75px;'><?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></th>
+				<th style='min-width:75px;max-width:75px;'><?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></th>
 			<?php
 			}
 			if($_SESSION['s_addl'] != 0)
 			{
 			?>
-				<th style='width:75px;'><?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></th>
+				<th style='min-width:75px;max-width:75px;'><?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></th>
 			<?php
 			}
 			//if($lab_config->hidePatientName == 0)
 			if($_SESSION['user_level'] == $LIS_TECH_SHOWPNAME)
 			{
 			?>
-				<th style='width:200px;'><?php echo LangUtil::$generalTerms['PATIENT_NAME']; ?></th>
+				<th style='min-width:100px;max-width:100px;'><?php echo LangUtil::$generalTerms['PATIENT_NAME']; ?></th>
 			<?php
 			}
 			else
 			{
 			?>
-			<th style='width:100px;'><?php echo LangUtil::$generalTerms['GENDER']."/".LangUtil::$generalTerms['AGE']; ?></th>
+			<th style='min-width:100px;max-width:100px;'><?php echo LangUtil::$generalTerms['GENDER']."/".LangUtil::$generalTerms['AGE']; ?></th>
 			<?php
 			}
 			?>
-			<th style='width:100px;'><?php echo LangUtil::$generalTerms['SPECIMEN_TYPE']; ?></th>
-			<th style='width:100px;'><?php echo LangUtil::$generalTerms['TESTS']; ?></th>
-			<th style='width:100px;'></th>
+			<th style='min-width:100px;max-width:100px;'><?php echo LangUtil::$generalTerms['SPECIMEN_TYPE']; ?></th>
+			<th style='min-width:100px;max-width:100px;'><?php echo LangUtil::$generalTerms['TESTS']; ?></th>
+			<th style='min-width:100px;max-width:100px;padding:0px'>Results</th>
+			
 		</tr>
 	</thead>
 </table>
@@ -438,19 +529,19 @@ $specimen_id_list = array_values(array_unique($specimen_id_list));
 			if($_SESSION['pid'] != 0)
 			{
 			?>
-				<td style='width:75px;'><?php echo $patient->getSurrogateId(); ?></td>
+				<td style='min-width:75px;max-width:75px;'><?php echo $patient->getSurrogateId(); ?></td>
 			<?php
 			}
 			if($_SESSION['dnum'] != 0)
 			{
 			?>
-				<td style='width:100px;'><?php echo $specimen->getDailyNumFull(); ?></td>
+				<td style='min-width:100px;max-width:100px'><?php echo $specimen->getDailyNumFull(); ?></td>
 			<?php
 			}
 			if($_SESSION['p_addl'] != 0)
 			{
 			?>
-				<td style='width:75px;'><?php echo $patient->getAddlId(); ?></td>
+				<td style='min-width:75px;max-width:75px'><?php echo $patient->getAddlId(); ?></td>
 			<?php
 			}
 			//if($_SESSION['sid'] != 0)
@@ -458,34 +549,36 @@ $specimen_id_list = array_values(array_unique($specimen_id_list));
 			if(false)
 			{
 			?>
-				<td style='width:75px;'><?php echo $specimen->specimenId; ?></td>
+				<td style='min-width:75px;max-width:75px'><?php echo $specimen->specimenId; ?></td>
 			<?php
 			}
 			if($_SESSION['s_addl'] != 0)
 			{
 			?>
-				<td style='width:75px;'><?php echo $specimen->getAuxId(); ?></td>
+				<td style='min-width:75px;max-width:75px'><?php echo $specimen->getAuxId(); ?></td>
 			<?php
 			}
 			//if($lab_config->hidePatientName == 0)
 			if($_SESSION['user_level'] == $LIS_TECH_SHOWPNAME)
 			{
 			?>
-				<td style='width:200px;'><?php echo $patient->getName()." (".$patient->sex." ".$patient->getAgeNumber().") "; ?></td>
+				<td style='min-width:100px;max-width:100px'><a href='javascript:fetch_specimenPat(<?php echo $patient->patientId;?>,<?php echo $specimen->specimenId;?>)'><?php echo $patient->getName();?></a><?php  echo " (".$patient->sex." ".$patient->getAgeNumber().") "; ?></td>
 			<?php
 			}
 			else
 			{
 			?>
-				<td style='width:100px;'><?php echo $patient->sex."/".$patient->getAgeNumber(); ?></td>
+				<td style='min-width:100px;max-width:100px;'><?php echo $patient->sex."/".$patient->getAgeNumber(); ?></td>
 			<?php
 			}
 			?>
-			<td style='width:100px;'><?php echo get_specimen_name_by_id($specimen->specimenTypeId); ?></td>
-			<td style='width:100px;'>
+			<td style='min-width:100px;max-width:100px;'><?php echo get_specimen_name_by_id($specimen->specimenTypeId); ?></td>
+			<td style='min-width:100px;max-width:100px;'>
 			<?php
 			$test_list = get_tests_by_specimen_id($specimen->specimenId);
 			$i = 0;
+			$number_of_tests = count($test_list);
+			$results_entered = 0;
 			foreach($test_list as $test)
 			{
 				echo get_test_name_by_id($test->testTypeId);
@@ -494,16 +587,27 @@ $specimen_id_list = array_values(array_unique($specimen_id_list));
 				{
 					echo "<br>";
 				}
+				if($test->result != ''){
+					$results_entered++;
+				}
 			}
 			?>
 			</td>
-			<td style='width:100px;'><a href="javascript:fetch_specimen2(<?php echo $specimen->specimenId; ?>);" title='Click to Enter Results for this Specimen'>
+			<td style='min-width:100px;max-width:100px;padding:0px'>
+			<?php if($number_of_tests != $results_entered){?>
+			<a href="javascript:fetch_specimen2(<?php echo $specimen->specimenId; ?>);" title='Click to Enter Results for this Specimen'>
 				<?php echo LangUtil::$generalTerms['ENTER_RESULTS']; ?></a>
+			<?php } else { ?>
+				<a href="javascript:fetch_specimen2(<?php echo $specimen->specimenId; ?>);" title='Click to Enter Results for this Specimen'>
+				<?php echo "View Results"; ?></a>
+			<?php }?>
 			</td>
-		</tr>
+			
 		</tbody>
 		</table>
 		<div class='result_form_pane' id='result_form_pane_<?php echo $specimen->specimenId; ?>'>
+		</div>
+		<div class='result_form_pane' id='result_form_pane_patient_<?php echo $specimen->specimenId; ?>'>
 		</div>
 		<?php
 		$count++;
@@ -522,17 +626,17 @@ if($attrib_type == 3 && $count > 2)
 
 ?>
 <?php 
-        if(isset($_REQUEST['l']))
+        if(isset($_REQUEST['labsec']))
         { 
-            $next_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter+1); 
+            $next_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['labsec']."&result_cap=".$result_cap."&result_counter=".($result_counter+1); 
         }
         else
         {
             $next_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&result_cap=".$result_cap."&result_counter=".($result_counter+1);             
         }
-        if(isset($_REQUEST['l']))
+        if(isset($_REQUEST['labsec']))
         { 
-            $prev_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1); 
+            $prev_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['labsec']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1); 
         }
         else
         {

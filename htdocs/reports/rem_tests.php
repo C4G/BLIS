@@ -15,7 +15,15 @@ $remarks = $_POST['remarks'];
 $count = count($sp);
 for($i = 0; $i < $count; $i++)
 {
-    remove_specimens($lid, $sp[$i], $remarks[$i]);
+	if(isset($_POST['category'])){
+    	remove_specimens($lid, $sp[$i], $remarks[$i], $_POST['category']);
+    	$testsList = get_tests_by_specimen_id($sp[$i]);
+    	delete_tests_by_test_id($testsList);
+	}
+	else { 
+		remove_specimens($lid, $sp[$i], $remarks[$i]);
+		
+	}
 }
 
 $url = "Location:../".$_POST['url'];

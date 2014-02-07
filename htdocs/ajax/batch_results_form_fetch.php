@@ -41,6 +41,7 @@ if(count($pending_tests) == 0 || $pending_tests == null)
 <input type='hidden' name='t_type' value='<?php echo $test_type_id; ?>'></input>
 <input type='hidden' name='num_measures' value='<?php echo count($measure_list); ?>'></input>
 <?php # Table of result fields ?>
+
 <table class='tablesorter' id='batch_result_table'>
 <thead>
 	<tr valign='top'>
@@ -87,6 +88,9 @@ if(count($pending_tests) == 0 || $pending_tests == null)
 				<th><?php echo LangUtil::$generalTerms['DOB']; ?></th>
 			<?php 
 		}
+		?>
+						
+		<?php 
 		# Patient Custom fields here
 		$custom_field_list = $lab_config->getPatientCustomFields();
 		if(count($custom_field_list) > 0 ) {
@@ -145,6 +149,7 @@ if(count($pending_tests) == 0 || $pending_tests == null)
 		?>
 		<th><?php echo LangUtil::$generalTerms['RESULT_COMMENTS']." (".LangUtil::$generalTerms['OPTIONAL'].")"; ?></th>
 		<th><?php echo LangUtil::$generalTerms['CMD_SKIP']; ?>?</th>
+		<th><!-- Related Tests Column --></th>
 	</tr>
 </thead>
 <tbody>
@@ -326,13 +331,27 @@ if(count($pending_tests) == 0 || $pending_tests == null)
 			<input type='checkbox' name='skip_<?php echo $i; ?>' title='Tick the box to Skip entering results for this Specimen'></input>
 			</center>
 		</td>
+		<td><a href="javascript:fetch_specimen3(<?php echo $specimen->specimenId;?>,<?php echo $test_type_id; ?>)">Related Tests for this specimen</a></td>
 	</tr>
+	<!-- <tr valign="top" class="related_tests_tr_<?php echo $specimen->specimenId; ?>" >
+		<td colspan="100%"><div class='result_form_pane_batch' id='result_form_pane_batch_<?php echo $specimen->specimenId; ?>'>
+		 </div></td>
+	</tr>  -->
+	<script type="text/javascript">
+	
+	</script>
 	<?php
 	}
 	?>
+	
 </tbody>
 </table>
 <script type='text/javascript'>
+$(document).ready(function(){
+	var rows = $('table.tablesorter tr');
+	alert("Test");
+	rows.filter('.related_tests_tr_'+specimen_id).hide();
+}
 </script>
 <!--
 <small>

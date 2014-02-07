@@ -589,6 +589,15 @@ CREATE TABLE IF NOT EXISTS `payments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 
+CREATE  TABLE IF NOT EXISTS `user_feedback` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `user_id` INT(11) NULL ,
+  `rating` INT(3) NULL ,
+  `comments` VARCHAR(500) NULL ,
+  `ts` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  PRIMARY KEY (`id`) );
+
+
 INSERT INTO `report_config` (`report_id`, `header`, `footer`, `margins`, `p_fields`, `s_fields`, `t_fields`, `p_custom_fields`, `s_custom_fields`) VALUES 
 ('1', 'Patient Report', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
 ('2', 'Specimen Report', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
@@ -597,4 +606,29 @@ INSERT INTO `report_config` (`report_id`, `header`, `footer`, `margins`, `p_fiel
 ('5', 'Worksheet', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
 ('6', 'Daily Log - Patients', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', '');
 
+CREATE TABLE IF NOT EXISTS `currency_conversion` (
+  `currencya` varchar(200) NOT NULL,
+  `currencyb` varchar(200) NOT NULL,
+  `exchangerate` FLOAT(5,2) default NULL,
+  `updatedts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `flag1` int(11) default NULL,
+  `flag2` int(11) default NULL,
+  `setting1` varchar(200) default NULL,
+  `setting2` varchar(200) default NULL,
+  PRIMARY KEY  (`currencya`,`currencyb`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
 INSERT INTO `test_category` (`test_category_id`, `name`) VALUES(1, 'HIV');
+
+
+CREATE TABLE `field_order` (
+  `id` int(11) NOT NULL auto_increment,
+  `lab_config_id` int(11) unsigned default NULL,
+  `form_id` int(11) default NULL,
+  `field_order` varchar(2000) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+
+alter table removal_record add category varchar(20) default "test";
+
+ALTER TABLE specimen ADD COLUMN referred_from_name varchar(20);

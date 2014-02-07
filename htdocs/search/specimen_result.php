@@ -47,6 +47,7 @@ function update_remarks(test_type_id, measure_id)
 	var result_field_name = 'result_'+test_type_id+"_"+measure_id;
 	var result_field_value = $("#"+result_field_name).val();
 	var comments_field_name = 'comments_'+test_type_id+"_"+measure_id;
+	//alert(result_field_value);
 	$("#"+comments_field_name).val(result_field_value);
 }
 </script>
@@ -88,8 +89,10 @@ $test_list = get_tests_by_specimen_id($specimen->specimenId);
 	<?php
 	foreach($test_list as $test)
 	{
+		// CSF eg.
 		$test_type = get_test_type_by_id($test->testTypeId);
-                
+
+		// 59,60,61...,
 		$measure_list = $test_type->getMeasures();
                 
                 $submeasure_list = array();

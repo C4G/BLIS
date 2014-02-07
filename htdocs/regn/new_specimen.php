@@ -11,6 +11,11 @@ $page_start = $load_time;
 
 include("redirect.php");
 include("includes/header.php");
+include_once ("includes/db_lib.php");
+include_once("includes/field_order_update.php");
+
+
+
 LangUtil::setPageId("new_specimen");
 
 $script_elems->enableDatePicker();
@@ -35,18 +40,29 @@ if ( substr($session_num,strpos($session_num, "-")+1 ) )
 */
 	
 $doc_array= getDoctorList();
+$ref_array= getRefToList();
 $php_array= addslashes(implode("%", $doc_array));
+
+$refTo_array= addslashes(implode("%", $ref_array));
 	
 $uiinfo = "pid=".$_REQUEST['pid']."&dnum=".$_REQUEST['dnum'];
 putUILog('new_specimen', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 ?>
 	<script>
   $(document).ready(function(){
-//var data = "Core Selectors Attributes Traversing Manipulation CSS Events Effects Ajax Utilities".split(" ");
-var data_string="<?php echo $php_array;?>";
-var data=data_string.split("%"); 
-$("#doc_row_1_input").autocomplete(data);
-  });
+
+	var data_string="<?php echo $php_array;?>";
+	var data=data_string.split("%"); 
+	$("#doc_row_1_input").autocomplete(data);
+
+	//$(".doctors_auto").autocomplete(data);
+
+
+  var refTo_string="<?php echo $refTo_array;?>";
+  var refTodata=refTo_string.split("%"); 
+  //alert("RefTo : "+refTodata);
+  $("#refTo_row_1_input").autocomplete(refTodata);
+    });
   </script>
 <script>
 // <!-- <![CDATA[
@@ -180,6 +196,27 @@ function add_specimens()
 			alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$pageTerms['MSG_SID_INVALID']; ?>");
 			return;
 		}
+
+		var referred_out = $('#ref_out_'+j+':checked').val();
+		var referred_to = $("#refTo_row_"+j+"_input").val();
+		var referred_from = $("#ref_from_row_"+j+"_input").val();
+		//alert(referred_out+" -- "+referred_to+" -- "+referred_from);
+
+		if(referred_out == 'Y'){
+						
+			if(referred_to != referred_from){
+				continue;		
+			} else{
+				alert("Enter either 'Referred To' or 'Referred From' ");
+				return;
+			}
+		}
+		if(specimen_valid != "")
+		{
+			alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$pageTerms['MSG_SID_INVALID']; ?>");
+			return;
+		}
+		
 		var ry = $("#"+form_id+" [name='receipt_yyyy']").attr("value");
 		ry = ry.replace(/[^0-9]/gi,'');
 		var rm = $("#"+form_id+" [name='receipt_mm']").attr("value");
@@ -265,10 +302,11 @@ function add_specimenbox()
 {
 	specimen_count++;
 	var doc = $('#doc_row_1_input').attr("value");
+	var refTo = $('#refTo_row_1_input').attr("value");
 	var title= $('#doc_row_1_title').attr("value");
 	var dnumInit = "<?php echo $dnum; ?>";
 	dnum = dnumInit.toString();
-	var url_string = "ajax/specimenbox_add.php?num="+specimen_count+"&pid=<?php echo $pid; ?>"+"&dnum="+dnum+"&doc="+doc+"&title="+title+"&session_num=<?php echo $session_num; ?>";
+	var url_string = "ajax/specimenbox_add.php?num="+specimen_count+"&pid=<?php echo $pid; ?>"+"&dnum="+dnum+"&doc="+doc+"&title="+title+"&refTo="+refTo+"&session_num=<?php echo $session_num; ?>";
 	$('#sbox_progress_spinner').show();
 	$.ajax({ 
 		url: url_string, 
@@ -281,6 +319,7 @@ function add_specimenbox()
 
 function get_testbox(testbox_id, stype_id)
 {
+	//alert("Test Box ID : "+testbox_id+" specimen type : "+stype_id);
 	var stype_val = $('#'+stype_id).attr("value");
 	if(stype_val == "")
 	{
@@ -337,14 +376,16 @@ function checkandtoggle(select_elem, div_id)
 	
 }
 
-function checkandtoggle_ref(ref_check_id, ref_row_id)
+function checkandtoggle_ref(ref_check_id, ref_row_id, ref_from_row_id)
 {
 	if($('#'+ref_check_id).attr("checked") == true)
 	{
 		$('#'+ref_row_id).show();
+		$('#'+ref_from_row_id).show();
 	}
 	else
 	{
+		$('#'+ref_from_row_id).hide();
 		$('#'+ref_row_id).hide();
 	}
 }
@@ -374,12 +415,25 @@ if($patient == null)
 	include("includes/footer.php");
 	return;
 }
+
+	if (isset($_SESSION['specimenFieldOrder']))
+		unset($_SESSION['specimenFieldOrder']);
+
+	if (! isset($_SESSION['specimenFieldOrder']))
+	{
+		$lab_config = get_lab_config_by_id($_SESSION['lab_config_id']);
+		$specimenFieldOrderingObj = field_order_update::install_first_order($lab_config, 2);
+		$specimenOrder = $specimenFieldOrderingObj->form_field_inOrder;
+		$_SESSION['specimenFieldOrder'] = explode( ',', $specimenOrder );
+	}
+
 ?>
 <table cellpadding='5px'>
 	<tbody>
 		<tr valign='top'>
 			<td>
 				<span id='specimenboxes'>
+				
 				<?php echo $page_elems->getNewSpecimenForm(1, $pid, $dnum, $session_num); ?>
 				</span>
 				<br>
@@ -420,6 +474,7 @@ if($patient == null)
 	</ul>
 </div>
 <span id='progress_spinner' style='display:none;'>
+	
 	<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
 </span>
 <br>

@@ -9,14 +9,26 @@ include("includes/new_image.php");
 include("includes/header.php");
 include("includes/random.php");
 include("includes/stats_lib.php");
+include_once("includes/field_order_update.php");
+
 LangUtil::setPageId("lab_config_home");
 
 putUILog('lab_config_home', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 $script_elems->enableTableSorter();
 $script_elems->enableJQueryForm();
+
 ?>
 
+  
+<script src="js/jquery-ui-1.8.16.js" type="text/javascript"></script>
+<link rel="stylesheet" href="css//jquery-ui-1.8.16.css" type="text/css" media="all">
+
+ <link rel="stylesheet" href="css/jquery-ui-1.8.16.css" type="text/css" media="all"> 
+<!-- <link rel="stylesheet" href="/resources/demos/style.css" /> -->
+<!-- <script type="text/javascript" src="js/jquery.ui.js"></script>
+<script type="text/javascript" src="js/dialog/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="js/dialog/jquery.ui.dialog.js"></script> -->
 
 <div id='Summary_config' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
@@ -47,7 +59,9 @@ $script_elems->enableJQueryForm();
 	<ul>
 		<?php
 		if(LangUtil::$pageTerms['TIPS_SPECIMENTESTTYPES']!="-") {
-			echo "<li>";
+	
+
+		echo "<li>";
 			echo LangUtil::$pageTerms['TIPS_SPECIMENTESTTYPES'];
 			echo "</li>";
 		}	
@@ -214,8 +228,13 @@ if ( !((is_country_dir($user)) || (is_super_admin($user)) ) ) {
 	}
 	DbUtil::switchRestore($saved_db);
 }
-
+//echo "Lab Config Id ".$lab_config_id;
 $lab_config = LabConfig::getById($lab_config_id);
+//Patient Custom Fields for the lab with $lab_config
+$custom_field_list_patients = get_lab_config_patient_custom_fields($lab_config->id);
+$custom_field_list_specimen = get_lab_config_specimen_custom_fields($lab_config->id);
+$custom_field_list_labTitle = get_lab_config_labtitle_custom_fields($lab_config->id);
+//echo "custom fields = ".$custom_field_list[0]->id;
 if($lab_config == null)
 {
 	?>
@@ -227,8 +246,29 @@ if($lab_config == null)
 	include("includes/footer.php");
 	return;
 }
+
+$field_odering_patients = field_order_update::install_first_order($lab_config, 1);
+$field_odering_specimen = field_order_update::install_first_order($lab_config, 2);
 ?>
 <style type='text/css'>
+
+	/* body { font-size: 62.5%; } */
+  /*.ui-state-default {font-size: 1.4em; height: 30px; }*/
+  /*.ui-dialog-content .ui-widget-content {height: 300px;}*/
+  #sortablePatients { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  #sortablePatients li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.0em; height: 16px; }
+  #sortablePatients li span { position: absolute; margin-left: -1.3em; }
+  
+  #sortableSpecimen { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  #sortableSpecimen li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.0em; height: 16px; }
+  #sortableSpecimen li span { position: absolute; margin-left: -1.3em; }
+  .ui-dialog .ui-state-error { padding: .3em; }
+    /* label, input { display:block; }
+    input.text { margin-bottom:12px; width:95%; padding: .4em; }
+    fieldset { padding:0; border:0; margin-top:25px; }
+    h1 { font-size: 1.2em; margin: .6em 0; }
+    
+    .validateTips { border: 1px solid transparent; padding: 0.3em; } */
 
 .range_field {
 	width:30px;
@@ -244,6 +284,8 @@ $(document).ready(function(){
 		toggle_agegrouplist();
 	});
 	$('#revert_done_msg').hide();
+	$('#reorder_fields').hide();
+	
 	$('#cat_code12').change( function() { get_test_types_bycat() });
 	get_test_types_bycat
 	<?php
@@ -351,6 +393,15 @@ $(document).ready(function(){
                 right_load(22, 'billing_div');
                 <?php
         }
+        
+        else if(isset($_REQUEST['addedCurrency']))
+        {
+        	?>
+                $('#billing_msg').html("New Currecy added. &nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('billing_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+        		$('#billing_msg').show();
+                right_load(22, 'billing_div');
+            <?php
+         }
 	else if(isset($_REQUEST['adupdate']))
 	{
 		# Show custom field updated message
@@ -501,6 +552,16 @@ $(document).ready(function(){
 	stype_toggle();
 });
 
+
+function openReorder(){
+	$('#reorder_fields').show();
+}
+
+function closeReorder(){
+	$('#reorder_fields').hide();
+}
+
+
 function performDbUpdate() {
 	$.ajax({
 		type : 'POST',
@@ -515,6 +576,27 @@ function performDbUpdate() {
 			}
 		}
 	});
+}
+
+function add_new_currency_ratio(action){
+	if(action == 1){
+		var defaultCurrency = $("#default_currency").val();
+		var addedCurrency=$("#added_currency").val();
+		var exchangeRate = $("#added_currency_rate").val();
+		var numberRegex = /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/;
+		if(exchangeRate == '' || !numberRegex.test(exchangeRate)){
+			alert("Enter a valid exchange rate");
+			return;
+		}
+		var url_string = "ajax/add_currency_rate.php?lid=<?php echo $lab_config->id; ?>&defaultCurrency="+
+		defaultCurrency+"&secondaryCurrency="+addedCurrency+"&exchangeRate="+exchangeRate;
+		var reload_url = "lab_config_home.php?id=<?php echo $lab_config_id; ?>&billingupdate=1";
+		$.ajax({ url: url_string, async: false, success: function() {
+			window.location=reload_url;
+		}});
+	} else {
+		$("#addCurrencyRatioDiv").hide();
+	}
 }
 
 function get_testbox2(stype_id)
@@ -694,6 +776,44 @@ function toggletatdivs()
 		$('#toggletat_link').html("<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>");
 }
 
+function updateCurrencyRatio(row_id)
+{
+	var defaultCurrency = $("#default_currency").val();
+	var secondaryCurrency= $("#currency"+row_id).text();
+	var exchangeRate = $("#exchangeRate"+row_id).val();
+
+	var numberRegex = /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/;
+	if(exchangeRate == '' || !numberRegex.test(exchangeRate)){
+		alert("Enter a valid exchange rate");
+		return;
+	}
+	
+	var url_string = "ajax/add_currency_rate.php?lid=<?php echo $lab_config->id; ?>&defaultCurrency="+
+	defaultCurrency+"&secondaryCurrency="+secondaryCurrency+"&exchangeRate="+exchangeRate;
+	var reload_url = "lab_config_home.php?id=<?php echo $lab_config_id; ?>&billingupdate=1";
+	$.ajax({ url: url_string, async: false, success: function() {
+		window.location=reload_url;
+	}});
+}
+
+function deleteCurrencyRatio(row_id)
+{
+	var defaultCurrency = $("#default_currency").val();
+	var secondaryCurrency= $("#currency"+row_id).text();
+	
+	var url_string = "ajax/delete_currency_rate.php?lid=<?php echo $lab_config->id; ?>&defaultCurrency="+
+	defaultCurrency+"&secondaryCurrency="+secondaryCurrency;
+	var reload_url = "lab_config_home.php?id=<?php echo $lab_config_id; ?>&billingupdate=1";
+	$.ajax({ url: url_string, async: false, success: function() {
+		window.location=reload_url;
+	}});
+}
+
+function addCurrencyRatio()
+{
+	$("#addCurrencyRatioDiv").show();
+}
+
 function toggle_disease_report()
 {
 	$('#agg_report_summary').toggle();
@@ -724,9 +844,126 @@ function toggle_ofield_div()
 	$('#ofield_form_div').toggle();
 	var curr_link_text = $('#ofield_toggle_link').html();
 	if(curr_link_text == "<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>")
-		$('#ofield_toggle_link').html("<?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?>");
-	else
+		{
+		 $('#ofield_toggle_link').html("<?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?>");
+		 $('#field_reorder_link_patient').show();
+		 $('#field_reorder_link_specimen').show();
+		}
+	else{
 		$('#ofield_toggle_link').html("<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>");
+		$('#field_reorder_link_patient').show();
+		$('#field_reorder_link_specimen').show();
+	 }
+}
+
+
+$(function() {
+    // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+   $( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+   $( "#dialog-form-patients" ).dialog({
+        autoOpen: false,
+        //position: { my: "center", at: "center", collision: 'none' },
+        height: 400,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Update": function() {
+                var index = 0;
+				var orders = "formId=1&";
+				$('#sortablePatients li').each(function(){
+					var $this = $(this);
+					index++;
+					var field_name = $this.text();
+					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
+				});
+				
+				orders = orders.match(/(.*).$/)[1];
+								
+				$.ajax({
+					url : "ajax/process-field-ordering.php?"+orders,
+					async: false,
+					success : function(data) {
+						alert("Patient Field Order Updated");
+						window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
+					}	
+				});
+   		     
+				},
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        },
+        close: function() {
+            allFields.val( "" ).removeClass( "ui-state-error" );
+        }
+    });
+
+    
+
+    $( "#field_reorder_link_patient" ).click(function() {
+            $( "#dialog-form-patients" ).dialog( "open" );
+        });
+
+    $( "#field_reorder_link_specimen" ).click(function() {
+        $( "#dialog-form-specimen" ).dialog( "open" );
+    });
+
+    $( "#dialog-form-specimen" ).dialog({
+        autoOpen: false,
+        //position: { my: "center", at: "center", collision: 'none' },
+        height: 400,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Update": function() {
+                var index = 0;
+				var orders = "formId=2&";
+				$('#sortableSpecimen li').each(function(){
+					var $this = $(this);
+					index++;
+					var field_name = $this.text();
+					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
+				});
+				
+				orders = orders.match(/(.*).$/)[1];
+								
+				$.ajax({
+					url : "ajax/process-field-ordering.php?"+orders,
+					async: false,
+					success : function(data) {
+						alert("Specimen Field Order Updated");
+						window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
+					}	
+				});
+   		     
+				},
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        },
+        close: function() {
+            allFields.val( "" ).removeClass( "ui-state-error" );
+        }
+    });
+
+    
+    $("#sortablePatients").sortable({     	});
+    $("#sortableSpecimen").sortable({     	});
+    $( "#sortablePatients" ).disableSelection();
+    $( "#sortableSpecimen" ).disableSelection();
+    
+});
+
+function add_new_currency(action)
+{
+	if(action == 1){
+	$('#new_currency').show();
+	$('#add_new_currency_link').hide();
+	} else {
+	$('#new_currency').hide();
+	$('#add_new_currency_link').show();
+	}
 }
 
 function stype_toggle()
@@ -806,6 +1043,38 @@ function submit_billing_update()
 			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&billingupdate=1";
 		}
 	});
+}
+
+
+function submit_new_currency()
+        //Submit stuff to the db here.
+{
+        $('#billing_progress').show();
+        var newCurrency = $('#new_currency_name').val();
+        if(newCurrency == '' || newCurrency == undefined || newCurrency.length == 0){
+			alert("Enter a currency name to be added");
+			return;
+        }
+
+        var url_string ='ajax/lab_config_addCurrency.php?id=<?php echo $lab_config->id; ?>&currencyName='+newCurrency;
+        $.ajax({
+    		url : url_string,
+    		async: false,
+    		success : function(data) {
+    			if ( data.indexOf("true") >= 0 ) {
+    				$('#billing_progress').hide();
+    				window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&addedCurrency=1";
+    			}
+    			else {
+    				$('#billing_progress').hide();
+    				alert("Currency already exists. Enter a different currency name");	
+    			}
+    		}
+    	});
+}
+
+function cancel_new_currency(){
+	
 }
 
 function delete_config()
@@ -1158,7 +1427,7 @@ function right_load_1(option_num, div_id)
 				<div id='report_setup' name='report_setup' style='display:none;'>
 					-<a id='option8' class='menu_option' href="javascript:right_load(8, 'agg_report_div');"><?php echo LangUtil::$pageTerms['MENU_INFECTION']; ?></a>
 					<br><br>
-                                        -<a id='option36' class='menu_option' href="javascript:right_load(36, 'grouped_count_div');"><?php echo "Test/Specimen Grouped Reports"; ?></a>
+                    -<a id='option36' class='menu_option' href="javascript:right_load(36, 'grouped_count_div');"><?php echo "Test/Specimen Grouped Reports"; ?></a>
 					<br><br>
 					-<a id='option11' class='menu_option' href="javascript:right_load(11, 'report_config_div');"><?php echo LangUtil::$pageTerms['MENU_REPORTCONFIG']; ?></a>
 					<br><br>
@@ -1369,7 +1638,8 @@ function right_load_1(option_num, div_id)
                                     <p style="text-align: right;"><a rel='facebox' href='#Billing_config'>Page Help</a></p>
                                     <div id='billing_msg' class='clean-orange' style='display:none;width:350px;'>
                                     </div>
-                                    <form id='billing_form' name='billing_form' action='ajax/billing_update.php' method='post'>
+                           
+									<form id='billing_form' name='billing_form' action='ajax/billing_update.php' method='post'>
                                         <input type='hidden' name='lid' value='<?php echo $lab_config->id; ?>'></input>
                                         <div class="pretty_box">
                                         <?php
@@ -1382,24 +1652,153 @@ function right_load_1(option_num, div_id)
                                         ?>
                                         <input type="checkbox" value="enable_billing" name="enable_billing" <?php echo $checkbox ?>/><?php echo "Enable Billing"; ?>
                                         <br><br>
-                                        <?php echo "Currency Name:"; ?>
-                                        <input type="text" name="currency_name" value="<?php echo get_currency_type_from_lab_config_settings() ?>" />
+                                        <?php echo "Default Currency Name:"; ?>
+                                        <!-- <input type="text" name="currency_name" value="<?php echo get_currency_type_from_lab_config_settings() ?>" />  -->
+                                        <select name='default_currency' id='default_currency'>
+                                        <?php $allCurrencies = currencyConfig::getAllDifferenctCurrencies($lab_config_id);
+                                        $defaultCurrency = "";
+                                        foreach ($allCurrencies as $currency){ 
+										//echo $currency->getFlag1(). " " . $currency->getCurrencyFrom();
+                                        if($currency->getFlag1()){
+										$defaultCurrency = $currency; 
+                                        ?>
+											<option value='<?php echo $currency->getCurrencyFrom(); ?>' selected><?php echo $currency->getCurrencyFrom(); ?></option>
+										<?php } 
+										else {
+                                        ?>
+                                        	<option value='<?php echo $currency->getCurrencyFrom(); ?>'><?php echo $currency->getCurrencyFrom(); ?></option>
+                                        <?php } 
+										}?>
+											
+										</select>
                                         <br><br>
                                         <?php echo "Currency Delimiter:"; ?>
                                         <input type="text" name="currency_delimiter" value="<?php echo get_currency_delimiter_from_lab_config_settings() ?>" size="1" maxlength="1" />
                                         <br><br>
                                         Currency will display as: 00<?php echo get_currency_delimiter_from_lab_config_settings(); ?>00 <?php echo get_currency_type_from_lab_config_settings() ?>
+                                        <br/><br/>
+                                        <?php if($defaultCurrency==""){?>
+                                        <div id="exchange_rate" style='display:none;' ></div><?php } else {?>
+                                        <?php 
+                                        $alreadyExistingExchangeRates = array();
+                                        if($defaultCurrency!=""){
+                                        $exchangeRates = currencyConfig::getExchangeRateSnap($lab_config_id, $defaultCurrency->getCurrencyFrom());
+                                        $totalCurrencies = count($allCurrencies);
+                                        $totalExchangeRates = count($exchangeRates);
+                                        }?>
+										<?php if($totalExchangeRates <1){?>
+                                        <div id="exchange_rate" style='display:none;'></div>
+										<?php } else {?>
+                                        <div id="exchange_rate" >
+                                        <table border="1">
+                                        <tr>
+                                        <th>&nbsp;&nbsp; <?php echo LangUtil::$generalTerms['CURRENCY']; ?>&nbsp;&nbsp; </th>
+                                        <th>&nbsp;&nbsp; <?php echo LangUtil::$generalTerms['EXCHANGE_RATE']; ?>&nbsp;&nbsp; </th>
+                                        <th>&nbsp;&nbsp; <?php echo LangUtil::$generalTerms['UPDATED_DATE']; ?>&nbsp;&nbsp; </th>
+                                        <th>&nbsp;&nbsp; <?php echo LangUtil::$generalTerms['ACTIONS']; ?>&nbsp;&nbsp; </th>
+                                        </tr>
+                                        <?php 
+                                        $row=0;
+                                        foreach($exchangeRates as $currencyExchageRow){?>
+                                        <tr> 
+                                        <td>&nbsp;&nbsp; <div id="currency<?php echo $row;?>"><?php echo $currencyExchageRow->getCurrencyTo();
+                                                         array_push($alreadyExistingExchangeRates, $currencyExchageRow->getCurrencyTo()); ?> </div>&nbsp;&nbsp;</td>
+                                        <td>&nbsp;&nbsp; <input type="text" id="exchangeRate<?php echo $row;?>" value="<?php echo $currencyExchageRow->getExchangeRate();?>" size="4" />&nbsp;&nbsp; </td>
+                                        <td>&nbsp;&nbsp; <?php echo DateLib::mysqlToString($currencyExchageRow->getLastUpdatedDate());?>&nbsp;&nbsp; </td>
+                                        <td>&nbsp;&nbsp; <a href="javascript:updateCurrencyRatio(<?php echo $row;?>);">Update</a>&nbsp;&nbsp; | &nbsp;&nbsp;<a href="javascript:deleteCurrencyRatio(<?php echo $row;?>);">Delete</a> &nbsp;&nbsp; </td>
+                                        </tr>
+                                        <?php $row++; }?>
+                                        </table>
                                         </div>
-                                        <br>
+                                        <?php } ?>
+                                        <a href="javascript:addCurrencyRatio();"><?php echo LangUtil::$generalTerms['ADD_CURRENCY_RATE']; ?></a><br/>
+										<?php }?>
+                                        
+                                        <div id="addCurrencyRatioDiv">
+                                        <?php
+                                        $validAddableCurrency = array();
+                                        foreach ($allCurrencies as $currency){ 
+										if($currency->getCurrencyTo() != $defaultCurrency->getCurrencyFrom() && !(in_array($currency->getCurrencyTo(), $alreadyExistingExchangeRates))){
+										array_push($validAddableCurrency, $currency);
+										} 
+										}
+										if(count($validAddableCurrency)>0){?>
+                                        Secondary Currency&nbsp;&nbsp;&nbsp; 
+                                        <select name='added_currency' id='added_currency'>
+                                        <?php
+                                        foreach ($validAddableCurrency as $currency){ 
+										?>
+											<option value='<?php echo $currency->getCurrencyFrom(); ?>'><?php echo $currency->getCurrencyFrom(); ?></option>
+										<?php } 
+										?>
+                                        </select> 
+                                        &nbsp;&nbsp;&nbsp; <input type="text" id="added_currency_rate" size="12" placeholder="Exchange Rate">
+                                        &nbsp;&nbsp;&nbsp; <input type="button" value="Add" onclick="add_new_currency_ratio(1)" />
+                                        &nbsp;&nbsp;&nbsp; <input type="button" value="Cancel" onclick="add_new_currency_ratio(0)" />
+                                        <?php }  else {
+											echo "<br/>"."Add secondary currencies to enter the exchange rates";
+										}?>
+                                        </div>
+                                        <br/>                                       
+                                        <div>
+                                    	<a href='javascript:add_new_currency(1);' id='add_new_currency_link'><?php echo LangUtil::$generalTerms['ADD_CURRENCY']; ?></a>
+                                    	                                    
+                                   	 	<div id="new_currency" style='display:none;'>
+                                   	 	<?php echo LangUtil::$generalTerms['NEW_CURRENCY']; ?>
+                                    	&nbsp;&nbsp;&nbsp;<input type="text" name="new_currency_name" id="new_currency_name" /> 
+                                    	&nbsp;&nbsp;&nbsp;<input type="button" value="Add Currency Type" onclick="submit_new_currency()" />
+                                    	&nbsp;&nbsp;&nbsp; <input type="button" value="Cancel" onclick="add_new_currency(0)" />
+                                    	</div>
+                                    	</div>
+                                       
+                                        <br/>
                                         <input type="button" value="Update" onclick="submit_billing_update()" />
 
                                         <span id='billing_progress' style='display:none;'>
                                             <?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
-					</span>
+										</span>
                                     </form>
+                                    </div>
+								
                                 </div>
 				
 				<div class='right_pane' id='fields_div' style='display:none;margin-left:10px;'>
+				
+<div id="dialog-form-patients" title="Customize Field Order - Patient Registration Form">
+<!-- <table>
+<tr>
+<td> -->
+<div >Tips : Drag and Drop and click update to reorder patient fields</div>
+<div align="center">
+   <ul id="sortablePatients">
+   <?php  
+   $field_odering_form_names = explode(',', $field_odering_patients->form_field_inOrder);
+   foreach($field_odering_form_names as $value){
+   	echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
+   }
+   ?>
+  
+</ul> </div>
+<!-- </td><td width='30%'><div align='top'>Tips : Drag and Drop and click update to reorder the existing fields</div></td>
+</table> -->
+</div>
+
+<div id="dialog-form-specimen" title="Customize Field Order - Specimen Registration Form">
+<div >Tips : Drag and Drop and click update to reorder specimen fields</div>
+<div align="center">
+   <ul id="sortableSpecimen">
+   <?php  
+   $field_odering_form_names = explode(',', $field_odering_specimen->form_field_inOrder);
+   foreach($field_odering_form_names as $value){
+   	echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
+   }
+   ?>
+  
+</ul> </div>
+</div>
+ 
+ 
+		
 					<p style="text-align: right;"><a rel='facebox' href='#RegistrationFields_config'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_CUSTOM']; ?></b>
 					 | <a href='javascript:toggle_ofield_div();' id='ofield_toggle_link'><?php echo LangUtil::$generalTerms['CMD_EDIT']; ?></a>
@@ -1501,6 +1900,8 @@ function right_load_1(option_num, div_id)
 										<script type='text/javascript'>
 										$(document).ready(function(){
 											$('#dnum_reset').attr("value", "<?php echo $lab_config->dailyNumReset; ?>");
+											$("#addCurrencyRatioDiv").hide();
+											$("#updateCurrencyRatioDialog").hide();
 										});										
 										</script>
 									</span>
@@ -1623,6 +2024,7 @@ function right_load_1(option_num, div_id)
 									if($lab_config->specimenAddl != 0)
 										echo " checked ";
 									?>>
+									
 									</input>
 									<span id='use_s_addl_mand' style='display:none;'>
 										&nbsp;&nbsp;
@@ -1716,7 +2118,7 @@ function right_load_1(option_num, div_id)
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['DOCTOR']; ?></td>
 								<td>
 									<input type='checkbox' name='use_doctor' id='use_doctor'<?php
-									if($lab_config->refout != 0)
+									if($lab_config->doctor != 0)
 										echo " checked ";
 									?>>
 									</input>
@@ -1725,12 +2127,12 @@ function right_load_1(option_num, div_id)
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_doctor_radio' value='Y'<?php
-										if($lab_config->refout == 2)
+										if($lab_config->doctor == 2)
 											echo " checked ";
 										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_doctor_radio' value='N' <?php
-										if($lab_config->refout != 2)
+										if($lab_config->doctor != 2)
 											echo " checked ";
 										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
@@ -1758,7 +2160,18 @@ function right_load_1(option_num, div_id)
 						</tbody>
 					</table>
 					</form>
+					</div> <br/>
+					<div><a href='javascript:openReorder()'>Reorder Fields</div>
+					<div id='reorder_fields'>
+					
+					&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;&nbsp;<a href="#" id='field_reorder_link_patient'>Patient Registration Form</a><br/>
+					&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;&nbsp;<a href="#" id='field_reorder_link_specimen'>Specimen Registration Form</a>
+					 
+					<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick='javascript:closeReorder();' value='cancel' />
 					</div>
+					<!-- <button id="create-user">Create new user</button> -->
+					<br/>
 					<script type='text/javascript'>
 					$(document).ready(function(){
 						if($('#use_pid').is(':checked'))
@@ -1964,8 +2377,8 @@ function right_load_1(option_num, div_id)
 					 | <a href='cfield_new.php?lid=<?php echo $lab_config_id; ?>'><?php echo LangUtil::$generalTerms['ADDNEW']; ?></a>[<a href='#new_help' rel='facebox'>?</a>]
 					<div id='specimen_custom_field_list'>
 					<?php 
-					$custom_field_list = get_lab_config_specimen_custom_fields($lab_config->id);
-					$page_elems->getCustomFieldTable($lab_config->id, $custom_field_list, 1); 
+					
+					$page_elems->getCustomFieldTable($lab_config->id, $custom_field_list_specimen, 1); 
 					?>
 					</div>
 					
@@ -1974,8 +2387,7 @@ function right_load_1(option_num, div_id)
 					 | <a href='cfield_new.php?lid=<?php echo $lab_config_id; ?>'><?php echo LangUtil::$generalTerms['ADDNEW']; ?></a> [<a href='#new_help' rel='facebox'>?</a>]
 					<div id='patient_custom_field_list'>
 					<?php 
-					$custom_field_list = get_lab_config_patient_custom_fields($lab_config->id);
-					$page_elems->getCustomFieldTable($lab_config->id, $custom_field_list, 2); 
+						$page_elems->getCustomFieldTable($lab_config->id, $custom_field_list_patients, 2); 
 					?>
 					</div>
 					
@@ -1984,8 +2396,8 @@ function right_load_1(option_num, div_id)
 					 | <a href='cfield_new.php?lid=<?php echo $lab_config_id; ?>'><?php echo LangUtil::$generalTerms['ADDNEW']; ?></a> [<a href='#new_help' rel='facebox'>?</a>]
 					<div id='labtitle_custom_field_list'>
 					<?php 
-					$custom_field_list = get_lab_config_labtitle_custom_fields($lab_config->id);
-					$page_elems->getCustomFieldTable($lab_config->id, $custom_field_list, 3); 
+					
+					$page_elems->getCustomFieldTable($lab_config->id, $custom_field_list_labTitle, 3); 
 					?>
 					</div>
 				</div>
@@ -2186,6 +2598,7 @@ function right_load_1(option_num, div_id)
 					</form>			
 				</div>
 				
+				<!--  Daily Report Settings Pane -->
 				<div class='right_pane' id='report_config_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#DRS_rc'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_REPORTCONFIG']; ?></b>
@@ -2214,6 +2627,7 @@ function right_load_1(option_num, div_id)
 							?>
 							<option value='4'><?php echo $LANG_ARRAY['reports']['MENU_DAILYLOGS']."-".LangUtil::$generalTerms['SPECIMENS']; ?></option>
 							<option value='6'><?php echo $LANG_ARRAY['reports']['MENU_DAILYLOGS']."-".LangUtil::$generalTerms['PATIENTS']; ?></option>
+							<!--<option value='77'><?php echo $LANG_ARRAY['reports']['MENU_DAILYLOGS']."-".LangUtil::$generalTerms['PATIENT_BARCODE']; ?></option>-->
 						</select>
 						&nbsp;&nbsp;
 						<input type='button' id='report_config_button' value="<?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?>" onclick="javascript:fetch_report_config();"></input>

@@ -6,6 +6,11 @@
 
 require_once("db_lib.php");
 
+include_once("field_order_update.php");
+include_once("../regn/generate_customize_field_order_patient.php");
+include_once("../regn/field_htmlFactory.php");
+
+
 class PageElems
 {
 	public function getSideTip($heading, $contents)
@@ -15,6 +20,15 @@ class PageElems
 			"<b>".$heading."</b><br><br>".$contents.
 			"</div>";
 		echo $html_code;		
+	}
+	
+	public function getSideTipBatchResults($heading, $contents)
+	{
+		$html_code =
+		"<div class='sidetip_batch_results_subdiv_help'>".
+		"<b>".$heading."</b><br><br>".$contents.
+		"</div>";
+		echo $html_code;
 	}
 	
 	public function getProgressSpinner($message)
@@ -349,10 +363,12 @@ class PageElems
 		# TODO: Link the hard-coded values below to includes/user_lib.php
 		$LIS_TECH_RW = 0;
 		$LIS_TECH_RO = 1;
-		$LIS_ADMIN = 2;
-		$LIS_SUPERADMIN = 3;
-		$LIS_COUNTRYDIR = 4;
-		$LIS_CLERK = 5;
+		$LIS_ADMIN = 3;
+		$LIS_SUPERADMIN = 4;
+		$LIS_COUNTRYDIR = 5;
+		$LIS_CLERK = 6;
+		
+		$LIS_VERIFIER = 15;
 		$LIS_TECH_SHOWPNAME = 13;
 		echo "<option value='$LIS_TECH_RW'";
 		if($selected_value == $LIS_TECH_RW)
@@ -368,12 +384,19 @@ class PageElems
 		if($selected_value == $LIS_CLERK)
 			echo " selected ";
 		echo ">".LangUtil::$generalTerms['LAB_RECEPTIONIST']."</option>";
+		
+		echo "<option value='$LIS_VERIFIER'";
+		if($selected_value == $LIS_VERIFIER)
+			echo " selected ";
+		echo ">Verifier</option>";
 	}	
 		
 	public function getSpecimenTypesSelect($lab_config_id)
 	{
+		
 		# Returns specimen types used at a site for drop down <select> boxes
 		$specimen_type_list = get_specimen_types_by_site($lab_config_id);
+		
 		foreach($specimen_type_list as $specimen_type)
 		{
 			echo "<option value='$specimen_type->specimenTypeId'>".$specimen_type->getName()."</option>";
@@ -1785,7 +1808,7 @@ class PageElems
 							<?php echo $user->username; ?>
 						</td>
 						<td>
-							<?php echo get_level_name($user->level); ?>
+							<?php echo get_level_name($user->level); //echo $user->level; ?>
 						</td>
 						<?php
 						if($to_export == false)
@@ -2202,6 +2225,7 @@ class PageElems
 				?>
 			</tbody>
 		</table>
+		
 		<?php
 	}
 	
@@ -2461,11 +2485,17 @@ class PageElems
 				<?php echo DateLib::mysqlToString($specimen->dateRecvd); ?>
 			</td>
 			<td>
-				<?php if($admin == 1)
+				<?php 
+				$removed = false;
+				
+				//print_r($rem_specs);
+				if($admin == 1)
                                      {
+                                     	
                                         if(in_array($specimen->specimenId, $rem_specs))
                                         {
                                             echo "Removed";
+                                            $removed = true;
                                         }
                                         else
                                         {
@@ -2486,7 +2516,20 @@ class PageElems
 			$pid=$specimen->patientId;
 			
 			?>
-			<td><a href="javascript:get_report(<?php echo $pid;?>,<?php echo $sid;?> )">Report</a> </td>
+			<td>
+			<a href="javascript:get_report(<?php echo $pid;?>,<?php echo $sid;?> )">Report</a> </td>
+			<td><!-- <a href="javascript:update_specimen(<?php echo $sid;?>)"> Update</a> &nbsp;/&nbsp; --> 
+			<?php if($removed == false){?>
+			<a href="javascript:delete_specimen(<?php echo $sid;?>)"> Delete</a>
+			<?php } else {
+					if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+						?>
+						<a href="javascript:retrieve_deleted(<?php echo $sid;?>,'specimen')"> Retrieve</a>
+					<?php } else {
+			   echo "Request Admin to undo delete"; 
+			   }
+			}?>
+			</td>
                         <?php
                             if($specimenBarcode)
                             {
@@ -2535,7 +2578,7 @@ class PageElems
                 $specimenBarcode = specimenBarcodeCheck();
                 if(is_admin(get_user_by_id($_SESSION['user_id']))) {
                     $admin = 1;}
-                $rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
+                $rem_recs = get_removed_specimens($_SESSION['lab_config_id'], "specimen");
                 $rem_specs = array();
                 $rem_remarks = array();
                 foreach($rem_recs as $rem_rec)
@@ -2562,8 +2605,44 @@ class PageElems
 		function get_report(pid,sid)
 		{
 			var url_string = "report_onetesthistory.php?ppid="+pid+"&spid="+sid;
-	window.open(url_string);
+			window.open(url_string);
 		}
+
+		function delete_specimen(sid){
+			if(ConfirmDelete()){
+				var params = "specimen_id="+sid;
+				//alert("patient Id " + patient_id);
+				$.ajax({
+					type: "POST",
+					url: "ajax/delete_specimen.php",
+					data: params,
+					success: function(msg) {
+						if(msg.indexOf("1")> -1){
+							// refresh the page with updated specimen details
+							location.href = location.href + '&del=1';
+						} else {
+							$("#target_div_id_del").html("Specimen cannot be deleted");
+						}
+						
+					}
+				}); 
+							
+			}	
+		}
+
+		function update_specimen(sid){
+			
+		}
+
+		function ConfirmDelete()
+		{
+		  var x = confirm("Are you sure you want to delete?");
+		  if (x)
+		      return true;
+		  else
+		    return false;
+		}
+		
 		</script>
 		<table class='tablesorter' id='test_history_table'>
 			<thead>
@@ -2581,6 +2660,8 @@ class PageElems
 					<th><?php echo LangUtil::$generalTerms['SP_STATUS']; ?></th>
 					<th></th>
 					<th></th>
+					<!-- Deleting the patient specimen -->
+					<th></th>
                                         <?php
                             if($specimenBarcode)
                             {
@@ -2596,11 +2677,13 @@ class PageElems
 			<?php
 			foreach($specimen_list as $specimen)
 			{
+				
                             if($admin == 0)
                             {
                                 if(in_array($specimen->specimenId, $rem_specs))
                                     continue;
                             }
+                            //echo $admin. " admin";
 				$this->getSpecimenInfoRow($specimen, $rem_specs, $admin);
 			}
 			?>
@@ -2610,13 +2693,13 @@ class PageElems
 		# TODO: Add paging to this table
 	}
 	
-	public function getSelectPatientHistory($pid)
+	public function getSelectPatientHistory($pid, $labsection)
 	{
 		# Returns HTML table displaying patient test history
                 $admin = 0;
                 if(is_admin(get_user_by_id($_SESSION['user_id']))) {
                     $admin = 1;}
-                $rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
+                $rem_recs = get_removed_specimens($_SESSION['lab_config_id'], "specimen");
                 $rem_specs = array();
                 $rem_remarks = array();
                 foreach($rem_recs as $rem_rec)
@@ -2625,7 +2708,7 @@ class PageElems
                     $rem_remarks[] = $rem_rec['remarks'];
                 }
 
-		$specimen_list = get_specimens_by_patient_id($pid);
+		$specimen_list = get_specimens_by_patient_id($pid, $labsection);
 		if(count($specimen_list) == 0)
 		{
 			?>
@@ -2784,6 +2867,9 @@ class PageElems
 	{
 		# Returns HTML table displaying specimen info
 		$specimen = get_specimen_by_id($sid);
+		
+		
+		//print_r($rem_specs);
 		if($specimen == null)
 		{
 			?>
@@ -2793,7 +2879,40 @@ class PageElems
 			<?php
 			return;
 		}
+		
+		$rem_recs = get_removed_specimens($_SESSION['lab_config_id'], "specimen");
+		$rem_specs = array();
+		$rem_remarks = array();
+		foreach($rem_recs as $rem_rec)
+		{
+			$rem_specs[] = $rem_rec['r_id'];
+			$rem_remarks[] = $rem_rec['remarks'];
+		}
+		
+		
+		
 		?>
+		
+		<script type="text/javascript">
+		function retrieve_deleted(sid, category){
+			var params = "item_id="+sid+"&ret_cat="+category;
+			 $.ajax({
+				type: "POST",
+				url: "ajax/retrieve_deleted.php",
+				data: params,
+				success: function(msg) {
+					if(msg.indexOf("1")> -1){
+						location.href = location.href;
+					} else {
+						$("#target_div_id_del").html("Specimen cannot be Retrieved");
+					}
+					
+				}
+			}); 
+			
+		}
+
+		</script>
 		<table class='hor-minimalist-b'>
 			<tbody>
 				<tr>
@@ -2917,7 +3036,9 @@ class PageElems
 					$specimen->statusCodeId == Specimen::$STATUS_RETURNED
 				)
 				{
+					if(strlen(trim($specimen->referredToName)) > 0){
 					?>
+					
 					<tr>
 						<td><u><?php echo LangUtil::$generalTerms['REF_TO']; ?></u></td>
 						<td>
@@ -2933,7 +3054,26 @@ class PageElems
 						?>
 						</td>
 					</tr>
+					<?php } 
+					if(strlen(trim($specimen->referredFromName)) > 0){
+					?>
+					<tr>
+						<td><u><?php echo "Referred From "; ?></u></td>
+						<td>
+						<?php
+						if(trim($specimen->referredFromName) == "")
+						{
+							echo "Not Known";
+						}
+						else
+						{
+							echo $specimen->referredFromName;
+						}
+						?>
+						</td>
+					</tr>
 					<?php
+						}
 				}
 				}
 				?>
@@ -2941,15 +3081,20 @@ class PageElems
 					<td><u><?php echo LangUtil::$generalTerms['SP_STATUS']; ?></u></td>
 					<td>
 					<?php
-					
+					if(in_array($specimen->specimenId, $rem_specs) && is_admin(get_user_by_id($_SESSION['user_id']))!=1){
+						echo "Specimen Removed. Contact lab admin";
+					} else if(in_array($specimen->specimenId, $rem_specs) && is_admin(get_user_by_id($_SESSION['user_id']))==1){
+					?> <a href='javascript:retrieve_deleted(<?php echo $specimen->specimenId;?>, "specimen")' title='Click to retrieve deleted Specimen'>Retrieve Specimen</a>
+					<?php 
+					} else {
 					echo $specimen->getStatus();
 					$result1="Completed";
 					$result= $specimen->getStatus();
 					?> <a href='specimen_result.php?sid=<?php echo $specimen->specimenId;?>'
 					<?php if(strcmp($result,$result1)==0){ ?> style='display:none;' <?php }?>
-				
 					title='Click to Enter result values for this Specimen'><?php echo LangUtil::$generalTerms['ENTER_RESULTS']; ?></a>
-					
+					<?php }
+					?>					
 					</td>
 				</tr>				
 			</tbody>
@@ -2963,6 +3108,10 @@ class PageElems
 		# Lists patient-profile related tasks in a tips box
 		global $LIS_CLERK;
 		$specimen = Specimen::getById($specimen_id);
+		$deleted = false;
+		if(check_removal_record($_SESSION['lab_config_id'], $specimen_id, "specimen")){
+			$deleted = true;
+		}
 		?>
 		<div class='sidetip_nopos'>
 			<?php
@@ -2973,7 +3122,7 @@ class PageElems
 			<p><a href='<?php echo $report_url; ?>' title='Click to Generate Specimen Report' target='_blank'><?php echo LangUtil::$generalTerms['CMD_GETREPORT']; ?></a></p>
 			<p><a href='reports_specimenlog.php?location=<?php echo $_SESSION['lab_config_id']; ?>&specimen_id=<?php echo $specimen_id; ?>' title='Click to View a Log of Actions Performed on this Specimen' target='_blank'><?php echo LangUtil::$generalTerms['CMD_TRACK']; ?></a></p>
 			<?php
-			if($_SESSION['user_level'] != $LIS_CLERK)
+			if($_SESSION['user_level'] != $LIS_CLERK && $deleted == false)
 			{
 				$user = get_user_by_id($_SESSION['user_level']);
 				if
@@ -3002,6 +3151,7 @@ class PageElems
 	public function getSpecimenTestsTable($sid)
 	{
 		# Displays list of all tests registered for a specimen w/ status/results
+		
 		$test_list = get_tests_by_specimen_id($sid);
 		if(count($test_list) == 0)
 		{
@@ -3011,11 +3161,42 @@ class PageElems
 			<?php
 			return;
 		}
+		
 		?>
 		<script type='text/javascript'>
 		$(document).ready(function(){
 			$('#specimen_tests_table').tablesorter();
 		});
+
+		function delete_test(test_id){
+			if(ConfirmDelete()){
+				//alert("Test with ID "+test_id+" will be deleted");
+				var params = "test_id="+test_id;
+				$.ajax({
+					type: "POST",
+					url: "ajax/delete_test.php",
+					data: params,
+					success: function(msg) {
+						if(msg.indexOf("1")> -1){
+							location.href = location.href + '&del=1';
+						} else {
+							$("#target_div_id_del").html("Test cannot be deleted");
+						}
+						
+					}
+				}); 
+			}
+		}				
+		
+
+		function ConfirmDelete()
+		{
+		  var x = confirm("Are you sure you want to delete?");
+		  if (x)
+		      return true;
+		  else
+		    return false;
+		}
 		
 		</script>
 		<table class='tablesorter' id='specimen_tests_table'>
@@ -3026,6 +3207,7 @@ class PageElems
 					<th><?php echo LangUtil::$generalTerms['RESULT_COMMENTS']; ?></th>
 					<th><?php echo LangUtil::$generalTerms['ENTERED_BY']; ?></th>
 					<th><?php echo LangUtil::$generalTerms['VERIFIED_BY']; ?></th>
+					<th><?php echo LangUtil::$generalTerms['ACTIONS']; ?></th>
 					
 				</tr>
 			</thead>
@@ -3067,6 +3249,23 @@ class PageElems
 			</td>
 			<td>
 				<?php echo $test->getVerifiedBy(); ?>
+			</td>
+			<td>
+			
+			<?php
+					if(check_removal_record($_SESSION['lab_config_id'], $test->testId) && is_admin(get_user_by_id($_SESSION['user_id']))!=1){
+						echo "Test removed. Contact Lab admin";
+					} else if(check_removal_record($_SESSION['lab_config_id'], $test->testId) && is_admin(get_user_by_id($_SESSION['user_id']))==1){
+					?> <a href='javascript:retrieve_deleted(<?php echo $test->testId;?>, "test")' title='Click to retrieve deleted Test'>Retrieve Test</a>
+					<?php 
+					} else {
+					?>
+						<a href="javascript:delete_test(<?php echo  $test->testId ;?>)">Delete</a>
+					<?php }
+					?>
+					
+					
+				
 			</td>
 			<?php
 			$specimen_object=Specimen::getById($test->specimenId);
@@ -3223,12 +3422,15 @@ public function getTestsDoneStatsTable($stat_list)
 		</thead>
 		<tbodys>
 		<?php
-		
+		$total_tests_done_count = 0;
+		$total_tests_pending_count = 0;
 		foreach($stat_list as $key=>$value)
 		{
 			$test_type_id = $key;
 			$tests_done_count = $value[0];
 			$tests_pending_count = $value[1];
+			$total_tests_done_count = $total_tests_done_count + $tests_done_count;
+			$total_tests_pending_count = $total_tests_pending_count + $tests_pending_count;
 			?>
 			<tr>
 			<td><?php
@@ -3243,6 +3445,14 @@ public function getTestsDoneStatsTable($stat_list)
 			<?php
 		}
 		?>
+		
+		<tr>
+			<td><?php
+			echo LangUtil::$pageTerms['TOTAL_TESTS']; 
+			?></td>
+			<td><?php echo $total_tests_done_count; ?></td>
+			<td><?php echo $total_tests_pending_count; ?></td>
+			</tr>
 		</tbody>
 		</table>
 		<?php
@@ -3571,7 +3781,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 		$name_prefix = "custom_".$custom_field->id;
 		if($custom_field->fieldTypeId == CustomField::$FIELD_FREETEXT)
 		{
-			echo "<input name='$name_prefix' class='uniform_width' value='$field_value' type='text'></input>";
+			echo "<input name='$name_prefix' class='uniform_width custom' value='$field_value' type='text'></input>";
 		}
 		else if($custom_field->fieldTypeId == CustomField::$FIELD_DATE)
 		{
@@ -3586,7 +3796,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 		else if($custom_field->fieldTypeId == CustomField::$FIELD_OPTIONS)
 		{
 			$options = explode("/", $custom_field->fieldOptions);
-			echo "<SELECT name='$name_prefix' class='uniform_width'>";
+			echo "<SELECT name='$name_prefix' class='uniform_width custom'>";
 			foreach($options as $option)
 			{
 				if(trim($option) == "")
@@ -3611,7 +3821,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 			</script>
 			<?php
 			$options = explode("/", $custom_field->fieldOptions);
-			echo "<SELECT name='".$name_prefix."[]' id='$name_prefix' class='uniform_width multiselect_custom_field' multiple='multiple' size='5'>";
+			echo "<SELECT name='".$name_prefix."[]' id='$name_prefix' class='uniform_width multiselect_custom_field custom' multiple='multiple' size='5'>";
 			foreach($options as $option)
 			{
 				if(trim($option) == "")
@@ -3630,7 +3840,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 			$range = explode(":", $custom_field->fieldOptions);
 			$elem_id = $name_prefix."_".$seq_num;
 			$error_elem_id = $elem_id."_err";
-			echo "<input class='uniform_width' name='$name_prefix' value='$field_value' type='text' onkeyup=\"javascript:validate_custom_numeric(this, '$elem_id', $range[0], $range[1]);\" onblur=\"javascript:validate_custom_numeric(this, '$elem_id', $range[0], $range[1]);\"></input>";
+			echo "<input class='uniform_width custom' name='$name_prefix' value='$field_value' type='text' onkeyup=\"javascript:validate_custom_numeric(this, '$elem_id', $range[0], $range[1]);\" onblur=\"javascript:validate_custom_numeric(this, '$elem_id', $range[0], $range[1]);\"></input>";
 			echo "<small>($range[0]-$range[1]) $range[2]</small><br>";
 			echo "<div id='$error_elem_id' class='clean-error uniform_width' style='display:none;'>".LangUtil::$generalTerms['RANGE_OUTOF']."</div>";
 		}
@@ -3775,7 +3985,187 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	
 	}
 	
-	function getNewSpecimenForm($form_num, $pid, $dnum, $session_num, $doc="" ,$title ="Dr.")
+	// field order customizations for specimen
+	function generate_patient_Number($dnum){
+		print "<tr valign='top'";
+		if(is_numeric($_SESSION['dnum']) && $_SESSION['dnum'] == 0)
+		{
+		# Hide if daily num not in use
+		echo " style='display:none;' ";
+		}
+		echo "><td><label for='dnum'>";
+				echo LangUtil::$generalTerms['PATIENT_DAILYNUM'];
+		    $this->getAsterisk();
+		echo "</label></td><td></td><td><input type='text' name='dnum' id='dnum' value='";
+		    echo $dnum;
+		echo "' size='20' class='uniform_width'> </input>	</td></tr>";
+	}
+	
+	function generate_specimen_type($stype_id, $testbox_id){
+		echo "<tr valign='top'><td><label for='stype'>".LangUtil::$generalTerms['SPECIMEN_TYPE'];
+		$this->getAsterisk();
+		echo "</label></td><td></td><td>";
+		
+		
+		echo "<select name='stype'
+						id='".$stype_id."'
+						onchange=\"javascript:get_testbox('".$testbox_id."', '".$stype_id."');\"
+						class='uniform_width'
+					>
+						<option value=\"\">-".LangUtil::$generalTerms['CMD_SELECT']."-</option>
+						";
+		echo $this->getSpecimenTypesSelect($_SESSION['lab_config_id']);
+		echo "</select>";
+		
+		echo "</td></tr>";
+		
+		
+		
+	}
+	
+	function generate_test($testbox_id){
+		echo "<tr valign='top'><td><label for='tests'>".
+		      LangUtil::$generalTerms['TESTS'];
+			 $this->getAsterisk(); 
+		echo "</label></td><td></td><td><span id='".$testbox_id."' class='uniform_width'>-".
+		      LangUtil::$pageTerms['MSG_SELECT_STYPE'].
+		      "-</span></td></tr>";
+	}
+	
+	function generate_specimen_addId($lab_config){
+		echo "<tr valign='top' ";
+		if($lab_config->specimenAddl == 0)
+			echo " style='display:none;' ";
+		echo ">	<td> <label for='addlid'>".LangUtil::$generalTerms['SPECIMEN_ID'];
+		if($_SESSION['s_addl'] == 2) 
+		 $this->getAsterisk(); 
+		echo " </label>	</td> <td>   </td>	<td><input type=\"text\" name=\"addl_id\" id=\"addl_id\" value=\"\" size=\"20\" class='uniform_width'> </input>
+				</td>
+			</tr>";
+	}
+	
+	function generate_reciept_date($lab_config, $form_id){
+		echo "<tr valign='top' ";
+		if($_SESSION['rdate'] == 0)
+				echo " style='display:none;' ";
+		echo ">	<td><label>".LangUtil::$generalTerms['R_DATE'];
+		if($_SESSION['rdate'] == 2) 
+			$this->getAsterisk();
+		echo "</label>	</td>	<td>  </td>	<td>";
+			$today = date("Y-m-d");
+			$today_array = explode("-", $today);
+			$name_list = array("receipt_yyyy", "receipt_mm", "receipt_dd");
+			$id_list = array($form_id."_receipt_yyyy", $form_id."_receipt_mm", $form_id."_receipt_dd");
+			$value_list = array($today_array[0], $today_array[1], $today_array[2]);
+		$this->getDatePicker($name_list, $id_list, $value_list, true);
+		echo "
+				</td>
+			</tr>";
+	}
+	
+	
+	function generate_comments(){
+		echo "<tr valign='top'";
+		if($_SESSION['comm'] == 0)
+				echo " style='display:none;' ";
+		echo ">	<td> <label for='comments' valign='top'>".LangUtil::$generalTerms['COMMENTS'];
+		if($_SESSION['comm'] == 2) 
+		    $this->getAsterisk(); 
+		echo "</label>	</td><td>   </td>		<td>
+					<textarea name=\"comments\" id=\"comments\" class='uniform_width'></textarea>
+				</td>
+			</tr>";
+	}
+	
+	function generate_doctors($doc_row_id, $doc=""){
+		/* $doc_array= getDoctorList();
+		$php_array= addslashes(implode("%", $doc_array));
+		echo '<script type="text/javascript">$(document).ready(function(){';
+			
+		echo 'var data_string="'.$php_array;
+		echo 'var data=data_string.split("%");
+					
+			$("#doc_row_1_input").autocomplete(data);
+		}</script>';
+ */
+		echo "<tr valign='top' id='";
+		echo $doc_row_id."'";
+		if($_SESSION['doctor'] == 0)
+				echo " style='display:none;' ";
+		echo ">
+				<td><label for='doctor' valign='top'>".LangUtil::$generalTerms['DOCTOR'];
+			if($_SESSION['doctor'] == 2) 
+				$this->getAsterisk(); 
+		echo "</label></label>
+				</td>
+				<td>";
+		$labtitlefieldoptions = get_custom_fields_labtitle(1);
+		$lab_titles = explode("/",$labtitlefieldoptions);
+		echo "<SELECT name='title' id='".$doc_row_id."_title'>";
+		
+		foreach($lab_titles as $option)
+			{
+				if(trim($option) == "")
+					continue;
+				echo "<option value='".$option."'";
+				if($option == $field_value)
+						{
+							echo " selected ";
+						}
+						echo " >".$option."</option>";
+			}
+		echo "	</SELECT>
+				</td>
+				<td>
+					<input type='text' name='doctor' class ='doctors_auto' id='".$doc_row_id."_input'  value='".$doc."' ></input>
+				</td>
+			</tr>";
+	}
+	
+	function generate_refOut($ref_out_check_id, $ref_out_row_id, $refTo_row_id, $ref_from_row_id, $refTo=""){
+// refTo_row_
+		echo "<tr valign='top'";
+			if($_SESSION['refout'] == 0)
+				echo " style='display:none;' ";
+		echo ">
+				<td>
+					<label for='ref_out' valign='top'>".LangUtil::$generalTerms['REF_OUT']."?";
+			if($_SESSION['refout'] == 2) $this->getAsterisk(); 
+		echo "</label>
+				</td>
+				<td>   </td>
+				<td>
+					<INPUT TYPE=RADIO NAME=\"ref_out\" id='".$ref_out_check_id."' VALUE=\"Y\" onchange=\"javascript:checkandtoggle_ref('".$ref_out_check_id. "', '".$ref_out_row_id."','".$ref_from_row_id."');\">".LangUtil::$generalTerms['YES']."
+					<INPUT TYPE=RADIO NAME=\"ref_out\" onchange=\"javascript:checkandtoggle_ref('".$ref_out_check_id."', '".$ref_out_row_id."','".$ref_from_row_id."');\" VALUE=\"N\" checked>".LangUtil::$generalTerms['NO']."
+				</td>
+			</tr>
+			<tr valign='top' id='".$ref_out_row_id."' style='display:none'>
+				<td>".LangUtil::$generalTerms['REF_TO']."</td>
+				<td>
+					<input type='text' name='ref_out_name' id='".$refTo_row_id."_input"."' value='".$refTo."'></input></td>
+					<td>&nbsp;&nbsp; OR </td>
+				
+			</tr>
+			<tr valign='top' id='".$ref_from_row_id."' style='display:none'>
+				<td>Referred From</td>
+				<td>
+					<input type='text' name='ref_from_name' id='".$ref_from_row_id."_input"."'  ></input>
+					
+				</td>
+			</tr>";
+	}
+	
+	function generate_customFields($custom_field){
+		echo "<tr valign='top'>
+					<td>".$custom_field->fieldName."</td>
+					<td></td>
+					<td>";
+		$this->getCustomFormField($custom_field);
+		echo "</td>	</tr>";
+	}
+	
+		
+	function getNewSpecimenForm($form_num, $pid, $dnum, $session_num, $doc="" ,$title ="Dr.", $refTo="")
 	{
 		# Returns HTML for new specimen form
 		LangUtil::setPageId("new_specimen");
@@ -3791,8 +4181,13 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		$specimen_id_div_id = 'specimen-id_'.$form_num;
 		$specimen_err_div_id = 'specimen_msg_'.$form_num;
 		$doc_row_id = 'doc_row_'.$form_num;
+		$refTo_row_id = 'refTo_row_'.$form_num;
 		$ref_out_row_id = 'ref_out_row_'.$form_num;
 		$ref_out_check_id = 'ref_out_'.$form_num;
+		
+		$ref_from_row_id = 'ref_from_row_'.$form_num;
+		$ref_from_check_id = 'ref_out_'.$form_num;
+		
 		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
 		?>
 		<div id='<?php echo $div_id; ?>'>
@@ -3802,50 +4197,59 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<?php /*<input type='hidden' name='session_num' value='<?php echo get_session_number(); ?>' class='uniform_width'></input> */ ?>
 			<table class='regn_form_table'>
 			<tbody>
-			<tr valign='top' <?php
-				if(is_numeric($_SESSION['dnum']) && $_SESSION['dnum'] == 0)
-				{
-					# Hide if daily num not in use
-					echo " style='display:none;' ";
-				}
+			
+			<?php $this->generate_patient_Number($dnum);?>
+			<?php $this->generate_specimen_type($stype_id, $testbox_id);?>
+			<?php $this->generate_test($testbox_id);?>
+			
+			<?php 
+					$specimenFieldOrder = $_SESSION['specimenFieldOrder'];
+					$custom_field_list = get_custom_fields_specimen();
+					$custFieldArray = array();
+					foreach($custom_field_list as $custom_field)
+					{	
+						if(($custom_field->flag)==NULL)
+						{
+							array_push($custFieldArray, $custom_field->fieldName);
+						}
+					}
+					if(sizeOf($specimenFieldOrder) > 0){
+						foreach($specimenFieldOrder as $field){
+							
+							if(in_array($field, $custFieldArray)){
+								// custom field generation
+								$custom_field = null;
+								foreach($custom_field_list as $custField){
+									if($custField->fieldName == $field){
+										$custom_field = $custField;
+									}
+								}
+								$this->generate_customFields($custom_field); 
+							}
+							else if($field == "Specimen ID"){
+								 $this->generate_specimen_addId($lab_config);
+							} /*else if($field == "Specimen Additional ID"){
+								<?php $this->generate_specimen_addId($lab_config);?>
+							}*/ else if($field == "Comments"){
+								$this->generate_comments(); 
+							} else if($field == "Lab Reciept Date"){
+								 $this->generate_reciept_date($lab_config, $form_id);
+							} else if($field == "Referred Out"){
+								$this->generate_refOut($ref_out_check_id, $ref_out_row_id, $refTo_row_id, $ref_from_row_id, $refTo); 
+							} else if($field == "Physician"){
+								$this->generate_doctors($doc_row_id, $doc);
+							} 
+						}
+					}
+					
+					
 				?>
-			>
-				<td>
-					<label for='dnum'><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?><?php $this->getAsterisk(); ?></label>
-				</td>
-				<td>   </td>
-				<td>
-					<input type="text" name="dnum" id="dnum" value=<?php echo $dnum; ?> size="20" class='uniform_width'> </input>
-				</td>
-			</tr>
-			<tr valign='top'>				
-				<td>
-					<label for='stype'><?php echo LangUtil::$generalTerms['SPECIMEN_TYPE']; ?><?php $this->getAsterisk(); ?></label>
-				</td>
-				<td>   </td>
-				<td>
-					<select
-						name='stype'
-						id='<?php echo $stype_id; ?>'
-						onchange="javascript:get_testbox('<?php echo $testbox_id; ?>', '<?php echo $stype_id; ?>');"
-						class='uniform_width'
-					>
-						option value="">-<?php echo LangUtil::$generalTerms['CMD_SELECT']; ?>-</option>
-						<?php $this->getSpecimenTypesSelect($_SESSION['lab_config_id']); ?>
-					</select>
-				</td>
-			</tr>
-			<tr valign='top'>
-				<td>
-					<label for='tests'><?php echo LangUtil::$generalTerms['TESTS']; ?> <?php $this->getAsterisk(); ?></label>
-				</td>
-				<td>   </td>
-				<td>
-					<span id='<?php echo $testbox_id; ?>' class='uniform_width'>
-						-<?php echo LangUtil::$pageTerms['MSG_SELECT_STYPE']; ?>-
-					</span>
-				</td>
-			</tr>
+				
+				
+			
+			
+			
+			
 			<tr valign='top'<?php
 			//if($_SESSION['sid'] == 0)
 			if(true)
@@ -3866,37 +4270,11 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<br><span id='<?php echo $specimen_err_div_id; ?>'></span>
 				</td>
 			</tr>
-			<tr valign='top' <?php
-				if($lab_config->specimenAddl == 0)
-					echo " style='display:none;' ";
-			?>>
-				<td>
-					<label for='addlid'><?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?><?php if($_SESSION['s_addl'] == 2) $this->getAsterisk(); ?> </label>
-				</td>
-				<td>   </td>
-				<td>
-					<input type="text" name="addl_id" id="addl_id" value="" size="20" class='uniform_width'> </input>
-				</td>
-			</tr>
-			<tr valign='top' <?php
-			if($_SESSION['rdate'] == 0)
-				echo " style='display:none;' ";
-			?>>
-				<td>
-					<label><?php echo LangUtil::$generalTerms['R_DATE']; ?> <?php if($_SESSION['rdate'] == 2) $this->getAsterisk(); ?></label>
-				</td>
-				<td>  </td>
-				<td>
-					<?php
-					$today = date("Y-m-d");
-					$today_array = explode("-", $today);
-					$name_list = array("receipt_yyyy", "receipt_mm", "receipt_dd");
-					$id_list = array($form_id."_receipt_yyyy", $form_id."_receipt_mm", $form_id."_receipt_dd");
-					$value_list = array($today_array[0], $today_array[1], $today_array[2]);
-					$this->getDatePicker($name_list, $id_list, $value_list, true);
-					?>
-				</td>
-			</tr>
+			
+			
+			
+			
+			
 			<tr valign='top' style='display:none;'>
 				<td>
 					<label><?php echo LangUtil::$generalTerms['C_DATE']; ?></label>
@@ -3958,17 +4336,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					&nbsp;&nbsp;hrs
 				</td>
 			</tr>
-			<tr valign='top'<?php
-			if($_SESSION['comm'] == 0)
-				echo " style='display:none;' ";
-			?>>
-				<td>
-					<label for='comments' valign='top'><?php echo LangUtil::$generalTerms['COMMENTS']; ?><?php if($_SESSION['comm'] == 2) $this->getAsterisk(); ?></label>
-				</td><td>   </td>
-				<td>
-					<textarea name="comments" id="comments" class='uniform_width'></textarea>
-				</td>
-			</tr>
+			
+			
 			<tr valign='top' style='display:none' <?php ## Disabled for now ?>>
 				<td>
 					<label for='report_to' valign='top'>Report To</label>
@@ -3985,38 +4354,12 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</select>
 				</td>
 			</tr>
-			<tr valign='top' id='<?php echo $doc_row_id; ?>' <?php
-			if($_SESSION['doctor'] == 0)
-				echo " style='display:none;' ";
-			?>>
-				<td><label for='doctor' valign='top'><?php echo LangUtil::$generalTerms['DOCTOR']; ?><?php if($_SESSION['doctor'] == 2) $this->getAsterisk(); ?></label></label>
-				</td>
-				<td>
-					<SELECT name='title' id='<?php echo $doc_row_id; ?>_title'>
-					<?php
-					$labtitlefieldoptions = get_custom_fields_labtitle(1);
-					$lab_titles = explode("/",$labtitlefieldoptions);
-					
-					foreach($lab_titles as $option)
-					{
-						if(trim($option) == "")
-							continue;
-						echo "<option value='$option'";
-						if($option == $field_value)
-						{
-							echo " selected ";
-						}
-						echo " >$option</option>";
-					}
-					?>
-					</SELECT>
-				</td>
-				<td>
-					<input type='text' name='doctor' id='<?php echo $doc_row_id."_input"; ?>'  value='<?php echo $doc; ?>' ></input>
-				</td>
-			</tr>
+			
+			
+			
+			
 			<?php
-			$custom_field_list = get_custom_fields_specimen();
+			/*$custom_field_list = get_custom_fields_specimen();
 			foreach($custom_field_list as $custom_field)
 			{	if(($custom_field->flag)==NULL)
 				{
@@ -4028,27 +4371,11 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</tr>
 				<?php
 				}
-			}
+			}*/
 			?>
-			<tr valign='top'<?php
-			if($_SESSION['refout'] == 0)
-				echo " style='display:none;' ";
-			?>>
-				<td>
-					<label for='ref_out' valign='top'><?php echo LangUtil::$generalTerms['REF_OUT']; ?>? <?php if($_SESSION['refout'] == 2) $this->getAsterisk(); ?></label>
-				</td>
-				<td>   </td>
-				<td>
-					<INPUT TYPE=RADIO NAME="ref_out" id='<?php echo $ref_out_check_id; ?>' VALUE="Y" onchange="javascript:checkandtoggle_ref('<?php echo $ref_out_check_id; ?>', '<?php echo $ref_out_row_id; ?>');"><?php echo LangUtil::$generalTerms['YES']; ?>
-					<INPUT TYPE=RADIO NAME="ref_out" onchange="javascript:checkandtoggle_ref('<?php echo $ref_out_check_id; ?>', '<?php echo $ref_out_row_id; ?>');" VALUE="N" checked><?php echo LangUtil::$generalTerms['NO']; ?>
-				</td>
-			</tr>
-			<tr valign='top' id='<?php echo $ref_out_row_id; ?>' style='display:none'>
-				<td><?php echo LangUtil::$generalTerms['REF_TO']; ?></td>
-				<td>
-					<input name='ref_out_name' class='uniform_width'></input>
-				</td>
-			</tr>
+			
+			
+			
 			<?php
 			if($form_num != 1)
 			{
@@ -6249,6 +6576,9 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	</>
 	<br />
 	</td></tr> <?php }?>
+	<br/>
+	
+	
 		</table>
 		<table cellspacing='5px' class='smaller_font'>
 			<tr valign='top'>
@@ -6264,6 +6594,28 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						?>>
 					</input>
 					<?php echo LangUtil::$generalTerms['PATIENT_ID']; ?>
+				</td>
+				<td></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+					<input type='checkbox' name='p_field_9' <?php
+						if($report_config->usePatientBarcode == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo LangUtil::$generalTerms['PATIENT_BARCODE']; ?>
+				</td>
+				<td></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+					<input type='checkbox' name='p_field_10' <?php
+						if($report_config->usePatientSignature == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo LangUtil::$generalTerms['PATIENT_SIGNATURE']; ?>
 				</td>
 				<td></td>
 			</tr>
@@ -6376,6 +6728,47 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				}
 			}
 			?>
+			
+			<tr valign='top'<?php
+			if($report_config->reportId != 6)
+				echo " style='display:none;' ";
+			?>>
+				<td><b>Patient Daily Report - Other Fields</b></td>
+			</tr>
+			
+			<tr valign='top'>
+				<td>
+				<?php if($report_config->reportId == 6){?>
+					<input type='checkbox' name='p_field_11' <?php
+						if($report_config->useRequesterName == 1)
+							echo " checked ";
+						?>>
+					</input>
+							<?php echo "Requester Name"; }?>
+				</td>
+				<td></td>
+			<!--<?php echo $report_config->reportId. " | Requester ".$report_config->useRequesterName." | ReferredTo ".$report_config->useReferredTo ?>-->
+			</tr>
+			
+			<tr valign='top'<?php
+			if($report_config->reportId != 4)
+				echo " style='display:none;' ";
+			?>>
+				<td><b>Specimen Daily Report - Other Fields</b></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+				<?php if($report_config->reportId == 4){?>
+					<input type='checkbox' name='p_field_12' <?php
+						if($report_config->useReferredToHospital == 1)
+							echo " checked ";
+						?>>
+					</input>
+							<?php echo "Referred From "; }?>
+				</td>
+				<td></td>
+			<!--<?php echo $report_config->reportId. " | Requester ".$report_config->useRequesterName." | ReferredTo ".$report_config->useReferredTo ?>-->
+			</tr>
 				
 			<tr valign='top'<?php
 			if($report_config->reportId == 6)
@@ -6469,7 +6862,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							echo " checked ";
 						?>>
 					</input>
-					<?php echo LangUtil::$generalTerms['REF_OUT']; ?>
+					<?php echo "Referred To";//LangUtil::$generalTerms['REF_OUT']; ?>
 				</td>
 				
 			</tr>
@@ -6787,6 +7180,26 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			</tr>
 			<tr valign='top'>
 				<?php
+				if($report_config->usePatientBarcode == 1)
+				{
+					echo "<td>";
+					echo LangUtil::$generalTerms['PATIENT_BARCODE'];
+					echo "</td>";
+				}
+				?>
+			</tr>
+			<tr valign='top'>
+				<?php
+				if($report_config->usePatientSignature == 1)
+				{
+					echo "<td>";
+					echo LangUtil::$generalTerms['PATIENT_SIGNATURE'];
+					echo "</td>";
+				}
+				?>
+			</tr>
+			<tr valign='top'>
+				<?php
 				if($report_config->useDailyNum == 1)
 				{
 					echo "<td>";
@@ -6870,7 +7283,39 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</tr>
 			<?php
 			}
+			?> <br/>
+			
+			
+			<?php
+			if($report_config->reportId == 4 || $report_config->reportId == 6){
+			 if($report_config->useRequesterName == 1 || $report_config->useReferredToHospital == 1) {
 			?>
+			<tr valign='top'>
+				<td><b><?php echo "Other Fields"?></b></td>
+				<td></td>
+			</tr>
+			<?php }?>
+			
+			
+			<tr valign='top'>
+				<td>
+					<?php
+					if($report_config->useRequesterName == 1)
+						echo "Requester Name";
+					?>
+				</td>
+			</tr>
+			<tr valign='top'>
+				<td>
+					<?php
+					if($report_config->useReferredToHospital == 1)
+						echo "Referrer To Hospital Name";
+					?>
+				</td>
+			</tr>
+			<?php }?>
+				
+				<br/>
 				
 			<tr valign='top'<?php
 			if($report_config->reportId == 6)
@@ -7378,12 +7823,13 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	{
             $userrr = get_user_by_id($_SESSION['user_id']);
 
-		global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_CLERK;
+		global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_CLERK, $LIS_VERIFIER;
 		if
 		(
 			$_SESSION['user_level'] == $LIS_TECH_RO ||
 			$_SESSION['user_level'] == $LIS_TECH_RW ||
-			$_SESSION['user_level'] == $LIS_CLERK
+			$_SESSION['user_level'] == $LIS_CLERK ||
+			$_SESSION['user_level'] == $LIS_VERIFIER
 		)
 		{
 			$lab_config = LabConfig::getById($_SESSION['lab_config_id']); 
@@ -7459,6 +7905,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		else
 		{
                                             $patientBarcodeSearch = patientSearchBarcodeCheck();
+                                            $specimenBarcodeSearch = specimenSearchBarcodeCheck();
 
 			# Show all options
 			?>
@@ -7466,10 +7913,20 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<option value='3'><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></option>
 			<option value='0'><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></option>
 			<option value='2'><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></option>
-                         <?php 
-                         if($patientBarcodeSearch != 0 && is_country_dir($userrr) != 1 && is_super_admin($userrr) != 1 ){ ?>
-                        				<option value='9'><?php echo 'Barcode Search'; ?></option>
+			
+			
+			<?php 
+               if($patientBarcodeSearch != 0 && is_country_dir($userrr) != 1 && is_super_admin($userrr) != 1 ){ ?>
+                        				<option value='10'><?php echo 'Patient Barcode'; ?></option>
                                                         <?php } ?>
+                                                        
+                                                        
+            <?php 
+                if($specimenBarcodeSearch != 0 && is_country_dir($userrr) != 1 && is_super_admin($userrr) != 1 ){ ?>
+                        				<option value='9'><?php echo 'Specimen Barcode'; ?></option>
+                                                        <?php } ?>
+                                                        
+                        
 
 			<?php
 		}

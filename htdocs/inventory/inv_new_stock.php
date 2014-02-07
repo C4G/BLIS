@@ -70,8 +70,8 @@ function validateRow() {
 		success: function(check){
                      if(check == '1')
                         {
-                                $('#lot_u_error').show();
-                                gcheck = 0;
+                                //$('#lot_u_error').show();
+                                //gcheck = 0;
                         }
                         else
                         {

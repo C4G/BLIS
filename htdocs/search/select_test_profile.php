@@ -15,12 +15,18 @@ $script_elems->enableLatencyRecord();
 $admin = 0;
 if(is_admin(get_user_by_id($_SESSION['user_id']))) {
      $admin = 1;}
-$rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
+$rem_recs = get_removed_specimens($_SESSION['lab_config_id'], "test");
 foreach($rem_recs as $rem_rec)
 {
     $rem_specs[] = $rem_rec['r_id'];
     $rem_remarks[] = $rem_rec['remarks'];
 }
+
+		$labsection = 0;
+		if(isset($_REQUEST['labsection'])){
+			$labsection = $_REQUEST['labsection'];
+		}
+
 //print_r($rem_specs);
 ?>
 <script type='text/javascript'>
@@ -165,7 +171,8 @@ var url_string = "retrieve_specimens.php?specimen_array="+txt+"&pid="+pid;
 <br>
 <p align="center">
 <b><?php echo LangUtil::$generalTerms['CMD_THISTORY']; ?></b></p>
-<?php $page_elems->getSelectPatientHistory($pid); ?>
+
+<?php $page_elems->getSelectPatientHistory($pid, $labsection); ?>
 <br>
 
 <p align="right">

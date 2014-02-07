@@ -15,6 +15,7 @@ putUILog('specimen_info', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', '
 
 
 $sid = $_REQUEST['sid'];
+$isTestDel = $_REQUEST['del'];
 ?>
 <script type='text/javascript'>
 function submit_forms(specimen_id)
@@ -69,7 +70,15 @@ function fetch_specimen2(specimen_id)
 <br>
 <b><?php echo LangUtil::getTitle(); ?></b>
  | <a href='javascript:history.go(-1);'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>
-<br><br>
+&nbsp;&nbsp;<?php 
+    			if($isTestDel){ 
+    		?>
+    			<span class='clean-orange' id='msg_box_test'>
+					<?php echo "Test Deleted Successfully" ?> &nbsp;&nbsp;<a href="javascript:toggle('msg_box_test');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>&nbsp;&nbsp;
+				</span>
+			<?php } ?>
+ 
+ <br><br>
 <?php
 if(isset($_REQUEST['vd']))
 {

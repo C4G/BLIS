@@ -11,8 +11,12 @@ $page_start = $load_time;
 
 include("redirect.php");
 include("includes/header.php");
+
+include_once("generate_customize_field_order_patient.php");
+include_once("field_htmlFactory.php");
+include_once("includes/field_order_update.php");
+
 LangUtil::setPageId("new_patient");
- 
 $script_elems->enableDatePicker();
 $script_elems->enableJQueryForm();
 $script_elems->enableFacebox();
@@ -22,6 +26,7 @@ $daily_num = get_daily_number();
 $session_num = get_session_number();
 $uiinfo = "qr=".$_REQUEST['n'];
 putUILog('new_patient', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+$field_odering = field_order_update::install_first_order($lab_config, 1);
 ?>
 <script type='text/javascript'>
 $(document).ready(function(){
@@ -47,12 +52,12 @@ $(document).ready(function(){
 		prefetch_pname();
 	});
 	
-	$('#custom_field_form').submit(function() { 
+	/* $('#custom_field_form').submit(function() { 
 		// submit the form 
 		$(this).ajaxSubmit({async:false}); 
 		// return false to prevent normal browser submit and page navigation 
 		return false; 
-	});
+	}); */
 });
 
 function prefetch_pname()
@@ -74,7 +79,7 @@ function add_patient()
 	$('#pid2').attr("value", card_num);
 	var addl_id = $("#addl_id").attr("value");
 	var name = $("#name").attr("value");
-	name = name.replace(/[^a-z ]/gi,'');
+	//name = name.replace(/[^a-z ]/gi,'');
 	var yyyy = $("#yyyy").attr("value");
 	yyyy = yyyy.replace(/[^0-9]/gi,'');
 	var mm = $("#mm").attr("value");
@@ -82,6 +87,7 @@ function add_patient()
 	var dd = $("#dd").attr("value");
 	dd = dd.replace(/[^0-9]/gi,'');
 	var receipt_yyyy = $("#receipt_yyyy").attr("value");
+	
 	receipt_yyyy = receipt_yyyy.replace(/[^0-9]/gi,'');
 	var receipt_mm = $("#receipt_mm").attr("value");
 	receipt_mm = receipt_mm.replace(/[^0-9]/gi,'');
@@ -218,7 +224,8 @@ function add_patient()
 				//Add custom fields
 				//$('#custom_field_form').ajaxSubmit();
 					
-				$('#custom_field_form').submit();
+				//$('#custom_field_form').submit();
+				addCustomElements();
 				$("#progress_spinner").hide();
 				
 				/* Retrieve actual DB Key used */
@@ -328,6 +335,32 @@ function reset_new_patient()
 	$('#new_record').resetForm();
 }
 
+function addCustomElements(){
+	var myCustomName = new Array();
+	var myCustomVal = new Array();
+	$(".custom").each(function(){
+		myCustomName.push(this.name);
+	});
+	
+	if(myCustomName.length > 0){
+		var card_num = $("#card_num").attr("value");
+		var params = "pid2="+card_num+"&";
+		for (var i = 0; i < myCustomName.length; i++) {
+			myCustomVal.push($('[name="'+myCustomName[i]+'"]').val());
+			params = params+myCustomName[i]+"="+$('[name="'+myCustomName[i]+'"]').val()+"&";
+		}
+		params = params.match(/(.*).$/)[1];
+			
+		$.ajax({
+			url : "ajax/patient_add_custom?"+params,
+			async: false,
+			success : function(data) {
+			}	
+		});
+	}
+
+	
+}
 </script>
 <p style="text-align: right;"><a rel='facebox' href='#regn_sidetip'>Page Help</a></p>
 <b><?php echo LangUtil::getTitle(); ?></b>
@@ -345,143 +378,21 @@ function reset_new_patient()
 	<?php # Hidden field for db key ?>
 	<input type='hidden' name='card_num' id='card_num' value="<?php echo get_max_patient_id()+1; ?>" ></input>
 	<table cellpadding="2" class='regn_form_table'>
-	<tr <?php
-	if($_SESSION['pid'] == 0)
-		echo " style='display:none;' ";
-	?>>
-		<td>
-			<?php echo LangUtil::$generalTerms['PATIENT_ID']; ?>
-			<?php
-			if($_SESSION['pid'] == 2)
-				$page_elems->getAsterisk();
-			?>
-		</td>
-		<td><input type="text" name="pid" id="pid" value="" size="20" class='uniform_width' /></td>
-	</tr>
-	<tr>
-		<td>Date of Registration</td>
-		<td>
-		<?php
-
-		$today1 = date("Y-m-d");
-		$today_array1 = explode("-", $today1);
-		$name_list1 = array("receipt_yyyy", "receipt_mm", "receipt_dd");
-		$id_list1 = array("receipt_yyyy", "receipt_mm", "receipt_dd");
-		$value_list1 = array($today_array1[0], $today_array1[1], $today_array1[2]);
-		$page_elems->getDatePicker($name_list1, $id_list1, $value_list1, true);
-		
-		?>
-		</td>
-	</tr>
-	<tr <?php
-	if($_SESSION['p_addl'] == 0)
-		echo " style='display:none;' ";
-	?>>
-		<td>
-			<?php echo LangUtil::$generalTerms['ADDL_ID'];
-			if($_SESSION['p_addl'] == 2)
-				$page_elems->getAsterisk();
-			?>
-		</td>
-		<td><input type="text" name="addl_id" id="addl_id" value="" size="20" class='uniform_width' /></td>
-	</tr>
-	<tr <?php
-	if( is_numeric($_SESSION['dnum']) && $_SESSION['dnum'] == 0 )
-		echo " style='display:none;' ";
-	?>>
-		<td><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?>
-		<?php
-			if($_SESSION['dnum'] == 2)
-				$page_elems->getAsterisk();
-			?>
-		</td>
-		<td><input type="text" name="dnum" id="dnum" value="<?php echo $daily_num; ?>" size="20" class='uniform_width' /></td>
-	</tr>
-	<tr<?php
-	if($_SESSION['pname'] == 0)
-		echo " style='display:none;' ";
-	?>>	
-		<td><?php echo LangUtil::$generalTerms['NAME']; ?><?php $page_elems->getAsterisk(); ?> </td>
-		<td><input type="text" name="name" id="name" value="" size="20" class='uniform_width' /></td>
-	</tr>
-	
-	<tr<?php
-	if($_SESSION['sex'] == 0)
-		echo " style='display:none;' ";
-	?>>
-		<td><?php echo LangUtil::$generalTerms['GENDER']; ?><?php $page_elems->getAsterisk();?> </td>
-		<td>
-			<INPUT TYPE=RADIO NAME="sex" id="sex" VALUE="M" checked><?php echo LangUtil::$generalTerms['MALE']; ?>
-			<INPUT TYPE=RADIO NAME="sex" VALUE="F"><?php echo LangUtil::$generalTerms['FEMALE']; ?>
-		<br>
-			
-		</td>
-	</tr>
-	
-	<tr><?php
-	if($_SESSION['age'] == 0)
-		echo " style='display:none;' ";
-	?>
-		<td><?php echo LangUtil::$generalTerms['AGE']; ?> <?php
-			if($_SESSION['age'] == 2)
-				$page_elems->getAsterisk();
-			?>
-		</td>
-		<td>
-		<font style='color:red'><?php echo LangUtil::$pageTerms['TIPS_DOB_AGE'];?></font>
-			<input type="text" name="age" id="age" value="" size="4" maxlength="10" class='uniform_width' />
-			
-			<select name='age_param' id='age_param'>
-				<option value='1'><?php echo LangUtil::$generalTerms['YEARS']; ?></option>
-				<option value='2'><?php echo LangUtil::$generalTerms['MONTHS']; ?></option>
-				<option value='3'><?php echo LangUtil::$generalTerms['DAYS']; ?></option>
-				<option value='4'>Weeks</option>
-				<option value='5'>Range(Years)</option>
-			</select>
-			
-		</td>
-	</tr>
-	<tr valign='top'<?php
-	if($_SESSION['dob'] == 0)
-		echo " style='display:none;' ";
-	?>>	
-		<td>
-			<?php echo LangUtil::$generalTerms['DOB']; ?> 
-			<?php
-			if($_SESSION['dob'] == 2)
-				$page_elems->getAsterisk();
-			?>
-		</td>
-		<td>
-		<?php
-		$name_list = array("yyyy", "mm", "dd");
-		$id_list = $name_list;
-		$value_list = array("", "", "");
-		$page_elems->getDatePicker($name_list, $id_list, $value_list); 
-		?>
-		</td>
-	</tr>
-		
-</form>
-	
-<form id='custom_field_form' name='custom_field_form' action='ajax/patient_add_custom.php' method='get'>
-<input type='hidden' name='pid2' id='pid2' value=''></input>
-	<?php
-	$custom_field_list = get_custom_fields_patient();
-	foreach($custom_field_list as $custom_field)
-	{
-		if(($custom_field->flag)==NULL)
-		{
-		?>
-		<tr valign='top'>
-			<td><?php echo $custom_field->fieldName; ?></td>
-			<td><?php $page_elems->getCustomFormField($custom_field); ?></td>
-		</tr>
-		<?php
+	<?php CustomFieldOrderGeneration_Patient::init(); 
+		  $HTMLFactory = new field_htmlFactory(); ?>
+	<?php 
+		$fieldOrder = $field_odering->form_field_inOrder;
+		$fieldOrder = explode(',', $fieldOrder);
+		foreach($fieldOrder as $fieldName){
+			$HTMLFactory->generateHTML($fieldName);
 		}
-	}
 	?>
-</form>
+	
+	<?php CustomFieldOrderGeneration_Patient::generate_patient_rdate(); ?>
+
+	</form>
+	
+	<input type='hidden' name='pid2' id='pid2' value=''></input>
 	
 	<tr>
 		<td></td>
@@ -495,36 +406,8 @@ function reset_new_patient()
 			</span>
 		</td>
 	</tr>
+</table>
 
-</table>
-<!--</form>-->
-</div>
-<small>
-<span style='float:right'>
-	<?php $page_elems->getAsteriskMessage(); ?>
-</span>
-</small>
-</div>
-</td>
-<td>
-&nbsp;&nbsp;&nbsp;
-</td>
-<td>
-<div>
-	<div id='regn_sidetip' class='right_pane' style='display:none;margin-left:10px;'>
-	<ul>
-		<li><?php echo LangUtil::$pageTerms['TIPS_REGN_NEW'];?></li>
-		<li><?php echo LangUtil::$pageTerms['TIPS_REGN'];?></li>
-	</ul>
-	</div>
-	<br><br><br><br><br><br><br>
-	<div id='patient_prompt_div'>
-	
-	</div>
-</div>
-</td>
-</tr>
-</table>
 <?php 
 /*
 $load_time = microtime(); 

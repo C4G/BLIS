@@ -27,6 +27,7 @@ if($lab_config == null)
 $report_config = $lab_config->getReportConfig($report_type);
 ?>
 <div class='pretty_box'>
+	
 	<form name='report_config_submit_form' id='report_config_submit_form' action='ajax/report_config_update.php' method='post'>
 		<?php $page_elems->getReportConfigForm($report_config); ?>
 	</form>

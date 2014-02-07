@@ -1,3 +1,15 @@
+CREATE TABLE IF NOT EXISTS `currency_conversion` (
+  `currencya` varchar(200) NOT NULL,
+  `currencyb` varchar(200) NOT NULL,
+  `exchangerate` FLOAT(5,2) default NULL,
+  `updatedts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `flag1` int(11) default NULL,
+  `flag2` int(11) default NULL,
+  `setting1` varchar(200) default NULL,
+  `setting2` varchar(200) default NULL,
+  PRIMARY KEY  (`currencya`,`currencyb`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
 CREATE TABLE IF NOT EXISTS `comment` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `username` varchar(45) NOT NULL default '',
@@ -106,15 +118,21 @@ CREATE TABLE IF NOT EXISTS `lab_config_access` (
   `user_id` int(10) unsigned NOT NULL default '0',
   `lab_config_id` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`user_id`,`lab_config_id`),
-  KEY `lab_config_id` (`lab_config_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `lab_config_id` (`lab_config_id`),
+  CONSTRAINT `lab_config_access_ibfk_1` FOREIGN KEY (`lab_config_id`) REFERENCES `blis_revamp`.`lab_config` (`lab_config_id`) ON UPDATE CASCADE,
+  CONSTRAINT `lab_config_access_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `blis_revamp`.`user` (`user_id`) ON UPDATE CASCADE,
+  CONSTRAINT `lab_config_access_ibfk_3` FOREIGN KEY (`lab_config_id`) REFERENCES `blis_revamp`.`lab_config` (`lab_config_id`) ON UPDATE CASCADE,
+  CONSTRAINT `lab_config_access_ibfk_4` FOREIGN KEY (`user_id`) REFERENCES `blis_revamp`.`user` (`user_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE IF NOT EXISTS `lab_config_specimen_type` (
   `lab_config_id` int(10) unsigned NOT NULL default '0',
   `specimen_type_id` int(10) unsigned NOT NULL default '0',
   KEY `lab_config_id` (`lab_config_id`),
-  KEY `specimen_type_id` (`specimen_type_id`)
+  KEY `specimen_type_id` (`specimen_type_id`),
+  CONSTRAINT `lab_config_specimen_type_ibfk_1` FOREIGN KEY (`lab_config_id`) REFERENCES `blis_revamp`.`lab_config` (`lab_config_id`) ON UPDATE CASCADE,
+  CONSTRAINT `lab_config_specimen_type_ibfk_2` FOREIGN KEY (`specimen_type_id`) REFERENCES `specimen` (`specimen_type_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -122,8 +140,10 @@ CREATE TABLE IF NOT EXISTS `lab_config_test_type` (
   `lab_config_id` int(10) unsigned NOT NULL default '0',
   `test_type_id` int(10) unsigned NOT NULL default '0',
   KEY `lab_config_id` (`lab_config_id`),
-  KEY `test_type_id` (`test_type_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `test_type_id` (`test_type_id`),
+  CONSTRAINT `lab_config_test_type_ibfk_1` FOREIGN KEY (`lab_config_id`) REFERENCES `blis_revamp`.`lab_config` (`lab_config_id`) ON UPDATE CASCADE,
+  CONSTRAINT `lab_config_test_type_ibfk_2` FOREIGN KEY (`test_type_id`) REFERENCES `test_type` (`test_type_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE IF NOT EXISTS `labtitle_custom_field` (
@@ -200,7 +220,8 @@ CREATE TABLE IF NOT EXISTS `patient_custom_data` (
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
   KEY `field_id` (`field_id`),
-  KEY `patient_id` (`patient_id`)
+  KEY `patient_id` (`patient_id`),
+  CONSTRAINT `patient_custom_data_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -230,7 +251,8 @@ CREATE TABLE IF NOT EXISTS `reference_range` (
   `range_lower` varchar(45) NOT NULL,
   `range_upper` varchar(45) NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `measure_id` (`measure_id`)
+  KEY `measure_id` (`measure_id`),
+  CONSTRAINT `reference_range_ibfk_1` FOREIGN KEY (`measure_id`) REFERENCES `measure` (`measure_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -263,6 +285,10 @@ CREATE TABLE IF NOT EXISTS `report_config` (
   PRIMARY KEY  (`report_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `report_config` (`report_id`, `header`, `footer`, `margins`, `test_type_id`, `title`, `landscape`) VALUES ('77', 'Daily reports - Patient Varcode Config', '-End-', '2,0,7,0', '0', 'Patient Barcode<br>', '0');
+
+
+
 
 CREATE TABLE IF NOT EXISTS `report_disease` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -274,8 +300,9 @@ CREATE TABLE IF NOT EXISTS `report_disease` (
   `lab_config_id` int(10) unsigned NOT NULL,
   `test_type_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  USING BTREE (`id`),
-  KEY `measure_id` (`measure_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `measure_id` (`measure_id`),
+  CONSTRAINT `report_disease_ibfk_1` FOREIGN KEY (`measure_id`) REFERENCES `measure` (`measure_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE IF NOT EXISTS `specimen` (
@@ -301,7 +328,10 @@ CREATE TABLE IF NOT EXISTS `specimen` (
   KEY `patient_id` (`patient_id`),
   KEY `specimen_type_id` (`specimen_type_id`),
   KEY `user_id` (`user_id`),
-  KEY `IDX_DATE` (`date_collected`)
+  KEY `IDX_DATE` (`date_collected`),
+  CONSTRAINT `specimen_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`) ON UPDATE CASCADE,
+  CONSTRAINT `specimen_ibfk_2` FOREIGN KEY (`specimen_type_id`) REFERENCES `specimen_type` (`specimen_type_id`) ON UPDATE CASCADE,
+  CONSTRAINT `specimen_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `blis_revamp`.`user` (`user_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -313,7 +343,8 @@ CREATE TABLE IF NOT EXISTS `specimen_custom_data` (
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
   KEY `field_id` (`field_id`),
-  KEY `specimen_id` (`specimen_id`)
+  KEY `specimen_id` (`specimen_id`),
+  CONSTRAINT `specimen_custom_data_ibfk_1` FOREIGN KEY (`specimen_id`) REFERENCES `specimen` (`specimen_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -340,7 +371,9 @@ CREATE TABLE IF NOT EXISTS `specimen_test` (
   `specimen_type_id` int(11) unsigned NOT NULL default '0',
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   KEY `test_type_id` (`test_type_id`),
-  KEY `specimen_type_id` (`specimen_type_id`)
+  KEY `specimen_type_id` (`specimen_type_id`),
+  CONSTRAINT `specimen_test_ibfk_1` FOREIGN KEY (`specimen_type_id`) REFERENCES `specimen_type` (`specimen_type_id`) ON UPDATE CASCADE,
+  CONSTRAINT `specimen_test_ibfk_2` FOREIGN KEY (`test_type_id`) REFERENCES `test_type` (`test_type_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Relates tests to the specimens that are compatible with thos';
 
 
@@ -398,7 +431,10 @@ CREATE TABLE IF NOT EXISTS `test` (
   PRIMARY KEY  (`test_id`),
   KEY `test_type_id` (`test_type_id`),
   KEY `user_id` (`user_id`),
-  KEY `specimen_id` (`specimen_id`)
+  KEY `specimen_id` (`specimen_id`),
+  CONSTRAINT `test_ibfk_1` FOREIGN KEY (`test_type_id`) REFERENCES `test_type` (`test_type_id`) ON UPDATE CASCADE,
+  CONSTRAINT `test_ibfk_2` FOREIGN KEY (`specimen_id`) REFERENCES `specimen` (`specimen_id`) ON UPDATE CASCADE,
+  CONSTRAINT `test_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `blis_revamp`.`user` (`user_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -424,7 +460,8 @@ CREATE TABLE IF NOT EXISTS `test_type` (
   `prevalence_threshold` int(3) default '70',
   `target_tat` int(3) default '24',
   PRIMARY KEY  (`test_type_id`),
-  KEY `test_category_id` (`test_category_id`)
+  KEY `test_category_id` (`test_category_id`),
+  CONSTRAINT `test_type_ibfk_1` FOREIGN KEY (`test_category_id`) REFERENCES `test_category` (`test_category_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -433,7 +470,9 @@ CREATE TABLE IF NOT EXISTS `test_type_measure` (
   `measure_id` int(11) unsigned NOT NULL default '0',
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   KEY `test_type_id` (`test_type_id`),
-  KEY `measure_id` (`measure_id`)
+  KEY `measure_id` (`measure_id`),
+  CONSTRAINT `test_type_measure_ibfk_1` FOREIGN KEY (`test_type_id`) REFERENCES `test_type` (`test_type_id`) ON UPDATE CASCADE,
+  CONSTRAINT `test_type_measure_ibfk_2` FOREIGN KEY (`measure_id`) REFERENCES `measure` (`measure_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -458,7 +497,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `phone` varchar(45) default NULL,
   `lang_id` varchar(45) NOT NULL default 'default',
   PRIMARY KEY  (`user_id`),
-  KEY `user_id_index` USING BTREE (`lab_config_id`)
+  KEY `user_id_index` USING BTREE (`lab_config_id`),
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`lab_config_id`) REFERENCES `blis_revamp`.`lab_config` (`lab_config_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Users are anybody that works in the lab.';
 
 
@@ -486,7 +526,8 @@ CREATE TABLE IF NOT EXISTS `user_rating` (
   `user_id` int(10) unsigned NOT NULL,
   `rating` int(10) unsigned NOT NULL,
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`user_id`,`ts`)
+  PRIMARY KEY  (`user_id`,`ts`),
+  CONSTRAINT `user_rating_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `blis_revamp`.`user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -516,6 +557,9 @@ CREATE TABLE IF NOT EXISTS `worksheet_custom_test` (
   KEY `worksheet_id` (`worksheet_id`),
   KEY `test_type_id` (`test_type_id`),
   KEY `measure_id` (`measure_id`),
+  CONSTRAINT `worksheet_custom_test_ibfk_1` FOREIGN KEY (`worksheet_id`) REFERENCES `worksheet` (`worksheet_id`) ON UPDATE CASCADE,
+  CONSTRAINT `worksheet_custom_test_ibfk_2` FOREIGN KEY (`test_type_id`) REFERENCES `test_type` (`test_type_id`) ON UPDATE CASCADE,
+  CONSTRAINT `worksheet_custom_test_ibfk_3` FOREIGN KEY (`measure_id`) REFERENCES `measure` (`measure_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -525,7 +569,8 @@ CREATE TABLE IF NOT EXISTS `worksheet_custom_userfield` (
   `width` int(10) unsigned NOT NULL default '10',
   `field_id` int(10) unsigned NOT NULL auto_increment,
   KEY `Primary Key` (`field_id`),
-  KEY `worksheet_id` (`worksheet_id`)
+  KEY `worksheet_id` (`worksheet_id`),
+  CONSTRAINT `worksheet_custom_userfield_ibfk_1` FOREIGN KEY (`worksheet_id`) REFERENCES `worksheet` (`worksheet_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -587,3 +632,11 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `bill_id` int(11) unsigned NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+CREATE  TABLE IF NOT EXISTS `user_feedback` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `user_id` INT(11) NULL ,
+  `rating` INT(3) NULL ,
+  `comments` VARCHAR(500) NULL ,
+  `ts` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  PRIMARY KEY (`id`) );

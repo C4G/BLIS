@@ -90,6 +90,297 @@ class User
 	}
 }
 
+
+class currencyConfig{
+	public $currencyFrom;
+	public $currencyTo; 
+	public $exchangeRate;
+	public $lastUpdatedOn;
+	public $flag1;
+	public $flag2;
+	public $setting1;
+	public $setting2;
+	
+	public static function getObject($record)
+	{
+		global $DEFAULT_DATE_FORMAT;
+		# Converts a lab_config record in DB into a LabConfig object
+		if($record == null)
+			return null;
+		$currency_config = new currencyConfig();
+		$currency_config->currencyFrom = $record['currencya'];
+		$currency_config->currencyTo = $record['currencyb'];
+		$currency_config->exchangeRate = $record['exchangerate'];
+		$currency_config->lastUpdatedOn = $record['updatedts'];
+		
+		if(isset($record['flag1']))
+			$currency_config->flag1 = $record['flag1'];
+		else
+			$currency_config->flag1 = 0;
+		
+		if(isset($record['flag2']))
+			$currency_config->flag2 = $record['flag2'];
+		else
+			$currency_config->flag2 = 0;
+		
+		if(isset($record['setting1']))
+			$currency_config->setting1 = $record['setting1'];
+		else
+			$currency_config->setting1 = 0;
+		
+		if(isset($record['setting2']))
+			$currency_config->setting2 = $record['setting2'];
+		else
+			$currency_config->setting2 = 0;
+		
+		return $currency_config;
+		
+	}
+	
+	
+	public function getCurrencyFrom()
+	{
+		if($this->currencyFrom == null || trim($this->currencyFrom) == "")
+			return "-";
+		else
+			return $this->currencyFrom;
+	}
+	
+	public function getCurrencyTo()
+	{
+		if($this->currencyTo == null || trim($this->currencyTo) == "")
+			return "-";
+		else
+			return $this->currencyTo;
+	}
+	public function getExchangeRate()
+	{
+		if($this->exchangeRate == null || trim($this->exchangeRate) == "")
+			return 0;
+		else
+			return $this->exchangeRate;
+	}
+	public function getLastUpdatedDate()
+	{
+		if($this->lastUpdatedOn == null || trim($this->lastUpdatedOn) == "")
+			return "-";
+		else
+			return $this->lastUpdatedOn;
+	}
+	public function getFlag1()
+	{
+		if($this->flag1 == null || trim($this->flag1) == "")
+			return 0;
+		else
+			return $this->flag1;
+	}
+	
+	public function getFlag2()
+	{
+		if($this->flag2 == null || trim($this->flag2) == "")
+			return "-";
+		else
+			return $this->flag2;
+	}
+	
+	public function getSetting1()
+	{
+		if($this->setting1 == null || trim($this->setting1) == "")
+			return "-";
+		else
+			return $this->setting1;
+	}
+	
+	public function getSetting2()
+	{
+		if($this->setting2 == null || trim($this->setting2) == "")
+			return "-";
+		else
+			return $this->setting2;
+	}
+	
+	public static function getExchangeRateSnap($lab_config_id, $currencyFrom) {
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		$retval = array();
+		$query_string = "SELECT * FROM currency_conversion where currencya='$currencyFrom' && currencyb!='$currencyFrom'";
+		$resultset = query_associative_all($query_string, $row_count);
+		foreach($resultset as $record)
+		{
+			$retval[] = currencyConfig::getObject($record);
+		}
+		DbUtil::switchRestore($saved_db);
+		return $retval;
+	}
+	
+	public static function getExchangeRateValue($lab_config_id, $currencyFrom, $currencyTo) {
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		global $con;
+		$query_config = "SELECT * FROM currency_conversion where currencya='$currencyFrom' && currencyb='$currencyTo' limit 1";
+		$record = query_associative_one($query_config);
+		DbUtil::switchRestore($saved_db);
+		return currencyConfig::getObject($record);
+	}
+	
+	public static function getDefaultCurrency($lab_config_id) {
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		global $con;
+		$query_config = "SELECT * FROM currency_conversion where currencya=currencyb && flag1='1' limit 1";
+		$record = query_associative_one($query_config);
+		DbUtil::switchRestore($saved_db);
+		return currencyConfig::getObject($record);
+	}
+	
+	public static function setDefaultCurrency($lab_config_id, $default_currency_name) {
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		$query_string = "update currency_conversion set flag1='0' where flag1='1'";
+		query_update($query_string);
+		$query_string = "update currency_conversion set flag1='1' where currencya='$default_currency_name' && currencya=currencyb";
+		query_update($query_string);
+		DbUtil::switchRestore($saved_db);
+		return 1;
+	}
+	
+	public static function getAllDifferenctCurrencies($lab_config_id) {
+		//echo "TEST";
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		global $con;
+		$query_string = "SELECT distinct currencyb FROM currency_conversion";
+		$resultset = query_associative_all($query_string, $row_count);
+		$record_c=array();
+		foreach($resultset as $record)
+		{
+			foreach($record as $key=>$value){
+			$query_string = "SELECT * FROM currency_conversion WHERE currencya='$value' && currencya=currencyb";
+			$record_each= query_associative_one($query_string);
+			echo $record_each['currencya'].'||';
+			$record_c[]=currencyConfig::getObject($record_each);
+			}
+		}
+		DbUtil::switchRestore($saved_db);
+		return $record_c;
+	}
+	
+	
+	public static function getAllSecondaryCurrencies($lab_config_id, $default_currency) {
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		$query_string = "SELECT distinct currencyb FROM currency_conversion where currencya='$default_currency'";
+		
+		$resultset = query_associative_all($query_string, $row_count);
+		$record_c=array();
+		foreach($resultset as $record)
+		{
+			foreach($record as $key=>$value){
+				$query_string = "SELECT * FROM currency_conversion WHERE currencya='$value' && currencya=currencyb";
+				$record_each= query_associative_one($query_string);
+				$record_c[]=currencyConfig::getObject($record_each);
+			}
+		}
+		DbUtil::switchRestore($saved_db);
+		return $record_c;
+	}
+	
+	
+}
+
+
+class FieldOrdering
+{
+	public $id; // 0 for patient registration, 1 for specimen registration
+	/* public $field1;
+	public $field2;
+	public $field3;
+	public $field4;
+	public $field5;
+	public $field6;
+	public $field7;
+	public $field8;
+	public $field9;
+	public $field10;
+	public $field11;
+	public $field12;
+	public $field13;
+	public $field14;
+	public $field15;
+	public $field16; */
+	public $form_field_inOrder;
+	
+	public $form_id;
+	
+	
+	public static function getObject($record)
+	{
+		# Converts a lab_config record in DB into a LabConfig object
+		if($record == null)
+			return null;
+		
+		$field_ordering = new FieldOrdering();
+		
+		if(isset($record['lab_config_id']))
+			$field_ordering->id = $record['lab_config_id'];
+		else
+			$field_ordering->id = null;
+		
+		if(isset($record['form_id']))
+			$field_ordering->form_id = $record['form_id'];
+		else
+			$field_ordering->form_id = -1;
+		
+		if(isset($record['field_order']))
+			$field_ordering->form_field_inOrder = $record['field_order'];
+		else
+			$field_ordering->form_field_inOrder = -1;
+		
+		return $field_ordering;
+	}
+
+	public static function getByFormId($lab_config_id, $form_id) {
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		//$query_config = "SELECT * FROM field_ordering WHERE lab_config_id = $lab_config_id AND form_id=$form_id LIMIT 1";
+		$query_config = "SELECT * FROM field_order WHERE lab_config_id = $lab_config_id AND form_id=$form_id LIMIT 1";
+		//echo $query_config;
+		$record = query_associative_one($query_config);
+		DbUtil::switchRestore($saved_db);
+		return FieldOrdering::getObject($record);
+	}
+	
+	public static function deleteFieldOrderEntry($lab_config_id, $form_id){
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		//$query_delete = "DELETE FROM field_ordering WHERE lab_config_id=$lab_config_id AND form_id=$form_id";
+		$query_delete = "DELETE FROM field_order WHERE lab_config_id=$lab_config_id AND form_id=$form_id";
+		query_blind($query_delete);
+		DbUtil::switchRestore($saved_db);
+	}
+	
+	public static function add_fieldOrdering($fieldOrder, $importOn = false)
+	{
+		# Adds a new patient/ specimen field order to DB 
+		
+		$field_order = db_escape($fieldOrder->form_field_inOrder);
+		$lab_config_id = db_escape($fieldOrder->id);
+		$form_id = db_escape($fieldOrder->form_id);
+			
+		
+		/* $query_string =
+			"INSERT INTO `field_ordering`(`lab_config_id`, `field1`, `field2`, `field3`, `field4`, `field5`, `field6`, `field7`,`field8`,`field9`,`field10`,`field11`,`field12`,`field13`,`field14`,`field15`,`field16`,`form_id`) ".
+			"VALUES ($lab_config_id, '$field1', '$field2', '$field3', '$field4', '$field5', '$field6', '$field7', '$field8', '$field9', '$field10', '$field11', '$field12', '$field13', '$field14', '$field15', '$field16', $form_id)";
+		 */
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+		
+		$query_string =
+		"INSERT INTO `field_order`(`lab_config_id`, `field_order`,`form_id`) ".
+		"VALUES ($lab_config_id, '$field_order', $form_id)";
+		
+		//print $query_string;
+		query_insert_one($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+		return true;
+	}
+}
+
+
+
+
 class LabConfig
 {
 	public $id;
@@ -221,12 +512,12 @@ class LabConfig
 	
 	public static function getById($lab_config_id) {
 		$saved_db = DbUtil::switchToGlobal();
-		
-		global $con;
+		//global $con;
 		//$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 		$query_config = "SELECT * FROM lab_config WHERE lab_config_id = $lab_config_id LIMIT 1";
 		$record = query_associative_one($query_config);
 		DbUtil::switchRestore($saved_db);
+		//echo "from db sid ".$record['sid'];
 		return LabConfig::getObject($record);
 	}
 	
@@ -450,7 +741,7 @@ class LabConfig
 				$query_string = 
 					"INSERT INTO test_type_tat (test_type_id, tat) ".
 					"VALUES ($test_type_id, $tat_value)";
-				echo $query_string;
+				;
 				query_insert_one($query_string);
 			}
 			*/
@@ -462,7 +753,7 @@ class LabConfig
 			$query_string = 
 				"INSERT INTO test_type_tat (test_type_id, tat) ".
 				"VALUES ($test_type_id, $tat_value)";
-			echo $query_string;
+			;
 			query_insert_one($query_string);
 		}
 		DbUtil::switchRestore($saved_db);
@@ -838,6 +1129,8 @@ class ReportConfig
 	public static $TOP=0, $BOTTOM=1, $LEFT=2, $RIGHT=3;
 	
 	public $usePatientId;
+	public $usePatientBarcode;
+	public $usePatientSignature;
 	public $useDailyNum;
 	public $usePatientAddlId;
 	public $useGender;
@@ -865,6 +1158,9 @@ class ReportConfig
 	public $useStatus;
 	public $useTestName;
 	public $useClinicalData;
+	
+	public $useRequesterName;
+	public $useReferredToHospital;
 	
 	public $landscape;
 	public $logoUrl;
@@ -973,7 +1269,27 @@ class ReportConfig
 			$report_config->usePatientRegistrationDate = 0;
 		else
 			$report_config->usePatientRegistrationDate = $patient_field_list[8];
-			
+		if(!isset($patient_field_list[9]))
+			$report_config->usePatientBarcode = 0;
+		else
+			$report_config->usePatientBarcode = $patient_field_list[9];
+		if(!isset($patient_field_list[10]))
+			$report_config->usePatientSignature = 0;
+		else
+			$report_config->usePatientSignature = $patient_field_list[10];
+
+		if(!isset($patient_field_list[11]))
+			$report_config->useRequesterName = 0;
+		else
+			$report_config->useRequesterName = $patient_field_list[11];
+		
+		if(!isset($patient_field_list[12]))
+		{	
+			$report_config->useReferredToHospital = 0;
+		}else
+			$report_config->useReferredToHospital = $patient_field_list[12];
+		
+		
 		# Specimen main fields
 		$specimen_field_list = explode(",", $record['s_fields']);
 		if(!isset($specimen_field_list[0]))
@@ -1860,6 +2176,8 @@ class Patient
 	public $createdBy; # user ID who registered this patient
 	public $hashValue; # hash value for this patient (based on name, dob, sex)
 	public $regDate;
+	
+	public $specimenCount;
 	public static function getObject($record)
 	{
 		# Converts a patient record in DB into a Patient object
@@ -1875,6 +2193,14 @@ class Patient
 		$date_parts = explode(" ", date($record['ts']));
 		$date_parts_1=explode("-",$date_parts[0]);
 		$patient->regDate=$date_parts_1[2]."-".$date_parts_1[1]."-".$date_parts_1[0];
+		
+		$patient->specimenCount = 0;
+		$args = func_get_args();
+		if(func_num_args() ==1){
+			$patient->specimenCount = 0;
+		} else {
+			$patient->specimenCount = $args[1];
+		}
 		
 		if(isset($record['partial_dob']))
 			$patient->partialDob = $record['partial_dob'];
@@ -2082,23 +2408,61 @@ class Patient
 		$record_p=array();
 			foreach($resultset as $record)
 			{
-				foreach($record as $key=>$value)
+				foreach($record as $key=>$value){
 				$query_string = "SELECT * FROM patient WHERE patient_id=$value";
 				$record_each= query_associative_one($query_string);
 				$record_p[]=Patient::getObject($record_each);
+				}
 			}
 		return $record_p;	
 	
 	}
 
-	public static function getReportedByRegDateRange($date_from , $date_to)
+	public static function getReportedByRegDateRange($date_from , $date_to, $lab_section)
 	{
 		$emp="";
+		$query_string = "";
+		if($lab_section == 0){
 		$query_string =
 				"SELECT DISTINCT patient_id FROM specimen , test ".
 				"WHERE date_collected BETWEEN '$date_from' AND '$date_to' ".
 				"AND result!='$emp' ".
-				"AND specimen.specimen_id=test.specimen_id";
+				"AND specimen.specimen_id=test.specimen_id AND patient_id
+						 NOT IN
+			(SELECT DISTINCT patient_id FROM specimen , test ".
+			"WHERE date_collected BETWEEN '$date_from' AND '$date_to' ".
+			"AND result='$emp' ".
+			"AND specimen.specimen_id=test.specimen_id)";
+		} else {
+			$query_string_for_test_type_id = "select test_type_id from test_type where test_category_id=$lab_section";
+			$resultsetTestIDs = query_associative_all($query_string_for_test_type_id, $row_count);
+			$testidsarr = array();
+			$counter = 0;
+			foreach($resultsetTestIDs as $key => $values){
+				array_push($testidsarr,$values['test_type_id']);
+				$counter++;
+			}
+			$testids = join(',',$testidsarr);
+			$labsecwise_addon = "";
+			if($counter > 0){
+				$labsecwise_addon = "AND test.test_type_id IN ($testids)";
+			} else {
+				$record_p=array();
+				return $record_p;
+			}
+			$query_string =
+			"SELECT DISTINCT patient_id FROM specimen , test ".
+			"WHERE date_collected BETWEEN '$date_from' AND '$date_to' ".
+			"AND result!='$emp' ".
+			"AND specimen.specimen_id=test.specimen_id ".$labsecwise_addon." AND patient_id 
+						 NOT IN
+			(SELECT DISTINCT patient_id FROM specimen , test ".
+						"WHERE date_collected BETWEEN '$date_from' AND '$date_to' ".
+						"AND result='$emp' ".
+						"AND specimen.specimen_id=test.specimen_id)".$labsecwise_addon;
+			
+		}
+		//;
 		$resultset = query_associative_all($query_string, $row_count);
 		$retval = array();
 		$record_p=array();
@@ -2111,19 +2475,81 @@ class Patient
 				$record_p[]=Patient::getObject($record_each);
 			}
 		}
+		//$unreportedList = self::getUnReportedByRegDateRange($date_from, $date_to);
 		return $record_p;	
 	
 	}
 	
+	
+	public static function getPatientsAndSpecimenCountByRegDateRange($date_from , $date_to)
+	{
+		$query_string =
+		"SELECT patient_id as patientId, count(*) as specimenCount FROM specimen ". 
+		"WHERE date_collected BETWEEN '$date_from' AND '$date_to'".
+ 		"group by patientId order by SpecimenCount desc";
+		
+		$resultset = query_associative_all($query_string, $row_count);
+		$retval = array();
+		$record_p=array();
+		$count = 0;
+		foreach($resultset as $record)
+		{
+			$record_each="";
+			$select = true;
+			foreach($record as $key=>$value) {
+				//$patientId = $obj['patientId'];
+				//$specimenCount = $obj['specimenCount'];
+				if($select)
+				{
+					$query_string = "SELECT * FROM patient WHERE patient_id=$value";
+					$record_each= query_associative_one($query_string);
+					$select = false;
+				} else {
+					$record_p[]=Patient::getObject($record_each, $value);
+					$select = true;
+				}
+			}
+		}
+		//$unreportedList = self::getUnReportedByRegDateRange($date_from, $date_to);
+		return $record_p;
+	
+	}
+	
 
-	public static function getUnReportedByRegDateRange($date_from , $date_to)
+	public static function getUnReportedByRegDateRange($date_from , $date_to, $lab_section)
 	{
 		$emp="";
+		$query_string = "";
+		if($lab_section == 0){
 		$query_string =
 			"SELECT DISTINCT patient_id FROM specimen , test ".
 			"WHERE date_collected BETWEEN '$date_from' AND '$date_to' ".
 			"AND result='$emp' ".
 			"AND specimen.specimen_id=test.specimen_id";
+		} else {
+			$query_string_for_test_type_id = "select test_type_id from test_type where test_category_id=$lab_section";
+			//_for_test_type_id;
+			$resultsetTestIDs = query_associative_all($query_string_for_test_type_id, $row_count);
+			$testidsarr = array();
+			$counter = 0;
+			foreach($resultsetTestIDs as $key => $values){
+				array_push($testidsarr,$values['test_type_id']);
+				$counter++;
+			}
+			$testids = join(',',$testidsarr);
+			$labsecwise_addon = "";
+			if($counter > 0){
+				$labsecwise_addon = "AND test.test_type_id IN ($testids)";
+			}else {
+				return;
+			}
+			$query_string =
+			"SELECT DISTINCT patient_id FROM specimen , test ".
+			"WHERE date_collected BETWEEN '$date_from' AND '$date_to' ".
+			"AND result='$emp' ".
+			"AND specimen.specimen_id=test.specimen_id ".$labsecwise_addon;
+		}
+		//;
 		$resultset = query_associative_all($query_string, $row_count);
 		$retval = array();
 		$record_p=array();
@@ -2154,6 +2580,14 @@ class Patient
 			return "-";
 		else
 			return $this->surrogateId;
+	}
+	
+	public function getSpecimenCount()
+	{
+		if($this->specimenCount == null || trim($this->specimenCount) == "")
+			return 0;
+		else
+			return $this->specimenCount;
 	}
 	
 	public function getDailyNum()
@@ -2254,6 +2688,8 @@ class Specimen
 	public $referredToName;
 	public $dailyNum;
 	
+	public $referredFromName;
+	
 	public static $STATUS_PENDING = 0;
 	public static $STATUS_DONE = 1;
 	public static $STATUS_REFERRED = 2;
@@ -2319,6 +2755,12 @@ class Specimen
 			$specimen->referredToName = $record['referred_to_name'];
 		else
 			$specimen->referredToName = null;
+		
+		if(isset($record['referred_from_name']))
+			$specimen->referredFromName = $record['referred_from_name'];
+		else
+			$specimen->referredFromName = null;
+		
 		if(isset($record['daily_num']))
 			$specimen->dailyNum = $record['daily_num'];
 		else
@@ -2520,6 +2962,13 @@ class Specimen
 		return trim($this->referredToName);
 	}
 	
+	public function getReferredFromName()
+	{
+		if($this->referredFromName == null || trim($this->referredFromName) == "")
+			return "-";
+		return trim($this->referredFromName);
+	}
+	
 	public function getDoctor()
 	{
 		if($this->doctor == "" || $this->doctor == null)
@@ -2599,6 +3048,20 @@ class Test
 		return $test;
 	}
 	
+	public static function getTestBySpecimenID($sid)
+	{
+		# Returns a test result entry by test_id field
+		if($sid == null || trim($sid) == "")
+		{
+			return null;
+		}
+		$query_string =
+		"SELECT * FROM test WHERE specimen_id = $sid";
+		//"AND result<>''";
+		$record = query_associative_one($query_string);
+		return Test::getObject($record);
+	}
+	
 	public static function getById($test_id)
 	{
 		# Returns a test result entry by test_id field
@@ -2654,6 +3117,15 @@ class Test
 		if($this->isVerified())
 			return get_username_by_id($this->verifiedBy);
 		return LangUtil::$generalTerms['PENDING_VER'];
+	}
+	
+	public function getVerifierPosition()
+	{
+	# Returns username of the technician who verified results
+	# Or, "Not verified" if results are pending verification
+	if($this->isVerified())
+		return get_user_position_by_id($this->verifiedBy);
+	return "";
 	}
 	
 	public function setVerifiedBy($verified_by)
@@ -3414,6 +3886,17 @@ class Test
 		return $retval;
 	}
 	
+	/* public function getTestBySpecimenIdAndLabSection()
+	{
+		$query_string =
+		"SELECT * FROM test WHERE specimen_id = $this->testId".
+		")";
+		//"AND result<>''";
+		$resultset = query_associative_one($query_string, $row_count);
+		$retval = $resultset['date_collected'];
+		return $retval;
+	} */
+	
 	public static function convertArrayOfIdsToObjects($testIds)
 	{
 		$test_objs = array();
@@ -3467,7 +3950,6 @@ class CustomField
 			$custom_field->flag=$name_string[1];
 			else
 			$custom_field->flag=0;
-			//$custom_field->fieldName = $record['field_name'];
 		}
 			else
 			$custom_field->fieldName = null;
@@ -5443,6 +5925,7 @@ function encrypt_password($password)
 	# Encrypts cleartext password before adding to DB or matching passwords
 	$salt = "This comment should suffice as salt.";
 	return sha1($password.$salt);
+
 }
 
 function check_user_password($username, $password)
@@ -5477,6 +5960,51 @@ function change_user_password($username, $password)
 	DbUtil::switchRestore($saved_db);
 }
 
+function change_user_password_oneTime($username, $password)
+{
+	# Changes user password
+	global $con;
+	$username = mysql_real_escape_string($username, $con);
+	$saved_db = DbUtil::switchToGlobal();
+	$password = encrypt_password($password);
+	$query_string =
+	"UPDATE user ".
+	"SET password='$password' ".
+	"WHERE username='$username'";
+	query_blind($query_string);
+	
+	//insert into blis_129.misc (vr_id, v1, v2) values ("username", "admin", "Password Reset Complete");
+	$query_string_misc = 
+	"INSERT INTO MISC ".
+	"(username, action) values ('$username', 'password reset completed')";
+	query_blind($query_string_misc);
+	
+	DbUtil::switchRestore($saved_db);
+}
+
+function password_reset_need_confirm()
+{
+	# Changes user password
+	global $con;
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string = "select count(*) as resetCount from misc where action='password reset completed'";
+	$record = query_associative_one($query_string);
+	//$num_rows = mysql_num_rows($record);
+	DbUtil::switchRestore($saved_db);
+	if($record['resetCount'] == 0)
+		return true;
+	return false; 
+	//return $record;
+}
+
+function password_reset_flush($reset_before_date){
+	global $con; 
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string = "delete from misc where ts<'$reset_before_date' && action='password reset completed'";
+	query_blind($query_string);
+	DbUtil::switchRestore($saved_db);
+}
+
 function check_user_exists($username)
 {
 	# Checks if the username exists in DB
@@ -5501,6 +6029,100 @@ function add_user($user)
 		"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId')";
 	query_insert_one($query_string);
 	DbUtil::switchRestore($saved_db);
+}
+
+// Delete Tests related to specimen
+function delete_tests_by_test_id($tests_list){
+	if(sizeof($tests_list)>0){
+		foreach($tests_list as $test){
+			/* $query_string = "DELETE FROM test WHERE test_id=$test->testId";
+			query_blind($query_string); */
+			$remarks = "Typo";
+			$category = "test";
+			remove_specimens($lab_config_id, $test->testId, $remarks, $category);
+		}
+	}
+}
+
+// Delete Specimen related to patient
+function delete_specimen_by_specimen_id($specimen_list){
+	if(sizeof($specimen_list)>0){
+		foreach($specimen_list as $specimen){
+			$testsList = get_tests_by_specimen_id($specimen->specimenId);
+			delete_tests_by_test_id($testsList);
+			/* $query_string = "DELETE FROM specimen WHERE specimen_id=$specimen->specimenId";
+			query_blind($query_string); */
+			$remarks = "Typo";
+			$category = "specimen";
+			remove_specimens($lab_config_id, $specimen->specimenId, $remarks, $category);
+		}
+	}
+	
+}
+
+ function delete_specimen_by_specimen_id_api($specimen_list, $lab_config_id, $remarks = "Typo"){
+	global $con;
+	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	
+ 	if(sizeof($specimen_list)>0){
+		foreach($specimen_list as $specimen){
+			//echo "in delete_specimen_by_specimen_id_api : ".$specimen->specimenId;
+			$testsList = get_tests_by_specimen_id($specimen->specimenId);
+			delete_tests_by_test_id($testsList);
+			/* $query_string = "DELETE FROM specimen WHERE specimen_id=$specimen->specimenId";
+			query_blind($query_string); */
+			
+			$category = "specimen";
+			remove_specimens($lab_config_id, $specimen->specimenId, $remarks, $category);
+		}
+	}
+	DbUtil::switchRestore($saved_db);
+	return 1;
+}
+
+function delete_test_by_test_id_api($test_list, $lab_config_id){
+	global $con;
+	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+	if(sizeof($test_list)>0){
+		
+		foreach($test_list as $test){
+/* 			$query_string = "DELETE FROM test WHERE test_id=$test->testId";
+			query_blind($query_string);
+ */		
+			$remarks = "Typo";
+			$category = "test";
+			remove_specimens($lab_config_id, $test->testId, $remarks, $category);
+		}
+	}
+	DbUtil::switchRestore($saved_db);
+	return 1;
+}
+
+function delete_patient($patient_id, $lab_config_id)
+{
+	$retval = get_specimens_by_patient_id($patient_id);
+	# Deletes a patient from DB
+	$isSuccess = 1;
+	global $con;
+	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	
+	if(sizeof($retval)>0){
+		// Collect Specimen Related to patients 
+		// Delete the above collected specimen from the above specimen table
+		// Collect the tests related to the above specimen
+		// Delete the above collected tests from the appropriate table
+		//$isSuccess = 0;
+		delete_specimen_by_specimen_id($retval);
+	}  
+		# Remove patient record
+	//$query_string = "DELETE FROM patient WHERE patient_id=$patient_id";
+	//query_blind($query_string);
+	$remarks = "Typo";
+	$category = "patient";
+	remove_specimens($lab_config_id, $patient_id, $remarks, $category);
+	DbUtil::switchRestore($saved_db);
+	return $isSuccess;
 }
 
 function update_user_profile($updated_entry)
@@ -5613,6 +6235,54 @@ function get_username_by_id($user_id)
 		return LangUtil::$generalTerms['NOTKNOWN'];
 	else
 		return $record['username'];
+}
+
+function get_user_position_by_id($user_id)
+{
+	# Returns username as string
+	global $con;
+	$user_id = mysql_real_escape_string($user_id, $con);
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string = "SELECT level FROM user WHERE user_id=$user_id";
+	$record = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
+	if($record == null)
+		return LangUtil::$generalTerms['NOTKNOWN'];
+	
+	$user_level = $record['level'];
+	
+	
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_VERIFIER, $LIS_COUNTRYDIR, $LIS_CLERK;
+	global $LIS_001, $LIS_010, $LIS_011, $LIS_100, $LIS_101, $LIS_110, $LIS_111, $LIS_TECH_SHOWPNAME;
+	
+	switch($user_level){
+		case $LIS_VERIFIER:
+			return "Verifier";
+			break;
+		case $LIS_ADMIN:
+			return "Lab Admin";
+			break;
+		case $LIS_SUPERADMIN:
+			return "Admin";
+			break;
+		case $LIS_COUNTRYDIR:
+			return "Country Director";
+			break;
+		case $LIS_CLERK:
+			return "Clerk";
+			break;
+		default :
+			return "";
+			break;
+	}
+	
+	
+	
+	
+	
+	return $record['level'];
+	
+	
 }
 
 function get_user_by_name($username)
@@ -5786,14 +6456,14 @@ function get_patient_by_sp_id($sid)
 	global $con;
 	$sid = mysql_real_escape_string($sid, $con);
 $query_string="SELECT patient_id FROM specimen WHERE specimen_id=$sid ";
-//echo $query_string;
+//;
 $resultset = query_associative_one($query_string);
 $patient_list = array();
 	if(count($resultset) > 0)
 	{
 		
 		$id= $resultset['patient_id'];
-		Patient::getById($patient_id);
+		
 			$patient_list[] = Patient::getById($id);
 			//print_r($patient_list);
 		}
@@ -5811,15 +6481,41 @@ function get_patient_by_id($pid)
 	return Patient::getById($pid);
 }
 
-function search_patients_by_id($q)
+function search_patients_by_id($q, $labsection = 0)
 {
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
 	# Searches for patients with similar PID
-	$query_string = 
+	if(! is_admin_check(get_user_by_id($_SESSION['user_id']))){
+		if($labsection == 0){
+			$query_string =
+			"SELECT * FROM patient ".
+			"WHERE surr_id='$q' ".
+			"ORDER BY ts DESC";
+		} else {
+			$query_string =
+			"select distinct p.* from patient p, specimen s where ".
+			"p.surr_id ='$q' and p.patient_id = s.patient_id and s.specimen_id in ".
+			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.ts DESC";
+		
+		}	
+	} else {
+	if($labsection == 0){
+		$query_string = 
 		"SELECT * FROM patient ".
-		"WHERE surr_id='$q'".
+		"WHERE surr_id='$q' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1)".
 		"ORDER BY ts DESC";
+	} else {
+		$query_string =
+		"select distinct p.* from patient p, specimen s where ".
+		"p.surr_id ='$q' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.ts DESC";
+		
+	}
+	}
+	//;
 	$resultset = query_associative_all($query_string, $row_count);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -5827,20 +6523,33 @@ function search_patients_by_id($q)
 		foreach($resultset as $record)
 		{
 			$patient_list[] = Patient::getObject($record);
+			
 		}
 	}
 	return $patient_list;
 }
 
-function search_patients_by_id_dyn($q, $cap, $counter)
+function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
         $offset = $cap * ($counter - 1);
 	$q = mysql_real_escape_string($q, $con);
-	$query_string = 
+	
+	
+	if($labsection == 0){
+		$query_string = 
 		"SELECT * FROM patient ".
 		"WHERE surr_id='$q' ORDER BY ts DESC LIMIT $offset,$cap";
+	} else {
+		$query_string =
+		"select distinct p.* from patient p, specimen s where ".
+		"p.surr_id ='$q' and p.patient_id = s.patient_id and s.specimen_id in ".
+		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
+	
+	}
+	
 	$resultset = query_associative_all($query_string, $row_count);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -5848,31 +6557,91 @@ function search_patients_by_id_dyn($q, $cap, $counter)
 		foreach($resultset as $record)
 		{
 			$patient_list[] = Patient::getObject($record);
+			
 		}
 	}
 	return $patient_list;
 }
 
-function search_patients_by_id_count($q)
+function search_patients_by_id_count($q, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
-	$query_string = 
-		"SELECT count(*) as val FROM patient ".
-		"WHERE surr_id LIKE '$q'";
+	
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+		if($labsection == 0){
+			$query_string =
+			"SELECT count(*) as val FROM patient ".
+			"WHERE surr_id LIKE '$q'";
+		} else {
+			$query_string = "select count(distinct patient.patient_id) as val from patient, specimen ".
+					"where patient.surr_id like '$q' and patient.patient_id = specimen.patient_id ".
+					"and specimen.specimen_id in ".
+					"(select specimen_id from specimen where specimen_type_id in ".
+					"(select specimen_type_id from specimen_test where test_type_id in ".
+					"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+		}	
+	} else {
+		
+		if($labsection == 0){
+			$query_string =
+			"SELECT count(*) as val FROM patient ".
+			"WHERE surr_id LIKE '$q' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1)";
+		} else {
+			$query_string = "select count(distinct patient.patient_id) as val from patient, specimen ".
+					"where patient.surr_id like '$q' and patient.patient_id = specimen.patient_id ".
+					" AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1)".
+					" and specimen.specimen_id in ".
+					"(select specimen_id from specimen where specimen_type_id in ".
+					"(select specimen_type_id from specimen_test where test_type_id in ".
+					"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+		}
+		
+		
+	}
+	
+	
+	
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
 
-function search_patients_by_name($q)
+function search_patients_by_name($q, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
-	$query_string = 
+	
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+	
+	if($labsection == 0){
+		$query_string = 
 		"SELECT * FROM patient ".
 		"WHERE name LIKE '$q%' ORDER BY name ASC";
+	} else {
+		$query_string =
+		"select distinct p.* from patient p, specimen s where ".
+		"p.name LIKE '$q%' and p.patient_id = s.patient_id and s.specimen_id in ".
+		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC";
+	
+	}
+	} else {
+		if($labsection == 0){
+			$query_string =
+			"SELECT * FROM patient ".
+			"WHERE name LIKE '$q%'  AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC";
+		} else {
+			$query_string =
+			"select distinct p.* from patient p, specimen s where ".
+			"p.name LIKE '$q%'  AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC";
+		
+		}
+	}
+	
 	$resultset = query_associative_all($query_string, $row_count);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -5880,20 +6649,49 @@ function search_patients_by_name($q)
 		foreach($resultset as $record)
 		{
 			$patient_list[] = Patient::getObject($record);
+			
 		}
 	}
 	return $patient_list;
 }
 
-function search_patients_by_name_dyn($q, $cap, $counter)
+function search_patients_by_name_dyn($q, $cap, $counter, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
         $offset = $cap * ($counter - 1);
 	$q = mysql_real_escape_string($q, $con);
-	$query_string = 
-		"SELECT * FROM patient ".
-		"WHERE name LIKE '$q%' ORDER BY name ASC LIMIT $offset,$cap";
+	//echo "[]".$labsection;
+	$user = get_user_by_id($_SESSION['user_id']);
+	
+	if(! is_admin_check($user)){
+	if($labsection == 0){
+		$query_string = 
+		"SELECT * FROM patient  ".
+		"WHERE name LIKE '$q%' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC LIMIT $offset,$cap";
+	} else {
+		$query_string =
+		"select distinct p.* from patient p, specimen s where ".
+		"p.name LIKE '$q%' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
+	//;
+	}
+	} else {
+		if($labsection == 0){
+			$query_string =
+			"SELECT * FROM patient ".
+			"WHERE name LIKE '$q%' ORDER BY name ASC LIMIT $offset,$cap";
+		} else {
+			$query_string =
+			"select distinct p.* from patient p, specimen s where ".
+			"p.name LIKE '$q%' and p.patient_id = s.patient_id and s.specimen_id in ".
+			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
+			//;
+		}
+	}
+	//;
 	$resultset = query_associative_all($query_string, $row_count);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -5901,31 +6699,84 @@ function search_patients_by_name_dyn($q, $cap, $counter)
 		foreach($resultset as $record)
 		{
 			$patient_list[] = Patient::getObject($record);
+			
 		}
 	}
 	return $patient_list;
 }
 
-function search_patients_by_name_count($q)
+function search_patients_by_name_count($q, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
-	$query_string = 
-		"SELECT count(*) as val FROM patient ".
-		"WHERE name LIKE '$q%'";
+	if(! is_admin_check(get_user_by_id($_SESSION['user_id']))){
+		if($labsection == 0){
+			$query_string =
+			"SELECT count(*) as val FROM patient  ".
+			"WHERE name LIKE '$q%' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1)";
+		} else {
+			$query_string =
+			"select count(distinct p.patient_id) as val from patient p, specimen s where ".
+			"p.name LIKE '$q%' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
+			//;
+		}
+	} else {
+		if($labsection == 0){
+			$query_string =
+			"SELECT count(*) as val FROM patient ".
+			"WHERE name LIKE '$q%'";
+		} else {
+			$query_string =
+			"select count(distinct p.patient_id) as val from patient p, specimen s where ".
+			"p.name LIKE '$q%' and p.patient_id = s.patient_id and s.specimen_id in ".
+			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
+			//;
+		}
+	}
+	//;
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
 
-function search_patients_by_addlid($q)
+function search_patients_by_addlid($q, $labsection = 0)
 {
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
 	# Searches for patients with similar addl ID
-	$query_string = 
+	
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+		
+	if($labsection == 0){
+		$query_string = 
 		"SELECT * FROM patient ".
 		"WHERE addl_id LIKE '%$q%'";
+	} else {
+		$query_string =
+		"select distinct p.* from patient p, specimen s where ".
+		"p.addl_id LIKE '%$q%' and p.patient_id = s.patient_id and s.specimen_id in ".
+		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
+	
+	}
+	} else {
+		if($labsection == 0){
+			$query_string =
+			"SELECT * FROM patient ".
+			"WHERE addl_id LIKE '%$q%'  AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1)";
+		} else {
+			$query_string =
+			"select distinct p.* from patient p, specimen s where ".
+			"p.addl_id LIKE '%$q%'  AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
+		
+		}	
+	}
+	//;
 	$resultset = query_associative_all($query_string, $row_count);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -5933,20 +6784,48 @@ function search_patients_by_addlid($q)
 		foreach($resultset as $record)
 		{
 			$patient_list[] = Patient::getObject($record);
+			
 		}
 	}
 	return $patient_list;
 }
 
-function search_patients_by_addlid_dyn($q, $cap, $counter)
+function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
         $offset = $cap * ($counter - 1);
 	$q = mysql_real_escape_string($q, $con);
-	$query_string = 
+	
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+	
+	if($labsection == 0){
+		$query_string = 
 		"SELECT * FROM patient ".
 		"WHERE addl_id LIKE '%$q%' ORDER BY addl_id ASC LIMIT $offset,$cap";
+	} else {
+		$query_string =
+		"select distinct p.* from patient p, specimen s where ".
+		"p.addl_id LIKE '%$q%' and p.patient_id = s.patient_id and s.specimen_id in ".
+		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
+	
+	}
+	} else{
+		if($labsection == 0){
+			$query_string =
+			"SELECT * FROM patient ".
+			"WHERE addl_id LIKE '%$q%' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY addl_id ASC LIMIT $offset,$cap";
+		} else {
+			$query_string =
+			"select distinct p.* from patient p, specimen s where ".
+			"p.addl_id LIKE '%$q%' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
+		
+		}
+	}
+	//;
 	$resultset = query_associative_all($query_string, $row_count);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -5954,29 +6833,84 @@ function search_patients_by_addlid_dyn($q, $cap, $counter)
 		foreach($resultset as $record)
 		{
 			$patient_list[] = Patient::getObject($record);
+				
 		}
 	}
 	return $patient_list;
 }
 
-function search_patients_by_addlid_count($q)
+function search_patients_by_addlid_count($q, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
-	$query_string = 
+	
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+	
+	if($labsection == 0){
+		$query_string = 
 		"SELECT count(*) as val FROM patient ".
 		"WHERE addl_id LIKE '%$q%'";
+	}
+	else {
+		$query_string = "select count(distinct patient.patient_id) as val from patient, specimen ".
+				"where patient.addl_id LIKE '%$q%' and patient.patient_id = specimen.patient_id ".
+				"and specimen.specimen_id in ".
+				"(select specimen_id from specimen where specimen_type_id in ".
+				"(select specimen_type_id from specimen_test where test_type_id in ".
+				"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+	}
+	} else {
+		if($labsection == 0){
+			$query_string =
+			"SELECT count(*) as val FROM patient ".
+			"WHERE addl_id LIKE '%$q%' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1)";
+		}
+		else {
+			$query_string = "select count(distinct patient.patient_id) as val from patient, specimen ".
+					"where patient.addl_id LIKE '%$q%' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and patient.patient_id = specimen.patient_id ".
+					"and specimen.specimen_id in ".
+					"(select specimen_id from specimen where specimen_type_id in ".
+					"(select specimen_type_id from specimen_test where test_type_id in ".
+					"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+		}	
+	}
+	//;
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
 
-function search_patients_by_dailynum($q)
+function search_patients_by_dailynum($q, $labsection = 0)
 {
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
 	# Searches for patients with similar daily number
-	$query_string = "SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' ORDER BY date_collected DESC LIMIT 20";
+
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+	if($labsection == 0){
+		$query_string = "SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' ORDER BY date_collected DESC LIMIT 20";
+	} else {
+	$query_string = "select distinct patient_id from specimen ".
+			"where specimen.daily_num like '%$q' ".
+			"and specimen.specimen_id in ".
+				"(select specimen_id from specimen where specimen_type_id in ".
+				"(select specimen_type_id from specimen_test where test_type_id in ".
+				"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))".
+				"  ORDER BY date_collected DESC LIMIT 20";
+	}
+	} else {
+		if($labsection == 0){
+			$query_string = "SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' AND patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY date_collected DESC LIMIT 20";
+		} else {
+			$query_string = "select distinct patient_id from specimen ".
+					"where specimen.daily_num like '%$q'  AND patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ".
+					"and specimen.specimen_id in ".
+					"(select specimen_id from specimen where specimen_type_id in ".
+					"(select specimen_type_id from specimen_test where test_type_id in ".
+					"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))".
+					"  ORDER BY date_collected DESC LIMIT 20";
+		}	
+	}
 	$resultset = query_associative_all($query_string, $row_count);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -5984,19 +6918,48 @@ function search_patients_by_dailynum($q)
 		foreach($resultset as $record)
 		{
 			$patient_list[] = Patient::getById($record['patient_id']);
+			
 		}
 	}
 	return $patient_list;
 }
 
-function search_patients_by_dailynum_dyn($q, $cap, $counter)
+function search_patients_by_dailynum_dyn($q, $cap, $counter, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
         $offset = $cap * ($counter - 1);
 	$q = mysql_real_escape_string($q, $con);
-	$query_string = 
+	
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+	if($labsection == 0){
+		$query_string = 
 		"SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' ORDER BY date_collected DESC LIMIT $offset,$cap";
+	} else {
+		$query_string = "select distinct patient_id from specimen ".
+			"where specimen.daily_num like '%$q' ".
+			"and specimen.specimen_id in ".
+				"(select specimen_id from specimen where specimen_type_id in ".
+				"(select specimen_type_id from specimen_test where test_type_id in ".
+				"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))".
+				"  ORDER BY date_collected DESC LIMIT $offset,$cap";
+	
+	}
+	} else {
+		if($labsection == 0){
+			$query_string =
+			"SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' AND patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1)  ORDER BY date_collected DESC LIMIT $offset,$cap";
+		} else {
+			$query_string = "select distinct patient_id from specimen ".
+					"where specimen.daily_num like '%$q'  AND patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ".
+					"and specimen.specimen_id in ".
+					"(select specimen_id from specimen where specimen_type_id in ".
+					"(select specimen_type_id from specimen_test where test_type_id in ".
+					"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))".
+					"  ORDER BY date_collected DESC LIMIT $offset,$cap";
+		
+		}
+	}
 	$resultset = query_associative_all($query_string, $row_count);
         $patient_list = array();
 	if(count($resultset) > 0)
@@ -6004,18 +6967,44 @@ function search_patients_by_dailynum_dyn($q, $cap, $counter)
 		foreach($resultset as $record)
 		{
 			$patient_list[] = Patient::getById($record['patient_id']);
+			
 		}
 	}
 	return $patient_list;
 }
 
-function search_patients_by_dailynum_count($q)
+function search_patients_by_dailynum_count($q, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
-	$query_string = 
+	
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+	if($labsection == 0){
+		$query_string = 
 		"SELECT count(DISTINCT patient_id) as val FROM specimen WHERE daily_num LIKE '%$q'";
+	} else {
+		$query_string = "select count(distinct specimen.patient_id) as val from specimen ".
+				"where specimen.daily_num like '%$q' ".
+				"and specimen.specimen_id in ".
+				"(select specimen_id from specimen where specimen_type_id in ".
+				"(select specimen_type_id from specimen_test where test_type_id in ".
+				"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+	} } else {
+		if($labsection == 0){
+			$query_string =
+			"SELECT count(DISTINCT patient_id) as val FROM specimen WHERE daily_num LIKE '%$q'  AND patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1)";
+		} else {
+		$query_string = "select count(distinct specimen.patient_id) as val from specimen ".
+				"where specimen.daily_num like '%$q'  AND patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ".
+				"and specimen.specimen_id in ".
+				"(select specimen_id from specimen where specimen_type_id in ".
+				"(select specimen_type_id from specimen_test where test_type_id in ".
+				"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+		}	
+	}
+	
+	
 	$resultset = query_associative_one($query_string);
 	return $resultset['val'];
 }
@@ -6404,19 +7393,30 @@ function get_pendingtat_tests_by_type($test_type_id, $date_from="", $date_to="")
 	return $resultset;
 }
 
-function get_specimens_by_patient_id($patient_id)
+function get_specimens_by_patient_id($patient_id, $labsection =0)
 {
 	global $con;
 	$patient_id = mysql_real_escape_string($patient_id, $con);
 	# Returns list of specimens registered for the given patient
-	$query_string = 
+	if($labsection == 0){
+		$query_string = 
 		"SELECT * FROM specimen WHERE patient_id=$patient_id ORDER BY date_collected DESC";
+	} else {
+		$query_string = 
+		"SELECT DISTINCT s.* from specimen s, test t, test_type tt ".
+		"WHERE patient_id=$patient_id ".
+		"AND s.specimen_id=t.specimen_id AND t.test_type_id=tt.test_type_id AND tt.test_category_id=$labsection ".
+		"ORDER BY s.date_collected DESC";
+	}
+		//;
 	$resultset = query_associative_all($query_string, $row_count);
 	$retval = array();
 	foreach($resultset as $record)
 	{
+		
 		$retval[] = Specimen::getObject($record);
 	}
+	//echo $retval[0]->specimenId;
 	return $retval;
 }
 
@@ -6425,10 +7425,10 @@ function add_specimen($specimen)
 	# Adds a new specimen record in DB
 	$query_string = 
 		"INSERT INTO `specimen` ( specimen_id, patient_id, specimen_type_id, date_collected, date_recvd, user_id, status_code_id, referred_to, comments, aux_id, ".
-		"session_num, time_collected, report_to, doctor, referred_to_name, daily_num ) VALUES ( $specimen->specimenId, $specimen->patientId, $specimen->specimenTypeId, ". 
+		"session_num, time_collected, report_to, doctor, referred_to_name, referred_from_name, daily_num ) VALUES ( $specimen->specimenId, $specimen->patientId, $specimen->specimenTypeId, ". 
 		"'$specimen->dateCollected', '$specimen->dateRecvd', $specimen->userId, $specimen->statusCodeId, $specimen->referredTo, '$specimen->comments', ".
-		"'$specimen->auxId', '$specimen->sessionNum', '$specimen->timeCollected', $specimen->reportTo, '$specimen->doctor', '$specimen->referredToName', '$specimen->dailyNum' )";
-	//echo $query_string;
+		"'$specimen->auxId', '$specimen->sessionNum', '$specimen->timeCollected', $specimen->reportTo, '$specimen->doctor', '$specimen->referredToName', '$specimen->referredFromName',  '$specimen->dailyNum' )";
+	//;
 	query_insert_one($query_string);
 	return $specimen->specimenId;
 }
@@ -6576,8 +7576,37 @@ function get_specimen_by_id($specimen_id)
 	# Fetches a specimen record by specimen id
 	$query_string = 
 		"SELECT * FROM specimen WHERE specimen_id=$specimen_id LIMIT 1";
+	//;
 	$record = query_associative_one($query_string);
 	return Specimen::getObject($record);
+}
+
+function get_specimen_by_id_api($specimen_id, $lab_config_id)
+{
+	global $con;
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	
+	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	# Fetches a specimen record by specimen id
+	$query_string =
+	"SELECT * FROM specimen WHERE specimen_id=$specimen_id LIMIT 1";
+	//;
+	$record = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
+	return Specimen::getObject($record);
+}
+
+function get_test_by_test_id_api($test_id, $lab_config_id)
+{
+	global $con;
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	$test_id = mysql_real_escape_string($test_id, $con);
+	$query_string =
+	"SELECT * FROM test WHERE test_id=$test_id LIMIT 1";
+	//." ";
+	$record = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
+	return Test::getObject($record);
 }
 
 function get_specimens_by_session($session_num)
@@ -7118,6 +8147,79 @@ function update_stocks($name, $lot_number, $quant, $receiver, $remarks, $ts)
 }
 
 /////////////////////////////////
+// This is add currency module //
+///////////////////////////////// 
+function add_currency_lab_config($lab_config_id, $new_currency)
+{
+	global $con;
+	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$query_string = 
+			"select count(*) as currencyCount from currency_conversion where currencyb='$new_currency' limit 1";
+	$record = query_associative_one($query_string);
+	$retval = $record['currencyCount'];
+	if($retval > 0){
+		DbUtil::switchRestore($saved_db);
+		return 0;
+	} else {
+		$date_updated = date("Y-m-d");
+		$query_string = "select count(*) as currencyCount from currency_conversion";
+		$record = query_associative_one($query_string);
+		$retval = $record['currencyCount'];
+		if($retval > 0){
+		$query_string = "insert into currency_conversion (currencya, currencyb, exchangerate, updatedts) 
+		values ('$new_currency','$new_currency', 1, '$date_updated')";
+		query_insert_one($query_string);
+		} else {
+			$query_string = "insert into currency_conversion (currencya, currencyb, exchangerate, updatedts, flag1)
+			values ('$new_currency','$new_currency', 1, '$date_updated', 1)";
+			query_insert_one($query_string);
+		}
+		DbUtil::switchRestore($saved_db);
+		return 1;
+	}
+}
+
+/////////////////////////////////
+// This is add currency rate module //
+///////////////////////////////// 
+
+function add_currency_rate_lab_config($lab_config_id, $default_currency, $new_currency, $exchange_rate)
+{
+	global $con;
+	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$query_string =
+	"select count(*) as currencyCount from currency_conversion where currencya='$default_currency' && currencyb='$new_currency' limit 1";
+	$record = query_associative_one($query_string);
+	$retval = $record['currencyCount'];
+	$date_updated = date("Y-m-d");
+	if($retval > 0){
+	$query_string = "update currency_conversion set exchangerate='$exchange_rate', updatedts='$date_updated' where currencya='$default_currency' && currencyb='$new_currency';
+	";
+	query_update($query_string);
+	DbUtil::switchRestore($saved_db);
+	return 0;
+	} else {
+	$query_string = "insert into currency_conversion (currencya, currencyb, exchangerate, updatedts)
+	values ('$default_currency','$new_currency', '$exchange_rate', '$date_updated')";
+	query_insert_one($query_string);
+	DbUtil::switchRestore($saved_db);
+	return 1;
+	}
+}
+
+function delete_currency_rate_lab_config($lab_config_id, $default_currency, $delete_currency)
+{
+	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	global $con;
+	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$query_string =
+	"delete from currency_conversion where currencya='$default_currency' && currencyb='$delete_currency'";
+	query_blind($query_string);
+	return 1;
+}
+/////////////////////////////////
 // This is end of stock module //
 /////////////////////////////////
 function delete_lab_config($lab_config_id)
@@ -7189,6 +8291,23 @@ function blis_db_update($lab_config_id, $db_name, $ufile)
 	{
 		query_blind($sql_command.";");
 	}
+	
+	
+}
+
+
+function default_currency_copy($lab_config_id){
+	global $con;
+	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$id=3;
+	$queryString  = "SELECT setting1 as defaultCurrency FROM lab_config_settings where id=$id";
+	$record = query_associative_one($queryString);
+	$defaultCurrency = $record['defaultCurrency'];
+	//echo $defaultCurrency;
+	$query_configs = "INSERT INTO `currency_conversion` (`currencya`, `currencyb`, `exchangerate`, `flag1`) VALUES ('$defaultCurrency', '$defaultCurrency', '1.0', '1')";
+	$resultset = query_associative_one($query_configs);
+	DbUtil::switchRestore($saved_db);
+	return 1;
 }
 
 function create_lab_config_revamp_tables($lab_config_id, $revamp_db_name)
@@ -7800,7 +8919,7 @@ function update_test_type($updated_entry, $new_specimen_list,$lab_config_id)
 		DbUtil::switchRestore($saved_db);
 		return;
 	}
-	if($lab_config_id=="128") {
+	if(0) {
 	$query_string =
 		"UPDATE test_type ".
 		"SET name='$updated_entry->name', ".
@@ -8431,6 +9550,25 @@ function getDoctorList()
 	}
 		return $retval;
 }
+
+function getRefToList()
+{
+	$query_string =
+	"SELECT DISTINCT referred_to_name FROM specimen WHERE referred_to_name!=' ' AND ts >'2010-11-11' ORDER BY ts desc  ";
+	$resultset = query_associative_all($query_string, $row_count);
+	$retval = array();
+	if($resultset == null)
+		return $retval;
+	foreach($resultset as $record)
+	{
+
+		$retval[] = $record['referred_to_name'];
+	}
+	return $retval;
+}
+
+
+
 function get_max_test_cat_id()
 {
 	# Returns the largest test category type ID
@@ -8496,7 +9634,7 @@ $today = date("Ymd");
 	$query_string =
 		"SELECT ts FROM specimen".
 		"WHERE session_id=1";
-	//	echo $query_string;
+	//	;
 
 	$record = query_associative_one($query_string);
 	//echo "fhi";
@@ -9013,6 +10151,25 @@ function get_custom_fields_patient()
 		$retval[] = $custom_field;
 	}
 	return $retval;
+}
+
+function get_custom_fields_patient_by_name($field_name)
+{
+	# Returns a list of all patient custom fields
+	$query_string =
+	"SELECT * FROM patient_custom_field where field_name = '$field_name' LIMIT 1";
+	$record = query_associative_one($query_string);
+	/* . " - ";
+	print_r($record);
+	echo "<br/>"; */
+	$retval = array();
+	//foreach($resultset as $record)
+	//{	
+		$custom_field = CustomField::getObject($record);
+	//	$retval[] = $custom_field;
+	//}
+		//echo "Final Field Name : ".$custom_field->fieldName."<br/>";
+	return $custom_field;
 }
 
 function get_custom_fields_labtitle($field_id)
@@ -9869,7 +11026,7 @@ class ReferenceRangeGlobal
 		$query_string = 
 			"INSERT INTO reference_range_global (measure_id, age_min, age_max, sex, range_lower, range_upper, user_id) ".
 			"VALUES ($this->measureId, '$this->ageMin', '$this->ageMax', '$this->sex', '$this->rangeLower', '$this->rangeUpper', $user_id)";
-		echo $query_string;
+		//;
 		query_insert_one($query_string);
 		DbUtil::switchRestore($saved_db);
 	}
@@ -10415,6 +11572,18 @@ class GlobalPatient
 /** 
 	Aggregation Helper Functions 
 */
+function getTestCatName_by_cat_id($lab_config_id, $cat_id){
+	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$query_string =
+	"select name from test_category where test_category_id=$cat_id";
+	$record = query_associative_one($query_string);
+	$catName = $record['name'];
+	DbUtil::switchRestore($saved_db);
+	# Return category name of the record just inserted
+	return $catName;
+}
+
+
 function addAggregateMeasure($measure, $range, $testId, $userId, $unit)
 {
 	# Adds a new measure to catalog
@@ -11162,7 +12331,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
 
         echo "---->".$val1."@".$val2."@".$val3."@".$val4."@".$val5."@".$val6."@"."<br><br>";
         $query_string = "INSERT INTO measure (measure_id, name, unit_id, range, description, unit) VALUES ($val1, '$val2', $val3, '$val4', '$val5', '$val6')";
-        echo $query_string."<br>";
+        ."<br>";
         query_insert_one($query_string);
     }*/
     $dbn = "blis_".$from_id.".measure";
@@ -11437,26 +12606,28 @@ function import_test_between_labs($test_id, $from_id, $to_id)
 /***************************************************
  * Test Removal Module STARTS
 ***************************************************/
-function remove_specimens($lid, $sp, $remarks)
+function remove_specimens($lid, $sp, $remarks, $category="test")
 {
             $created_by = $_SESSION["user_id"];
             
             $saved_db = DbUtil::switchToLabConfig($lid);            
             
-            $query_string = "INSERT INTO removal_record (r_id, type, remarks, user_id, status) ".
-                            "VALUES ($sp, 1, '$remarks', $created_by, 1)";
+            $query_string = "INSERT INTO removal_record (r_id, type, remarks, user_id, status, category) ".
+                            "VALUES ($sp, 1, '$remarks', $created_by, 1, '$category')";
+            //;
             query_insert_one($query_string);
             
             DbUtil::switchRestore($saved_db);
 }
   
-function get_removed_specimens($lid)
+function get_removed_specimens($lid, $category="test")
 {
             $lab_config_id = $lid;
             
             $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
             
-            $query_string = "SELECT * from removal_record WHERE type = 1 AND status = 1";
+            $query_string = "SELECT * from removal_record WHERE type = 1 AND category='$category' AND status = 1";
+            
             $recordset = query_associative_all($query_string, $row_count);
             
             DbUtil::switchRestore($saved_db);
@@ -11464,27 +12635,57 @@ function get_removed_specimens($lid)
             return $recordset;
 }
 
-function retrieve_specimens($lid, $sp)
+function retrieve_deleted_items($lid, $sp, $category="test"){
+	$lab_config_id = $lid;
+	
+	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	if($category == "patient"){
+		$specimen_list = get_specimens_by_patient_id($sp);
+		if(sizeof($specimen_list)>0){
+			foreach($specimen_list as $specimen){
+				retrieve_deleted_items($lid,$specimen->specimenId, "specimen");
+			}
+			
+		}
+	} else if($category == "specimen"){
+		$testsList = get_tests_by_specimen_id($sp);
+		if(sizeof($testsList)>0){
+			foreach($testsList as $test){
+				retrieve_deleted_items($lid, $test->testId );
+			}
+		}
+	}
+	    $query_string = "UPDATE removal_record SET status = 0 WHERE r_id = $sp AND category='$category' AND status = 1 AND type = 1";
+		//."<br/>";
+	    query_update($query_string);
+    
+	DbUtil::switchRestore($saved_db);
+	return 1;
+}
+
+function retrieve_specimens($lid, $sp, $category="test")
 {
         $lab_config_id = $lid;
             
         $saved_db = DbUtil::switchToLabConfig($lab_config_id);  
     
-        $query_string = "UPDATE removal_record SET status = 0 WHERE r_id = $sp AND status = 1 AND type = 1";
+        $query_string = "UPDATE removal_record SET status = 0 WHERE r_id = $sp AND category='$category' AND status = 1 AND type = 1";
             query_update($query_string);
             
         DbUtil::switchRestore($saved_db);
 }
 
-function check_removal_record($lid, $sp)
+function check_removal_record($lid, $sp, $category="test")
 {
             $lab_config_id = $lid;
             
             $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
             
-            $query_string = "SELECT count(*) as val from removal_record WHERE type = 1 AND status = 1 AND r_id = $sp";
-            $recordset = query_associative_one($query_string);
+            $query_string = "SELECT count(*) as val from removal_record WHERE type = 1 AND category='$category' AND status = 1 AND r_id = $sp";
             
+            //;
+            $recordset = query_associative_one($query_string);
+            //."<br/>";
             DbUtil::switchRestore($saved_db);
             return $recordset['val'];
 }
@@ -11595,7 +12796,7 @@ function get_cost_of_test_type_for_closest_date($date, $test_type_id)
     return $result;
 }
 
-function get_all_tests_for_patient_and_date_range($patient_id, $small_date, $large_date)
+function get_all_tests_for_patient_and_date_range($patient_id, $small_date, $large_date, $labsection=0)
 {
     $lab_config_id = $_SESSION['lab_config_id'];
     
@@ -11604,7 +12805,14 @@ function get_all_tests_for_patient_and_date_range($patient_id, $small_date, $lar
     
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
     
-    $query_string = "SELECT DISTINCT test_id, ts FROM test WHERE specimen_id IN (SELECT specimen_id FROM specimen WHERE patient_id=$patient_id) AND ts<='$large_date' AND ts>='$small_date'";
+	if($labsection == 0){
+		$query_string = "SELECT DISTINCT test_id, ts FROM test WHERE specimen_id IN (SELECT specimen_id FROM specimen WHERE patient_id=$patient_id) AND ts<='$large_date' AND ts>='$small_date'";
+    } else {
+		$query_string = "SELECT DISTINCT t.test_id, t.ts FROM test t, test_type tt ". 
+						 "WHERE t.specimen_id IN (SELECT specimen_id FROM specimen WHERE patient_id=$patient_id) ".
+						 "AND t.test_type_id IN (SELECT test_type_id from test_type where test_category_id=$labsection) AND t.ts<='$large_date' AND t.ts>='$small_date'";
+	}
+	
     $result = query_associative_all($query_string, $_count);
     
     DbUtil::switchRestore($saved_db);
@@ -11641,9 +12849,10 @@ function get_cost_of_test($test)
 	return $cost;
 }
 
-function generate_bill_data_for_patient_and_date_range($patient_id, $first_date, $second_date)
+function generate_bill_data_for_patient_and_date_range($patient_id, $first_date, $second_date, $labsection=0)
 {
-    $test_info = get_all_tests_for_patient_and_date_range($patient_id, $first_date, $second_date);
+	//echo "Lab Section ".$labsection;
+    $test_info = get_all_tests_for_patient_and_date_range($patient_id, $first_date, $second_date, $labsection);
 
     $test_ids = array();
     $test_dates = array();
@@ -11722,6 +12931,20 @@ function format_number_to_money($number)
     
     return $dollars . get_currency_delimiter_from_lab_config_settings() . $cents_as_whole_number . " " . get_currency_type_from_lab_config_settings();
 }
+
+function format_number_to_money_currencyName($number, $currencyName)
+{
+    $dollars = floor($number);
+    $cents = $number - $dollars;
+    
+    $cents_as_whole_number = get_cents_as_whole_number($cents);
+    
+    if ($cents_as_whole_number < 10)
+        $cents_as_whole_number = "0" . strval($cents_as_whole_number);
+    
+    return $dollars . get_currency_delimiter_from_lab_config_settings() . $cents_as_whole_number . " " . $currencyName;
+}
+
 
 function get_cents_as_whole_number($cents)
 {
@@ -11829,7 +13052,8 @@ function update_currency_name_in_lab_config_settings($new_currency)
     $settings['currency_name'] = $new_currency;
    
     update_lab_config_settings_billing($settings);
-    
+    $lab_config_id = $_SESSION['lab_config_id'];
+    currencyConfig::setDefaultCurrency($lab_config_id, $new_currency);
     return 1;
 }
 
@@ -12467,6 +13691,28 @@ function setVersionDataFlag($fl, $vers)
    DbUtil::switchRestore($saved_db);
    return $code; 
 }
+
+function update_language_files(){
+	$directories = scandir('../../local');
+	foreach($directories as $directory){
+		if($directory=='.' or $directory=='..' ){
+			continue;
+		}else{
+			if (strpos($directory,'langdata_') !== false && is_dir("../../local/".$directory)) {
+				copy("../Language/en.php","../../local/".$directory."/en.php");
+				copy("../Language/en.xml","../../local/".$directory."/en.xml");
+				
+				copy("../Language/default.php","../../local/".$directory."/default.php");
+				copy("../Language/default.xml","../../local/".$directory."/default.xml");
+				
+				copy("../Language/fr.php","../../local/".$directory."/fr.php");
+				copy("../Language/fr.xml","../../local/".$directory."/fr.xml");
+			}
+	
+		}
+	}
+}
+
 function insertVersionDataEntry()
 {
    
@@ -12538,12 +13784,24 @@ function getPatientFromBarcode($patient_code)
     return $patient;
 }
 
-function search_patients_by_db_id_count($patient_code)
+function search_patients_by_db_id_count($patient_code, $labsection)
 {
     $patient = getPatientFromBarcode($patient_code);
     $count = 0;
+    if($labsection == 0){
     if($patient != NULL)
         $count = 1;
+    } else {
+    	$query_string = "select count(distinct patient.patient_id) as val from patient, specimen ".
+    			"where patient.patient_id like '$patient->patientId' and patient.patient_id = specimen.patient_id ".
+    			"and specimen.specimen_id in ".
+    			"(select specimen_id from specimen where specimen_type_id in ".
+    			"(select specimen_type_id from specimen_test where test_type_id in ".
+    			"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+    	
+    	$resultset = query_associative_one($query_string);
+    	return $resultset['val'];
+    }
     return $count;
 }
 
@@ -12721,7 +13979,7 @@ function get_prevalence_data_per_test_per_lab_dir($test_type_id, $lab_config_id,
 						"AND p.sex LIKE '$gender' ".
 						"AND t.specimen_id=s.specimen_id ".
 						"AND (s.date_collected BETWEEN '$date_fromp' AND '$date_top') ".
-						"AND  (t.result LIKE 'N,%' OR t.result LIKE 'n�gatif,%' OR t.result LIKE 'negatif,%' OR t.result LIKE 'n,%' OR t.result LIKE 'negative,%')";
+						"AND  (t.result LIKE 'N,%' OR t.result LIKE 'nÃ¯Â¿Â½gatif,%' OR t.result LIKE 'negatif,%' OR t.result LIKE 'n,%' OR t.result LIKE 'negative,%')";
 			}
 			else {
 				$query_string = 
@@ -12729,7 +13987,7 @@ function get_prevalence_data_per_test_per_lab_dir($test_type_id, $lab_config_id,
 				"WHERE t.test_type_id=$test_type_id ".
 				"AND t.specimen_id=s.specimen_id ".
 				"AND ( s.date_collected BETWEEN '$date_fromp' AND '$date_top' )".
-				"AND  (result LIKE 'N,%' OR result LIKE 'n�gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
+				"AND  (result LIKE 'N,%' OR result LIKE 'nÃ¯Â¿Â½gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
 
 				}
 			$record = query_associative_one($query_string);
@@ -12796,7 +14054,7 @@ function get_prevalence_data_per_test_per_lab_dir22($test_type_id, $lab_config_i
 							"WHERE t.test_type_id=$test_type_id ".
 							"AND t.specimen_id=s.specimen_id ".
 							"AND ( s.date_collected BETWEEN '$date_from' AND '$date_to' ) ".
-							"AND (result LIKE 'N,%' OR result LIKE 'n�gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
+							"AND (result LIKE 'N,%' OR result LIKE 'nÃ¯Â¿Â½gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
 						$record = query_associative_one($query_string);
 						$count_negative = intval($record['count_val']);
 						$query_string = 
@@ -13438,4 +14696,1031 @@ function db_analysis_tests($lb)
 		$ic++;
 	}
 }
+
+/* Functions used by API class member function */
+function api_get_patient_records($lab_config, $patient_id, $date_from, $date_to, $ip) {
+
+	$retval = array();
+
+	if($_REQUEST['ip'] == 0) {
+
+		# Do not include pending tests
+
+		$query_string =
+
+			"SELECT t.* FROM test t, specimen sp ".
+
+			"WHERE t.result <> '' ".
+
+			"AND t.specimen_id=sp.specimen_id ".
+
+			"AND sp.patient_id=$patient_id ";
+
+
+			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
+
+		$query_string .= "ORDER BY sp.date_collected DESC";
+
+	
+
+	}
+
+	else {
+
+		# Include pending tests
+
+		$query_string =
+
+			"SELECT t.* FROM test t, specimen sp ".
+
+			"WHERE t.specimen_id=sp.specimen_id ".
+
+			"AND sp.patient_id=$patient_id ";
+
+
+			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
+
+		$query_string .= "ORDER BY sp.date_collected DESC";		
+
+	
+
+	}
+
+	
+
+	$resultset = query_associative_all($query_string, $row_count);
+
+	
+
+	if(count($resultset) == 0 || $resultset == null)
+
+		return $retval;
+
+	
+
+	foreach($resultset as $record) {
+
+		$test = Test::getObject($record);
+
+		$hide_patient_name = TestType::toHidePatientName($test->testTypeId);
+
+		
+
+		if( $hide_patient_name == 1 )
+
+					$hidePatientName = 1;
+
+		
+
+		$specimen = get_specimen_by_id($test->specimenId);
+
+		$retval[] = array($test, $specimen, $hide_patient_name);		
+
+	}
+
+	
+
+	return $retval;
+
+}
+
+function api_decode_results($testObj)
+{
+    $rts = array();
+    $show_range = false;
+    //print_r($testObj);
+    //echo "-----------".$testObj->testTypeId."--------";
+    $test_type = TestType::getById($testObj->testTypeId);
+		$measure_list = $test_type->getMeasures();
+                //print_r($measure_list);
+                $submeasure_list = array();
+                $comb_measure_list = array();
+               // print_r($measure_list);
+                foreach($measure_list as $measure)
+                {
+                    
+                    $submeasure_list = $measure->getSubmeasuresAsObj();
+                    //echo "<br>".count($submeasure_list);
+                    //print_r($submeasure_list);
+                    $submeasure_count = count($submeasure_list);
+                    
+                    if($measure->checkIfSubmeasure() == 1)
+                    {
+                        continue;
+                    }
+                        
+                    if($submeasure_count == 0)
+                    {
+                        array_push($comb_measure_list, $measure);
+                    }
+                    else
+                    {
+                        array_push($comb_measure_list, $measure);
+                        foreach($submeasure_list as $submeasure)
+                           array_push($comb_measure_list, $submeasure); 
+                    }
+                }
+                $measure_list = $comb_measure_list;
+		$result_csv = $testObj->getResultWithoutHash();
+                //$result_csv = $this->getResultWithoutHash();
+                //echo "<br>";
+                //echo $result_csv;
+                //echo "<br>";
+                if(strpos($result_csv, "[$]") === false)
+                {
+                    $result_list = explode(",", $result_csv);
+                }
+                else
+                {
+                    //$testt = "one,[$]two[/$],[$]twotwo[/$],three";
+                    $testt = $result_csv;
+                    //$test2 = strstr($testt, $);
+                    $start_tag = "[$]";
+                    $end_tag = "[/$]";
+                    //$testtt = str_replace("[$]two[/$],", "", $testt);
+                    $freetext_results = array();
+                    $ft_count = substr_count($testt, $start_tag);
+                    //echo $ft_count;
+                    $k = 0;
+                    while($k < $ft_count)
+                    {
+                        $ft_beg = strpos($testt, $start_tag);
+                        $ft_end = strpos($testt, $end_tag);
+                        $ft_sub = substr($testt, $ft_beg + 3, $ft_end - $ft_beg - 3);
+                        $ft_left = substr($testt, 0, $ft_beg);
+                        $ft_right = substr($testt, $ft_end + 5);
+                        //echo "<br>".$ft_left."--".$ft_right."<br>";
+                        $testt = $ft_left.$ft_right;
+                        array_push($freetext_results, $ft_sub);
+                        $k++;
+                    }
+                    //echo $freetext_results."<br>".$testt;
+                    //$testtt = str_replace($subb, "", $testt, 1);
+                    //echo "$testto<br>$subb<br>";
+                    $result_csv = $testt;
+                    if(strpos($testt, ",") == 0)
+                            $result_csv = substr($testt, 1, strlen($testt)); 
+                    $result_list = explode(",", $result_csv);
+                    //echo "<br>";
+                    //print_r($result_list);
+                    //echo "<br>";
+                }
+                $retval = "";
+                //NC3065
+                //echo print_r($measure_list);
+                //echo "<br>";
+                //echo $result_csv;
+                //echo "<br>";
+                //echo print_r($result_list,true);
+                //echo "Num->".count($measure_list);
+		//-NC3065
+                $j = 0;
+                $i = 0;
+                $c = 0;
+                //for($i = 0; $i < count($measure_list); $i++) {
+                while($c < count($measure_list)) {
+			# Pretty print
+			$curr_measure = $measure_list[$c];
+			if($curr_measure->getRangeType() != Measure::$RANGE_FREETEXT)
+                        {
+                            if(isset($result_list[$i]))
+                            {    
+                                //echo "Num->".$i;
+                                    # If matching result value exists (e.g. after a new measure was added to this test type)
+                                    if(count($measure_list) == 1)
+                                    {
+                                            # Only one measure: Do not print measure name
+                                            if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE) {
+                                                    $result_string = "";
+                                                    $value_list = explode("_", $result_list[$i]);
+                                                    foreach($value_list as $value) {
+                                                            if(trim($value) == "")
+                                                                    continue;
+                                                            $result_string .= $value.",";
+                                                    }
+                                                    $result_string = substr($result_string, 0, -4);
+                                                    $retval .= "<br>".$result_string."&nbsp;";
+                                                    $rts[$curr_measure->name] = $result_string;
+                                            }
+                                            else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
+                                            {
+                                                    if($result_list[$i] != $curr_measure->unit)
+                                                            $retval .= "<br><b>".$result_list[$i]."</b> &nbsp;";
+                                                    else
+                                                            $retval .= "<br>".$result_list[$i]."&nbsp;";
+                                                    $rts[$curr_measure->name] = $result_list[$i];
+                                            }
+                                            else
+                                            {
+                                                    $retval .= "<br>".$result_list[$i]."&nbsp;";
+                                                    $rts[$curr_measure->name] = $result_list[$i];
+                                            }
+                                    }
+                                    else
+                                    {
+                                            # Print measure name with each result value
+                                         if(strpos($curr_measure->name, "\$sub") !== false)
+                                                            {
+                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
+                                                                
+                                                            }
+                                                            else
+                                                            {
+                                                                $decName = $curr_measure->name;
+                                                            }
+                                            $retval .= "<br>".$decName.":"."&nbsp;";
+                                        
+                                            if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE)
+                                            {
+                                                    $result_string = "";
+                                                    $value_list = str_replace("_", ",", $result_list[$i]);
+                                                    $retval .= "<b>".$value_list."</b>";
+                                                    $rts[$decName] = $value_list;
+                                            }
+                                            else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
+                                            {
+                                                    if($result_list[$i]!=$curr_measure->unit)
+                                                            $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;";
+                                                    else
+                                                            $retval .= $result_list[$i]."&nbsp;";
+                                                    $rts[$decName] = $result_list[$i];
+                                            }
+                                            else
+                                            {
+                                                    $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;";
+                                                     $rts[$decName] = $result_list[$i];
+                                            }
+                                            
+                                    }
+
+                                    if($show_range === true)
+                                    {
+                                            $retval .= $curr_measure->getRangeString();
+                                    }
+                                    if($i != count($measure_list) - 1)
+                                    {
+                                            $retval .= "<br>";
+                                    }
+                            }
+                            else
+                            {
+                                    # Matching result value not found: Show "-"
+                                    if(count($measure_list) == 1)
+                                    {
+                                            if(strpos($curr_measure->name, "\$sub") !== false)
+                                                            {
+                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
+                                                                
+                                                            }
+                                                            else
+                                                            {
+                                                                $decName = $curr_measure->name;
+                                                            }
+                                            $retval .= $decName."&nbsp;";
+                                    }
+                                    $retval .= " - <br>";
+                                     $rts[$decName] = "-";
+                            }
+                            $i++;
+                        }
+                        else
+                        {
+                            $ft_result = $freetext_results[$j];
+
+                            if(count($measure_list) == 1)
+                            {
+                                $retval .= "<br>".$ft_result."&nbsp;";   
+                            }
+                            else
+                            {
+                                if(strpos($curr_measure->name, "\$sub") !== false)
+                                                            {
+                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
+                                                                
+                                                            }
+                                                            else
+                                                            {
+                                                                $decName = $curr_measure->name;
+                                                            }
+                                $retval .= "<br>".$decName.":"."&nbsp;"."<b>".$ft_result."</b>"."&nbsp;";
+                            }
+                            if($show_range === true)
+                                        {
+                                                $retval .= $curr_measure->getRangeString();
+                                        }
+                                        if($i != count($measure_list) - 1)
+                                        {
+                                                $retval .= "<br>";
+                                        }
+                            $j++;
+                            
+                             $rts[$decName] = $ft_result;
+                            
+                        }$c++;
+		}//end
+		//$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
+		return $rts;
+	
+}
+
+ function check_api_token($tok)
+    {
+        print_r($_SESSION);
+        echo "<br>";
+        echo "<br>".$_SESSION['tok']." - ".$tok."<br>";
+        if(!isset($_SESSION['tok']))
+            return -2;
+        if($_SESSION['tok'] == $tok)
+        {
+            // valid token
+            return 1;
+        }
+        if($_SESSION['tok'] == -1)
+        {
+            // invalid session
+            return -2;
+        }
+        if($_SESSION['tok'] != $tok)
+        {
+            // invalid token
+            return -2;
+        }
+        
+       
+        
+            return -2;
+    }
+
+function is_admin_check($user)
+{
+	# Returns true for admin and superadmin level users
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_CLERK, $LIS_TECH_SHOWPNAME, $LIS_COUNTRYDIR;
+	if
+	(
+		$user->level == $LIS_TECH_RO || 
+		$user->level == $LIS_TECH_RW || 
+		$user->level == $LIS_CLERK || 
+		$user->level == $LIS_TECH_SHOWPNAME
+	)
+		return false;
+	return true;
+}    
+
+function is_super_admin_check($user)
+{
+	# Returns true for superadmin level users only
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_VERIFIER, $LIS_SUPERADMIN;
+	if($user->level == $LIS_SUPERADMIN)
+		return true;
+	return false;
+}
+
+function is_country_dir_check($user)
+{
+	# Returns true for superadmin level users only
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_ADMIN, $LIS_VERIFIER, $LIS_SUPERADMIN, $LIS_COUNTRYDIR;
+	if($user->level == $LIS_COUNTRYDIR)
+		return true;
+	return false;
+}
+
+function is_verifier_check($user)
+{
+	# Returns true for superadmin level users only
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_ADMIN, $LIS_VERIFIER, $LIS_SUPERADMIN, $LIS_COUNTRYDIR;
+	if($user->level == $LIS_VERIFIER)
+		return true;
+	return false;
+}
+
+
+function getDoctorNamesForPatients($patient, $lab_config_id, $lab_section, $reported){
+	//$query =
+	$specimen_list = get_specimens_by_patient_id($patient->patientId, $lab_section);
+	$doctors = array();
+	if($reported == 1){
+		// reported
+		foreach($specimen_list as $specimen){
+			$test = Test::getTestBySpecimenID($specimen->specimenId);
+			if($test != null && $test->result != ""){
+				array_push($doctors,$specimen->doctor);
+			}
+		}
+	} else {
+		// unreported 
+		foreach($specimen_list as $specimen){
+			$test = Test::getTestBySpecimenID($specimen->specimenId);
+			//echo "Test ".$test->specimenId;
+			if($test != null && $test->result == ""){
+				array_push($doctors,$specimen->doctor);
+			}
+		}
+	}
+	
+	return array_unique($doctors);
+}
+
+
+/* API starts here*/
+
+class API
+{
+    public static function test_api($data)
+    {
+        return "# API test String".$data." #";
+    }
+    
+   public function login($username, $password)
+    {
+       print_r($_SESSION);
+        global $con;
+	$username = mysql_real_escape_string($username, $con);
+	$saved_db = DbUtil::switchToGlobal();
+	$password = encrypt_password($password);
+	$query_string = 
+		"SELECT * FROM user ".
+		"WHERE username='$username' ".
+		"AND password='$password' LIMIT 1";
+	$record = query_associative_one($query_string);
+	# Return user profile (null if incorrect username/password)
+	DbUtil::switchRestore($saved_db);
+	//return User::getObject($record);
+        if($record == NULL)
+        {
+            return -1;
+        }
+        else
+        {
+            $tok = API::start_session($username, $password);
+            return $tok;
+        }
+    }
+    
+    
+    
+    public function start_session($username, $password)
+    {
+         session_start();
+        
+         $sid = session_id();
+         //$_SESSION['tok'] = $sid;
+        
+         $user = get_user_by_name($username);
+	$_SESSION['username'] = $username;
+	$_SESSION['user_id'] = $user->userId;
+	$_SESSION['user_actualname'] = $user->actualName;
+	$_SESSION['user_level'] = $user->level;
+        $_SESSION['level'] = $user->level;
+	$_SESSION['locale'] = $user->langId;
+        
+	if(is_admin_check($user))
+	{
+		
+		$lab_id=get_lab_config_id_admin($user->userId);
+		$_SESSION['lab_config_id'] = $lab_id;
+		$_SESSION['db_name'] = "blis_".$lab_id;
+		$_SESSION['dformat'] = $DEFAULT_DATE_FORMAT;
+		$_SESSION['country'] = $user->country;
+	}
+	else
+	{
+		$_SESSION['lab_config_id'] = $user->labConfigId;
+		echo $user->labConfigId;
+		$_SESSION['country'] = $user->country;
+		$lab_config = get_lab_config_by_id($user->labConfigId);
+		$_SESSION['db_name'] = $lab_config->dbName;
+		# Config values for registration fields
+		$_SESSION['p_addl'] = $lab_config->patientAddl;
+		$_SESSION['s_addl'] = $lab_config->specimenAddl;
+		$_SESSION['dnum'] = $lab_config->dailyNum;
+		$_SESSION['sid'] = $lab_config->sid;
+		$_SESSION['pid'] = $lab_config->pid;
+		$_SESSION['comm'] = $lab_config->comm;
+		$_SESSION['age'] = $lab_config->age;
+		$_SESSION['dob'] = $lab_config->dob;
+		$_SESSION['rdate'] = $lab_config->rdate;
+		$_SESSION['refout'] = $lab_config->refout;
+		$_SESSION['pname'] = $lab_config->pname;
+		$_SESSION['sex'] = $lab_config->sex;
+		$_SESSION['dformat'] = $lab_config->dateFormat;
+		$_SESSION['dnum_reset'] = $lab_config->dailyNumReset;
+		$_SESSION['doctor'] = $lab_config->doctor;
+		$_SESSION['pnamehide'] = $lab_config->hidePatientName;
+		if($SERVER == $ON_PORTABLE)
+			$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_".$lab_config->id."/";
+		else
+			$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
+	}
+	
+	
+	# Set session variables for recording latency/user props
+	$_SESSION['PROPS_RECORDED'] = false;
+	$_SESSION['DELAY_RECORDED'] = false;
+	#TODO: Add other session variables here
+	$_SESSION['user_role'] = "garbage";
+         return 1; 
+    }
+    
+    public function stop_session()
+    {
+         //$_SESSION['tok'] = -1;
+         //session_destroy();
+         return 1;
+    }
+    
+    public function search_patients($by, $str)
+    {
+        //by 1 = name, 2 = id, 3 = number
+        global $con;
+	$q = mysql_real_escape_string($str, $con);
+        
+        if($by == 2)
+         {
+             //$count = search_patients_by_id_count($q);
+             $patient_list = search_patients_by_id($q);
+             if(count($patient_list) > 0)
+                $ret = $patient_list;
+             else
+                $ret = 0;
+         }
+         else if($by == 1)
+         {
+             //$count = search_patients_by_name_count($q);
+             $patient_list = search_patients_by_name($q);
+             if(count($patient_list) > 0)
+                $ret = $patient_list;
+             else
+                $ret = 0;
+         }
+         else if($by == 3)
+         {
+             //$count = search_patients_by_dailynum_count($q);
+             $patient_list = search_patients_by_dailynum($q);
+             if(count($patient_list) > 0)
+                $ret = $patient_list;
+             else
+                $ret = 0;
+         }
+         else
+         {
+            return -1;
+         }
+         return $ret;
+         
+    }
+    
+    public function search_specimens($by, $str)
+    {
+        //by 3 = patient name, 2 = patient id, 1 = specimen_id
+        global $con;
+	$q = mysql_real_escape_string($str, $con);
+        
+        if($by == 1)
+         {
+             $patient_list = search_specimens_by_id($q);
+            if(count($patient_list) > 0)
+                $ret = $patient_list;
+            else
+                $ret = 0;
+         }
+         else if($by == 3)
+         {
+             $patient_list = search_specimens_by_patient_name($q);
+             if(count($patient_list) > 0)
+                $ret = $patient_list;
+             else
+                $ret = 0;
+         }
+         else if($by == 2)
+         {
+             $patient_list = search_specimens_by_patient_id($q);
+             if(count($patient_list) > 0)
+                $ret = $patient_list;
+             else
+                $ret = 0;
+         }
+         else
+         {
+            return -1;
+         }
+         return $ret;
+         
+    }
+    
+    public function get_tests($specimen_id)
+    {
+        $test_list = get_tests_by_specimen_id($specimen_id);
+        if(count($test_list) > 0)
+                $ret = $test_list;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    public function get_patient($patient_id)
+    {
+         /*$chk = check_api_token($tok);
+        if($chk != 1)
+        return $chk;*/
+        
+        $pat = get_patient_by_id($patient_id);
+        if($pat != 3)
+                $ret = $pat;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    public function get_specimen($specimen_id)
+    {
+        $spec = get_specimen_by_id($specimen_id);
+        if(count($spec) > 0)
+                $ret = $spec;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+     
+    public function get_specimen_catalog()
+    {
+        global $CATALOG_TRANSLATION;
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lab_config_id = $user->labConfigId;
+        }
+
+            if($lab_config_id == null)
+            {
+                $lab_config_id = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$query_stypes =
+		"SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name";
+	$resultset = query_associative_all($query_stypes, $row_count);
+	$retval = array();
+	if($resultset) {
+		foreach($resultset as $record)
+		{
+			if($CATALOG_TRANSLATION === true)
+				$retval[$record['specimen_type_id']] = LangUtil::getSpecimenName($record['specimen_type_id']);
+			else
+				$retval[$record['specimen_type_id']] = $record['name'];
+		}
+	}
+	DbUtil::switchRestore($saved_db);
+        $catalog = $retval;
+        if(count($catalog) > 0)
+                $ret = $catalog;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    
+    public function get_test_catalog()
+    {
+        global $CATALOG_TRANSLATION;
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lab_config_id = $user->labConfigId;
+        }
+
+            if($lab_config_id == null)
+            {
+                $lab_config_id = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$query_ttypes =
+		"SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name";
+	$resultset = query_associative_all($query_ttypes, $row_count);
+	$retval = array();
+	if($resultset) {
+		foreach($resultset as $record)
+		{
+			if($CATALOG_TRANSLATION === true)
+				$retval[$record['test_type_id']] = LangUtil::getTestName($record['test_type_id']);
+			else
+				$retval[$record['test_type_id']] = $record['name'];
+		}
+	}
+	DbUtil::switchRestore($saved_db);
+        $catalog = $retval;
+        if(count($catalog) > 0)
+                $ret = $catalog;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    
+    public function get_lab_sections()
+    {
+        /*$chk = check_api_token($tok);
+        if($chk != 1)
+        return $chk;*/
+        
+        global $CATALOG_TRANSLATION;
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lab_config_id = $user->labConfigId;
+        }
+
+            if($lab_config_id == null)
+            {
+                $lab_config_id = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$query_stypes =
+		"SELECT test_category_id, name, description FROM test_category";
+	$resultset = query_associative_all($query_stypes, $row_count);
+	$retval = array();
+        DbUtil::switchRestore($saved_db);
+	if($resultset) {
+            $ret = $resultset;
+	}
+        else
+             $ret = 0;
+	             
+        return $ret;
+    }
+    
+    public function get_test_type($test_type_id)
+    {
+        global $con;
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lab_config_id = $user->labConfigId;
+        }
+
+            if($lab_config_id == null)
+            {
+                $lab_config_id = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+		$test_type_id = mysql_real_escape_string($test_type_id, $con);
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		$query_string =
+			"SELECT * FROM test_type WHERE test_type_id=$test_type_id LIMIT 1";
+		$record = query_associative_one($query_string);
+		
+		$test_type = TestType::getObject($record);
+         
+        //print_r($test_type);
+                $ret = array();
+        if($test_type != null)
+                $ret['info'] = $test_type;
+             else
+                return 0;
+        $measure_list = array();
+
+         $measure_list_objs = $test_type->getMeasures();
+                //print_r($measure_list);
+                $submeasure_list_objs = array();
+                
+                $comb_measure_list = array();
+               // print_r($measure_list);
+                
+                foreach($measure_list_objs as $measure)
+                {
+                    
+                    $submeasure_list_objs = $measure->getSubmeasuresAsObj();
+                    //echo "<br>".count($submeasure_list);
+                    //print_r($submeasure_list);
+                    $submeasure_count = count($submeasure_list_objs);
+                    
+                    if($measure->checkIfSubmeasure() == 1)
+                    {
+                        continue;
+                    }
+                        
+                    if($submeasure_count == 0)
+                    {
+                        array_push($comb_measure_list, $measure);
+                    }
+                    else
+                    {
+                        array_push($comb_measure_list, $measure);
+                        foreach($submeasure_list_objs as $submeasure)
+                           array_push($comb_measure_list, $submeasure); 
+                    }
+                }
+                
+                $measure_list_ids = array();
+                //echo "<pre>";
+                //print_r($comb_measure_list);
+                //echo "</pre>";
+                foreach($comb_measure_list as $measure)
+                {
+                    array_push($measure_list_ids, $measure->measureId);
+                }
+                /*
+                echo "<pre>";
+                print_r($measure_list);
+                
+                print_r($measure_list_ids);
+                echo "</pre>";
+                */
+                $measure_list = $measure_list_ids;
+                //print_r($measure_list_objs);
+                $ret['measures'] = $measure_list_objs;
+             DbUtil::switchRestore($saved_db);
+        return $ret;
+    } 
+    
+    public function get_patient_results($patient_id, $date_from, $date_to, $ip)
+    {
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lab_config_id = $user->labConfigId;
+        }
+
+            if($lab_config_id == null)
+            {
+                $lab_config_id = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+        $recs = api_get_patient_records($lab_config, $patient_id, $date_from, $date_to, $ip);
+        //echo "<pre>";
+        //print_r($recs);
+        $rtt = array();
+        foreach($recs as $tobj)
+            $rtt[$tobj[0]->testId] = api_decode_results ($tobj[0]);
+        
+        return $rtt;
+            
+    }
+    
+    public function get_inventory()
+    {
+        //print_r($_SESSION);
+        /*
+        $chk = check_api_token($tok);
+        if($chk != 1)
+        return $chk;
+        */
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lid = $user->labConfigId;
+        }
+
+            if($lid == null)
+            {
+                $lid = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+         $reagents_list = Inventory::getAllReagents($lid);
+         $cc = 1;
+        foreach($reagents_list as $reagent) 
+        {
+            $quant = Inventory::getQuantity($lid, $reagent['id']);
+            // $uni = $reagent['unit'];
+             $spec[$cc]['id'] =  $reagent['id'];
+              $spec[$cc]['name'] =  $reagent['name'];
+               $spec[$cc]['unit'] =  $reagent['unit'];
+               $spec[$cc]['remarks'] =  $reagent['remarks'];
+               $spec[$cc]['quantity'] =  $quant;
+               $cc++;
+        }
+        //$spec = get_specimen_by_id($specimen_id);
+        if(count($spec) > 0)
+                $ret = $spec;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+   
+    public function get_stock_lots($r_id)
+    {
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lid = $user->labConfigId;
+        }
+
+            if($lid == null)
+            {
+                $lid = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+        $stocks_list = Inventory::getStocksList($lid, $r_id);
+    
+         $cc = 1;
+        foreach($stocks_list as $stock) 
+        {
+            $quant = Inventory::getQuantity($lid, $reagent['id']);
+            // $uni = $reagent['unit'];
+             $spec[$cc]['id'] = $stock['id'];
+              $spec[$cc]['lot'] =  $stock['lot'];
+               $spec[$cc]['manufacturer'] =  $stock['manufacturer'];
+                $spec[$cc]['supplier'] =  $stock['supplier'];
+                $spec[$cc]['date_of_reception'] =  $stock['date_of_reception'];
+               $spec[$cc]['remarks'] =  $stock['remarks'];
+               $dp = explode("-", $stock['expiry_date']);
+                            $e_date = $dp[2]."/".$dp[1]."/".$dp[0];
+               $spec[$cc]['expiry_date'] =  $e_date;             
+               $spec[$cc]['current_quantity'] =  Inventory::getLotQuantity($lid, $r_id, $stock['lot']);
+               $spec[$cc]['quantity_supplied'] =  $stock['quantity_suppied'];
+               $cc++;
+        }
+        
+        //$spec = get_specimen_by_id($specimen_id);
+        if(count($spec) > 0)
+                $ret = $spec;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    public function get_stock_usage($r_id, $lot)
+    {
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lid = $user->labConfigId;
+        }
+
+            if($lid == null)
+            {
+                $lid = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+        //$stocks_list = Inventory::getStocksList($lid, $r_id);
+        $lab_config_id = $lid;
+
+                    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+
+                    $query_string = "SELECT * from inv_usage WHERE reagent_id = $r_id AND lot = '$lot'";
+                    $recordset = query_associative_all($query_string, $row_count);
+
+                    DbUtil::switchRestore($saved_db);
+         $cc = 1;
+         //echo "-".$recordset."-";
+         //print_r($recordset);
+         $spec = array();
+        foreach($recordset as $stock) 
+        {
+            $quant = Inventory::getQuantity($lid, $reagent['id']);
+            // $uni = $reagent['unit'];
+             $spec[$cc]['id'] = $stock['id'];
+              $spec[$cc]['quantity_used'] =  $stock['quantity_used'];;
+               $spec[$cc]['user_id'] =  $stock['user_id'];
+               $spec[$cc]['remarks'] =  $reagent['remarks'];
+               $dp = explode("-", $stock['date_of_use']);
+                            $e_date = $dp[2]."/".$dp[1]."/".$dp[0];
+               $spec[$cc]['date_of_use'] =  $e_date;             
+               $cc++;
+        }
+        
+        //$spec = get_specimen_by_id($specimen_id);
+        if(count($spec) > 0)
+                $ret = $spec;
+             else
+                $ret = 0;
+             
+        return $ret;
+    }
+    
+    public function get_test_cost($tid)
+    {
+        if($_SESSION['level'] < 2 || $_SESSION['level'] > 4)
+        {
+            $user = get_user_by_id($_SESSION['user_id']);
+            $lid = $user->labConfigId;
+        }
+
+            if($lid == null)
+            {
+                $lid = get_lab_config_id_admin($_SESSION['user_id']);
+            }
+        //$stocks_list = Inventory::getStocksList($lid, $r_id);
+        $lab_config_id = $lid;
+
+                    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+
+                    $query_string = "SELECT * from test_type_costs WHERE test_type_id = $tid ORDER BY earliest_date_valid DESC LIMIT 1";
+                    $record = query_associative_one($query_string);
+
+                    DbUtil::switchRestore($saved_db);
+        
+        if($record != null)
+                $ret = $record['amount'];
+             else
+                $ret = -1;
+             
+        return $ret;
+    }
+    
+    
+}
+	
+   
+/* API ends here */
 ?>

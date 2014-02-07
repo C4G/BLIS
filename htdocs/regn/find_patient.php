@@ -11,6 +11,7 @@ LangUtil::setPageId("find_patient");
 putUILog('find_patient', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 
+
 $script_elems->enableDatePicker();
 $script_elems->enableJQueryForm();
 
@@ -47,6 +48,7 @@ function restrictCharacters(e) {
 
 function fetch_patients()
 {
+	$("#target_div_id_del").hide();
 	$('#psearch_progress_spinner').show();
 	var patient_id = $('#pq').attr("value").trim();
 	patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
@@ -65,6 +67,38 @@ function fetch_patients()
 		}
 	});
 }
+
+function delete_patient_profile(patientId){
+	if(ConfirmDelete()){
+	var params = "patient_id="+patientId+"&lab_config_id="+<?php echo $lab_config->id;?>;
+	//alert("patient Id " + patient_id);
+	$.ajax({
+		type: "POST",
+		url: "ajax/delete_patient.php",
+		data: params,
+		success: function(msg) {
+			if(msg.indexOf("1")> -1){
+				$("#target_div_id_del").html("Patient successfully deleted");
+			} else {
+				$("#target_div_id_del").html("Patient cannot be deleted");
+			}
+			$("#target_div_id_del").show();
+			$("#patients_found").html('');
+			$("#add_anyway_div").hide();
+		}
+	}); 
+}
+}
+
+function ConfirmDelete()
+{
+  var x = confirm("Are you sure you want to delete?");
+  if (x)
+      return true;
+  else
+    return false;
+}
+
 
 function continue_fetch_patients()
 {
@@ -139,8 +173,8 @@ function continue_fetch_patients()
 		?>
 	</ul>
 </div>
-<div id='patients_found' style='position:relative;left:10px;'>
-</div>
+<div id='patients_found' style='position:relative;left:10px;'> </div><br/>
+<div id='target_div_id_del' style='position:relative;left:10px;'></div>
 <br>
 <div id='add_anyway_div' style='display:none'>
 <a id='add_anyway_link' href='new_patient.php'><?php echo LangUtil::$pageTerms['ADD_NEW_PATIENT']; ?> &raquo;</a>

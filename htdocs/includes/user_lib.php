@@ -22,11 +22,13 @@ $LIS_101 = 10;
 $LIS_110 = 11;
 $LIS_111 = 12;
 
+$LIS_VERIFIER = 15;
+
 function get_top_menu_options($user_role)
 {
 	# Returns list links to php pages accessible by $user_role
 	# Called from perms_check.php
-	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_COUNTRYDIR, $LIS_CLERK;
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_VERIFIER, $LIS_COUNTRYDIR, $LIS_CLERK;
 	global $LIS_001, $LIS_010, $LIS_011, $LIS_100, $LIS_101, $LIS_110, $LIS_111, $LIS_TECH_SHOWPNAME;
 	# Global variables from includes/db_constants.php
 	global $SERVER, $ON_ARC;
@@ -83,6 +85,9 @@ function get_top_menu_options($user_role)
 		$page_list[LangUtil::getPageTitle("lab_admins")] = "lab_admins.php";
 		$page_list[LangUtil::getPageTitle("catalog")] = "country_catalog.php";
 		$page_list[LangUtil::getPageTitle("reports")] = "reports.php";
+	}
+	else if($user_role == $LIS_VERIFIER){
+		$page_list[LangUtil::getPageTitle("results_entry")] = "results_entry.php";
 	}
 	else if(false)
 	{
@@ -166,13 +171,14 @@ function get_random_password()
 function is_admin($user)
 {
 	# Returns true for admin and superadmin level users
-	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_CLERK, $LIS_TECH_SHOWPNAME, $LIS_COUNTRYDIR;
+	global $LIS_VERIFIER, $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_CLERK, $LIS_TECH_SHOWPNAME, $LIS_COUNTRYDIR;
 	if
 	(
 		$user->level == $LIS_TECH_RO || 
 		$user->level == $LIS_TECH_RW || 
 		$user->level == $LIS_CLERK || 
-		$user->level == $LIS_TECH_SHOWPNAME
+		$user->level == $LIS_TECH_SHOWPNAME ||
+		$user->level == $LIS_VERIFIER
 	)
 		return false;
 	return true;
@@ -199,7 +205,8 @@ function is_country_dir($user)
 function get_level_name($level_code)
 {
 	# Returns string containing user-level
-	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_COUNTRYDIR, $LIS_CLERK, $LIS_TECH_SHOWPNAME;
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_VERIFIER , $LIS_COUNTRYDIR, $LIS_CLERK, $LIS_TECH_SHOWPNAME;
+	//echo "Level Code = ".$level_code."-".$LIS_VERIFIER;
 	switch($level_code)
 	{
 		case $LIS_TECH_RW:
@@ -223,6 +230,12 @@ function get_level_name($level_code)
 		case $LIS_CLERK:
 			return LangUtil::$generalTerms['LAB_RECEPTIONIST'];
 			break;
+		case $LIS_VERIFIER:
+			{
+			$verifier = "Verifier";
+			return $verifier;
+			break;
+			}
 	}
 }
 ?>

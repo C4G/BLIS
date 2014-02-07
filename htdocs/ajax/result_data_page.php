@@ -11,6 +11,12 @@ LangUtil::setPageId("results_entry");
 $attrib_value = $_REQUEST['a'];
 $attrib_type = $_REQUEST['t'];
 $dynamic = 1;
+
+$lab_section = 0; // All lab section by default
+if(isset($_REQUEST['l']))
+	$lab_section = $_REQUEST['l']; // change the value based on the query
+
+
 if(!isset($_REQUEST['result_cap']))
     $result_cap = 10;
 else
@@ -84,23 +90,44 @@ else
 {
     if($attrib_type == 5)
     {
+    	
             # Search by specimen aux ID
-            $query_string = 
+    	if($lab_section == 0) {
+    		$query_string = 
                     "SELECT s.specimen_id FROM specimen s, test t, patient p ".
                     "WHERE p.patient_id=s.patient_id ".
                     "AND s.aux_id='$attrib_value'".
                     "AND s.specimen_id=t.specimen_id ".
                     "AND t.result = '' LIMIT $offset,$result_cap ";
+    	} else {
+			$query_string =
+					"SELECT s.specimen_id FROM specimen s, test t, patient p ".
+					"WHERE p.patient_id=s.patient_id ".
+					"AND s.aux_id='$attrib_value'".
+					"AND s.specimen_id=t.specimen_id ".
+					"AND t.result = '' AND test_type_id IN
+					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) LIMIT $offset,$result_cap ";
+		}
     }
     if($attrib_type == 0)
     {
             # Search by patient ID
-            $query_string = 
+    	if($lab_section == 0) {
+    		$query_string = 
                     "SELECT s.specimen_id FROM specimen s, test t, patient p ".
                     "WHERE p.patient_id=s.patient_id ".
                     "AND p.surr_id='$attrib_value'".
                     "AND s.specimen_id=t.specimen_id ".
                     "AND t.result = '' LIMIT $offset,$result_cap ";
+    	} else {
+    		$query_string =
+					"SELECT s.specimen_id FROM specimen s, test t, patient p ".
+					"WHERE p.patient_id=s.patient_id ".
+					"AND p.surr_id='$attrib_value'".
+					"AND s.specimen_id=t.specimen_id ".
+					"AND t.result = '' AND test_type_id IN
+					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) LIMIT $offset,$result_cap ";
+    	}
     }
     else if($attrib_type == 1)
     {
@@ -117,24 +144,67 @@ else
                     <?php
                     return;
             }
+            
+            if($lab_section == 0) {
             $query_string = 
                     "SELECT s.specimen_id FROM specimen s, test t, patient p ".
                     "WHERE s.specimen_id=t.specimen_id ".
                     "AND t.result = '' ".
                     "AND s.patient_id=p.patient_id ".
-                    "AND p.name LIKE '%$attrib_value%' LIMIT $offset,$result_cap";
+                    "AND p.name LIKE '%$attrib_value%' LIMIT $offset,$result_cap"; }
+            else {
+			$query_string =
+					"SELECT s.specimen_id FROM specimen s, test t, patient p ".
+					"WHERE s.specimen_id=t.specimen_id ".
+					"AND t.result = '' ".
+					"AND s.patient_id=p.patient_id ".
+					"AND p.name LIKE '%$attrib_value%' AND test_type_id IN
+					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) LIMIT $offset,$result_cap";
+			}
     }
     else if($attrib_type == 3)
     {
             # Search by patient daily number
-            $query_string = 
+    	if($lab_section == 0) {
+    		$query_string = 
                     "SELECT specimen_id FROM specimen ".
                     "WHERE daily_num LIKE '%-$attrib_value' ".
                     "AND ( status_code_id=".Specimen::$STATUS_PENDING." ".
                     "OR status_code_id=".Specimen::$STATUS_REFERRED." ) ".
                     "ORDER BY date_collected DESC LIMIT $offset,$result_cap";
+    	} else {
+			$query_string =
+					"SELECT s.specimen_id FROM specimen s, test t WHERE s.specimen_id = t.specimen_id AND ".
+					"daily_num LIKE '%-$attrib_value'".
+					"AND ( status_code_id=".Specimen::$STATUS_PENDING." ".
+					"OR status_code_id=".Specimen::$STATUS_REFERRED." ) AND t.test_type_id IN
+					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section)".
+					"ORDER BY date_collected DESC LIMIT $offset,$result_cap";
+    		
+    	}
     } 
-}
+    else if($attrib_type == 9)
+    {
+            # Search by patient specimen id
+                $decoded = decodeSpecimenBarcode($attrib_value);
+                if($lab_section == 0) {
+
+				$query_string = 
+                    "SELECT specimen_id FROM specimen ".
+                    "WHERE specimen_id = $decoded[1] ".
+                    "AND ( status_code_id=".Specimen::$STATUS_PENDING." ".
+                    "OR status_code_id=".Specimen::$STATUS_REFERRED." ) ".
+                    "ORDER BY date_collected DESC LIMIT $offset,$result_cap";
+            	} else {
+					$query_string =
+						"SELECT specimen_id FROM specimen ".
+						"WHERE specimen_id = $decoded[1] ".
+						"AND ( status_code_id=".Specimen::$STATUS_PENDING." ".
+						"OR status_code_id=".Specimen::$STATUS_REFERRED." ) ".
+						"ORDER BY date_collected DESC LIMIT $offset,$result_cap";
+				}
+    } 
+	}
 $resultset = query_associative_all($query_string, $row_count);
 if(count($resultset) == 0 || $resultset == null)
 {

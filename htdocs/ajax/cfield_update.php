@@ -66,8 +66,10 @@ $updated_entry = new CustomField();
 $updated_entry->id = $field_id;
 $updated_entry->fieldName = $field_name;
 $updated_entry->fieldOptions = $options_csv;
-if($del=="Delete")
+if($del=="Delete"){
 CustomField::deleteById($updated_entry, $lab_config_id, $type);
+FieldOrdering::deleteFieldOrderEntry($lab_config_id, 1);
+}
 else
 CustomField::updateById($updated_entry, $lab_config_id, $type, $offset);
 ?>

@@ -34,12 +34,17 @@ $pid = $_REQUEST['pid'];
 $dnum = $_REQUEST['dnum'];
 $session_num = $_REQUEST['session_num'];
 $doctor = "";
+$refTo = "";
 if(isset($_REQUEST['doc']))
 	{
 	$doc = $_REQUEST['doc'];
 	$title=$_REQUEST['title'];
 	}
+if(isset($_REQUEST['refTo']))
+	{
+		$refTo = $_REQUEST['refTo'];
+	}
 	
 $_SESSION['doctor'] = $doc_session;
-$page_elems->getNewSpecimenForm($num, $pid, $dnum, $session_num, $doc , $title);
+$page_elems->getNewSpecimenForm($num, $pid, $dnum, $session_num, $doc , $title, $refTo);
 ?>

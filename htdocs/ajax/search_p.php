@@ -46,16 +46,17 @@ else
 	$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
 }
 $patient_list = array();
+$patient_list_all = array();
 # Fetch list from DB
 if($a == 0)
 {
 	# Fetch by patient ID
-	$patient_list = search_patients_by_id($q);
+	$patient_list_all = search_patients_by_id($q);
 }
 else if($a == 1)
 {
 	# Fetch by patient name
-	$patient_list = search_patients_by_name($q);
+	$patient_list_all = search_patients_by_name($q);
 	//DB Merging - Currently Disabled 
 	# See if there's a patient by the exact same name in another lab
 	//$patient = searchPatientByName($q);
@@ -67,13 +68,24 @@ else if($a == 1)
 else if($a == 2)
 {
 	# Fetch by additional ID
-	$patient_list = search_patients_by_addlid($q);
+	$patient_list_all = search_patients_by_addlid($q);
 }
 else if($a == 3)
 {
 	# Fetch by daily number
-	$patient_list = search_patients_by_dailynum("-".$q);
+	$patient_list_all = search_patients_by_dailynum("-".$q);
 }
+
+// fetch from removal record and compare with patient_list
+$category="patient";
+foreach ($patient_list_all as $patient1){
+	if(check_removal_record($_SESSION['lab_config_id'], $patient1->patientId, $category) > 0)
+		continue;
+	else
+		$patient_list[] = $patient1;
+}
+
+
 if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null) )
 {
 	?>
@@ -163,6 +175,8 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				echo "<th>".LangUtil::$generalTerms['SP_STATUS']."</th>";
 			}
 			?>
+			<th></th>
+			<th></th>
 			<th></th>
 			<th></th>
 		</tr>
@@ -266,6 +280,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					<a href='new_specimen.php?pid=<?php echo $patient->patientId; ?>' title='Click to Register New Specimen for this Patient'><?php echo LangUtil::$pageTerms['CMD_REGISTERSPECIMEN']; ?></a>
 					</td><td>
 					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'><?php echo LangUtil::$pageTerms['CMD_VIEWPROFILE']; ?></a>
+					</td><td>
+					<a href='javascript:delete_patient_profile(<?php echo $patient->patientId; ?>)' title='Click to Delete Patient Profile'><?php echo "Delete Profile"; ?></a>
+					</td><td>
+					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>&update=1' title='Click to Update Patient Profile'><?php echo "Update Profile" ?></a>
 					<?php
 				}
 				else if(strpos($_SERVER["HTTP_REFERER"], "reports.php") !== false || strpos($_SERVER["HTTP_REFERER"], "reports2.php") !== false)

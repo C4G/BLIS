@@ -15,12 +15,16 @@ $script_elems->enableLatencyRecord();
 $script_elems->enableTokenInput();
 
 $lab_config = LabConfig::getById($_SESSION['lab_config_id']);
+
+$user_level = $_SESSION['user_level'];
+//$user = get_user_by_id($_SESSION[''])
 ?>
 <div class='batch_results_subdiv_help' id='batch_results_subdiv_help' style='display:none;'>
 	<?php
 		//$tips_string = LangUtil::$pageTerms['TIPS_INFECTIONSUMMARY'];
 		$tips_string = "If you cannot see any information other than Test Name, Results and the Skip Option, please tell your administrator to configure it from Worksheet Configuration";
-		$page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
+		//$tips_string = "";
+		$page_elems->getSideTipBatchResults(LangUtil::$generalTerms['TIPS'], $tips_string);
 	?>
 </div>
 <style type='text/css'>
@@ -43,8 +47,21 @@ $(document).ready(function(){
 	get_test_types_bycat();
 	$("#worksheet_results").hide();
 	$('.results_subdiv').hide();
-	right_load("specimen_results");
+
 	<?php 
+	global $LIS_VERIFIER;
+	if($user_level == $LIS_VERIFIER){
+		//right_load("specimen_results");
+		?>
+		right_load('verify_results'); 
+		<?php }
+	else {	
+	?>
+
+	
+	right_load("specimen_results");
+	<?php
+	} 
 	if(isset($_REQUEST['ajax_response']))
 	{
 		#Rendering after Ajax response (workaround for dynamically loading JS via Ajax)
@@ -109,6 +126,9 @@ function right_load(destn_div)
 	$('.menu_option').removeClass('current_menu_option');
 	$('#'+destn_div+'_menu').addClass('current_menu_option');
 	$('#'+destn_div+'_subdiv_help').show();
+	if(destn_div == 'specimen_results'){
+		$('#batch_results_subdiv_help').hide();
+	}
 	if(destn_div == "report_results")
 	{
 		load_unreported_results();
@@ -153,6 +173,9 @@ function hide_result_form(specimen_id)
 
 function fetch_specimen()
 {
+	
+	var labsection = document.getElementById('cat_code_labsection_specimen').value;
+	
 	var specimen_id = $('#specimen_id').attr("value");
 	specimen_id = specimen_id.replace(/[^a-z0-9 ]/gi,'');
 	$('#fetch_progress_bar').show();
@@ -167,8 +190,10 @@ function fetch_specimen()
 		return;
 	}
 	var url = 'ajax/result_entry_patient_dyn.php';
+
+	
 	$("#fetched_patient_entry").load(url, 
-		{a: specimen_id, t: attrib}, 
+		{a: specimen_id, t: attrib, labsec: labsection}, 
 		function() 
 		{
 			$('#fetch_progress_bar').hide();
@@ -177,6 +202,46 @@ function fetch_specimen()
 		}
 	);
 }
+
+// EDITING
+function fetch_specimen_by_lab_section()
+{
+	//var specimen_id = $('#specimen_id').attr("value");
+	$('#fetch_progress_bar_labsection').show();
+	var lab_section_id = $('#cat_code_labsection').attr("value");
+	//alert(lab_section_id);
+	var url = 'ajax/result_entry_patient_lab_section.php';
+	$("#labsection_results_div").load(url, 
+		{labSectionId: lab_section_id}, 
+		function() 
+		{
+			$('#fetch_progress_bar_labsection').hide();
+			$("#fetched_specimen_labsetion").show();
+			$("#fetched_specimen_labsetion").html("");
+		}
+	);
+}
+
+
+/* function fetch_specimenPat(patientId,specimenId)
+{
+var pg=2;
+	$('#fetch_progress_bar').show();
+	var url = 'ajax/specimen_form_fetch.php';
+	//var target_div = "fetch_specimen";
+	$('.result_form_pane_patient_').html("Patient Id - "+patientId+" SpecimenID - "+specimenId);
+	/* var target_div = "result_form_pane_patient_"+specimen_id;
+	$("#"+target_div).load(url, 
+		{sid: specimen_id , page_id:pg}, 
+		function() 
+		{
+			$('#fetch_progress_bar').hide();
+			$("#fetched_specimen").show();
+		}
+	); 
+} */
+
+
 
 function fetch_specimen2(specimen_id)
 {
@@ -194,6 +259,22 @@ var pg=2;
 			$("#fetched_specimen").show();
 		}
 	);
+}
+
+function fetch_specimen3(specimen_id, test_id)
+{
+	$('#fetch_progress_bar').show();
+	var rows = $('table.tablesorter tr');
+	//$('.related_tests_tr_'+specimen_id).toggle();
+	//alert("Specimen ID "+specimen_id+" And Existing Test ID "+test_id);
+	//$("#result_form_pane_batch_"+specimen_id).html("Specimen Id : "+specimen_id);
+	//rows.hide();
+	//rows.filter('.related_tests_tr_'+specimen_id).hide();
+	//alert("Specimen ID "+specimen_id+" And Existing Test ID "+test_id);
+	rows.filter('.related_tests_tr_'+specimen_id).show();
+	var url = "related_tests_results_entry.php";
+	window.location = url+"?specimen_id="+specimen_id+"&test_id="+test_id;
+	//$('#fetch_progress_bar').hide();
 }
 
 function verify_control_selection() {
@@ -217,7 +298,7 @@ function verify_control_selection() {
 
 function toggle_form(form_id, checkbox_obj)
 {
-	if(checkbox_obj.checked == true)
+	if(checkbox_obj.checked == false)
 	{
 		$('#'+form_id+' :input').attr('disabled', 'disabled');
 		checkbox_obj.disabled=false;
@@ -233,25 +314,54 @@ function submit_forms(specimen_id)
 {
 	var form_id_csv = $('#form_id_list').attr("value");
 	var form_id_list = form_id_csv.split(",");
+	var resultAvailable = 0;
+	for(var i = 0; i < form_id_list.length; i++)
+	{
+		if(!$('#'+form_id_list[i]+'_skip').is(':checked'))
+		{
+			resultAvailable++;
+		}
+	}
+
+	//alert(form_id_list.length + " " + resultAvailable);
+	if(resultAvailable>1 && resultAvailable == form_id_list.length){
+		alert("Enter at least one result to submit ");
+		return;
+	}
+
 	$('.result_cancel_link').hide();
 	$('.result_progress_spinner').show();
 	//var target_div_id = "fetched_specimen";
 	var target_div_id = "result_form_pane_"+specimen_id;
+	var count = 0;
 	for(var i = 0; i < form_id_list.length; i++)
 	{
-		if($('#'+form_id_list[i]+'_skip').is(':checked'))
-		{
-			continue;
-		}
-		var params = $('#'+form_id_list[i]).formSerialize();
-			$.ajax({
-			type: "POST",
-			url: "ajax/result_add.php",
-			data: params,
-			success: function(msg) {
-				$("#"+target_div_id).html(msg);
+		
+			if($('#'+form_id_list[i]+'_skip').is(':checked'))
+			{
+				var params = $('#'+form_id_list[i]).formSerialize();
+				
+				 $.ajax({
+					type: "POST",
+					url: "ajax/result_add.php",
+					data: params,
+					success: function(msg) {
+						$("#"+target_div_id).html(msg);
+					}
+				}); 
+			} else {
+				count++;
+				if(form_id_list.length == count){
+					$('.result_cancel_link').show();
+					$('.result_progress_spinner').hide();
+					alert("Enter the test result to save by enabling the checkbox");
+					return;
+				}
+				continue;
 			}
-		});
+		
+		
+		
 	}
 	$('.result_progress_spinner').hide();
 }
@@ -434,6 +544,10 @@ function update_remarks(test_type_id, count, patient_age, patient_sex)
 <table name="page_panes" cellpadding="10px">
 	<tr valign='top'>
 	<td id="left_pane" class="left_menu" valign="top" width='180px'>
+
+	<?php  
+	global $LIS_VERIFIER;
+	if($user_level != $LIS_VERIFIER){?>
 		<a href="javascript:right_load('specimen_results');" title='Enter Test Results for a Single Specimen' 
 			class='menu_option' id='specimen_results_menu'
 		>
@@ -450,7 +564,7 @@ function update_remarks(test_type_id, count, patient_age, patient_sex)
 		>
 			Import Results
 		</a><br><br>
-		-->
+		--><?php }?>
 		<a href="javascript:right_load('verify_results');"  title='Verify Test Results'
 			class='menu_option' id='verify_results_menu'
 		>
@@ -482,8 +596,18 @@ function update_remarks(test_type_id, count, patient_age, patient_sex)
 		>
 			<?php echo LangUtil::$pageTerms['MENU_WORKSHEET']; ?>
 		</a><br><br>
+		
+		
+		<a href="javascript:right_load('labsection_div');"  title='Enter Results by Lab Sections'
+			class='menu_option' id='labsection_div_menu'
+		> <?php echo LangUtil::$pageTerms['MENU_LABSECTION']; ?></a>
+		
+		
+			
 		<p>&nbsp;</p>
-		<p><div id="worksheet_link"></div></p>
+		<p><div id="worksheet_link"></div></p><br><br>
+		
+		
 	</td>
 	
 	<td id="right_pane" class="right_pane" valign="top" >
@@ -524,8 +648,24 @@ function update_remarks(test_type_id, count, patient_age, patient_sex)
 				</select>
 				&nbsp;&nbsp;
 				<input type="text" name="specimen_id" id="specimen_id" class='uniform_width' />
+				<br/> <br/>
+				
+				<table cellspacing='4px'>
+					<tbody>
+					<tr valign='top'>
+						<td><?php echo LangUtil::$generalTerms['LAB_SECTION']; ?> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+						<td>
+							<select name='cat_code_labsection_specimen' id='cat_code_labsection_specimen' class='uniform_width'>
+								<option value="0">ALL</option>
+								<?php $page_elems->getTestCategorySelect(); ?>
+							</select>
+						</td>
+					</tr>
+					
+				</table>
+				<br/>
 				<input type="button" id='fetch_specimen_button' onclick="fetch_specimen();" value="<?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?>" />
-				&nbsp;&nbsp;
+				&nbsp;&nbsp; <br/>
 				<span id='fetch_progress_bar' style='display:none;'>
 					<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SEARCHING']); ?>
 				</span>	
@@ -629,6 +769,7 @@ function update_remarks(test_type_id, count, patient_age, patient_sex)
 			<form name='verify_results_form' id='verify_results_form' action='results_verify.php' method='post'>
 				<?php echo LangUtil::$generalTerms['TEST_TYPE']; ?>
 				&nbsp;&nbsp;&nbsp;
+				
 				<select id='verify_test_type' name='t_type' class='uniform_width'>
 					<option value=""><?php echo LangUtil::$generalTerms['SELECT_ONE']; ?>..</option>
 					<?php $page_elems->getTestTypesSelect($_SESSION['lab_config_id']); ?>
@@ -757,6 +898,47 @@ function update_remarks(test_type_id, count, patient_age, patient_sex)
 				</table>
 			</form>
 		</div>
+		
+		
+		
+		<div id='labsection_div' class='results_subdiv' style='display:none;'>
+			<b><?php echo LangUtil::$pageTerms['MENU_LABSECTION']; ?></b>
+			<br>
+			<br>
+			<form name='labsection_form' id='labsection_form' action=''>
+				<table cellspacing='4px'>
+					<tbody>
+					<tr valign='top'>
+						<td><?php echo LangUtil::$generalTerms['LAB_SECTION']; ?></td>
+						<td>
+							<select name='cat_code_labsection' id='cat_code_labsection' class='uniform_width'>
+								<?php $page_elems->getTestCategorySelect(); ?>
+							</select>
+						</td>
+						<td>
+						  	<input type="button" value="submit" onclick="fetch_specimen_by_lab_section()" />
+						</td>
+					</tr>
+					
+				</table>
+				<span id='fetch_progress_bar_labsection' style='display:none;'>
+					<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SEARCHING']); ?>
+				</span>	
+			</form>
+			<br><br>
+			<div id='labsection_results_div'>
+			</div> <br/>
+			<div id="fetched_specimen_labsetion">
+			<?php
+				if(isset($_REQUEST['ajax_response']))
+					echo $_REQUEST['ajax_response'];
+			?>
+			</div>
+		</div>
+		
+		
+		
+			
 		<?php
 		if($SHOW_REPORT_RESULTS === true)
 		{

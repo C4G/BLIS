@@ -5,6 +5,7 @@
 #
 
 include("../users/accesslist.php");
+include("../includes/field_order_update.php");
 if( !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList))
     && !(isSuperAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $superAdminPageList))
     && !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList)) ) {
@@ -218,6 +219,99 @@ $lab_config->updateDateFormat($_REQUEST['dformat']);
 $lab_config->updateDailyNumReset($_REQUEST['dnum_reset']);
 $lab_config->updateDoctor($use_doctor);
 //$lab_config->updateHidePatientName($show_pname);
+
+// 1. delete existing entry from the field order table
+FieldOrdering::deleteFieldOrderEntry($lab_config->id, 1);
+FieldOrdering::deleteFieldOrderEntry($lab_config->id, 2);
+
+
+// 2. Enter a new row for the same lab config and form
+		/* $field_ordering = new FieldOrdering();
+		 // default values
+		$field_ordering->form_id = 1;
+		$field_ordering->id = $_SESSION['lab_config_id']; */
+		/* 
+		$field_ordering->field1 = -1;
+		$field_ordering->field2 = -1;
+		$field_ordering->field3 = -1;
+		$field_ordering->field4 = -1;
+		$field_ordering->field5 = -1;
+		$field_ordering->field6 = -1;
+		$field_ordering->field7 = -1;
+		$field_ordering->field8 = -1;
+		$field_ordering->field9 = -1;
+		$field_ordering->field10 = -1;
+		$field_ordering->field11 = -1;
+		$field_ordering->field12 = -1;
+		$field_ordering->field13 = -1;
+		$field_ordering->field14 = -1;
+		$field_ordering->field15 = -1;
+		$field_ordering->field16 = -1;
+		$count = 1;
+		
+		if(isset($lab_config->pid) && $lab_config->pid > 0){
+		    $field_ordering->{field.$count} = "pid";
+			$count++;
+		}
+		//p_addl
+		if(isset($lab_config->patientAddl) && $lab_config->patientAddl> 0){
+		    $field_ordering->{field.$count} = "patientaddl";
+			$count++;
+		}//dnum
+		if(isset($lab_config->dailyNum) &&  $lab_config->dailyNum > 0){
+		    $field_ordering->{field.$count} = "dnum";
+			$count++;
+		}//pname
+		if(isset($lab_config->pname) && $lab_config->pname > 0){
+		    $field_ordering->{field.$count} = "pname";
+			$count++;
+		}//sex
+		if(isset($lab_config->sex) && $lab_config->sex> 0){
+		    $field_ordering->{field.$count} = "sex";
+			$count++;
+		}//age
+		if(isset($lab_config->age) && $lab_config->age > 0){
+		    $field_ordering->{field.$count} = "age";
+			$count++;
+		}//dob
+		if(isset($lab_config->dob) && $lab_config->dob > 0){
+		    $field_ordering->{field.$count} = "dob";
+			$count++;
+		}
+		//sid
+		if(isset($lab_config->sid) && $lab_config->sid > 0){
+		    $field_ordering->{field.$count} = "sid";
+			$count++;
+		}
+		//s_addl
+		if(isset($lab_config->specimenAddl) && $lab_config->specimenAddl > 0){
+		    $field_ordering->{field.$count} = "specimenaddl";
+			$count++;
+		}
+		//refout
+		if(isset($lab_config->refout) && $lab_config->refout > 0){
+		    $field_ordering->{field.$count} = "refout";
+			$count++;
+		}
+		//rdate
+		if(isset($lab_config->rdate) && $lab_config->rdate > 0){
+		    $field_ordering->{field.$count} = "rdate";
+			$count++;
+		}
+		//COMM
+		if(isset($lab_config->comm) && $lab_config->comm > 0){
+		    $field_ordering->{field.$count} = "comm";
+			$count++;
+		}
+		//agelimit
+		if(isset($lab_config->agelimit) && $lab_config->agelimit > 0){
+		    $field_ordering->{field.$count} = "agelimit";
+			$count++;
+		}
+ */		
+	//FieldOrdering::add_fieldOrdering($field_ordering);
+	
+		//field_order_update::install_first_order($lab_config);
 
 SessionUtil::restore($saved_session);
 ?>
