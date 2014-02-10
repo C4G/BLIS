@@ -23,3 +23,6 @@ The update procedure for the country director is as follows,
 - Download the two update files, splash.png and htdocs.zip.
 - Unzip the zip file to get the htdocs folder and then copy and replace the htdocs folder and the splash file in your BLIS folder with these.
 - This completes the update procedure.
+
+
+Current Version merged and active on this repository is V 2.7
