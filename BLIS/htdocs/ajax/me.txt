@@ -1,0 +1,258 @@
+﻿----------------------- Page 1-----------------------
+
+                                                                         Spring   10  
+
+  AOS Project 3 – MultiRPC using XML‐RPC  
+
+Kaustubh Sheth  
+GTID: 902398028  
+
+Satyajit Deshmukh  
+GTID: 902609679  
+
+----------------------- Page 2-----------------------
+
+TABLE OF CONTENTS  
+
+INTRODUCTION ................................................................................................................................................. 2  
+
+PROBLEM SPACE................................................................................................................................................ 2  
+
+OUR SOLUTION ­ multiRPC using XML­RPC.............................................................................................. 3  
+
+SYNCHRONIZATION MECHANISM ................................................................................................................ 3  
+    Asynchronous multiRPC..............................................................................................................................................3  
+    Synchronous multiRPC ................................................................................................................................................4  
+
+IMPLEMENTATION............................................................................................................................................ 4  
+    Synchronous multiRPC ................................................................................................................................................5  
+    Asynchronous multiRPC..............................................................................................................................................5  
+
+TEST CASES.......................................................................................................................................................... 6  
+  
+
+INTRODUCTION  
+  
+
+XML-RPC is a remote procedure call protocol that uses XML to encode its calls and HTTP as a transport 
+mechanism. 
+It's remote procedure calling using HTTP as the transport and XML as the encoding. XML-RPC is designed 
+to   be   as   simple   as   possible,   while   allowing   complex   data   structures   to   be   transmitted,   processed   and 
+returned. 
+
+PROBLEM SPACE  
+  
+
+As described in the CODA paper, there could arise a situation where we need to make parallel RPC calls to 
+a set of workstations. For example, the server maintains a list of workstations (with a particular file cached). 
+When   there's   a   update   on   this   file,   it   needs   to   communicate   this   update   remotely   to   all   the   workstations 
+corresponding          to  that  file.   Using     XML-RPC         alone,     would     allow    making      sequential      RPC     calls   to   each 
+workstation and wait for each response before making the next RPC. This has mainly two problems: 
+
+I. TIMEOUTS: Doing it sequentially could lead to timeouts and the aggregate time to maintain consistency 
+semantics increases greatly. 
+
+II. TRANSPARENCY: This method also makes the handling of consistency semantics difficult to implement 
+in a manner so as to make the RPC calls transparent to the workstation. For example, if the client wants a 
+majority   semantics   where   majority   successful   RPC   responses   are   good   enough   to   declare   the   RPC   as   a 
+success; this would be difficult by using XML-RPC alone for each server sequentially since the client would 
+only   like   to   see   a   single   response   stating       if   the   RPC   was   a   success   or   a   failure.   The   client   could   be 
+interested   only   in   the   semantics   and   not   in   the   individual   RPC   responses.   This   transparency   is   hard   to 
+achieve without the concept of multiRPC using XML-RPC. 
+
+                                                                                                                                                     2  
+
+----------------------- Page 3-----------------------
+
+OUR SOLUTION ‐ multiRPC using XML‐RPC  
+  
+
+The   idea   of   multiRPC   using   XML-RPC   is   to   make   parallel   XML-RPC   requests   via   the   concept   of   multi- 
+threading.   So,   each   thread   is   responsible   to   handle   the   RPC   to   a   particular   server.   These   threads   have 
+multiple     points   of  execution     and   thus   these    XML-RPC        operations     proceed     in  parallel.  So,   the   above- 
+mentioned problems are solved as follows: 
+
+I. TIMEOUTS:   If   we   make   a   XML-RPC   to   a   dead   server,   even   in   this   case,   only   the   thread   assigned   to 
+communicate remotely with that server blocks and finally times out. But this doesn't affect the operation of 
+the    other   threads    running    concurrently.     For   example,      in  a  majority    semantics     case,    if  the  client  gets 
+successful   responses   from   more   than   half   of   its   threads,   the   library   immediately   invokes   the   response 
+handler/callback handler for the client. So, the client is free to proceed with its regular operation even if some 
+thread times out on a response from a particular server. 
+
+II. TRANSPARENCY: The client is only concerned in knowing whether the desired semantics succeeded or 
+not. This is achieved by adding a level of indirection between the client and multiple servers. 
+
+In the case of an asynchronous multiRPC, we achieve this level of indirection by creating a library response 
+handler   function.   So,   each   response   from   the   asynchronous   call   to   a   server   would   return   to   our   library 
+response   handler   rather   than   the   client's   callback   function.   This   way,   the   client's   callback   function   is   not 
+invoked   for   a   response   from   each   server.   Instead,   it   is   the   library's   response   handler's   responsibility   to 
+decide the success or failure of a semantic based on the responses received from each individual RPC and 
+according inform the client's call back function just once. This maintains the transparency required. 
+
+In   the   case   of   a   synchronous  multiRPC,   the   level   of   indirection   is   achieved   by   following   the   boss-worker 
+model. The client thread acts as the boss. It delegates the responsibility of each RPC to its worker threads. 
+The worker threads make the RPC calls. Depending on the responses received, they accordingly inform the 
+boss/client thread through the usage of a global counter. On a successful RPC response, it increments this 
+global counter. The client waits for this counter to reach the threshold value which would satisfy the required 
+semantic. 
+
+SYNCHRONIZATION MECHANISM  
+
+  
+
+Asynchronous multiRPC  
+  
+We have not use pthread mutexes for this mechanism because the pthreads just make the XML-RPC call 
+and     then   join   the  boss    thread.    Given     that  a   pthread    mutex     requires    an    owner,    we    can't  use    this 
+synchronization        facility.  Hence     synchronization        amongst      concurrent     threads     is  achieved      via   POSIX 
+semaphores. 
+
+The Code snippet is as follows: 
+
+                                                                                                                                         3  
+
+----------------------- Page 4-----------------------
+
+sem_wait(&mutex_async);               //Critical Section for incrementing succesful RPC Response count 
+response_count++;                     //Irrespective of success/failure, get the count; 
+if(resultP)                           //Check if resultP is NOT NULL which means successful RPC response 
+          global_count++; 
+if(global_count == global_threshold)            //Semantic Requirement complete. 
+                                                //Give the good news to the client's response handler ! 
+          (*global_responseHandler)(serverUrl,methodName,paramArrayP,user_data,faultP,resultP); 
+else 
+if(response_count == servers_count && global_count < global_threshold) 
+{ 
+          (*global_responseHandler)(serverUrl,methodName,paramArrayP,user_data,faultP,NULL); 
+} 
+sem_post(&mutex_async);                         //End of Critical Section 
+
+Synchronous multiRPC  
+  
+We   have   used   pthread   mutexes   given   that   a   pthread   only   joins   after   receiving   the   response   to   the   XML- 
+RPC. 
+The Code snippet is as follows: 
+
+pthread_mutex_lock(&mutex_semantic);                     //CRITICAL SECTION 
+                                                         //clientCall_va is NOT THREAD SAFE. BETTER LOCK IT!! 
+while(flag) 
+          pthread_cond_wait(&cond_end,&mutex_semantic); 
+flag=1; 
+clientCall_va(&envP,         serverInfoP,     call_params->methodName,             call_params->format,        call_params->args, 
+&resultP); 
+xmlrpc_server_info_free(serverInfoP); 
+
+if(!(envP.fault_occurred))            //Increment successful RPC response only 
+                                      //if there's no fault in the RPC env var 
+          global_threshold++; 
+flag=0; 
+pthread_mutex_unlock(&mutex_semantic); 
+pthread_cond_signal(&cond_end);                          //END OF CRTICAL SECTION 
+
+IMPLEMENTATION  
+  
+
+We have embedded the multiRPC facility in the existing library by modifying the following 2 files. 
+
+     1.   xmlrpc_client_global.c  
+     2.   xmlrpc_sample_add_client.c  
+  
+  
+
+                                                                                                                                    4  
+
+----------------------- Page 5-----------------------
+
+Synchronous multiRPC  
+  
+We change the xmlrpc_client_call to accept a list of server URLs instead of a single URL. Further, we spawn 
+server   URL   number   of   threads,   with   each   thread   responsible   for   a   single   RPC   i.e.   making   a   call   to   the 
+primitive function 
+
+ clientCall_va(&envP, serverInfoP, call_params->methodName, call_params->format, 
+                    call_params->args, &resultP); 
+ //where serverInfoP = xmlrpc_server_info_new(&envP, call_params->serverUrl); 
+
+The Code snippet is as given below: 
+
+routine_vars_sync *params_sync = 
+(routine_vars_sync *)malloc(sizeof(routine_vars_sync) * url_count);//Create the Packaged Structure 
+
+pthread_t *client=(pthread_t *)malloc(sizeof(pthread_t)*url_count);                     //Spawn threads equal to # of servers 
+
+for(i=0;i<url_count;i++){ 
+   if (!envP->fault_occurred) {                            //Start Packing stuff ! 
+          strcpy(params_sync[i].methodName,methodName); 
+          strcpy(params_sync[i].format,format); 
+          params_sync[i].args = args; 
+          strcpy(params_sync[i].serverUrl,serverUrl[i]); 
+          params_sync[i].threshold = threshold; 
+
+          pthread_create(&client[i],NULL,client_routine_sync,(void*)&params_sync[i]); 
+          //Spawn a thread and let it take care of the entire RPC 
+   } 
+
+  } //end of for 
+
+while(global_threshold<threshold)                //Hold fort until reqd # of responses come. 
+                                                 //Once that's done, declare freedom!(Success) 
+          fflush(stdout); 
+va_end(args); 
+return resultP; 
+} 
+
+Asynchronous multiRPC  
+  
+We change the xmlrpc_client_call_asynch to accept a list of server URLs instead of a single URL. Further, 
+we spawn server URL number of threads, with each thread responsible for a single RPC i.e. making a call to 
+the primitive function. The difference from the synchronous case is that the individual worker threads just 
+make the asynchronous call and join. As mentioned earlier, we have introduced a level of indirection which 
+act    as  a  callback    handler     for  the  spawned      threads    from    the  xml   library.   This   helps   in  achieving     the 
+transparency since we are able to return a single result to the client's callback handler. 
+
+                                                                                                                                        5  
+
+----------------------- Page 6-----------------------
+
+Code Snippet is as follows: 
+
+if(response_count == servers_count && global_count < global_threshold) 
+{ 
+          (*global_responseHandler)(serverUrl,methodName,paramArrayP,user_data,faultP,NULL); 
+} 
+
+wherein global_responseHandler is the client's callback handler which is invoked only once. 
+
+TEST CASES  
+  
+
+RESULTS for below given test cases are kept in the ‘Resultsʼ folder. 
+
+The Test cases carried out are as follows: (Same for both synchronous and asynchronous) 
+
+1. Anyone Semantic Success: We have sent requests to dead servers. Only 1 request is sent to the server 
+that is alive. The result is a successful RPC complete response for client. 
+(anyone_semantics_async_success.log) 
+
+2. Anyone Semantic Failure: We have sent all requests to dead servers. In this case, the client's response 
+handler gives a RPC failed message to the client. 
+(anyone_semantics_async_unsuccess.log) 
+
+3.   Majority   Semantic    Success:     We   have    sent  requests    to  some    alive  servers   and   dead   servers    such 
+count(alive servers) > count(dead servers). The RPC returns a success message to the client. 
+(majority_semantics_async_success.log) 
+
+4.   Majority   Semantic     Failure:  We    have   sent   requests    to  some    alive  servers    and   dead   servers    such 
+count(alive servers) < count(dead servers). The RPC returns a RPC failed message to the client. 
+(majority_semantics_async_unsuccess.log) 
+
+5. All Semantic Success: We send all requests to alive servers. The result is a success given to the client's 
+response handler. 
+(all_semantics_async_success.log) 
+
+6. All Semantic Failure: We send 1 request to a dead server. Result is a failed RPC to the client. 
+(all_semantics_async_unsuccess.log) 
+
+NOTE: We have used the timeout facility of the xml-rpc library when a server crashes in between. 
+
+                                                                                                                                6  

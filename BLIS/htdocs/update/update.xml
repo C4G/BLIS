@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<update>
+	<old>0.8.3</old>
+	<new>0.8.4</new>
+	<descr>Makes schema changes for storing patient hash values in results. Updates langdata files.</descr>
+</update>
