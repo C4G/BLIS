@@ -1,0 +1,121 @@
+C4G BLIS API v0.1
+Documentation
+----------------
+
+C4G BLIS API is an HTTP API that enables you to query the C4G BLIS system externally.
+
+- Format for HTTP queries: http://[C4G BLIS IP]:[C4G BLIS PORT]/api/[QUERY].php?[ARGUMENTS]
+For example,
+http://192.168.228.236:4001/api/connect.php?username=testlab_admin&password=admin123
+
+- Argument are passed as GET values in the HTTP link. For example,
+username and password are passed to connect.php as shown in the above example.
+
+- Non-error results for the query are returned as key-value pairs in the JSON format.
+
+- Error values: 
+    -2  : Incorrect arguments
+    -1  : Query Error
+    0   : No values returned
+    Else: connection error
+
+- Any machine on the same network that is able to access C4G BLIS can exploit this API 
+
+----------
+API:
+
+- connect.php
+Function: Authenticate and start session
+Arguments: username and password
+Return Value: 1 if successful
+
+- disconnect.php
+Function: Disconnect and terminate your session
+Arguments: None
+Return Values: 1 if successful
+
+
+- search_patients.php
+Function: Search for patients as per specified method
+Options = 
+    1 : by Patient Name (returns all patients with name starting with the specified query string) 
+    2 : by Patient ID
+    3 : by Patient Number 
+Arguments: Search option, Search query
+Sample Usage: http://192.168.228.236:4001/api/search_patients.php?option=1&query=joh
+
+
+- search_specimens.php
+Function: Search for registered specimens as per specified method
+Options = 
+    1 : by Specimen ID
+    2 : by Patient ID  (returns all specimens registered for patients with the specified ID) 
+    3 : by Patient Name (returns all specimens registered for patients with name starting with the specified query string) 
+Arguments: Search option, Search query
+Sample Usage: http://192.168.228.236:4001/api/search_specimens.php?option=3&query=joh
+
+- get_specimen.php
+Function: Get patient information for the specified patient ID
+Arguments: specimen ID
+Sample Usage: http://192.168.228.236:4001/api/get_specimen.php?specimen_id=1
+
+- get_tests.php
+Function: Get all tests associated with the specified specimen ID along with the results (if available)
+Arguments: specimen ID
+Sample Usage: http://192.168.228.236:4001/api/get_tests.php?specimen_id=18
+
+- get_patient.php
+Function: Get patient information for the specified patient ID
+Arguments: patient ID
+Sample Usage: http://192.168.228.236:4001/api/get_patient.php?patient_id=1
+
+- get_patient_results.php
+Function: Get patient results between specified date range
+Arguments: patient ID, date from, date to, include pending results (0 if No, 1 if Yes)
+Sample Usage: http://192.168.228.236:4001/api/get_patient_results.php?patient_id=38000&yf=2011&mf=05&df=18&yt=2013&mt=05&dt=18&ip=1
+
+- get_specimen_catalog.php
+Function: Get specimen catalog
+Arguments: None
+Sample Usage: http://192.168.228.236:4001/api/get_specimen_catalog.php
+
+- get_test_catalog.php
+Function: Get test catalog
+Arguments: None
+Sample Usage: http://192.168.228.236:4001/api/get_test_catalog.php
+
+- get_test_type_data.php
+Function: Get information and measures associated with a specified test type
+Arguments: Test Type ID
+Sample Usage: http://192.168.228.236:4001/api/get_test_type_data.php?test_type_id=18
+
+- get_lab_sections.php
+Function: Get lab section / test categories
+Arguments: None
+Sample Usage: http://192.168.228.236:4001/api/get_lab_sections.php
+
+- get_inventory.php
+Function: Get current inventory data for the lab
+Arguments: None
+Sample Usage: http://192.168.228.236:4001/api/get_inventory.php
+
+- get_stock_lots.php
+Function: Get stock lots for the specified reagent ID
+Arguments: Reagent ID
+Sample Usage: http://192.168.228.236:4001/api/get_stock_lots.php?reagent_id=1
+
+- get_stock_usage.php
+Function: Get stock usage log for the specified reagent ID and lot
+Arguments: Reagent ID, Lot
+Sample Usage: http://192.168.228.236:4001/api/get_stock_usage.php?reagent_id=1&lot=U8
+
+- get_infection_rates.php
+Function: Get infection rates for specified lab section between specified date range
+Arguments: category_code, date_from, date_to
+Sample Usage: http://192.168.228.236:4001/api/get_infection_rates.php?category_code=2&yf=2013&mf=05&df=18&yt=2013&mt=05&dt=18
+
+- get_prev_rates.php
+Function: Get prevalence rates between specified date range
+Arguments: date_from, date_to
+Return Values: [total tests, tests with negative results, prevalence threshold]
+Sample Usage: http://192.168.228.236:4001/api/get_prev_rates.php?yf=2013&mf=05&df=18&yt=2013&mt=05&dt=18
