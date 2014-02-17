@@ -24,6 +24,9 @@ $a = $_REQUEST['a'];
 $saved_db = "";
 $lab_config = null;
 $uiinfo = "op=".$a."&qr=".$q;
+
+$c = $_REQUEST['c'];
+
 putUILog('search_p', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 ?>
@@ -56,7 +59,8 @@ if($a == 0)
 else if($a == 1)
 {
 	# Fetch by patient name
-	$patient_list_all = search_patients_by_name($q);
+	$patient_list_all = search_patients_by_name($q,0,$c);
+	//print_r($patient_list_all);exit;
 	//DB Merging - Currently Disabled 
 	# See if there's a patient by the exact same name in another lab
 	//$patient = searchPatientByName($q);

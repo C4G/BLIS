@@ -43,7 +43,7 @@ else {
         
         # lab update
         $db_name = "blis_".$lab_config_id;
-        $ufile = "db_update_lab_2.7";
+        $ufile = "db_update_lab_2.7.1";
         blis_db_update($lab_config_id, $db_name, $ufile);
         update_language_files();
         $def = default_currency_copy($lab_config_id);

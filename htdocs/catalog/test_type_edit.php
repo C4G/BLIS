@@ -121,7 +121,7 @@ var len = 100;
  while (--len >= 0) {
         num_submeasures[len] = 0;
     }
-var num_measures = 0;
+var num_measures = <?php echo count($measure_list); ?>
 
 var num_ranges = new Array();
 for(var k = 0; k < 100; k++)
@@ -289,6 +289,11 @@ function update_ttype()
 						else if(isNaN(upper_value))
 						{
 							alert("<?php echo LangUtil::$generalTerms['INVALID']." ".LangUtil::$generalTerms['AGE']; ?>: '"+upper_value+"'");
+							return;
+						}
+						else if((upper_value.trim()== lower_value.trim()))
+						{
+							alert("Age range : max age should be greater than min age");
 							return;
 						}
 						else if((upper_value.trim()-lower_value.trim())<=0)
@@ -528,13 +533,37 @@ function update_ttype()
 		$('#prevalenceThresholdError').show();
 		return;
 	}
-	$('#update_ttype_progress').show();
-	$('#edit_ttype_form').ajaxSubmit({
-		success: function(msg) {
-			$('#update_ttype_progress').hide();
-			window.location="test_type_updated.php?tid=<?php echo $_REQUEST['tid']; ?>";
+	
+	var old_name = "<?php echo $test_type->name;?>";	
+	var name = $('#name').attr("value").trim();
+	var name_valid=true;
+
+	old_name = old_name.toLowerCase();
+	name = name.toLowerCase();
+	if(old_name != name)
+	{
+		var check_url = "ajax/test_type_name_check.php?test_name="+name;
+		$.ajax({ url: check_url, async : false, success: function(response){			
+				if(response == "1")		
+				{	
+					alert("Test name: "+name + " already exist");
+					name_valid=false;								
+				}			
 		}
-	});
+		});
+	}
+	
+	if(name_valid)
+	{
+		$('#update_ttype_progress').show();
+		$('#edit_ttype_form').ajaxSubmit({
+			success: function(msg) {
+				$('#update_ttype_progress').hide();
+				window.location="test_type_updated.php?tid=<?php echo $_REQUEST['tid']; ?>";
+			}
+		});
+	}
+	//$('#edit_ttype_form').submit();
 }
 
  function check_if_new_category(select_obj)
@@ -594,10 +623,13 @@ if(num_ranges[mrow_num] == 0)
 	var num_row = num_ranges[mrow_num];
 	
 		var map=map_offset-1;									
-	var html_code = "<input type='text' class='range_field' name='range_l_"+mrow_num+"[]' value='' /> : <input type='text' class='range_field' name='range_u_"+mrow_num+"[]' value='' /> <input type='text' class='range_field' name='gender_"+mrow_num+"_"+map+"' value='B'/> <input type='text' class='range_field agerange_l_"+mrow_num+"' name='agerange_l_"+mrow_num+"_"+map+"' id='agerange_l_"+mrow_num+"_"+map+"' value='0' /> : <input type='text' class='range_field agerange_u_"+mrow_num+"' name='agerange_u_"+mrow_num+"_"+map+"' id='agerange_u_"+mrow_num+"_"+map+"' value='100' /><br>";
+	var html_code = "<input type='text' class='range_field' name='range_l_"+mrow_num+"[]' value='' /> : <input type='text' class='range_field' name='range_u_"+mrow_num+"[]' value='' /> <input type='text' class='range_field' name='gender_"+mrow_num+"[]' value='B'/> <input type='text' class='range_field agerange_l_"+mrow_num+"' name='agerange_l_"+mrow_num+"[]' id='agerange_l_"+mrow_num+"_"+map+"' value='0' /> : <input type='text' class='range_field agerange_u_"+mrow_num+"' name='agerange_u_"+mrow_num+"[]' id='agerange_u_"+mrow_num+"_"+map+"' value='100' /><br>";
 	$('#numeric_'+mrow_num).append(html_code);
 }	
-	function add_new_range_field(mrow_num, map_offset)
+
+
+
+function add_new_range_field(mrow_num, map_offset)
 	{
 if(num_ranges[mrow_num] == 0)
 	{
@@ -612,6 +644,22 @@ if(num_ranges[mrow_num] == 0)
 											
 	var html_code = "<input type='text' class='range_field' name='new_range_l_"+mrow_num+"[]' value='' /> : <input type='text' class='range_field' name='new_range_u_"+mrow_num+"[]' value='' /> <input type='text' class='range_field' name='new_gender_"+mrow_num+"[]' value='B' /> <input type='text' class='range_field agerange_l_"+mrow_num+"[]' name='new_agerange_l_"+mrow_num+"[]' id='new_agerange_l_"+mrow_num+"[]' value='0' /> : <input type='text' class='range_field agerange_u_"+mrow_num+"[]' name='new_agerange_u_"+mrow_num+"[]' id='new_agerange_u_"+mrow_num+"[]' value='100' /><br>";
 	$('#new_numeric_'+mrow_num).append(html_code);
+}
+
+function removeMeasure(measure_num)
+{
+	//alert('#new_mrow_'+measure_num);
+	$('#new_mrow_'+measure_num).hide();
+	for(var i = 1; i <= num_submeasures[measure_num]; i++)
+	{
+		$('#smrow_'+measure_num+'_'+i).hide();		
+		
+	}
+}
+
+function removeSubMeasure(measure,submeasure)
+{
+	$('#smrow_'+measure+'_'+submeasure).hide();
 }
 
  function addRowToTable()
@@ -823,7 +871,7 @@ function isInputCurrency(evt) {
 			</div>-->
 			</td>
 			<td>
-			<div id="tblSample1">
+			<div id="tblSample1" style="display:none">
 			<table border="1" id="tblSample" >
 			<tr>
 				
@@ -1000,9 +1048,9 @@ function isInputCurrency(evt) {
 										?>
 											<input type='text' class='range_field' name='range_l_<?php echo $i; ?>[]' value='<?php echo $ref_range->rangeLower; ?>' /> :
 											<input type='text' class='range_field' name='range_u_<?php echo $i; ?>[]' value='<?php echo $ref_range->rangeUpper; ?>' />
-											<input type='text' class='range_field' name='gender_<?php echo $i; ?>_<?php echo $ref_count; ?>' value='<?php echo $ref_range->sex; ?>'/>
-											<input type='text' class='range_field agerange_l_<?php echo $i; ?>' name='agerange_l_<?php echo $i; ?>_<?php echo $ref_count; ?>' id='agerange_l_<?php echo $i; ?>_<?php echo $ref_count; ?>' value='<?php echo $ref_range->ageMin; ?>' /> :
-											<input type='text' class='range_field agerange_u_<?php echo $i; ?>' name='agerange_u_<?php echo $i; ?>_<?php echo $ref_count; ?>' id='agerange_u_<?php echo $i; ?>_<?php echo $ref_count; ?>' value='<?php echo $ref_range->ageMax; ?>' />
+											<input type='text' class='range_field' name='gender_<?php echo $i; ?>[]' value='<?php echo $ref_range->sex; ?>'/>
+											<input type='text' class='range_field agerange_l_<?php echo $i; ?>' name='agerange_l_<?php echo $i; ?>[]' id='agerange_l_<?php echo $i; ?>_<?php echo $ref_count; ?>' value='<?php echo $ref_range->ageMin; ?>' /> :
+											<input type='text' class='range_field agerange_u_<?php echo $i; ?>' name='agerange_u_<?php echo $i; ?>[]' id='agerange_u_<?php echo $i; ?>_<?php echo $ref_count; ?>' value='<?php echo $ref_range->ageMax; ?>' />
 											<br>
 											<?php
 											$ref_count++;
@@ -1071,8 +1119,10 @@ function isInputCurrency(evt) {
 							}
 							}
 							# Space for adding new measures
-							$max_num_measures = 8;
-							for($i = 1; $i <= $max_num_measures; $i += 1)
+							//$max_num_measures = count($measure_list)
+							//echo count($measure_list);
+							$max_num_measures = 40 - count($measure_list);
+							for($i = count($measure_list)+1; $i <= $max_num_measures; $i += 1)
 							{
 								echo "<tr valign='top' id='new_mrow_$i' ";
 								//if($i != 1)
@@ -1116,7 +1166,7 @@ function isInputCurrency(evt) {
 											<br>
 								</span>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo LangUtil::$generalTerms['RANGE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender &nbsp;&nbsp;Age_Range
 								<br>
-											<small><a href="javascript:add_new_range_field('<?php echo $i; ?>', 0);"><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a></small>
+											<small><a href="javascript:add_new_range_field('<?php echo $i; ?>', 1);"><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a></small>
 									<br><br>
 								</div>
 								</span>	
@@ -1145,13 +1195,15 @@ function isInputCurrency(evt) {
 								echo "</td>";
 								echo "<td id='unit_$i'>";
 								echo "<input type='text' name='new_unit[]' value='' />";
+								if($i!=1)
+									echo "<small><a href='javascript:removeMeasure($i);'> Remove</a></small>";
 								echo "</td>";
 								echo "</tr>";
                                                                 
                                                                 
                                         # submeasures
                                         
-                                        $max_num_submeasures = 5;
+                                        $max_num_submeasures = 15;
                                         $us = '_';
                                     for($y = 1; $y <= $max_num_submeasures; $y += 1)
                                     {
@@ -1189,7 +1241,7 @@ function isInputCurrency(evt) {
                                                             <input type='text' class='range_field' name='gender_<?php echo $i.$us.$y; ?>[]' value='B'/>
                                                             <input type='text' class='range_field'  name='agerange_l_<?php echo $i.$us.$y; ?>[]' id='agerange_l_<?php echo $i.$us.$y; ?>[]' value='0' /> :
                                                             <input type='text' class='range_field' name='agerange_u_<?php echo $i.$us.$y; ?>[]' id='agerange_u_<?php echo $i.$us.$y; ?>[]' value='100' />
-                                                            <br>
+                                                           
                                                     </span>
                                                     &nbsp;&nbsp;&nbsp;&nbsp;<?php echo LangUtil::$generalTerms['RANGE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender &nbsp;&nbsp;Age_Range
                                                             <br>
@@ -1222,6 +1274,8 @@ function isInputCurrency(evt) {
                                             ?>
                                             <input type='text' name='sunit[<?php echo $i; ?>][]' value='' />
                                             <?php
+											if($y!=1)
+												echo "<small><a href='javascript:removeSubMeasure($i,$y);'> Remove</a></small>";
                                             echo "</td>";
                                             echo "</tr>";
                                             ?>

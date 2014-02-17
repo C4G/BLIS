@@ -87,11 +87,11 @@ function prefetch_pname()
 	$('#patient_prompt_div').load(url_string);
 }
 </script>
-<a href='view_stock.php'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>&nbsp;|&nbsp;<b><?php echo "Add New Reagent"; ?></b>
+<a href='view_stock.php'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>&nbsp;|&nbsp;<b><?php echo "Add New Item"; ?></b>
 <br><br>
 
 <?php
-$tips_string = "Add new Reagent by completeing this form. Stocks can then be added for these reagents. Reagent name is required. Entering units for the reagent is optional. As you type letters in reagent name field, reageants with similar names are dispayed below.";
+$tips_string = "Add new Item by completeing this form. Stocks can then be added for these items. Item name is required. Entering units for the item is optional. As you type letters in item name field, item with similar names are dispayed below.";
 $page_elems->getSideTip("Tips", $tips_string);
 ?>
 
@@ -105,7 +105,7 @@ $page_elems->getSideTip("Tips", $tips_string);
 					<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					<td>
 						<input type="text" name="reagent" id="reagent" class='uniform_width'/>
-                                                <label class="error" for="reagent" id="reagent_u_error"><small><font color="red"><?php echo "Reagent already exists"; ?></font></small></label>
+                                                <label class="error" for="reagent" id="reagent_u_error"><small><font color="red"><?php echo "Item already exists"; ?></font></small></label>
                                                 <label class="error" for="reagent" id="reagent_error"><small><font color="red"><?php echo LangUtil::getGeneralTerm("MSG_REQDFIELD"); ?></font></small></label>
 					</td>
                                         

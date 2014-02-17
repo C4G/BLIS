@@ -32,7 +32,7 @@ function query_insert_one($query)
 
 
 function query_update($query)
-{
+{	
 	# Single update statement
 	global $con;
     mysql_query( $query, $con ) or die(mysql_error());

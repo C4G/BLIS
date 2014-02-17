@@ -13,6 +13,29 @@ $report_config->labConfigId = $lab_config_id;
 $report_config->reportId = $report_id;
 $report_config->testTypeId = $_REQUEST['t_type'];
 
+
+$report_config->rowItems = $_REQUEST['row_items'];
+if($_REQUEST['show_border']=='Y')
+	$report_config->showBorder = true;
+else
+	$report_config->showBorder = false;
+	
+if($_REQUEST['show_rborder']=='Y')
+	$report_config->showResultBorder = true;
+else
+	$report_config->showResultBorder = false;
+	
+if($_REQUEST['result_box_hori']=='Y')
+	$report_config->resultborderHorizontal = true;
+else
+	$report_config->resultborderHorizontal = false;
+	
+if($_REQUEST['result_box_vert']=='Y')
+	$report_config->resultborderVertical = true;
+else
+	$report_config->resultborderVertical = false;
+	
+
 if($_REQUEST['do_landscape'] == 'Y')
 	$report_config->landscape = true;
 else
@@ -143,7 +166,6 @@ if($report_config->reportId == 1){
 	
 	
 }
-
 # Update DB with this entry
 ReportConfig::updateToDb(
 	$report_config, 

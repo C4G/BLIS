@@ -128,7 +128,8 @@ function add_patient()
 		error_flag = 1;
 		error_message += "<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['GENDER']; ?>\n";
 	}
-	
+		
+	<?php $_SESSION['pid']= $lab_config->pid; ?>	
 	if(card_num == "" || !card_num)
 	{
 		error_message += "<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['PATIENT_ID']; ?>\n";
@@ -211,63 +212,80 @@ function add_patient()
 	<?php
 	}
 	?>
-	var data_string = "card_num="+card_num+"&addl_id="+addl_id+"&name="+name+"&yyyy="+yyyy+"&mm="+mm+"&dd="+dd+"&age="+age+"&sex="+sex+"&pd_ym="+partial_dob_ym+"&pd_y="+partial_dob_y+"&agep="+age_param+"&pid="+pid+"&receipt_yyyy="+receipt_yyyy+"&receipt_mm="+receipt_mm+"&receipt_dd="+receipt_dd;
-	if(error_flag == 0)
-	{
-		$("#progress_spinner").show();
-		//Submit form by ajax
-		$.ajax({  
-			type: "POST",  
-			url: "ajax/patient_add.php", 
-			data: data_string,
-			success: function(data) { 
-				//Add custom fields
-				//$('#custom_field_form').ajaxSubmit();
-					
-				//$('#custom_field_form').submit();
-				addCustomElements();
-				$("#progress_spinner").hide();
-				
-				/* Retrieve actual DB Key used */
-				var pidStart = data.indexOf("VALUES") + 8;
-				var pidEnd = data.indexOf(",",pidStart);
-				var new_card_num = data.substring(pidStart,pidEnd);
-				
-				/* If DB key used was different from one sent, increase daily num if set in session and card_num to new DB key 
-				if ( new_card_num != card_num ) {
-						<?php 
-							if($_SESSION['dnum'] != 0) 
-							{
-						?>
-								dnum = parseInt(dnum) + 1;
-						<?php
-							}
-						?>
-				*/
-					card_num = new_card_num;
-				<?php
-				if( is_numeric($_SESSION['dnum']) && $_SESSION['dnum'] != 0 ) 
-				{
-				?>
-					window.location = "new_specimen.php?pid="+card_num+"&dnum="+dnum+"&session_num=<?php echo $session_num ?>";
-				<?php
-				}
-				else
-				{
-				?>
-					window.location = "new_specimen.php?pid="+card_num+"&session_num=<?php echo $session_num ?>";
-				<?php
-				}
-				?>
+	
+	var check_url = "ajax/patient_check_surr_id.php?sur_id="+pid;
+	$.ajax({ url: check_url, success: function(response){	
+		<?php
+		if($_SESSION['pid'] == 3 || $_SESSION['pid'] == 4)
+		{
+		?>		
+			if(response == "1")	
+			{		
+				alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['TIPS_PATIENTID_EXISTS']; ?>");	
+				return;		
 			}
-		});
-		//Patient added
-	}
-	else
-	{
-		alert(error_message);
-	}
+	<?php }?>	
+		var data_string = "card_num="+card_num+"&addl_id="+addl_id+"&name="+name+"&yyyy="+yyyy+"&mm="+mm+"&dd="+dd+"&age="+age+"&sex="+sex+"&pd_ym="+partial_dob_ym+"&pd_y="+partial_dob_y+"&agep="+age_param+"&pid="+pid+"&receipt_yyyy="+receipt_yyyy+"&receipt_mm="+receipt_mm+"&receipt_dd="+receipt_dd;
+		if(error_flag == 0)
+		{
+			$("#progress_spinner").show();
+			//Submit form by ajax
+			$.ajax({  
+				type: "POST",  
+				url: "ajax/patient_add.php", 
+				data: data_string,
+				success: function(data) { 
+					//Add custom fields
+					//$('#custom_field_form').ajaxSubmit();
+						
+					//$('#custom_field_form').submit();
+					addCustomElements();
+					$("#progress_spinner").hide();
+					
+					/* Retrieve actual DB Key used */
+					var pidStart = data.indexOf("VALUES") + 8;
+					var pidEnd = data.indexOf(",",pidStart);
+					var new_card_num = data.substring(pidStart,pidEnd);
+					
+					/* If DB key used was different from one sent, increase daily num if set in session and card_num to new DB key 
+					if ( new_card_num != card_num ) {
+							<?php 
+								if($_SESSION['dnum'] != 0) 
+								{
+							?>
+									dnum = parseInt(dnum) + 1;
+							<?php
+								}
+							?>
+					*/
+						card_num = new_card_num;
+					<?php
+					if( is_numeric($_SESSION['dnum']) && $_SESSION['dnum'] != 0 ) 
+					{
+					?>
+						window.location = "new_specimen.php?pid="+card_num+"&dnum="+dnum+"&session_num=<?php echo $session_num ?>";
+					<?php
+					}
+					else
+					{
+					?>
+						window.location = "new_specimen.php?pid="+card_num+"&session_num=<?php echo $session_num ?>";
+					<?php
+					}
+					?>
+				}
+			});
+			//Patient added
+		}
+		else
+		{
+			alert(error_message);
+		}
+	
+		}
+	});
 }
+
 
 function fetchPatientAjax()
 {

@@ -1452,7 +1452,8 @@ class PageElems
 			$("#<?php echo $id; ?>").tokenInput("<?php echo $json_url; ?>", {
 				hintText: "<?php echo $hint_text; ?>",
 				noResultsText: "No results",
-				searchingText: "Searching..."
+				searchingText: "Searching...",
+				preventDuplicates: true
 				/*
 				classes: {
 					tokenList: "token-input-list-facebook",
@@ -1472,8 +1473,10 @@ class PageElems
 				{
 					echo ", prePopulate: $json_prepopulate";
 				}
+				
 				?>
-			});
+			});			
+			
 		});
 		</script>
 		
@@ -3481,6 +3484,9 @@ public function getTestsDoneStatsTable($stat_list)
 		<tbody>
 		<?php
 		$count = 1;
+		$grand_total_patients=0;
+		$grand_total_specimens=0;
+		$grand_total_tests=0;
 		if(empty($stat_list)===false)
 		foreach($stat_list as $key=>$value)
 		{
@@ -3488,6 +3494,11 @@ public function getTestsDoneStatsTable($stat_list)
 			$total_patients=$value[0];
 			$total_specimens=$value[1];
 			$total_tests=$value[2];
+			
+			///grand totals
+			$grand_total_patients += $total_patients;
+			$grand_total_specimens += $total_specimens;
+			$grand_total_tests += $total_tests;
 
 			?>
 			<tr>
@@ -3515,6 +3526,15 @@ public function getTestsDoneStatsTable($stat_list)
 		}
 		?>
 		</tbody>
+        <tfoot>
+        	<tr>
+            <th>Grand Totals</th>
+				<th><?php echo $grand_total_patients; ?></th>
+				<th><?php echo $grand_total_specimens ?></th>
+				<th><?php echo $grand_total_tests; ?></th>				
+				<th></th>
+			</tr>
+        </tfoot>
 		</table>
 		<?php
 	}
@@ -4118,6 +4138,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</td>
 				<td>
 					<input type='text' name='doctor' class ='doctors_auto' id='".$doc_row_id."_input'  value='".$doc."' ></input>
+
 				</td>
 			</tr>";
 	}
@@ -4149,7 +4170,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<tr valign='top' id='".$ref_from_row_id."' style='display:none'>
 				<td>Referred From</td>
 				<td>
-					<input type='text' name='ref_from_name' id='".$ref_from_row_id."_input"."'  ></input>
+					<input type='text' name='ref_from_name' id='".$ref_from_row_id."_input"."'></input>
 					
 				</td>
 			</tr>";
@@ -6563,6 +6584,31 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					if($report_config->useClinicalData == 0) echo " checked "; ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 				</td>
 			</tr>
+            <tr>
+            <td><?php echo LangUtil::$pageTerms['RPT_ITEMS_ON_ROW']; ?></td>
+            <td><input type="text" id="row_items" name="row_items" value="<?php echo $report_config->rowItems;?>" size="2" /></td>
+            </tr>
+             <tr>
+            <td><?php echo LangUtil::$pageTerms['RPT_SHOW_DEMO_BORDER']; ?></td>
+            <td>
+            	<input type='radio' name='show_border' value='Y' <?php
+					if($report_config->showBorder == 1) echo " checked "; ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+					<input type='radio' name='show_border' value='N' <?php
+					if($report_config->showBorder == 0) echo " checked "; ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+              </td>
+            </tr>
+            <tr>
+            <td><?php echo LangUtil::$pageTerms['RPT_SHOW_SPM_BORDER'] ?></td>
+            <td><input type='radio' name='show_rborder' value='Y' <?php
+					if($report_config->showResultBorder == 1) echo " checked "; ?> onclick="javascript:$('#R_Border').show();"><?php echo LangUtil::$generalTerms['YES']; ?></input>
+					<input type='radio' name='show_rborder' value='N' <?php
+					if($report_config->showResultBorder == 0) echo " checked "; ?> onclick="javascript:$('#R_Border').hide();"><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span id="R_Border">
+                   <input type="checkbox" name="result_box_hori" value="Y" <?php if($report_config->resultborderHorizontal == 1) echo " checked "; ?> ><?php echo  LangUtil::$pageTerms['RPT_R_BORDER_HOR'];?>&nbsp;
+                    <input type="checkbox" name="result_box_vert"  value="Y"  <?php if($report_config->resultborderVertical == 1) echo " checked "; ?>  ><?php echo LangUtil::$pageTerms['RPT_R_BORDER_VERT'];?>                  
+                    </span>
+                    </td>
+            </tr>
 			<?php if($report_config->reportId==1){?>
 			<tr><td><h4><?php $name="../logos/logo_".$lab_config_id.".jpg";
 			 if (file_exists("../logos/logo_".$report_config->labConfigId.".jpg")==true)
@@ -7161,6 +7207,51 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					?>
 				</td>
 			</tr>
+            <tr valign='top'>
+				<td><?php  echo LangUtil::$pageTerms['RPT_ITEMS_ON_ROW'];?></td>
+				<td>
+					<?php
+					echo $report_config->rowItems;					
+					?>
+				</td>
+			</tr>
+            <tr valign='top'>
+				<td><?php  echo LangUtil::$pageTerms['RPT_SHOW_DEMO_BORDER'];?></td>
+				<td>
+					<?php
+					if($report_config->showBorder == 1)
+						echo LangUtil::$generalTerms['YES'];
+					else
+						echo LangUtil::$generalTerms['NO'];
+					?>
+				</td>
+			</tr>
+             <tr valign='top'>
+				<td><?php  echo LangUtil::$pageTerms['RPT_SHOW_SPM_BORDER'];?></td>
+				<td>
+					<?php
+					if($report_config->showResultBorder == 1)
+						echo LangUtil::$generalTerms['YES'];
+					else
+						echo LangUtil::$generalTerms['NO'];
+						?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <?php
+						echo  LangUtil::$pageTerms['RPT_R_BORDER_VERT'];
+						if( $report_config->resultborderVertical == 1)
+							echo ": ".LangUtil::$generalTerms['YES'];
+						else
+							echo ": ".LangUtil::$generalTerms['NO'];						 
+					?>
+                    &nbsp;&nbsp;
+                     <?php
+						echo  LangUtil::$pageTerms['RPT_R_BORDER_HOR'];
+						if( $report_config->resultborderHorizontal == 1)
+							echo ": ".LangUtil::$generalTerms['YES'];
+						else
+							echo ": ".LangUtil::$generalTerms['NO'];						 
+					?>
+				</td>
+			</tr>
 		</table>
 		<table cellspacing='5px' class='smaller_font'>
 			<tr valign='top'>
@@ -7609,8 +7700,14 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 										echo " In use ";
 									else
 										echo "Not in use";
-									if($lab_config->pid == 2)
-										echo " (Mandatory field) ";
+									if($lab_config->pid == 1 )
+										echo "(allows duplicates)";										
+									if($lab_config->pid == 2 )
+										echo " (Mandatory field) (allows duplicates)";
+									if($lab_config->pid == 4)
+										echo " (Mandatory field) (no duplicates)";
+									if($lab_config->pid == 3)
+										echo "(no duplicates)";
 									?>
 								</td>
 							</tr>
@@ -8704,6 +8801,217 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			echo ">$value</option><br>";
 			$count++;
 		}
+	}
+	
+	public function getPatientSearchCondition()
+	{
+		?>
+        	<option value='%[pq]%'><?php echo LangUtil::getSearchCondition('SEARCH_CONTAINS'); ?></option>
+			<option value='[pq]%'><?php echo LangUtil::getSearchCondition('SEARCH_BEGIN_WITH'); ?></option>
+            <option value='%[pq]'><?php echo LangUtil::getSearchCondition('SEARCH_END_WITH'); ?></option>            
+            
+		<?php
+		
+	}
+	
+	public 	function  getPatientFieldsOrderForm()
+	{
+		global $SYSTEM_PATIENT_FIELDS;
+		?>
+		<table cellspacing='5px' class='smaller_font'>
+			<tr valign='top'>
+				<td><b><?php echo LangUtil::$generalTerms['PATIENT_FIELDS']?></b></td>
+                <td></td>               
+				<td><b><?php echo LangUtil::$generalTerms['PATIENT_ORDERED_FIELDS']?></b></td>
+                <td></td>
+			</tr>
+			<?php # Patient main fields ?>
+			<tr valign='top'>
+            <td>
+            <input type="hidden" id="p_fields_left" name="p_fields_left" />
+            <input type="hidden" id="o_fields_left" name="o_fields_left" />                         
+            <select id="p_fields" name="p_fields"  size="15" onchange="javascript:setSel(this);">
+            <?php 
+			 $combined_fields =$SYSTEM_PATIENT_FIELDS;
+				$lab_config = LabConfig::getById($_SESSION['lab_config_id']);				
+				if( $lab_config ) {
+					$custom_field_list = $lab_config->getPatientCustomFields();
+					foreach($custom_field_list as $custom_field)
+					{
+						 $custom_array = array ("p_custom_$custom_field->id" => $custom_field->fieldName);
+						 $combined_fields = array_merge($combined_fields,$custom_array);
+					
+					}
+				}
+			
+			$record=Patient::getReportfieldsOrder();
+			if(!is_array($record))
+			{
+				foreach ($combined_fields as $field=>$text)
+				{?>
+					<option value="<?php echo $field ?>"><?php if(!stristr($field,"custom")) echo LangUtil::$generalTerms[$text]; else
+					echo $text;?></option>
+                
+				<?php
+				}		
+				
+			}
+			else
+			{
+				$unordered=explode(",",$record['p_fields']);				
+				foreach( $unordered as $field)
+				{
+				?>
+				<option value="<?php echo $field ?>"><?php 
+				if(!stristr($field,"custom")) 
+					echo LangUtil::$generalTerms[$combined_fields[$field]]; 
+				else
+					echo $combined_fields[$field];?></option>
+			<?php
+				}
+            }
+			?>
+            
+            </select>
+            </td>
+            <td valign="middle"> 
+            <input type="button" name="AddOrder" id="AddOrder" value=">" disabled="disabled"  onclick="javascript:setOrder();"/> 
+            <input type="button" name="RemOrder" id="RemOrder" value="<" disabled="disabled"  onclick="javascript:remOrder();" />
+            </td>
+            <td><select id="o_fields" name="o_fields" size="15" onchange="javascript:setSel(this);">
+            <?php
+			if(is_array($record))
+			{
+				$ordered=explode(",",$record['o_fields']);				
+				foreach( $ordered as $field)
+				{
+				?>
+				<option value="<?php echo $field ?>"><?php 
+				if(!stristr($field,"custom")) 
+					echo LangUtil::$generalTerms[$combined_fields[$field]]; 
+				else
+					echo $combined_fields[$field];?></option>
+			<?php
+				}
+            }
+			?>			
+            </select>          
+            </td>
+            <td valign="middle">
+            <input type="button" id="o_up" name="o_up" value="ʌ"  onclick="javascript:reorder('up');"/><br /> 
+             <input type="button" id="o_down" name="o_down" value="v" onclick="javascript:reorder('down');" />  
+            </td>
+            </tr>
+            <tr>
+            
+            <td> <br />   <input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' id='ordered_fields_submit' onclick='javascript:submit_ordered_fields_form();'>
+		</input><small>
+		<a href='lab_config_home.php?id=<?php echo $lab_config->id; ?>'>
+			<?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?>
+		</a>
+		</small>
+		</td>           
+            <td>&nbsp;&nbsp;&nbsp;
+		<span id='ordered_fields_submit_progress' style='display:none;'>
+			<?php $this->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
+		</span></td> <td></td>
+            </tr>
+            </table>
+                 
+       <script type='text/javascript'>
+		var selvalue;
+		var seltext;
+		var selIndex;		
+		function setSel(sel)
+		{
+			
+			selvalue=sel.options[sel.selectedIndex].value;
+			seltext=sel.options[sel.selectedIndex].text;
+			selIndex=sel.selectedIndex;
+			if($(sel).attr("name")=="p_fields")
+			{
+				document.getElementById("AddOrder").disabled=false;
+				document.getElementById("RemOrder").disabled=true;
+			}
+			else
+			{
+				document.getElementById("RemOrder").disabled=false;
+				document.getElementById("AddOrder").disabled=true;
+			}
+		}
+		
+		function setOrder()
+		{
+			var opt = document.createElement("option");
+			document.getElementById("o_fields").options.add(opt);       
+			opt.text = seltext;
+			opt.value = selvalue;		
+			document.getElementById("p_fields").options.remove(selIndex);
+			document.getElementById("AddOrder").disabled=true;
+		}
+		
+		function remOrder()
+		{
+			var opt = document.createElement("option");
+			document.getElementById("p_fields").options.add(opt);       
+			opt.text = seltext;
+			opt.value = selvalue;		
+			document.getElementById("o_fields").options.remove(selIndex);
+			document.getElementById("RemOrder").disabled=true;
+		}
+		
+		function reorder(direction)
+		{
+					
+			var o_fields=document.getElementById("o_fields");			
+			var newIndex=0;			
+			
+			if(direction=="up")
+				newIndex=selIndex-1;
+			else
+				newIndex=selIndex+1;						
+			
+			if(newIndex >=o_fields.options.length || newIndex < 0)
+				return;
+			
+			var keys = new Array();
+			var texts = new Array();
+			var tempkey="";
+			var temptext="";
+				for(var i=0;i<o_fields.options.length;i++)
+				{
+					keys[i] = o_fields.options[i].value;
+					texts[i] = o_fields.options[i].text;					
+				}	
+				
+				while(o_fields.options.length>0)
+				{
+					o_fields.options.remove(0);
+				}
+				
+				tempkey=keys[newIndex];
+				temptext=texts[newIndex];
+				
+				keys[newIndex]=keys[selIndex];
+				texts[newIndex]=texts[selIndex];
+				
+				keys[selIndex]=tempkey;
+				texts[selIndex]=temptext;
+				
+				for(var i=0;i<keys.length;i++)
+				{			
+					var opt = document.createElement("option");
+					o_fields.options.add(opt);       
+					opt.text = texts[i];
+					opt.value = keys[i];							
+				}	
+				
+			o_fields.selectedIndex=newIndex;
+			selIndex=newIndex;
+			
+		}
+		</script>			
+  <?php
 	}
 }
 

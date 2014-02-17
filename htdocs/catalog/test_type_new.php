@@ -133,8 +133,24 @@ function add_new_submeasure(mrow_num)
 	$('#smrow_'+mrow_num+'_'+num_submeasures[mrow_num]).show();
 }
 
+function removeMeasure(measure_num)
+{
+	//alert("Submeasures:"+num_submeasures[measure_num]);
+	$('#mrow_'+measure_num).hide();
+	for(var i = 1; i <= num_submeasures[measure_num]; i++)
+	{
+		$('#smrow_'+measure_num+'_'+i).hide();		
+		
+	}
+}
 
- function addRowToTable()
+function removeSubMeasure(measure,submeasure)
+{
+	$('#smrow_'+measure+'_'+submeasure).hide();
+}
+
+ 
+function addRowToTable()
 {
   var tbl = document.getElementById('tblSample');
   var lastRow = tbl.rows.length;
@@ -248,7 +264,7 @@ function check_input()
 	}
 	var cat_code = $('#cat_code').attr("value");
 	var new_cat_name = $('#new_category_textbox').attr("value");
-	if(cat_code == -1 && new_cat_name == "")
+	if((cat_code == -1 && new_cat_name == "") || cat_code == -2)
 	{
 		alert("<?php echo LangUtil::$pageTerms['TIPS_MISSING_CATNAME']; ?>");
 		return;
@@ -288,6 +304,7 @@ function check_input()
 					// Check all age ranges specified
 					var range_l_elems = $("input[name='range_l_"+(j+1)+"[]']");
 					var range_u_elems = $("input[name='range_u_"+(j+1)+"[]']");
+					
 					for(var k = 0; k < range_l_elems.length; k++)
 					{
 						var range_l = range_l_elems[k].value;
@@ -354,10 +371,15 @@ function check_input()
 						{
 							alert("<?php echo LangUtil::$generalTerms['INVALID']." ".LangUtil::$generalTerms['AGE']; ?>: '"+upper_value+"'");
 							return;
-						}
+						}						
 						else if((upper_value.trim()-lower_value.trim())<=0)
 						{
 							alert("Age range cannot be negative.");
+							return;
+						}
+						else if((upper_value.trim()== lower_value.trim()))
+						{
+							alert("Age range: Min age should not ne same as max age.");
 							return;
 						}
 					}				
@@ -426,7 +448,23 @@ function check_input()
 		alert("<?php echo LangUtil::$pageTerms['TIPS_MISSING_SELECTEDSPECIMEN']; ?>");
 		return;
 	}
-	$('#new_test_form').submit();
+	
+	
+	var check_url = "ajax/test_type_name_check.php?test_name="+test_name;
+	$.ajax({ url: check_url, async : false, success: function(response){			
+			if(response == "1")		
+			{	
+				alert("Test name: "+test_name + " already exist");				
+			}
+			else
+			{
+					// All OK
+					$('#new_test_form').submit();
+			}
+	}
+	});
+	
+	
 }
 
 function toggle_agerange(measure_num, row_num)
@@ -483,7 +521,8 @@ function isInputNumber(evt) {
 		<td><?php echo LangUtil::$generalTerms['LAB_SECTION']; ?> <?php $page_elems->getAsterisk(); ?></td>
 		<td>
 			<SELECT name='cat_code' id='cat_code' onchange="javascript:check_if_new_category(this);" class='uniform_width'>
-				<?php $page_elems->getTestCategorySelect(); ?>
+			<option value="-2">--<?php echo LangUtil::$generalTerms['CMD_SELECT']; ?>--</option>			
+			<?php $page_elems->getTestCategorySelect(); ?>
 				<option value='-1'>--<?php echo LangUtil::$pageTerms['NEW_LAB_SECTION']; ?>--</option>
 			</select>
 			&nbsp;&nbsp;&nbsp;
@@ -508,7 +547,7 @@ function isInputNumber(evt) {
 		<td>
 		</td>
 			<td>
-			<div id="tblSample1" >
+			<div id="tblSample1" style="display:none" >
 			<table border="1" id="tblSample">
 			<tr>
 			</tr>
@@ -562,7 +601,7 @@ function isInputNumber(evt) {
 					<td><u><?php echo LangUtil::$generalTerms['UNIT'] ; ?> /Default Value</u>[<a href='#unit_help' rel='facebox'>?</a>]</td>
 				</tr>
 				<?php
-				$max_num_measures = 15;
+				$max_num_measures = 40;
                                 $max_num_submeasures = 15;
 				for($i = 1; $i <= $max_num_measures; $i += 1)
 				{
@@ -600,8 +639,7 @@ function isInputNumber(evt) {
 							<input type='text' class='range_field' name='range_u_<?php echo $i; ?>[]' value=''/>
 							<input type='text' class='range_field' name='gender_<?php echo $i; ?>[]' value='B'/>
 							<input type='text' class='range_field'  name='agerange_l_<?php echo $i; ?>[]' id='agerange_l_<?php echo $i; ?>[]' value='0' /> :
-							<input type='text' class='range_field' name='agerange_u_<?php echo $i; ?>[]' id='agerange_u_<?php echo $i; ?>[]' value='100' />
-							<br>
+							<input type='text' class='range_field' name='agerange_u_<?php echo $i; ?>[]' id='agerange_u_<?php echo $i; ?>[]' value='100' /><br />
 						</span>
 						&nbsp;&nbsp;&nbsp;&nbsp;<?php echo LangUtil::$generalTerms['RANGE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender &nbsp;&nbsp;Age_Range
 							<br>
@@ -632,12 +670,14 @@ function isInputNumber(evt) {
 					echo "</td>";
 					echo "<td id='unit_$i'>";
 					echo "<input type='text' name='unit[]' value='' />";
+					if($i!=1)
+						echo "<small><a href='javascript:removeMeasure($i);'> Remove</a></small>";
 					echo "</td>";
 					echo "</tr>";
                                         
                                         # submeasures
                                         
-                                        $max_num_submeasures = 5;
+                                       // $max_num_submeasures = 5;
                                         $us = '_';
                                     for($y = 1; $y <= $max_num_submeasures; $y += 1)
                                     {
@@ -703,11 +743,14 @@ function isInputNumber(evt) {
                                             ?>
                                             <input type='text' name='sunit[<?php echo $i; ?>][]' value='' />
                                             <?php
+											if($y!=1)
+												echo "<small><a href='javascript:removeSubMeasure($i,$y);'> Remove</a></small>";
                                             echo "</td>";
                                             echo "</tr>";
                                             ?>
                                             <div id='new_subentries' style='display:none;'>
-                                            </div>
+                                            
+											</div>
                                             
 
                                             
@@ -719,6 +762,7 @@ function isInputNumber(evt) {
 				}//end of measures
 				?>
                                         
+			
 			</table>
                         
 			<div id='new_entries'>

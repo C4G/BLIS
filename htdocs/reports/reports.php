@@ -1270,6 +1270,7 @@ function search_patient_history()
 {
 	var location = $("#location8").attr("value");
 	var search_attrib = $('#p_attrib').attr("value");
+	var condition_attrib = $('#h_attrib').attr("value");
 	var pid = $('#patient_id8').attr("value");
 	if(pid == "")
 	{
@@ -1282,7 +1283,7 @@ function search_patient_history()
 	var url = 'ajax/search_p_dyn.php';
 	//alert(search_attrib+" "+pid);
 	$("#phistory_list").load(url, 
-		{q: pid, a: search_attrib, l: location, lab_section : cat_code }, 
+		{q: pid, a: search_attrib, l: location, lab_section : cat_code, c: condition_attrib }, 
 		function()
 		{
 			$('#test_history_progress_spinner').hide();
@@ -1634,6 +1635,14 @@ function show_custom_report_form(report_id)
 {
 	var url_string = "report_custom.php?rid="+report_id;
 	window.location = url_string;
+}
+
+function hideCondition(p_attrib)
+{
+	if(parseInt(p_attrib)==1)
+		$('#h_attrib').show();
+	else
+		$('#h_attrib').hide();
 }
 </script>
 <br>
@@ -2824,9 +2833,12 @@ function show_custom_report_form(report_id)
 			?>
 				<tr>
 					<td>
-					<select name='p_attrib' id='p_attrib' style='font-family:Tahoma;'>
+					<select name='p_attrib' id='p_attrib' style='font-family:Tahoma;' onchange="javascript:hideCondition(this.value);">
 						<?php $page_elems->getPatientSearchAttribSelect(); ?>
-					</select>
+					</select><select name='h_attrib' id='h_attrib' style='font-family:Tahoma;'>
+		<?php $page_elems->getPatientSearchCondition(); ?>
+        
+	</select>
 					</td>
 					<td>
 						<input type='text' name='patient_id' id='patient_id8' class='uniform_width'></input>

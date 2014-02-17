@@ -50,7 +50,8 @@ function validateForm() {
         name = name.replace(" ", "%20");
         oname = oname.replace(" ", "%20");
         vall = $('select').val();
-        var url_string = "inventory/check_lot.php?lot="+name+"&lid="+"<?php echo $_SESSION['lab_config_id']; ?>"+"&id="+"<?php echo $r_id; ?>";
+		//disable duplicate lot check
+       /* var url_string = "inventory/check_lot.php?lot="+name+"&lid="+"<?php echo $_SESSION['lab_config_id']; ?>"+"&id="+"<?php echo $r_id; ?>";
 	$.ajax({ 
 		url: url_string, 
                 async : false,
@@ -65,7 +66,7 @@ function validateForm() {
                                 $('#lot_u_error').hide();
                         }
                }
-	});
+	});*/
         
         if($('#n_lot').attr("value") == "")
 	{

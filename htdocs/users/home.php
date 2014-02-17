@@ -59,11 +59,11 @@ $(document).ready(function(){
 		url : 'update/check_version.php',
 		success : function(data) {
 			if ( data=='0' ) 
-                        {
+             {
                             $('#update_div').show();
 			}
 			else 
-                        {
+             {
                              $('#update_div').hide();
 			}
 		}

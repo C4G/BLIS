@@ -111,7 +111,7 @@ function get_barcode(code)
 
 <a href='view_stock.php'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a> &nbsp;|&nbsp;<b> <?php echo LangUtil::$pageTerms['Current_Inventory']; ?></b>
 
-<?php echo "<br><br>Reagent Name: <b>".$reag['name']."</b>";?>
+<?php echo "<br><br>Item Name: <b>".$reag['name']."</b>";?>
  
 <table class='tablesorter' id='current_inventory'  style='width:700px'>
 	<thead>

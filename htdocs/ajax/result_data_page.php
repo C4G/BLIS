@@ -12,6 +12,8 @@ $attrib_value = $_REQUEST['a'];
 $attrib_type = $_REQUEST['t'];
 $dynamic = 1;
 
+$c = $_REQUEST['c'];
+
 $lab_section = 0; // All lab section by default
 if(isset($_REQUEST['l']))
 	$lab_section = $_REQUEST['l']; // change the value based on the query
@@ -56,8 +58,13 @@ if($dynamic == 0)
     else if($attrib_type == 1)
     {
             # Search by patient name
+			if(empty($c))
+				$attrib_value.='%';
+			else	
+				$attrib_value=str_replace('[pq]',$attrib_value,$c);
+				
             $query_string = 
-                    "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '%$attrib_value%'";
+                    "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '$attrib_value'";
             $record = query_associative_one($query_string);
             if($record['val'] == 0)
             {
@@ -73,7 +80,7 @@ if($dynamic == 0)
                     "WHERE s.specimen_id=t.specimen_id ".
                     "AND t.result = '' ".
                     "AND s.patient_id=p.patient_id ".
-                    "AND p.name LIKE '%$attrib_value%'";
+                    "AND p.name LIKE '$attrib_value'";
     }
     else if($attrib_type == 3)
     {
@@ -132,8 +139,13 @@ else
     else if($attrib_type == 1)
     {
             # Search by patient name
+			if(empty($c))
+				$attrib_value.='%';
+			else	
+				$attrib_value=str_replace('[pq]',$attrib_value,$c);
+				
             $query_string = 
-                    "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '%$attrib_value%'";
+                    "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '$attrib_value'";
             $record = query_associative_one($query_string);
             if($record['val'] == 0)
             {
@@ -151,14 +163,14 @@ else
                     "WHERE s.specimen_id=t.specimen_id ".
                     "AND t.result = '' ".
                     "AND s.patient_id=p.patient_id ".
-                    "AND p.name LIKE '%$attrib_value%' LIMIT $offset,$result_cap"; }
+                    "AND p.name LIKE '$attrib_value' LIMIT $offset,$result_cap"; }
             else {
 			$query_string =
 					"SELECT s.specimen_id FROM specimen s, test t, patient p ".
 					"WHERE s.specimen_id=t.specimen_id ".
 					"AND t.result = '' ".
 					"AND s.patient_id=p.patient_id ".
-					"AND p.name LIKE '%$attrib_value%' AND test_type_id IN
+					"AND p.name LIKE '$attrib_value' AND test_type_id IN
 					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) LIMIT $offset,$result_cap";
 			}
     }

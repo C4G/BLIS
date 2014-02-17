@@ -1,2 +1,0 @@
-Bobby Bopper
-Tracy Tanner

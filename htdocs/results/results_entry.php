@@ -183,6 +183,7 @@ function fetch_specimen()
 	#Used when Ajax response did not have JavaScript code included 
 	?>
 	var attrib = $('#resultfetch_attrib').attr("value");
+	var condition_attrib = $('#h_attrib').attr("value");
 	var first_char =specimen_id.charAt(0);
 	if(attrib==1 && isNaN(first_char)==false)
 	{
@@ -193,7 +194,7 @@ function fetch_specimen()
 
 	
 	$("#fetched_patient_entry").load(url, 
-		{a: specimen_id, t: attrib, labsec: labsection}, 
+		{a: specimen_id, t: attrib, labsec: labsection, c: condition_attrib }, 
 		function() 
 		{
 			$('#fetch_progress_bar').hide();
@@ -539,6 +540,14 @@ function update_remarks(test_type_id, count, patient_age, patient_sex)
 		 }
 	 });
 }
+
+function hideCondition(p_attrib)
+{
+	if(parseInt(p_attrib)==1)
+		$('#h_attrib').show();
+	else
+		$('#h_attrib').hide();
+}
 </script>
 <br>
 <table name="page_panes" cellpadding="10px">
@@ -629,7 +638,7 @@ function update_remarks(test_type_id, count, patient_age, patient_sex)
 				<b><?php echo LangUtil::$pageTerms['MENU_SINGLESPECIMEN']; ?></b>
 				<br>
 				<br>
-				<select name='resultfetch_attrib' id='resultfetch_attrib'>
+				<select name='resultfetch_attrib' id='resultfetch_attrib' onchange="javascript:hideCondition(this.value);">
 					<?php
 					$hide_patient_name = true;
 					//if($lab_config->hidePatientName == 1)
@@ -645,7 +654,10 @@ function update_remarks(test_type_id, count, patient_age, patient_sex)
 					<?php
 					}
 					?>
-				</select>
+				</select><select name='h_attrib' id='h_attrib' style='font-family:Tahoma;'>
+		<?php $page_elems->getPatientSearchCondition(); ?>
+        
+	</select>
 				&nbsp;&nbsp;
 				<input type="text" name="specimen_id" id="specimen_id" class='uniform_width' />
 				<br/> <br/>

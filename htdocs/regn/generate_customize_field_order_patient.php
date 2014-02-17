@@ -21,7 +21,7 @@ class CustomFieldOrderGeneration_Patient{
 			echo " style='display:none;' ";
 			echo " ><td>";
 				echo LangUtil::$generalTerms['PATIENT_ID']; 
-				if($_SESSION['pid'] == 2)
+				if($_SESSION['pid'] == 2 || $_SESSION['pid'] == 4)
 					CustomFieldOrderGeneration_Patient::$page_elems->getAsterisk();
 			
 			echo "</td>

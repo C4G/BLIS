@@ -171,10 +171,10 @@ background-color:#EAF2D3;
 <script type='text/javascript'>
     $(document).ready(function(){
         var lab_section = <?php echo $_REQUEST['lab_section']; ?>;
-        url_string = 'ajax/get_result_count.php?a='+'<?php echo $_REQUEST['a']; ?>'+'&q='+'<?php echo $_REQUEST['q']; ?>'+'&labsection='+lab_section;
+        url_string = 'ajax/get_result_count.php?a='+'<?php echo $_REQUEST['a']; ?>'+'&q='+'<?php echo $_REQUEST['q']; ?>'+'&labsection='+lab_section+'&c=<?php echo $_REQUEST['c']; ?>';
         var cap = parseInt($('#rcap').html());
         //console.log(cap);
-                                        $('.prev_link').hide();
+         $('.prev_link').hide();	
 		
         $.ajax({ 
 		url: url_string, 
@@ -318,6 +318,7 @@ $saved_db = "";
 $lab_config = null;
 $q = $_REQUEST['q'];
 $q = strip_tags($q);
+$c = $_REQUEST['c'];
 // lab section fetch
 $lab_section = $_REQUEST['lab_section'];
 if(isset($_REQUEST['l']))
@@ -351,12 +352,12 @@ else if($a == 1)
 	# Fetch by patient name
         if($dynamic_fetch == 0)
         {
-            $patient_list = search_patients_by_name($q, $lab_section);
+            $patient_list = search_patients_by_name($q, $lab_section,$c);
         }
         else
         {
         	//echo "Fetch By Name section is ".$lab_section;
-            $patient_list = search_patients_by_name_dyn($q, $result_cap, $result_counter, $lab_section);
+            $patient_list = search_patients_by_name_dyn($q, $result_cap, $result_counter, $lab_section,$c);
         }
 	//DB Merging - Currently Disabled 
 	# See if there's a patient by the exact same name in another lab

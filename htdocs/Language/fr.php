@@ -19,7 +19,7 @@ $LANG_ARRAY = array (
 		"CURRENCY" => "Currency",
 		"EXCHANGE_RATE" => "Exchange Rate",
 		"UPDATED_DATE" => "Updated Date",
-		"ACTIONS" => "Actions",
+		"ACTIONS" => "Actes",
 		"ADD_CURRENCY_RATE" => "Add new currency rate",
 		"CMD_LOGIN" => "Ouverture", 
 		"CMD_SEARCH" => "Chercher", 
@@ -204,7 +204,8 @@ $LANG_ARRAY = array (
 		"LANGUAGE" => "Language", 
 		"USER_FUNCTIONS" => "Fonctions", 
 		"APPROX" => "Approximatif", 
-		"LANDSCAPE" => "Mode paysage"
+		"LANDSCAPE" => "Mode paysage",
+         "TIPS_PATIENTID_EXISTS"=>"Patient ID existent déjà. Consulter pour le patient pour confirmer et enregistrer spécimen"
 	) , 
 	"header" => array ( 
 		"TITLE" => "", 
@@ -434,7 +435,14 @@ $LANG_ARRAY = array (
 		"BACKUP_CURRENT_VERSION" => "Sauvegarder la version courante avant de retourner.", 
 		"TIPS_REVERTDONE" => "La Sauvegarde a réussite. Prière de redemarer pour achener le procedé inverse.", 
 		"TIPS_SETUPNETWORK_3" => "Vous allez maintenant être en mesure d'accéder en cliquant sur ??BLIS BlisSetup.html et en entrant votre nom d'utilisateur et mot de passe.", 
-		"TIPS_SETUPNETWORK_4" => "Dans le cas d'un redémarrage de l'ordinateur ou cliquez sur une défaillance du réseau d'installation de réseau option à nouveau."
+		"TIPS_SETUPNETWORK_4" => "Dans le cas d'un redémarrage de l'ordinateur ou cliquez sur une défaillance du réseau d'installation de réseau option à nouveau.",
+		"RPT_ITEMS_ON_ROW"=>"Articles sur une ligne",
+		"RPT_SHOW_DEMO_BORDER"=>"Afficher Démographie frontière",
+		"RPT_SHOW_SPM_BORDER"=>"Afficher les résultats frontière",
+		"TIPS_PATIENTFIELDSORDER"=>"Cette page est utilisée pour définir la façon dont les champs patients sont triés sur le rapport. C'est, dont on vient d'abord ...",
+		"MENU_PATIENTFIELDSORDER"=>"Patient Champs de configuration de commande",
+		"RPT_R_BORDER_HOR"=>"horizontal",
+		"RPT_R_BORDER_VERT"=>"vertical"
 	) , 
 	"lab_admins" => array ( 
 		"TITLE" => "Biologistes", 
@@ -671,6 +679,11 @@ $LANG_ARRAY = array (
 		"TIPS_TURNAROUNDTIME" => "Délai d'exécution: Cette option génère le délai d'exécution pour la totalité ou d'essai choisie pour une période de temps donnée. Il génère également un graphique des statistiques. Vous pouvez choisir d'inclure les deux essais en cours ou terminées ou tout simplement les tests effectués.", 
 		"TIPS_INFECTIONREPORT" => "Infection Rapport: Cette option génère un rapport global d'infection pour une période donnée pour une ou toutes les sections de laboratoire. Il propose également une option pour créer un document Word du rapport généré.", 
 		"TIPS_INVENTORY" => "Inventaire: Cette option génère une liste de l'inventaire actuel."
+       )  ,
+	"search_condition" => array (
+	"SEARCH_BEGIN_WITH"=>"Commence par",
+	"SEARCH_END_WITH"=>"Fin d'",
+	"SEARCH_CONTAINS"=>"Contient"
 	) 
 );
 

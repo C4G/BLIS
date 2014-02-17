@@ -27,6 +27,8 @@ $(document).ready(function(){
 
 function update_stype()
 {
+	var old_specimen_name = "<?php echo $specimen_type->getName(); ?>";	
+	old_specimen_name = old_specimen_name.toLowerCase();
 	if($('#name').attr("value").trim() == "")
 	{
 		alert("<?php echo LangUtil::$pageTerms['TIPS_MISSING_SPECIMENNAME']; ?>");
@@ -44,16 +46,34 @@ function update_stype()
 	}
 	if(ttype_selected == false)
 	{
-		alert("<?php echo LangUtil::$pageTerms['TIPS_MISSING_SELECTEDTESTS']; ?>");
-		return;
+		<?php # Disabled to allow additions of new specimens that do not YET have compatible tests entered ?>
+		//alert("<?php echo LangUtil::$pageTerms['TIPS_MISSING_SELECTEDTESTS']; ?>");
+		//return;
 	}
-	$('#update_stype_progress').show();
-	$('#edit_stype_form').ajaxSubmit({
-		success: function(msg) {
-			$('#update_stype_progress').hide();
-			window.location="specimen_type_updated.php?sid=<?php echo $_REQUEST['sid']; ?>";
+	var name_valid=true;
+	var specimen_name = $('#name').attr("value").toLowerCase();	
+	if( specimen_name != old_specimen_name)
+	{
+		var check_url = "ajax/specimen_name_check.php?specimen_name="+specimen_name;
+		$.ajax({ url: check_url, async : false, success: function(response){			
+				if(response == "1")		
+				{	
+					alert("Spacemen :"+specimen_name + " already exist");
+					name_valid=false;								
+				}			
 		}
-	});
+		});
+	}	
+	if(name_valid)
+	{
+		$('#update_stype_progress').show();
+		$('#edit_stype_form').ajaxSubmit({
+			success: function(msg) {
+				$('#update_stype_progress').hide();
+				window.location="specimen_type_updated.php?sid=<?php echo $_REQUEST['sid']; ?>";
+			}
+		});
+	}
 }
 </script>
 <br>

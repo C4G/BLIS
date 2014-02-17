@@ -278,6 +278,14 @@
 			<value>No de Facture</value>
 		</term>
 		<term>
+			<key>PATIENT_BARCODE</key>
+			<value>Barcode patient</value>
+		</term>
+		<term>
+			<key>PATIENT_SIGNATURE</key>
+			<value>Signature du patient</value>
+		</term>
+		<term>
 			<key>ADDL_ID</key>
 			<value>ID Additionel</value>
 		</term>
@@ -550,6 +558,10 @@
 			<value>Vérifié par:</value>
 		</term>
 		<term>
+			<key>ACTION</key>
+			<value>Actes</value>
+		</term>
+		<term>
 			<key>RECORDS</key>
 			<value>Bilans</value>
 		</term>
@@ -596,6 +608,10 @@
 		<term>
 			<key>MSG_NOTFOUND</key>
 			<value>Non Retrouvé</value>
+		</term>
+			<term>
+			<key>RELATED_TESTS_NOTFOUND</key>
+			<value>Essais relatifs introuvable</value>
 		</term>
 		<term>
 			<key>MSG_SIMILARNOTFOUND</key>
@@ -732,6 +748,10 @@
 		<term>
 			<key>LANDSCAPE</key>
 			<value>Mode paysage</value>
+		</term>
+		<term>
+			<key>TIPS_PATIENTID_EXISTS</key>
+			<value>Patient ID existe déjà. S'il vous plaît vérifier et essayer à nouveau.</value>
 		</term>
 	</page>
 	<page id="header" descr="Page Header">
@@ -876,11 +896,11 @@
 		</term>
 		<term>
 			<key>CMD_DELPROFILE</key>
-			<value>Delete Profile</value>
+			<value>Supprimer le profil</value>
 		</term>
 		<term>
 			<key>CMD_UPDPROFILE</key>
-			<value>Update Profile</value>
+			<value>Mettre à jour le profil</value>
 		</term>
 	</page>
 	<page id="new_patient" descr="Patient Registration Page">
@@ -1007,20 +1027,20 @@
 			<value>Lab Section-wise Results</value>
 		</term>
 		<term>
-			<key>RELATED_RESULTS</key>
-			<value>Related Test Results Entry</value>
-		</term>
-		<term>
-			<key>RELATED_RESULTS_EMPTY</key>
-			<value>No related tests for this specimen</value>
-		</term>
-		<term>
 			<key>MENU_BATCHRESULTS</key>
 			<value>Résultats Groupés</value>
 		</term>
 		<term>
 			<key>MENU_VERIFYRESULTS</key>
 			<value>Vérifier les Résultats</value>
+		</term>
+		<term>
+			<key>RELATED_RESULTS</key>
+			<value>Test Résultats connexe Entrée</value>
+		</term>
+		<term>
+			<key>RELATED_RESULTS_EMPTY</key>
+			<value>Pas de tests liés à ce spécimen</value>
 		</term>
 		<term>
 			<key>CONTROL_TESTING_RESULTS</key>
@@ -2453,4 +2473,18 @@
 			<value>Inventaire: Cette option génère une liste de l'inventaire actuel.</value>
 		</term>
 	</page>
+	<page id="search_condition" descr="Search Conditions">
+		<term>
+			<key>SEARCH_BEGIN_WITH</key>
+			<value>Commence par</value>
+		</term>
+		<term>
+			<key>SEARCH_END_WITH</key>
+			<value>Fin d'</value>
+		</term>
+		<term>
+			<key>SEARCH_CONTAINS</key>
+			<value>Contient</value>
+		</term>
+ </page>
 </pages>

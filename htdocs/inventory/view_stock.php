@@ -77,7 +77,7 @@ Barcode Scan Search: <input type="text" id="barcode_search_field" name="barcode_
 
 </div>
 <br>
-<a href='inv_new_reagent.php'> <?php echo "Add Reagent" ; ?></a> &nbsp;|&nbsp;<a href='generate_barcode.php'> <?php echo "Generate Barcodes" ; ?></a> &nbsp;| &nbsp;<b> <?php echo LangUtil::$pageTerms['Current_Inventory']; ?></b>
+<a href='inv_new_reagent.php'> <?php echo "Add Item" ; ?></a> &nbsp;|&nbsp;<a href='generate_barcode.php'> <?php echo "Generate Barcodes" ; ?></a> &nbsp;| &nbsp;<b> <?php echo LangUtil::$pageTerms['Current_Inventory']; ?></b>
 <table class='tablesorter' id='current_inventory'  style='width:600px'>
 	<thead>
 		<tr align='center'>
@@ -152,19 +152,19 @@ Barcode Scan Search: <input type="text" id="barcode_search_field" name="barcode_
         <?php
 
                 echo "<li>";
-                echo " Displays Inventory of all Reagents";
+                echo " Displays Inventory of all Items";
                 echo "</li>";
                 echo "<li>";
-                echo " New Reagents can be added from the 'Add Reagents' link ";
+                echo " New Items can be added from the 'Add Items' link ";
                 echo "</li>";
                 echo "<li>";
-                echo " New stocks (lots) can be added for indiviual reagents using 'Add Stocks' link ";
+                echo " New stocks (lots) can be added for indiviual items using 'Add Stocks' link ";
                 echo "</li>";
                 echo "<li>";
                 echo " Signed out qunatities of stocks can be logged in using the 'Log Stock Usage' link";
                 echo "</li>";
                 echo "<li>";
-                echo " Administrators can edit Reagent and Stock details";
+                echo " Administrators can edit Item and Stock details";
                 echo "</li>";
 
 

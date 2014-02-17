@@ -56,6 +56,7 @@ function patient_search()
 	$('#patient_search_error').hide();
 	var patient_id = $('#patient_id').val();
 	var search_attrib = $('#p_attrib').attr("value");
+	var condition_attrib = $('#h_attrib').attr("value");
 	if(patient_id == "")
 	{
 		$('#patient_search_error').show();
@@ -65,13 +66,20 @@ function patient_search()
 	$('#patient_search_spinner').show();
 	var url = 'ajax/search_p_dyn.php';
 	$("#patient_search_results").load(url, 
-		{q: patient_id, a: search_attrib }, 
+		{q: patient_id, a: search_attrib, c: condition_attrib }, 
 		function()
 		{
 			$('#patient_search_spinner').hide();
 			$('#patient_search_results').show();
 		}
 	);
+}
+function hideCondition(p_attrib)
+{
+	if(parseInt(p_attrib)==1)
+		$('#h_attrib').show();
+	else
+		$('#h_attrib').hide();
 }
 </script>
 <p style="text-align: right;"><a rel='facebox' href='#Search'>Page Help</a></p>
@@ -82,9 +90,12 @@ function patient_search()
 	<tr class="card_num_row" id="card_num_row">
 	<td><?php echo LangUtil::$generalTerms['PATIENT']; ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td>
-		<select name='p_attrib' id='p_attrib'>
+		<select name='p_attrib' id='p_attrib' onchange="javascript:hideCondition(this.value);">
 			<?php $page_elems->getPatientSearchAttribSelect(); ?>
-		</select>
+		</select><select name='h_attrib' id='h_attrib' style='font-family:Tahoma;'>
+		<?php $page_elems->getPatientSearchCondition(); ?>
+        
+	</select>
 		&nbsp;&nbsp;
 	</td>
 	<td><input type="text" name="patient_id" id="patient_id" value="" size="30" />&nbsp;&nbsp;<span class='error_string' id='patient_search_error'><?php echo LangUtil::$generalTerms['MSG_REQDFIELD']; ?></span></td>

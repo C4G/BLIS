@@ -105,6 +105,7 @@ function continue_fetch_patients()
 	var patient_id = $('#pq').attr("value").trim();
 	patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
 	var search_attrib = $('#p_attrib').attr("value");
+	var condition_attrib = $('#h_attrib').attr("value");
 	$('#psearch_progress_spinner').show();
 	if(patient_id == "")
 	{
@@ -114,7 +115,7 @@ function continue_fetch_patients()
 	}
 	var url = 'ajax/search_p.php';
 	$("#patients_found").load(url, 
-		{q: patient_id, a: search_attrib}, 
+		{q: patient_id, a: search_attrib, c: condition_attrib}, 
 		function(response)
 		{
 			$('#psearch_progress_spinner').hide();
@@ -132,6 +133,14 @@ function continue_fetch_patients()
 		}
 	);
 }
+
+function hideCondition(p_attrib)
+{
+	if(parseInt(p_attrib)==1)
+		$('#h_attrib').show();
+	else
+		$('#h_attrib').hide();
+}
 </script>
 
 <p style="text-align: right;"><a rel='facebox' href='#Registration'>Page Help</a></p>
@@ -139,8 +148,11 @@ function continue_fetch_patients()
 <!--| <a href='new_patient.php' title='Click to add a new patient in the system'>Add New Patient &raquo;</a>-->
 <br><br>
 <form>
-	<select name='p_attrib' id='p_attrib' style='font-family:Tahoma;'>
+	<select name='p_attrib' id='p_attrib' style='font-family:Tahoma;' onchange="javascript:hideCondition(this.value);">
 		<?php $page_elems->getPatientSearchAttribSelect(); ?>
+	</select><select name='h_attrib' id='h_attrib' style='font-family:Tahoma;'>
+		<?php $page_elems->getPatientSearchCondition(); ?>
+        
 	</select>
 	&nbsp;&nbsp;
 	<input type='text' name='pq' id='pq' style='font-family:Tahoma;' onkeypress="return restrictCharacters(event)" />

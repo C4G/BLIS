@@ -1,5 +1,0 @@
-C4G Basic Laboratory Information System v2.5
-A joint initiative of C4G @ Georgia Tech, the CDC and participating countries
-
-
-Distribution Build v2.5 A Release

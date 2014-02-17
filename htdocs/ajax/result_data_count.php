@@ -3,6 +3,7 @@ include("../includes/db_lib.php");
 
 $attrib_value = $_REQUEST['q'];
 $attrib_type = $_REQUEST['a'];
+$c = $_REQUEST['c'];
 
 $lab_section = 0; // All lab section by default
 if(isset($_REQUEST['labsec']))
@@ -37,8 +38,13 @@ if($attrib_type == 5)
     else if($attrib_type == 1)
     {
             # Search by patient name
+			if(empty($c))
+				$attrib_value.='%';
+			else	
+				$attrib_value=str_replace('[pq]',$attrib_value,$c);
+				
             $query_string = 
-                    "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '%$attrib_value%'";
+                    "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '$attrib_value'";
             $record = query_associative_one($query_string);
             if($record['val'] == 0)
             {
@@ -54,7 +60,7 @@ if($attrib_type == 5)
                     "WHERE s.specimen_id=t.specimen_id ".
                     "AND t.result = '' ".
                     "AND s.patient_id=p.patient_id ".
-                    "AND p.name LIKE '%$attrib_value%' AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1)  ".$query_by_labsec;
+                    "AND p.name LIKE '$attrib_value' AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1)  ".$query_by_labsec;
     }
     else if($attrib_type == 3)
     {

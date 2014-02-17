@@ -108,6 +108,8 @@ else
                                     //$reference_ranges_list[$i][] = array($lower_range, $upper_range, $lower_age, $upper_age, $gender_option);
                             }
                             //	$range_string = trim($ranges_lower[$i]).":".trim($ranges_upper[$i]);
+							
+							//print_r($reference_ranges_list);exit;
                             $range_string = ":";
                     }
                     else if($measure_types[$i] == Measure::$RANGE_OPTIONS)

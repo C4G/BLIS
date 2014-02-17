@@ -25,7 +25,7 @@ foreach($test_list as $test_entry)
 	$measure_list = $test_type->getMeasures();
 	$result_value_valid = true;
 	$result_csv = "";
-	$comments_csv = "";
+	$comment_csv = "";
         $submeasure_list = array();
                 $comb_measure_list = array();
                // print_r($measure_list);
@@ -87,18 +87,22 @@ foreach($test_list as $test_entry)
                     {
                         $result_csv = $result_csv."[$]".$result_value."[/$]_";
                     }
-                    else if($range_typee == Measure::$RANGE_AUTOCOMPLETE)
-                    {
-                        $result_csv = $result_csv.$result_value;
-                    }
+                   // else if($range_typee == Measure::$RANGE_AUTOCOMPLETE)
+                   // {
+                  //      $result_csv = $result_csv.$result_value;
+                    //}
                     else
                     {
-                        $result_csv = $result_csv.$result_value."_";
+						if ( strstr($result_value, ",") ) 
+							$result_csv .= str_replace(",","_",$result_value);
+						else
+							$result_csv .= $result_value."_";					
+                        //$result_csv = $result_csv.$result_value."_";
                     }
                          
 		}	
 		# replace last underscore with "," to separate multiple measures results
-		//echo "Result CSV ".$result_csv;
+		
 		$result_csv = substr($result_csv, 0, strlen($result_csv) - 1);
 		$result_csv .= ",";
 		//echo "<br/> === ".$result_csv. " ===>".$result_value_valid."<br/>";
@@ -129,6 +133,10 @@ foreach($test_list as $test_entry)
                 //NC3065
 		//$result_csv = preg_replace("/[^a-zA-Z0-9,+.;:_\s]/", "", $result_csv);
                 //-NC3065
+				
+		//echo $comment_csv; exit;
+		
+		//echo "<br/>Result CSV ".$result_csv;exit;
 		if($test_entry->result == "")
 		{
 			# Test result not yet entered

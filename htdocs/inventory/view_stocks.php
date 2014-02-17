@@ -39,7 +39,7 @@ $script_elems->enableTableSorter();
 
 </script>
 <!--<p style="text-align: right;"><a rel='facebox' href='#view_stocks_help'>Page Help</a></p>-->
-<a href='inv_new_reagent.php'> <?php echo "Add Reagent" ; ?></a> &nbsp;|&nbsp;<b> <?php echo LangUtil::$pageTerms['Current_Inventory']; ?></b>
+<a href='inv_new_reagent.php'> <?php echo "Add Item" ; ?></a> &nbsp;|&nbsp;<b> <?php echo LangUtil::$pageTerms['Current_Inventory']; ?></b>
 <table class='tablesorter' id='current_inventory'  style='width:600px'>
 	<thead>
 		<tr align='center'>

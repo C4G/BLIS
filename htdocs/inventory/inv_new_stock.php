@@ -118,7 +118,7 @@ function display_unit()
 <br><br>
 
 <?php
-$tips_string = "Add new stocks (lots) for existing reagents by completing this form. Lot number, Expiry Date, Quantity and Date of Reception are compulsory fields.";
+$tips_string = "Add new stocks (lots) for existing items by completing this form. Lot number, Expiry Date, Quantity and Date of Reception are compulsory fields.";
 $page_elems->getSideTip("Tips", $tips_string);
 ?>
 

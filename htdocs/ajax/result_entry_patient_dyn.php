@@ -10,6 +10,7 @@ LangUtil::setPageId("results_entry");
 
 $attrib_value = $_REQUEST['a'];
 $attrib_type = $_REQUEST['t'];
+$c = $_REQUEST['c'];
 
 $lab_section = 0; // All lab section by default
 if(isset($_REQUEST['labsec']))
@@ -82,7 +83,7 @@ background-color:#EAF2D3;
 </style>
 <script type='text/javascript'>
     $(document).ready(function(){
-        url_string = 'ajax/result_data_count.php?a='+'<?php echo $_REQUEST['t']; ?>'+'&q='+'<?php echo $_REQUEST['a']; ?>'+'&labsec='+'<?php echo $lab_section; ?>';
+        url_string = 'ajax/result_data_count.php?a='+'<?php echo $_REQUEST['t']; ?>'+'&q='+'<?php echo $_REQUEST['a']; ?>'+'&labsec='+'<?php echo $lab_section; ?>&c=<?php echo $_REQUEST['c'] ?>';
         var cap = parseInt($('#rcap').html());
         //console.log(cap);
         //alert(<?php echo $_REQUEST['t']; ?>+"-"+<?php echo $_REQUEST['a']; ?>);
@@ -224,8 +225,13 @@ if($dynamic == 0)
     else if($attrib_type == 1)
     {
             # Search by patient name
+			if(empty($c))
+				$attrib_value.='%';
+			else	
+				$attrib_value=str_replace('[pq]',$attrib_value,$c);
+		
             $query_string = 
-                    "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '%$attrib_value%'";
+                    "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '$attrib_value'";
             $record = query_associative_one($query_string);
             if($record['val'] == 0)
             {
@@ -241,7 +247,7 @@ if($dynamic == 0)
                     "WHERE s.specimen_id=t.specimen_id ".
                     "AND t.result = '' ".
                     "AND s.patient_id=p.patient_id ".
-                    "AND p.name LIKE '%$attrib_value%' AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen')";
+                    "AND p.name LIKE '$attrib_value' AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen')";
     }
     else if($attrib_type == 3)
     {
@@ -300,8 +306,13 @@ else
     else if($attrib_type == 1)
     {
             # Search by patient name
+			if(empty($c))
+				$attrib_value.='%';
+			else	
+				$attrib_value=str_replace('[pq]',$attrib_value,$c);
+				
             $query_string = 
-                    "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '%$attrib_value%'";
+                    "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '$attrib_value'";
             $record = query_associative_one($query_string);
             if($record['val'] == 0)
             {
@@ -319,14 +330,14 @@ else
                     "WHERE s.specimen_id=t.specimen_id ".
                     "AND t.result = '' ".
                     "AND s.patient_id=p.patient_id ".
-                    "AND p.name LIKE '%$attrib_value%' AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) LIMIT 0,$rcap"; }
+                    "AND p.name LIKE '$attrib_value' AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) LIMIT 0,$rcap"; }
             else {
 			$query_string =
 					"SELECT s.specimen_id FROM specimen s, test t, patient p ".
 					"WHERE s.specimen_id=t.specimen_id ".
 					"AND t.result = '' ".
 					"AND s.patient_id=p.patient_id AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) ".
-					"AND p.name LIKE '%$attrib_value%' AND test_type_id IN
+					"AND p.name LIKE '$attrib_value' AND test_type_id IN
 					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) LIMIT 0,$rcap";
 			}
     }
@@ -628,19 +639,19 @@ if($attrib_type == 3 && $count > 2)
 <?php 
         if(isset($_REQUEST['labsec']))
         { 
-            $next_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['labsec']."&result_cap=".$result_cap."&result_counter=".($result_counter+1); 
+            $next_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['labsec']."&result_cap=".$result_cap."&result_counter=".($result_counter + 1)."&c=".$_REQUEST['c']; 
         }
         else
         {
-            $next_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&result_cap=".$result_cap."&result_counter=".($result_counter+1);             
+            $next_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&result_cap=".$result_cap."&result_counter=".($result_counter + 1)."&c=".$_REQUEST['c'];             
         }
         if(isset($_REQUEST['labsec']))
         { 
-            $prev_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['labsec']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1); 
+            $prev_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['labsec']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1)."&c=".$_REQUEST['c']; 
         }
         else
         {
-            $prev_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1);             
+            $prev_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1)."&c=".$_REQUEST['c'];             
         }
     ?>        
 <div class="prev_link">                       

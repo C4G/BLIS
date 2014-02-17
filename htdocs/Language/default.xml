@@ -278,6 +278,14 @@
 			<value>Patient ID</value>
 		</term>
 		<term>
+			<key>PATIENT_BARCODE</key>
+			<value>Patient Barcode</value>
+		</term>
+		<term>
+			<key>PATIENT_SIGNATURE</key>
+			<value>Patient Signature</value>
+		</term>
+		<term>
 			<key>ADDL_ID</key>
 			<value>Additional ID</value>
 		</term>
@@ -388,7 +396,7 @@
 		<term>
 			<key>TEST_TYPES</key>
 			<value>Test Types</value>
-		</term>
+		</term>		
 		<term>
 			<key>CONTROL_TESTING_RESULTS</key>
 			<value>Control Results</value>
@@ -550,6 +558,10 @@
 			<value>Verified By</value>
 		</term>
 		<term>
+			<key>ACTION</key>
+			<value>Action</value>
+		</term>
+		<term>
 			<key>RECORDS</key>
 			<value>Records</value>
 		</term>
@@ -596,6 +608,10 @@
 		<term>
 			<key>MSG_NOTFOUND</key>
 			<value>Not Found</value>
+		</term>
+		<term>
+			<key>RELATED_TESTS_NOTFOUND</key>
+			<value>Related Tests Not Found</value>
 		</term>
 		<term>
 			<key>MSG_SIMILARNOTFOUND</key>
@@ -733,11 +749,15 @@
 			<key>LANDSCAPE</key>
 			<value>Landscape mode</value>
 		</term>
+		<term>
+			<key>TIPS_PATIENTID_EXISTS</key>
+			<value>Patient ID already exists. Please check and try again.</value>
+		</term>
 	</page>
 	<page id="header" descr="Page Header">
 		<term>
 			<key>TITLE</key>
-			<value></value>
+			<value/>
 		</term>
 		<term>
 			<key>LOGGEDINAS</key>
@@ -789,7 +809,7 @@
 	<page id="login" descr="Login Page">
 		<term>
 			<key>TITLE</key>
-			<value></value>
+			<value/>
 		</term>
 		<term>
 			<key>MSG_PLSLOGIN</key>
@@ -918,7 +938,7 @@
 		</term>
 		<term>
 			<key>TIPS_DOB_AGE</key>
-			<value>* Enter either &lt;i&gt;Age&lt;/i&gt; or &lt;i&gt;Date of Birth&lt;/i&gt;</value>
+			<value>Only one of &lt;i&gt;Age&lt;/i&gt; or &lt;i&gt;Date of Birth&lt;/i&gt; is required for entry.</value>
 		</term>
 	</page>
 	<page id="new_specimen" descr="Specimen Registration Page">
@@ -1007,20 +1027,20 @@
 			<value>Lab Section-wise Results</value>
 		</term>
 		<term>
-			<key>RELATED_RESULTS</key>
-			<value>Related Test Results Entry</value>
-		</term>
-		<term>
-			<key>RELATED_RESULTS_EMPTY</key>
-			<value>No related tests for this specimen</value>
-		</term>
-		<term>
 			<key>MENU_BATCHRESULTS</key>
 			<value>Batch Results</value>
 		</term>
 		<term>
 			<key>MENU_VERIFYRESULTS</key>
 			<value>Verify Results</value>
+		</term>
+		<term>
+			<key>RELATED_RESULTS</key>
+			<value>Related Test Results Entry</value>
+		</term>
+		<term>
+			<key>RELATED_RESULTS_EMPTY</key>
+			<value>No related tests for this specimen</value>
 		</term>
 		<term>
 			<key>CONTROL_TESTING_RESULTS</key>
@@ -1547,7 +1567,7 @@
 		<term>
 			<key>TIPS_REVERTDONE</key>
 			<value>Backup reverted successfully. Please shutdown the system and restart to complete the reverting process.</value>
-		</term>
+		</term>		
 		<term>
 			<key>TIPS_SETUPNETWORK_3</key>
 			<value>You will now be able to access BLIS by clicking on BlisSetup.html and entering your username and password.</value>
@@ -1555,7 +1575,7 @@
 		<term>
 			<key>TIPS_SETUPNETWORK_4</key>
 			<value>In case of a computer restart or network failure click on Setup Network option again.</value>
-		</term>		
+		</term>
 	</page>
 	<page id="lab_admins" descr="Lab Managers Page">
 		<term>
@@ -1675,7 +1695,7 @@
 		<term>
 			<key>TIPS_MEASURES</key>
 			<value>Only numbers and alphabets should be used while adding measures.For the range option please specify the lower and the upper bound.</value>
-		</term>
+		</term>	
 		<term>
 			<key>TIPS_TC_TESTTYPE_1</key>
 			<value>Gives a complete listing of the available test types.</value>
@@ -2008,9 +2028,9 @@
 		</term>
 	</page>
 	<page id="stocks" descr="Stock Related Terms">
-	<term>
+		<term>
 			<key>Reagent</key>
-			<value>Reagent</value>
+			<value>Item</value>
 		</term>
 		<term>
 			<key>Lot_Number</key>
@@ -2058,7 +2078,7 @@
 		</term>
 		<term>
 			<key>Current_Inventory</key>
-			<value>Current_Inventory</value>
+			<value>Current Inventory</value>
 		</term>
 		<term>
 			<key>Quantity_Signed_Out</key>
@@ -2174,7 +2194,7 @@
 		</term>
 		<term>
 			<key>TIPS_INFECTIONREPORT</key>
-			<value>This is an editable page for setting the various parameters associaated with each individual test type.</value>
+			<value>Infection Report: This option generates an aggregate infection report for a particular period for one or all Lab sections. It also provides an option to create a Word document of the generated report.</value>
 		</term>
 		<term>
 			<key>MENU_R_DRS</key>
@@ -2374,7 +2394,7 @@
 		</term>
 		<term>
 			<key>TIPS_R_WORKSHEET_1</key>
-			<value>This option generates a worksheet based on the Lab Section and Test Type. You can also use a custom worksheet which can be created by Admins using Lab Configuration > Tests > Reports > Worksheet.</value>
+			<value>This option generates a worksheet based on the Lab Section and Test Type. You can also use a custom worksheet which can be created by Admins using Lab Configuration &gt; Tests &gt; Reports &gt; Worksheet.</value>
 		</term>
 		<term>
 			<key>TIPS_R_WORKSHEET_2</key>
@@ -2402,11 +2422,11 @@
 		</term>
 		<term>
 			<key>TIPS_INVENTORY_1</key>
-			<value>This page displays the current reagent quantities in stock.</value>
+			<value>This page displays the current item quantities in stock.</value>
 		</term>
 		<term>
 			<key>TIPS_INVENTORY_2</key>
-			<value>You can update stock as you acquire new reagents by adding the reagent name,quantity received, receiver name and remarks.</value>
+			<value>You can update stock as you acquire new items by adding the item name,quantity received, receiver name and remarks.</value>
 		</term>
 		<term>
 			<key>TIPS_INVENTORY_3</key>
@@ -2453,4 +2473,18 @@
 			<value>Inventory: This option generates a listing of the current inventory.</value>
 		</term>
 	</page>
+	<page id="search_condition" descr="Search Conditions">
+		<term>
+			<key>SEARCH_BEGIN_WITH</key>
+			<value>Starts with</value>
+		</term>
+		<term>
+			<key>SEARCH_END_WITH</key>
+			<value>End with</value>
+		</term>
+		<term>
+			<key>SEARCH_CONTAINS</key>
+			<value>Contains</value>
+		</term>
+ </page>
 </pages>

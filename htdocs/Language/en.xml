@@ -278,6 +278,14 @@
 			<value>Patient ID</value>
 		</term>
 		<term>
+			<key>PATIENT_BARCODE</key>
+			<value>Patient Barcode</value>
+		</term>
+		<term>
+			<key>PATIENT_SIGNATURE</key>
+			<value>Patient Signature</value>
+		</term>
+		<term>
 			<key>ADDL_ID</key>
 			<value>Additional ID</value>
 		</term>
@@ -550,6 +558,10 @@
 			<value>Verified By</value>
 		</term>
 		<term>
+			<key>ACTION</key>
+			<value>Action</value>
+		</term>
+		<term>
 			<key>RECORDS</key>
 			<value>Records</value>
 		</term>
@@ -596,6 +608,10 @@
 		<term>
 			<key>MSG_NOTFOUND</key>
 			<value>Not Found</value>
+		</term>
+		<term>
+			<key>RELATED_TESTS_NOTFOUND</key>
+			<value>Related Tests Not Found</value>
 		</term>
 		<term>
 			<key>MSG_SIMILARNOTFOUND</key>
@@ -732,6 +748,10 @@
 		<term>
 			<key>LANDSCAPE</key>
 			<value>Landscape mode</value>
+		</term>
+		<term>
+			<key>TIPS_PATIENTID_EXISTS</key>
+			<value>Patient ID already exists. Please check and try again.</value>
 		</term>
 	</page>
 	<page id="header" descr="Page Header">
@@ -1007,20 +1027,20 @@
 			<value>Lab Section-wise Results</value>
 		</term>
 		<term>
-			<key>RELATED_RESULTS</key>
-			<value>Related Test Results Entry</value>
-		</term>
-		<term>
-			<key>RELATED_RESULTS_EMPTY</key>
-			<value>No related tests for this specimen</value>
-		</term>
-		<term>
 			<key>MENU_BATCHRESULTS</key>
 			<value>Batch Results</value>
 		</term>
 		<term>
 			<key>MENU_VERIFYRESULTS</key>
 			<value>Verify Results</value>
+		</term>
+		<term>
+			<key>RELATED_RESULTS</key>
+			<value>Related Test Results Entry</value>
+		</term>
+		<term>
+			<key>RELATED_RESULTS_EMPTY</key>
+			<value>No related tests for this specimen</value>
 		</term>
 		<term>
 			<key>CONTROL_TESTING_RESULTS</key>
@@ -2010,7 +2030,7 @@
 	<page id="stocks" descr="Stock Related Terms">
 		<term>
 			<key>Reagent</key>
-			<value>Reagent</value>
+			<value>Item</value>
 		</term>
 		<term>
 			<key>Lot_Number</key>
@@ -2033,16 +2053,16 @@
 			<value>Quantity Supplied</value>
 		</term>
 		<term>
+			<key>Units</key>
+			<value>Units</value>
+		</term>
+		<term>
 			<key>Cost_per_Unit</key>
-			<value>Cost per Unit</value>
+			<value>Cost per unit</value>
 		</term>
 		<term>
 			<key>Date_received</key>
 			<value>Date received</value>
-		</term>
-		<term>
-			<key>Units</key>
-			<value>Units</value>
 		</term>
 		<term>
 			<key>Quantity</key>
@@ -2402,11 +2422,11 @@
 		</term>
 		<term>
 			<key>TIPS_INVENTORY_1</key>
-			<value>This page displays the current reagent quantities in stock.</value>
+			<value>This page displays the current item quantities in stock.</value>
 		</term>
 		<term>
 			<key>TIPS_INVENTORY_2</key>
-			<value>You can update stock as you acquire new reagents by adding the reagent name,quantity received, receiver name and remarks.</value>
+			<value>You can update stock as you acquire new items by adding the item name,quantity received, receiver name and remarks.</value>
 		</term>
 		<term>
 			<key>TIPS_INVENTORY_3</key>
@@ -2453,4 +2473,18 @@
 			<value>Inventory: This option generates a listing of the current inventory.</value>
 		</term>
 	</page>
+	<page id="search_condition" descr="Search Conditions">
+		<term>
+			<key>SEARCH_BEGIN_WITH</key>
+			<value>Starts with</value>
+		</term>
+		<term>
+			<key>SEARCH_END_WITH</key>
+			<value>End with</value>
+		</term>
+		<term>
+			<key>SEARCH_CONTAINS</key>
+			<value>Contains</value>
+		</term>
+ </page>
 </pages>

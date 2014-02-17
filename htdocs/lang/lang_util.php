@@ -127,6 +127,16 @@ class LangUtil
 			$retval = $REMARKS_ARRAY[$measure_id];
 		return $retval;
 	}
+	public static function getSearchCondition($condition)
+	{
+		global $LANG_ARRAY;
+		$retval = $LANG_ARRAY["search_condition"][$condition];		
+		if($retval == null)
+		{
+			$retval = "[ERROR]";
+		}
+		return $retval;
+	}
 }
 
 LangUtil::init();

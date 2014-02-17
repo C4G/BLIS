@@ -1164,6 +1164,16 @@ class ReportConfig
 	
 	public $landscape;
 	public $logoUrl;
+	
+	//Appearance
+	public $rowItems;
+	public $showBorder;
+	public $patientFields;
+	public $showResultBorder;
+	public $resultborderVertical;
+	public $resultborderHorizontal;
+	
+		
 		
 	public static function getObject($record, $lab_config_id)
 	{
@@ -1177,6 +1187,15 @@ class ReportConfig
 		$report_config->labConfigId = $lab_config_id;
 		$report_config->reportId = $record['report_id'];
 		$report_config->testTypeId = $record['test_type_id'];
+		
+		$report_config->rowItems = (int)$record['row_items'];
+		$report_config->showBorder = $record['show_border'];
+		$report_config->patientFields = $record['p_fields'];
+		$report_config->showResultBorder = $record['show_result_border'];		
+		$report_config->resultborderHorizontal = $record['result_border_horizontal'];
+		$report_config->resultborderVertical = $record['result_border_vertical'];		
+		
+		
 		
 		switch($report_config->reportId)
 		{
@@ -1428,10 +1447,10 @@ class ReportConfig
 			$query_string = 
 				"INSERT INTO report_config (".
 					"report_id, test_type_id, header, footer, title, landscape, margins, ".
-					"p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ".
-				") VALUES (".
+					"p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields , row_items,show_border,show_result_border ".
+				",result_border_horizontal,result_border_vertical) VALUES (".
 					"$reportId, $report_config->testTypeId, '$report_config->headerText', '$footer_designation', '$report_config->titleText', $landscape_flag, '$margin_csv', ".
-					"'$pfield_csv', '$sfield_csv', '$tfield_csv', '$pcustom_csv', '$scustom_csv' ".
+					"'$pfield_csv', '$sfield_csv', '$tfield_csv', '$pcustom_csv', '$scustom_csv','$report_config->rowItems','$report_config->showBorder','$report_config->showResultBorder','$report_config->resultborderHorizontal','$report_config->resultborderVertical'".
 				")";
 			query_insert_one($query_string);
 		}
@@ -1449,10 +1468,16 @@ class ReportConfig
 				"s_fields='$sfield_csv', ".
 				"t_fields='$tfield_csv', ".
 				"p_custom_fields='$pcustom_csv', ".
-				"s_custom_fields='$scustom_csv' ".
+				"s_custom_fields='$scustom_csv', ".
+				"row_items='$report_config->rowItems', ".
+				"show_border='$report_config->showBorder', ".
+				"show_result_border='$report_config->showResultBorder', ".
+				"result_border_horizontal='$report_config->resultborderHorizontal', ".
+				"result_border_vertical='$report_config->resultborderVertical' ".
 				"WHERE report_id=$report_config->reportId";
 			query_update($query_string);
 		}
+		
 		DbUtil::switchRestore($saved_db);
 	}
 }
@@ -2665,6 +2690,37 @@ class Patient
 			"UPDATE patient SET hash_value='$hash_value' ".
 			"WHERE patient_id=$this->patientId";
 		query_update($query_string);
+	}
+	
+	#updates patients ordered fields on reports
+	public static function updateReportOrder($p_fields, $o_fields)
+	{
+		$query_string ="select count(id) as val from patient_report_fields_order";
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+
+		$resultset = query_associative_one($query_string);
+		if($resultset == null || $resultset['val'] == 0)
+		{
+			$query_string="insert into patient_report_fields_order(p_fields,o_fields)
+			values('$p_fields','$o_fields') ";
+		}
+		else
+		{
+			$query_string="update patient_report_fields_order set p_fields='$p_fields',o_fields='$o_fields'";
+			
+		}
+		
+		query_update($query_string);
+		
+		DbUtil::switchRestore($saved_db);
+	}
+	
+	public static function getReportfieldsOrder()
+	{
+		$query_string ="select * from patient_report_fields_order limit 1";
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+		$record = query_associative_one($query_string);
+		return $record;
 	}
 }
 
@@ -6451,6 +6507,47 @@ function check_patient_id($pid)
 		return true;
 }
 
+function check_spacemen_byname($specimen_name)
+{
+	# Checks if Specimen already exists in DB, and returns true/false accordingly
+	global $con;
+	$specimen_name = mysql_real_escape_string($specimen_name, $con);
+	$query_string = "SELECT specimen_type_id FROM specimen_type WHERE name='$specimen_name' LIMIT 1";	
+	$retval = query_associative_one($query_string);
+	if($retval == null)
+		return false;
+	else
+		return true;
+	
+}
+
+function check_testType_byname($test_type)
+{
+	# Checks if Specimen already exists in DB, and returns true/false accordingly
+	global $con;
+	$test_type = mysql_real_escape_string($test_type, $con);
+	$query_string = "SELECT test_type_id FROM test_type WHERE name='$test_type' LIMIT 1";	
+	$retval = query_associative_one($query_string);
+	if($retval == null)
+		return false;
+	else
+		return true;
+	
+}
+function check_patient_surr_id($surr_id)
+{
+	# Checks if patient ID already exists in DB, and returns true/false accordingly
+	# Called from ajax/patient_check_surr_id.php
+	global $con;
+	$surr_id = mysql_real_escape_string($surr_id, $con);
+	$query_string = "SELECT surr_id FROM patient WHERE surr_id='$surr_id' LIMIT 1";	
+	$retval = query_associative_one($query_string);
+	if($retval == null)
+		return false;
+	else
+		return true;
+}
+
 function get_patient_by_sp_id($sid)
 {
 	global $con;
@@ -6472,6 +6569,7 @@ return $patient_list;
 
 
 }
+
 
 function get_patient_by_id($pid)
 {
@@ -6607,22 +6705,26 @@ function search_patients_by_id_count($q, $labsection = 0)
 	return $resultset['val'];
 }
 
-function search_patients_by_name($q, $labsection = 0)
+function search_patients_by_name($q, $labsection = 0,$c="")
 {
 	# Searches for patients with similar name
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
-	
+	if(empty($c))
+		$q.='%';
+    else	
+		$q=str_replace('[pq]',$q,$c);
+
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 	
 	if($labsection == 0){
 		$query_string = 
 		"SELECT * FROM patient ".
-		"WHERE name LIKE '$q%' ORDER BY name ASC";
+		"WHERE name LIKE '$q' ORDER BY name ASC";
 	} else {
 		$query_string =
 		"select distinct p.* from patient p, specimen s where ".
-		"p.name LIKE '$q%' and p.patient_id = s.patient_id and s.specimen_id in ".
+		"p.name LIKE '$q' and p.patient_id = s.patient_id and s.specimen_id in ".
 		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC";
 	
@@ -6631,17 +6733,16 @@ function search_patients_by_name($q, $labsection = 0)
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
-			"WHERE name LIKE '$q%'  AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC";
+			"WHERE name LIKE '$q'  AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC";
 		} else {
 			$query_string =
 			"select distinct p.* from patient p, specimen s where ".
-			"p.name LIKE '$q%'  AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+			"p.name LIKE '$q'  AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC";
 		
 		}
-	}
-	
+	}			
 	$resultset = query_associative_all($query_string, $row_count);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -6652,15 +6753,20 @@ function search_patients_by_name($q, $labsection = 0)
 			
 		}
 	}
+	
 	return $patient_list;
 }
 
-function search_patients_by_name_dyn($q, $cap, $counter, $labsection = 0)
+function search_patients_by_name_dyn($q, $cap, $counter, $labsection = 0,$c="")
 {
 	# Searches for patients with similar name
 	global $con;
         $offset = $cap * ($counter - 1);
 	$q = mysql_real_escape_string($q, $con);
+	if(empty($c))
+		$q.='%';
+    else	
+		$q=str_replace('[pq]',$q,$c);
 	//echo "[]".$labsection;
 	$user = get_user_by_id($_SESSION['user_id']);
 	
@@ -6668,11 +6774,11 @@ function search_patients_by_name_dyn($q, $cap, $counter, $labsection = 0)
 	if($labsection == 0){
 		$query_string = 
 		"SELECT * FROM patient  ".
-		"WHERE name LIKE '$q%' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC LIMIT $offset,$cap";
+		"WHERE name LIKE '$q' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC LIMIT $offset,$cap";
 	} else {
 		$query_string =
 		"select distinct p.* from patient p, specimen s where ".
-		"p.name LIKE '$q%' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+		"p.name LIKE '$q' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
 		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
 	//;
@@ -6681,17 +6787,17 @@ function search_patients_by_name_dyn($q, $cap, $counter, $labsection = 0)
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
-			"WHERE name LIKE '$q%' ORDER BY name ASC LIMIT $offset,$cap";
+			"WHERE name LIKE '$q' ORDER BY name ASC LIMIT $offset,$cap";
 		} else {
 			$query_string =
 			"select distinct p.* from patient p, specimen s where ".
-			"p.name LIKE '$q%' and p.patient_id = s.patient_id and s.specimen_id in ".
+			"p.name LIKE '$q' and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
 			//;
 		}
 	}
-	//;
+	//;	
 	$resultset = query_associative_all($query_string, $row_count);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -6705,20 +6811,25 @@ function search_patients_by_name_dyn($q, $cap, $counter, $labsection = 0)
 	return $patient_list;
 }
 
-function search_patients_by_name_count($q, $labsection = 0)
+function search_patients_by_name_count($q, $labsection = 0,$c="")
 {
 	# Searches for patients with similar name
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
+	if(empty($c))
+		$q.='%';
+    else	
+		$q=str_replace('[pq]',$q,$c);
+		
 	if(! is_admin_check(get_user_by_id($_SESSION['user_id']))){
 		if($labsection == 0){
 			$query_string =
 			"SELECT count(*) as val FROM patient  ".
-			"WHERE name LIKE '$q%' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1)";
+			"WHERE name LIKE '$q' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1)";
 		} else {
 			$query_string =
 			"select count(distinct p.patient_id) as val from patient p, specimen s where ".
-			"p.name LIKE '$q%' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+			"p.name LIKE '$q' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
 			//;
@@ -6727,11 +6838,11 @@ function search_patients_by_name_count($q, $labsection = 0)
 		if($labsection == 0){
 			$query_string =
 			"SELECT count(*) as val FROM patient ".
-			"WHERE name LIKE '$q%'";
+			"WHERE name LIKE '$q'";
 		} else {
 			$query_string =
 			"select count(distinct p.patient_id) as val from patient p, specimen s where ".
-			"p.name LIKE '$q%' and p.patient_id = s.patient_id and s.specimen_id in ".
+			"p.name LIKE '$q' and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
 			//;
@@ -13711,8 +13822,8 @@ function update_language_files(){
 	
 		}
 	}
+	
 }
-
 function insertVersionDataEntry()
 {
    

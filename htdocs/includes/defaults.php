@@ -6,7 +6,7 @@
 #
 
 # System version number displayed on page title and footer
-$VERSION = "2.7";
+$VERSION = "2.7.1";
 
 # Debug mode
 $DEBUG = false;
@@ -93,4 +93,22 @@ $PATIENT_HASH_LENGTH = 40;
 
 # Disable updating of patient profile by users
 $DISABLE_UPDATE_PATIENT_PROFILE = false;
+
+#Default system patient fields. These fields are predefined in the system
+$SYSTEM_PATIENT_FIELDS = array(
+	'p_field_0' => 'PATIENT_ID',
+	'p_field_9' => 'PATIENT_BARCODE',	
+	'p_field_10' => 'PATIENT_SIGNATURE',
+	'p_field_1' => 'PATIENT_DAILYNUM',	
+	'p_field_2' => 'ADDL_ID',
+	'p_field_3' => 'GENDER',
+	'p_field_4' => 'AGE',
+	'p_field_5' => 'DOB',
+	'p_field_6' => 'NAME',
+	'p_field_7' =>'TEST',
+	'p_field_8' => 'REGISTRATION_DATE',
+	'p_field_11' => 'useRequesterName',
+	'p_field_12' => 'useReferredToHospital');
+
+
 ?>

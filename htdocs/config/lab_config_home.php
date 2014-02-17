@@ -3,7 +3,6 @@
 # Main page for listing all options for a lab configuration
 # Used by the Lab Admin periodically to change settings
 #
-
 include("redirect.php");
 include("includes/new_image.php");
 include("includes/header.php");
@@ -59,9 +58,7 @@ $script_elems->enableJQueryForm();
 	<ul>
 		<?php
 		if(LangUtil::$pageTerms['TIPS_SPECIMENTESTTYPES']!="-") {
-	
-
-		echo "<li>";
+			echo "<li>";
 			echo LangUtil::$pageTerms['TIPS_SPECIMENTESTTYPES'];
 			echo "</li>";
 		}	
@@ -101,6 +98,12 @@ $script_elems->enableJQueryForm();
 		</ul>
 	</div>
 	
+	 <div id='PFO' class='right_pane' style='display:none;margin-left:10px;'>
+	<ul>
+			<li><?php echo LangUtil::$pageTerms['TIPS_PATIENTFIELDSORDER']; ?></li>
+		</ul>
+	</div>
+
 	<div id='WS_rc' class='right_pane' style='display:none;margin-left:10px;'>
 		<ul>
 			<li><?php echo LangUtil::$pageTerms['TIPS_WORKSHEETS']; ?></li>
@@ -285,6 +288,7 @@ $(document).ready(function(){
 	});
 	$('#revert_done_msg').hide();
 	$('#reorder_fields').hide();
+	
 	
 	$('#cat_code12').change( function() { get_test_types_bycat() });
 	get_test_types_bycat
@@ -486,6 +490,16 @@ $(document).ready(function(){
 		$('#report_type11').attr("value", report_type);
 		//fetch_report_config();
 		fetch_report_summary();
+		<?php
+	}
+	else if(isset($_REQUEST['rpfoupdate']))
+	{
+		# Show updated ordered patient fields on reports
+		?>
+		$('#patient_fields_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('patient_fields_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+		$('#patient_fields_msg').show();				
+		right_load(40, 'patient_fields_config_div');		
+		//fetch_report_summary();
 		<?php
 	}
 	else if(isset($_REQUEST['wcfgupdate']))
@@ -1299,6 +1313,41 @@ var report_id = $('#report_type11').attr("value");
 	});
 }
 
+function submit_ordered_fields_form()
+{ 
+	$('#ordered_fields_submit_progress').show();
+	
+	var p_fields = document.getElementById('p_fields');
+	var o_fields = document.getElementById('o_fields');
+	var p_fields_left="";
+	var o_fields_left="";
+		
+	
+	for(var i=0;i<p_fields.options.length;i++)
+	{
+		
+		p_fields_left = p_fields_left + ","+ p_fields.options[i].value;
+	}	
+	
+	for(var i=0;i<o_fields.options.length;i++)
+	{
+		o_fields_left = o_fields_left + ","+ o_fields.options[i].value;
+	}
+	
+
+	
+	$('#p_fields_left').attr('value',p_fields_left);	
+	$('#o_fields_left').attr('value',o_fields_left);		
+	
+	$('#patient_fields_order_from').ajaxSubmit({
+		success: function() {
+		$('#ordered_fields_submit_progress').hide();
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&rpfoupdate=orderedfields";
+			
+		}
+	});
+}
+
 function get_test_types_bycat()
 {
 	var cat_code = $('#cat_code12').attr("value");
@@ -1432,6 +1481,8 @@ function right_load_1(option_num, div_id)
 					-<a id='option11' class='menu_option' href="javascript:right_load(11, 'report_config_div');"><?php echo LangUtil::$pageTerms['MENU_REPORTCONFIG']; ?></a>
 					<br><br>
 					-<a id='option12' class='menu_option' href="javascript:right_load(12, 'worksheet_config_div');"><?php echo LangUtil::$pageTerms['MENU_WORKSHEETCONFIG']; ?></a>
+					<br><br>
+ 					-<a id='option40' class='menu_option' href="javascript:right_load(40, 'patient_fields_config_div');"><?php echo "Order Patient Fields"; ?></a>
 					<br><br>
 				</div>
 
@@ -1832,12 +1883,25 @@ function right_load_1(option_num, div_id)
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_pid_radio' value='Y' <?php
-										if($lab_config->pid == 2)
+										if($lab_config->pid == 2 || $lab_config->pid == 4)
 											echo " checked ";
 										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_pid_radio' value='N' <?php
-										if($lab_config->pid != 2)
+										if($lab_config->pid == 1 || $lab_config->pid == 3 )
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        
+                                        &nbsp;&nbsp;
+										<?php echo 'Allow Duplicate' ?>?
+										&nbsp;&nbsp;
+										<input type='radio' name='dup_pid_radio' value='Y' <?php
+										if($lab_config->pid == 1 || $lab_config->pid == 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+										&nbsp;&nbsp;
+										<input type='radio' name='dup_pid_radio' value='N' <?php
+										if($lab_config->pid == 3 || $lab_config->pid == 4)
 											echo " checked ";
 										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
@@ -2641,6 +2705,22 @@ function right_load_1(option_num, div_id)
 					</form>	
 				</div>
 				
+				<!-- Form for setting patients fields order -->              
+				<div class='right_pane' id='patient_fields_config_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;"><a rel='facebox' href='#PFO'>Page Help</a></p>
+					<b><?php echo LangUtil::$pageTerms['MENU_PATIENTFIELDSORDER']; ?></b>
+					<br><br>
+					<div id='patient_fields_msg' class='clean-orange' style='display:none;width:350px;'>
+					</div>
+					<br>
+                    <div class='pretty_box'>
+					<form id='patient_fields_order_from' name='patient_fields_order_from' action='ajax/report_fields_order.php' method='post'>
+						<?php $page_elems->getPatientFieldsOrderForm(); ?>                         
+					</form>
+                    </div>
+				</div>
+
+
 				<div class='right_pane' id='backup_revert_div' style='display:none;margin-left:10px;'>
 					<p style="text-align: right;"><a rel='facebox' href='#Revert'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_REVERT']; ?></b>

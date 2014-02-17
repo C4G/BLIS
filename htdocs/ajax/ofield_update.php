@@ -50,11 +50,29 @@ $use_comm = 0;
 $mand_comm = 0;
 
 # Patient related fields
-if(isset($_REQUEST['use_pid']))
-{
-	$use_pid = 1;
-	if($_REQUEST['use_pid_radio'] == 'Y')
+if(isset($_REQUEST['use_pid'])){
+	
+	//$use_pid = 1;
+	
+	//make sure we add the duplicate check also as part of pid
+	/*
+	0 not enabled
+	1 enabled and not mandatory and allow duplicate
+	2 enabled and manadatory and allow duplicate
+	3 enabled and not mandatory and  no  duplicate
+	4 enabled and mandfatory and  no duplicate
+
+	*/
+	
+	if($_REQUEST['use_pid_radio'] == 'Y' && $_REQUEST['dup_pid_radio'] == 'Y')
 		$use_pid = 2;
+	elseif($_REQUEST['use_pid_radio'] == 'Y' && $_REQUEST['dup_pid_radio'] != 'Y')
+		$use_pid = 4;
+	elseif($_REQUEST['use_pid_radio'] != 'Y' && $_REQUEST['dup_pid_radio'] == 'Y')
+		$use_pid = 1;
+	elseif($_REQUEST['use_pid_radio'] !== 'Y' && $_REQUEST['dup_pid_radio'] != 'Y')
+		$use_pid = 3;
+		
 }
 if(isset($_REQUEST['use_p_addl']))
 {

@@ -396,6 +396,9 @@ $measure_list_objs = $test_type_obj->getMeasures();
 			# Check if new reference values and age ranges have been entered properly
 			$ranges_lower = $_REQUEST['range_l_'.($i+1)];
 			$ranges_upper = $_REQUEST['range_u_'.($i+1)];
+			$age_lower = $_REQUEST["agerange_l_".($i+1)];
+			$age_upper = $_REQUEST["agerange_u_".($i+1)];
+			$gender_option = $_REQUEST["gender_".($i+1)];
 			for($j = 0; $j < count($ranges_lower); $j++)
 			{
 				$lower_range = $ranges_lower[$j];
@@ -404,23 +407,27 @@ $measure_list_objs = $test_type_obj->getMeasures();
 				{
 				$lower_age = 0;
 				$upper_age = 0;
-				if(isset($_REQUEST["agerange_l_".($i+1)."_".$j]))
+				if(isset($_REQUEST["agerange_l_".($i+1)]))
 				{
 					# Age range specified for this reference range
-					$lower_age = $_REQUEST["agerange_l_".($i+1)."_".$j];
-					$upper_age = $_REQUEST["agerange_u_".($i+1)."_".$j];
-					$gender_option=$_REQUEST["gender_".($i+1)."_".$j];
-					if($lower_age > $upper_age)
+					$lower_age = $age_lower[$j];
+					$upper_age = $age_upper[$j];
+					$option_gender = $gender_option[$j];									
+					/*if($lower_age > $upper_age)
 					{
 						# Swap
 						list($lower_age, $upper_age) = array($upper_age, $lower_age);
-					}
+					}*/
+					$reference_ranges_list[$i][] = array($lower_range, $upper_range, $lower_age, $upper_age, $option_gender);
 				}
 					//$gender_option = 'B';
-				$reference_ranges_list[$i][] = array($lower_range, $upper_range, $lower_age, $upper_age, $gender_option);
+				
 			}
 			}
 			//	$range_string = trim($ranges_lower[$i]).":".trim($ranges_upper[$i]);
+			
+			//print_r($reference_ranges_list);exit;
+						
 			$range_string = ":";
 		}
 		else if($measure_types[$i] == Measure::$RANGE_OPTIONS)
