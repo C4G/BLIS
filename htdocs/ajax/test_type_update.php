@@ -399,6 +399,7 @@ $measure_list_objs = $test_type_obj->getMeasures();
 			$age_lower = $_REQUEST["agerange_l_".($i+1)];
 			$age_upper = $_REQUEST["agerange_u_".($i+1)];
 			$gender_option = $_REQUEST["gender_".($i+1)];
+			$agettype = $_REQUEST['agetype_'.($i+1)];
 			for($j = 0; $j < count($ranges_lower); $j++)
 			{
 				$lower_range = $ranges_lower[$j];
@@ -412,13 +413,14 @@ $measure_list_objs = $test_type_obj->getMeasures();
 					# Age range specified for this reference range
 					$lower_age = $age_lower[$j];
 					$upper_age = $age_upper[$j];
-					$option_gender = $gender_option[$j];									
+					$option_gender = $gender_option[$j];	
+					$agetype_option = $agettype[$j];								
 					/*if($lower_age > $upper_age)
 					{
 						# Swap
 						list($lower_age, $upper_age) = array($upper_age, $lower_age);
 					}*/
-					$reference_ranges_list[$i][] = array($lower_range, $upper_range, $lower_age, $upper_age, $option_gender);
+					$reference_ranges_list[$i][] = array($lower_range, $upper_range, $lower_age, $upper_age, $option_gender,$agetype_option);
 				}
 					//$gender_option = 'B';
 				
@@ -544,6 +546,7 @@ $measure_list_objs = $test_type_obj->getMeasures();
 		$age_upper = $_REQUEST['new_agerange_u_'.($i+1)];
 		$age_lower = $_REQUEST['new_agerange_l_'.($i+1)];
 		$gender = $_REQUEST['new_gender_'.($i+1)];
+		$agetype = $_REQUEST['new_agetype_'.($i+1)];
 			foreach($ranges_lower as $lower)
 			
 			{
@@ -553,7 +556,8 @@ $measure_list_objs = $test_type_obj->getMeasures();
 			$lower_age = $age_lower[$index];
 			$upper_age = $age_upper[$index];
 			$gender_option=$gender[$index];
-			$reference_ranges_list[$count_ref][] = array($lower, $upper , $lower_age , $upper_age, $gender_option);
+			$age_option = $agetype[$index];
+			$reference_ranges_list[$count_ref][] = array($lower, $upper , $lower_age , $upper_age, $gender_option,$age_option);
 			}
 			$index++;
 			
@@ -655,6 +659,7 @@ $measure_list_objs = $test_type_obj->getMeasures();
                     $age_upper = $_REQUEST['agerange_u_'.($i+1).$us.($k+1)];
                     $age_lower = $_REQUEST['agerange_l_'.($i+1).$us.($k+1)];
                     $gender = $_REQUEST['gender_'.($i+1).$us.($k+1)];
+					$agetype = $_REQUEST['agetype_'.($i+1).$us.($k+1)];
                             foreach($ranges_lower as $lower)
 
                             {
@@ -664,7 +669,8 @@ $measure_list_objs = $test_type_obj->getMeasures();
                             $lower_age = $age_lower[$index];
                             $upper_age = $age_upper[$index];
                             $gender_option=$gender[$index];
-                            $sub_reference_ranges_list[$r][] = array($lower, $upper , $lower_age , $upper_age, $gender_option);
+							$age_option = $agettype[$index];
+                            $sub_reference_ranges_list[$r][] = array($lower, $upper , $lower_age , $upper_age, $gender_option,$age_option);
                             $r++;
                             }
                             $index++;
@@ -803,6 +809,7 @@ foreach($reference_ranges_list as $range_list)
 		$age_min = $range_entry[2];
 		$age_max = $range_entry[3];
 		$gender_option = $range_entry[4];
+		$agettype =  $range_entry[5];
 		$ref_range = new ReferenceRange();
 		$ref_range->measureId = $measure_id;
 		$ref_range->ageMin = $age_min;
@@ -810,6 +817,7 @@ foreach($reference_ranges_list as $range_list)
 		$ref_range->sex = $gender_option;
 		$ref_range->rangeLower = $range_lower;
 		$ref_range->rangeUpper = $range_upper;
+		$ref_range->agetype = $agettype;
 		$ref_range->addToDb($_SESSION['lab_config_id']);
 	}
 	$measure_count++;
@@ -832,6 +840,7 @@ foreach($sub_reference_ranges_list as $range_list)
 		$age_min = $range_entry[2];
 		$age_max = $range_entry[3];
 		$gender_option = $range_entry[4];
+		$agettype =  $range_entry[5];
 		$ref_range = new ReferenceRange();
 		$ref_range->measureId = $measure_id;
 		$ref_range->ageMin = $age_min;
@@ -839,6 +848,7 @@ foreach($sub_reference_ranges_list as $range_list)
 		$ref_range->sex = $gender_option;
 		$ref_range->rangeLower = $range_lower;
 		$ref_range->rangeUpper = $range_upper;
+		$ref_range->agetype = $agettype;
 		$ref_range->addToDb($_SESSION['lab_config_id']);
 	}
 	$measure_count++;

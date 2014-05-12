@@ -94,7 +94,7 @@ foreach($specimen_list as $specimen)
 	<td>
 	<?php
 	$date_parts = explode("-", $specimen->dateCollected);
-	$report_url = "reports_testhistory.php?location=".$_SESSION['lab_config_id']."&patient_id=".$specimen->patientId."&yf=$date_parts[0]&mf=$date_parts[1]&df=$date_parts[2]&yt=$date_parts[0]&mt=$date_parts[1]&dt=$date_parts[2]&ip=1";
+	$report_url = "reports_testhistory_new.php?location=".$_SESSION['lab_config_id']."&patient_id=".$specimen->patientId."&yf=$date_parts[0]&mf=$date_parts[1]&df=$date_parts[2]&yt=$date_parts[0]&mt=$date_parts[1]&dt=$date_parts[2]&ip=1";
 	//$report_url = "reports_specimen.php?location=".$_SESSION['lab_config_id']."&specimen_id=".$specimen->specimenId;
 	?>
 	<a href='<?php echo $report_url; ?>' target='_blank' title='Click to Generate Report for this Specimen'><?php echo LangUtil::$generalTerms['CMD_GETREPORT']; ?></a>

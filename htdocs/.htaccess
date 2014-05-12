@@ -44,6 +44,7 @@ RewriteRule ^worksheet_custom_updated\.php$ config/worksheet_custom_updated.php
 
 
 ## /reports folder
+ReWriteRule ^reports_testhistory_new\.php$ reports/reports_testhistory_new.php
 RewriteRule ^reports\.php$ reports/reports.php
 RewriteRule ^report_onetesthistory\.php$ reports/report_onetesthistory.php
 RewriteRule ^report_selected_tests\.php$ reports/report_selected_tests.php

@@ -18,10 +18,7 @@ $patient = Patient::getById($specimen->patientId);
 $test_list = get_tests_by_specimen_id($specimen->specimenId);
 foreach($test_list as $test_entry)
 {
-	$test_type = get_test_type_by_id($test_entry->testTypeId);	
-	
-	
-	
+	$test_type = get_test_type_by_id($test_entry->testTypeId);		
 	$measure_list = $test_type->getMeasures();
 	$result_value_valid = true;
 	$result_csv = "";
@@ -33,7 +30,7 @@ foreach($test_list as $test_entry)
 		if($_REQUEST[$comment_field_name] != "")
 			$comment_field_value .= $measure->getName().":".$_REQUEST[$comment_field_name].",";		
 		
-		$result_value = $_REQUEST[$result_field_name];
+		$result_value = $_REQUEST[$result_field_name];	
 		if(trim($result_value) == "")
 		{
 			# Result value not provided / is empty:
@@ -63,7 +60,7 @@ foreach($test_list as $test_entry)
 		$result_csv .= ",";
 		
 	}
-	$comment_field_value=substr($comment_field_value,0,strlen($comment_field_value)-1);
+	$comment_field_value=substr($comment_field_value,0,strlen($comment_field_value)-1);	
 	
 	if($result_value_valid === true)
 	{
