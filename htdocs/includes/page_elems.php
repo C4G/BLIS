@@ -370,6 +370,9 @@ class PageElems
 		
 		$LIS_VERIFIER = 15;
 		$LIS_TECH_SHOWPNAME = 13;
+
+		$LIS_DOCTOR = 16;		
+		
 		echo "<option value='$LIS_TECH_RW'";
 		if($selected_value == $LIS_TECH_RW)
 			echo " selected ";
@@ -389,6 +392,11 @@ class PageElems
 		if($selected_value == $LIS_VERIFIER)
 			echo " selected ";
 		echo ">Verifier</option>";
+		
+		echo "<option value='$LIS_DOCTOR'";
+		if($selected_value == $LIS_DOCTOR)
+			echo " selected ";
+		echo ">Requester</option>";
 	}	
 		
 	public function getSpecimenTypesSelect($lab_config_id)
@@ -3025,7 +3033,7 @@ class PageElems
 					?>
 					<tr>
 						<td><u><?php echo $field_name; ?></u></td>
-						<td><?php echo $custom_data->getFieldValueString($_SESSION['lab_config_id'], 1); ?></td>
+						<td><input type="text" value="<?php echo $custom_data->getFieldValueString($_SESSION['lab_config_id'], 1); ?>" /></td>
 					</tr>
 					<?php
 					}
@@ -3109,7 +3117,7 @@ class PageElems
 	public function getSpecimenTaskList($specimen_id)
 	{
 		# Lists patient-profile related tasks in a tips box
-		global $LIS_CLERK;
+		global $LIS_CLERK,$LIS_VERIFIER;
 		$specimen = Specimen::getById($specimen_id);
 		$deleted = false;
 		if(check_removal_record($_SESSION['lab_config_id'], $specimen_id, "specimen")){
@@ -3126,17 +3134,16 @@ class PageElems
 			<p><a href='reports_specimenlog.php?location=<?php echo $_SESSION['lab_config_id']; ?>&specimen_id=<?php echo $specimen_id; ?>' title='Click to View a Log of Actions Performed on this Specimen' target='_blank'><?php echo LangUtil::$generalTerms['CMD_TRACK']; ?></a></p>
 			<?php
 			if($_SESSION['user_level'] != $LIS_CLERK && $deleted == false)
-			{
+			{			
 				$user = get_user_by_id($_SESSION['user_level']);
 				if
-				(
-					$specimen->statusCodeId == Specimen::$STATUS_TOVERIFY ||
-					$specimen->statusCodeId == Specimen::$STATUS_DONE
-				)
+				( $specimen->statusCodeId == Specimen::$STATUS_TOVERIFY || $specimen->statusCodeId == Specimen::$STATUS_DONE )
 				{
+					
 					?>
 					<p><a href='specimen_verify.php?sid=<?php echo $specimen_id; ?>' title='Click to Verify or Update result values for this Specimen'><?php echo LangUtil::$generalTerms['CMD_VERIFY']; ?></a></p>
 					<?php
+					
 				}
 				else
 				{
@@ -7920,12 +7927,13 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	{
             $userrr = get_user_by_id($_SESSION['user_id']);
 
-		global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_CLERK, $LIS_VERIFIER;
+		global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_CLERK, $LIS_VERIFIER,$LIS_DOCTOR;
 		if
 		(
 			$_SESSION['user_level'] == $LIS_TECH_RO ||
 			$_SESSION['user_level'] == $LIS_TECH_RW ||
 			$_SESSION['user_level'] == $LIS_CLERK ||
+			$_SESSION['user_level'] == $LIS_DOCTOR ||
 			$_SESSION['user_level'] == $LIS_VERIFIER
 		)
 		{

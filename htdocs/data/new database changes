@@ -1,0 +1,2 @@
+ALTER TABLE `specimen` ADD INDEX `aux_ind`(`aux_id`);
+ALTER TABLE `reference_range` ADD `age_type` INT NOT NULL  DEFAULT 3

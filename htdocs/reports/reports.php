@@ -1,6 +1,7 @@
 <?php 
 include("redirect.php");
 include("includes/header.php");
+include_once("includes/user_lib.php");
 LangUtil::setPageId("reports");
 
 putUILog('reports', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
@@ -1652,7 +1653,7 @@ function hideCondition(p_attrib)
 		<?php
 			$site_list = get_site_list($_SESSION['user_id']);
 			if ( !is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) ) { 
-				echo LangUtil::$pageTerms['MENU_DAILY']; ?>
+				if($_SESSION['user_level'] != $LIS_DOCTOR) echo LangUtil::$pageTerms['MENU_DAILY']; ?>
 			<ul>
 				<!--
 				<li class='menu_option' id='patient_report_menu'>
@@ -1664,23 +1665,25 @@ function hideCondition(p_attrib)
 					<a href='javascript:show_test_history_form();'><?php echo LangUtil::$pageTerms['MENU_PATIENT']; ?></a>
 				</li>
 				<li class='menu_option' id='session_report_menu' <?php
-				if($SHOW_SPECIMEN_REPORT === false)
+				if($SHOW_SPECIMEN_REPORT === false || $_SESSION['user_level'] == $LIS_DOCTOR)
 					echo " style='display:none;' ";
 				?>>
 					<a href='javascript:show_session_report_form();'><?php echo LangUtil::$pageTerms['MENU_SPECIMEN']; ?></a>
 				</li>
 				<li class='menu_option' id='print_menu' <?php
-				if($SHOW_TESTRECORD_REPORT === false)
+				if($SHOW_TESTRECORD_REPORT === false || $_SESSION['user_level'] == $LIS_DOCTOR)
 					echo " style='display:none;' ";
 				?>>
 					<a href='javascript:show_print_form();'><?php echo LangUtil::$pageTerms['MENU_TESTRECORDS']; ?></a>
 				</li>
 				
-				<li class='menu_option' id='daily_report_menu'>
+				<li class='menu_option' id='daily_report_menu' <?php if($_SESSION['user_level'] == $LIS_DOCTOR)
+					echo " style='display:none;' ";
+				?>>
 					<a href='javascript:show_daily_report_form();'><?php echo LangUtil::$pageTerms['MENU_DAILYLOGS']; ?></a>
 				</li>
 				<li class='menu_option' id='print_menu' <?php
-				if($SHOW_PENDINGTEST_REPORT === false)
+				if($SHOW_PENDINGTEST_REPORT === false || $_SESSION['user_level'] == $LIS_DOCTOR)
 					echo " style='display:none;' ";
 				?>>
 					<a href='javascript:show_pending_tests_form();'><?php echo LangUtil::$pageTerms['MENU_PENDINGTESTS']; ?></a>
@@ -1700,7 +1703,7 @@ function hideCondition(p_attrib)
 					<a href='lab_pin.php'><?php echo "Location Settings"; ?></a>
 					</li>
 				</ul>
-			<?php } echo LangUtil::$pageTerms['MENU_AGGREPORTS']; ?>
+			<?php } if ($_SESSION['user_level'] != $LIS_DOCTOR) echo LangUtil::$pageTerms['MENU_AGGREPORTS']; ?>
 			<ul>
 				<?php
 					$site_list = get_site_list($_SESSION['user_id']);
@@ -1714,7 +1717,7 @@ function hideCondition(p_attrib)
 						<!--<li class='menu_option' id='disease_report_menu'>
 							<a href='javascript:show_selection("infection_aggregate");'><?php echo LangUtil::$pageTerms['MENU_INFECTIONREPORT']; ?></a>
 						</li>-->
-					<?php } else { ?>
+					<?php } else if($_SESSION['user_level'] != $LIS_DOCTOR) { ?>
 						<li class='menu_option' id='summary_menu'>
 							<a href='javascript:show_selection("summary");'><?php echo LangUtil::$pageTerms['MENU_INFECTIONSUMMARY']; ?></a>
 						</li>

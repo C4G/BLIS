@@ -6,6 +6,7 @@
 #
 include("../includes/db_lib.php");
 include("../includes/script_elems.php");
+include_once("../includes/user_lib.php");
 LangUtil::setPageId("find_patient");
 
 $script_elems = new ScriptElems();
@@ -645,10 +646,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
                                         ?>
 					<a href='<?php echo $url_string; ?>' title='Click to View Report for this Patient' target='_blank'><?php echo LangUtil::$generalTerms['CMD_VIEW']; ?> Report</a>
 					</td>
-					<td>
+					<td <?php if($_SESSION['user_level'] == $LIS_DOCTOR) print("style='display:none'") ?>>
 					<a href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>&labsection=<?php echo $lab_section?>' title='Click to View Patient Profile'>Select Tests</a>
 										</td>
-                                        <td <?php (is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none'")) ?> >
+                                        <td <?php (is_billing_enabled($_SESSION['lab_config_id']) && $_SESSION['user_level'] != $LIS_DOCTOR  ? print("") : print("style='display:none'")) ?> >
                                        
                                             <a  target='_blank' href=<?php echo $billing_url_string; ?> title='Click to generate a bill for this patient'>Generate Bill</a>
                                         </td>                                      

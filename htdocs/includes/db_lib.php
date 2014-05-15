@@ -2347,7 +2347,7 @@ class Patient
 			if($this->dob != null && $this->dob != "")
 			{
 				# DoB present in patient record
-				return DateLib::dobToAgeNumber($this->dob);
+				return DateLib::dobToAgeNumber($this->dob,true);
 			}
 			else
 			{	if($this->age<100)
@@ -2372,7 +2372,7 @@ class Patient
 				# Year and month specified
 				$approx_dob = trim($this->partialDob)."-01";
 			}
-			return DateLib::dobToAgeNumber($approx_dob);
+			return DateLib::dobToAgeNumber($approx_dob,true);
 		}
 	}
 	
@@ -3280,6 +3280,59 @@ class Test
 		$retval = substr($this->result, -1*$PATIENT_HASH_LENGTH);
                 return $retval;
         }
+		
+public	function  getMeasureListArray()
+{
+	$retval = array();
+	$testType = TestType::getById($this->testTypeId);
+		$measure_list = $testType->getMeasures();
+                $submeasure_list = array();
+                $comb_measure_list = array();
+               // print_r($measure_list);
+                
+                foreach($measure_list as $measure)
+                {
+                    
+                    $submeasure_list = $measure->getSubmeasuresAsObj();
+                    //echo "<br>".count($submeasure_list);
+                    //print_r($submeasure_list);
+                    $submeasure_count = count($submeasure_list);
+                    
+                    if($measure->checkIfSubmeasure() == 1)
+                    {
+                        continue;
+                    }
+                        
+                    if($submeasure_count == 0)
+                    {
+                        array_push($comb_measure_list, $measure);
+                    }
+                    else
+                    {
+                        array_push($comb_measure_list, $measure);
+                        foreach($submeasure_list as $submeasure)
+                           array_push($comb_measure_list, $submeasure); 
+                    }
+                }
+                $measure_list = $comb_measure_list;
+		for($i = 0; $i < count($measure_list); $i++) {
+			$curr_measure = $measure_list[$i];
+                        if(strpos($curr_measure->name, "\$sub") !== false)
+                                                            {
+                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
+                                                                
+                                                            }
+                                                            else
+                                                            {
+                                                                $decName = $curr_measure->name;
+                                                            }
+                                            
+                        
+			$retval[] = $decName;
+		}
+		return $retval;
+	
+}
 	public function getMeasureList() {
 		$testType = TestType::getById($this->testTypeId);
 		$measure_list = $testType->getMeasures();
@@ -3473,7 +3526,7 @@ class Test
                                             if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE)
                                             {
                                                     $result_string = "";
-                                                    $value_list = str_replace("_", ",", $result_list[$i]);
+                                                    $value_list = str_replace("_", "<br/>", $result_list[$i]);
                                                     $retval .= "<b>".$value_list."</b>";
                                             }
                                             else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
@@ -3550,12 +3603,237 @@ class Test
                         }$c++;
 		}//end
 		//$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
-		return $retval;
+		return "<b>".$retval."</b>";
 	}
 	
-        public function decodeResultWithoutMeasures($show_range=false) {
+public function getTestMeasureRange($measurename,$testresultvalue)
+{
+	$test_type = TestType::getById($this->testTypeId);
+
+	$measure_list = $test_type->getMeasures();
+    $submeasure_list = array();
+    $comb_measure_list = array();
+
+    foreach($measure_list as $measure)
+    {		
+		
+		$submeasure_list = $measure->getSubmeasuresAsObj();
+
+        $submeasure_count = count($submeasure_list);
+                    
+
+                    if($measure->checkIfSubmeasure() == 1)
+
+                    {
+
+                        continue;
+
+                    }
+
+                        
+
+                    if($submeasure_count == 0)
+
+                    {
+
+                        array_push($comb_measure_list, $measure);
+
+                    }
+
+                    else
+
+                    {
+
+                        array_push($comb_measure_list, $measure);
+
+                        foreach($submeasure_list as $submeasure)
+
+                           array_push($comb_measure_list, $submeasure); 
+
+                    }
+
+                }
+
+                $measure_list = $comb_measure_list;
+
+                                                
+						$flag_num = -1;
+						foreach($measure_list as $measure) 
+						{
+							$flag_num++;
+							if($measure->name == $measurename)
+							{
+
+							$type=$measure->getRangeType();
+
+							if($type==Measure::$RANGE_NUMERIC) 
+							{
+
+								$range_list_array=$measure->getRangeString($patient);
+
+								$lower=$range_list_array[0];
+
+								$upper=$range_list_array[1];
+								
+								echo $this->getResultFlaged($testresultvalue,$lower,$upper);
+
+								$unit=$measure->unit;
+
+								if(stripos($unit,",")!=false) {	
+
+									echo "(";
+
+									$units=explode(",",$unit);
+
+									$lower_parts=explode(".",$lower);
+
+									$upper_parts=explode(".",$upper);
+
+				
+
+									if($lower_parts[0]!=0) {
+
+										echo $lower_parts[0];
+
+										echo $units[0];
+
+									}
+
+									
+
+									if($lower_parts[1]!=0) {
+
+										echo $lower_parts[1];
+
+										echo $units[1];
+
+									}
+
+									echo " - ";
+
+				
+
+									if($upper_parts[0]!=0) {
+
+										echo $upper_parts[0];
+
+										echo $units[0];
+
+									}
+
+									
+
+									if($upper_parts[1]!=0) {
+
+										echo $upper_parts[1];
+
+										echo $units[1];
+
+									}
+
+									echo ")";
+
+								} else if(stripos($unit,":")!=false) {
+
+									$units=explode(":",$unit);
+
+									echo "(";	
+
+									echo $lower;
+
+									?><sup><?php echo $units[0]; ?></sup> - 
+
+									<?php echo $upper;?> <sup> <?php echo $units[0]; ?> </sup>
+
+									<?php
+
+									echo " ".$units[1].")";
+
+								} else {	
+
+									echo "(";		
+
+									echo $lower; ?>-<?php echo $upper.")"; 
+
+									echo " ".$measure->unit;
+
+								}?>
+
+								<?php
+
+							} else {
+								$this->Color();
+
+								if($measure->unit=="")
+
+									$measure->unit="-";
+
+								echo "&nbsp;&nbsp;&nbsp;". $measure->unit;
+
+							}
+							
+							break;
+							}
+
+							//echo "<br>";
+
+						}
+}
+	
+	public function getResultAsArray()
+	{			
+		
+		$result_csv = $this->getResultWithoutHash();
+             
+                if(strpos($result_csv, "[$]") === false)
+                {
+                    $result_list = explode(",", $result_csv);
+                }
+                else
+                {
+                    //$testt = "one,[$]two[/$],[$]twotwo[/$],three";
+                    $testt = $result_csv;
+                    //$test2 = strstr($testt, $);
+                    $start_tag = "[$]";
+                    $end_tag = "[/$]";
+                    //$testtt = str_replace("[$]two[/$],", "", $testt);
+                    $freetext_results = array();
+                    $ft_count = substr_count($testt, $start_tag);
+                    //echo $ft_count;
+                    $k = 0;
+                    while($k < $ft_count)
+                    {
+                        $ft_beg = strpos($testt, $start_tag);
+                        $ft_end = strpos($testt, $end_tag);
+                        $ft_sub = substr($testt, $ft_beg + 3, $ft_end - $ft_beg - 3);
+                        $ft_left = substr($testt, 0, $ft_beg);
+                        $ft_right = substr($testt, $ft_end + 5);
+                        //echo "<br>".$ft_left."--".$ft_right."<br>";
+                        $testt = $ft_left.$ft_right;
+                        array_push($freetext_results, $ft_sub);
+                        $k++;
+                    }
+                    //echo $freetext_results."<br>".$testt;
+                    //$testtt = str_replace($subb, "", $testt, 1);
+                    //echo "$testto<br>$subb<br>";
+                    $result_csv = $testt;
+                    if(strpos($testt, ",") == 0)
+                            $result_csv = substr($testt, 1, strlen($testt)); 
+                    $result_list = explode(",", $result_csv);
+                    //echo "<br>";
+                    //print_r($result_list);
+                    //echo "<br>";
+                } 
+				
+		
+		return $result_list;
+	}
+	
+	
+        public function decodeResultWithoutMeasures($show_range=false,$patient = null) {
             # Converts stored result value(s) for showing on front-end
 		# Get measure, unit pairs for this test
+				
 		$test_type = TestType::getById($this->testTypeId);
 		$measure_list = $test_type->getMeasures();
                 //print_r($measure_list);
@@ -3666,18 +3944,21 @@ class Test
                                                             $result_string .= $value."<br>";
                                                     }
                                                     $result_string = substr($result_string, 0, -4);
-                                                    $retval .= "<br>".$result_string."&nbsp;";
+                                                    $retval .= "<br>".$this->resetColor($result_string)."&nbsp;";
                                             }
                                             else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
                                             {
                                                     if($result_list[$i] != $curr_measure->unit)
-                                                            $retval .= "<br><b>".$result_list[$i]."</b> &nbsp;";
+                                                            $retval .= "<br><b>".$this->resetColor($result_list[$i])."</b> &nbsp;";
                                                     else
-                                                            $retval .= "<br>".$result_list[$i]."&nbsp;";
+                                                            $retval .= "<br>".$this->resetColor($result_list[$i])."&nbsp;";
                                             }
                                             else
                                             {
-                                                    $retval .= "<br>".$result_list[$i]."&nbsp;";
+												$range_list_array=$curr_measure->getRangeString($patient);
+												$lower=$range_list_array[0];				
+												$upper=$range_list_array[1];
+												$retval .= "<br>".$this->getResultFlaged($result_list[$i],$lower,$upper)."&nbsp;";
                                             }
                                     }
                                     else
@@ -3688,18 +3969,25 @@ class Test
                                             if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE)
                                             {
                                                     $result_string = "";
-                                                    $value_list = str_replace("_", ",", $result_list[$i]);
-                                                    $retval .= "<br><b>".$value_list."</b>";
+                                                    $value_list = str_replace("_", "<br/>", $result_list[$i]);
+                                                    $retval .= "<br><b>".$this->resetColor($value_list)."</b>";
                                             }
                                             else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
                                             {
                                                     if($result_list[$i]!=$curr_measure->unit)
-                                                            $retval .= "<br><b>".$result_list[$i]."</b>"."&nbsp;";
+                                                            $retval .= "<br><b>".$this->resetColor($result_list[$i])."</b>"."&nbsp;";
                                                     else
-                                                            $retval .= $result_list[$i]."&nbsp;";
+                                                            $retval .= $this->resetColor($result_list[$i])."&nbsp;";
                                             }
                                             else
-                                                    $retval .= "<br><b>".$result_list[$i]."</b>"."&nbsp;";
+											{
+												$range_list_array=$curr_measure->getRangeString($patient);
+												$lower=$range_list_array[0];				
+												$upper=$range_list_array[1];
+												//$this->getFlag($result_list[$i],$lower,$upper);
+								
+                                                    $retval .= "<br><b>".$this->getResultFlaged($result_list[$i],$lower,$upper)."</b>"."&nbsp;";
+											}
                                     }
 
                                     if($show_range === true)
@@ -3718,7 +4006,7 @@ class Test
                                     {
                                             
                                     }
-                                    $retval .= " - <br>";
+                                    $retval .= $this->resetColor(" - ")."<br>";
                             }
                             $i++;
                         }
@@ -3728,11 +4016,11 @@ class Test
 
                             if(count($measure_list) == 1)
                             {
-                                $retval .= "<br>".$ft_result."&nbsp;";   
+                                $retval .= "<br>". $this->resetColor($ft_result)."&nbsp;";   
                             }
                             else
                             {
-                                 $retval .= "<br>".$ft_result."&nbsp;"; 
+                                 $retval .= "<br>".$this->resetColor($ft_result)."&nbsp;"; 
                             }
                             if($show_range === true)
                                         {
@@ -3747,7 +4035,7 @@ class Test
                         }$c++;
 		}//end
 		//$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
-		return $retval;
+		return "<b>".$retval."</b>";
         }
         
         /*
@@ -3842,7 +4130,32 @@ class Test
 		return $retval;
 	}
 	*/
+	
+	function getResultFlaged($result,$minrange,$maxrang)
+	{
+		if($result < $minrange)
+		{
+			return "<font color='#0033FF'>$result<font>";
+		}
+		else if( $result > $maxrang)
+		{
+			return "<font color='#FF0000'>$result<font>";
+		}
+		else
+		{
+			return "<font color='#000000'>$result<font>";
+		}
+	}
         
+	function resetColor($result)
+	{
+		return "<font color='#000000'>$result<font>";
+	}
+	function Color()
+	{
+		echo "<font color='#000000'>$result<font>";
+	}
+
 	public function getComments()
 	{
 		if(trim($this->comments) == "" || $this->comments == null)
@@ -3882,7 +4195,8 @@ class Test
 		$record = query_associative_one($query_string);
 		$existing_entry = Test::getObject($record);
 		$test_id = $existing_entry->testId;
-		$new_result_value = $this->result.$hash_value;
+		$new_result_value = $this->result.$hash_value;	
+		
 		$query_verify = "";
 		if	(
 				$existing_entry->result == $new_result_value && 
@@ -4785,6 +5099,7 @@ class ReferenceRange
 	public $sex;
 	public $rangeLower;
 	public $rangeUpper;
+	public $agetype;
 	
 	public static function getObject($record)
 	{
@@ -4821,6 +5136,12 @@ class ReferenceRange
 			//$reference_range->rangeUpper = intval($record['range_upper']);
 		else
 			$reference_range->rangeUpper = null;
+		if(isset($record['age_type']))
+			$reference_range->agetype = $record['age_type'];
+		else
+			$reference_range->agetype = null;
+				
+		
 		return $reference_range;
 	}
 	
@@ -4829,8 +5150,8 @@ class ReferenceRange
 		# Adds this entry to database
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = 
-			"INSERT INTO reference_range (measure_id, age_min, age_max, sex, range_lower, range_upper) ".
-			"VALUES ($this->measureId, '$this->ageMin', '$this->ageMax', '$this->sex', '$this->rangeLower', '$this->rangeUpper')";
+			"INSERT INTO reference_range (measure_id, age_min, age_max, sex, range_lower, range_upper,age_type) ".
+			"VALUES ($this->measureId, '$this->ageMin', '$this->ageMax', '$this->sex', '$this->rangeLower', '$this->rangeUpper',$this->agetype)";
 		query_insert_one($query_string);
 		DbUtil::switchRestore($saved_db);
 	}
@@ -4850,38 +5171,51 @@ class ReferenceRange
 	}
 	
 	public static function getByAgeAndSex($age, $sex, $measure_id, $lab_config_id)
-	{
+	{		
+		
 		# Fetches the reference range based on supplied age and sex values
 		global $con;
 		$measure_id = mysql_real_escape_string($measure_id, $con);
 		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 		$age = mysql_real_escape_string($age, $con);
-		$sex = mysql_real_escape_string($sex, $con);
+		$sex = trim(mysql_real_escape_string($sex, $con));
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$query_string = "SELECT * FROM reference_range WHERE measure_id=$measure_id";
+		$query_string = "SELECT * FROM reference_range WHERE measure_id=$measure_id";		
 		$retval = null;
 		$resultset = query_associative_all($query_string, $row_count);
 		if($resultset == null || count($resultset) == 0)
 			return $retval;
+			$normalizedage=0;
 		foreach($resultset as $record)
 		{
-			$ref_range = ReferenceRange::getObject($record);
+			$ref_range = ReferenceRange::getObject($record);			
+			//default is in days
+			if($ref_range->agetype == 2)//month
+				$normalizedage = $age / 30;
+			else if($ref_range->agetype == 3)//year							
+				$normalizedage = $age / 365;	
+			else
+				$normalizedage = $age;//days
+					
+			
 			if($ref_range->ageMin == 0 && $ref_range->ageMax == 0)
 			{
 				# No agewise split
-				if($ref_range->sex == "B" || strtolower($ref_range->sex) == strtolower($sex))
+				if($ref_range->sex == "B" || strtolower(trim($ref_range->sex)) == strtolower($sex))
 				{
 					return $ref_range;
 				}
 			}
-			else if($ref_range->ageMin <= $age && $ref_range->ageMax >= $age)
+			else if($normalizedage >= $ref_range->ageMin &&  $normalizedage <= $ref_range->ageMax)
 			{
-				# Age wise split exists
-				if($ref_range->sex == "B" || strtolower($ref_range->sex) == strtolower($sex))
+				
+				# Age wise split exists								
+				if($ref_range->sex == "B" || (strtolower(trim($ref_range->sex)) == strtolower($sex)))
 				{
+					
 					return $ref_range;
 				}
-			}
+			}			
 		}
 		DbUtil::switchRestore($saved_db);
 	}
@@ -7690,6 +8024,29 @@ function get_specimen_by_id($specimen_id)
 	//;
 	$record = query_associative_one($query_string);
 	return Specimen::getObject($record);
+}
+
+function get_specimen_by_auxid($specimen_id)
+{
+	global $con;
+	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	# Fetches a specimen record by specimen id
+	$query_string = 
+		"SELECT * FROM specimen WHERE  aux_id='$specimen_id' LIMIT 1";		
+	//;
+	$record = query_associative_one($query_string);
+	return Specimen::getObject($record);
+}
+
+function get_specimenAndTest($aux_id)
+{
+	global $con;
+	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	# Fetches a specimen record by specimen id
+	$query_string = 
+		"SELECT * FROM specimen WHERE  aux_id='$specimen_id' LIMIT 1";		
+	//;
+	$record = query_associative_one($query_string);
 }
 
 function get_specimen_by_id_api($specimen_id, $lab_config_id)
@@ -11446,7 +11803,7 @@ class GlobalPatient
 			if($this->dob != null && $this->dob != "")
 			{
 				# DoB present in patient record
-				return DateLib::dobToAgeNumber($this->dob);
+				return DateLib::dobToAgeNumber($this->dob,true);
 			}
 			else
 			{	if($this->age<100)
@@ -11471,7 +11828,7 @@ class GlobalPatient
 				# Year and month specified
 				$approx_dob = trim($this->partialDob)."-01";
 			}
-			return DateLib::dobToAgeNumber($approx_dob);
+			return DateLib::dobToAgeNumber($approx_dob,true);
 		}
 	}
 	
@@ -15242,9 +15599,8 @@ class API
     }
     
    public function login($username, $password)
-    {
-       print_r($_SESSION);
-        global $con;
+    {      
+     global $con;
 	$username = mysql_real_escape_string($username, $con);
 	$saved_db = DbUtil::switchToGlobal();
 	$password = encrypt_password($password);
@@ -15262,8 +15618,8 @@ class API
         }
         else
         {
-            $tok = API::start_session($username, $password);
-            return $tok;
+            $dbName = API::start_session($username, $password);			
+            return $dbName;
         }
     }
     
@@ -15274,63 +15630,11 @@ class API
          session_start();
         
          $sid = session_id();
-         //$_SESSION['tok'] = $sid;
-        
-         $user = get_user_by_name($username);
-	$_SESSION['username'] = $username;
-	$_SESSION['user_id'] = $user->userId;
-	$_SESSION['user_actualname'] = $user->actualName;
-	$_SESSION['user_level'] = $user->level;
-        $_SESSION['level'] = $user->level;
-	$_SESSION['locale'] = $user->langId;
-        
-	if(is_admin_check($user))
-	{
-		
-		$lab_id=get_lab_config_id_admin($user->userId);
-		$_SESSION['lab_config_id'] = $lab_id;
-		$_SESSION['db_name'] = "blis_".$lab_id;
-		$_SESSION['dformat'] = $DEFAULT_DATE_FORMAT;
-		$_SESSION['country'] = $user->country;
-	}
-	else
-	{
-		$_SESSION['lab_config_id'] = $user->labConfigId;
-		echo $user->labConfigId;
-		$_SESSION['country'] = $user->country;
-		$lab_config = get_lab_config_by_id($user->labConfigId);
-		$_SESSION['db_name'] = $lab_config->dbName;
-		# Config values for registration fields
-		$_SESSION['p_addl'] = $lab_config->patientAddl;
-		$_SESSION['s_addl'] = $lab_config->specimenAddl;
-		$_SESSION['dnum'] = $lab_config->dailyNum;
-		$_SESSION['sid'] = $lab_config->sid;
-		$_SESSION['pid'] = $lab_config->pid;
-		$_SESSION['comm'] = $lab_config->comm;
-		$_SESSION['age'] = $lab_config->age;
-		$_SESSION['dob'] = $lab_config->dob;
-		$_SESSION['rdate'] = $lab_config->rdate;
-		$_SESSION['refout'] = $lab_config->refout;
-		$_SESSION['pname'] = $lab_config->pname;
-		$_SESSION['sex'] = $lab_config->sex;
-		$_SESSION['dformat'] = $lab_config->dateFormat;
-		$_SESSION['dnum_reset'] = $lab_config->dailyNumReset;
-		$_SESSION['doctor'] = $lab_config->doctor;
-		$_SESSION['pnamehide'] = $lab_config->hidePatientName;
-		if($SERVER == $ON_PORTABLE)
-			$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_".$lab_config->id."/";
-		else
-			$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
-	}
+         //$_SESSION['tok'] = $sid;        
+   	 $user = get_user_by_name($username);	
+	return "blis_".$user->labConfigId;
 	
-	
-	# Set session variables for recording latency/user props
-	$_SESSION['PROPS_RECORDED'] = false;
-	$_SESSION['DELAY_RECORDED'] = false;
-	#TODO: Add other session variables here
-	$_SESSION['user_role'] = "garbage";
-         return 1; 
-    }
+	}
     
     public function stop_session()
     {
@@ -15446,7 +15750,7 @@ class API
     
     public function get_specimen($specimen_id)
     {
-        $spec = get_specimen_by_id($specimen_id);
+        $spec = get_specimen_by_auxid($specimen_id);
         if(count($spec) > 0)
                 $ret = $spec;
              else
@@ -15454,7 +15758,133 @@ class API
              
         return $ret;
     }
-     
+    
+	public function update_result($db,$specimen_id,$measure_id,$result)
+	{
+		$sql = "select t.test_id,s.specimen_id,t.test_type_id,m.measure_id,s.patient_id from test t 
+inner join specimen s on s.specimen_id=t.specimen_id 
+inner join test_type_measure m on m.test_type_id=t.test_type_id 
+where trim(s.aux_id)='$specimen_id' and m.measure_id=$measure_id limit 1";
+	$record = query_associative_one($sql,$db);
+		if(count($record) > 0)
+		{			
+			$sql = "select measure_id from test_type_measure where  test_type_id=".$record["test_type_id"];
+			$measures = query_associative_all($sql, $row_count,$db);					
+			if(count($measures)>0)
+			{	
+				$result_index=0;		
+				
+				for($i=0;$i<count($measures);$i++)
+				{
+					if($measures[$i]["measure_id"] == $measure_id)
+					{
+						$result_index = $i;						
+						break;
+					}
+				}	
+							
+				$sql = "SELECT result FROM test where test_id=".$record["test_id"];
+				$test = query_associative_one($sql, $row_count,$db);
+				$results_csv = "";											
+				if(!empty($test['result']))
+				{				
+					
+					$results_parts = explode(",",$test["result"]);					
+					$results_parts[$result_index] = $result;
+					$results_csv = implode(",",	$results_parts);
+					
+				}
+				else
+				{
+					
+					for($i=0;$i<count($measures);$i++)
+					{						
+						if($i==$result_index)
+							$results_csv .=$result;	
+							
+						$results_csv .=',';								
+							
+					}	
+					$patient = Patient::getById($record["patient_id"]);
+					$hash_value = $patient->getHashValue();
+					$results_csv .= ','.$hash_value;
+				}		
+									
+					//echo 	$results_csv;exit;
+					$sql = "UPDATE test ".
+							"SET  result='$results_csv'".
+							" where test_id=".$record["test_id"];							
+							query_blind($sql,$db);
+							return 1;
+				
+			}
+			else
+			{
+				return 0;
+			}
+			
+		}
+		else
+		{
+			return 0;
+		}
+		
+	}
+	
+	public function getTestDetails($db,$specimenTypefilter ="",$test_typeFilter="",$day=0,$aux_id="")
+	{
+		$sql = "SELECT distinct s.specimen_id,s.aux_id,s.date_collected,s.date_recvd,s.doctor,p.name,p.surr_id,p.sex,p.dob as dob,p.partial_dob,
+t.test_type_id,s.specimen_type_id,st.name as specimentype FROM specimen s
+inner join patient p on p.patient_id=s.patient_id
+inner join test t on t.specimen_id=s.specimen_id
+inner join test_type tt on tt.test_type_id=t.test_type_id
+inner join specimen_type st on st.specimen_type_id=s.specimen_type_id
+inner join test_type_measure tm on tm.test_type_id = tt.test_type_id ";
+
+if(!empty($aux_id))
+	$sql .="where s.aux_id = '$aux_id' ";
+else
+	$sql .="where date(s.date_collected) >= curdate()-$day ";
+if(!empty($specimenTypefilter))
+	$sql .=" and st.specimen_type_id in ($specimenTypefilter)";		
+if(!empty($test_typeFilter))
+	$sql .=" and tt.test_type_id in ($test_typeFilter)";	 
+	 $resultset = query_associative_all($sql, $row_count,$db);	
+        if(count($resultset) > 0)
+                $ret = $resultset;
+             else
+                $ret = 0;
+             
+        return $ret;
+		
+	}
+	public function get_specimenAndTest($db,$specimen_id="",$specimenTypefilter="",$test_filter="",$datefrom="",$dateto="")
+	{
+		$sql ="SELECT s.specimen_id,s.aux_id,s.date_collected,s.date_recvd,s.doctor,p.name,p.surr_id,p.sex,p.dob as dob,p.partial_dob,
+t.test_type_id,tm.measure_id,m.name as testname,s.specimen_type_id,st.name as specimentype FROM specimen s
+inner join patient p on p.patient_id=s.patient_id
+inner join test t on t.specimen_id=s.specimen_id
+inner join test_type tt on tt.test_type_id=t.test_type_id
+inner join specimen_type st on st.specimen_type_id=s.specimen_type_id
+inner join test_type_measure tm on tm.test_type_id = tt.test_type_id
+inner join measure m on m.measure_id = tm.measure_id where 1";
+if(!empty($specimen_id))
+	$sql .=" and TRIM(s.aux_id)='$specimen_id'";
+if(!empty($specimenTypefilter))
+	$sql .=" and st.specimen_type_id in ($specimenTypefilter)";
+if(!empty($test_filter))
+	$sql .=" and m.measure_id in ($test_filter)";	
+if(!empty($datefrom) && !empty($dateto))
+	$sql .=" and s.date_collected between '$datefrom' and '$dateto'";
+	$sql .=" order by specimen_id ";
+	$resultset = query_associative_all($sql, $row_count,$db);	
+        if(count($resultset) > 0)
+                $ret = $resultset;
+             else
+                $ret = 0;
+             
+        return $ret;
+	}
     public function get_specimen_catalog()
     {
         global $CATALOG_TRANSLATION;
