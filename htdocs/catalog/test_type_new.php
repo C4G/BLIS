@@ -81,7 +81,7 @@ function add_range_field(mrow_num)
 	var num_row = num_ranges[mrow_num];
 	
 //		var map=map_offset-1;									
-	var html_code = "<input type='text' class='range_field' name='range_l_"+mrow_num+"[]' value='' /> : <input type='text' class='range_field' name='range_u_"+mrow_num+"[]' value='' /> <input type='text' class='range_field' name='gender_"+mrow_num+"[]' value='B'/> <input type='text' class='range_field agerange_l_"+mrow_num+"' name='agerange_l_"+mrow_num+"[]' id='agerange_l_"+mrow_num+"[]' value='0' /> : <input type='text' class='range_field agerange_u_"+mrow_num+"' name='agerange_u_"+mrow_num+"[]' id='agerange_u_"+mrow_num+"[]' value='100' /> <select name='agetype_"+mrow_num+"[]'><option value='1'>D</option><option value='2'>M</option><option value='3'>Y</option></select> <br>";
+	var html_code = "<input type='text' class='range_field' name='range_l_"+mrow_num+"[]' value='' /> : <input type='text' class='range_field' name='range_u_"+mrow_num+"[]' value='' /> <input type='text' class='range_field' name='gender_"+mrow_num+"[]' value='B'/> <input type='text' class='range_field agerange_l_"+mrow_num+"' name='agerange_l_"+mrow_num+"[]' id='agerange_l_"+mrow_num+"[]' value='0' /> : <input type='text' class='range_field agerange_u_"+mrow_num+"' name='agerange_u_"+mrow_num+"[]' id='agerange_u_"+mrow_num+"[]' value='100' /> <br>";
 	$('#numeric_'+mrow_num).append(html_code);
 }
 
@@ -597,7 +597,7 @@ function isInputNumber(evt) {
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['NAME']; ?><?php $page_elems->getAsterisk(); ?></u></td>
 					<td><u><?php echo LangUtil::$generalTerms['TYPE']; ?><?php $page_elems->getAsterisk(); ?></u></td>
-					<td><u><?php echo LangUtil::$generalTerms['VALUES']; ?><?php $page_elems->getAsterisk(); ?></u></td>                   
+					<td><u><?php echo LangUtil::$generalTerms['VALUES']; ?><?php $page_elems->getAsterisk(); ?></u></td>
 					<td><u><?php echo LangUtil::$generalTerms['UNIT'] ; ?> /Default Value</u>[<a href='#unit_help' rel='facebox'>?</a>]</td>
 				</tr>
 				<?php
@@ -639,15 +639,9 @@ function isInputNumber(evt) {
 							<input type='text' class='range_field' name='range_u_<?php echo $i; ?>[]' value=''/>
 							<input type='text' class='range_field' name='gender_<?php echo $i; ?>[]' value='B'/>
 							<input type='text' class='range_field'  name='agerange_l_<?php echo $i; ?>[]' id='agerange_l_<?php echo $i; ?>[]' value='0' /> :
-							<input type='text' class='range_field' name='agerange_u_<?php echo $i; ?>[]' id='agerange_u_<?php echo $i; ?>[]' value='100' />
-                             <select name='agetype_<?php echo $i; ?>[]'>
-                             <option value='1'>D</option>
-                              <option value='2'>M</option>
-                               <option value='3'>Y</option>
-                             </select>
-                            <br />                           
+							<input type='text' class='range_field' name='agerange_u_<?php echo $i; ?>[]' id='agerange_u_<?php echo $i; ?>[]' value='100' /><br />
 						</span>
-						&nbsp;&nbsp;&nbsp;&nbsp;<?php echo LangUtil::$generalTerms['RANGE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender &nbsp;&nbsp;&nbsp;&nbsp;Age_Range
+						&nbsp;&nbsp;&nbsp;&nbsp;<?php echo LangUtil::$generalTerms['RANGE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender &nbsp;&nbsp;Age_Range
 							<br>
 						<small><a href="javascript:add_range_field('<?php echo $i; ?>');"><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?> &raquo;</a></small>
 						<br><br>
@@ -716,11 +710,6 @@ function isInputNumber(evt) {
                                                             <input type='text' class='range_field' name='gender_<?php echo $i.$us.$y; ?>[]' value='B'/>
                                                             <input type='text' class='range_field'  name='agerange_l_<?php echo $i.$us.$y; ?>[]' id='agerange_l_<?php echo $i.$us.$y; ?>[]' value='0' /> :
                                                             <input type='text' class='range_field' name='agerange_u_<?php echo $i.$us.$y; ?>[]' id='agerange_u_<?php echo $i.$us.$y; ?>[]' value='100' />
-                                                             <select name='agetype_<?php echo $i.$us.$y; ?>[]'>
-                             <option value='1'>D</option>
-                              <option value='2'>M</option>
-                               <option value='3'>Y</option>
-                             </select>
                                                             <br>
                                                     </span>
                                                     &nbsp;&nbsp;&nbsp;&nbsp;<?php echo LangUtil::$generalTerms['RANGE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender &nbsp;&nbsp;Age_Range
@@ -818,7 +807,7 @@ function isInputNumber(evt) {
         <tr valign='top' <?php if (!is_billing_enabled($_SESSION['lab_config_id'])) {echo "style='display:none;'";} ?>>
 		<td>Cost To Patient</td>
                 <td>
-                    <input id='cost_to_patient_dollars' name='cost_to_patient_dollars' type='number' size='4' maxLength='4' onkeypress="return isInputNumber(event);" value='0' />
+                    <input id='cost_to_patient_dollars' name='cost_to_patient_dollars' type='number' size='6' maxLength='6' onkeypress="return isInputNumber(event);" value='0' />
                     <?php echo get_currency_delimiter_from_lab_config_settings(); ?>
                     <input id='cost_to_patient_dollars' name='cost_to_patient_cents' type='number' size='2' maxLength='2' onkeypress="return isInputNumber(event);" value='00' />
                     <?php echo get_currency_type_from_lab_config_settings(); ?>

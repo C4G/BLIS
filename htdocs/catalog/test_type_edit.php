@@ -623,7 +623,7 @@ if(num_ranges[mrow_num] == 0)
 	var num_row = num_ranges[mrow_num];
 	
 		var map=map_offset-1;									
-	var html_code = "<input type='text' class='range_field' name='range_l_"+mrow_num+"[]' value='' /> : <input type='text' class='range_field' name='range_u_"+mrow_num+"[]' value='' /> <input type='text' class='range_field' name='gender_"+mrow_num+"[]' value='B'/> <input type='text' class='range_field agerange_l_"+mrow_num+"' name='agerange_l_"+mrow_num+"[]' id='agerange_l_"+mrow_num+"_"+map+"' value='0' /> : <input type='text' class='range_field agerange_u_"+mrow_num+"' name='agerange_u_"+mrow_num+"[]' id='agerange_u_"+mrow_num+"_"+map+"' value='100' /><select name='agetype_"+mrow_num+"[]' id='agetype_"+mrow_num+"_"+map+"'><option value='1'>D</option><option value='2'>M</option><option value='3'>Y</option></select><br>";
+	var html_code = "<input type='text' class='range_field' name='range_l_"+mrow_num+"[]' value='' /> : <input type='text' class='range_field' name='range_u_"+mrow_num+"[]' value='' /> <input type='text' class='range_field' name='gender_"+mrow_num+"[]' value='B'/> <input type='text' class='range_field agerange_l_"+mrow_num+"' name='agerange_l_"+mrow_num+"[]' id='agerange_l_"+mrow_num+"_"+map+"' value='0' /> : <input type='text' class='range_field agerange_u_"+mrow_num+"' name='agerange_u_"+mrow_num+"[]' id='agerange_u_"+mrow_num+"_"+map+"' value='100' /><br>";
 	$('#numeric_'+mrow_num).append(html_code);
 }	
 
@@ -642,7 +642,7 @@ if(num_ranges[mrow_num] == 0)
 	var num_row = num_ranges[mrow_num];
 	
 											
-	var html_code = "<input type='text' class='range_field' name='new_range_l_"+mrow_num+"[]' value='' /> : <input type='text' class='range_field' name='new_range_u_"+mrow_num+"[]' value='' /> <input type='text' class='range_field' name='new_gender_"+mrow_num+"[]' value='B' /> <input type='text' class='range_field agerange_l_"+mrow_num+"[]' name='new_agerange_l_"+mrow_num+"[]' id='new_agerange_l_"+mrow_num+"[]' value='0' /> : <input type='text' class='range_field agerange_u_"+mrow_num+"[]' name='new_agerange_u_"+mrow_num+"[]' id='new_agerange_u_"+mrow_num+"[]' value='100' /><select name='new_agetype_"+mrow_num+"[]'><option value='1'>D</option><option value='2'>M</option><option value='3'>Y</option></select><br>";
+	var html_code = "<input type='text' class='range_field' name='new_range_l_"+mrow_num+"[]' value='' /> : <input type='text' class='range_field' name='new_range_u_"+mrow_num+"[]' value='' /> <input type='text' class='range_field' name='new_gender_"+mrow_num+"[]' value='B' /> <input type='text' class='range_field agerange_l_"+mrow_num+"[]' name='new_agerange_l_"+mrow_num+"[]' id='new_agerange_l_"+mrow_num+"[]' value='0' /> : <input type='text' class='range_field agerange_u_"+mrow_num+"[]' name='new_agerange_u_"+mrow_num+"[]' id='new_agerange_u_"+mrow_num+"[]' value='100' /><br>";
 	$('#new_numeric_'+mrow_num).append(html_code);
 }
 
@@ -923,10 +923,10 @@ function isInputCurrency(evt) {
 							$max_num_measures = count($measure_list);
 							for($i = 1; $i <= $max_num_measures; $i += 1)
 							{
-								$curr_measure = Measure::getById($measure_list[$i-1]);							
+								$curr_measure = Measure::getById($measure_list[$i-1]);
 								if($curr_measure!=NULL)
 								{
-								$ref_ranges = $curr_measure->getReferenceRanges($_SESSION['lab_config_id']);								
+								$ref_ranges = $curr_measure->getReferenceRanges($_SESSION['lab_config_id']);
 								?>
 								<input type='hidden' name='m_id[]' value='<?php echo $measure_list[$i-1]; ?>'></input>
 								<?php
@@ -962,7 +962,7 @@ function isInputCurrency(evt) {
 								echo "<input type='text' name='measure[]' value='$decName' />";
 								echo "</td>";
 								echo "<td>";
-								$range_string = $curr_measure->range;								
+								$range_string = $curr_measure->range;
 								$range_values = array();
 								$range_type = $curr_measure->getRangeType();
 								switch($range_type)
@@ -1031,11 +1031,6 @@ function isInputCurrency(evt) {
 											<input type='text' class='range_field' name='gender_<?php echo $i; ?>[]' value='B'/>
 											<input type='text' class='range_field' name='age_l_<?php echo $i; ?>[]' value='0'/>
 											<input type='text' class='range_field' name='age_u_<?php echo $i; ?>[]' value='100'/>
-                                             <select name='agetype_<?php echo $i; ?>[]'>
-                                             <option value='1'>D</option>
-                                              <option value='2'>M</option>
-                                               <option value='3'>Y</option>
-                                             </select>
 											<br>
 											
 										</span>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo LangUtil::$generalTerms['RANGE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender &nbsp;&nbsp;Age_Range
@@ -1056,11 +1051,6 @@ function isInputCurrency(evt) {
 											<input type='text' class='range_field' name='gender_<?php echo $i; ?>[]' value='<?php echo $ref_range->sex; ?>'/>
 											<input type='text' class='range_field agerange_l_<?php echo $i; ?>' name='agerange_l_<?php echo $i; ?>[]' id='agerange_l_<?php echo $i; ?>_<?php echo $ref_count; ?>' value='<?php echo $ref_range->ageMin; ?>' /> :
 											<input type='text' class='range_field agerange_u_<?php echo $i; ?>' name='agerange_u_<?php echo $i; ?>[]' id='agerange_u_<?php echo $i; ?>_<?php echo $ref_count; ?>' value='<?php echo $ref_range->ageMax; ?>' />
-                                            <select name='agetype_<?php echo $i; ?>[]'>
-                                             <option value='1' <?php if($ref_range->agetype == 1) echo 'selected="selected"'?>>D</option>
-                                              <option value='2' <?php if($ref_range->agetype == 2) echo 'selected="selected"'?>>M</option>
-                                               <option value='3' <?php if($ref_range->agetype == 3) echo 'selected="selected"'?>>Y</option>
-                                             </select>
 											<br>
 											<?php
 											$ref_count++;
@@ -1171,11 +1161,7 @@ function isInputCurrency(evt) {
 											<input type='text' class='range_field' name='new_range_u_<?php echo $i; ?>[]' value='' />
 											<input type='text' class='range_field' name='new_gender_<?php echo $i; ?>[]' value='B'/>
 											<input type='text' class='range_field agerange_l_<?php echo $i; ?>' name='new_agerange_l_<?php echo $i; ?>[]' id='new_agerange_l_<?php echo $i; ?>[]' value='0' /> :
-											<input type='text' class='range_field agerange_u_<?php echo $i; ?>' name='new_agerange_u_<?php echo $i; ?>[]' id='new_agerange_u_<?php echo $i; ?>[]' value='100' /> <select name='new_agetype_<?php echo $i; ?>[]'>
-                                             <option value='1'>D</option>
-                                              <option value='2'>M</option>
-                                               <option value='3'>Y</option>
-                                             </select>
+											<input type='text' class='range_field agerange_u_<?php echo $i; ?>' name='new_agerange_u_<?php echo $i; ?>[]' id='new_agerange_u_<?php echo $i; ?>[]' value='100' />
 																
 											<br>
 								</span>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo LangUtil::$generalTerms['RANGE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender &nbsp;&nbsp;Age_Range
@@ -1254,11 +1240,7 @@ function isInputCurrency(evt) {
                                                             <input type='text' class='range_field' name='range_u_<?php echo $i.$us.$y; ?>[]' value=''/>
                                                             <input type='text' class='range_field' name='gender_<?php echo $i.$us.$y; ?>[]' value='B'/>
                                                             <input type='text' class='range_field'  name='agerange_l_<?php echo $i.$us.$y; ?>[]' id='agerange_l_<?php echo $i.$us.$y; ?>[]' value='0' /> :
-                                                            <input type='text' class='range_field' name='agerange_u_<?php echo $i.$us.$y; ?>[]' id='agerange_u_<?php echo $i.$us.$y; ?>[]' value='100' /> <select name='agetype_<?php echo $i.$us.$y; ?>[]'>
-                                             <option value='1'>D</option>
-                                              <option value='2'>M</option>
-                                               <option value='3'>Y</option>
-                                             </select>
+                                                            <input type='text' class='range_field' name='agerange_u_<?php echo $i.$us.$y; ?>[]' id='agerange_u_<?php echo $i.$us.$y; ?>[]' value='100' />
                                                            
                                                     </span>
                                                     &nbsp;&nbsp;&nbsp;&nbsp;<?php echo LangUtil::$generalTerms['RANGE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender &nbsp;&nbsp;Age_Range
@@ -1361,7 +1343,7 @@ function isInputCurrency(evt) {
 				<input type="hidden" name='cost_to_patient_cents_old' value='<?php echo $cost_to_patient_cents; ?>' />
 
 				<td>
-					<input id='cost_to_patient_dollars' name='cost_to_patient_dollars' type='text' size='4' maxLength='4' onkeypress="return isInputNumber(event);" value='<?php echo $cost_to_patient_dollars; ?>' />
+					<input id='cost_to_patient_dollars' name='cost_to_patient_dollars' type='text' size='6' maxLength='6' onkeypress="return isInputNumber(event);" value='<?php echo $cost_to_patient_dollars; ?>' />
 					<?php echo get_currency_delimiter_from_lab_config_settings(); ?>
 
 					<input id='cost_to_patient_dollars' name='cost_to_patient_cents' type='text' size='2' maxLength='2' onkeypress="return isInputNumber(event);" value='<?php echo get_cents_as_whole_number($cost_to_patient_cents); ?>' />
