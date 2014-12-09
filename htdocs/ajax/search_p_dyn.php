@@ -6,7 +6,6 @@
 #
 include("../includes/db_lib.php");
 include("../includes/script_elems.php");
-include_once("../includes/user_lib.php");
 LangUtil::setPageId("find_patient");
 
 $script_elems = new ScriptElems();
@@ -176,11 +175,12 @@ background-color:#EAF2D3;
         var cap = parseInt($('#rcap').html());
         //console.log(cap);
          $('.prev_link').hide();	
-		
+		//alert(cap);
         $.ajax({ 
 		url: url_string, 
                 async : false,
 		success: function(count){
+					//alert(count);
                     var icount = parseInt(count);
                     //alert(icount+"-"+count);
                      if(icount < cap/*parseInt('<?php echo $_REQUEST['result_cap']; ?>')*/)
@@ -210,6 +210,7 @@ background-color:#EAF2D3;
                                 else
                                     var max_pages = parseInt(icount / cap) + 1;
                                  $('#page_counts').html('1/' + max_pages + ' Page');
+								 
                                  $('#mpage').html(max_pages);
                                 $('#tot').html(count);
                                 var rem = icount - cap;
@@ -524,10 +525,19 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				echo "<th>".LangUtil::$generalTerms['SP_STATUS']."</th>";
 			}
 			?>
+			<?php 
+			$user = get_user_by_id($_SESSION['user_id']);
+			$rwopts = explode(",", $user->rwoptions);
+			if (in_array("51", $rwopts) || in_array("2", $rwopts) || in_array("3", $rwopts) || in_array("4", $rwopts) || in_array("6", $rwopts) || in_array("7", $rwopts)) {
+				echo "<th></th>";
+			} 
+			if (in_array("52", $rwopts) || in_array("2", $rwopts) || in_array("3", $rwopts) || in_array("4", $rwopts) || in_array("6", $rwopts) || in_array("7", $rwopts)) {
+				echo "<th></th>";
+			}
+			?>
 			<th></th>
-			<th></th>
-                        <th></th>
-			<?php if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+			<?php
+				if(is_admin_check($user)){
 			?>
 				<th></th>
 			<?php }?>
@@ -625,7 +635,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			?>
 			<td>
 				<?php 
-				if(strpos($_SERVER["HTTP_REFERER"], "find_patient.php") !== false)
+				if(strpos($_SERVER["HTTP_REFERER"], "find_patient.php") !== false || strpos($_SERVER["HTTP_REFERER"], "doctor_register.php") !== false)
 				{
 					# Called from find_patient.php. Show 'profile' and 'register specimen' link
 					?>
@@ -646,13 +656,31 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
                                         ?>
 					<a href='<?php echo $url_string; ?>' title='Click to View Report for this Patient' target='_blank'><?php echo LangUtil::$generalTerms['CMD_VIEW']; ?> Report</a>
 					</td>
-					<td <?php if($_SESSION['user_level'] == $LIS_DOCTOR) print("style='display:none'") ?>>
+					<td>
+					
+					<?php $user = get_user_by_id($_SESSION['user_id']);
+					$rw_option = array();
+					$rw_option = explode(",",$user->rwoptions);
+					if($user->level == 16){
+						 if (in_array("51", $rw_option) || in_array("2", $rw_option) || in_array("3", $rw_option) || in_array("4", $rw_option) || in_array("6", $rw_option) || in_array("7", $rw_option)) {
+					?>
 					<a href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>&labsection=<?php echo $lab_section?>' title='Click to View Patient Profile'>Select Tests</a>
+					<?php } 
+					} else {?>
+						<a href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>&labsection=<?php echo $lab_section?>' title='Click to View Patient Profile'>Select Tests</a>
+					<?php }?>
 										</td>
-                                        <td <?php (is_billing_enabled($_SESSION['lab_config_id']) && $_SESSION['user_level'] != $LIS_DOCTOR  ? print("") : print("style='display:none'")) ?> >
-                                       
-                                            <a  target='_blank' href=<?php echo $billing_url_string; ?> title='Click to generate a bill for this patient'>Generate Bill</a>
-                                        </td>                                      
+                                        <td <?php (is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none'")) ?> >
+                    <?php          
+                    if($user->level == 16){
+						 if (in_array("52", $rw_option) || in_array("2", $rw_option) || in_array("3", $rw_option) || in_array("4", $rw_option) || in_array("6", $rw_option) || in_array("7", $rw_option)) {
+					?>
+			               <a  target='_blank' href=<?php echo $billing_url_string; ?> title='Click to generate a bill for this patient'>Generate Bill</a>
+					<?php } 
+					} else {?>
+			               <a  target='_blank' href=<?php echo $billing_url_string; ?> title='Click to generate a bill for this patient'>Generate Bill</a>
+					<?php }?>          
+    		                              </td>                                      
 					<td>					
 					<?php
 				}
@@ -660,7 +688,9 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				{
 					# Called from search.php. Show only 'profile' link
 					?>
+					
 					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'><?php echo LangUtil::$pageTerms['CMD_VIEWPROFILE']; ?></a>
+					
 					</td><td>
 					<?php
 				}

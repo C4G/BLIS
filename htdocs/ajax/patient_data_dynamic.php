@@ -85,7 +85,7 @@ if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null
 	?>
 	<b><?php echo $q; ?></b>
 	<?php
-	//if(strpos($_SERVER['HTTP_REFERER'], "find_patient.php") !== false)
+	//if(strpos($_SERVER['HTTP_REFERER'], "find_patient.php") !== false || strpos($_SERVER["HTTP_REFERER"], "doctor_register.php") !== false)
 	if(false)
 	{
 		?>
@@ -255,7 +255,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			?>
 			<td>
 				<?php 
-				if(strpos($_SERVER["HTTP_REFERER"], "find_patient.php") !== false)
+				if(strpos($_SERVER["HTTP_REFERER"], "find_patient.php") !== false || strpos($_SERVER["HTTP_REFERER"], "doctor_register.php") !== false)
 				{
 					# Called from find_patient.php. Show 'profile' and 'register specimen' link
 					?>

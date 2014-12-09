@@ -139,6 +139,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 <table class='hor-minimalist-c' id='patientListTable' name='patientListTable'>
 	<thead>
 		<tr valign='top'>
+		<th>Patient Number</th>
 			<?php
 			if($lab_config->pid != 0)
 			{
@@ -191,12 +192,22 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 	{
 	?>
 		<tr valign='top'>
+		<?php
+				$patient_num =$patient->getDailyNum();
+				$pieces = explode("-", $patient_num);
+				?>
+				<td><?php echo  $patient_num?></td>
 			<?php
+			
 			if($lab_config->pid != 0)
 			{
+				$patient_id =$patient->getSurrogateId();
+				if ($patient_id == undefined) {
+					$patient_id = "*";
+				}
 				?>
 				<td>
-					<?php echo $patient->getSurrogateId(); ?>
+					<?php echo  $patient_id?>
 				</td>
 				<?php
 			}
@@ -280,14 +291,23 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				if(strpos($_SERVER["HTTP_REFERER"], "find_patient.php") !== false)
 				{
 					# Called from find_patient.php. Show 'profile' and 'register specimen' link
+					
 					?>
-					<a href='new_specimen.php?pid=<?php echo $patient->patientId; ?>' title='Click to Register New Specimen for this Patient'><?php echo LangUtil::$pageTerms['CMD_REGISTERSPECIMEN']; ?></a>
+					<a href='new_specimen.php?pid=<?php echo $patient->patientId; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register New Specimen for this Patient'><?php echo LangUtil::$pageTerms['CMD_REGISTERSPECIMEN']; ?></a>
 					</td><td>
 					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'><?php echo LangUtil::$pageTerms['CMD_VIEWPROFILE']; ?></a>
 					</td><td>
 					<a href='javascript:delete_patient_profile(<?php echo $patient->patientId; ?>)' title='Click to Delete Patient Profile'><?php echo "Delete Profile"; ?></a>
 					</td><td>
 					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>&update=1' title='Click to Update Patient Profile'><?php echo "Update Profile" ?></a>
+					<?php
+				}
+				else if (strpos($_SERVER["HTTP_REFERER"], "doctor_register.php") !== false) {
+
+					# Called from doctor_register.php. Show 'profile' and 'register specimen' link
+					?>
+					<a href='new_specimen.php?pid=<?php echo $patient->patientId; ?>&dnum=<?php echo $pieces[1]; ?>'' title='Click to Register New Specimen for this Patient'><?php echo LangUtil::$pageTerms['CMD_REGISTERSPECIMEN']; ?></a>
+					</td><td>
 					<?php
 				}
 				else if(strpos($_SERVER["HTTP_REFERER"], "reports.php") !== false || strpos($_SERVER["HTTP_REFERER"], "reports2.php") !== false)

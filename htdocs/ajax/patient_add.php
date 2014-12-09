@@ -131,6 +131,7 @@ $patient->sex = $sex;
 $patient->regDate=$date_receipt;
 $patient->surrogateId = $pid;
 $patient->createdBy = $_SESSION['user_id'];
+update_daily_number_registration();
 $patient_added = add_patient($patient);
 echo json_encode($patient_data);
 SessionUtil::restore($saved_session);

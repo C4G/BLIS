@@ -14,6 +14,9 @@ if ($_REQUEST['enable_billing']) {
     disable_billing();
 }
 
-update_currency_name_in_lab_config_settings($_REQUEST['default_currency']);
-update_currency_delimiter_in_lab_config_settings($_REQUEST['currency_delimiter']);
+$name="../../logo_billing_".$lab_config_id.".jpg";
+$success =  move_uploaded_file($_FILES["billingLogo"]["tmp_name"],$name);
+$a = update_currency_name_in_lab_config_settings($_REQUEST['default_currency']);
+$b = update_currency_delimiter_in_lab_config_settings($_REQUEST['currency_delimiter']);
+echo $a+$b;
 ?>

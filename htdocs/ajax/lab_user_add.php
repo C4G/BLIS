@@ -22,6 +22,7 @@ $user_type = $_REQUEST['ut'];
 $lab_config_id = $_REQUEST['lid'];
 $lang_id = $_REQUEST['lang'];
 
+$user_rwoption = $_REQUEST['opt'];
 # Fetch selected user functions
 # And, generate level number based on chosen functions
 # Disabled for now
@@ -67,6 +68,7 @@ $user->email = $email;
 $user->phone = $phone;
 $user->createdBy = $_SESSION['user_id'];
 $user->langId = $lang_id;
+$user->rwoptions = $user_rwoption;
 add_user($user);
 ?>
 <table cellspacing="20px">

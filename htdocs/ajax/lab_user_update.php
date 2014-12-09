@@ -17,7 +17,9 @@ $phone = $_REQUEST['ph'];
 $new_pwd = $_REQUEST['p'];
 $level = $_REQUEST['lev'];
 $lang_id = $_REQUEST['lang'];
-if($level == $LIS_TECH_RW)
+$rwoptions = $_REQUEST['opt'];
+
+if($level == $LIS_TECH_RW || $level == $LIS_PHYSICIAN)
 {
 	if($_REQUEST['showpname'] == 1)
 	{
@@ -34,6 +36,7 @@ $user->phone = $phone;
 $user->password = $new_pwd;
 $user->level = $level;
 $user->langId = $lang_id;
+$user->rwoption = $rwoptions;
 
 update_lab_user($user);
 
