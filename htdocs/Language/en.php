@@ -254,7 +254,19 @@ $LANG_ARRAY = array (
 		"CMD_VIEWPROFILE" => "View Profile",
 		"CMD_DELPROFILE" => "Delete Profile",
 		"CMD_UPDPROFILE" => "Update Profile"
-	) , 
+	) ,
+		"doctor_register" => array (
+				"TITLE" => "Patient Look-up",
+				"ADD_NEW_PATIENT" => "Add New Patient",
+				"TIPS_REGISTRATION_1" => "This page allows us to register new patients or lookup existing patients based on name, patient ID or number.",
+				"TIPS_REGISTRATION_2" => "Once a patient has been registered, we can use this page to view,edit the patients profile.",
+				"TIPS_PATIENT_LOOKUP" => "To register a new specimen, enter Patient by ID/Name or add a new Patient first.",
+				"MSG_NOMATCH" => "No match found",
+				"CMD_REGISTERSPECIMEN" => "Register Specimen",
+				"CMD_VIEWPROFILE" => "View Profile",
+				"CMD_DELPROFILE" => "Delete Profile",
+				"CMD_UPDPROFILE" => "Update Profile"
+		) ,
 	"new_patient" => array ( 
 		"TITLE" => "New Patient", 
 		"MSG_BACKTOLOOKUP" => "Back to Patient Look-up", 

@@ -254,7 +254,19 @@ $LANG_ARRAY = array (
 		"CMD_VIEWPROFILE" => "Voir le profil",
 		"CMD_DELPROFILE" => "Delete le profil",
 		"CMD_UPDPROFILE" => "Update Profile Fr"
-	) , 
+	) ,
+		"doctor_register" => array (
+				"TITLE" => "Surveillance du Patient",
+				"ADD_NEW_PATIENT" => "Ajouter un Nouveau Patient",
+				"TIPS_REGISTRATION_1" => "Cette page nous permet d'enregistrer de nouveaux patients ou de patients de recherche existants basés sur le nom, l'identité du patient ou le numéro.",
+				"TIPS_REGISTRATION_2" => "Une fois qu'un patient a été enregistré, nous pouvons utiliser cette page pour visualiser, modifier le profil des patients.",
+				"TIPS_PATIENT_LOOKUP" => "Pour enregistrer un nouvel échantillon, entrer le patient par son ID/Nom ou ajouter un nouvel échantillon.",
+				"MSG_NOMATCH" => "Pas de sélection retrouvée",
+				"CMD_REGISTERSPECIMEN" => "Enregistrer Echantillon",
+				"CMD_VIEWPROFILE" => "Voir le profil",
+				"CMD_DELPROFILE" => "Delete le profil",
+				"CMD_UPDPROFILE" => "Update Profile Fr"
+		) ,
 	"new_patient" => array ( 
 		"TITLE" => "Nouveau Patient", 
 		"MSG_BACKTOLOOKUP" => "Retour à Idetification du Patient", 
