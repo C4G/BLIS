@@ -44,7 +44,6 @@ RewriteRule ^worksheet_custom_updated\.php$ config/worksheet_custom_updated.php
 
 
 ## /reports folder
-ReWriteRule ^reports_testhistory_new\.php$ reports/reports_testhistory_new.php
 RewriteRule ^reports\.php$ reports/reports.php
 RewriteRule ^report_onetesthistory\.php$ reports/report_onetesthistory.php
 RewriteRule ^report_selected_tests\.php$ reports/report_selected_tests.php
@@ -116,6 +115,8 @@ RewriteRule ^test_type_updated_agg\.php$ catalog/test_type_updated_agg.php
 
 
 ## /regn folder
+RewriteRule ^doctor_register\.php$ regn/doctor_register.php
+RewriteRule ^doctor_add_patient\.php$ regn/doctor_add_patient.php
 RewriteRule ^find_patient\.php$ regn/find_patient.php
 RewriteRule ^new_patient\.php$ regn/new_patient.php
 RewriteRule ^new_specimen\.php$ regn/new_specimen.php
