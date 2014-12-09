@@ -173,6 +173,7 @@ function update_profile()
 		data: params,
 		success: function(msg) {
 			$('#update_profile_progress').hide();
+			alert("Successfully updated");
 			window.location.reload();
 		}
 	});	
