@@ -357,6 +357,61 @@ class PageElems
 		}
 	}
 	
+	public function getLabUserReadWriteOption($user_level="", $user_rwoptions=""){
+		if($user_level == 17) {
+			$user_rwoptions= "2,4";
+		}
+
+		echo " 	<td> <div id='readOrWrite' name='readOrWrite' >";
+		if($user_level < 16 || $user_level == 17)
+			echo "Writeable Options ";
+		else
+			echo "Readable Options";
+		
+		echo "</div>".$this->getAsterisk()."</td>";
+		$userRWoptions = explode( ',', $user_rwoptions );
+		if($user_level < 16 || $user_level == 17)
+		{
+			
+			echo "<td><div id='readWrite_options' name='readWrite_options'>
+		 			<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' value='2' ";
+			if(in_array("2", $userRWoptions))
+				echo "checked";
+			echo ">Patient Registration<br>
+					
+					<input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3' ";
+					if(in_array("3", $userRWoptions))
+						echo " checked";
+					echo ">Test Results<br>
+						<input type='checkbox' name='readwriteOpt' id='readwriteOpt4' value='4' ";
+					if(in_array("4", $userRWoptions))
+						echo " checked";
+					echo ">Search<br>
+					<input type='checkbox' name='readwriteOpt' id='readwriteOpt6' value='6' ";
+					if(in_array("6", $userRWoptions))
+						echo " checked";
+					echo ">Inventory<br>
+					<input type='checkbox' name='readwriteOpt' id='readwriteOpt7' value='7' ";
+					if(in_array("7", $userRWoptions))
+						echo " checked";
+					echo ">Backup Data <br>
+				</div>
+		 	</td>";
+		} else {
+		echo "<td><div id='readWrite_options' name='readWrite_options'>
+			<input type='checkbox' name='readwriteOpt' id='readwriteOpt51' value='51' ";
+			if(in_array("51", $userRWoptions))
+				echo " checked";
+			echo ">Select Test - option<br>
+			<input type='checkbox' name='readwriteOpt' id='readwriteOpt52' value='52' ";
+			if(in_array("52", $userRWoptions))
+				echo " checked";
+			echo ">Generate Bill - option<br>";
+
+		}		
+
+	}
+	
 	public function getLabUserTypeOptions($selected_value="")
 	{
 		# Returns accessible sites for drop down <select> boxes
@@ -372,6 +427,7 @@ class PageElems
 		$LIS_TECH_SHOWPNAME = 13;
 
 		$LIS_DOCTOR = 16;		
+		$LIS_PHYSICIAN = 17;
 		
 		echo "<option value='$LIS_TECH_RW'";
 		if($selected_value == $LIS_TECH_RW)
@@ -397,6 +453,17 @@ class PageElems
 		if($selected_value == $LIS_DOCTOR)
 			echo " selected ";
 		echo ">Requester</option>";
+		
+		echo "<option value='$LIS_READONLY'";
+		if($selected_value == $LIS_READONLY)
+			echo " selected ";
+		echo ">Read-Only Mode</option>";
+		
+		echo "<option value='$LIS_PHYSICIAN'";
+		if($selected_value == $LIS_PHYSICIAN)
+			echo " selected ";
+		echo ">Doctor</option>";
+		
 	}	
 		
 	public function getSpecimenTypesSelect($lab_config_id)
@@ -2259,7 +2326,7 @@ class PageElems
 				?>>
 					<td><u><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></u></td>
 					<td>
-						<input type='text' name='surr_id' id='surr_id' value='<?php echo $patient->surrogateId; ?>' class='uniform_width'></input>
+						<input type='text' name='surr_id' id='surr_id' value='<?php if($patient->surrogateId != undefined) { echo $patient->surrogateId; }?>' class='uniform_width'></input>
 					</td>
 				</tr>
 				
@@ -2309,13 +2376,13 @@ class PageElems
 						if($patient->age != null and $patient->age != "" and $patient->age != "0")
 						{
 						?>
-							<input type='text' name='age' id='age' value='<?php echo $patient->age; ?>'  class='uniform_width'></input>
+							<input type='text' name='age' id='age' value='<?php  echo $patient->age; ?>'  class='uniform_width'></input>
 						<?php
 						}
 						else
 						{
 						?>
-							<input type='text' name='age' id='age' value=''  class='uniform_width'></input>
+							<input type='text' name='age' id='age' value=' <?php $pieces = explode(" ", $patient->getAge()); echo $pieces[0]  ?>'  class='uniform_width'></input>
 						<?php
 						}
 						?>
@@ -2816,6 +2883,10 @@ class PageElems
 
 	public function getPatientTaskList($patient_id)
 	{
+		$patient = get_patient_by_id($patient_id);
+		$patient_num =$patient->getDailyNum();
+		$pieces = explode("-", $patient_num);
+				
 		# Lists patient-profile related tasks in a tips box
             $patientBarcodes = patientBarcodeCheck();
 		global $LIS_TECH_RO, $DISABLE_UPDATE_PATIENT_PROFILE;
@@ -2824,7 +2895,7 @@ class PageElems
 		?>
 			<div class='sidetip_nopos'>
 			<p>
-				<a href='new_specimen.php?pid=<?php echo $patient_id; ?>' title='Click to Register a New Specimen for this Patient'>
+				<a href='new_specimen.php?pid=<?php echo $patient_id; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register a New Specimen for this Patient'>
 					<?php echo LangUtil::$pageTerms['MSG_REGNEWSPECIMEN']; ?>
 				</a>
 			</p>
@@ -3102,7 +3173,7 @@ class PageElems
 					$result1="Completed";
 					$result= $specimen->getStatus();
 					?> <a href='specimen_result.php?sid=<?php echo $specimen->specimenId;?>'
-					<?php if(strcmp($result,$result1)==0){ ?> style='display:none;' <?php }?>
+					<?php if(strcmp($result,$result1)==0 || $_SESSION['user_level'] == 17){ ?> style='display:none;' <?php }?>
 					title='Click to Enter result values for this Specimen'><?php echo LangUtil::$generalTerms['ENTER_RESULTS']; ?></a>
 					<?php }
 					?>					
@@ -4115,6 +4186,11 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			$("#doc_row_1_input").autocomplete(data);
 		}</script>';
  */
+		if($_SESSION['user_level'] == 17) {
+			if($doc =="") {
+				$doc = $_SESSION['username'];
+			}
+		}
 		echo "<tr valign='top' id='";
 		echo $doc_row_id."'";
 		if($_SESSION['doctor'] == 0)
@@ -7923,29 +7999,230 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		<?php
 	}
 	
+	public function getDoctorRegistrationFieldsSummary($lab_config)
+	{
+		?>
+			<table class='hor-minimalist-b' style='width:auto;'>
+							<tbody>
+								
+								<tr>
+									<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></td>
+									<td>
+										<?php
+										if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
+											echo " In use ";
+										else
+											echo "Not in use";
+										if($lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
+										{
+											echo " (Mandatory field) ";
+											echo "&nbsp;&nbsp;";
+										}
+										if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
+										{
+											echo "&nbsp;&nbsp;".LangUtil::$generalTerms['MSG_RESET'].": ";
+											switch($lab_config->dailyNumReset)
+											{
+												case LabConfig::$RESET_DAILY:
+													echo LangUtil::$pageTerms['DAILY'];
+													break;
+												case LabConfig::$RESET_WEEKLY:
+													echo LangUtil::$pageTerms['WEEKLY'];
+													break;
+												case LabConfig::$RESET_MONTHLY:
+													echo LangUtil::$pageTerms['MONTHLY'];
+													break;
+												case LabConfig::$RESET_YEARLY:
+													echo LangUtil::$pageTerms['YEARLY'];
+													break;
+											}
+										}
+										?>
+									</td>
+								</tr>
+								<tr style='display:none;'>
+									<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['NAME']; ?></td>
+									<td>
+										<?php
+										if($lab_config->pname != 0)
+											echo " In use ";
+										else
+											echo "Not in use";
+										if($lab_config->pname == 2)
+											echo " (Mandatory field) ";
+										?>
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['GENDER']; ?></td>
+									<td>
+										<?php
+										if($lab_config->sex != 0)
+											echo " In use ";
+										else
+											echo "Not in use";
+										if($lab_config->sex == 2)
+											echo " (Mandatory field) ";
+										?>
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['DOB']; ?></td>
+									<td>
+										<?php
+										if($lab_config->dob != 0)
+											echo " In use ";
+										else
+											echo "Not in use";
+										if($lab_config->dob == 2)
+											echo " (Mandatory field) ";
+										?>
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['AGE']; ?></td>
+									<td>
+									<?php
+										if($lab_config->age == 1 || $lab_config->age == 2 || $lab_config->age == 11 || $lab_config->age == 12)
+											echo " In use ";
+										else
+											echo "Not in use";
+										if($lab_config->age == 2 || $lab_config->age == 12)
+											echo " (Mandatory field) ";
+									?>
+									</td>
+								</tr>
+								<?php
+								# Hide patient name flag: Hidden
+								# Option moved to technician account profile from v0.8.2
+								/*
+								<tr>
+									<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$pageTerms['USE_PNAME_RESULTS']; ?>?</td>
+									<td>
+									<?php
+										if($lab_config->hidePatientName == 0)
+											echo " Yes ";
+										else
+											echo " No ";
+									?>
+									</td>
+								</tr>
+								*/
+								?>
+								<tr valign='top' style='display:none;'>
+									<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></td>
+									<td>
+										<?php
+										if($lab_config->sid != 0)
+											echo " In use ";
+										else
+											echo "Not in use";
+										if($lab_config->sid == 2)
+											echo " (Mandatory field) ";
+									?>
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></td>
+									<td>
+										<?php
+										if($lab_config->specimenAddl != 0)
+											echo " In use ";
+										else
+											echo "Not in use";
+										if($lab_config->specimenAddl == 2)
+											echo " (Mandatory field) ";
+									?>
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['COMMENTS']; ?></td>
+									<td>
+									<?php
+										if($lab_config->comm != 0)
+											echo " In use ";
+										else
+											echo "Not in use";
+										if($lab_config->comm == 2)
+											echo " (Mandatory field) ";
+									?>
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['R_DATE']; ?></td>
+									<td>
+										<?php
+										if($lab_config->rdate != 0)
+											echo " In use ";
+										else
+											echo "Not in use";
+										if($lab_config->rdate == 2)
+											echo " (Mandatory field) ";
+									?>
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['REF_OUT']; ?></td>
+									<td>
+										<?php
+										if($lab_config->refout != 0)
+											echo " In use ";
+										else
+											echo "Not in use";
+										if($lab_config->refout == 2)
+											echo " (Mandatory field) ";
+									?>
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['DOCTOR']; ?></td>
+									<td>
+										<?php
+										if($lab_config->doctor != 0)
+											echo " In use ";
+										else
+											echo "Not in use";
+										if($lab_config->doctor == 2)
+											echo " (Mandatory field) ";
+									?>
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo LangUtil::$generalTerms['DATE_FORMAT']; ?></td>
+									<td><?php echo $lab_config->dateFormat; ?></td>
+								</tr>
+							</tbody>
+						</table>
+						
+			<?php
+		}
+		
 	public function getPatientSearchAttribSelect($hide_patient_name=false)
 	{
             $userrr = get_user_by_id($_SESSION['user_id']);
 
-		global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_CLERK, $LIS_VERIFIER,$LIS_DOCTOR;
+		global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_CLERK, $LIS_VERIFIER,$LIS_DOCTOR, $LIS_PHYSICIAN;
 		if
 		(
 			$_SESSION['user_level'] == $LIS_TECH_RO ||
 			$_SESSION['user_level'] == $LIS_TECH_RW ||
 			$_SESSION['user_level'] == $LIS_CLERK ||
 			$_SESSION['user_level'] == $LIS_DOCTOR ||
-			$_SESSION['user_level'] == $LIS_VERIFIER
+			$_SESSION['user_level'] == $LIS_VERIFIER ||
+			$_SESSION['user_level'] == 17
 		)
 		{
 			$lab_config = LabConfig::getById($_SESSION['lab_config_id']); 
                         $patientBarcodeSearch = patientSearchBarcodeCheck();
+                        echo $hide_patient_name;
+                        echo $lab_config->pname ;
 			if($hide_patient_name === false && $lab_config->pname != 0)
 			{
 				?>
 				<option value='1'><?php echo LangUtil::$generalTerms['PATIENT_NAME']; ?></option>
 				<?php
 			}
-			if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
+			if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 12 || $lab_config->dailyNum == 17)
 			{
 				?>
 				<option value='3'><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></option>
@@ -8815,9 +9092,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	{
 		?>
         	<option value='%[pq]%'><?php echo LangUtil::getSearchCondition('SEARCH_CONTAINS'); ?></option>
-			<option value='[pq]%'><?php echo LangUtil::getSearchCondition('SEARCH_BEGIN_WITH'); ?></option>
-            <option value='%[pq]'><?php echo LangUtil::getSearchCondition('SEARCH_END_WITH'); ?></option>            
-            
+			<option value='[pq]%'><?php echo LangUtil::getSearchCondition('SEARCH_BEGIN_WITH'); ?></option>           
 		<?php
 		
 	}

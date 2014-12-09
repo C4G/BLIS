@@ -68,12 +68,9 @@ function query_alter($query)
         }
 }
 
-function query_associative_all( $query, $row_count,$db="" ) 
+function query_associative_all( $query, $row_count ) 
 {
     global $con;
-	if(!empty($db))
-		db_change($db);
-	
 	if( !($result = mysql_query( $query, $con ) ) ) 
 	{
         return null;
@@ -90,13 +87,9 @@ function query_associative_all( $query, $row_count,$db="" )
     return $retval;
 }
 
-function query_associative_one( $query ,$db="") 
+function query_associative_one( $query ) 
 {
     global $con;
-
-	if(!empty($db))
-		db_change($db);
-		
 	if( !($result =  mysql_query( $query, $con ) ) ) 
 	{
         return null;
@@ -288,12 +281,9 @@ function get_last_db_error()
     return $retval;
 }
 
-function query_blind( $query ,$db="") 
+function query_blind( $query ) 
 {
     global $con;
-	if(!empty($db))
-		db_change($db);
-		
     $result = mysql_query( $query, $con );
 	$LOG_QUERIES = true;
 	if($LOG_QUERIES == true)

@@ -67,6 +67,10 @@ else if
 	# ...
 	# Fetch appropriate top menu options in an array
 	if(isset($_SESSION['user_level']))
-		$top_menu_options = get_top_menu_options($_SESSION['user_level']);
+	{	
+		$user = get_user_by_name($_SESSION['username']);
+
+		$top_menu_options = get_top_menu_options($_SESSION['user_level'], $user->rwoptions );
+	}
 }
 ?>

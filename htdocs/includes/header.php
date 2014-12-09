@@ -188,6 +188,7 @@ if(strpos($_SERVER['PHP_SELF'], 'login.php') === false)
 	{
 		foreach($top_menu_options as $key => $value)
 		{
+			//echo "hello "."<br/>";
 			
 			echo "<li ";
 			echo "><a href='".$value."' ";

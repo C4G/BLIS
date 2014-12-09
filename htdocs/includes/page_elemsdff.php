@@ -7181,7 +7181,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		(
 			$_SESSION['user_level'] == $LIS_TECH_RO ||
 			$_SESSION['user_level'] == $LIS_TECH_RW ||
-			$_SESSION['user_level'] == $LIS_CLERK
+			$_SESSION['user_level'] == $LIS_CLERK ||
+				$_SESSION['user_level'] == $LIS_PHYSICIAN 
 		)
 		{
 			$lab_config = LabConfig::getById($_SESSION['lab_config_id']); 

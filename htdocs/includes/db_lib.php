@@ -52,6 +52,8 @@ class User
 	public $langId;
 	public $country;
 	
+	public $rwoption;
+	
 	public static function getObject($record)
 	{
 		global $DEFAULT_LANG;
@@ -75,6 +77,9 @@ class User
 			
 		/*if( $user->labConfigId == 128 || $user->labConfigId == 129 || $user->labConfig == 131 ) */
 			$user->country = LabConfig::getUserCountry($user->labConfigId);
+		
+		$user->rwoptions = $record['rwoptions'];;
+		
 		return $user;
 	}
 	
@@ -510,6 +515,86 @@ class LabConfig
 		return $lab_config;
 	}
 	
+	public static function getDoctorUserOptions() {
+		$saved_db = DbUtil::switchToGlobal();
+		//global $con;
+		//$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+		$query_rwoptions= "SELECT * FROM user WHERE level=17 and lab_config_id = ".$_SESSION['lab_config_id']." LIMIT 1";
+		$recordOptions = query_associative_one($query_rwoptions);
+		DbUtil::switchRestore($saved_db);
+		//echo "from db sid ".$record['sid'];
+		if($recordOptions != null && count($recordOptions) != 0) {
+			return $recordOptions['rwoptions'];
+		}
+		else {
+			return '0122011111121';
+		}
+	}
+	
+	public static function getDoctorObject($record)
+	{
+		global $DEFAULT_DATE_FORMAT;
+		# Converts a lab_config record in DB into a LabConfig object
+		if($record == null)
+			return null;
+			$lab_config = new LabConfig();
+			if(isset($record['lab_config_id']))
+				$lab_config->id = $record['lab_config_id'];
+			else
+				$lab_config->id = null;
+			$lab_config->name = $record['name'];
+			$lab_config->location = $record['location'];
+			$lab_config->adminUserId = $record['admin_user_id'];
+			$lab_config->dbName = $record['db_name'];
+			if(isset($record['id_mode']))
+				$lab_config->idMode = $record['id_mode'];
+			else
+				$lab_config->idMode = 1;
+			## TODO: Reflect the following attribs in DB backend
+			$lab_config->collectionDateUsed = false;
+			$lab_config->collectionTimeUsed = false;
+			
+			
+			$arr1 = str_split(LabConfig::getDoctorUserOptions());
+		
+			$lab_config->patientAddl = $arr1[0];
+			$lab_config->specimenAddl = $arr1[1];
+			$lab_config->dailyNum = $arr1[2];
+			$lab_config->sid = $arr1[3];
+			$lab_config->pid = $arr1[4];;
+			$lab_config->comm = $arr1[5];
+			$lab_config->age = $arr1[6];
+			$lab_config->dob = $arr1[7];
+			$lab_config->rdate = $arr1[8];
+			$lab_config->refout = $arr1[9];
+			$lab_config->pname = $arr1[10];
+			$lab_config->sex = $arr1[11];
+			$lab_config->doctor = $arr1[12];
+
+			
+			if(isset($record['dnum_reset']))
+				$lab_config->dailyNumReset = $record['dnum_reset'];
+			else
+				$lab_config_id->dailyNumReset = LabConfig::$RESET_DAILY;
+			
+			if(isset($record['dformat']))
+				$lab_config->dateFormat = $record['dformat'];
+			else
+				$lab_config->dateFormat = $DEFAULT_DATE_FORMAT;
+			
+			if(isset($record['pnamehide']))
+				$lab_config->hidePatientName = $record['pnamehide'];
+			else
+				$lab_config->hidePatientName = 1;
+			
+			if(isset($record['ageLimit']))
+				$lab_config->ageLimit = $record['ageLimit'];
+			else
+				$lab_config->ageLimit = 5;
+			return $lab_config;
+	}
+
+	
 	public static function getById($lab_config_id) {
 		$saved_db = DbUtil::switchToGlobal();
 		//global $con;
@@ -520,6 +605,19 @@ class LabConfig
 		//echo "from db sid ".$record['sid'];
 		return LabConfig::getObject($record);
 	}
+	
+	public static function getDoctorConfig($lab_config_id) {
+		$saved_db = DbUtil::switchToGlobal();
+		//global $con;
+		//$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+		$query_config = "SELECT * FROM lab_config WHERE lab_config_id = $lab_config_id LIMIT 1";
+		$record = query_associative_one($query_config);
+		DbUtil::switchRestore($saved_db);
+		//echo "from db sid ".$record['sid'];
+		return LabConfig::getDoctorObject($record);
+	}
+	
+	
 	
 	public function getUserCountry($lab_config_id) {
 		global $con;
@@ -1557,7 +1655,8 @@ class TestType
 		$query_string = 
 			"SELECT * FROM test_type ".
 			"WHERE test_category_id=$cat_code AND disabled=0";
-		$saved_db = DbUtil::switchToLabConfigRevamp();
+		//$saved_db = DbUtil::switchToLabConfigRevamp();
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 		$resultset = query_associative_all($query_string, $row_count);
 		foreach($resultset as $record)
 		{
@@ -1572,7 +1671,8 @@ class TestType
 		# Returns test type record in DB
 		global $con;
 		$test_type_id = mysql_real_escape_string($test_type_id, $con);
-		$saved_db = DbUtil::switchToLabConfigRevamp();
+		//$saved_db = DbUtil::switchToLabConfigRevamp();
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 		$query_string =
 			"SELECT * FROM test_type WHERE test_type_id=$test_type_id LIMIT 1";
 		$record = query_associative_one($query_string);
@@ -2347,7 +2447,7 @@ class Patient
 			if($this->dob != null && $this->dob != "")
 			{
 				# DoB present in patient record
-				return DateLib::dobToAgeNumber($this->dob,true);
+				return DateLib::dobToAgeNumber($this->dob);
 			}
 			else
 			{	if($this->age<100)
@@ -2372,7 +2472,7 @@ class Patient
 				# Year and month specified
 				$approx_dob = trim($this->partialDob)."-01";
 			}
-			return DateLib::dobToAgeNumber($approx_dob,true);
+			return DateLib::dobToAgeNumber($approx_dob);
 		}
 	}
 	
@@ -2594,8 +2694,9 @@ class Patient
 		global $con;
 		$patient_id = mysql_real_escape_string($patient_id, $con);
 		$query_string = "SELECT * FROM patient WHERE patient_id=$patient_id";
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 		$record = query_associative_one($query_string);
-		//return 1;
+		DbUtil::switchRestore($saved_db);
 		return Patient::getObject($record);
 	}
 	
@@ -2965,7 +3066,9 @@ class Specimen
 	public function getTestNames()
 	{
 		$query_string = "SELECT test_type_id FROM test WHERE specimen_id=$this->specimenId";
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 		$resultset = query_associative_all($query_string, $row_count);
+		DbUtil::switchRestore($saved_db);
 		$retval = "";
 		$count = 0;
 		foreach($resultset as $record)
@@ -3280,59 +3383,6 @@ class Test
 		$retval = substr($this->result, -1*$PATIENT_HASH_LENGTH);
                 return $retval;
         }
-		
-public	function  getMeasureListArray()
-{
-	$retval = array();
-	$testType = TestType::getById($this->testTypeId);
-		$measure_list = $testType->getMeasures();
-                $submeasure_list = array();
-                $comb_measure_list = array();
-               // print_r($measure_list);
-                
-                foreach($measure_list as $measure)
-                {
-                    
-                    $submeasure_list = $measure->getSubmeasuresAsObj();
-                    //echo "<br>".count($submeasure_list);
-                    //print_r($submeasure_list);
-                    $submeasure_count = count($submeasure_list);
-                    
-                    if($measure->checkIfSubmeasure() == 1)
-                    {
-                        continue;
-                    }
-                        
-                    if($submeasure_count == 0)
-                    {
-                        array_push($comb_measure_list, $measure);
-                    }
-                    else
-                    {
-                        array_push($comb_measure_list, $measure);
-                        foreach($submeasure_list as $submeasure)
-                           array_push($comb_measure_list, $submeasure); 
-                    }
-                }
-                $measure_list = $comb_measure_list;
-		for($i = 0; $i < count($measure_list); $i++) {
-			$curr_measure = $measure_list[$i];
-                        if(strpos($curr_measure->name, "\$sub") !== false)
-                                                            {
-                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
-                                                                
-                                                            }
-                                                            else
-                                                            {
-                                                                $decName = $curr_measure->name;
-                                                            }
-                                            
-                        
-			$retval[] = $decName;
-		}
-		return $retval;
-	
-}
 	public function getMeasureList() {
 		$testType = TestType::getById($this->testTypeId);
 		$measure_list = $testType->getMeasures();
@@ -3526,7 +3576,7 @@ public	function  getMeasureListArray()
                                             if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE)
                                             {
                                                     $result_string = "";
-                                                    $value_list = str_replace("_", "<br/>", $result_list[$i]);
+                                                    $value_list = str_replace("_", ",", $result_list[$i]);
                                                     $retval .= "<b>".$value_list."</b>";
                                             }
                                             else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
@@ -3603,237 +3653,12 @@ public	function  getMeasureListArray()
                         }$c++;
 		}//end
 		//$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
-		return "<b>".$retval."</b>";
+		return $retval;
 	}
 	
-public function getTestMeasureRange($measurename,$testresultvalue)
-{
-	$test_type = TestType::getById($this->testTypeId);
-
-	$measure_list = $test_type->getMeasures();
-    $submeasure_list = array();
-    $comb_measure_list = array();
-
-    foreach($measure_list as $measure)
-    {		
-		
-		$submeasure_list = $measure->getSubmeasuresAsObj();
-
-        $submeasure_count = count($submeasure_list);
-                    
-
-                    if($measure->checkIfSubmeasure() == 1)
-
-                    {
-
-                        continue;
-
-                    }
-
-                        
-
-                    if($submeasure_count == 0)
-
-                    {
-
-                        array_push($comb_measure_list, $measure);
-
-                    }
-
-                    else
-
-                    {
-
-                        array_push($comb_measure_list, $measure);
-
-                        foreach($submeasure_list as $submeasure)
-
-                           array_push($comb_measure_list, $submeasure); 
-
-                    }
-
-                }
-
-                $measure_list = $comb_measure_list;
-
-                                                
-						$flag_num = -1;
-						foreach($measure_list as $measure) 
-						{
-							$flag_num++;
-							if($measure->name == $measurename)
-							{
-
-							$type=$measure->getRangeType();
-
-							if($type==Measure::$RANGE_NUMERIC) 
-							{
-
-								$range_list_array=$measure->getRangeString($patient);
-
-								$lower=$range_list_array[0];
-
-								$upper=$range_list_array[1];
-								
-								echo $this->getResultFlaged($testresultvalue,$lower,$upper);
-
-								$unit=$measure->unit;
-
-								if(stripos($unit,",")!=false) {	
-
-									echo "(";
-
-									$units=explode(",",$unit);
-
-									$lower_parts=explode(".",$lower);
-
-									$upper_parts=explode(".",$upper);
-
-				
-
-									if($lower_parts[0]!=0) {
-
-										echo $lower_parts[0];
-
-										echo $units[0];
-
-									}
-
-									
-
-									if($lower_parts[1]!=0) {
-
-										echo $lower_parts[1];
-
-										echo $units[1];
-
-									}
-
-									echo " - ";
-
-				
-
-									if($upper_parts[0]!=0) {
-
-										echo $upper_parts[0];
-
-										echo $units[0];
-
-									}
-
-									
-
-									if($upper_parts[1]!=0) {
-
-										echo $upper_parts[1];
-
-										echo $units[1];
-
-									}
-
-									echo ")";
-
-								} else if(stripos($unit,":")!=false) {
-
-									$units=explode(":",$unit);
-
-									echo "(";	
-
-									echo $lower;
-
-									?><sup><?php echo $units[0]; ?></sup> - 
-
-									<?php echo $upper;?> <sup> <?php echo $units[0]; ?> </sup>
-
-									<?php
-
-									echo " ".$units[1].")";
-
-								} else {	
-
-									echo "(";		
-
-									echo $lower; ?>-<?php echo $upper.")"; 
-
-									echo " ".$measure->unit;
-
-								}?>
-
-								<?php
-
-							} else {
-								$this->Color();
-
-								if($measure->unit=="")
-
-									$measure->unit="-";
-
-								echo "&nbsp;&nbsp;&nbsp;". $measure->unit;
-
-							}
-							
-							break;
-							}
-
-							//echo "<br>";
-
-						}
-}
-	
-	public function getResultAsArray()
-	{			
-		
-		$result_csv = $this->getResultWithoutHash();
-             
-                if(strpos($result_csv, "[$]") === false)
-                {
-                    $result_list = explode(",", $result_csv);
-                }
-                else
-                {
-                    //$testt = "one,[$]two[/$],[$]twotwo[/$],three";
-                    $testt = $result_csv;
-                    //$test2 = strstr($testt, $);
-                    $start_tag = "[$]";
-                    $end_tag = "[/$]";
-                    //$testtt = str_replace("[$]two[/$],", "", $testt);
-                    $freetext_results = array();
-                    $ft_count = substr_count($testt, $start_tag);
-                    //echo $ft_count;
-                    $k = 0;
-                    while($k < $ft_count)
-                    {
-                        $ft_beg = strpos($testt, $start_tag);
-                        $ft_end = strpos($testt, $end_tag);
-                        $ft_sub = substr($testt, $ft_beg + 3, $ft_end - $ft_beg - 3);
-                        $ft_left = substr($testt, 0, $ft_beg);
-                        $ft_right = substr($testt, $ft_end + 5);
-                        //echo "<br>".$ft_left."--".$ft_right."<br>";
-                        $testt = $ft_left.$ft_right;
-                        array_push($freetext_results, $ft_sub);
-                        $k++;
-                    }
-                    //echo $freetext_results."<br>".$testt;
-                    //$testtt = str_replace($subb, "", $testt, 1);
-                    //echo "$testto<br>$subb<br>";
-                    $result_csv = $testt;
-                    if(strpos($testt, ",") == 0)
-                            $result_csv = substr($testt, 1, strlen($testt)); 
-                    $result_list = explode(",", $result_csv);
-                    //echo "<br>";
-                    //print_r($result_list);
-                    //echo "<br>";
-                } 
-				
-		
-		return $result_list;
-	}
-	
-	
-        public function decodeResultWithoutMeasures($show_range=false,$patient = null) {
+        public function decodeResultWithoutMeasures($show_range=false) {
             # Converts stored result value(s) for showing on front-end
 		# Get measure, unit pairs for this test
-				
 		$test_type = TestType::getById($this->testTypeId);
 		$measure_list = $test_type->getMeasures();
                 //print_r($measure_list);
@@ -3944,21 +3769,18 @@ public function getTestMeasureRange($measurename,$testresultvalue)
                                                             $result_string .= $value."<br>";
                                                     }
                                                     $result_string = substr($result_string, 0, -4);
-                                                    $retval .= "<br>".$this->resetColor($result_string)."&nbsp;";
+                                                    $retval .= "<br>".$result_string."&nbsp;";
                                             }
                                             else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
                                             {
                                                     if($result_list[$i] != $curr_measure->unit)
-                                                            $retval .= "<br><b>".$this->resetColor($result_list[$i])."</b> &nbsp;";
+                                                            $retval .= "<br><b>".$result_list[$i]."</b> &nbsp;";
                                                     else
-                                                            $retval .= "<br>".$this->resetColor($result_list[$i])."&nbsp;";
+                                                            $retval .= "<br>".$result_list[$i]."&nbsp;";
                                             }
                                             else
                                             {
-												$range_list_array=$curr_measure->getRangeString($patient);
-												$lower=$range_list_array[0];				
-												$upper=$range_list_array[1];
-												$retval .= "<br>".$this->getResultFlaged($result_list[$i],$lower,$upper)."&nbsp;";
+                                                    $retval .= "<br>".$result_list[$i]."&nbsp;";
                                             }
                                     }
                                     else
@@ -3969,25 +3791,18 @@ public function getTestMeasureRange($measurename,$testresultvalue)
                                             if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE)
                                             {
                                                     $result_string = "";
-                                                    $value_list = str_replace("_", "<br/>", $result_list[$i]);
-                                                    $retval .= "<br><b>".$this->resetColor($value_list)."</b>";
+                                                    $value_list = str_replace("_", ",", $result_list[$i]);
+                                                    $retval .= "<br><b>".$value_list."</b>";
                                             }
                                             else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
                                             {
                                                     if($result_list[$i]!=$curr_measure->unit)
-                                                            $retval .= "<br><b>".$this->resetColor($result_list[$i])."</b>"."&nbsp;";
+                                                            $retval .= "<br><b>".$result_list[$i]."</b>"."&nbsp;";
                                                     else
-                                                            $retval .= $this->resetColor($result_list[$i])."&nbsp;";
+                                                            $retval .= $result_list[$i]."&nbsp;";
                                             }
                                             else
-											{
-												$range_list_array=$curr_measure->getRangeString($patient);
-												$lower=$range_list_array[0];				
-												$upper=$range_list_array[1];
-												//$this->getFlag($result_list[$i],$lower,$upper);
-								
-                                                    $retval .= "<br><b>".$this->getResultFlaged($result_list[$i],$lower,$upper)."</b>"."&nbsp;";
-											}
+                                                    $retval .= "<br><b>".$result_list[$i]."</b>"."&nbsp;";
                                     }
 
                                     if($show_range === true)
@@ -4006,7 +3821,7 @@ public function getTestMeasureRange($measurename,$testresultvalue)
                                     {
                                             
                                     }
-                                    $retval .= $this->resetColor(" - ")."<br>";
+                                    $retval .= " - <br>";
                             }
                             $i++;
                         }
@@ -4016,11 +3831,11 @@ public function getTestMeasureRange($measurename,$testresultvalue)
 
                             if(count($measure_list) == 1)
                             {
-                                $retval .= "<br>". $this->resetColor($ft_result)."&nbsp;";   
+                                $retval .= "<br>".$ft_result."&nbsp;";   
                             }
                             else
                             {
-                                 $retval .= "<br>".$this->resetColor($ft_result)."&nbsp;"; 
+                                 $retval .= "<br>".$ft_result."&nbsp;"; 
                             }
                             if($show_range === true)
                                         {
@@ -4035,7 +3850,7 @@ public function getTestMeasureRange($measurename,$testresultvalue)
                         }$c++;
 		}//end
 		//$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
-		return "<b>".$retval."</b>";
+		return $retval;
         }
         
         /*
@@ -4130,32 +3945,7 @@ public function getTestMeasureRange($measurename,$testresultvalue)
 		return $retval;
 	}
 	*/
-	
-	function getResultFlaged($result,$minrange,$maxrang)
-	{
-		if($result < $minrange)
-		{
-			return "<font color='#0033FF'>$result<font>";
-		}
-		else if( $result > $maxrang)
-		{
-			return "<font color='#FF0000'>$result<font>";
-		}
-		else
-		{
-			return "<font color='#000000'>$result<font>";
-		}
-	}
         
-	function resetColor($result)
-	{
-		return "<font color='#000000'>$result<font>";
-	}
-	function Color()
-	{
-		echo "<font color='#000000'>$result<font>";
-	}
-
 	public function getComments()
 	{
 		if(trim($this->comments) == "" || $this->comments == null)
@@ -4195,8 +3985,7 @@ public function getTestMeasureRange($measurename,$testresultvalue)
 		$record = query_associative_one($query_string);
 		$existing_entry = Test::getObject($record);
 		$test_id = $existing_entry->testId;
-		$new_result_value = $this->result.$hash_value;	
-		
+		$new_result_value = $this->result.$hash_value;
 		$query_verify = "";
 		if	(
 				$existing_entry->result == $new_result_value && 
@@ -5099,7 +4888,6 @@ class ReferenceRange
 	public $sex;
 	public $rangeLower;
 	public $rangeUpper;
-	public $agetype;
 	
 	public static function getObject($record)
 	{
@@ -5136,12 +4924,6 @@ class ReferenceRange
 			//$reference_range->rangeUpper = intval($record['range_upper']);
 		else
 			$reference_range->rangeUpper = null;
-		if(isset($record['age_type']))
-			$reference_range->agetype = $record['age_type'];
-		else
-			$reference_range->agetype = null;
-				
-		
 		return $reference_range;
 	}
 	
@@ -5150,8 +4932,8 @@ class ReferenceRange
 		# Adds this entry to database
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = 
-			"INSERT INTO reference_range (measure_id, age_min, age_max, sex, range_lower, range_upper,age_type) ".
-			"VALUES ($this->measureId, '$this->ageMin', '$this->ageMax', '$this->sex', '$this->rangeLower', '$this->rangeUpper',$this->agetype)";
+			"INSERT INTO reference_range (measure_id, age_min, age_max, sex, range_lower, range_upper) ".
+			"VALUES ($this->measureId, '$this->ageMin', '$this->ageMax', '$this->sex', '$this->rangeLower', '$this->rangeUpper')";
 		query_insert_one($query_string);
 		DbUtil::switchRestore($saved_db);
 	}
@@ -5171,51 +4953,38 @@ class ReferenceRange
 	}
 	
 	public static function getByAgeAndSex($age, $sex, $measure_id, $lab_config_id)
-	{		
-		
+	{
 		# Fetches the reference range based on supplied age and sex values
 		global $con;
 		$measure_id = mysql_real_escape_string($measure_id, $con);
 		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 		$age = mysql_real_escape_string($age, $con);
-		$sex = trim(mysql_real_escape_string($sex, $con));
+		$sex = mysql_real_escape_string($sex, $con);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$query_string = "SELECT * FROM reference_range WHERE measure_id=$measure_id";		
+		$query_string = "SELECT * FROM reference_range WHERE measure_id=$measure_id";
 		$retval = null;
 		$resultset = query_associative_all($query_string, $row_count);
 		if($resultset == null || count($resultset) == 0)
 			return $retval;
-			$normalizedage=0;
 		foreach($resultset as $record)
 		{
-			$ref_range = ReferenceRange::getObject($record);			
-			//default is in days
-			if($ref_range->agetype == 2)//month
-				$normalizedage = $age / 30;
-			else if($ref_range->agetype == 3)//year							
-				$normalizedage = $age / 365;	
-			else
-				$normalizedage = $age;//days
-					
-			
+			$ref_range = ReferenceRange::getObject($record);
 			if($ref_range->ageMin == 0 && $ref_range->ageMax == 0)
 			{
 				# No agewise split
-				if($ref_range->sex == "B" || strtolower(trim($ref_range->sex)) == strtolower($sex))
+				if($ref_range->sex == "B" || strtolower($ref_range->sex) == strtolower($sex))
 				{
 					return $ref_range;
 				}
 			}
-			else if($normalizedage >= $ref_range->ageMin &&  $normalizedage <= $ref_range->ageMax)
+			else if($ref_range->ageMin <= $age && $ref_range->ageMax >= $age)
 			{
-				
-				# Age wise split exists								
-				if($ref_range->sex == "B" || (strtolower(trim($ref_range->sex)) == strtolower($sex)))
+				# Age wise split exists
+				if($ref_range->sex == "B" || strtolower($ref_range->sex) == strtolower($sex))
 				{
-					
 					return $ref_range;
 				}
-			}			
+			}
 		}
 		DbUtil::switchRestore($saved_db);
 	}
@@ -6414,9 +6183,13 @@ function add_user($user)
 	# Adds a new user account
 	$saved_db = DbUtil::switchToGlobal();
 	$password = encrypt_password($user->password);
+	if($user->level == 17) {
+		$user->rwoptions = LabConfig::getDoctorUserOptions();
+	}
 	$query_string = 
-		"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id) ".
-		"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId')";
+		"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions) ".
+		"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions')";
+	
 	query_insert_one($query_string);
 	DbUtil::switchRestore($saved_db);
 }
@@ -6566,19 +6339,35 @@ function update_lab_user($updated_entry)
 {
 	# Updates lab user (non-admin) account
 	$saved_db = DbUtil::switchToGlobal();
+	if($updated_entry->level == 17) {
+		$updated_entry->rwoption = LabConfig::getDoctorUserOptions();
+	}
 	$query_string = 
 		"UPDATE user ".
 		"SET actualname='$updated_entry->actualName', ".
 		"phone='$updated_entry->phone', ".
 		"email='$updated_entry->email', ".
 		"level=$updated_entry->level, ".
-		"lang_id='$updated_entry->langId' ".
+		"lang_id='$updated_entry->langId', ".
+		"rwoptions='$updated_entry->rwoption' ".
 		"WHERE user_id=$updated_entry->userId";
 	query_blind($query_string);
 	if($updated_entry->password != "")
 	{
 		change_user_password($updated_entry->username, $updated_entry->password);
 	}
+	DbUtil::switchRestore($saved_db);
+}
+
+function update_lab_RWOptions($config)
+{
+	# Updates lab user (non-admin) account
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string = 
+	"UPDATE user ".
+	"SET rwoptions='$config'".
+	"WHERE level=17 and lab_config_id = ".$_SESSION['lab_config_id']."";
+	query_blind($query_string);	
 	DbUtil::switchRestore($saved_db);
 }
 
@@ -6642,7 +6431,7 @@ function get_user_position_by_id($user_id)
 	$user_level = $record['level'];
 	
 	
-	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_VERIFIER, $LIS_COUNTRYDIR, $LIS_CLERK;
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_VERIFIER, $LIS_COUNTRYDIR, $LIS_CLERK,$LIS_PHYSICIAN;
 	global $LIS_001, $LIS_010, $LIS_011, $LIS_100, $LIS_101, $LIS_110, $LIS_111, $LIS_TECH_SHOWPNAME;
 	
 	switch($user_level){
@@ -6661,6 +6450,9 @@ function get_user_position_by_id($user_id)
 		case $LIS_CLERK:
 			return "Clerk";
 			break;
+			case $LIS_PHYSICIAN:
+				return "Doctor";
+				break;
 		default :
 			return "";
 			break;
@@ -7035,7 +6827,9 @@ function search_patients_by_id_count($q, $labsection = 0)
 	
 	
 	
+	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 	$resultset = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
 	return $resultset['val'];
 }
 
@@ -7166,7 +6960,7 @@ function search_patients_by_name_count($q, $labsection = 0,$c="")
 			"p.name LIKE '$q' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
-			//;
+
 		}
 	} else {
 		if($labsection == 0){
@@ -7179,12 +6973,15 @@ function search_patients_by_name_count($q, $labsection = 0,$c="")
 			"p.name LIKE '$q' and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
-			//;
+			
 		}
 	}
-	//;
+	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 	$resultset = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
+	//$res = implode(",",$resultset);
 	return $resultset['val'];
+	//return $res;
 }
 
 function search_patients_by_addlid($q, $labsection = 0)
@@ -7321,7 +7118,9 @@ function search_patients_by_addlid_count($q, $labsection = 0)
 		}	
 	}
 	//;
+	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 	$resultset = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
 	return $resultset['val'];
 }
 
@@ -7450,7 +7249,9 @@ function search_patients_by_dailynum_count($q, $labsection = 0)
 	}
 	
 	
+	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 	$resultset = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
 	return $resultset['val'];
 }
 
@@ -7721,7 +7522,9 @@ function get_tests_by_specimen_id($specimen_id)
 	$specimen_id = mysql_real_escape_string($specimen_id, $con);
 	# Returns list of tests scheduled for this given specimen
 	$query_string = "SELECT * FROM test WHERE specimen_id=$specimen_id";
+	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 	$resultset = query_associative_all($query_string, $row_count);
+	DbUtil::switchRestore($saved_db);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -7854,7 +7657,9 @@ function get_specimens_by_patient_id($patient_id, $labsection =0)
 		"ORDER BY s.date_collected DESC";
 	}
 		//;
+	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 	$resultset = query_associative_all($query_string, $row_count);
+	DbUtil::switchRestore($saved_db);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -8022,31 +7827,10 @@ function get_specimen_by_id($specimen_id)
 	$query_string = 
 		"SELECT * FROM specimen WHERE specimen_id=$specimen_id LIMIT 1";
 	//;
+	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 	$record = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
 	return Specimen::getObject($record);
-}
-
-function get_specimen_by_auxid($specimen_id)
-{
-	global $con;
-	$specimen_id = mysql_real_escape_string($specimen_id, $con);
-	# Fetches a specimen record by specimen id
-	$query_string = 
-		"SELECT * FROM specimen WHERE  aux_id='$specimen_id' LIMIT 1";		
-	//;
-	$record = query_associative_one($query_string);
-	return Specimen::getObject($record);
-}
-
-function get_specimenAndTest($aux_id)
-{
-	global $con;
-	$specimen_id = mysql_real_escape_string($specimen_id, $con);
-	# Fetches a specimen record by specimen id
-	$query_string = 
-		"SELECT * FROM specimen WHERE  aux_id='$specimen_id' LIMIT 1";		
-	//;
-	$record = query_associative_one($query_string);
 }
 
 function get_specimen_by_id_api($specimen_id, $lab_config_id)
@@ -9051,8 +8835,7 @@ function get_site_list($user_id)
 	$saved_db = DbUtil::switchToGlobal();
 	$user = get_user_by_id($user_id);
 	$retval = array();
-	//if($user->isAdmin())
-	if(is_admin($user))
+	if(is_admin_check($user))
 	{
 		# Admin level user
 		# Return all owned/accessible lab configurations
@@ -9819,7 +9602,8 @@ function get_specimen_name_by_id($specimen_type_id)
 		return LangUtil::getSpecimenName($specimen_type_id);
 	else
 	{
-		$saved_db = DbUtil::switchToLabConfigRevamp();
+		//$saved_db = DbUtil::switchToLabConfigRevamp();
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 		$query_string = 
 			"SELECT name FROM specimen_type ".
 			"WHERE specimen_type_id=$specimen_type_id LIMIT 1";
@@ -9843,7 +9627,8 @@ function get_test_name_by_id($test_type_id, $lab_config_id=null)
 	return LangUtil::getTestName($test_type_id);
 	else
 	{
-		$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+		//$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
 		$query_string = 
 			"SELECT name FROM test_type ".
 			"WHERE test_type_id=$test_type_id LIMIT 1";
@@ -10212,6 +9997,84 @@ function get_daily_number()
 	return $returnValue;
 }
 
+function update_daily_number_registration()
+{
+	# Generate the next daily number for specimen registration
+	$today = date("Ymd");
+	switch($_SESSION['dnum_reset'])
+	{
+		case LabConfig::$RESET_DAILY:
+			$today = date("Ymd");
+			break;
+		case LabConfig::$RESET_WEEKLY:
+			$today = date("Y_W");
+			break;
+		case LabConfig::$RESET_MONTHLY:
+			$today = date("Ym");
+			break;
+		case LabConfig::$RESET_YEARLY:
+			$today = date("Y");
+			break;
+	}
+	$query_string =
+	"SELECT * FROM patient_daily ".
+	"WHERE datestring='$today'";
+	$record = query_associative_one($query_string);
+
+	if($record == null) {
+		$returnValue = 1;
+		$query_string = "INSERT INTO patient_daily (datestring, count) ".
+				"VALUES ('$today', $returnValue)";
+		query_insert_one($query_string);
+		//update_session_number(date("Ymd"));
+	}
+	else {
+		$returnValue = $record['count']+1;
+		$query_string = "update patient_daily set count=$returnValue where datestring='$today' ";
+		query_blind($query_string);
+		//update_session_number(date("Ymd"));
+	}
+	return $returnValue;
+}
+
+function get_daily_number_registration()
+{
+	# Generate the next daily number for specimen registration
+	$today = date("Ymd");
+	switch($_SESSION['dnum_reset'])
+	{
+		case LabConfig::$RESET_DAILY:
+			$today = date("Ymd");
+			break;
+		case LabConfig::$RESET_WEEKLY:
+			$today = date("Y_W");
+			break;
+		case LabConfig::$RESET_MONTHLY:
+			$today = date("Ym");
+			break;
+		case LabConfig::$RESET_YEARLY:
+			$today = date("Y");
+			break;
+	}
+	$query_string =
+	"SELECT * FROM patient_daily ".
+	"WHERE datestring='$today'";
+	$record = query_associative_one($query_string);
+
+	if($record == null) {
+		$returnValue = 1;
+		//update_session_number(date("Ymd"));
+	}
+	else {
+		$returnValue = $record['count']+1;
+		//update_session_number(date("Ymd"));
+	}
+	return $returnValue;
+}
+
+
+
+
 function update_daily_number($daily_date_string, $curr_count)
 {
 	# Updates count values for daily numbers
@@ -10465,8 +10328,14 @@ function get_lab_config_test_types($lab_config_id, $to_global=false)
 {
 	## Moved to LabConfig::getTestTypeIds();
 	global $con;
+	//$lab_config_id = 127;
+	
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	//echo "test ".$lab_config_id;
+	//$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$lab_config = LabConfig::getById($lab_config_id);
+	//DbUtil::switchRestore($saved_db);
+	
 	return $lab_config->getTestTypeIds();
 }
 
@@ -10743,7 +10612,9 @@ function get_custom_data_specimen($specimen_id)
 	$query_string = 
 		"SELECT * FROM specimen_custom_data ".
 		"WHERE specimen_id=$specimen_id";
+	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);		
 	$resultset = query_associative_all($query_string, $row_count);
+	DbUtil::switchRestore($saved_db);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -11803,7 +11674,7 @@ class GlobalPatient
 			if($this->dob != null && $this->dob != "")
 			{
 				# DoB present in patient record
-				return DateLib::dobToAgeNumber($this->dob,true);
+				return DateLib::dobToAgeNumber($this->dob);
 			}
 			else
 			{	if($this->age<100)
@@ -11828,7 +11699,7 @@ class GlobalPatient
 				# Year and month specified
 				$approx_dob = trim($this->partialDob)."-01";
 			}
-			return DateLib::dobToAgeNumber($approx_dob,true);
+			return DateLib::dobToAgeNumber($approx_dob);
 		}
 	}
 	
@@ -13320,17 +13191,20 @@ function get_cost_of_test($test)
 function generate_bill_data_for_patient_and_date_range($patient_id, $first_date, $second_date, $labsection=0)
 {
 	//echo "Lab Section ".$labsection;
+	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
     $test_info = get_all_tests_for_patient_and_date_range($patient_id, $first_date, $second_date, $labsection);
-
+	DbUtil::switchRestore($saved_db);
+	
     $test_ids = array();
     $test_dates = array();
     foreach ($test_info as $test) {
         $test_ids[] = $test['test_id'];
         $test_dates[] = date("Y-m-d", strtotime($test['ts']));
     }
-    
+    $saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
     $names_and_costs = get_test_names_and_costs_from_ids($test_ids);
-    $bill_total = array_sum($names_and_costs['costs']);
+    DbUtil::switchRestore($saved_db);
+	$bill_total = array_sum($names_and_costs['costs']);
     $bill_fields = array();
     $bill_fields['total'] = $bill_total;
     $bill_fields['names'] = $names_and_costs['names'];
@@ -14267,7 +14141,9 @@ function search_patients_by_db_id_count($patient_code, $labsection)
     			"(select specimen_type_id from specimen_test where test_type_id in ".
     			"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))";
     	
-    	$resultset = query_associative_one($query_string);
+    	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
+	$resultset = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
     	return $resultset['val'];
     }
     return $count;
@@ -15522,13 +15398,16 @@ function api_decode_results($testObj)
 function is_admin_check($user)
 {
 	# Returns true for admin and superadmin level users
-	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_CLERK, $LIS_TECH_SHOWPNAME, $LIS_COUNTRYDIR;
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_CLERK, $LIS_TECH_SHOWPNAME, $LIS_COUNTRYDIR, $READONLYMODE, $LIS_PHYSICIAN;
 	if
 	(
 		$user->level == $LIS_TECH_RO || 
 		$user->level == $LIS_TECH_RW || 
 		$user->level == $LIS_CLERK || 
-		$user->level == $LIS_TECH_SHOWPNAME
+		$user->level == $LIS_TECH_SHOWPNAME ||
+		$user->level == $READONLYMODE ||
+		$user->level == $LIS_PHYSICIAN ||
+		$user->level == $LIS_PHYSICIAN 
 	)
 		return false;
 	return true;
@@ -15546,7 +15425,7 @@ function is_super_admin_check($user)
 function is_country_dir_check($user)
 {
 	# Returns true for superadmin level users only
-	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_ADMIN, $LIS_VERIFIER, $LIS_SUPERADMIN, $LIS_COUNTRYDIR;
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_ADMIN, $LIS_VERIFIER, $LIS_SUPERADMIN, $LIS_COUNTRYDIR, $LIS_PHYSICIAN;
 	if($user->level == $LIS_COUNTRYDIR)
 		return true;
 	return false;
@@ -15555,7 +15434,7 @@ function is_country_dir_check($user)
 function is_verifier_check($user)
 {
 	# Returns true for superadmin level users only
-	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_ADMIN, $LIS_VERIFIER, $LIS_SUPERADMIN, $LIS_COUNTRYDIR;
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_ADMIN, $LIS_VERIFIER, $LIS_SUPERADMIN, $LIS_COUNTRYDIR, $LIS_PHYSICIAN;
 	if($user->level == $LIS_VERIFIER)
 		return true;
 	return false;
@@ -15599,8 +15478,9 @@ class API
     }
     
    public function login($username, $password)
-    {      
-     global $con;
+    {
+       print_r($_SESSION);
+        global $con;
 	$username = mysql_real_escape_string($username, $con);
 	$saved_db = DbUtil::switchToGlobal();
 	$password = encrypt_password($password);
@@ -15618,8 +15498,8 @@ class API
         }
         else
         {
-            $dbName = API::start_session($username, $password);			
-            return $dbName;
+            $tok = API::start_session($username, $password);
+            return $tok;
         }
     }
     
@@ -15630,11 +15510,86 @@ class API
          session_start();
         
          $sid = session_id();
-         //$_SESSION['tok'] = $sid;        
-   	 $user = get_user_by_name($username);	
-	return "blis_".$user->labConfigId;
-	
+         //$_SESSION['tok'] = $sid;
+        
+         $user = get_user_by_name($username);
+	$_SESSION['username'] = $username;
+	$_SESSION['user_id'] = $user->userId;
+	$_SESSION['user_actualname'] = $user->actualName;
+	$_SESSION['user_level'] = $user->level;
+        $_SESSION['level'] = $user->level;
+	$_SESSION['locale'] = $user->langId;
+	if($user->level==17) {
+		$combinedString = $user->rwoptions;
+
+		$_SESSION['doctorConfig'] = $combinedString;
 	}
+        
+	if(is_admin_check($user))
+	{
+		
+		$lab_id=get_lab_config_id_admin($user->userId);
+		$_SESSION['lab_config_id'] = $lab_id;
+		$_SESSION['db_name'] = "blis_".$lab_id;
+		$_SESSION['dformat'] = $DEFAULT_DATE_FORMAT;
+		$_SESSION['country'] = $user->country;
+	}
+	else
+	{
+		$_SESSION['lab_config_id'] = $user->labConfigId;
+		echo $user->labConfigId;
+		$_SESSION['country'] = $user->country;
+		$lab_config = get_lab_config_by_id($user->labConfigId);
+		$_SESSION['db_name'] = $lab_config->dbName;
+		$_SESSION['dformat'] = $lab_config->dateFormat;
+		$_SESSION['dnum_reset'] = $lab_config->dailyNumReset;
+		$_SESSION['pnamehide'] = $lab_config->hidePatientName;
+		# Config values for registration fields
+		if($user->level!=17) {
+		$_SESSION['p_addl'] = $lab_config->patientAddl;
+		$_SESSION['s_addl'] = $lab_config->specimenAddl;
+		$_SESSION['dnum'] = $lab_config->dailyNum;
+		$_SESSION['sid'] = $lab_config->sid;
+		$_SESSION['pid'] = $lab_config->pid;
+		$_SESSION['comm'] = $lab_config->comm;
+		$_SESSION['age'] = $lab_config->age;
+		$_SESSION['dob'] = $lab_config->dob;
+		$_SESSION['rdate'] = $lab_config->rdate;
+		$_SESSION['refout'] = $lab_config->refout;
+		$_SESSION['pname'] = $lab_config->pname;
+		$_SESSION['sex'] = $lab_config->sex;
+		$_SESSION['doctor'] = $lab_config->doctor;
+		}
+		else {
+			$arr1 = str_split($combinedString);
+			$_SESSION['p_addl'] = $arr1[0];
+			$_SESSION['s_addl'] = $arr1[1];
+			$_SESSION['dnum'] = $arr1[2];
+			$_SESSION['sid'] = $arr1[3];
+			$_SESSION['pid'] = $arr1[4];
+			$_SESSION['comm'] = $arr1[5];
+			$_SESSION['age'] = $arr1[6];
+			$_SESSION['dob'] = $arr1[7];
+			$_SESSION['rdate'] = $arr1[8];
+			$_SESSION['refout'] = $arr1[9];
+			$_SESSION['pname'] = $arr1[10];
+			$_SESSION['sex'] = $arr1[11];
+			$_SESSION['doctor'] = $arr1[12];			
+		}
+		if($SERVER == $ON_PORTABLE)
+			$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_".$lab_config->id."/";
+		else
+			$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
+	}
+	
+	
+	# Set session variables for recording latency/user props
+	$_SESSION['PROPS_RECORDED'] = false;
+	$_SESSION['DELAY_RECORDED'] = false;
+	#TODO: Add other session variables here
+	$_SESSION['user_role'] = "garbage";
+         return 1; 
+    }
     
     public function stop_session()
     {
@@ -15750,7 +15705,7 @@ class API
     
     public function get_specimen($specimen_id)
     {
-        $spec = get_specimen_by_auxid($specimen_id);
+        $spec = get_specimen_by_id($specimen_id);
         if(count($spec) > 0)
                 $ret = $spec;
              else
@@ -15758,133 +15713,7 @@ class API
              
         return $ret;
     }
-    
-	public function update_result($db,$specimen_id,$measure_id,$result)
-	{
-		$sql = "select t.test_id,s.specimen_id,t.test_type_id,m.measure_id,s.patient_id from test t 
-inner join specimen s on s.specimen_id=t.specimen_id 
-inner join test_type_measure m on m.test_type_id=t.test_type_id 
-where trim(s.aux_id)='$specimen_id' and m.measure_id=$measure_id limit 1";
-	$record = query_associative_one($sql,$db);
-		if(count($record) > 0)
-		{			
-			$sql = "select measure_id from test_type_measure where  test_type_id=".$record["test_type_id"];
-			$measures = query_associative_all($sql, $row_count,$db);					
-			if(count($measures)>0)
-			{	
-				$result_index=0;		
-				
-				for($i=0;$i<count($measures);$i++)
-				{
-					if($measures[$i]["measure_id"] == $measure_id)
-					{
-						$result_index = $i;						
-						break;
-					}
-				}	
-							
-				$sql = "SELECT result FROM test where test_id=".$record["test_id"];
-				$test = query_associative_one($sql, $row_count,$db);
-				$results_csv = "";											
-				if(!empty($test['result']))
-				{				
-					
-					$results_parts = explode(",",$test["result"]);					
-					$results_parts[$result_index] = $result;
-					$results_csv = implode(",",	$results_parts);
-					
-				}
-				else
-				{
-					
-					for($i=0;$i<count($measures);$i++)
-					{						
-						if($i==$result_index)
-							$results_csv .=$result;	
-							
-						$results_csv .=',';								
-							
-					}	
-					$patient = Patient::getById($record["patient_id"]);
-					$hash_value = $patient->getHashValue();
-					$results_csv .= ','.$hash_value;
-				}		
-									
-					//echo 	$results_csv;exit;
-					$sql = "UPDATE test ".
-							"SET  result='$results_csv'".
-							" where test_id=".$record["test_id"];							
-							query_blind($sql,$db);
-							return 1;
-				
-			}
-			else
-			{
-				return 0;
-			}
-			
-		}
-		else
-		{
-			return 0;
-		}
-		
-	}
-	
-	public function getTestDetails($db,$specimenTypefilter ="",$test_typeFilter="",$day=0,$aux_id="")
-	{
-		$sql = "SELECT distinct s.specimen_id,s.aux_id,s.date_collected,s.date_recvd,s.doctor,p.name,p.surr_id,p.sex,p.dob as dob,p.partial_dob,
-t.test_type_id,s.specimen_type_id,st.name as specimentype FROM specimen s
-inner join patient p on p.patient_id=s.patient_id
-inner join test t on t.specimen_id=s.specimen_id
-inner join test_type tt on tt.test_type_id=t.test_type_id
-inner join specimen_type st on st.specimen_type_id=s.specimen_type_id
-inner join test_type_measure tm on tm.test_type_id = tt.test_type_id ";
-
-if(!empty($aux_id))
-	$sql .="where s.aux_id = '$aux_id' ";
-else
-	$sql .="where date(s.date_collected) >= curdate()-$day ";
-if(!empty($specimenTypefilter))
-	$sql .=" and st.specimen_type_id in ($specimenTypefilter)";		
-if(!empty($test_typeFilter))
-	$sql .=" and tt.test_type_id in ($test_typeFilter)";	 
-	 $resultset = query_associative_all($sql, $row_count,$db);	
-        if(count($resultset) > 0)
-                $ret = $resultset;
-             else
-                $ret = 0;
-             
-        return $ret;
-		
-	}
-	public function get_specimenAndTest($db,$specimen_id="",$specimenTypefilter="",$test_filter="",$datefrom="",$dateto="")
-	{
-		$sql ="SELECT s.specimen_id,s.aux_id,s.date_collected,s.date_recvd,s.doctor,p.name,p.surr_id,p.sex,p.dob as dob,p.partial_dob,
-t.test_type_id,tm.measure_id,m.name as testname,s.specimen_type_id,st.name as specimentype FROM specimen s
-inner join patient p on p.patient_id=s.patient_id
-inner join test t on t.specimen_id=s.specimen_id
-inner join test_type tt on tt.test_type_id=t.test_type_id
-inner join specimen_type st on st.specimen_type_id=s.specimen_type_id
-inner join test_type_measure tm on tm.test_type_id = tt.test_type_id
-inner join measure m on m.measure_id = tm.measure_id where 1";
-if(!empty($specimen_id))
-	$sql .=" and TRIM(s.aux_id)='$specimen_id'";
-if(!empty($specimenTypefilter))
-	$sql .=" and st.specimen_type_id in ($specimenTypefilter)";
-if(!empty($test_filter))
-	$sql .=" and m.measure_id in ($test_filter)";	
-if(!empty($datefrom) && !empty($dateto))
-	$sql .=" and s.date_collected between '$datefrom' and '$dateto'";
-	$sql .=" order by specimen_id ";
-	$resultset = query_associative_all($sql, $row_count,$db);	
-        if(count($resultset) > 0)
-                $ret = $resultset;
-             else
-                $ret = 0;
-             
-        return $ret;
-	}
+     
     public function get_specimen_catalog()
     {
         global $CATALOG_TRANSLATION;
