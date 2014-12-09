@@ -642,19 +642,19 @@ display:none;
 <div id='logo' >
 <?php
 # If hospital logo exists, include it
-$logo_path = "../logos/logo_".$lab_config_id.".jpg";
-$logo_path2 = "../ajax/logo_".$lab_config_id.".jpg";
-$logo_path1="../../logo_".$lab_config_id.".jpg";
+$logo_path = "../logos/logo_billing_".$lab_config_id.".jpg";
+$logo_path2 = "../ajax/logo_billing_".$lab_config_id.".jpg";
+$logo_path1="../../logo_billing_".$lab_config_id.".jpg";
 if(file_exists($logo_path1) === true)
 {	copy($logo_path1,$logo_path);
 	?>
-	<img src='<?php echo "logos/logo_".$lab_config_id.".jpg"; ?>' alt="Big Boat" height='140px'    ></src>
+	<img src='<?php echo "logos/logo_billing_".$lab_config_id.".jpg"; ?>' alt="Big Boat" height='140px'    ></src>
 	<?php
 }
 else if(file_exists($logo_path) === true)
 {
 ?>
-	<img src='<?php echo "logos/logo_".$lab_config_id.".jpg"; ?>' alt="Big Boat" height='140px' width='140px'></src>
+	<img src='<?php echo "logos/logo_billing_".$lab_config_id.".jpg"; ?>' alt="Big Boat" height='140px' width='140px'></src>
 	<?php
 }
 ?>
@@ -823,6 +823,8 @@ else
 	<br>
 	<?php
 }
+
+//echo "Bill count - ".count($billing_info['names']);
 if(count($billing_info['names']) != 0)
 {?>
 <table>
@@ -850,7 +852,8 @@ if(count($billing_info['names']) != 0)
         <td></td>
         <td>BILL TOTAL</td>
         <?php if($defaultFlag != 1) { ?>
-        <td><?php echo format_number_to_money_currencyName(($billing_info['costs'][$i])*$exchange_rate->getExchangeRate(), $currencyTo); ?></td>
+        <td><?php echo format_number_to_money_currencyName(($billing_info['total'])*$exchange_rate->getExchangeRate(), $currencyTo); ?>
+        </td>
 		<?php } else {?>
 		<td><?php echo format_number_to_money(($billing_info['costs'][$i])); ?></td>
 		<?php } ?>
