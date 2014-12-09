@@ -53,6 +53,7 @@ putUILog('new_specimen', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X'
 
 	var data_string="<?php echo $php_array;?>";
 	var data=data_string.split("%"); 
+	
 	$("#doc_row_1_input").autocomplete(data);
 
 	//$(".doctors_auto").autocomplete(data);

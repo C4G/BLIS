@@ -16,7 +16,9 @@ class CustomFieldOrderGeneration_Patient{
 		 echo "</td></tr>";
 	}
 	public static function generate_patient_Id(){
-		print "<tr ";
+		if($_SESSION['user_level'] != 17) {
+			print "<tr ";
+				
 		if($_SESSION['pid'] == 0)
 			echo " style='display:none;' ";
 			echo " ><td>";
@@ -27,6 +29,7 @@ class CustomFieldOrderGeneration_Patient{
 			echo "</td>
 			<td><input type='text' name='pid' id='pid' value='' size='20' class='uniform_width' /></td>
 		</tr>";
+		}
 	}
 	
 	public static function generate_patient_rdate(){ 
@@ -46,6 +49,7 @@ class CustomFieldOrderGeneration_Patient{
 	}
 
 	public static function generate_patient_addl(){ 
+		if($_SESSION['user_level'] != 17) {
 		echo "<tr ";
 		if($_SESSION['p_addl'] == 0)
 			echo " style='display:none;' ";
@@ -55,10 +59,11 @@ class CustomFieldOrderGeneration_Patient{
 		echo "</td>
 		<td><input type='text' name='addl_id' id='addl_id' value='' size='20' class='uniform_width' /></td>
 		</tr>";
+		}
 	}
 	
 	public static function generate_patient_dailynum(){ 
-		$daily_num = get_daily_number();
+		$daily_num = get_daily_number_registration();
 		echo "<tr ";
 		if( is_numeric($_SESSION['dnum']) && $_SESSION['dnum'] == 0 )
 			echo " style='display:none;' ";

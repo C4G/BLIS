@@ -26,7 +26,7 @@ if(count($specimen_list) > 1)
 }
 ?>
  | <a href='session_print.php?snum=<?php echo $session_num; ?>' target='_blank'><?php echo LangUtil::$generalTerms['CMD_PRINT']; ?></a>
- | <a href='find_patient.php'>&laquo; <?php echo LangUtil::$pageTerms['MSG_NEXTSPECIMEN']; ?></a>
+ | <a href='doctor_register.php'>&laquo; <?php echo LangUtil::$pageTerms['MSG_NEXTSPECIMEN']; ?></a>
 <br><br>
 <?php
 if(count($specimen_list) == 0)
@@ -52,7 +52,7 @@ $patient_id = $specimen_list[0]->patientId;
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			</td>
 			<td>
-				<?php $page_elems->getPostSpecimenEntryTaskList($patient_id); ?>
+			  	<?php $page_elems->getPostSpecimenEntryTaskList($patient_id); ?>
 			</td>
 		</tr>
 	</tbody>

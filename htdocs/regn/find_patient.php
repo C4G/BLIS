@@ -31,13 +31,14 @@ function restrictCharacters(e) {
 	
 	var alphabets = /[A-Za-z]/g;
 	var numbers = /[0-9]/g;
+	var specialCharacter = /[_&.]/g;
 	if(!e) var e = window.event;
 	if( e.keyCode ) code = e.keyCode;
 	else if ( e.which) code = e.which;
 	var character = String.fromCharCode(code);
 	
 	if( !e.ctrlKey && code!=9 && code!=8 && code!=27 && code!=36 && code!=37 && code!=38  && code!=40 &&code!=13 &&code!=32 ) {
-		if ( !character.match(alphabets) && !character.match(numbers) )
+		if ( !character.match(alphabets) && !character.match(numbers) && !character.match(specialCharacter))
 			return false;
 		else
 			return true;
@@ -144,6 +145,18 @@ function hideCondition(p_attrib)
 </script>
 
 <p style="text-align: right;"><a rel='facebox' href='#Registration'>Page Help</a></p>
+<div class='sidetip_patient'>
+<b> Tips </b>
+<br />
+<br />
+		<?php
+		if(LangUtil::$pageTerms['TIPS_REGISTRATION_1']!="-") {
+			echo "This page allows us to register new patients or lookup existing patients based on name, patient ID or number.";
+			echo "</br>";
+		}	
+		
+		?>
+</div>
 <span class='page_title'><?php echo LangUtil::getTitle(); ?></span>
 <!--| <a href='new_patient.php' title='Click to add a new patient in the system'>Add New Patient &raquo;</a>-->
 <br><br>

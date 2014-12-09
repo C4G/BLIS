@@ -22,7 +22,7 @@ $script_elems->enableJQueryForm();
 $script_elems->enableFacebox();
 
 $lab_config = get_lab_config_by_id($_SESSION['lab_config_id']);
-$daily_num = get_daily_number(); 
+//$daily_num = get_daily_number(); 
 $session_num = get_session_number();
 $uiinfo = "qr=".$_REQUEST['n'];
 putUILog('new_patient', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
