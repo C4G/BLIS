@@ -233,6 +233,7 @@ if ( !((is_country_dir($user)) || (is_super_admin($user)) ) ) {
 }
 //echo "Lab Config Id ".$lab_config_id;
 $lab_config = LabConfig::getById($lab_config_id);
+$doctor_lab_config = LabConfig::getDoctorConfig($lab_config_id);
 //Patient Custom Fields for the lab with $lab_config
 $custom_field_list_patients = get_lab_config_patient_custom_fields($lab_config->id);
 $custom_field_list_specimen = get_lab_config_specimen_custom_fields($lab_config->id);
@@ -261,7 +262,9 @@ $field_odering_specimen = field_order_update::install_first_order($lab_config, 2
   #sortablePatients { list-style-type: none; margin: 0; padding: 0; width: 60%; }
   #sortablePatients li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.0em; height: 16px; }
   #sortablePatients li span { position: absolute; margin-left: -1.3em; }
-  
+  #doctor_sortablePatients { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  #doctor_sortablePatients li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.0em; height: 16px; }
+  #doctor_sortablePatients li span { position: absolute; margin-left: -1.3em; }
   #sortableSpecimen { list-style-type: none; margin: 0; padding: 0; width: 60%; }
   #sortableSpecimen li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.0em; height: 16px; }
   #sortableSpecimen li span { position: absolute; margin-left: -1.3em; }
@@ -288,6 +291,7 @@ $(document).ready(function(){
 	});
 	$('#revert_done_msg').hide();
 	$('#reorder_fields').hide();
+	$('#doctor_reorder_fields').hide();
 	
 	
 	$('#cat_code12').change( function() { get_test_types_bycat() });
@@ -307,6 +311,15 @@ $(document).ready(function(){
 		right_load(4, 'fields_div');
 		<?php
 	}
+	
+	else if(isset($_REQUEST['show_df']))
+	{
+	# Preload custom fields pane
+	?>
+			right_load(4, 'doctor_fields_div');
+			<?php
+		}
+		
 	else if(isset($_REQUEST['show_i']))
 	{
 		# Preload the inventory pane
@@ -371,6 +384,15 @@ $(document).ready(function(){
 		right_load(4, 'fields_div');
 		<?php
 	}
+	else if(isset($_REQUEST['dfupdate']))
+	{
+	# Show custom field updated message
+	?>
+			$('#cfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('cfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+			$('#cfield_msg').show();
+			right_load(4, 'doctor_fields_div');
+			<?php
+		}
 	else if(isset($_REQUEST['fadd']))
 	{
 		# Show custom field added message
@@ -380,6 +402,15 @@ $(document).ready(function(){
 		right_load(4, 'fields_div');
 		<?php
 	}
+	else if(isset($_REQUEST['dfadd']))
+	{
+	# Show custom field added message
+	?>
+			$('#cfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_ADDED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('cfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+			$('#cfield_msg').show();
+			right_load(4, 'doctor_fields_div');
+			<?php
+		}
 	else if(isset($_REQUEST['stupdate']))
 	{
 		# Show custom field updated message
@@ -459,6 +490,16 @@ $(document).ready(function(){
 		right_load(4, 'fields_div');
 		<?php
 	}
+	
+	else if(isset($_REQUEST['odfupdate']))
+	{
+	# Show other fields updated message
+	?>
+			$('#cfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('cfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+			$('#cfield_msg').show();
+			right_load(4, 'doctor_fields_div');
+			<?php
+		}
         //NC3065
         else if(isset($_REQUEST['sfcupdate']))
 	{
@@ -571,10 +612,17 @@ function openReorder(){
 	$('#reorder_fields').show();
 }
 
+function openDoctorReorder(){
+	$('#doctor_reorder_fields').show();
+}
+
 function closeReorder(){
 	$('#reorder_fields').hide();
 }
 
+function closeDoctorReorder(){
+	$('#doctor_reorder_fields').hide();
+}
 
 function performDbUpdate() {
 	$.ajax({
@@ -870,6 +918,25 @@ function toggle_ofield_div()
 	 }
 }
 
+function doctor_toggle_ofield_div()
+{
+	$('#doctor_ofield_summary').toggle();
+	$('#doctor_ofield_form_div').toggle();
+	var curr_link_text = $('#doctor_ofield_toggle_link').html();
+	if(curr_link_text == "<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>")
+		{
+		 $('#doctor_ofield_toggle_link').html("<?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?>");
+		 $('#doctor_field_reorder_link_patient').show();
+		 $('#doctor_field_reorder_link_specimen').show();
+		}
+	else{
+		$('#doctor_ofield_toggle_link').html("<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>");
+		$('#doctor_field_reorder_link_patient').show();
+		$('#doctor_field_reorder_link_specimen').show();
+	 }
+}
+
+
 
 $(function() {
     // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
@@ -969,6 +1036,103 @@ $(function() {
     
 });
 
+$(function() {
+    // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+   $( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+   $( "#doctor-dialog-form-patients" ).dialog({
+        autoOpen: false,
+        //position: { my: "center", at: "center", collision: 'none' },
+        height: 400,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Update": function() {
+                var index = 0;
+				var orders = "formId=1&";
+				$('#doctor_sortablePatients li').each(function(){
+					var $this = $(this);
+					index++;
+					var field_name = $this.text();
+					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
+				});
+				
+				orders = orders.match(/(.*).$/)[1];
+								
+				$.ajax({
+					url : "ajax/process-field-ordering.php?"+orders,
+					async: false,
+					success : function(data) {
+						alert("Patient Field Order Updated");
+						window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
+					}	
+				});
+   		     
+				},
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        },
+        close: function() {
+            allFields.val( "" ).removeClass( "ui-state-error" );
+        }
+    });
+
+    
+
+    $( "#doctor_field_reorder_link_patient" ).click(function() {
+            $( "#doctor-dialog-form-patients" ).dialog( "open" );
+        });
+
+    $( "#doctor_field_reorder_link_specimen" ).click(function() {
+        $( "#doctor-dialog-form-specimen" ).dialog( "open" );
+    });
+
+    $( "#doctor-dialog-form-specimen" ).dialog({
+        autoOpen: false,
+        //position: { my: "center", at: "center", collision: 'none' },
+        height: 400,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Update": function() {
+                var index = 0;
+				var orders = "formId=2&";
+				$('#sortableSpecimen li').each(function(){
+					var $this = $(this);
+					index++;
+					var field_name = $this.text();
+					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
+				});
+				
+				orders = orders.match(/(.*).$/)[1];
+								
+				$.ajax({
+					url : "ajax/process-field-ordering.php?"+orders,
+					async: false,
+					success : function(data) {
+						alert("Specimen Field Order Updated");
+						window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
+					}	
+				});
+   		     
+				},
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        },
+        close: function() {
+            allFields.val( "" ).removeClass( "ui-state-error" );
+        }
+    });
+
+    
+    $("#doctor_sortablePatients").sortable({     	});
+    $("#doctor_sortableSpecimen").sortable({     	});
+    $( "#doctor_sortablePatients" ).disableSelection();
+    $( "#sortableSpecimen" ).disableSelection();
+    
+});
 function add_new_currency(action)
 {
 	if(action == 1){
@@ -1228,6 +1392,17 @@ function submit_otherfields()
 		success: function() {
 			$('#otherfields_progress').hide();
 			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&ofupdate=1";
+		}
+	});
+}
+
+function submit_otherDoctorfields()
+{
+	$('#otherDoctorfields_progress').show();
+	$('#doctor_otherfields_form').ajaxSubmit({
+		success: function() {
+			$('#otherDoctorfields_progress').hide();
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&ofdupdate=1";
 		}
 	});
 }
@@ -1496,7 +1671,8 @@ function right_load_1(option_num, div_id)
 				<br><br>
 				<a id='option4' class='menu_option' href="javascript:right_load(4, 'fields_div');"><?php echo LangUtil::$pageTerms['MENU_CUSTOM']; ?></a>
 				<br><br>
-							
+				<a id='option50' class='menu_option' href="javascript:right_load(50, 'doctor_fields_div');">Doctor Registration Fields</a>
+				<br><br>			
 				<a id='option19' class='menu_option' href="javascript:language_div_load();"><?php echo LangUtil::getPageTerm("MODIFYLANG"); ?></a>
 				<br><br>
 				<a id='option14' class='menu_option' href="javascript:export_html();"><?php echo "Setup Network" ?></a>
@@ -1803,6 +1979,22 @@ function right_load_1(option_num, div_id)
                                     	</div>
                                        
                                         <br/>
+                                        
+                                        <!-- Billing logo upload code -->
+                                        <?php $name="../logos/logo_billing_".$lab_config->id.".jpg";
+										 if (file_exists("../logos/logo_billing_".$lab_config->id.".jpg")==true)
+										 echo "LOGO being Used "; ?></h4>
+	  									<h3>File Upload:</h3><?php
+			
+	 									if (file_exists("../logos/logo_billing_".$lab_config->id.".jpg")==false)
+										{echo "( Add a Logo)"; }else echo "(Change Logo)"; ?>
+										Choose a .jpg logo File to upload:
+										<input type="file" name="billingLogo" >
+										</>
+										<br />	
+										<br />
+	
+                                        
                                         <input type="button" value="Update" onclick="submit_billing_update()" />
 
                                         <span id='billing_progress' style='display:none;'>
@@ -2254,6 +2446,7 @@ function right_load_1(option_num, div_id)
 						{
 							$('#use_dnum_mand').show();
 						}
+
 						if($('#use_sex').is(':checked'))
 						{
 							$('#use_sex_mand').show();
@@ -2465,6 +2658,567 @@ function right_load_1(option_num, div_id)
 					?>
 					</div>
 				</div>
+	
+				<div class='right_pane' id='doctor_fields_div' style='display:none;margin-left:10px;'>
+				
+<div id="doctor-dialog-form-patients" title="Customize Field Order - Patient Registration Form">
+<!-- <table>
+<tr>
+<td> -->
+<div >Tips : Drag and Drop and click update to reorder patient fields</div>
+<div align="center">
+   <ul id="doctor_sortablePatients">
+   <?php  
+   $field_odering_form_names = explode(',', $field_odering_patients->form_field_inOrder);
+   foreach($field_odering_form_names as $value){
+   	echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
+   }
+   ?>
+  
+</ul> </div>
+<!-- </td><td width='30%'><div align='top'>Tips : Drag and Drop and click update to reorder the existing fields</div></td>
+</table> -->
+</div>
+
+<div id="doctor-dialog-form-specimen" title="Customize Field Order - Specimen Registration Form">
+<div >Tips : Drag and Drop and click update to reorder specimen fields</div>
+<div align="center">
+   <ul id="sortableSpecimen">
+   <?php  
+   $field_odering_form_names = explode(',', $field_odering_specimen->form_field_inOrder);
+   foreach($field_odering_form_names as $value){
+   	echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
+   }
+   ?>
+  
+</ul> </div>
+</div>
+ 
+ 
+		
+					<p style="text-align: right;"><a rel='facebox' href='#RegistrationFields_config'>Page Help</a></p>
+					<b>Doctor Registration Fields</b>
+					 | <a href='javascript:doctor_toggle_ofield_div();' id='doctor_ofield_toggle_link'><?php echo LangUtil::$generalTerms['CMD_EDIT']; ?></a>
+					<br><br>
+					<div id='cfield_msg' class='clean-orange' style='display:none;width:350px;'>
+					</div>
+					<div id='doctor_ofield_summary' class='pretty_box'>
+					<?php $page_elems->getDoctorRegistrationFieldsSummary($doctor_lab_config); ?>
+					</div>
+					<div id='doctor_ofield_form_div' style='display:none;'>
+					<form id='doctor_otherfields_form' name='doctor_otherfields_form' action='ajax/doctor_ofield_update.php' method='post'>
+					<input type='hidden' value='<?php echo $_REQUEST['id']; ?>' name='lab_config_id'></input>
+					<table class='hor-minimalist-b' style='width:auto;'>
+						<thead>
+							<tr>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							
+							<tr>
+								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></td>
+								<td>
+									<input type='checkbox' name='doctor_use_dnum' id='doctor_use_dnum'<?php
+									
+                                                                        if($doctor_lab_config->dailyNum == 1 || $doctor_lab_config->dailyNum == 2 || $doctor_lab_config->dailyNum == 11 || $doctor_lab_config->dailyNum == 12)
+										echo " checked ";
+									?>>
+									</input>
+									<span id='doctor_use_dnum_mand' style='display:none;'>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_dnum_radio' value='Y'<?php
+										if($doctor_lab_config->dailyNum == 2 || $doctor_lab_config->dailyNum == 12)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_dnum_radio' value='N' <?php
+										if($doctor_lab_config->dailyNum != 2 && $doctor_lab_config->dailyNum != 12)
+											echo " checked ";
+										?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_RESET']; ?>
+										<select name='dnum_reset' id='dnum_reset'>
+											<option value='<?php echo LabConfig::$RESET_DAILY; ?>'><?php echo LangUtil::$pageTerms['DAILY']; ?></option>
+											<option value='<?php echo LabConfig::$RESET_WEEKLY; ?>'><?php echo LangUtil::$pageTerms['WEEKLY']; ?></option>
+											<option value='<?php echo LabConfig::$RESET_MONTHLY; ?>'><?php echo LangUtil::$pageTerms['MONTHLY']; ?></option>
+											<option value='<?php echo LabConfig::$RESET_YEARLY; ?>'><?php echo LangUtil::$pageTerms['YEARLY']; ?></option>
+										</select>
+										<script type='text/javascript'>
+										$(document).ready(function(){
+											$('#dnum_reset').attr("value", "<?php echo $doctor_lab_config->dailyNumReset; ?>");
+											$("#addCurrencyRatioDiv").hide();
+											$("#updateCurrencyRatioDialog").hide();
+										});										
+										</script>
+									</span>
+								</td>
+							</tr>
+							<tr style='display:none;'>
+								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['NAME']; ?></td>
+								<td>
+									<input type='checkbox' name='doctor_use_pname' id='doctor_use_pname'<?php
+									if($doctor_lab_config->pname != 0)
+										echo " checked ";
+									?>>
+									</input>
+									<span id='doctor_use_pname_mand' style='display:none;'>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_pname_radio' value='Y'<?php
+										if($doctor_lab_config->pname == 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_pname_radio' value='N' <?php
+										if($doctor_lab_config->pname != 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['GENDER']; ?></td>
+								<td>
+									<input type='checkbox' name='doctor_use_sex' id='doctor_use_sex' <?php
+									if($doctor_lab_config->sex != 0)
+										echo " checked ";
+									?>>
+									</input>
+									<span id='doctor_use_sex_mand' style='display:none;'>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['DOB']; ?></td>
+								<td>
+									<input type='checkbox' name='doctor_use_dob' id='doctor_use_dob'<?php
+									if($doctor_lab_config->dob != 0)
+										echo " checked ";
+									?>>
+									</input>
+									<span id='doctor_use_dob_mand' style='display:none;'>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_dob_radio' value='Y'<?php
+										if($doctor_lab_config->dob == 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_dob_radio' value='N' <?php
+										if($doctor_lab_config->dob != 2)
+											echo " checked ";
+										?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['AGE']; ?></td>
+								<td>
+									<input type='checkbox' name='doctor_use_age' id='doctor_use_age'<?php
+                                                                        if($doctor_lab_config->age == 1 || $doctor_lab_config->age == 2 || $doctor_lab_config->age == 11 || $doctor_lab_config->age == 12)
+									
+										echo " checked ";
+									?>>
+									</input>
+									<span id='doctor_use_age_mand' style='display:none;'>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_age_radio' value='Y'<?php
+										if($doctor_lab_config->age == 2 || $doctor_lab_config->age == 12)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_age_radio' value='N' <?php
+										if($doctor_lab_config->age != 2 && $doctor_lab_config->age != 12)
+											echo " checked ";
+										?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo 'Complete Age Display Limit'; ?></td>
+								<td>
+									<input type='text' name='ageLimit' id='ageLimit' size='3' maxlength='3' value='<?php echo $doctor_lab_config->ageLimit; ?>'>
+									</input>
+									<?php echo LangUtil::$generalTerms['YEARS'] ?>
+								</td>
+							</tr>
+							<tr valign='top' style='display:none;'>
+								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></td>
+								<td>
+									<input type='checkbox' name='doctor_use_sid' id='doctor_use_sid'<?php
+									//if($doctor_lab_config->sid != 0)
+									if(true)
+										echo " checked ";
+									?>>
+									</input>
+									<span id='doctor_use_sid_mand' style='display:none;'>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></td>
+								<td>
+									<input type='checkbox' name='doctor_use_s_addl' id='doctor_use_s_addl'<?php
+									if($doctor_lab_config->specimenAddl != 0)
+										echo " checked ";
+									?>>
+									
+									</input>
+									<span id='doctor_use_s_addl_mand' style='display:none;'>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_s_addl_radio' value='Y'<?php
+										if($doctor_lab_config->specimenAddl == 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_s_addl_radio' value='N' <?php
+										if($doctor_lab_config->specimenAddl != 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['COMMENTS']; ?></td>
+								<td>
+									<input type='checkbox' name='doctor_use_comm' id='doctor_use_comm'<?php
+									if($doctor_lab_config->comm != 0)
+										echo " checked ";
+									?>>
+									</input>
+									<span id='doctor_use_comm_mand' style='display:none;'>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_comm_radio' value='Y'<?php
+										if($doctor_lab_config->comm == 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_comm_radio' value='N' <?php
+										if($doctor_lab_config->comm != 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['R_DATE']; ?></td>
+								<td>
+									<input type='checkbox' name='doctor_use_rdate' id='doctor_use_rdate'<?php
+									if($doctor_lab_config->rdate != 0)
+										echo " checked ";
+									?>>
+									</input>
+									<span id='doctor_use_rdate_mand' style='display:none;'>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_rdate_radio' value='Y'<?php
+										if($doctor_lab_config->rdate == 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_rdate_radio' value='N' <?php
+										if($doctor_lab_config->rdate != 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['REF_OUT']; ?></td>
+								<td>
+									<input type='checkbox' name='doctor_use_refout' id='doctor_use_refout'<?php
+									if($doctor_lab_config->refout != 0)
+										echo " checked ";
+									?>>
+									</input>
+									<span id='doctor_use_refout_mand' style='display:none;'>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_refout_radio' value='Y'<?php
+										if($doctor_lab_config->refout == 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_refout_radio' value='N' <?php
+										if($doctor_lab_config->refout != 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['DOCTOR']; ?></td>
+								<td>
+									<input type='checkbox' name='doctor_use_doctor' id='doctor_use_doctor'<?php
+									if($doctor_lab_config->doctor != 0)
+										echo " checked ";
+									?>>
+									</input>
+									<span id='doctor_use_doctor_mand' style='display:none;'>
+										&nbsp;&nbsp;
+										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_doctor_radio' value='Y'<?php
+										if($doctor_lab_config->doctor == 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+										&nbsp;&nbsp;
+										<input type='radio' name='doctor_use_doctor_radio' value='N' <?php
+										if($doctor_lab_config->doctor != 2)
+											echo " checked ";
+										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo LangUtil::$generalTerms['DATE_FORMAT']; ?></td>
+								<td>
+									<select name='dformat' id='dformat'>
+										<?php $page_elems->getDateFormatSelect($lab_config); ?>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_UPDATE']; ?>' onclick='javascript:submit_otherDoctorfields();'>
+									</input>
+									&nbsp;&nbsp;&nbsp;
+									<span id='otherDoctorfields_progress' style='display:none;'>
+										<?php echo $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
+									</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					</form>
+					</div> <br/>
+					<!-- <button id="create-user">Create new user</button> -->
+					<br/>
+					<script type='text/javascript'>
+					$(document).ready(function(){
+						if($('#docotor_use_pid').is(':checked'))
+						{
+							$('#docotor_use_pid_mand').show();
+						}
+						if($('#docotor_use_p_addl').is(':checked'))
+						{
+							$('#docotor_use_p_addl_mand').show();
+						}
+						if($('#doctor_use_s_addl').is(':checked'))
+						{
+							$('#doctor_use_s_addl_mand').show();
+						}
+						if($('#doctor_use_dnum').is(':checked'))
+						{
+							$('#doctor_use_dnum_mand').show();
+						}
+						if($('#doctor_use_sex').is(':checked'))
+						{
+							$('#doctor_use_sex_mand').show();
+						}
+						if($('#doctor_use_age').is(':checked'))
+						{
+							$('#doctor_use_age_mand').show();
+						}
+						if($('#doctor_use_dob').is(':checked'))
+						{
+							$('#doctor_use_dob_mand').show();
+						}
+						if($('#docotor_use_pid').is(':checked'))
+						{
+							$('#docotor_use_pid_mand').show();
+						}
+						if($('#doctor_use_sid').is(':checked'))
+						{
+							$('#doctor_use_sid_mand').show();
+						}
+						if($('#doctor_use_rdate').is(':checked'))
+						{
+							$('#doctor_use_rdate_mand').show();
+						}
+						if($('#doctor_use_refout').is(':checked'))
+						{
+							$('#doctor_use_refout_mand').show();
+						}
+						if($('#doctor_use_doctor').is(':checked'))
+						{
+							$('#doctor_use_doctor_mand').show();
+						}
+						if($('#doctor_use_pname').is(':checked'))
+						{
+							$('#doctor_use_pname_mand').show();
+						}
+						if($('#doctor_use_comm').is(':checked'))
+						{
+							$('#doctor_use_comm_mand').show();
+						}
+						$('#docotor_use_pid').click(function() {
+							if($('#docotor_use_pid').is(':checked'))
+							{
+								$('#docotor_use_pid_mand').show();
+							}
+							else
+							{
+								$('#docotor_use_pid_mand').hide();
+							}
+						});
+						$('#docotor_use_p_addl').click(function() {
+							if($('#docotor_use_p_addl').is(':checked'))
+							{
+								$('#docotor_use_p_addl_mand').show();
+							}
+							else
+							{
+								$('#docotor_use_p_addl_mand').hide();
+							}
+						});
+						$('#doctor_use_dnum').click(function() {
+							if($('#doctor_use_dnum').is(':checked'))
+							{
+								$('#doctor_use_dnum_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_dnum_mand').hide();
+							}
+						});
+						$('#doctor_use_s_addl').click(function() {
+							if($('#doctor_use_s_addl').is(':checked'))
+							{
+								$('#doctor_use_s_addl_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_s_addl_mand').hide();
+							}
+						});
+						$('#doctor_use_dnum').click(function() {
+							if($('#doctor_use_dnum').is(':checked'))
+							{
+								$('#doctor_use_dnum_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_dnum_mand').hide();
+							}
+						});
+						$('#doctor_use_dob').click(function() {
+							if($('#doctor_use_dob').is(':checked'))
+							{
+								$('#doctor_use_dob_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_dob_mand').hide();
+							}
+						});
+						$('#doctor_use_sid').click(function() {
+							if($('#doctor_use_sid').is(':checked'))
+							{
+								$('#doctor_use_sid_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_sid_mand').hide();
+							}
+						});
+						$('#doctor_use_sex').click(function() {
+							if($('#doctor_use_sex').is(':checked'))
+							{
+								$('#doctor_use_sex_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_sex_mand').hide();
+							}
+						});
+						$('#doctor_use_age').click(function() {
+							if($('#doctor_use_age').is(':checked'))
+							{
+								$('#doctor_use_age_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_age_mand').hide();
+							}
+						});
+						$('#doctor_use_refout').click(function() {
+							if($('#doctor_use_refout').is(':checked'))
+							{
+								$('#doctor_use_refout_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_refout_mand').hide();
+							}
+						});
+						$('#doctor_use_doctor').click(function() {
+							if($('#doctor_use_doctor').is(':checked'))
+							{
+								$('#doctor_use_doctor_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_doctor_mand').hide();
+							}
+						});
+						$('#doctor_use_rdate').click(function() {
+							if($('#doctor_use_rdate').is(':checked'))
+							{
+								$('#doctor_use_rdate_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_rdate_mand').hide();
+							}
+						});
+						$('#doctor_use_comm').click(function() {
+							if($('#doctor_use_comm').is(':checked'))
+							{
+								$('#doctor_use_comm_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_comm_mand').hide();
+							}
+						});
+						$('#doctor_use_pname').click(function() {
+							if($('#doctor_use_pname').is(':checked'))
+							{
+								$('#doctor_use_pname_mand').show();
+							}
+							else
+							{
+								$('#doctor_use_pname_mand').hide();
+							}
+						});
+					});
+					</script>
+					<br>
+					
+					<br>
+					
+				</div>
+				
 				<div class='right_pane' id='network_setup_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#SetupNet'>Page Help</a></p>
 				Setup can be accessed from BlisSetup.html in the main folder.
