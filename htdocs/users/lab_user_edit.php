@@ -59,7 +59,26 @@ function update_lab_user()
 	{
 		showpname = 1;
 	}
-	var data_string = 'id=<?php echo $user_id; ?>&un='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&lev='+level+'&lang='+lang_id+"&showpname="+showpname;
+
+	var readwriteOption = 0;
+    var rwoptions = ',';
+    
+	$('input[name="readwriteOpt"]:checked').each(function() {
+		readwriteOption++;
+		rwoptions = rwoptions + this.value+','  ; 
+	});
+
+	rwoptions = rwoptions.slice(1,-1);
+	
+	if(readwriteOption < 1){
+		alert("Select at least one read or write options");
+		return;
+	}
+
+	
+	var data_string = 'id=<?php echo $user_id; ?>&un='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&lev='+level+'&lang='+lang_id+"&showpname="+showpname+"&opt="+rwoptions;
+	//alert(data_string);
+	//return;
 	$('#edit_user_progress').show();
 	$.ajax({
 		type: "POST",
@@ -70,6 +89,42 @@ function update_lab_user()
 			window.location = "<?php echo $_REQUEST['backurl']; ?>&show_u=1&aupdate=<?php echo $user->username; ?>";
 		}
 	});
+}
+
+function add_read_mode(){
+	//alert(test);
+	var usermode = $('select[name="level"]').val();
+	if(usermode == 16){
+		$("#readOrWrite").empty();
+		$("#readOrWrite").append("Read Options");
+
+		$("#readWrite_options").empty();
+		$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt51' value='51'>Select Test - option<br><input type='checkbox' id='readwriteOpt52' name='readwriteOpt' value='52'>Generate Bill - option");
+		checkAllReadWriteOptions();
+	} else {
+		$("#readOrWrite").empty();
+		$("#readOrWrite").append("Writeable Options");
+
+		$("#readWrite_options").empty();
+		$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' value='2'>Patient Registration<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3'>Test Results<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt4' value='4'>Search<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt6' value='6'>Inventory<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt7' value='7'>Backup Data <br>");
+		checkAllReadWriteOptions();
+	}
+	if(usermode==17){
+		$("#patient-entry").hide();
+		$("#patient-entry_check").hide();
+}
+else
+{
+	$("#patient-entry").show();
+	$("#patient-entry_check").show();
+}
+}
+
+function checkAllReadWriteOptions(){
+	checkboxes = document.getElementsByName('readwriteOpt');
+	  for(var i=0, n=checkboxes.length;i<n;i++) {
+	    checkboxes[i].checked = true;
+	  }
 }
 
 $(document).ready(function(){
@@ -87,6 +142,16 @@ $(document).ready(function(){
         ))
         event.preventDefault();
 	});
+	var usermode = $('select[name="level"]').val();
+	if(usermode==17){
+		$("#patient-entry").hide();
+		$("#patient-entry_check").hide();
+}
+else
+{
+	$("#patient-entry").show();
+	$("#patient-entry_check").show();
+}
 });
 
 </script>
@@ -139,21 +204,29 @@ if($user == null)
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['TYPE'] ?></td>
 			<td>
-			<select name='level' id='level' class='uniform_width'>
+			<select name='level' id='level' class='uniform_width' onchange="javascript:add_read_mode();">
 			<?php
 			$page_elems->getLabUserTypeOptions($user->level);
 			?>
 			</select>
 			</td>
 		</tr>
+		<tr>
+			<?php 
+			$page_elems->getLabUserReadWriteOption($user->level, $user->rwoptions);
+			?>
+			
+			
+		</tr>
 		<tr valign='top'>
-			<td><?php echo LangUtil::$pageTerms['USE_PNAME_RESULTS']; ?>?</td>
+		
+			<td><div id="patient-entry"><?php echo LangUtil::$pageTerms['USE_PNAME_RESULTS']; ?>?</div></td>
 			<td>
-				<input type="checkbox" name="showpname" id="showpname" <?php
+				<div id="patient-entry_check"><input type="checkbox" name="showpname" id="showpname" <?php
 				if($user->level == $LIS_TECH_SHOWPNAME)
 					echo "checked ";
 				?>/><?php echo LangUtil::$generalTerms['YES']; ?>
-			</td>
+			</div></td>
 		</tr>
 		<tr>
 			<td>

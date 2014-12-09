@@ -27,6 +27,20 @@ if($login_correct)
 	$_SESSION['user_actualname'] = $user->actualName;
 	$_SESSION['user_level'] = $user->level;
 	$_SESSION['locale'] = $user->langId;
+	
+	if($user->level==17) {
+	 $combinedString = $_SESSION['doctorConfig'] = $user->rwoptions;
+	 $rwopts = '2,3,4,6,7';
+	 $rwoptsarr = explode(" ", $rwopts);
+	 $_SESSION['rwoptionsarray'] = $rwoptsarr;
+	}
+	else {
+		$rwopts = $user->rwoptions;
+		$rwoptsarr = explode(" ", $rwopts);
+		$_SESSION['rwoptionsarray'] = $rwoptsarr;
+	}
+	
+	
 	//if($user->isAdmin())
 	if(is_admin($user))
 	{
@@ -39,12 +53,16 @@ if($login_correct)
 	}
 	else
 	{
-		$_SESSION['lab_config_id'] = $user->labConfigId;
+	$_SESSION['lab_config_id'] = $user->labConfigId;
 		echo $user->labConfigId;
 		$_SESSION['country'] = $user->country;
 		$lab_config = get_lab_config_by_id($user->labConfigId);
 		$_SESSION['db_name'] = $lab_config->dbName;
+		$_SESSION['dformat'] = $lab_config->dateFormat;
+		$_SESSION['dnum_reset'] = $lab_config->dailyNumReset;
+		$_SESSION['pnamehide'] = $lab_config->hidePatientName;
 		# Config values for registration fields
+		if($user->level!=17) {
 		$_SESSION['p_addl'] = $lab_config->patientAddl;
 		$_SESSION['s_addl'] = $lab_config->specimenAddl;
 		$_SESSION['dnum'] = $lab_config->dailyNum;
@@ -57,10 +75,24 @@ if($login_correct)
 		$_SESSION['refout'] = $lab_config->refout;
 		$_SESSION['pname'] = $lab_config->pname;
 		$_SESSION['sex'] = $lab_config->sex;
-		$_SESSION['dformat'] = $lab_config->dateFormat;
-		$_SESSION['dnum_reset'] = $lab_config->dailyNumReset;
 		$_SESSION['doctor'] = $lab_config->doctor;
-		$_SESSION['pnamehide'] = $lab_config->hidePatientName;
+		}
+		else {
+			$arr1 = str_split($combinedString);
+			$_SESSION['p_addl'] = $arr1[0];
+			$_SESSION['s_addl'] = $arr1[1];
+			$_SESSION['dnum'] = $arr1[2];
+			$_SESSION['sid'] = $arr1[3];
+			$_SESSION['pid'] = $arr1[4];
+			$_SESSION['comm'] = $arr1[5];
+			$_SESSION['age'] = $arr1[6];
+			$_SESSION['dob'] = $arr1[7];
+			$_SESSION['rdate'] = $arr1[8];
+			$_SESSION['refout'] = $arr1[9];
+			$_SESSION['pname'] = $arr1[10];
+			$_SESSION['sex'] = $arr1[11];
+			$_SESSION['doctor'] = $arr1[12];			
+		}
 		if($SERVER == $ON_PORTABLE)
 			$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_".$lab_config->id."/";
 		else

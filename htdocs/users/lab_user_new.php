@@ -80,10 +80,26 @@ function add_lab_user()
 	}
 	// End email address test
 
+	// readwriteOption = $('#readwriteOpt:checked').length;
+    var readwriteOption = 0;
+    var rwoptions = ',';
+    
+	$('input[name="readwriteOpt"]:checked').each(function() {
+		readwriteOption++;
+		rwoptions = rwoptions + this.value+','  ; 
+	});
+
+	rwoptions = rwoptions.slice(1,-1);
+	
+	if(readwriteOption < 1){
+		alert("Select at least one read or write options");
+		return;
+	}
+
 	$('#error_msg').hide();
 	var url_string = 'ajax/lab_user_add.php';
 	//var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&ut='+ut+'&lid=<?php echo $lab_config_id; ?>&lang='+lang_id+"&fn_reports="+fn_reports+"&fn_results="+fn_results+"&fn_regn="+fn_regn;
-	var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&ut='+ut+'&lid=<?php echo $lab_config_id; ?>&lang='+lang_id+"&showpname="+showpname;
+	var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&ut='+ut+'&lid=<?php echo $lab_config_id; ?>&lang='+lang_id+"&showpname="+showpname+"&opt="+rwoptions;
 	$('#add_user_progress').show();
 	$.ajax({
 		type: "POST",
@@ -98,6 +114,59 @@ function add_lab_user()
 		}
 	});
 }
+
+
+function add_read_mode(){
+	var usermode = $('select[name="user_type"]').val();
+	if(usermode == 16){
+		$("#readOrWrite").empty();
+		$("#readOrWrite").append("Read Options");
+
+		$("#readWrite_options").empty();
+		$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt' value='51'>Select Test - option<br><input type='checkbox' id='readwriteOpt' name='readwriteOpt' value='52'>Generate Bill - option");
+	} /*else if(usermode == 15){
+		$("#readOrWrite").empty();
+		$("#readOrWrite").append("Selected Write Options");
+		$("#readWrite_options").empty();
+		$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3'>Test Results<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt4' value='4'>Search<br>");
+		checkAllReadWriteOptions();
+	} else if(usermode == 6){
+		$("#readOrWrite").empty();
+		$("#readOrWrite").append("Selected Read Options");
+		$("#readWrite_options").empty();
+		$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' value='2'>Patient Registration<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3'>Test Results<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt4' value='4'>Search<br>");
+		checkAllReadWriteOptions();
+	}*/ else {
+		$("#readOrWrite").empty();
+		$("#readOrWrite").append("Write Options");
+		$("#readWrite_options").empty();
+		$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' checked='true' value='2'>Patient Registration<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3'>Test Results<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt4'  checked='true' value='4'>Search<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt6' value='6'>Inventory<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt7' value='7'>Backup Data <br>");
+	}
+	if(usermode!=17) {
+		checkAllReadWriteOptions();
+	}
+	if(usermode==17){
+			$("#patient-entry").hide();
+			$("#patient-entry_check").hide();
+}
+	else
+	{
+		$("#patient-entry").show();
+		$("#patient-entry_check").show();
+	}
+}
+
+function checkAllReadWriteOptions(){
+	checkboxes = document.getElementsByName('readwriteOpt');
+	  for(var i=0, n=checkboxes.length;i<n;i++) {
+	    checkboxes[i].checked = true;
+	  }
+}
+
+$(document).ready(function(){
+	checkAllReadWriteOptions();
+});
+
 </script>
 
 <table cellspacing="20px">
@@ -120,12 +189,27 @@ function add_lab_user()
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['TYPE']; ?><?php $page_elems->getAsterisk(); ?>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td>
-			<select name='user_type' id='user_type' class='uniform_width' >
+			<select name='user_type' id='user_type' class='uniform_width' onchange="javascript:add_read_mode();">
 			<?php
 			$page_elems->getLabUserTypeOptions();
 			?>
 			</select>
 			</td>
+		</tr>
+		<tr>
+		  
+		 	<td> <div id="readOrWrite" name="readOrWrite" > Writeable Options </div><?php $page_elems->getAsterisk(); ?>
+		 	</td>
+		 	<td><div id="readWrite_options" name="readWrite_options">
+		 		
+					<input type="checkbox" name="readwriteOpt" id='readwriteOpt2' value="2">Patient Registration<br>
+					<input type="checkbox" name="readwriteOpt" id='readwriteOpt3' value="3">Test Results<br>
+					<input type="checkbox" name="readwriteOpt" id='readwriteOpt4' value="4">Search<br>
+					<input type="checkbox" name="readwriteOpt" id='readwriteOpt6' value="6">Inventory<br>
+					<input type="checkbox" name="readwriteOpt" id='readwriteOpt7' value="7">Backup Data <br>
+				
+				</div>
+		 	</td>
 		</tr>
 		<!--
 		<tr valign='top'>
@@ -158,10 +242,10 @@ function add_lab_user()
 			</td>
 		</tr>
 		<tr valign='top'>
-			<td><?php echo LangUtil::$pageTerms['USE_PNAME_RESULTS']; ?>?</td>
+			<td><div id="patient-entry"> <?php echo LangUtil::$pageTerms['USE_PNAME_RESULTS']; ?>?</div></td>
 			<td>
-				<input type="checkbox" name="showpname" id="showpname" /><?php echo LangUtil::$generalTerms['YES']; ?>
-			</td>
+				<div id="patient-entry_check"><input type="checkbox" name="showpname" id="showpname" /><?php echo LangUtil::$generalTerms['YES']; ?>
+			</div></td>
 		</tr>
 		<tr>
 			<td></td>
