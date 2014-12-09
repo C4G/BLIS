@@ -38,12 +38,13 @@ else {
 	//runUpdate($labConfigId);
         # revamp update
         $db_name = "blis_revamp";
-        $ufile = "db_update_revamp";
+        $ufile = "db_update_revamp_2.8";
         blis_db_update($lab_config_id, $db_name, $ufile);
         
         # lab update
         $db_name = "blis_".$lab_config_id;
-        $ufile = "db_update_lab_2.7.2";
+        #$ufile = "db_update_lab_2.7.1";
+        $ufile = "db_update_lab_2.8";
         blis_db_update($lab_config_id, $db_name, $ufile);
         update_language_files();
         $def = default_currency_copy($lab_config_id);

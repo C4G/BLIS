@@ -216,7 +216,15 @@ $LANG_ARRAY = array (
 		"MSG_NOMATCH" => "No match found", 
 		"CMD_REGISTERSPECIMEN" => "Register Specimen", 
 		"CMD_VIEWPROFILE" => "View Profile"
-	) , 
+	) ,
+		"doctor_register" => array (
+				"TITLE" => "Patient Look-up",
+				"ADD_NEW_PATIENT" => "Add New Patient",
+				"TIPS_PATIENT_LOOKUP" => "To register a new specimen, enter Patient by ID/Name or add a new Patient first.",
+				"MSG_NOMATCH" => "No match found",
+				"CMD_REGISTERSPECIMEN" => "Register Specimen",
+				"CMD_VIEWPROFILE" => "View Profile"
+		) ,
 	"new_patient" => array ( 
 		"TITLE" => "New Patient", 
 		"MSG_BACKTOLOOKUP" => "Back to Patient Look-up", 
@@ -483,7 +491,16 @@ $LANG_ARRAY = array (
 	"lang_modify" => array ( 
 		"TITLE" => "Modify Language", 
 		"CATEGORY" => "Category"
-	) 
+	) ,
+		"doctor_register" => array (
+				"TITLE" => "Patient Look-up",
+				"ADD_NEW_PATIENT" => "Add New Patient",
+				"TIPS_PATIENT_LOOKUP" => "To register a new specimen, enter Patient by ID/Name or add a new Patient first.",
+				"MSG_NOMATCH" => "No match found",
+				"CMD_REGISTERSPECIMEN" => "Register Specimen",
+				"CMD_VIEWPROFILE" => "View Profile"
+		) 
+		
 );
 
 include("../lang/lang_util.php");

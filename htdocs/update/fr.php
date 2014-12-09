@@ -204,7 +204,7 @@ $LANG_ARRAY = array (
 	"home" => array ( 
 		"TITLE" => "Home", 
 		"WELCOME" => "Bienvenue", 
-		"TIPS_BLISINTRO" => "Le Basic Laboratory Information System (BLIS) pistes échantillons du patient et des résultats de laboratoire.", 
+		"TIPS_BLISINTRO" => "Le Basic Laboratory Information System (BLIS) pistes Ã©chantillons du patient et des rÃ©sultats de laboratoire.", 
 		"TIPS_PWD" => "You can update your profile and password by clicking on Edit Profile."
 	) , 
 	"regn" => array ( 
@@ -218,6 +218,14 @@ $LANG_ARRAY = array (
 		"CMD_REGISTERSPECIMEN" => "Register Specimen", 
 		"CMD_VIEWPROFILE" => "View Profile"
 	) , 
+		"doctor_register" => array (
+				"TITLE" => "Patient Look-up",
+				"ADD_NEW_PATIENT" => "Add New Patient",
+				"TIPS_PATIENT_LOOKUP" => "To register a new specimen, enter Patient by ID/Name or add a new Patient first.",
+				"MSG_NOMATCH" => "No match found",
+				"CMD_REGISTERSPECIMEN" => "Register Specimen",
+				"CMD_VIEWPROFILE" => "View Profile"
+		) ,
 	"new_patient" => array ( 
 		"TITLE" => "New Patient", 
 		"MSG_BACKTOLOOKUP" => "Back to Patient Look-up", 
