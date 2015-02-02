@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<catalog lang="fr" descr="">
+	<entity id="section" descr="Lab Section">		
+		<term>
+			<key>1</key>
+			<value>Serology</value>
+		</term>		
+		<term>
+			<key>2</key>
+			<value>Hematology</value>
+		</term>		
+		<term>
+			<key>4</key>
+			<value>HIV</value>
+		</term>		
+		<term>
+			<key>5</key>
+			<value>CD4</value>
+		</term>		
+		<term>
+			<key>6</key>
+			<value>Chemistry</value>
+		</term>		
+		<term>
+			<key>7</key>
+			<value>Microscopy</value>
+		</term>		
+		<term>
+			<key>8</key>
+			<value>Other</value>
+		</term>		
+		<term>
+			<key>9</key>
+			<value>Hormonal</value>
+		</term>		
+		<term>
+			<key>10</key>
+			<value>Bacteriology</value>
+		</term>	
+	</entity>	
+	<entity id="test" descr="Test Type">		
+		<term>
+			<key>7</key>
+			<value>CD4 Count</value>
+		</term>		
+		<term>
+			<key>8</key>
+			<value>ALT/SGPT</value>
+		</term>		
+		<term>
+			<key>9</key>
+			<value>FBS</value>
+		</term>		
+		<term>
+			<key>10</key>
+			<value>Protein Count</value>
+		</term>		
+		<term>
+			<key>11</key>
+			<value>Uric Acid</value>
+		</term>		
+		<term>
+			<key>12</key>
+			<value>Calcium</value>
+		</term>		
+		<term>
+			<key>13</key>
+			<value>Phosphorus</value>
+		</term>		
+		<term>
+			<key>14</key>
+			<value>Magnesium</value>
+		</term>		
+		<term>
+			<key>15</key>
+			<value>Creatine Kinase</value>
+		</term>		
+		<term>
+			<key>16</key>
+			<value>Thyroglobulin</value>
+		</term>		
+		<term>
+			<key>17</key>
+			<value>Total Albumin</value>
+		</term>		
+		<term>
+			<key>18</key>
+			<value>AST/SGOT</value>
+		</term>		
+		<term>
+			<key>19</key>
+			<value>Alkaline Phosphatase</value>
+		</term>		
+		<term>
+			<key>20</key>
+			<value>Total Birilubin</value>
+		</term>		
+		<term>
+			<key>21</key>
+			<value>Blood Urea Nitrogen</value>
+		</term>		
+		<term>
+			<key>22</key>
+			<value>Creatinine</value>
+		</term>		
+		<term>
+			<key>23</key>
+			<value>Sodium</value>
+		</term>		
+		<term>
+			<key>24</key>
+			<value>Potassium</value>
+		</term>		
+		<term>
+			<key>25</key>
+			<value>Chloride</value>
+		</term>		
+		<term>
+			<key>26</key>
+			<value>CO2 Bicarbonate</value>
+		</term>		
+		<term>
+			<key>27</key>
+			<value>Cholesterol</value>
+		</term>		
+		<term>
+			<key>28</key>
+			<value>Triglycerides</value>
+		</term>		
+		<term>
+			<key>29</key>
+			<value>HDL Cholesterol</value>
+		</term>		
+		<term>
+			<key>30</key>
+			<value>LDL Cholesterol</value>
+		</term>		
+		<term>
+			<key>31</key>
+			<value>Glucose</value>
+		</term>		
+		<term>
+			<key>32</key>
+			<value>Amylase</value>
+		</term>		
+		<term>
+			<key>33</key>
+			<value>Lactate</value>
+		</term>		
+		<term>
+			<key>34</key>
+			<value>Kidney Function Panel</value>
+		</term>		
+		<term>
+			<key>35</key>
+			<value>Lipid Panel</value>
+		</term>		
+		<term>
+			<key>36</key>
+			<value>Liver Function Panel</value>
+		</term>		
+		<term>
+			<key>37</key>
+			<value>HIV Monitoring Panel</value>
+		</term>		
+		<term>
+			<key>38</key>
+			<value>Malaria</value>
+		</term>		
+		<term>
+			<key>39</key>
+			<value>Complete Blood Count</value>
+		</term>		
+		<term>
+			<key>40</key>
+			<value>HGB</value>
+		</term>		
+		<term>
+			<key>41</key>
+			<value>HIV DNA PCR</value>
+		</term>		
+		<term>
+			<key>42</key>
+			<value>HIV RNA VL</value>
+		</term>		
+		<term>
+			<key>43</key>
+			<value>HIV EIA</value>
+		</term>		
+		<term>
+			<key>44</key>
+			<value>HIV Rapid Test</value>
+		</term>		
+		<term>
+			<key>46</key>
+			<value>Western Blot</value>
+		</term>		
+		<term>
+			<key>47</key>
+			<value>RPR</value>
+		</term>		
+		<term>
+			<key>48</key>
+			<value>Hepatitis B</value>
+		</term>		
+		<term>
+			<key>49</key>
+			<value>HGB Electropherosis</value>
+		</term>		
+		<term>
+			<key>50</key>
+			<value>Platelet Count</value>
+		</term>		
+		<term>
+			<key>51</key>
+			<value>ESR (Sed rate)</value>
+		</term>		
+		<term>
+			<key>52</key>
+			<value>White Blood Cell Count</value>
+		</term>		
+		<term>
+			<key>53</key>
+			<value>Sickling RBC</value>
+		</term>		
+		<term>
+			<key>54</key>
+			<value>Clotting Time (CT)</value>
+		</term>		
+		<term>
+			<key>55</key>
+			<value>Gamma Glutamyl</value>
+		</term>		
+		<term>
+			<key>56</key>
+			<value>Urine Analysis</value>
+		</term>		
+		<term>
+			<key>57</key>
+			<value>Hepatitis C</value>
+		</term>		
+		<term>
+			<key>58</key>
+			<value>VDRL</value>
+		</term>		
+		<term>
+			<key>59</key>
+			<value>Rheumatoid Factor</value>
+		</term>		
+		<term>
+			<key>60</key>
+			<value>CSF</value>
+		</term>		
+		<term>
+			<key>61</key>
+			<value>Pregnancy Test (HCG)</value>
+		</term>		
+		<term>
+			<key>62</key>
+			<value>Progesterone</value>
+		</term>		
+		<term>
+			<key>63</key>
+			<value>Blood Type (ABO/Rh)</value>
+		</term>		
+		<term>
+			<key>64</key>
+			<value>ASOT (Streptococcal)</value>
+		</term>		
+		<term>
+			<key>65</key>
+			<value>Sperm Count</value>
+		</term>		
+		<term>
+			<key>66</key>
+			<value>TPHA</value>
+		</term>		
+		<term>
+			<key>67</key>
+			<value>Toxoplasma</value>
+		</term>		
+		<term>
+			<key>68</key>
+			<value>C-Reactive Protein</value>
+		</term>		
+		<term>
+			<key>69</key>
+			<value>Zn Stain</value>
+		</term>		
+		<term>
+			<key>70</key>
+			<value>Bleeding Time (BT)</value>
+		</term>		
+		<term>
+			<key>71</key>
+			<value>Stool Analysis</value>
+		</term>		
+		<term>
+			<key>72</key>
+			<value>Prolactin</value>
+		</term>		
+		<term>
+			<key>73</key>
+			<value>Ferritin</value>
+		</term>		
+		<term>
+			<key>74</key>
+			<value>Testosterone</value>
+		</term>		
+		<term>
+			<key>75</key>
+			<value>Urine Analysis</value>
+		</term>		
+		<term>
+			<key>84</key>
+			<value>Random Blood Sugar</value>
+		</term>		
+		<term>
+			<key>83</key>
+			<value>TB Smear</value>
+		</term>		
+		<term>
+			<key>85</key>
+			<value>AFB</value>
+		</term>		
+		<term>
+			<key>86</key>
+			<value>T-Lymphocytes CD4</value>
+		</term>		
+		<term>
+			<key>87</key>
+			<value>Testsample</value>
+		</term>		
+		<term>
+			<key>88</key>
+			<value>Testsample</value>
+		</term>	
+	</entity>	
+	<entity id="measure" descr="Measures">		
+		<term>
+			<key>2</key>
+			<value>WBC</value>
+		</term>		
+		<term>
+			<key>3</key>
+			<value>HIV Rapid</value>
+		</term>		
+		<term>
+			<key>4</key>
+			<value>CD4</value>
+		</term>		
+		<term>
+			<key>5</key>
+			<value>CD4%</value>
+		</term>		
+		<term>
+			<key>6</key>
+			<value>ALT/SGPT</value>
+		</term>		
+		<term>
+			<key>7</key>
+			<value>FBS</value>
+		</term>		
+		<term>
+			<key>8</key>
+			<value>Protein</value>
+		</term>		
+		<term>
+			<key>9</key>
+			<value>Uric Acid</value>
+		</term>		
+		<term>
+			<key>10</key>
+			<value>Ca++</value>
+		</term>		
+		<term>
+			<key>11</key>
+			<value>Phosphorus</value>
+		</term>		
+		<term>
+			<key>12</key>
+			<value>Mg++</value>
+		</term>		
+		<term>
+			<key>13</key>
+			<value>CREAT</value>
+		</term>		
+		<term>
+			<key>14</key>
+			<value>Globulin</value>
+		</term>		
+		<term>
+			<key>15</key>
+			<value>Albumin</value>
+		</term>		
+		<term>
+			<key>16</key>
+			<value>AST/SGOT</value>
+		</term>		
+		<term>
+			<key>17</key>
+			<value>ALKP</value>
+		</term>		
+		<term>
+			<key>18</key>
+			<value>TBILI</value>
+		</term>		
+		<term>
+			<key>19</key>
+			<value>BUN</value>
+		</term>		
+		<term>
+			<key>74</key>
+			<value>Direct Coombs Test (DCT)</value>
+		</term>		
+		<term>
+			<key>21</key>
+			<value>NA</value>
+		</term>		
+		<term>
+			<key>22</key>
+			<value>K</value>
+		</term>		
+		<term>
+			<key>23</key>
+			<value>CL</value>
+		</term>		
+		<term>
+			<key>24</key>
+			<value>BICAR</value>
+		</term>		
+		<term>
+			<key>25</key>
+			<value>CHOL</value>
+		</term>		
+		<term>
+			<key>26</key>
+			<value>TRIG</value>
+		</term>		
+		<term>
+			<key>27</key>
+			<value>HDL-CHOL</value>
+		</term>		
+		<term>
+			<key>28</key>
+			<value>LDL-CHOL</value>
+		</term>		
+		<term>
+			<key>29</key>
+			<value>GLUC</value>
+		</term>		
+		<term>
+			<key>30</key>
+			<value>AMYL</value>
+		</term>		
+		<term>
+			<key>31</key>
+			<value>LACT</value>
+		</term>		
+		<term>
+			<key>32</key>
+			<value>Malaria Smear</value>
+		</term>		
+		<term>
+			<key>33</key>
+			<value>RBC</value>
+		</term>		
+		<term>
+			<key>34</key>
+			<value>HGB</value>
+		</term>		
+		<term>
+			<key>35</key>
+			<value>HCT</value>
+		</term>		
+		<term>
+			<key>36</key>
+			<value>MCV</value>
+		</term>		
+		<term>
+			<key>37</key>
+			<value>MCH</value>
+		</term>		
+		<term>
+			<key>38</key>
+			<value>MCHC</value>
+		</term>		
+		<term>
+			<key>39</key>
+			<value>PLT</value>
+		</term>		
+		<term>
+			<key>40</key>
+			<value>PCR (HIV DNA)</value>
+		</term>		
+		<term>
+			<key>41</key>
+			<value>VL (HIV RNA)</value>
+		</term>		
+		<term>
+			<key>42</key>
+			<value>HIV EIA</value>
+		</term>		
+		<term>
+			<key>43</key>
+			<value>WB (Western Blot)</value>
+		</term>		
+		<term>
+			<key>44</key>
+			<value>RPR</value>
+		</term>		
+		<term>
+			<key>45</key>
+			<value>HEP B</value>
+		</term>		
+		<term>
+			<key>46</key>
+			<value>HGB Electro</value>
+		</term>		
+		<term>
+			<key>47</key>
+			<value>ESR (Sed rate)</value>
+		</term>		
+		<term>
+			<key>48</key>
+			<value>Sickling RBC</value>
+		</term>		
+		<term>
+			<key>49</key>
+			<value>CT (Clotting Time)</value>
+		</term>		
+		<term>
+			<key>50</key>
+			<value>GGT</value>
+		</term>		
+		<term>
+			<key>51</key>
+			<value>URINE COLOUR</value>
+		</term>		
+		<term>
+			<key>52</key>
+			<value>URINE TURBIDITY</value>
+		</term>		
+		<term>
+			<key>53</key>
+			<value>URINE OCCULT BI</value>
+		</term>		
+		<term>
+			<key>54</key>
+			<value>Stool Consistency</value>
+		</term>		
+		<term>
+			<key>55</key>
+			<value>Stool Occult BI</value>
+		</term>		
+		<term>
+			<key>56</key>
+			<value>HCV</value>
+		</term>		
+		<term>
+			<key>57</key>
+			<value>VDRL</value>
+		</term>		
+		<term>
+			<key>58</key>
+			<value>Rheumatoid Factor</value>
+		</term>		
+		<term>
+			<key>59</key>
+			<value>CSF Glucose</value>
+		</term>		
+		<term>
+			<key>60</key>
+			<value>CSF Protein</value>
+		</term>		
+		<term>
+			<key>61</key>
+			<value>CSF Chloride</value>
+		</term>		
+		<term>
+			<key>62</key>
+			<value>Pregnancy</value>
+		</term>		
+		<term>
+			<key>63</key>
+			<value>Progesterone</value>
+		</term>		
+		<term>
+			<key>64</key>
+			<value>Blood Group</value>
+		</term>		
+		<term>
+			<key>65</key>
+			<value>Rh Group</value>
+		</term>		
+		<term>
+			<key>66</key>
+			<value>ASOT</value>
+		</term>		
+		<term>
+			<key>67</key>
+			<value>Sperm Count</value>
+		</term>		
+		<term>
+			<key>68</key>
+			<value>TPHA</value>
+		</term>		
+		<term>
+			<key>69</key>
+			<value>Toxoplasma</value>
+		</term>		
+		<term>
+			<key>70</key>
+			<value>CRP</value>
+		</term>		
+		<term>
+			<key>71</key>
+			<value>PSA</value>
+		</term>		
+		<term>
+			<key>72</key>
+			<value>Zn Stain</value>
+		</term>		
+		<term>
+			<key>73</key>
+			<value>Bleeding Time</value>
+		</term>		
+		<term>
+			<key>75</key>
+			<value>Prolactin</value>
+		</term>		
+		<term>
+			<key>76</key>
+			<value>Ferritin</value>
+		</term>		
+		<term>
+			<key>77</key>
+			<value>Testosterone</value>
+		</term>		
+		<term>
+			<key>88</key>
+			<value>Blood Sugar</value>
+		</term>		
+		<term>
+			<key>87</key>
+			<value>TB Smear</value>
+		</term>		
+		<term>
+			<key>85</key>
+			<value>m2</value>
+		</term>		
+		<term>
+			<key>84</key>
+			<value>m1</value>
+		</term>		
+		<term>
+			<key>89</key>
+			<value>AFB</value>
+		</term>		
+		<term>
+			<key>90</key>
+			<value>T4</value>
+		</term>		
+		<term>
+			<key>91</key>
+			<value>T8</value>
+		</term>		
+		<term>
+			<key>92</key>
+			<value>T3</value>
+		</term>		
+		<term>
+			<key>93</key>
+			<value>T4/T8</value>
+		</term>		
+		<term>
+			<key>94</key>
+			<value>sample1</value>
+		</term>		
+		<term>
+			<key>95</key>
+			<value>sample1</value>
+		</term>	
+	</entity>	
+	<entity id="specimen" descr="Specimen Types">		
+		<term>
+			<key>6</key>
+			<value>Whole Blood</value>
+		</term>		
+		<term>
+			<key>7</key>
+			<value>Serum</value>
+		</term>		
+		<term>
+			<key>8</key>
+			<value>Dried Blood Spot</value>
+		</term>		
+		<term>
+			<key>9</key>
+			<value>Sputum</value>
+		</term>		
+		<term>
+			<key>10</key>
+			<value>CSF</value>
+		</term>		
+		<term>
+			<key>11</key>
+			<value>Urine</value>
+		</term>		
+		<term>
+			<key>12</key>
+			<value>Stool</value>
+		</term>		
+		<term>
+			<key>13</key>
+			<value>Aspirate</value>
+		</term>		
+		<term>
+			<key>14</key>
+			<value>Nasal Swab</value>
+		</term>		
+		<term>
+			<key>15</key>
+			<value>Semen</value>
+		</term>		
+		<term>
+			<key>16</key>
+			<value>Rectal Swab</value>
+		</term>		
+		<term>
+			<key>17</key>
+			<value>Throat Swab</value>
+		</term>		
+		<term>
+			<key>18</key>
+			<value>Plasma EDTA</value>
+		</term>		
+		<term>
+			<key>19</key>
+			<value>Urine</value>
+		</term>		
+		<term>
+			<key>22</key>
+			<value>qe3</value>
+		</term>		
+		<term>
+			<key>23</key>
+			<value>qwq</value>
+		</term>	
+	</entity>	
+</catalog>
