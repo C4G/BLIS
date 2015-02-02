@@ -21,7 +21,7 @@ $script_elems->enableJQueryForm();
 
   
 <script src="js/jquery-ui-1.8.16.js" type="text/javascript"></script>
-<link rel="stylesheet" href="css//jquery-ui-1.8.16.css" type="text/css" media="all">
+<script src="js/lab_config_home.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="css/jquery-ui-1.8.16.css" type="text/css" media="all"> 
 
@@ -152,42 +152,19 @@ $script_elems->enableJQueryForm();
 
         <!--NC3065-->
         
-        <div id='search_config' class='right_pane' style='display:none;margin-left:10px;'>
-	<ul>	
-		<?php
-		
-			echo "<li>";
-			echo " Toggle Patient Number or Patient's Age to be displayed as part of Search Results";
-			echo "</li>";
-                        echo "<li>";
-			echo " Choosing to display Patient Number and/or Patient's Age as part of Search results slows down the time taken to search ";
-			echo "</li>";
-                        
-                        
-		
-		?>
-	</ul>
+    <div id='search_config' class='right_pane' style='display:none;margin-left:10px;'>
+		<ul>	
+			<li> Toggle Patient Number or Patient's Age to be displayed as part of Search Results</li>
+			<li> Choosing to display Patient Number and/or Patient's Age as part of Search results slows down the time taken to search </li>
+		</ul>
 	</div>
         
-        <div id='barcode_config' class='right_pane' style='display:none;margin-left:10px;'>
-	<ul>	
-		<?php
-		
-			echo "<li>";
-			echo " Configure your settings for barcode formats";
-			echo "</li>";
-                        echo "<li>";
-			echo " Width and Height are the dimensions of the bars ";
-			echo "</li>";
-                        echo "<li>";
-			echo " Text size os the for the code printed underneath the barcodes";
-			echo "</li>";
-                       
-                        
-                        
-		
-		?>
-	</ul>
+    <div id='barcode_config' class='right_pane' style='display:none;margin-left:10px;'>
+		<ul>	
+			<li> Configure your settings for barcode formats</li>
+	        <li> Width and Height are the dimensions of the bars </li>";
+	        <li> Text size os the for the code printed underneath the barcodes</li>";
+		</ul>
 	</div>
         
         <!---NC3065-->
@@ -281,19 +258,7 @@ $field_odering_specimen = field_order_update::install_first_order($lab_config, 2
 <?php $page_elems->getCompatibilityJsArray("st_map", $lab_config_id); ?>
 
 $(document).ready(function(){
-        $("#inventory_div").load("view_stocks.php");;
-	$("input[name='rage']").change(function() {
-		toggle_agegrouplist();
-	});
-	$('#revert_done_msg').hide();
-	$('#reorder_fields').hide();
-	$('#doctor_reorder_fields').hide();
-	
-	$('#instruments_menu').click(function(){
-		$('#instrumentation_setup').toggle();
-	});
-	
-	$('#cat_code12').change( function() { get_test_types_bycat() });
+
 	get_test_types_bycat
 	<?php
 	if(isset($_REQUEST['show_u']))
@@ -596,48 +561,8 @@ $(document).ready(function(){
 	}
 	?>
 	$('#lab_admin').attr("value", "<?php echo $lab_config->adminUserId; ?>");
-	/*$('.stype_entry').change(function() {
-		check_compatible();
-	});
-	*/
-	$('.dboption').change(function() {
-		toggle_dboption_help();
-	});
-	stype_toggle();
+
 });
-
-
-function openReorder(){
-	$('#reorder_fields').show();
-}
-
-function openDoctorReorder(){
-	$('#doctor_reorder_fields').show();
-}
-
-function closeReorder(){
-	$('#reorder_fields').hide();
-}
-
-function closeDoctorReorder(){
-	$('#doctor_reorder_fields').hide();
-}
-
-function performDbUpdate() {
-	$.ajax({
-		type : 'POST',
-		url : 'update/updateDB.php',
-		success : function (param) {
-			$('#updating').hide();
-			if ( param=="true" ) {
-				$('#updateSuccess').show();
-				setTimeout("location.href='home.php'",5000);
-			} else {
-				$('#updateFailure').show();
-			}
-		}
-	});
-}
 
 function add_new_currency_ratio(action){
 	if(action == 1){
@@ -662,7 +587,7 @@ function add_new_currency_ratio(action){
 
 function get_testbox2(stype_id)
 {
-	//var stype_val = $('#'+stype_id).attr("value");
+
         var stype_val = stype_id;
         $('#test_list_by_site').show();
 	if(stype_val == "")
@@ -679,86 +604,6 @@ function get_testbox2(stype_id)
 	);
 }
 
-function toggle_div(div_name) {
-	$("#"+div_name).hide();
-}
-
-function inventory_load()
-{
-    //$("#inventory_div").load("view_stock.php");
-    right_load(15, 'inventory_div');
-}
-
-function performUpdate()
-{
-	$('#updating').show();
-	$.ajax({
-		type : 'POST',
-		url : 'ajax/update.php',
-		success : function(data) {
-			if ( data=="true" ) {
-				performDbUpdate();
-			}
-			else {
-				$('#updating').hide();
-				$('#updateFailure').show();
-			}
-		}
-	});
-}
-
-function test_setup()
-{
-if(document.getElementById('test_setup').style.display =='none')
-$('#test_setup').show();
-else
-$('#test_setup').hide();
-}
-
-function report_setup()
-{
-if(document.getElementById('report_setup').style.display =='none')
-$('#report_setup').show();
-else
-$('#report_setup').hide();
-
-}
-
-function check_compatible()
-{
-}
-
-function blis_update_t()
-{
-    $('#update_button').hide();
-    $('#update_spinner').show();
-    setTimeout( "blis_update();", 5000); 
-}
-
-function blis_update()
-{
-    
-    $.ajax({
-		type : 'POST',
-		url : 'update/blis_update.php',
-		success : function(data) {
-			if ( data=="true" ) {
-                            $('#update_failure').hide();
-                            $('#update_spinner').hide();
-                            $('#update_success').show();
-			}
-			else {
-                                $('#update_success').hide();
-
-                                $('#update_spinner').hide();
-				$('#update_failure').show();
-			}
-		}
-	});
-        
-    $('#update_button').show();
-}
-
 function right_load(option_num, div_id)
 {
 	$('#name9').attr("value", "<?php echo $lab_config->name; ?>");
@@ -769,14 +614,6 @@ function right_load(option_num, div_id)
 	$('#'+div_id).show();
 	$('#option'+option_num).addClass('current_menu_option');
 
-}
-
-function language_div_load() {
-	$('#misc_errormsg').hide();
-	$('.right_pane').hide();
-	$('.menu_option').removeClass('current_menu_option');
-	$('#language_div').show();
-	$('#option19').addClass('current_menu_option');
 }
 
 function export_html()
@@ -797,11 +634,6 @@ fwrite($fh, $content);
 fclose($fh);
 ?>
 right_load(14, 'network_setup_div');
-}
-function ask_to_delete_user(user_id)
-{
-	var div_id = 'delete_confirm_'+user_id;
-	$('#'+div_id).show();
 }
 
 function delete_user(user_id)
@@ -866,11 +698,6 @@ function deleteCurrencyRatio(row_id)
 	$.ajax({ url: url_string, async: false, success: function() {
 		window.location=reload_url;
 	}});
-}
-
-function addCurrencyRatio()
-{
-	$("#addCurrencyRatioDiv").show();
 }
 
 function toggle_disease_report()
@@ -978,15 +805,6 @@ $(function() {
     });
 
     
-
-    $( "#field_reorder_link_patient" ).click(function() {
-            $( "#dialog-form-patients" ).dialog( "open" );
-        });
-
-    $( "#field_reorder_link_specimen" ).click(function() {
-        $( "#dialog-form-specimen" ).dialog( "open" );
-    });
-
     $( "#dialog-form-specimen" ).dialog({
         autoOpen: false,
         //position: { my: "center", at: "center", collision: 'none' },
@@ -1024,12 +842,6 @@ $(function() {
             allFields.val( "" ).removeClass( "ui-state-error" );
         }
     });
-
-    
-    $("#sortablePatients").sortable({     	});
-    $("#sortableSpecimen").sortable({     	});
-    $( "#sortablePatients" ).disableSelection();
-    $( "#sortableSpecimen" ).disableSelection();
     
 });
 
@@ -1122,50 +934,8 @@ $(function() {
             allFields.val( "" ).removeClass( "ui-state-error" );
         }
     });
-
-    
-    $("#doctor_sortablePatients").sortable({     	});
-    $("#doctor_sortableSpecimen").sortable({     	});
-    $( "#doctor_sortablePatients" ).disableSelection();
-    $( "#sortableSpecimen" ).disableSelection();
     
 });
-function add_new_currency(action)
-{
-	if(action == 1){
-	$('#new_currency').show();
-	$('#add_new_currency_link').hide();
-	} else {
-	$('#new_currency').hide();
-	$('#add_new_currency_link').show();
-	}
-}
-
-function stype_toggle()
-{
-	$('#stype_box').toggle();
-	if($('#stype_link').html() == "Show")
-	{
-		$('#stype_link').html("Hide");		
-	}
-	else
-	{
-		$('#stype_link').html("Show");
-	}
-}
-
-function ttype_toggle()
-{
-	$('#ttype_box').toggle();
-	if($('#ttype_link').html() == "Show")
-	{
-		$('#ttype_link').html("Hide");		
-	}
-	else
-	{
-		$('#ttype_link').html("Show");
-	}
-}
 
 function checkandsubmit_st_types()
 {
@@ -1299,43 +1069,6 @@ function grouped_checkandsubmit()
 	});
 }
 
-function agg_preview()
-{
-	// Shows preview of infection report in a separate window
-	// Clone fields from disease report form to preview form
-	$('#agg_preview_form').html($('#agg_report_form').clone(true).html());
-	$('#agg_preview_form').submit();
-}
-
-function toggle_agegrouplist()
-{
-	$('#agegrouprow').toggle();
-}
-
-function agegrouplist_append()
-{
-	var html_code = "&nbsp;&nbsp;<input type='text' name='age_l[]' class='range_field'></input>-<input type='text' name='age_u[]' class='range_field'></input>";
-	$('#agegrouplist_inner').append(html_code);
-}
-
-function t_agegrouplist_append()
-{
-	var html_code = "&nbsp;&nbsp;<input type='text' name='age_l[]' class='range_field'></input>-<input type='text' name='age_u[]' class='range_field'></input>";
-	$('#t_agegrouplist_inner').append(html_code);
-}
-
-function s_agegrouplist_append()
-{
-	var html_code = "&nbsp;&nbsp;<input type='text' name='sp_age_l[]' class='range_field'></input>-<input type='text' name='sp_age_u[]' class='range_field'></input>";
-	$('#s_agegrouplist_inner').append(html_code);
-}
-
-function add_slot(span_id, field_name1, field_name2)
-{
-	var html_code = "&nbsp;&nbsp;&nbsp;<input type='text' class='range_field' name='"+field_name1+"[]' value=''></input>-<input type='text' class='range_field' name='"+field_name2+"[]' value=''></input>";
-	$('#'+span_id).append(html_code);
-}
-
 function misc_checkandsubmit()
 {
 	//Validate
@@ -1357,29 +1090,6 @@ function misc_checkandsubmit()
 	//All okay
 	$('#misc_progress').show();
 	$('#misc_form').submit();
-	/*
-	$('#misc_form').ajaxSubmit({
-		success: function() {
-			$('#misc_progress').hide();
-			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&miscupdate=1";
-		}
-	});
-	*/
-}
-
-function toggle_dboption_help()
-{
-	var dboption_val = $("input[name='dboption']:checked").attr("value");
-	$('.dboption_help').hide();
-	$('.random_params').hide();
-	if(dboption_val != 0)
-	{
-		$('#dboption_help_'+dboption_val).show();
-	}
-	if(dboption_val == 1)
-	{
-		$('.random_params').show();
-	}
 }
 
 function submit_otherfields()
@@ -1427,15 +1137,6 @@ function submit_barcodeconfig()
 }
 //-NC3065
 
-function backup_data()
-{
-	var r=confirm("Do you want to backup?");
-	if(r==true)
-		$('#backup_form').submit();
-	else
-		{}
-}
-
 function fetch_report_config()
 {
 	var report_type = $("#report_type11").attr("value");
@@ -1445,12 +1146,6 @@ function fetch_report_config()
 		$('#report_config_fetch_progress').hide();
 	});
 }
-
-function hide_report_config()
-{
-	$('#report_config_content').html("");
-}
-
 
 function fetch_report_summary()
 {
@@ -1538,11 +1233,6 @@ function fetch_worksheet_config()
 	});
 }
 
-function hide_worksheet_config()
-{
-	$('#worksheet_config_content').html("");
-}
-
 function fetch_worksheet_summary()
 {
 	var cat_code = $('#cat_code12').attr("value");
@@ -1567,37 +1257,6 @@ function update_worksheet_config()
 	});
 }
 
-function backup_revert_submit()
-{
-	// Validate
-	// All okay
-	$('#backup_revert_progress').show();
-	$('#backup_revert_form').submit();
-}
-
-function update_database_submit() {
-	$('#update_database_progress').show();
-	$('#update_database_form').ajaxSubmit(function success(data) {
-		window.location = data;
-	});
-
-}
-
-function add_title_line()
-{
-	var html_code = "<input type='text' name='title[]' value='' class='uniform_width_more'></input><br>";
-	$('#title_lines').append(html_code);
-}
-
-function right_load_1(option_num, div_id)
-{
-//	$('#misc_errormsg').hide();
-	$('.right_pane').hide();
-	$('.menu_option').removeClass('current_menu_option');
-	$('#'+div_id).show();
-	$('#option'+option_num).addClass('current_menu_option');
-	
-}
 </script>
 
 <br>
@@ -1640,8 +1299,8 @@ function right_load_1(option_num, div_id)
 					<br><br>
 				</div>
                                 
-                                <a id='option21' class='menu_option' href="javascript:right_load(21, 'search_div');"><?php echo "Search" ?></a>
-                                <br><br>
+                <a id='option21' class='menu_option' href="javascript:right_load(21, 'search_div');"><?php echo "Search" ?></a>
+                <br><br>
                                 
 				<a id='report' class='menu_option' href="javascript:report_setup();"><?php echo LangUtil::$pageTerms['Reports']; ?> </a>
 				<br><br></li>
@@ -1690,17 +1349,18 @@ function right_load_1(option_num, div_id)
 				<?php
 					if($SERVER != $ON_ARC) {
 						?>
-						<a id='option13' class='menu_option' href="javascript:right_load(13, 'backup_revert_div');"><?php echo LangUtil::$pageTerms['MENU_BACKUP_REVERT']; ?></a><br><br></li>
+						<a id='option13' class='menu_option' href="javascript:right_load(13, 'backup_revert_div');"><?php echo LangUtil::$pageTerms['MENU_BACKUP_REVERT']; ?></a><br><br>
 						<?php if(is_super_admin($user) || is_country_dir($user)) { ?>
-								<a id='option18' class='menu_option' href="javascript:right_load(18, 'update_database_div');"><?php echo 'Update Data'; ?></a><br><br></li>
-                                                                <a id='option34' class='menu_option' href="javascript:right_load(34, 'import_config_div');"><?php echo 'Import Configuration' ?></a><br><br></li>
+								<a id='option18' class='menu_option' href="javascript:right_load(18, 'update_database_div');"><?php echo 'Update Data'; ?></a>
+								<br><br>
+                                <a id='option34' class='menu_option' href="javascript:right_load(34, 'import_config_div');"><?php echo 'Import Configuration' ?></a><br><br>
 
 						<?php }
 					}
 				?>
 				
-				<a href='export_config?id=<?php echo $_REQUEST['id']; ?>' target='_blank'><?php echo LangUtil::$pageTerms['MENU_EXPORTCONFIG']; ?></a><br><br></li>
-                                <div id="old_update_div" style="display:none;">
+				<a href='export_config?id=<?php echo $_REQUEST['id']; ?>' target='_blank'><?php echo LangUtil::$pageTerms['MENU_EXPORTCONFIG']; ?></a><br><br>
+                <div id="old_update_div" style="display:none;">
 				<a id='option39' class='menu_option' href="javascript:right_load(39, 'blis_update_div');">Update to New Version</a>
 				<br><br>
 				</div>
@@ -1729,21 +1389,21 @@ function right_load_1(option_num, div_id)
 				<p style="text-align: right;"><a rel='facebox' href='#Summary_config'>Page Help</a></p>
 				<b><?php echo "BLIS Update"; ?></b>
 					<br><br>
-                                        <input type="Button" id="update_button" name="update_button" value="Start Update" onclick="javascript:blis_update_t()"/>
-                                        <br>
-                                        <div id='update_spinner' style='display:none;'>
-                                        <?php
-					$spinner_message = "Updating to C4G BLIS v2.2"."<br>";
-                                        $page_elems->getProgressSpinnerBig($spinner_message);
-                                        ?>
-                                        </div>
-                                        <br>
-                                        <div id='update_success' class='clean-orange' style='display:none;width:350px;'>
-                                            Update to v2.2 Successful!
-                                        </div>
-                                        <div id='update_failure' class='clean-error' style='display:none;width:350px;'>
-                                            Update to v2.2 Failed! Try Again.
-                                        </div>
+                    <input type="Button" id="update_button" name="update_button" value="Start Update" onclick="javascript:blis_update_t()"/>
+                    <br>
+                    <div id='update_spinner' style='display:none;'>
+	                    <?php
+							$spinner_message = "Updating to C4G BLIS v2.2"."<br>";
+	                       	$page_elems->getProgressSpinnerBig($spinner_message);
+	                    ?>
+                    </div>
+                    <br>
+                    <div id='update_success' class='clean-orange' style='display:none;width:350px;'>
+                        Update to v2.2 Successful!
+                    </div>
+                    <div id='update_failure' class='clean-error' style='display:none;width:350px;'>
+                        Update to v2.2 Failed! Try Again.
+                    </div>
 				</div>
 				
 				<div class='right_pane' id='st_types_div' style='display:none;margin-left:10px;'>
@@ -1768,19 +1428,19 @@ function right_load_1(option_num, div_id)
 					<div class='pretty_box' id='ttype_box' style='display:none'>
 					<b><u><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></u></b>
                                         
-                                        <?php
-                                        //NC3065
-                                        
-                                        $user = get_user_by_id($_SESSION['user_id']);
-                                        if(is_super_admin($user) || is_country_dir($user))
-                                        {
-                                            $page_elems->getTestTypeCheckboxes_dir($lab_config->id);
-                                        }
-                                        else
-                                        {
-                                            $page_elems->getTestTypeCheckboxes($lab_config->id); 
-                                        }
-                                        //NC3065
+                    <?php
+                    //NC3065
+                    
+	                    $user = get_user_by_id($_SESSION['user_id']);
+	                    if(is_super_admin($user) || is_country_dir($user))
+	                    {
+	                        $page_elems->getTestTypeCheckboxes_dir($lab_config->id);
+	                    }
+	                    else
+	                    {
+	                        $page_elems->getTestTypeCheckboxes($lab_config->id); 
+	                    }
+                    //NC3065
 					?>
 
 					</div>
@@ -1797,11 +1457,12 @@ function right_load_1(option_num, div_id)
 			
                                 <!--NC3065-->
                                 
-                                <div class='right_pane' id='search_div' style='display:none;margin-left:10px;'>
-				<p style="text-align: right;"><a rel='facebox' href='#search_config'>Page Help</a></p>
+                <div class='right_pane' id='search_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;">
+					<a rel='facebox' href='#search_config'>Page Help</a></p>
 					<b><?php echo "Configure Fields for search results"; ?></b>
 					<br><br>
-                                        <div id='searchfield_msg' class='clean-orange' style='display:none;width:350px;'>
+                    <div id='searchfield_msg' class='clean-orange' style='display:none;width:350px;'>
 					</div>
 					<form id='searchfields_form' name='searchfields_form' action='ajax/search_config_update.php' method='post'>
 					<input type='hidden' name='lab_config_id' value='<?php echo $lab_config->id; ?>'></input>					
@@ -1811,7 +1472,7 @@ function right_load_1(option_num, div_id)
 					</input>
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					<!--span id='st_types_progress' style='display:none;'-->
-                                        <span id='searchfields_progress' style='display:none;'>
+                        <span id='searchfields_progress' style='display:none;'>
 
 						<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
 					</span>
@@ -2215,7 +1876,7 @@ function right_load_1(option_num, div_id)
 								<td>
 									<input type='checkbox' name='use_dnum' id='use_dnum'<?php
 									
-                                                                        if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 12)
+                                if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 12)
 										echo " checked ";
 									?>>
 									</input>
@@ -2316,7 +1977,7 @@ function right_load_1(option_num, div_id)
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['AGE']; ?></td>
 								<td>
 									<input type='checkbox' name='use_age' id='use_age'<?php
-                                                                        if($lab_config->age == 1 || $lab_config->age == 2 || $lab_config->age == 11 || $lab_config->age == 12)
+                                        if($lab_config->age == 1 || $lab_config->age == 2 || $lab_config->age == 11 || $lab_config->age == 12)
 									
 										echo " checked ";
 									?>>
@@ -2513,209 +2174,9 @@ function right_load_1(option_num, div_id)
 					<br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick='javascript:closeReorder();' value='cancel' />
 					</div>
-					<!-- <button id="create-user">Create new user</button> -->
-					<br/>
-					<script type='text/javascript'>
-					$(document).ready(function(){
-						if($('#use_pid').is(':checked'))
-						{
-							$('#use_pid_mand').show();
-						}
-						if($('#use_p_addl').is(':checked'))
-						{
-							$('#use_p_addl_mand').show();
-						}
-						if($('#use_s_addl').is(':checked'))
-						{
-							$('#use_s_addl_mand').show();
-						}
-						if($('#use_dnum').is(':checked'))
-						{
-							$('#use_dnum_mand').show();
-						}
 
-						if($('#use_sex').is(':checked'))
-						{
-							$('#use_sex_mand').show();
-						}
-						if($('#use_age').is(':checked'))
-						{
-							$('#use_age_mand').show();
-						}
-						if($('#use_dob').is(':checked'))
-						{
-							$('#use_dob_mand').show();
-						}
-						if($('#use_pid').is(':checked'))
-						{
-							$('#use_pid_mand').show();
-						}
-						if($('#use_sid').is(':checked'))
-						{
-							$('#use_sid_mand').show();
-						}
-						if($('#use_rdate').is(':checked'))
-						{
-							$('#use_rdate_mand').show();
-						}
-						if($('#use_refout').is(':checked'))
-						{
-							$('#use_refout_mand').show();
-						}
-						if($('#use_doctor').is(':checked'))
-						{
-							$('#use_doctor_mand').show();
-						}
-						if($('#use_pname').is(':checked'))
-						{
-							$('#use_pname_mand').show();
-						}
-						if($('#use_comm').is(':checked'))
-						{
-							$('#use_comm_mand').show();
-						}
-						$('#use_pid').click(function() {
-							if($('#use_pid').is(':checked'))
-							{
-								$('#use_pid_mand').show();
-							}
-							else
-							{
-								$('#use_pid_mand').hide();
-							}
-						});
-						$('#use_p_addl').click(function() {
-							if($('#use_p_addl').is(':checked'))
-							{
-								$('#use_p_addl_mand').show();
-							}
-							else
-							{
-								$('#use_p_addl_mand').hide();
-							}
-						});
-						$('#use_dnum').click(function() {
-							if($('#use_dnum').is(':checked'))
-							{
-								$('#use_dnum_mand').show();
-							}
-							else
-							{
-								$('#use_dnum_mand').hide();
-							}
-						});
-						$('#use_s_addl').click(function() {
-							if($('#use_s_addl').is(':checked'))
-							{
-								$('#use_s_addl_mand').show();
-							}
-							else
-							{
-								$('#use_s_addl_mand').hide();
-							}
-						});
-						$('#use_dnum').click(function() {
-							if($('#use_dnum').is(':checked'))
-							{
-								$('#use_dnum_mand').show();
-							}
-							else
-							{
-								$('#use_dnum_mand').hide();
-							}
-						});
-						$('#use_dob').click(function() {
-							if($('#use_dob').is(':checked'))
-							{
-								$('#use_dob_mand').show();
-							}
-							else
-							{
-								$('#use_dob_mand').hide();
-							}
-						});
-						$('#use_sid').click(function() {
-							if($('#use_sid').is(':checked'))
-							{
-								$('#use_sid_mand').show();
-							}
-							else
-							{
-								$('#use_sid_mand').hide();
-							}
-						});
-						$('#use_sex').click(function() {
-							if($('#use_sex').is(':checked'))
-							{
-								$('#use_sex_mand').show();
-							}
-							else
-							{
-								$('#use_sex_mand').hide();
-							}
-						});
-						$('#use_age').click(function() {
-							if($('#use_age').is(':checked'))
-							{
-								$('#use_age_mand').show();
-							}
-							else
-							{
-								$('#use_age_mand').hide();
-							}
-						});
-						$('#use_refout').click(function() {
-							if($('#use_refout').is(':checked'))
-							{
-								$('#use_refout_mand').show();
-							}
-							else
-							{
-								$('#use_refout_mand').hide();
-							}
-						});
-						$('#use_doctor').click(function() {
-							if($('#use_doctor').is(':checked'))
-							{
-								$('#use_doctor_mand').show();
-							}
-							else
-							{
-								$('#use_doctor_mand').hide();
-							}
-						});
-						$('#use_rdate').click(function() {
-							if($('#use_rdate').is(':checked'))
-							{
-								$('#use_rdate_mand').show();
-							}
-							else
-							{
-								$('#use_rdate_mand').hide();
-							}
-						});
-						$('#use_comm').click(function() {
-							if($('#use_comm').is(':checked'))
-							{
-								$('#use_comm_mand').show();
-							}
-							else
-							{
-								$('#use_comm_mand').hide();
-							}
-						});
-						$('#use_pname').click(function() {
-							if($('#use_pname').is(':checked'))
-							{
-								$('#use_pname_mand').show();
-							}
-							else
-							{
-								$('#use_pname_mand').hide();
-							}
-						});
-					});
-					</script>
+					<br/>
+
 					<br>
 					<?php echo LangUtil::$pageTerms['CUSTOMFIELDS']." - ".LangUtil::$generalTerms['SPECIMENS']; ?>
 					 | <a href='cfield_new.php?lid=<?php echo $lab_config_id; ?>'><?php echo LangUtil::$generalTerms['ADDNEW']; ?></a>[<a href='#new_help' rel='facebox'>?</a>]
@@ -2910,7 +2371,7 @@ function right_load_1(option_num, div_id)
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['AGE']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_age' id='doctor_use_age'<?php
-                                                                        if($doctor_lab_config->age == 1 || $doctor_lab_config->age == 2 || $doctor_lab_config->age == 11 || $doctor_lab_config->age == 12)
+                                        if($doctor_lab_config->age == 1 || $doctor_lab_config->age == 2 || $doctor_lab_config->age == 11 || $doctor_lab_config->age == 12)
 									
 										echo " checked ";
 									?>>
@@ -3101,204 +2562,7 @@ function right_load_1(option_num, div_id)
 					<!-- <button id="create-user">Create new user</button> -->
 					<br/>
 					<script type='text/javascript'>
-					$(document).ready(function(){
-						if($('#docotor_use_pid').is(':checked'))
-						{
-							$('#docotor_use_pid_mand').show();
-						}
-						if($('#docotor_use_p_addl').is(':checked'))
-						{
-							$('#docotor_use_p_addl_mand').show();
-						}
-						if($('#doctor_use_s_addl').is(':checked'))
-						{
-							$('#doctor_use_s_addl_mand').show();
-						}
-						if($('#doctor_use_dnum').is(':checked'))
-						{
-							$('#doctor_use_dnum_mand').show();
-						}
-						if($('#doctor_use_sex').is(':checked'))
-						{
-							$('#doctor_use_sex_mand').show();
-						}
-						if($('#doctor_use_age').is(':checked'))
-						{
-							$('#doctor_use_age_mand').show();
-						}
-						if($('#doctor_use_dob').is(':checked'))
-						{
-							$('#doctor_use_dob_mand').show();
-						}
-						if($('#docotor_use_pid').is(':checked'))
-						{
-							$('#docotor_use_pid_mand').show();
-						}
-						if($('#doctor_use_sid').is(':checked'))
-						{
-							$('#doctor_use_sid_mand').show();
-						}
-						if($('#doctor_use_rdate').is(':checked'))
-						{
-							$('#doctor_use_rdate_mand').show();
-						}
-						if($('#doctor_use_refout').is(':checked'))
-						{
-							$('#doctor_use_refout_mand').show();
-						}
-						if($('#doctor_use_doctor').is(':checked'))
-						{
-							$('#doctor_use_doctor_mand').show();
-						}
-						if($('#doctor_use_pname').is(':checked'))
-						{
-							$('#doctor_use_pname_mand').show();
-						}
-						if($('#doctor_use_comm').is(':checked'))
-						{
-							$('#doctor_use_comm_mand').show();
-						}
-						$('#docotor_use_pid').click(function() {
-							if($('#docotor_use_pid').is(':checked'))
-							{
-								$('#docotor_use_pid_mand').show();
-							}
-							else
-							{
-								$('#docotor_use_pid_mand').hide();
-							}
-						});
-						$('#docotor_use_p_addl').click(function() {
-							if($('#docotor_use_p_addl').is(':checked'))
-							{
-								$('#docotor_use_p_addl_mand').show();
-							}
-							else
-							{
-								$('#docotor_use_p_addl_mand').hide();
-							}
-						});
-						$('#doctor_use_dnum').click(function() {
-							if($('#doctor_use_dnum').is(':checked'))
-							{
-								$('#doctor_use_dnum_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_dnum_mand').hide();
-							}
-						});
-						$('#doctor_use_s_addl').click(function() {
-							if($('#doctor_use_s_addl').is(':checked'))
-							{
-								$('#doctor_use_s_addl_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_s_addl_mand').hide();
-							}
-						});
-						$('#doctor_use_dnum').click(function() {
-							if($('#doctor_use_dnum').is(':checked'))
-							{
-								$('#doctor_use_dnum_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_dnum_mand').hide();
-							}
-						});
-						$('#doctor_use_dob').click(function() {
-							if($('#doctor_use_dob').is(':checked'))
-							{
-								$('#doctor_use_dob_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_dob_mand').hide();
-							}
-						});
-						$('#doctor_use_sid').click(function() {
-							if($('#doctor_use_sid').is(':checked'))
-							{
-								$('#doctor_use_sid_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_sid_mand').hide();
-							}
-						});
-						$('#doctor_use_sex').click(function() {
-							if($('#doctor_use_sex').is(':checked'))
-							{
-								$('#doctor_use_sex_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_sex_mand').hide();
-							}
-						});
-						$('#doctor_use_age').click(function() {
-							if($('#doctor_use_age').is(':checked'))
-							{
-								$('#doctor_use_age_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_age_mand').hide();
-							}
-						});
-						$('#doctor_use_refout').click(function() {
-							if($('#doctor_use_refout').is(':checked'))
-							{
-								$('#doctor_use_refout_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_refout_mand').hide();
-							}
-						});
-						$('#doctor_use_doctor').click(function() {
-							if($('#doctor_use_doctor').is(':checked'))
-							{
-								$('#doctor_use_doctor_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_doctor_mand').hide();
-							}
-						});
-						$('#doctor_use_rdate').click(function() {
-							if($('#doctor_use_rdate').is(':checked'))
-							{
-								$('#doctor_use_rdate_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_rdate_mand').hide();
-							}
-						});
-						$('#doctor_use_comm').click(function() {
-							if($('#doctor_use_comm').is(':checked'))
-							{
-								$('#doctor_use_comm_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_comm_mand').hide();
-							}
-						});
-						$('#doctor_use_pname').click(function() {
-							if($('#doctor_use_pname').is(':checked'))
-							{
-								$('#doctor_use_pname_mand').show();
-							}
-							else
-							{
-								$('#doctor_use_pname_mand').hide();
-							}
-						});
-					});
+
 					</script>
 					<br>
 					
@@ -3333,24 +2597,13 @@ function right_load_1(option_num, div_id)
 				</div>
 				
 
-                            <div id='view_stocks_help' class='right_pane' style='display:none;margin-left:10px;'>
-                                    <ul>	
-                                            <?php
-
-                                                    echo "<li>";
-                                                    echo " Toggle Patient Number or Patient's Age to be displayed as part of Search Results";
-                                                    echo "</li>";
-                                                    echo "<li>";
-                                                    echo " Choosing to display Patient Number and/or Patient's Age as part of Search results slows down the time taken to search ";
-                                                    echo "</li>";
-
-
-
-                                            ?>
-                                    </ul>
-                                    </div>
-
-                                
+                <div id='view_stocks_help' class='right_pane' style='display:none;margin-left:10px;'>
+                    <ul>	
+                        <li> Toggle Patient Number or Patient's Age to be displayed as part of Search Results</li>";
+                        <li> Choosing to display Patient Number and/or Patient's Age as part of Search results slows down the time taken to search </li>
+                        ?>
+                    </ul>
+                </div>
                                 
 				<div class='right_pane' id='del_config_div' style='display:none;margin-left:10px;'>
 					<b><?php echo LangUtil::$pageTerms['MENU_DEL']; ?></b>
@@ -3664,43 +2917,37 @@ function right_load_1(option_num, div_id)
 						<input type='hidden' name='lid' value='<?php echo $lab_config->id; ?>'></input>
 						<table>
 							<tbody>
-                                                            <tr valign='top'>
-                                                                <td><?php echo '- Select the facility from which you want to import data:'; ?></td>
+                                <tr valign='top'>
+                                    <td><?php echo '- Select the facility from which you want to import data:'; ?></td>
 									<td>
 										<?php echo ""; ?>
 									</td>
 								</tr>
-                                                                <tr valign='top'>
-                                                                <td><?php
-                                                                    //$site_list = get_site_list($_SESSION['user_id']);
-                                                                    //print_r($site_list);
-                                                                    //echo "<input type='checkbox' name='".$elem_name."[]' id='$elem_id' value='$key'>$value</input>";
-                                                                    ?>
-                                                                    <select name='location' id='location2' class='uniform_width' onchange="javascript:get_testbox2(this.value);">
-                                                                    <option value='0'><?php echo 'Select Facility'; ?></option>
-                                                                    <?php
-                                                                        $page_elems->getSiteOptions();
-                                                                    ?>
-                                                                    </select>
-                                                                    
-                                                                        
-                                                                </td>
+                                <tr valign='top'>
+	                                <td>
+                                        <select name='location' id='location2' class='uniform_width' onchange="javascript:get_testbox2(this.value);">
+                                        <option value='0'><?php echo 'Select Facility'; ?></option>
+                                        <?php
+                                            $page_elems->getSiteOptions();
+                                        ?>
+                                        </select>
+                                    </td>
 									<td>
 										<?php //echo $lab_config->id; ?>
 									</td>
 								</tr>
-                                                                <tr valign='top'>
-                                                                <td>
-                                                                    <div id='test_list_by_site'>
-                                                                        <?php //echo 'Select Facility to dispay its test catalog '?>
-                                                                        </div>
-                                                                </td>
+                                <tr valign='top'>
+                                    <td>
+                                        <div id='test_list_by_site'>
+                                            <?php //echo 'Select Facility to dispay its test catalog '?>
+                                        </div>
+	                                </td>
 									<td>
 										<?php echo ""; ?>
 									</td>
 								</tr>
-                                                                <tr valign='top'>
-                                                                <td><?php echo '- Select the configuration data you want to import:'; ?></td>
+                                <tr valign='top'>
+	                                <td><?php echo '- Select the configuration data you want to import:'; ?></td>
 									<td>
 										<?php echo ""; ?>
 									</td>
@@ -3720,21 +2967,21 @@ function right_load_1(option_num, div_id)
                                                                                 </input>
 									</td>
 								</tr>
-                                                                <tr valign='top'>
+                                <tr valign='top'>
 									<td><?php echo 'Import Statistic Report settings'; ?></td>
 									<td>
 										<input type='checkbox' id="import_sr" name='import_sr' >
                                                                                 </input>
 									</td>
 								</tr>
-                                                                <tr valign='top'>
+                                <tr valign='top'>
 									<td><?php echo 'Import Patient Report configurations and Worksheets'; ?></td>
 									<td>
 										<input type='checkbox' id="import_pw" name='import_pw' >
                                                                                 </input>
 									</td>
 								</tr>
-                                                                <tr valign='top'>
+                                <tr valign='top'>
 									<td></td>
 									<td>
 										<input type='button' onclick='javascript:update_database_submit();' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>'></input>
