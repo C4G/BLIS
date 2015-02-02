@@ -3,6 +3,7 @@ include("redirect.php");
 
 include("includes/header.php");
 LangUtil::setPageId("home");
+error_log("users/home.php:6. SESSION['lab_config_id'] = ". $_SESSION['lab_config_id']);
 
 $page_elems = new PageElems();
 $profile_tip = LangUtil::getPageTerm("TIPS_PWD");
@@ -53,24 +54,6 @@ $script_elems->enableLatencyRecord();
 
 <script type='text/javascript'>
 
-/*$(document).ready(function(){
-    $.ajax({
-		type : 'POST',
-		url : 'update/check_version.php',
-		success : function(data) {
-			if ( data=='0' && $VERSION != "2.9") 
-             {
-                            $('#update_div').show();
-			}
-			else 
-             {
-                             $('#update_div').hide();
-			}
-		}
-	});
-    //$('#update_div').show();
-});*/
-
 function blis_update_t()
 {
     $('#update_spinner').show();
@@ -97,7 +80,6 @@ function blis_update()
 		}
 	});
         
-    //$('#update_button').show();
 }
 
 </script>

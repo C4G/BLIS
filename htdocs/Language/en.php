@@ -695,9 +695,9 @@ $LANG_ARRAY = array (
 		
 	) ,
 	"search_condition" => array (
-	"SEARCH_BEGIN_WITH"=>"Starts with",
-	"SEARCH_END_WITH"=>"End with",
-	"SEARCH_CONTAINS"=>"Contains"
+		"SEARCH_BEGIN_WITH"=>"Starts with",
+		"SEARCH_END_WITH"=>"End with",
+		"SEARCH_CONTAINS"=>"Contains"
 	)
 );
 

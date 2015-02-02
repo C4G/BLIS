@@ -1,6 +1,7 @@
 <?php
 $LANG_ARRAY = array ( 
 		"general" => array ( 
+		"DRIVE_BY"=>"Contains",
 		"TIPS" => "Tips", 
 		"USERNAME" => "Username", 
 		"PWD" => "Password", 

@@ -33,7 +33,6 @@ require_once("date_lib.php");
 require_once('../tcpdf/config/lang/eng.php');
 require_once('../tcpdf/tcpdf.php');
 
-
 #
 # Entity classes for database backend
 #
@@ -105,6 +104,7 @@ class currencyConfig{
 	public $flag2;
 	public $setting1;
 	public $setting2;
+	private $row_count = 0;
 	
 	public static function getObject($record)
 	{
@@ -291,26 +291,10 @@ class currencyConfig{
 class FieldOrdering
 {
 	public $id; // 0 for patient registration, 1 for specimen registration
-	/* public $field1;
-	public $field2;
-	public $field3;
-	public $field4;
-	public $field5;
-	public $field6;
-	public $field7;
-	public $field8;
-	public $field9;
-	public $field10;
-	public $field11;
-	public $field12;
-	public $field13;
-	public $field14;
-	public $field15;
-	public $field16; */
+
 	public $form_field_inOrder;
 	
 	public $form_id;
-	
 	
 	public static function getObject($record)
 	{
@@ -421,6 +405,7 @@ class LabConfig
 	public static $RESET_MONTHLY = 2;
 	public static $RESET_YEARLY = 3;
 	public static $RESET_WEEKLY = 4;
+	private $row_count = 0;
 
 	public static function getObject($record)
 	{
@@ -683,11 +668,7 @@ class LabConfig
 		$retval = array();
 		foreach($test_type_list as $test_type)
 		{
-			/*
-			$query_string = 
-				"SELECT tat FROM test_type_tat ".
-				"WHERE test_type_id=$test_type->testTypeId ORDER BY ts DESC LIMIT 1";
-			*/
+
 			$query_string = 
 				"SELECT target_tat FROM test_type ".
 				"WHERE test_type_id=$test_type->testTypeId ORDER BY ts DESC LIMIT 1";
@@ -760,53 +741,7 @@ class LabConfig
 		$record = query_associative_one($query_string);
 		return $record['target_tat'];
 	}
-	
-	
-	/*
-	public function getGoalTatValue($test_type_id, $timestamp="")
-	{
-		# Returns the goal TAT value for the test on a given timestamp
-		global $DEFAULT_TARGET_TAT;
-		$saved_db = DbUtil::switchToLabConfig($this->id);
-		$query_string = "";
-		if($timestamp == "")
-		{
-			# Fetch latest entry
-			$query_string = 
-				"SELECT target_tat FROM test_type ".
-				"WHERE test_type_id=$test_type_id ORDER BY ts DESC LIMIT 1";
-		}
-		else
-		{
-			# Fetch entry closest before or at the timestamp value
-			$query_string = 
-				"SELECT target_tat FROM test_type ttt ".
-				"WHERE ttt.test_type_id=$test_type_id ".
-				"AND ( ".
-					"((UNIX_TIMESTAMP('$timestamp')-UNIX_TIMESTAMP(ttt.ts)) < (".
-					"SELECT (UNIX_TIMESTAMP('$timestamp')-UNIX_TIMESTAMP(ttt2.ts)) ".
-					"FROM test_type_tat ttt2 ".
-					"WHERE ttt2.test_type_id=$test_type_id ".
-					"AND ttt2.ts <> ttt.ts ".
-					")) ".
-					"OR ( ".
-					"(SELECT COUNT(*) ".
-					"FROM test_type_tat ttt3 ".
-					"WHERE ttt3.test_type_id=$test_type_id ".
-					"AND ttt3.ts <> ttt.ts) = 0 )".
-				")";
-		}
-		$record = query_associative_one($query_string);
-		$retval = 0;
-		if($record == null)
-			$retval = $DEFAULT_TARGET_TAT;
-		else
-			$retval = round($record['tat']/24, 2);
-		DbUtil::switchRestore($saved_db);
-		return $retval;
-	}
-	*/
-	
+		
 	public function updateGoalTatValue($test_type_id, $tat_value)
 	{	
 		# Updates goal TAT value for a single test type
@@ -816,11 +751,7 @@ class LabConfig
 		$test_type_id = mysql_real_escape_string($tat_value, $con);
 		$tat_value = mysql_real_escape_string($test_type_id, $con);
 		# Create new entry
-		/*
-		$query_string = 
-			"SELECT tat FROM test_type_tat ".
-			"WHERE test_type_id=$test_type_id ORDER BY ts DESC LIMIT 1";
-		*/
+
 		$query_string =
 			"SELECT target_tat FROM test_type ".
 			"WHERE test_type_id=$test_type_id ORDER BY ts DESC LIMIT 1";
@@ -832,35 +763,13 @@ class LabConfig
 					"UPDATE test_type SET target_tat=$tat_value WHERE test_type_id=$test_type_id";
 				query_update($query_string);
 			}
-			/*
-			else
-			{
-				# New record to append for TAT (keeping timestamp wise progression of entries)
-				$query_string = 
-					"INSERT INTO test_type_tat (test_type_id, tat) ".
-					"VALUES ($test_type_id, $tat_value)";
-				;
-				query_insert_one($query_string);
-			}
-			*/
 		}
-		/*
-		else
-		{
-			# New record to add (first entry for this test type)
-			$query_string = 
-				"INSERT INTO test_type_tat (test_type_id, tat) ".
-				"VALUES ($test_type_id, $tat_value)";
-			;
-			query_insert_one($query_string);
-		}
-		DbUtil::switchRestore($saved_db);
-		*/
 	}
 	
 	public function getTestTypeIds()
 	{
 		$saved_db = DbUtil::switchToLabConfigRevamp($this->id);
+		$row_count = 0;
 		# Returns a list of all test type IDs added to the lab configuration
 		$query_string = 
 			"SELECT test_type_id FROM lab_config_test_type ".
@@ -1218,9 +1127,7 @@ class ReportConfig
 	public $footerText;
 	public $designation;
 	public $aglignment_header;
-	//alignmen
-	//size
-	//align?size?text
+
 	public $patientCustomFields;
 	public $specimenCustomFields;
 	public $margins;
@@ -1271,8 +1178,6 @@ class ReportConfig
 	public $resultborderVertical;
 	public $resultborderHorizontal;
 	
-		
-		
 	public static function getObject($record, $lab_config_id)
 	{
 		global $LANG_ARRAY, $LOCAL_PATH;
@@ -1592,6 +1497,8 @@ class TestType
 	public $prevalenceThreshold;
 	public $targetTat;
 	
+	private $row_count = 0;
+
 	public static function getObject($record)
 	{
 		# Converts a test_type record in DB into a TestType object
@@ -1683,6 +1590,7 @@ class TestType
 	public function getMeasures()
 	{
 		# Returns list of measures included in a test type
+		$row_count = 0;
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 		$query_string = 
 			"SELECT measure_id FROM test_type_measure ".
@@ -1872,7 +1780,8 @@ class Measure
         
         # nc50
         public static $RANGE_SUBTYPE = 6;
-        
+ 	private $row_count = 0;
+       
 	public static function getObject($record)
 	{
 		# Converts a measure record in DB into a Measure object
@@ -2303,6 +2212,8 @@ class Patient
 	public $regDate;
 	
 	public $specimenCount;
+	private $row_count = 0;
+
 	public static function getObject($record)
 	{
 		# Converts a patient record in DB into a Patient object
@@ -2853,6 +2764,7 @@ class Specimen
 	public static $STATUS_TOVERIFY = 3;
 	public static $STATUS_REPORTED = 4;
 	public static $STATUS_RETURNED = 5;
+	private $row_count = 0;
 	
 	public static function getObject($record)
 	{
@@ -3151,6 +3063,7 @@ class Test
 	public $dateVerified;
 	public $timestamp;
 	public $ts;
+	private $row_count = 0;
 	
 	public static function getObject($record)
 	{
@@ -4045,17 +3958,6 @@ class Test
 		return $retval;
 	}
 	
-	/* public function getTestBySpecimenIdAndLabSection()
-	{
-		$query_string =
-		"SELECT * FROM test WHERE specimen_id = $this->testId".
-		")";
-		//"AND result<>''";
-		$resultset = query_associative_one($query_string, $row_count);
-		$retval = $resultset['date_collected'];
-		return $retval;
-	} */
-	
 	public static function convertArrayOfIdsToObjects($testIds)
 	{
 		$test_objs = array();
@@ -4087,6 +3989,7 @@ class CustomField
 	public static $FIELD_OPTIONS = 3;
 	public static $FIELD_NUMERIC = 4;
 	public static $FIELD_MULTISELECT = 5;
+	private $row_count = 0;
 	
 	public static function getObject($record)
 	{
@@ -4323,6 +4226,7 @@ class SpecimenCustomData
 	public $fieldId;
 	public $specimenId;
 	public $fieldValue;
+	private $row_count = 0;
 	
 	public static function getObject($record)
 	{
@@ -4442,6 +4346,7 @@ class Report
 	public $groupByGender;
 	public $groupByAge;
 	public $ageSlots;
+	private $row_count = 0;
 	
 	public static function getObject($record)
 	{
@@ -4663,9 +4568,11 @@ class CustomWorksheet
 	
 	public static $DEFAULT_WIDTH = 10; # in %age
 	public static $DEFAULT_MARGINS = array(2, 2, 2, 2);
+	private $row_count = 0;
 	
 	public static function getObject($record)
 	{
+		$row_count = 0;
 		if($record == null)
 			return null;
 		
@@ -4888,6 +4795,7 @@ class ReferenceRange
 	public $sex;
 	public $rangeLower;
 	public $rangeUpper;
+	private $row_count = 0;
 	
 	public static function getObject($record)
 	{
@@ -5246,8 +5154,8 @@ class UserStats
                             "WHERE lab_config_id = $lab_config_id";
                         
 	$resultset = query_associative_one($query_string);
-        //print_r($resultset);
-        $retval = $resultset['admin_user_id'];	
+
+    $retval = $resultset['admin_user_id'];	
 	DbUtil::switchRestore($saved_db);
 	return $retval;
     }
@@ -5260,20 +5168,21 @@ class UserStats
 			"WHERE lab_config_id = $lab_config_id ".
                         "AND user_id <> ".
 			"( ".
-                            "SELECT admin_user_id FROM lab_config ".
-                            "WHERE lab_config_id = $lab_config_id".
-                        " ) ";
+                "SELECT admin_user_id FROM lab_config ".
+                "WHERE lab_config_id = $lab_config_id".
+            " ) ";
 	
-	$retval = array();
-	$resultset = query_associative_all($query_string, $row_count);
-        //print_r($resultset);
-	foreach($resultset as $record)
-	{
-             //$i = $resultset['user_id'];
-             $retval[] = $record['user_id'];
-	}
-	DbUtil::switchRestore($saved_db);
-	return $retval;
+		$retval = array();
+		$row_count = 0;
+		$resultset = query_associative_all($query_string, $row_count);
+
+		foreach($resultset as $record)
+		{
+
+			$retval[] = $record['user_id'];
+		}
+		DbUtil::switchRestore($saved_db);
+		return $retval;
     }
     
     public function getTestStats($user_id, $lab_config_id, $date_from, $date_to)
@@ -5372,6 +5281,7 @@ class UserStats
         $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
         $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
         $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+        $row_count = 0;
 
         $query_string = 
 				"SELECT * FROM patient ".
@@ -5400,6 +5310,7 @@ class UserStats
         $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
         $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
         $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+        $row_count = 0;
 
         $query_string = 
 				"SELECT * FROM specimen ".
@@ -5428,6 +5339,7 @@ class UserStats
         $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
         $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
         $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+        $row_count = 0;
 
         $query_string = 
 				"SELECT * FROM test ".
@@ -5456,6 +5368,7 @@ class UserStats
         $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
         $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
         $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+        $row_count = 0;
 
         $query_string = 
 				"SELECT * FROM test ".
@@ -6223,17 +6136,15 @@ function delete_specimen_by_specimen_id($specimen_list){
 	
 }
 
- function delete_specimen_by_specimen_id_api($specimen_list, $lab_config_id, $remarks = "Typo"){
+function delete_specimen_by_specimen_id_api($specimen_list, $lab_config_id, $remarks = "Typo"){
 	global $con;
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	
  	if(sizeof($specimen_list)>0){
 		foreach($specimen_list as $specimen){
-			//echo "in delete_specimen_by_specimen_id_api : ".$specimen->specimenId;
+
 			$testsList = get_tests_by_specimen_id($specimen->specimenId);
 			delete_tests_by_test_id($testsList);
-			/* $query_string = "DELETE FROM specimen WHERE specimen_id=$specimen->specimenId";
-			query_blind($query_string); */
 			
 			$category = "specimen";
 			remove_specimens($lab_config_id, $specimen->specimenId, $remarks, $category);
@@ -6250,9 +6161,6 @@ function delete_test_by_test_id_api($test_list, $lab_config_id){
 	if(sizeof($test_list)>0){
 		
 		foreach($test_list as $test){
-/* 			$query_string = "DELETE FROM test WHERE test_id=$test->testId";
-			query_blind($query_string);
- */		
 			$remarks = "Typo";
 			$category = "test";
 			remove_specimens($lab_config_id, $test->testId, $remarks, $category);
@@ -8636,6 +8544,7 @@ function  insert_import_entry($id)
 
 function get_lab_configs_imported()
 {
+	$row_count = 0;
     $saved_db = DbUtil::switchToGlobal();
     $query_configs = "SELECT distinct lab_config_id from import_log";
     $retval = array();
@@ -8690,6 +8599,8 @@ function get_lab_configs($admin_user_id = "")
 	# If admin_user_id not supplied, all stored lab configs are returned
 	$saved_db = DbUtil::switchToGlobal();
 	$user = null;
+	$row_count = 0;
+
 	if($admin_user_id != "")
 		$user = get_user_by_id($admin_user_id);
 	if($admin_user_id == "" || is_super_admin($user))
@@ -8862,6 +8773,7 @@ function get_site_list($user_id)
 function get_test_types_by_site($lab_config_id="")
 {
 	global $con;
+	$row_count = 0;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	# Returns a list of test types configured for a particular site
 	$saved_db = "";
@@ -8874,12 +8786,7 @@ function get_test_types_by_site($lab_config_id="")
 		$query_string = "SELECT * FROM test_type ORDER BY name";
 	else
 		$query_string = "SELECT * FROM test_type ORDER BY name";
-		/*
-		$query_string = 
-			"SELECT tt.* FROM test_type tt, lab_config_test_type lctt ".
-			"WHERE tt.test_type_id=lctt.test_type_id ".
-			"AND lctt.lab_config_id=$lab_config_id ORDER BY tt.name";
-		*/
+
 	$resultset = query_associative_all($query_string, $row_count);
 	if($resultset) {
 		foreach($resultset as $record)
@@ -8919,6 +8826,7 @@ function get_test_types_by_site_category($lab_config_id, $cat_code)
 function get_test_types_by_site_map($lab_config_id)
 {
 	global $con;
+	$row_count = 0;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	# Returns a list of test types configured for a particular site
 	global $CATALOG_TRANSLATION;
@@ -8944,6 +8852,7 @@ function get_test_types_by_site_map($lab_config_id)
 function get_users_by_site_map($lab_config_id)
 {
 	global $con;
+	$row_count = 0;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	# Returns a list of usernames configured for a particular site
 	$saved_db = DbUtil::switchToGlobal();
@@ -8970,6 +8879,7 @@ function get_users_by_site_map($lab_config_id)
 function get_tech_users_by_site_map($lab_config_id)
 {
 	global $con;
+	$row_count = 0;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	# Returns a list of technician usernames configured for a particular site
 	$saved_db = DbUtil::switchToGlobal();
@@ -8992,6 +8902,7 @@ function get_tech_users_by_site_map($lab_config_id)
 function get_specimen_types_by_site($lab_config_id="")
 {
 	global $con;
+	$row_count = 0;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	# Returns a list of specimen types configured for a particular site
 	$saved_db = "";
@@ -9003,13 +8914,8 @@ function get_specimen_types_by_site($lab_config_id="")
 	if($lab_config_id === "")
 		$query_string = "SELECT * FROM specimen_type WHERE disabled=0 ORDER BY NAME";
 	else
-		/*
-		$query_string = 
-			"SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst ".
-			"WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id ".
-			"AND lcst.lab_config_id=$lab_config_id ORDER BY st.name";
-		*/
 		$query_string = "SELECT * FROM specimen_type WHERE disabled=0 ORDER BY NAME";
+
 	$resultset = query_associative_all($query_string, $row_count);
 	if($resultset) {
 		foreach($resultset as $record)
@@ -9274,6 +9180,7 @@ function get_specimen_types_catalog($lab_config_id=null, $reff=null)
 {
 	# Returns a list of all specimen types available in catalog
 	global $CATALOG_TRANSLATION;
+	$row_count = 0;
         //NC3065
         //global $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_COUNTRYDIR;
         if($reff == 1)
@@ -9308,6 +9215,7 @@ function get_test_types_catalog($lab_config_id=null, $reff=null)
 {
 	# Returns a list of all test types available in catalog
 	global $CATALOG_TRANSLATION;
+	$row_count = 0;
         //NC3065
                // global $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_COUNTRYDIR;
         if($reff == 1 && $reff != 2)
@@ -9346,6 +9254,7 @@ function get_search_fields($lab_config_id=null)
 		return;
 	else
 		$saved_db = DbUtil::switchToGlobal();
+
 	$query_sfields ="SELECT pid, p_addl, daily_num, pname, sex, age, dob FROM lab_config WHERE lab_config_id=$lab_config_id";
         $resultset = query_associative_one($query_sfields);
 	//$retval = array();
@@ -9357,6 +9266,7 @@ function get_search_fields($lab_config_id=null)
 //NC3065
 function getDoctorNames()
 {
+	$row_count = 0;
 	$query_string = "SELECT doctor FROM specimen WHERE date_collected >'2010-08-11'";
 	$resultset = query_associative_all($query_string, $row_count);
 	$retval = array();
@@ -9373,8 +9283,9 @@ function getDoctorNames()
 
 function get_test_categories_data($lab_config_id) {
 	
-        $saved_db = DbUtil::switchToLabConfig($lab_config_id);		
-        $query_string = "SELECT test_category_id, name FROM test_category";
+	$row_count = 0;
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);		
+    $query_string = "SELECT test_category_id, name FROM test_category";
 	$resultset = query_associative_all($query_string, $row_count);
 	$retval = array();
         $i = 0;
@@ -9392,8 +9303,9 @@ function get_test_categories_data($lab_config_id) {
 
 function get_test_ids_by_category($cat, $lab_config_id) {
 	
-        $saved_db = DbUtil::switchToLabConfig($lab_config_id);		
-        $query_string = "SELECT test_type_id FROM test_type WHERE test_category_id = $cat";
+ 	$row_count = 0;
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);		
+    $query_string = "SELECT test_type_id FROM test_type WHERE test_category_id = $cat";
 	$resultset = query_associative_all($query_string, $row_count);
 	$retval = array();
 	foreach($resultset as $record)
@@ -9406,6 +9318,7 @@ function get_test_ids_by_category($cat, $lab_config_id) {
 
 function get_test_categories($lab_config_id=null) {
 	global $con;
+	$row_count = 0;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	# Returns a list of all test categories available in catalog
 	global $CATALOG_TRANSLATION;
@@ -9426,6 +9339,7 @@ function get_test_categories($lab_config_id=null) {
 
 function get_test_categories2($lab_config_id=null) {
 	global $con;
+	$row_count = 0;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	# Returns a list of all test categories available in catalog
 	global $CATALOG_TRANSLATION;
@@ -10264,6 +10178,7 @@ function get_compatible_tests($specimen_type_id)
 	global $con;
 	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
 	$saved_db = DbUtil::switchToLabConfigRevamp();
+	$row_count = 0;
 	$query_string = 
 		"SELECT test_type_id FROM specimen_test WHERE specimen_type_id=$specimen_type_id";
 	$resultset = query_associative_all($query_string, $row_count);
@@ -10284,6 +10199,7 @@ function get_compatible_specimens($test_type_id)
 	global $con;
 	$test_type_id = mysql_real_escape_string($test_type_id, $con);
 	$saved_db = DbUtil::switchToLabConfigRevamp();
+	$row_count = 0;
 	$query_string = 
 		"SELECT specimen_type_id FROM specimen_test WHERE test_type_id=$test_type_id";
 	$resultset = query_associative_all($query_string, $row_count);
@@ -10305,6 +10221,7 @@ function get_compatible_test_types($lab_config_id, $specimen_type_id)
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+	$row_count = 0;
 	$query_string = 
 		"SELECT tt.* FROM test_type tt, lab_config_test_type lctt, specimen_test st ".
 		"WHERE tt.test_type_id=lctt.test_type_id ".
@@ -10343,6 +10260,8 @@ function get_lab_config_specimen_types($lab_config_id, $to_global=false)
 {
 	global $con;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$row_count = 0;
+
 	# Returns a list of all specimen types added to the lab configuration
 	if($to_global == false)
 		$saved_db = DbUtil::switchToLabConfigRevamp();
@@ -10450,6 +10369,7 @@ function get_custom_fields()
 	# Returns a list of all patient custom fields
 	$query_string =
 		"SELECT DISTINCT doctor FROM specimen WHERE doctor!=''";
+	$row_count = 0;
 	$resultset = query_associative_all($query_string, $row_count);
 	$retval = array();
 	foreach($resultset as $record)
@@ -10465,6 +10385,7 @@ function get_custom_fields_specimen()
 	# Returns a list of all specimen custom fields
 	$query_string =
 		"SELECT * FROM specimen_custom_field";
+	$row_count = 0;
 	$resultset = query_associative_all($query_string, $row_count);
 	$retval = array();
 	foreach($resultset as $record)
@@ -10480,6 +10401,7 @@ function get_custom_fields_patient()
 	# Returns a list of all patient custom fields
 	$query_string =
 		"SELECT * FROM patient_custom_field";
+	$row_count = 0;
 	$resultset = query_associative_all($query_string, $row_count);
 	$retval = array();
 	foreach($resultset as $record)
@@ -10609,6 +10531,7 @@ function get_custom_data_specimen($specimen_id)
 	# Fetches custom data stored for a given specimen ID
 	global $con;
 	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	$row_count = 0;
 	$query_string = 
 		"SELECT * FROM specimen_custom_data ".
 		"WHERE specimen_id=$specimen_id";
@@ -10642,6 +10565,7 @@ function get_custom_data_patient($patient_id)
 {
 	# Fetches custom data stored for a given patient ID
 	global $con;
+	$row_count = 0;
 	$patient_id = mysql_real_escape_string($patient_id, $con);
 	$query_string = 
 		"SELECT * FROM patient_custom_data ".
@@ -10674,6 +10598,7 @@ function get_lab_config_specimen_custom_fields($lab_config_id)
 {
 	# Returns list of specimen custom fields for a lab configuration
 	global $con;
+	$row_count = 0;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_string = 
@@ -10694,6 +10619,7 @@ function get_lab_config_patient_custom_fields($lab_config_id)
 	global $con;
 	$lab_config_id = mysql_real_escape_string($lab_config_id);
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$row_count = 0;
 	$query_string = 
 		"SELECT * FROM patient_custom_field";
 	$resultset = query_associative_all($query_string, $row_count);
@@ -10712,6 +10638,7 @@ function get_lab_config_labtitle_custom_fields($lab_config_id)
 	global $con;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$row_count = 0;
 	$query_string = 
 		"SELECT * FROM labtitle_custom_field";
 	$resultset = query_associative_all($query_string, $row_count);
@@ -10845,6 +10772,7 @@ class TestTypeMapping {
 	public $userId;
 	public $labIdTestId;
 	public $testCategoryId;
+	private $row_count = 0;
 	
 	public static function getObject($record)
 	{
@@ -11006,6 +10934,7 @@ class GlobalMeasure
 	public static $RANGE_MULTI = 3;
 	public static $RANGE_AUTOCOMPLETE = 4;
 
+	private $row_count = 0;
 	
 	public static function getObject($record) {
 		# Converts a measure record in DB into a Measure object
@@ -11056,91 +10985,6 @@ class GlobalMeasure
 		}
 	}
 	
-	/*
-	public function getRangeValues($patient=null)
-	{
-		# Returns range values in a list
-		
-		$range_type = $this->getRangeType();
-		$retval = array();
-		switch($range_type)
-		{
-			case Measure::$RANGE_NUMERIC:
-				# check if ref range is already configured
-				$ref_range = null;
-				if($patient != null)
-				{	$ref_range = ReferenceRange::getByAgeAndSex($patient->getAgeNumber(), $patient->sex, $this->measureId, $_SESSION['lab_config_id']);
-				
-				}
-				if($ref_range == null)
-					# Fetch from default entry in 'measure' table
-					$retval = explode(":", $this->range);
-				else
-					$retval = array($ref_range->rangeLower, $ref_range->rangeUpper);
-				break;
-			case Measure::$RANGE_OPTIONS:
-			
-			{
-			$retval = explode("/", $this->range);
-				
-				foreach($retval as $key=>$value)
-				{
-				
-				$retval[$key]=str_replace("#","/",$value);
-				}
-			break;
-			}
-			case Measure::$RANGE_AUTOCOMPLETE:
-				$retval = explode("_", $this->range);
-				foreach($retval as $key=>$value)
-				{
-				$retval[$key]=str_replace("#","_",$value);
-				}
-				break;
-		}
-		return $retval;
-	}
-	
-	public function getRangeString($patient=null)
-	{
-		# Returns range in string for printing or displaying
-		$retval = "";
-		if
-		(
-			$this->getRangeType() == Measure::$RANGE_OPTIONS ||
-			$this->getRangeType() == Measure::$RANGE_MULTI ||
-			$this->getRangeType() == Measure::$RANGE_AUTOCOMPLETE
-		)
-		{
-			$range_parts = explode("/", $this->range);
-			# TODO: Display possible options for result indicator??
-			$retval .= "-";
-		}
-		else if($this->getRangeType() == Measure::$RANGE_NUMERIC)
-		{
-			$ref_range = null;
-			if($patient != null)
-				$ref_range = ReferenceRange::getByAgeAndSex($patient->getAgeNumber(), $patient->sex, $this->measureId, $_SESSION['lab_config_id']);
-			if($ref_range == null)
-				# Fetch from default entry in 'measure' table
-				$range_parts = explode(":", $this->range);
-			else
-				$range_parts = array($ref_range->rangeLower, $ref_range->rangeUpper);
-			$retval .= "(".$range_parts[0]."-".$range_parts[1];
-			if($this->range != null && trim($this->range) != "")
-				$retval .= "  ".$this->unit;
-			$retval .= ")";
-		}
-		
-		return $range_parts;
-	}
-	
-	public function getUnits()
-	{
-		return $this->unit;
-	}
-	*/
-	
 	public static function getById($measure_id)
 	{
 		# Returns a test measure by ID
@@ -11164,106 +11008,6 @@ class GlobalMeasure
 		DbUtil::switchRestore($saved_db);
 	}
 	
-	/*
-	public function setInterpretation($inter)
-	{
-		# Updates an existing measure entry in DB
-		$saved_db = DbUtil::switchToLabConfigRevamp();
-		$query_string = 
-			"UPDATE measure SET description='$inter'".
-			"WHERE measure_id=$this->measureId";
-		query_blind($query_string);
-		DbUtil::switchRestore($saved_db);
-	}
-	public function setNumericInterpretation($remarks_list,$id_list, $range_l_list, $range_u_list, $age_u_list, $age_l_list, $gender_list)
-	{
-		# Updates an existing measure entry in DB
-		$saved_db = DbUtil::switchToLabConfigRevamp();
-		$count = 0;
-		if($id_list[0]==-1)
-		{
-		foreach($range_l_list as $range_value)
-				{
-			//insert query
-			$query_string="INSERT INTO NUMERIC_INTERPRETATION (range_u, range_l, age_u, age_l, gender, description, measure_id) ".
-			"VALUES($range_u_list[$count],$range_l_list[$count],$age_u_list[$count],$age_l_list[$count],'$gender_list[$count]','$remarks_list[$count]',$this->measureId)";
-			query_insert_one($query_string);
-			$count++;
-				}
-		}
-		else
-		{
-		foreach($range_l_list as $range_value)
-			{
-				if($id_list[$count]!=-2)
-					{
-						if($remarks_list[$count]=="")
-							{
-						//delete
-						$query_string="DELETE FROM NUMERIC_INTERPRETATION WHERE id=$id_list[$count]";
-						query_delete($query_string);
-						}else
-							{
-							//update
-						$query_string = 
-						"UPDATE numeric_interpretation SET range_u=$range_u_list[$count], range_l=$range_l_list[$count], age_u=$age_u_list[$count], age_l=$age_l_list[$count], gender='$gender_list[$count]' , description='$remarks_list[$count]' ".
-						"WHERE id=$id_list[$count]";
-						query_update($query_string);
-						
-						}
-				}else
-					{
-					$query_string="INSERT INTO numeric_interpretation (range_u, range_l, age_u, age_l, gender, description, measure_id) ".
-			"VALUES($range_u_list[$count],$range_l_list[$count],$age_u_list[$count],$age_l_list[$count],'$gender_list[$count]','$remarks_list[$count]',$this->measureId)";
-			query_insert_one($query_string);
-				}
-		
-		$count++;
-		}
-	}
-	DbUtil::switchRestore($saved_db);
-	}
-	
-	public function getNumericInterpretation()
-	{
-	$saved_db = DbUtil::switchToLabConfigRevamp();
-		$query_string = "SELECT * FROM numeric_interpretation WHERE measure_id=$this->measureId";
-		$resultset = query_associative_all($query_string, $row_count);
-		$retval = array();
-		if($resultset!=NULL)
-			{
-			foreach($resultset as $record)
-			{
-				$range_u=$record['range_u'];
-				$range_l=$record['range_l'];
-				$age_u=$record['age_u'];
-				$age_l=$record['age_l'];
-				$gender=$record['gender'];
-				$id=$record['id'];
-				$description=$record['description'];
-				$measure_id=$record['measure_id'];
-				$retval[] =array($range_l,$range_u,$age_l,$age_u,$gender,$description,$id,$measure_id);
-			}
-			
-		}else
-			{
-		//get interpretation ka loop
-			}
-	DbUtil::switchRestore($saved_db);
-	return $retval;
-	}
-	
-	public function addToDb()
-	{
-		# Updates an existing measure entry in DB
-		$saved_db = DbUtil::switchToLabConfigRevamp();
-		$query_string = 
-			"INSERT INTO measure (name, range, unit) ".
-			"VALUES ('$this->name', '$this->range', '$this->unit')".
-		query_insert_one($query_string);
-		DbUtil::switchRestore($saved_db);
-	}
-	*/
 	
 	public function getReferenceRanges($user_id)
 	{
@@ -11283,32 +11027,6 @@ class GlobalMeasure
 			return $retval;
 	}
 	
-	/*
-	public function getInterpretation()
-	{	
-		$retval= array();
-		$numeric_description=array();
-		if(trim($this->description) == "" || $this->description == null)
-			return $retval;
-		else 
-		{
-		$description=substr(($this->description),2);
-		if(strpos($description,"##")===false)
-		$retval=explode("//" , $description);
-		else
-		$retval=explode("##",$description);
-		}
-		
-		return $retval;
-	}
-	
-	public function getDescription()
-	{
-		if(trim($this->description) == "" || $this->description == null)
-			return "-";
-		else
-			return trim($this->description);
-	} */
 }
 
 class ReferenceRangeGlobal
@@ -11959,44 +11677,7 @@ function updateAggregateTestType($updated_entry, $userId) {
 		"SET name='$updated_entry->name' ".
 		"WHERE user_id=$userId ";
 	query_blind($query_string);
-	/*
-	# Delete entries for removed compatible specimens
-	$existing_list = get_compatible_specimens($updated_entry->testTypeId);
-	foreach($existing_list as $specimen_type_id)
-	{
-		if(in_array($specimen_type_id, $new_specimen_list))
-		{
-			# Compatible specimen not removed
-			# Do nothing
-		}
-		else
-		{
-			# Remove entry from mapping table
-			$query_del = 
-				"DELETE from specimen_test ".
-				"WHERE test_type_id=$updated_entry->testTypeId ".
-				"AND specimen_type_id=$specimen_type_id";
-			query_blind($query_del);
-		}
-	}
-	# Add entries for new compatible specimens
-	foreach($new_specimen_list as $specimen_type_id)
-	{
-		if(in_array($specimen_type_id, $existing_list))
-		{
-			# Entry already exists
-			# Do nothing
-		}
-		else
-		{
-			# Add entry in mapping table
-			$query_ins = 
-				"INSERT INTO specimen_test (specimen_type_id, test_type_id) ".
-				"VALUES ($specimen_type_id, $updated_entry->testTypeId)";
-			query_blind($query_ins);
-		}
-	}
-	*/
+
 	DbUtil::switchRestore($saved_db);
 }
 
@@ -12052,15 +11733,7 @@ function addTestCategoryAgg($cat_name, $cat_descr="")
 
 function updateTestMappingWithCategory($testId, $catCode) {
 	$saved_db = DbUtil::switchToGlobal();
-	/*
-	$query_string = 
-		"SELECT test_category_id ".
-		"FROM test_category_mapping ".
-		"WHERE lab_id_test_category_id='$catCode' ";
-	$record = query_associative_one($query_string);
-	if($record != null)
-		$testCategoryId = $record['test_category_id'];
-	*/
+
 	$query_string = 
 		"UPDATE test_mapping ".
 		"SET test_category_id=$catCode ".
@@ -12358,12 +12031,7 @@ function getSpecimenCountGroupedConfig($lab_config_id)
 		$record = query_associative_one($query_string);
                 if($record == '')
                 {
-                    /*
-                    $query_string_add = "INSERT INTO report_disease (group_by_age, group_by_gender, age_groups, measure_groups, measure_id, lab_config_id, test_type_id) VALUES (1, 1, '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+', '0', 1, 9999009, 1)";
-                    query_insert_one($query_string_add);
-                    $record = query_associative_one($query_string);
-                     
-                     */
+
                     $query_string_add = "INSERT INTO report_config (header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields, test_type_id, title, landscape ) VALUES ('Grouped Specimen Count Report Configuration', '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+', '0', '1', '1', '1', '1', '0', '$nineID' , '0', $nineID)";
                     query_insert_one($query_string_add);
                     $record = query_insert_one($query_string);
@@ -12375,11 +12043,6 @@ function getSpecimenCountGroupedConfig($lab_config_id)
                 
 		DbUtil::switchRestore($saved_db);
                 $retval = array();
-                /*$byAge = $configArray['group_by_age'];
-                $age_group_list = decodeAgeGroups($configArray['age_groups']);
-                $byGender = $configArray['group_by_gender'];
-                $bySection = $configArray['measure_id'];
-                $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending */
                 
                 $retval['group_by_age'] = intval($record['p_fields']); //group_by_age
                 $retval['age_groups'] = $record['footer']; //age_groups
@@ -12443,6 +12106,7 @@ function updateGroupedReportsConfig($byAge, $byGender, $ageGroups, $bySection, $
         function getTestRecordsByDate($date, $test_type_id)
 	{
 		global $con;
+		$row_count = 0;
 		$test_type_id = mysql_real_escape_string($test_type_id, $con);
 		$date = mysql_real_escape_string($date, $con);
 		$query_string =
@@ -12458,9 +12122,7 @@ function updateGroupedReportsConfig($byAge, $byGender, $ageGroups, $bySection, $
         
         function updateTestRecordByIds($test_id, $result)
 	{
-            //$count_tests = count($test_ids);
-            //for($i = 0; $i < $count_tests; $i++)
-            //{
+
 		$query_string =
 			"UPDATE test SET result='$result' ".
 			"WHERE test_id=$test_id ";
@@ -12472,6 +12134,7 @@ function updateGroupedReportsConfig($byAge, $byGender, $ageGroups, $bySection, $
 	{
 		# Returns all test records added on that day
 		global $con;
+		$row_count = 0;
 		$test_type_id = mysql_real_escape_string($test_type_id, $con);
 		$date = mysql_real_escape_string($date, $con);
 		$query_string =
@@ -12592,16 +12255,7 @@ function setBaseConfig($from_id, $to_id)
     $dbnn = "blis_".$to_id.".custom_field_type";
     $query_string = "INSERT INTO ".$dbnn." (id, field_type) SELECT id, field_type FROM ".$dbn;
     query_insert_one($query_string);
-    
-    /*
-    $query_string = "DELETE FROM labtitle_custom_field WHERE id > 0";
-    query_blind($query_string);
-    $dbn = "blis_".$from_id.".labtitle_custom_field";
-    $dbnn = "blis_".$to_id.".labtitle_custom_field";
-    $query_string = "INSERT INTO ".$dbnn." (id, field_name, field_options, field_type_id) SELECT id, field_name, field_options, field_type_id FROM ".$dbn;
-    query_insert_one($query_string);
-    */
-    
+     
     $query_string = "DELETE FROM patient_custom_field WHERE id > 0";
     query_blind($query_string);
     $dbn = "blis_".$from_id.".patient_custom_field";
@@ -12624,6 +12278,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
 {
     # test_category table
     $saved_db = DbUtil::switchToLabConfig($from_id);
+	$row_count = 0;
     $query_string =
 			"SELECT * FROM test_category ";
     $recordset = query_associative_all($query_string, $row_count);
@@ -12652,27 +12307,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($to_id);
      $query_string = "DELETE FROM measure WHERE measure_id > 0";
     query_blind($query_string);
-    /*foreach($recordset as $rec)
-    {
-        // $intLat = !empty($intLat) ? "'$intLat'" : "NULL";
-        $val1 = $rec['measure_id'];
-        $val2 = $rec['name'];
-        $val3 = db_prep_int($rec['unit_id'], 1);
-        $val4 = $rec['range'];
-        $val5 = db_prep_string($rec['description']);
-        $val6 = db_prep_string($rec['unit']);
-        $val1 = !empty($val1) ? $val1 : NULL;
-        $val2 = !empty($val2) ? $val2 : "";
-        $val3 = !empty($val3) ? $val3 : NULL;
-        $val4 = !empty($val4) ? $val4 : NULL;
-        $val5 = !empty($val5) ? "$val5" : NULL;
-        $val6 = !empty($val6) ? "$val6" : NULL;
 
-        echo "---->".$val1."@".$val2."@".$val3."@".$val4."@".$val5."@".$val6."@"."<br><br>";
-        $query_string = "INSERT INTO measure (measure_id, name, unit_id, range, description, unit) VALUES ($val1, '$val2', $val3, '$val4', '$val5', '$val6')";
-        ."<br>";
-        query_insert_one($query_string);
-    }*/
     $dbn = "blis_".$from_id.".measure";
     $dbnn = "blis_".$to_id.".measure";
      $query_string = "INSERT INTO ".$dbnn." (measure_id, name, unit_id, range, description, unit) SELECT measure_id, name, unit_id, range, description, unit FROM ".$dbn;
@@ -12961,17 +12596,18 @@ function remove_specimens($lid, $sp, $remarks, $category="test")
   
 function get_removed_specimens($lid, $category="test")
 {
-            $lab_config_id = $lid;
-            
-            $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
-            
-            $query_string = "SELECT * from removal_record WHERE type = 1 AND category='$category' AND status = 1";
-            
-            $recordset = query_associative_all($query_string, $row_count);
-            
-            DbUtil::switchRestore($saved_db);
-            
-            return $recordset;
+    $lab_config_id = $lid;
+	$row_count = 0;
+
+    $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
+    
+    $query_string = "SELECT * from removal_record WHERE type = 1 AND category='$category' AND status = 1";
+    
+    $recordset = query_associative_all($query_string, $row_count);
+    
+    DbUtil::switchRestore($saved_db);
+    
+    return $recordset;
 }
 
 function retrieve_deleted_items($lid, $sp, $category="test"){
@@ -13637,11 +13273,12 @@ function putUILog($id, $info, $file, $tag1, $tag2, $tag3)
 
 class Inventory
 {
-        public $id;
+    public $id;
 	public $name;
 	public $unit;
 	public $remarks;
 	public $quantity;
+	private $row_count = 0;
 	        
         public function addReagent($name, $unit, $remarks)
         {
@@ -14323,7 +13960,7 @@ function get_prevalence_data_per_test_per_lab_dir($test_type_id, $lab_config_id,
 						"AND p.sex LIKE '$gender' ".
 						"AND t.specimen_id=s.specimen_id ".
 						"AND (s.date_collected BETWEEN '$date_fromp' AND '$date_top') ".
-						"AND  (t.result LIKE 'N,%' OR t.result LIKE 'nÃ¯Â¿Â½gatif,%' OR t.result LIKE 'negatif,%' OR t.result LIKE 'n,%' OR t.result LIKE 'negative,%')";
+						"AND  (t.result LIKE 'N,%' OR t.result LIKE 'nÃƒÂ¯Ã‚Â¿Ã‚Â½gatif,%' OR t.result LIKE 'negatif,%' OR t.result LIKE 'n,%' OR t.result LIKE 'negative,%')";
 			}
 			else {
 				$query_string = 
@@ -14331,7 +13968,7 @@ function get_prevalence_data_per_test_per_lab_dir($test_type_id, $lab_config_id,
 				"WHERE t.test_type_id=$test_type_id ".
 				"AND t.specimen_id=s.specimen_id ".
 				"AND ( s.date_collected BETWEEN '$date_fromp' AND '$date_top' )".
-				"AND  (result LIKE 'N,%' OR result LIKE 'nÃ¯Â¿Â½gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
+				"AND  (result LIKE 'N,%' OR result LIKE 'nÃƒÂ¯Ã‚Â¿Ã‚Â½gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
 
 				}
 			$record = query_associative_one($query_string);
@@ -14398,7 +14035,7 @@ function get_prevalence_data_per_test_per_lab_dir22($test_type_id, $lab_config_i
 							"WHERE t.test_type_id=$test_type_id ".
 							"AND t.specimen_id=s.specimen_id ".
 							"AND ( s.date_collected BETWEEN '$date_from' AND '$date_to' ) ".
-							"AND (result LIKE 'N,%' OR result LIKE 'nÃ¯Â¿Â½gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
+							"AND (result LIKE 'N,%' OR result LIKE 'nÃƒÂ¯Ã‚Â¿Ã‚Â½gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
 						$record = query_associative_one($query_string);
 						$count_negative = intval($record['count_val']);
 						$query_string = 
@@ -15045,6 +14682,7 @@ function db_analysis_tests($lb)
 function api_get_patient_records($lab_config, $patient_id, $date_from, $date_to, $ip) {
 
 	$retval = array();
+	$row_count = 0;
 
 	if($_REQUEST['ip'] == 0) {
 
@@ -15472,6 +15110,9 @@ function getDoctorNamesForPatients($patient, $lab_config_id, $lab_section, $repo
 
 class API
 {
+
+	private $row_count = 0;
+
     public static function test_api($data)
     {
         return "# API test String".$data." #";

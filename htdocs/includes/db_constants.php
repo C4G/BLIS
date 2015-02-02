@@ -12,7 +12,7 @@ $ON_DEV = 1;
 $ON_ARC = 2;
 $ON_PORTABLE = 3;
 
-$SERVER = $ON_PORTABLE;
+$SERVER = $ON_DEV;
 
 $LOCAL_PATH = "../../local/";
 if($SERVER == $ON_ARC)
@@ -22,24 +22,6 @@ if($SERVER == $ON_ARC)
 
 $DB_HOST = "localhost";
 $DB_USER = "root";
-// $d = dirname(__FILE__);
-// $name= strrpos($d,"htdocs");
-// //if($name === false)
-// // echo "Not found";
-// $new_name=substr($d,0,$name)."dbdir";
-// //echo $new_name;
-// $dir1 = opendir($new_name); #open directory
-
-// $count=0;
-// while (($file = readdir($dir1)) !== false) {
-	// if($count==3)
-// {
-// $GLOBAL_DB = $file;
-
-// }	
-	// $count++;	
-// }
-// closedir($dir1);
 
 $GLOBAL_DB_NAME="blis_revamp";
 
@@ -48,7 +30,8 @@ $DB_PASS = "";
 
 if($SERVER == $ON_DEV)
 {
-	$DB_PASS = "monu123";
+	$DB_USER = "blis";
+	$DB_PASS = "password";
 }
 else if($SERVER == $ON_ARC)
 {

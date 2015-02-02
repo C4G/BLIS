@@ -97,10 +97,10 @@ function query_associative_one( $query )
     $retval = mysql_fetch_assoc( $result );
     $LOG_QUERIES = true;
 	if($LOG_QUERIES == true)
-        {
-		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
-		DebugLib::logDBUpdates($query, db_get_current());
-        }
+    {
+    	DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
+    	DebugLib::logDBUpdates($query, db_get_current());
+    }
 	return $retval;
 }
 

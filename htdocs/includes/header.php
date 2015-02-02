@@ -25,30 +25,6 @@ require_once("includes/script_elems.php");
 LangUtil::setPageId("header");
 require_once("includes/perms_check.php");
 
-# Perform system updates to portable version , if any
-/*
-if
-(
-	$SERVER == $ON_PORTABLE && 
-	strpos($_SERVER['PHP_SELF'], "/home.php") !== false &&
-	$_SESSION['user_level'] != $LIS_SUPERADMIN &&
-	$_SESSION['user_level'] != $LIS_COUNTRYDIR
-)
-{
-	if
-	(
-		$_SESSION['user_level'] == $LIS_ADMIN && 
-		! User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level'])
-	)
-	{
-		# Do not include update file as this lab admin account is incharge of multiple labs
-	}
-	else
-	{
-		include("update/update.php");
-	}
-}
-*/
 $script_elems = new ScriptElems();
 $page_elems = new PageElems();
 header('Content-Type: text/html; charset=UTF-8');
@@ -62,17 +38,7 @@ header('Content-Type: text/html; charset=UTF-8');
 		</title>
 <?php
 		include("styles.php");
-		/*if ($_SESSION['theme'] ==  1) 
-		{
-			?>
-			changeSheets('green');
-			<?php
-		}
-		else {
-			?>
-			changeSheets('grey');
-			<?php
-		}*/
+
 		$script_elems->enableJQuery();
 		$script_elems->enableFacebox();
 		$script_elems->enableAutoScrollTop();
@@ -130,7 +96,7 @@ if(isset($_SESSION['username']))
 	<?php echo LangUtil::getPageTerm("LOGGEDINAS"); ?>: <?php echo $_SESSION['username']; ?> | 
 	<a href='edit_profile.php'><?php echo LangUtil::$pageTerms['EDITPROFILE']; ?></a> | 
 	<?php
-	//echo "test".$_SESSION['admin_as_tech'];
+
 	if(isset($_SESSION['admin_as_tech']) && $_SESSION['admin_as_tech'] === true)
 	{
 		?>
@@ -154,7 +120,7 @@ if(isset($_SESSION['username']))
 	<a rel='facebox' href='user_rating.php'><?php echo LangUtil::getPageTerm("LOGOUT"); ?></a>
 	
 	<?php
-	//if(User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level']))
+
 	if(false)
 	{
 		$lab_config_list = get_lab_configs($_SESSION['user_id']);
@@ -188,7 +154,6 @@ if(strpos($_SERVER['PHP_SELF'], 'login.php') === false)
 	{
 		foreach($top_menu_options as $key => $value)
 		{
-			//echo "hello "."<br/>";
 			
 			echo "<li ";
 			echo "><a href='".$value."' ";

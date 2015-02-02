@@ -13,6 +13,9 @@ include_once("../regn/field_htmlFactory.php");
 
 class PageElems
 {
+
+	private $row_count = 0;
+
 	public function getSideTip($heading, $contents)
 	{
 		$html_code =
@@ -433,12 +436,7 @@ class PageElems
 		if($selected_value == $LIS_TECH_RW)
 			echo " selected ";
 		echo ">".LangUtil::$generalTerms['LAB_TECH']."</option>";
-		/*
-		echo "<option value='$LIS_TECH_RO'";
-		if($selected_value == $LIS_TECH_RO)
-			echo " selected ";
-		echo ">Tech read-only</option>";
-		*/
+
 		echo "<option value='$LIS_CLERK'";
 		if($selected_value == $LIS_CLERK)
 			echo " selected ";
@@ -575,28 +573,8 @@ class PageElems
 	
 	public function getTestTypesCountrySelect()
 	{
-		/*
-		$site_list = get_site_list($_SESSION['user_id']);
-		$count = 0;
-		$finalTestList = array();
-		foreach($site_list as $lab_config_id => $lab_name)
-		{
-			$test_type_list = get_test_types_by_site($lab_config_id);
-			foreach($test_type_list as $test_type) {
-				$testName = $test_type->getName();
-				if ( !array_key_exists($testName, $finalTestList) )
-					$finalTestList[$testName] = $lab_config_id.":".$test_type->testTypeId.";";
-				else {
-					$existingValue = $finalTestList[$testName];
-					$finalTestList[$testName] = $existingValue.$lab_config_id.":".$test_type->testTypeId.";";
-				}
-				continue;
-			}
-		}
-		ksort($finalTestList);
-		foreach($finalTestList as $key => $value)
-			echo "<option value=$value>$key</option>";
-		*/
+
+		$row_count = 0;
 		$userId = $_SESSION['user_id'];
 		$saved_db = DbUtil::switchToGlobal();
 		$query = "SELECT * FROM test_mapping WHERE user_id = $userId";
@@ -697,45 +675,48 @@ class PageElems
 	
 	public function getTestCategoryNamesSelector() {
 		#Return table which includes dropdowns of test categories configured in all labs in the country
-		echo "<table>";
+		$table = "<table>";
 		$count = 1;
-		 $config_list = get_lab_configs_imported();
+		$config_list = get_lab_configs_imported();
 		foreach($config_list as $lab_config) {
-			echo "<tr><td>".$lab_config->name."</td>";
-			echo "<td><select id='testCategoryNameSelect$count'>";
+			$table .= "<tr><td>".$lab_config->name."</td>";
+			$table .= "<td><select id='testCategoryNameSelect$count'>";
 			$testCategoriesList = get_test_categories($lab_config->id);
 			foreach( $testCategoriesList as $testCategoryId => $testCategoryName ) {
-				echo "<option value='$lab_config->id:$testCategoryId'>".$testCategoryName."</option>";
+				$table .= "<option value='$lab_config->id:$testCategoryId'>".$testCategoryName."</option>";
 			}
-			echo "</select></td></tr>";
+			$table .= "</select></td></tr>";
 			$count++;
 		}
-		echo "<tr><td></td><td></td>";
-		echo "</tr>";
-		echo "<tr>"; ?>
-		<td>Country Category Name:</td>
-		<td><input type="text" id="commonTestCategoryName" size="50"></input>
-		<div id='commonTestCategoryNameError' style='display:none'>
-			<label class="error" id="commonTestCategoryNameErrorLabel"><small><font color="red"><?php echo LangUtil::getGeneralTerm("MSG_REQDFIELD"); ?></font></small></label>
-		</div>
-		</td>
-		</tr>
-		<tr>
-		<td></td>		
-		<td><input type="button" id="submit" type="submit" onclick="submitTestCategoryNames();" value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>" size="20" />
-		<?
+		$table .= "<tr><td></td><td></td>";
+		$table .= "</tr>";
+		$table .= "<tr>"; 
+		$table .= "<td>Country Category Name:</td>";
+		$table .= "<td><input type='text' id='commonTestCategoryName' size='50'></input>";
+		$table .= "<div id='commonTestCategoryNameError' style='display:none'>";
+		$table .= "<label class='error' id='commonTestCategoryNameErrorLabel'><small><font color='red'>";
+		$table .= LangUtil::getGeneralTerm("MSG_REQDFIELD")."</font></small></label>";
+		$table .= "</div></td></tr>";
+		$table .= "<tr><td></td>";
+		$table .= "<td><input type='button' id='submit' type='submit' ";
+		$table .= "onclick='submitTestCategoryNames();' value=".LangUtil::$generalTerms['CMD_SUBMIT']." size="20" />";
+
+		echo $table;
 	}
 	
 	public function getTestCategoryTypesCountrySelect() {
+
 		$userId = $_SESSION['user_id'];
 		$saved_db = DbUtil::switchToGlobal();
 		$query = "SELECT * FROM test_category_mapping WHERE user_id = $userId";
 		$resultset = query_associative_all($query, $row_count);
+
 		foreach($resultset as $record) {
 				$key = $record['test_category_id'];
 				$value = $record['test_category_name'];
 				echo "<option value='$key'>$value</option>";
 		}
+
 		DbUtil::switchRestore($saved_db);
 	}
 	
@@ -2538,89 +2519,86 @@ class PageElems
 		</form>
 		<?php
 	}
+
 	public function getSpecimenInfoRow($specimen, $rem_specs, $admin)
 	{
 		# Returns HTML table row containing specimen info
 		# Called by getPatientHistory() function
-                $specimenBarcode = specimenBarcodeCheck();
-		?>
-                        
-		<tr valign='top'>
-			<?php
-			if($_SESSION['s_addl'] != 0)
+		$row = "";
+        $specimenBarcode = specimenBarcodeCheck();
+		
+		$row .= "<tr valign='top'>";
+
+		if($_SESSION['s_addl'] != 0)
+		{
+			$row .= "<td>".$specimen->getAuxId()."</td>";
+		}
+		
+		$row .= "<td>".get_specimen_name_by_id($specimen->specimenTypeId)."</td>";
+		$row .= "<td>".DateLib::mysqlToString($specimen->dateRecvd)."</td>";
+		$row .= "<td>";
+
+		$removed = false;
+		
+		//print_r($rem_specs);
+		if($admin == 1)
+		{
+
+			if(in_array($specimen->specimenId, $rem_specs))
 			{
-			?>
-				<td>
-					<?php echo $specimen->getAuxId(); ?>
-				</td>
-			<?php
+				$row .= "Removed";
+				$removed = true;
 			}
-			?>
-			<td>
-				<?php echo get_specimen_name_by_id($specimen->specimenTypeId); ?>
-			</td>
-			<td>
-				<?php echo DateLib::mysqlToString($specimen->dateRecvd); ?>
-			</td>
-			<td>
-				<?php 
-				$removed = false;
-				
-				//print_r($rem_specs);
-				if($admin == 1)
-                                     {
-                                     	
-                                        if(in_array($specimen->specimenId, $rem_specs))
-                                        {
-                                            echo "Removed";
-                                            $removed = true;
-                                        }
-                                        else
-                                        {
-                                            echo $specimen->getStatus();
-                                        }
-                                     }
-                                     else
-                                     {
-                                         echo $specimen->getStatus();
-                                     }
-                                ?>
-			</td>
-			<td>
-				<a href='specimen_info.php?sid=<?php echo $specimen->specimenId; ?>' title='Click to View Details of this Specimen'><?php echo LangUtil::$generalTerms['DETAILS']; ?></a>
-			</td>
-			<?php
-			$sid=$specimen->specimenId;
-			$pid=$specimen->patientId;
-			
-			?>
-			<td>
-			<a href="javascript:get_report(<?php echo $pid;?>,<?php echo $sid;?> )">Report</a> </td>
-			<td><!-- <a href="javascript:update_specimen(<?php echo $sid;?>)"> Update</a> &nbsp;/&nbsp; --> 
-			<?php if($removed == false){?>
-			<a href="javascript:delete_specimen(<?php echo $sid;?>)"> Delete</a>
-			<?php } else {
-					if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
-						?>
-						<a href="javascript:retrieve_deleted(<?php echo $sid;?>,'specimen')"> Retrieve</a>
-					<?php } else {
-			   echo "Request Admin to undo delete"; 
-			   }
-			}?>
-			</td>
-                        <?php
-                            if($specimenBarcode)
-                            {
-                            ?>
-                                <td><a href="javascript:print_specimen_barcode(<?php echo $pid;?>,<?php echo $sid;?> )">Print Barcode</a> </td>
-                            <? 
-                            }
-                                
-                        ?>
-		</tr>
-		<?php
+			else
+			{
+				$row .= $specimen->getStatus();
+			}
+		}
+		else
+		{
+			$row .= $specimen->getStatus();
+		}
+
+		$row .= "</td>";
+		$row .= "<td>";
+		$row .= "<a href='specimen_info.php?sid=".$specimen->specimenId."' ";
+		$row .= "title='Click to View Details of this Specimen'>".LangUtil::$generalTerms['DETAILS']."</a>";
+		$row .= "</td>";
+
+		$sid=$specimen->specimenId;
+		$pid=$specimen->patientId;
+
+		$row .= "<td>";
+		$row .= "<a href=\"javascript:get_report($pid,$sid)\">Report</a> </td>";
+		$row .= "<td><!-- <a href=\"javascript:update_specimen($sid)\"> Update</a> &nbsp;/&nbsp; -->"; 
+
+		if($removed == false){
+
+			$row .= "<a href=\"javascript:delete_specimen($sid;?>)\"> Delete</a>";
+		} else {
+			if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+
+				$row .= "<a href=\"javascript:retrieve_deleted($sid,'specimen')\"> Retrieve</a>";
+			} else {
+			   	$row .= "Request Admin to undo delete"; 
+	   		}
+		}
+
+		$row .= "</td>";
+
+        if($specimenBarcode)
+		{
+
+	        $row .= "<td>";
+	        $row .= "<a href=\"javascript:print_specimen_barcode($pid,$sid)\">";
+	        $row .= "Print Barcode</a> </td>";
+        }                                
+
+		$row .= "</tr>";
+
+		echo $row;
 	}
-	
+
 	public function getSpecimenExceededInfoRow($specimen, $count)
 	{
 		# Returns HTML table row containing specimen info
@@ -2652,123 +2630,130 @@ class PageElems
 	public function getPatientHistory($pid)
 	{
 		# Returns HTML table displaying patient test history
-                $admin = 0;
-                $specimenBarcode = specimenBarcodeCheck();
-                if(is_admin(get_user_by_id($_SESSION['user_id']))) {
-                    $admin = 1;}
-                $rem_recs = get_removed_specimens($_SESSION['lab_config_id'], "specimen");
-                $rem_specs = array();
-                $rem_remarks = array();
-                foreach($rem_recs as $rem_rec)
-                {
-                    $rem_specs[] = $rem_rec['r_id'];
-                    $rem_remarks[] = $rem_rec['remarks'];
-                }
+		$table = "";
+
+        $admin = 0;
+        $specimenBarcode = specimenBarcodeCheck();
+
+        if(is_admin(get_user_by_id($_SESSION['user_id']))) {
+            $admin = 1;
+        }
+
+        $rem_recs = get_removed_specimens($_SESSION['lab_config_id'], "specimen");
+        $rem_specs = array();
+        $rem_remarks = array();
+
+        foreach($rem_recs as $rem_rec)
+        {
+            $rem_specs[] = $rem_rec['r_id'];
+            $rem_remarks[] = $rem_rec['remarks'];
+        }
 
 		$specimen_list = get_specimens_by_patient_id($pid);
 		if(count($specimen_list) == 0)
 		{
-			?>
-			<br>
-			<div class='sidetip_nopos'><?php echo LangUtil::$generalTerms['TESTS']." - ".LangUtil::$generalTerms['MSG_NOTFOUND']; ?></div>
-			<?php
+
+			$table .= "<br>";
+			$table .= "<div class='sidetip_nopos'>".LangUtil::$generalTerms['TESTS'];
+			$table .= " - ".LangUtil::$generalTerms['MSG_NOTFOUND']."</div>;";
+
+			echo $table;
 			return;
 		}
-		?>
-		<script type='text/javascript'>
-		$(document).ready(function(){
-			$('#test_history_table').tablesorter();
-		});
-		
-		function get_report(pid,sid)
-		{
-			var url_string = "report_onetesthistory.php?ppid="+pid+"&spid="+sid;
-			window.open(url_string);
-		}
 
-		function delete_specimen(sid){
-			if(ConfirmDelete()){
-				var params = "specimen_id="+sid;
-				//alert("patient Id " + patient_id);
-				$.ajax({
-					type: "POST",
-					url: "ajax/delete_specimen.php",
-					data: params,
-					success: function(msg) {
-						if(msg.indexOf("1")> -1){
-							// refresh the page with updated specimen details
-							location.href = location.href + '&del=1';
-						} else {
-							$("#target_div_id_del").html("Specimen cannot be deleted");
-						}
+		$table .= "<script type='text/javascript'>";
+		$table .= "$(document).ready(function(){";
+		$table .= "$('#test_history_table').tablesorter();";
+		$table .= "});";
+		
+		$table .= "function get_report(pid,sid)";
+		$table .= "{";
+		$table .= "var url_string = \"report_onetesthistory.php?ppid=\"+pid+\"&spid=\"+sid;";
+		$table .= "window.open(url_string);";
+		$table .= "}";
+
+		$table .= "function delete_specimen(sid){";
+		$table .= "if(ConfirmDelete()){";
+		$table .= "var params = \"specimen_id=\"+sid;";
+		$table .= "$.ajax({";
+		$table .= "type: \"POST\",";
+		$table .= "url: \"ajax/delete_specimen.php\",";
+		$table .= "data: params,";
+		$table .= "success: function(msg) {";
+		$table .= "if(msg.indexOf(\"1\")> -1){";
+		$table .= "// refresh the page with updated specimen details";
+		$table .= "location.href = location.href + '&del=1';";
+		$table .= "} else {";
+		$table .= "$(\"#target_div_id_del\").html(\"Specimen cannot be deleted\");";
+		$table .= "}";
 						
-					}
-				}); 
+		$table .= "}";
+		$table .= "});";
 							
-			}	
-		}
+		$table .= "}";
+		$table .= "}";
 
-		function update_specimen(sid){
+		$table .= "function update_specimen(sid){";
 			
+		$table .= "}";
+
+		$table .= "function ConfirmDelete()";
+		$table .= "{";
+		$table .= "var x = confirm(\"Are you sure you want to delete?\");";
+		$table .= "if (x)";
+		$table .= "return true;";
+		$table .= "else";
+		$table .= "return false;";
+		$table .= "}";
+		
+		$table .= "</script>";
+
+		$table .= "<table class='tablesorter' id='test_history_table'>";
+		$table .= "<thead>";
+		$table .= "<tr valign='top'>";
+
+		if($_SESSION['s_addl'] != 0)
+		{
+
+			$table .= "<th>".LangUtil::$generalTerms['SPECIMEN_ID']."</th>";
 		}
 
-		function ConfirmDelete()
+		$table .= "<th>".LangUtil::$generalTerms['TYPE']."</th>";
+		$table .= "<th>".LangUtil::$generalTerms['R_DATE']."</th>";
+		$table .= "<th>".LangUtil::$generalTerms['SP_STATUS']."</th>";
+		$table .= "<th></th>";
+		$table .= "<th></th>";
+		$table .= "<!-- Deleting the patient specimen -->";
+		$table .= "<th></th>";
+
+        if($specimenBarcode)
+        {
+
+            $table .= "<th></th>";
+        }
+                    
+		$table .= "</tr>";
+		$table .= "</thead>";
+		$table .= "<tbody>";
+
+		foreach($specimen_list as $specimen)
 		{
-		  var x = confirm("Are you sure you want to delete?");
-		  if (x)
-		      return true;
-		  else
-		    return false;
+			
+            if($admin == 0)
+            {
+                if(in_array($specimen->specimenId, $rem_specs))
+                    continue;
+            }
+
+			$this->getSpecimenInfoRow($specimen, $rem_specs, $admin);
 		}
-		
-		</script>
-		<table class='tablesorter' id='test_history_table'>
-			<thead>
-				<tr valign='top'>
-					<?php
-					if($_SESSION['s_addl'] != 0)
-					{
-					?>
-					<th><?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></th>
-					<?php
-					}
-					?>
-					<th><?php echo LangUtil::$generalTerms['TYPE']; ?></th>
-					<th><?php echo LangUtil::$generalTerms['R_DATE']; ?></th>
-					<th><?php echo LangUtil::$generalTerms['SP_STATUS']; ?></th>
-					<th></th>
-					<th></th>
-					<!-- Deleting the patient specimen -->
-					<th></th>
-                                        <?php
-                            if($specimenBarcode)
-                            {
-                            ?>
-                                 <th></th>
-                            <? 
-                            }
-                                
-                        ?>
-				</tr>
-			</thead>
-			<tbody>
-			<?php
-			foreach($specimen_list as $specimen)
-			{
-				
-                            if($admin == 0)
-                            {
-                                if(in_array($specimen->specimenId, $rem_specs))
-                                    continue;
-                            }
-                            //echo $admin. " admin";
-				$this->getSpecimenInfoRow($specimen, $rem_specs, $admin);
-			}
-			?>
-			</tbody>
-		</table>
-		<?php
+
+		$table .= "</tbody>";
+		$table .= "</table>";
+
 		# TODO: Add paging to this table
+
+		echo $table;
 	}
 	
 	public function getSelectPatientHistory($pid, $labsection)
@@ -9090,11 +9075,10 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	
 	public function getPatientSearchCondition()
 	{
-		?>
-        	<option value='%[pq]%'><?php echo LangUtil::getSearchCondition('SEARCH_CONTAINS'); ?></option>
-			<option value='[pq]%'><?php echo LangUtil::getSearchCondition('SEARCH_BEGIN_WITH'); ?></option>           
-		<?php
+		$options = "<option value='%[pq]%'>".LangUtil::getSearchCondition('SEARCH_CONTAINS')."</option>";
+		$options .= "<option value='[pq]%'>".LangUtil::getSearchCondition('SEARCH_BEGIN_WITH')."</option>";
 		
+		echo $options;
 	}
 	
 	public 	function  getPatientFieldsOrderForm()
@@ -9181,7 +9165,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
             </select>          
             </td>
             <td valign="middle">
-            <input type="button" id="o_up" name="o_up" value="ʌ"  onclick="javascript:reorder('up');"/><br /> 
+            <input type="button" id="o_up" name="o_up" value="ÊŒ"  onclick="javascript:reorder('up');"/><br /> 
              <input type="button" id="o_down" name="o_down" value="v" onclick="javascript:reorder('down');" />  
             </td>
             </tr>

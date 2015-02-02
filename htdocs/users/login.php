@@ -6,6 +6,7 @@ include("includes/password_reset_need.php");
 
 
 $file = "../../BlisSetup.html";
+
 $content =<<<content
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -15,14 +16,18 @@ CONTENT="1; URL=http://{$_SERVER['SERVER_ADDR']}:4001/login.php">
 </head>
 </html>
 content;
+
 file_put_contents($file, $content);
 
-session_start();
+if(session_id() == "")session_start();
+
 # If already logged in, redirect to home page
+
 if(isset($_SESSION['user_id']))
 {
 	header("Location: home.php");
 }
+
 include("includes/header.php");
 LangUtil::setPageId("login");
 
@@ -83,15 +88,7 @@ function unload()
 
 $(document).ready(function(){
 	load();
-	//alert( "You are running jQuery version: " + $.fn.jquery );
-	/* var passwordNeed = false;
-	$.ajax({
-		url : "ajax/password_rest_need.php",
-		success: function(data) {
-			if(data == 'need') passwordNeed = true;
-		},
-		dataType: "String"
-	}); */
+
 	$('#username').focus();
 });
 
@@ -161,9 +158,6 @@ function capLock(e)
 						echo "<tr valign='top'>";
 						echo "<td></td>";
 						echo "<td>";
-						//echo "<span id='server_msg' class='error_string'>";
-						//echo LangUtil::getPageTerm("MSG_PLSLOGIN");
-						//echo "</span><br>";
 						echo "</td>";
 						echo "</tr>";
 					}

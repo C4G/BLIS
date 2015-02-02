@@ -19,7 +19,7 @@ $level = $_REQUEST['lev'];
 $lang_id = $_REQUEST['lang'];
 $rwoptions = $_REQUEST['opt'];
 
-if($level == $LIS_TECH_RW || $level == $LIS_PHYSICIAN)
+if($level == $LIS_TECH_RW)
 {
 	if($_REQUEST['showpname'] == 1)
 	{
