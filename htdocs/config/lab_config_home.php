@@ -23,11 +23,7 @@ $script_elems->enableJQueryForm();
 <script src="js/jquery-ui-1.8.16.js" type="text/javascript"></script>
 <link rel="stylesheet" href="css//jquery-ui-1.8.16.css" type="text/css" media="all">
 
- <link rel="stylesheet" href="css/jquery-ui-1.8.16.css" type="text/css" media="all"> 
-<!-- <link rel="stylesheet" href="/resources/demos/style.css" /> -->
-<!-- <script type="text/javascript" src="js/jquery.ui.js"></script>
-<script type="text/javascript" src="js/dialog/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="js/dialog/jquery.ui.dialog.js"></script> -->
+<link rel="stylesheet" href="css/jquery-ui-1.8.16.css" type="text/css" media="all"> 
 
 <div id='Summary_config' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
@@ -293,6 +289,9 @@ $(document).ready(function(){
 	$('#reorder_fields').hide();
 	$('#doctor_reorder_fields').hide();
 	
+	$('#instruments_menu').click(function(){
+		$('#instrumentation_setup').toggle();
+	});
 	
 	$('#cat_code12').change( function() { get_test_types_bycat() });
 	get_test_types_bycat
@@ -769,9 +768,7 @@ function right_load(option_num, div_id)
 	$('.menu_option').removeClass('current_menu_option');
 	$('#'+div_id).show();
 	$('#option'+option_num).addClass('current_menu_option');
-	if ( option_num == 16 ) {
-		//performUpdate();
-	}
+
 }
 
 function language_div_load() {
@@ -1665,7 +1662,19 @@ function right_load_1(option_num, div_id)
 				<br><br>
 				<a id='option28' class='menu_option' href="javascript:right_load(28, 'barcode_div');"><?php echo "Barcode Settings"; ?></a>
 				<br><br>
-                                <a id='option22' class='menu_option' href="javascript:right_load(22, 'billing_div');"><?php echo "Billing"; ?></a>
+                <a id='instruments_menu' class='menu_option' href="javascript:void(0);">
+                	<?php echo LangUtil::$pageTerms['INSTRUMENTATION']; ?> 
+                </a>
+				<br><br>
+				<div id='instrumentation_setup' name='instrumentation_setup' style='display:none;'>
+					-<a id='option51' class='menu_option' href="javascript:right_load(51, 'driver_div');">
+						<?php echo LangUtil::$pageTerms['INSTRUMENTATION_INSTALL_DRIVERS']; ?></a>
+					<br><br>
+					-<a id='option52' class='menu_option' href="javascript:right_load(52, 'device_div');">
+						<?php echo LangUtil::$pageTerms['INSTRUMENTATION_CONFIGURE_DEVICE']; ?></a>
+					<br><br>
+				</div>
+                <a id='option22' class='menu_option' href="javascript:right_load(22, 'billing_div');"><?php echo "Billing"; ?></a>
 				<br><br>
 				<a id='option3' class='menu_option' href="javascript:right_load(3, 'users_div');"><?php echo LangUtil::$pageTerms['MENU_USERS']; ?></a>
 				<br><br>
@@ -1695,10 +1704,7 @@ function right_load_1(option_num, div_id)
 				<a id='option39' class='menu_option' href="javascript:right_load(39, 'blis_update_div');">Update to New Version</a>
 				<br><br>
 				</div>
-				<?php /* Enable for Data Merging
-				<a rel='facebox' id='option18' class='menu_option' href="updateCountryDbAtLocalUI.php">Update National Database</a>
-				</ul>
-				*/ ?>
+
 			</td>
 			<td>
 				<br><br><br><br><br>
@@ -1776,9 +1782,7 @@ function right_load_1(option_num, div_id)
                                         }
                                         //NC3065
 					?>
-                                        
-                                         <?php //$page_elems->getTestTypeCheckboxes($lab_config->id); ?>
-                                        
+
 					</div>
 					<br><br>
 					<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='checkandsubmit_st_types()'>
@@ -1814,49 +1818,132 @@ function right_load_1(option_num, div_id)
 					</form>
 				</div>
                                 
-                                <div class='right_pane' id='barcode_div' style='display:none;margin-left:10px;'>
+            <div class='right_pane' id='barcode_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#barcode_config'>Page Help</a></p>
 					<b><?php echo "Configure Barcode Format Settings"; ?></b>
-					<br><br>
-                                        <div id='barcodefield_msg' class='clean-orange' style='display:none;width:350px;'>
-					</div>
-					<form id='barcodefields_form' name='barcodefields_form' action='ajax/update_barcode_settings.php' method='post'>
+				<br><br>
+                <div id='barcodefield_msg' class='clean-orange' style='display:none;width:350px;'>
+				</div>
+				<form id='barcodefields_form' name='barcodefields_form' action='ajax/update_barcode_settings.php' method='post'>
 					<input type='hidden' name='lab_config_id' value='<?php echo $lab_config->id; ?>'></input>					
-						<?php $page_elems->getBarcodeFields($lab_config->id);
-                                                //$page_elems->getSearchFieldsCheckboxes($lab_config->id); ?>
+						<?php
+							$page_elems->getBarcodeFields($lab_config->id);
+						?>
 					<br><br>
 					<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='submit_barcodeconfig()'>
 					</input>
 					&nbsp;&nbsp;&nbsp;&nbsp;
-					<!--span id='st_types_progress' style='display:none;'-->
-                                        <span id='barcodefields_progress' style='display:none;'>
-
-						<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
+                    <span id='barcodefields_progress' style='display:none;'>
+						<?php
+							$page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']);
+						?>
 					</span>
-					</form>
-				</div>
+				</form>
+			</div>
                                 
                                 <!--NC3065-->
 
                             
-				<div class='right_pane' id='users_div' style='display:none;margin-left:10px;'>
-					<?php
-					$reload_url = "lab_config_home.php?id=$lab_config_id";
-					?>
-					<p style="text-align: right;"><a rel='facebox' href='#UserAccounts_config'>Page Help</a></p>
-					<b><?php echo LangUtil::$pageTerms['MENU_USERS']; ?></b>
-					 | <a rel='facebox' href='lab_user_new.php?ru=<?php echo $reload_url; ?>&lid=<?php echo $lab_config_id; ?>'><?php echo LangUtil::$generalTerms['CMD_ADDNEWACCOUNT']; ?></a>
-					<br><br>
-					<div id='user_acc_msg' class='clean-orange' style='display:none;width:350px;'>
-					</div>
-					<div id='user_list_table'>
-					<?php
-					$user_list = $lab_config->getUsers();
-					$page_elems->getLabUsersTable($user_list, $lab_config_id);
-					?>
-					</div>
+			<div class='right_pane' id='users_div' style='display:none;margin-left:10px;'>
+				<?php
+				$reload_url = "lab_config_home.php?id=$lab_config_id";
+				?>
+				<p style="text-align: right;"><a rel='facebox' href='#UserAccounts_config'>Page Help</a></p>
+				<b><?php echo LangUtil::$pageTerms['MENU_USERS']; ?></b>
+				 | <a rel='facebox' href='lab_user_new.php?ru=<?php echo $reload_url; ?>&lid=<?php echo $lab_config_id; ?>'><?php echo LangUtil::$generalTerms['CMD_ADDNEWACCOUNT']; ?></a>
+				<br><br>
+				<div id='user_acc_msg' class='clean-orange' style='display:none;width:350px;'>
 				</div>
+				<div id='user_list_table'>
+				<?php
+				$user_list = $lab_config->getUsers();
+				$page_elems->getLabUsersTable($user_list, $lab_config_id);
+				?>
+				</div>
+			</div>
 					
+			<div class='right_pane' id='driver_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;">
+					<a rel='facebox' href='#UserAccounts_config'>Page Help</a>
+				</p>
+				<b><?php echo LangUtil::$pageTerms['INSTRUMENTATION_INSTALL_DRIVERS']; ?></b> |
+
+				<a rel='facebox' href='javascript:void(0)' class='new-driver'>Add New Driver</a>
+
+				<br><br>
+				<div id='driver_list_table'>
+					<table class='hor-minimalist-b' style="width:auto;">
+						<thead>
+							<th>#</th>
+							<th>Driver Name</th>
+							<th>Description</th>
+							<th>Supported Tests</th>
+							<th>Provider</th>
+							<th></th>
+						</thead>
+						<tbody>
+							<?php
+								$drivers = $lab_config->getInstrumentationDrivers();
+								if(count($drivers) > 0){
+									$cnt = 1;
+									foreach ($drivers as $driver) {
+										echo "<td>".$cnt++."</td>";
+										echo "<td>".$driver['alias']."</td>";
+										echo "<td>".$driver['description']."</td>";
+										echo "<td>".$driver['supported_tests']."</td>";
+										echo "<td>".$driver['provider']."</td>";
+										echo "<td><a href='javascript:void(0)' ";
+										echo "class='btn driver-delete' data-toggle='modal' ";
+										echo "data-target='.confirm-delete-modal' data-id='".$driver['id']."'>";
+										echo LangUtil::$generalTerms['CMD_DELETE']."</a></td>";
+									}
+								}else{
+									echo "<td colspan='6'>No drivers found!</td>";
+								}
+							?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class='right_pane' id='device_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;">
+					<a rel='facebox' href='#UserAccounts_config'>Page Help</a>
+				</p>
+				<b><?php echo LangUtil::$pageTerms['INSTRUMENTATION_CONFIGURE_DEVICE']; ?></b> |
+
+				<a rel='facebox' href='javascript:void(0)'>Add New Device</a>
+
+				<br><br>
+				<div id='device_list_table'>
+					<table class='hor-minimalist-b' style="width:auto;">
+						<thead>
+							<th>#</th>
+							<th>Name</th>
+							<th>IP Address</th>
+							<th>Hostname</th>
+							<th>Actions</th>
+						</thead>
+						<tbody>
+							<?php
+								$instruments = $lab_config->getInstrumentationMachines();
+								if(count($instruments) > 0){
+									$cnt = 1;
+									foreach ($instruments as $instrument) {
+										echo "<td>".$cnt++."</td>";
+										foreach ($instrument as $property) {
+											echo "<td>$property</td>";
+										}
+									}
+								}else{
+									echo "<td colspan='5'>No device found!</td>";
+								}
+							?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
 				<div class='right_pane' id='inventory_div' style='display:none;margin-left:10px;'>
 				</div>
                                 

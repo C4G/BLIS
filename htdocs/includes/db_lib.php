@@ -1113,6 +1113,29 @@ class LabConfig
 		DbUtil::switchRestore($saved_db);
 		return $retval;
 	}
+
+	public function getInstrumentationDrivers()
+	{
+		$saved_db = DbUtil::switchToLabConfig($this->id);
+		$query_string = "SELECT id, alias, description, supported_tests, provider ".
+				"FROM machine_drivers ORDER BY alias";
+		$resultset = query_associative_all($query_string, $row_count);
+
+		DbUtil::switchRestore($saved_db);
+		return $resultset;
+	}
+
+	public function getInstrumentationMachines()
+	{
+		$saved_db = DbUtil::switchToLabConfig($this->id);
+		$query_string = "SELECT name, ip_address, hostname, description ".
+				"FROM test_machines ORDER BY name";
+		$resultset = query_associative_all($query_string, $row_count);
+
+		DbUtil::switchRestore($saved_db);
+		return $resultset;
+	}
+	
 }
 
 class ReportConfig
@@ -13863,38 +13886,25 @@ function get_tat_data_per_test_per_lab_dir_new($test_type_id, $lab_config_id, $d
 			$date_top=date("Y-m-d", $second_day_ts);
                         $resultset = get_completed_tests_by_type($test_type_id, $date_fromp, $date_top);
                         $progression_val[$date_ts]= 0;
-				//$percentile_count[$week_ts] = array();
-				//$percentile_count[$week_ts][] = $date_diff;
 				$progression_count[$date_ts] = 0;
                         foreach($resultset as $record) {
 			$date_collected = $record['date_collected'];
-			//$week_collected = date("W", $date_collected);
-			//$year_collected = date("Y", $date_collected);
-			//$week_ts = week_to_date2($week_collected, $year_collected);
-			//$week_ts_datetime = date("Y-m-d H:i:s", $week_ts);
+
 			$date_r_ts = $record['ts'];
 			$date_diff = ($date_r_ts - $date_collected);
                         if($date_diff < 0)
                             $date_diff = 0;
 			if(!isset($progression_val[$date_ts])) {
-                        //if($progression_val[$week_ts] == 0) {
-				//$progression_val[$week_ts] = array();
+
 				$progression_val[$date_ts]= $date_diff;
-				//$percentile_count[$week_ts] = array();
-				//$percentile_count[$week_ts][] = $date_diff;
 				$progression_count[$date_ts] = 1;
-				//$goal_tat[$week_ts] = $lab_config->getGoalTatValue($test_type_id, $week_ts_datetime);
-				//$progression_val[$week_ts][3] = array();
-				//$progression_val[$week_ts][4] = array();
 			}
 			else {
                             
 				$progression_val[$date_ts] += $date_diff;
-				//$percentile_count[$week_ts][] = $date_diff;
+
 				$progression_count[$date_ts] += 1;
-                                //$formattedValue = round($value[0],2);
-                                //$formattedDate = bcmul($key,1000);
-                                //ksort($stat_list); 
+
 			}
 			
                     }
@@ -13921,11 +13931,6 @@ function get_tat_data_per_test_per_lab_dir_new($test_type_id, $lab_config_id, $d
                         $rstat[$cc][0] =  date('d M Y', $key);
                                 //ksort($stat_list); 
                         $cc++;
-			# Determine percentile value
-			//$progression_val[$key][1] = getPercentile2($percentile_count[$key], $percentile_tofind);
-			# Convert from sec timestamp to days
-			//$progression_val[$key][1] = $progression_val[$key][1]/(60*60*24);
-			//$progression_val[$key][2] = $goal_tat[$key];
 		}
 		DbUtil::switchRestore($saved_db);
 		# Return {week=>[avg tat, percentile tat, goal tat, [overdue specimen_ids], [pending specimen_ids]]}
@@ -14003,10 +14008,6 @@ function get_prevalence_data_per_test_per_lab_dir($test_type_id, $lab_config_id,
                                 //ksort($stat_list); 
                         $cc++;
 			# Determine percentile value
-			//$progression_val[$key][1] = getPercentile2($percentile_count[$key], $percentile_tofind);
-			# Convert from sec timestamp to days
-			//$progression_val[$key][1] = $progression_val[$key][1]/(60*60*24);
-			//$progression_val[$key][2] = $goal_tat[$key];
 		}
 		DbUtil::switchRestore($saved_db);
 		
@@ -14017,15 +14018,9 @@ function get_prevalence_data_per_test_per_lab_dir($test_type_id, $lab_config_id,
 function get_prevalence_data_per_test_per_lab_dir22($test_type_id, $lab_config_id, $date_from, $date_to)
 {
         $retval = array();
-    //$testTypeMapping = TestTypeMapping::getTestTypeById($test_type_id, $_SESSION['user_id']);
-    //$mapping_list = array();
-    //$mapping_list = get_test_mapping_list_by_string($testTypeMapping->labIdTestId);
-    //print_r($mapping_list);
 
-                          //  foreach( $lab_config_id as $key) {
 					$lab_config = LabConfig::getById($lab_config_id);
-                                        //print_r($lab_config);
-					//$test_type_id = $mapping_list[$lab_config->id];
+
 					$saved_db = DbUtil::switchToLabConfig($lab_config->id);	
 					
 					# For particular test type, fetch negative records
