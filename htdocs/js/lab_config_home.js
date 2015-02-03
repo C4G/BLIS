@@ -7,10 +7,69 @@ $(document).ready(function(){
 	$('#reorder_fields').hide();
 	$('#doctor_reorder_fields').hide();
 	
+	/* 
+	 *Instrumentation JS
+	 */
 	$('#instruments_menu').click(function(){
 		$('#instrumentation_setup').toggle();
 	});
-	
+
+	$('#delete-confirm-dialog').dialog({
+		appendTo: 'body',
+		autoOpen: false,
+		resizable: false,
+		height:140,
+		modal: true,
+		buttons: {
+			"Delete": function() {
+				$( this ).dialog( "close" );
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
+	$( ".driver-delete" ).click(function() {
+		$( '#delete-confirm-dialog' ).dialog( "open" );
+	});
+
+	$( ".new-driver" ).click(function() {
+
+		if ($(this).html() == "Add New Driver") {
+			$(this).html( "View Driver List" );
+		}else{
+			$(this).html( "Add New Driver" );
+		}
+
+		$('#driver_list_table').toggle();
+		$('#install-new-driver').toggle();
+	});
+
+	$('.close-new-driver').click(function(){
+		$( ".new-driver" ).click();
+	});
+
+	$( ".new-device" ).click(function() {
+
+		if ($(this).html() == "Add New Device") {
+			$(this).html( "View Device List" );
+		}else{
+			$(this).html( "Add New Device" );
+		}
+
+		$('#device_list_table').toggle();
+		$('#configure-new-device').toggle();
+	});
+
+	$('.close-new-device').click(function(){
+		$( ".new-device" ).click();
+	});
+
+	/*
+	 * End Instrumentation
+	 */
+
 	$('#cat_code12').change( function() { get_test_types_bycat() });
 
 	$('.dboption').change(function() {
@@ -25,6 +84,14 @@ $(document).ready(function(){
 
     $( "#field_reorder_link_specimen" ).click(function() {
         $( "#dialog-form-specimen" ).dialog( "open" );
+    });
+
+    $( "#doctor_field_reorder_link_patient" ).click(function() {
+            $( "#doctor-dialog-form-patients" ).dialog( "open" );
+        });
+
+    $( "#doctor_field_reorder_link_specimen" ).click(function() {
+        $( "#doctor-dialog-form-specimen" ).dialog( "open" );
     });
 
     $("#sortablePatients").sortable({     	});

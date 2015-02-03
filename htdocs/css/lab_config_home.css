@@ -1,0 +1,123 @@
+
+#sortablePatients { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#sortablePatients li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.0em; height: 16px; }
+#sortablePatients li span { position: absolute; margin-left: -1.3em; }
+#doctor_sortablePatients { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#doctor_sortablePatients li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.0em; height: 16px; }
+#doctor_sortablePatients li span { position: absolute; margin-left: -1.3em; }
+#sortableSpecimen { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#sortableSpecimen li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.0em; height: 16px; }
+#sortableSpecimen li span { position: absolute; margin-left: -1.3em; }
+.ui-dialog .ui-state-error { padding: .3em; }
+
+.range_field {
+	width:30px;
+}
+
+/*
+*Instrumentation Styles
+*/
+
+#install-new-driver,
+#configure-new-device {
+  display: none;
+}
+  .instruments-panel{
+    min-width: 500px;
+    border: 1px solid #B3C6E6;
+    border-radius: 3px;
+    padding: 1px;
+  }
+    .instruments-panel .panel-header{
+      background-color: #B3C6E6;
+      border-radius: 3px;
+      padding: 0 10px;
+      height: 36px;
+    }
+      .instruments-panel .panel-header h3{
+        font-size: 0.9em;
+        padding: 2px;
+        line-height: 36px;
+        margin: 0;
+      }
+    .instruments-panel .panel-body{
+      height: 100%;
+      min-height: 200px;
+    }
+      .instruments-panel .panel-body .panel-logo{
+        min-width: 100px;
+        min-height: 200px;
+        background-image: url('/includes/img/knob_attention.png');
+        background-position: center 15px;
+        background-repeat: no-repeat;
+        float: left;
+      }
+      .instruments-panel .panel-body .panel-text{
+        float: left;
+      }
+        .instruments-panel .panel-body .panel-text p{
+          font-size: 1.1em;
+          font-weight: bold;
+        }
+        .instruments-panel .panel-body .panel-text div{
+          margin: 10px 0;
+        }
+      .instruments-panel .panel-body .panel-row{
+        margin-bottom: 10px;
+        padding: 10px;
+        min-height: 28px;
+        height: 100%;
+      }
+        .instruments-panel .panel-body .panel-row label{
+          width: 150px;
+          padding-left: 10px;
+          font-size: 0.95em;
+          display: inline-block;
+          float: left;
+        }
+        .instruments-panel .panel-body .panel-row input,
+        .instruments-panel .panel-body .panel-row textarea{
+          border: 1px solid #B3C6E6;
+          border-radius: 3px;
+          float: left;
+          min-height: 25px;
+        }
+        .instruments-panel .panel-body .panel-row input:focus,
+        .instruments-panel .panel-body .panel-row textarea:focus{
+          border: 1px solid #3366CC;
+          border-radius: 3px;
+        }
+    .instruments-panel .panel-footer{
+      background-color: #F0F0F0;
+      border-top: 1px solid #CCCCCC;
+      padding: 5px;
+      height: 40px;
+    }
+      .instruments-panel .panel-footer a{
+        float:right;
+      }
+      .instruments-panel .panel-footer a.btn{
+        margin-right: 5px;
+        padding: 5px 10px;
+        border: 1px solid #CCCCCC;
+        border-radius: 4px;
+        background-color: #B3C6E6;
+        height: 28px;
+        line-height: 28px;
+        font-weight: bold;
+        min-width: 75px;
+        text-align: center;
+      }
+      .instruments-panel .panel-footer a.btn:hover{
+        background-color: #B6C9E9;
+        border: 1px solid #B3C6E6;
+        color:#2B70B6;
+        text-decoration: none;
+      }
+
+#device_list_table {
+  min-width: 500px;
+}
+  #device_list_table table{
+    width: 100%;
+  }
