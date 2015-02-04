@@ -75,12 +75,18 @@
           display: inline-block;
           float: left;
         }
+        .instruments-panel .panel-body .panel-row select{
+          min-width: 200px;
+          min-height: 30px;
+          line-height: 30px;
+        }
         .instruments-panel .panel-body .panel-row input,
         .instruments-panel .panel-body .panel-row textarea{
           border: 1px solid #B3C6E6;
           border-radius: 3px;
           float: left;
           min-height: 25px;
+          padding: 1px 5px;
         }
         .instruments-panel .panel-body .panel-row input:focus,
         .instruments-panel .panel-body .panel-row textarea:focus{

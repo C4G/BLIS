@@ -1598,28 +1598,40 @@ function update_worksheet_config()
 						<h3 class="title">Configure New Device</h3>
 					</div><!-- /.panel-header -->
 					<div class="panel-body">
+						<form method='POST' action='/ajax/instrumentation_add_device.php'>
 						<div class="panel-row">
 							<label for='driver'>Driver</label>
 							<select type='text' class='select-input' name='driver'>
-								<option value='1'>First Driver</option>
+								<?php 
+									$drivers = $lab_config->getInstrumentationDrivers();
+									if (count($drivers) > 0) {
+										foreach ($drivers as $driver) {
+											echo "<option value='".$driver['id']."'>".$driver['alias']."</option>";
+										}
+									}else{
+										echo "<option value='0'>No drivers installed!</option>";
+									}
+								?>
 							</select>
 						</div> <!-- /.panel-row -->
 						<div class="panel-row">
 							<label for='name'>Name</label>
-							<input type='text' class='text-input' name='name' />
+							<input type='text' class='text-input' name='name' placeholder='Beckman Coulter' />
 						</div> <!-- /.panel-row -->
 						<div class="panel-row">
 							<label for='description'>Description</label>
-							<textarea cols='30' rows='3' class='text-input' name='description'></textarea>
+							<textarea cols='30' rows='3' class='text-input' name='description' 
+								placeholder='Coulter counter connected to the comp in the Biochem Lab.'></textarea>
 						</div> <!-- /.panel-row -->
 						<div class="panel-row">
 							<label for='ip_address'>IP Address</label>
-							<input type='text' class='text-input' name='ip_address' />
+							<input type='text' class='text-input' name='ip_address' placeholder='10.0.0.125' />
 						</div> <!-- /.panel-row -->
 						<div class="panel-row">
 							<label for='host_name'>Host Name</label>
-							<input type='text' class='text-input' name='host_name' />
+							<input type='text' class='text-input' name='host_name' placeholder='BIOC_ONE' />
 						</div> <!-- /.panel-row -->
+						</form>
 					</div><!-- /.panel-body -->
 					<div class="panel-footer">
 						<a class='btn btn-info close-new-device' href='javascript:void()'>Cancel</a>
