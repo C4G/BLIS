@@ -13493,6 +13493,7 @@ class Inventory
         public function getAllReagents($lid)
         {
             $lab_config_id = $lid;
+            $row_count=0;
             
             $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
             

@@ -596,7 +596,7 @@ function right_load(option_num, div_id)
 function export_html()
 {
 <?php
-$myFile = "../../BlisSetup.html";
+$myFile = "../../local/BlisSetup.html";
 $fh = fopen($myFile, 'w') or die("can't open file");
 $content =('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <html xmlns="http://www.w3.org/1999/xhtml">  

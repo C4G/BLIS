@@ -8,13 +8,9 @@ LINUX QUICKSTART
 
     `cat scriptname.sql | mysql -uroot -p`
 
-3. Set the owner and group of the following files and folders to be the same as the web server user
+3. Grant the web server user READ and WRITE permissions to the BLIS_HOME/local folder
 
-    - BLIS_HOME/htdocs
-    - BLIS_HOME/local
-    - BLIS_HOME/BlisSetup.html
-
-    `chown -R www-data.www-data BLIS_HOME/htdocs`
+    `chown -R www-data.www-data BLIS_HOME/local`
 
 4. Declare your database connection settings in `BLIS_HOME/htdocs/db_constants.php`
     `LOCAL_PATH` is the location of the 'local' directory relative to the 'BLIS_HOME/htdocs/includes' folder.
