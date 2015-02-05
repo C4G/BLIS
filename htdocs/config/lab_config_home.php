@@ -1499,15 +1499,15 @@ function update_worksheet_config()
 				<a href='javascript:void(0)' class='new-driver'>Add New Driver</a>
 
 				<br><br>
-				<div id='driver_list_table'>
+				<div id='driver_list_table' class='instrumentation'>
 					<table class='hor-minimalist-b'>
-						<thead>
+						<thead><tr>
 							<th>#</th>
 							<th>Driver Name</th>
 							<th>Description</th>
 							<th>Supported Tests</th>
 							<th>Provider</th>
-							<th></th>
+							<th></th></tr>
 						</thead>
 						<tbody>
 							<?php
@@ -1515,17 +1515,17 @@ function update_worksheet_config()
 								if(count($drivers) > 0){
 									$cnt = 1;
 									foreach ($drivers as $driver) {
-										echo "<td>".$cnt++."</td>";
+										echo "<tr><td>".$cnt++."</td>";
 										echo "<td>".$driver['alias']."</td>";
 										echo "<td>".$driver['description']."</td>";
 										echo "<td>".$driver['supported_tests']."</td>";
 										echo "<td>".$driver['provider']."</td>";
 										echo "<td><a href='javascript:void(0)' ";
 										echo "class='btn driver-delete' data-id='".$driver['id']."'>";
-										echo LangUtil::$generalTerms['CMD_DELETE']."</a></td>";
+										echo LangUtil::$generalTerms['CMD_DELETE']."</a></td></tr>";
 									}
 								}else{
-									echo "<td colspan='6'>No drivers found!</td>";
+									echo "<tr><td colspan='6'>No drivers found!</td></tr>";
 								}
 							?>
 						</tbody>
@@ -1568,14 +1568,14 @@ function update_worksheet_config()
 				<a class='new-device' href='javascript:void(0)'>Add New Device</a>
 
 				<br><br>
-				<div id='device_list_table'>
+				<div id='device_list_table' class='instrumentation'>
 					<table class='hor-minimalist-b'>
-						<thead>
+						<thead><tr>
 							<th>#</th>
 							<th>Name</th>
 							<th>IP Address</th>
 							<th>Hostname</th>
-							<th>Actions</th>
+							<th>Actions</th></tr>
 						</thead>
 						<tbody>
 							<?php
@@ -1583,16 +1583,16 @@ function update_worksheet_config()
 								if(count($instruments) > 0){
 									$cnt = 1;
 									foreach ($instruments as $instrument) {
-										echo "<td>".$cnt++."</td>";
+										echo "<tr><td>".$cnt++."</td>";
 										echo "<td>".$instrument['name']."</td>";
 										echo "<td>".$instrument['ip_address']."</td>";
 										echo "<td>".$instrument['hostname']."</td>";
 										echo "<td><a href='javascript:void(0)' ";
 										echo "class='btn device-delete' data-id='".$instrument['id']."'>";
-										echo LangUtil::$generalTerms['CMD_DELETE']."</a></td>";
+										echo LangUtil::$generalTerms['CMD_DELETE']."</a></td></tr>";
 									}
 								}else{
-									echo "<td colspan='5'>No device found!</td>";
+									echo "<tr><td colspan='5'>No device found!</td></tr>";
 								}
 							?>
 						</tbody>

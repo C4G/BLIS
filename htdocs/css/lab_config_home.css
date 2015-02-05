@@ -121,9 +121,9 @@
         text-decoration: none;
       }
 
-#device_list_table {
+.instrumentation {
   min-width: 500px;
 }
-  #device_list_table table{
+  .instrumentation table{
     width: 100%;
   }
