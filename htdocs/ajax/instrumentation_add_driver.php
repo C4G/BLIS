@@ -45,7 +45,7 @@
                                 mysql_real_escape_string($pluginInfo['name']),
                                 mysql_real_escape_string($pluginInfo['description']),
                                 mysql_real_escape_string($pluginInfo['code']),
-                                mysql_real_escape_string(implode(",", $pluginInfo['testTypes']));
+                                mysql_real_escape_string(implode(",", $pluginInfo['testTypes'])));
 
                 query_insert_one($queryString);
                 DbUtil::switchRestore($saved_db);

@@ -22,7 +22,7 @@
     function pluginLoader($class)
     {
         $filename = $class . '.php';
-        $file =$_SERVER['DOCUMENT_ROOT'].'../local/plugins/' . $filename;
+        $file =$_SERVER['DOCUMENT_ROOT'].'/classes/plugins/' . $filename;
         if (!is_readable($file))
         {
             return false;
