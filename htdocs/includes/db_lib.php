@@ -684,7 +684,6 @@ class LabConfig
 			}
 		}
 		# Append TAT value for pending tests
-		//$query_string = "SELECT tat FROM test_type_tat WHERE test_type_id=0 LIMIT 1";
 		$query_string = "SELECT target_tat FROM test_type_tat WHERE test_type_id=0 LIMIT 1";
 		$record = query_associative_one($query_string);
 		if($record == null)
@@ -1116,7 +1115,7 @@ class LabConfig
 
 	public function getInstrumentationDrivers()
 	{
-		$saved_db = DbUtil::switchToLabConfig($this->id);
+		$saved_db = DbUtil::switchToGlobal();
 		$query_string = "SELECT id, alias, description, supported_tests, provider ".
 				"FROM machine_drivers ORDER BY alias";
 		$resultset = query_associative_all($query_string, $row_count);

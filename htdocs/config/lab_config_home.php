@@ -1535,19 +1535,21 @@ function update_worksheet_config()
 					<div class="panel-header">
 						<h3 class="title">Install New Driver</h3>
 					</div><!-- /.panel-header -->
+					<form method='post' action='/ajax/instrumentation_add_driver.php' enctype="multipart/form-data">
 					<div class="panel-body">
 						<div class="panel-logo"></div>
 						<div class="panel-text">
 							<p>Install only drivers obtained from trusted sources!</p>
 							<div>
-								<input type='file' name='Browse' placeholder='Select a file.'>
+								<input type='file' name='import-driver-file' id='import-driver-file' />
 							</div>
 						</div>
 					</div><!-- /.panel-body -->
 					<div class="panel-footer">
-						<a class='btn btn-info close-new-driver' href='javascript:void()'>Cancel</a>
-						<a class='btn btn-info' href='javascript:void()'>Save</a>
+						<a class='btn close-new-driver' href='javascript:void(0)'>Cancel</a>
+						<a class='btn submit-new-driver-form' href='javascript:void(0)'>Save</a>
 					</div><!-- /.panel-footer -->
+					</form>
 				</div><!-- /#install-new-driver -->
 			</div>
 
@@ -1582,9 +1584,12 @@ function update_worksheet_config()
 									$cnt = 1;
 									foreach ($instruments as $instrument) {
 										echo "<td>".$cnt++."</td>";
-										foreach ($instrument as $property) {
-											echo "<td>$property</td>";
-										}
+										echo "<td>".$instrument['name']."</td>";
+										echo "<td>".$instrument['ip_address']."</td>";
+										echo "<td>".$instrument['hostname']."</td>";
+										echo "<td><a href='javascript:void(0)' ";
+										echo "class='btn device-delete' data-id='".$instrument['id']."'>";
+										echo LangUtil::$generalTerms['CMD_DELETE']."</a></td>";
 									}
 								}else{
 									echo "<td colspan='5'>No device found!</td>";
@@ -1597,11 +1602,11 @@ function update_worksheet_config()
 					<div class="panel-header">
 						<h3 class="title">Configure New Device</h3>
 					</div><!-- /.panel-header -->
+						<form method='POST' action='/ajax/instrumentation_add_device.php' id='form_instruments_add'>
 					<div class="panel-body">
-						<form method='POST' action='/ajax/instrumentation_add_device.php'>
 						<div class="panel-row">
 							<label for='driver'>Driver</label>
-							<select type='text' class='select-input' name='driver'>
+							<select type='text' class='form-input required' id='select-driver' name='driver'>
 								<?php 
 									$drivers = $lab_config->getInstrumentationDrivers();
 									if (count($drivers) > 0) {
@@ -1616,27 +1621,27 @@ function update_worksheet_config()
 						</div> <!-- /.panel-row -->
 						<div class="panel-row">
 							<label for='name'>Name</label>
-							<input type='text' class='text-input' name='name' placeholder='Beckman Coulter' />
+							<input type='text' class='form-input required' name='name' placeholder='Beckman Coulter' />
 						</div> <!-- /.panel-row -->
 						<div class="panel-row">
 							<label for='description'>Description</label>
-							<textarea cols='30' rows='3' class='text-input' name='description' 
+							<textarea cols='30' rows='3' class='form-input' name='description' 
 								placeholder='Coulter counter connected to the comp in the Biochem Lab.'></textarea>
 						</div> <!-- /.panel-row -->
 						<div class="panel-row">
 							<label for='ip_address'>IP Address</label>
-							<input type='text' class='text-input' name='ip_address' placeholder='10.0.0.125' />
+							<input type='text' class='form-input required' name='ip_address' placeholder='10.0.0.125' />
 						</div> <!-- /.panel-row -->
 						<div class="panel-row">
 							<label for='host_name'>Host Name</label>
-							<input type='text' class='text-input' name='host_name' placeholder='BIOC_ONE' />
+							<input type='text' class='form-input' name='host_name' placeholder='BIOC_ONE' />
 						</div> <!-- /.panel-row -->
-						</form>
 					</div><!-- /.panel-body -->
 					<div class="panel-footer">
-						<a class='btn btn-info close-new-device' href='javascript:void()'>Cancel</a>
-						<a class='btn btn-info' href='javascript:void()'>Save</a>
+						<a class='btn close-new-device' href='javascript:void(0)'>Cancel</a>
+						<a class='btn submit-new-device-form' href='javascript:void(0)'>Save</a>
 					</div><!-- /.panel-footer -->
+						</form>
 				</div><!-- /#configure-new-device -->
 			</div>
 

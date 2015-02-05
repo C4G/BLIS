@@ -66,6 +66,38 @@ $(document).ready(function(){
 		$( ".new-device" ).click();
 	});
 
+	$('.submit-new-driver-form').click(function(){ // New driver form
+		var form = $(this).parents('form');
+		var formURI = form.attr('action');
+		var formData = new FormData(form[0]);
+
+		if($('#import-driver-file').val() != ''){
+
+			$.ajax({ url:formURI, type:"POST", data:formData, async: false, cache: false, contentType: false, processData: false })
+				.done(function(data){
+					alert(data);
+					$( ".new-driver" ).click();
+				});
+		}else{
+			alert("Please select a file!");
+		};
+	});
+
+	$('.submit-new-device-form').click(function(){ // New device form
+		var form = $(this).parents('form');
+		var url = form.attr('action');
+		if ($('#select-driver').val() > 0) {
+			$.post( url, form.serialize() )
+				.done(function(data){
+					alert(data);
+					$( ".new-device" ).click();
+				});
+		}else{
+
+			alert($('#select-driver').siblings('label').html() + " must be selected!");
+		};
+	});
+
 	/*
 	 * End Instrumentation
 	 */
