@@ -15,22 +15,28 @@ $(document).ready(function(){
 	});
 
 	$('#delete-confirm-dialog').dialog({
-		appendTo: 'body',
 		autoOpen: false,
 		resizable: false,
-		height:140,
 		modal: true,
 		buttons: {
 			"Delete": function() {
 				$( this ).dialog( "close" );
+				var url = $(this).dialog("option", "url");
+				var id = $(this).dialog("option", "id");
+				alert(id + url);
 			},
-			Cancel: function() {
+			"Cancel": function() {
 				$( this ).dialog( "close" );
 			}
 		}
 	});
 
 	$( ".driver-delete" ).click(function() {
+		var url = $(this).data('url');
+		var id = $(this).data('id');
+
+		$( '#delete-confirm-dialog' ).dialog( "option", "url", url );
+		$( '#delete-confirm-dialog' ).dialog( "option", "id", id );
 		$( '#delete-confirm-dialog' ).dialog( "open" );
 	});
 
@@ -333,6 +339,165 @@ $(document).ready(function(){
 			$('#use_pname_mand').hide();
 		}
 	});
+
+
+    // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+   $( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+   $( "#dialog-form-patients" ).dialog({
+        autoOpen: false,
+        //position: { my: "center", at: "center", collision: 'none' },
+        height: 400,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Update": function() {
+                var index = 0;
+				var orders = "formId=1&";
+				$('#sortablePatients li').each(function(){
+					var $this = $(this);
+					index++;
+					var field_name = $this.text();
+					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
+				});
+				
+				orders = orders.match(/(.*).$/)[1];
+								
+				$.ajax({
+					url : "ajax/process-field-ordering.php?"+orders,
+					async: false,
+					success : function(data) {
+						alert("Patient Field Order Updated");
+						window.location="lab_config_home.php?id="+$('.main-table').data('lab-config-id');
+					}	
+				});
+   		     
+				},
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        },
+        close: function() {
+            allFields.val( "" ).removeClass( "ui-state-error" );
+        }
+    });
+
+    
+    $( "#dialog-form-specimen" ).dialog({
+        autoOpen: false,
+        //position: { my: "center", at: "center", collision: 'none' },
+        height: 400,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Update": function() {
+                var index = 0;
+				var orders = "formId=2&";
+				$('#sortableSpecimen li').each(function(){
+					var $this = $(this);
+					index++;
+					var field_name = $this.text();
+					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
+				});
+				
+				orders = orders.match(/(.*).$/)[1];
+								
+				$.ajax({
+					url : "ajax/process-field-ordering.php?"+orders,
+					async: false,
+					success : function(data) {
+						alert("Specimen Field Order Updated");
+						window.location="lab_config_home.php?id="+$('.main-table').data('lab-config-id');
+					}	
+				});
+   		     
+				},
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        },
+        close: function() {
+            allFields.val( "" ).removeClass( "ui-state-error" );
+        }
+    });
+
+   $( "#doctor-dialog-form-patients" ).dialog({
+        autoOpen: false,
+        //position: { my: "center", at: "center", collision: 'none' },
+        height: 400,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Update": function() {
+                var index = 0;
+				var orders = "formId=1&";
+				$('#doctor_sortablePatients li').each(function(){
+					var $this = $(this);
+					index++;
+					var field_name = $this.text();
+					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
+				});
+				
+				orders = orders.match(/(.*).$/)[1];
+								
+				$.ajax({
+					url : "ajax/process-field-ordering.php?"+orders,
+					async: false,
+					success : function(data) {
+						alert("Patient Field Order Updated");
+						window.location="lab_config_home.php?id="+$('.main-table').data('lab-config-id');
+					}	
+				});
+   		     
+				},
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        },
+        close: function() {
+            allFields.val( "" ).removeClass( "ui-state-error" );
+        }
+    });
+    
+    $( "#doctor-dialog-form-specimen" ).dialog({
+        autoOpen: false,
+        //position: { my: "center", at: "center", collision: 'none' },
+        height: 400,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Update": function() {
+                var index = 0;
+				var orders = "formId=2&";
+				$('#sortableSpecimen li').each(function(){
+					var $this = $(this);
+					index++;
+					var field_name = $this.text();
+					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
+				});
+				
+				orders = orders.match(/(.*).$/)[1];
+								
+				$.ajax({
+					url : "ajax/process-field-ordering.php?"+orders,
+					async: false,
+					success : function(data) {
+						alert("Specimen Field Order Updated");
+						window.location="lab_config_home.php?id="+$('.main-table').data('lab-config-id');
+					}	
+				});
+   		     
+				},
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        },
+        close: function() {
+            allFields.val( "" ).removeClass( "ui-state-error" );
+        }
+    });
+    
+
 });
 
 function openReorder(){
@@ -396,23 +561,18 @@ function performUpdate()
 
 function test_setup()
 {
-if(document.getElementById('test_setup').style.display =='none')
-$('#test_setup').show();
-else
-$('#test_setup').hide();
+	if(document.getElementById('test_setup').style.display =='none')
+		$('#test_setup').show();
+	else
+		$('#test_setup').hide();
 }
 
 function report_setup()
 {
-if(document.getElementById('report_setup').style.display =='none')
-$('#report_setup').show();
-else
-$('#report_setup').hide();
-
-}
-
-function check_compatible()
-{
+	if(document.getElementById('report_setup').style.display =='none')
+		$('#report_setup').show();
+	else
+		$('#report_setup').hide();
 }
 
 function blis_update_t()
@@ -430,14 +590,13 @@ function blis_update()
 		url : 'update/blis_update.php',
 		success : function(data) {
 			if ( data=="true" ) {
-                            $('#update_failure').hide();
-                            $('#update_spinner').hide();
-                            $('#update_success').show();
+	            $('#update_failure').hide();
+	            $('#update_spinner').hide();
+	            $('#update_success').show();
 			}
 			else {
-                                $('#update_success').hide();
-
-                                $('#update_spinner').hide();
+				$('#update_success').hide();
+				$('#update_spinner').hide();
 				$('#update_failure').show();
 			}
 		}
@@ -603,4 +762,337 @@ function right_load_1(option_num, div_id)
 	$('#'+div_id).show();
 	$('#option'+option_num).addClass('current_menu_option');
 	
+}
+
+function add_new_currency_ratio(action){
+	if(action == 1){
+		var labConfigID = $('.main-table').data('lab-config-id');
+		var defaultCurrency = $("#default_currency").val();
+		var addedCurrency=$("#added_currency").val();
+		var exchangeRate = $("#added_currency_rate").val();
+		var numberRegex = /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/;
+		if(exchangeRate == '' || !numberRegex.test(exchangeRate)){
+			alert("Enter a valid exchange rate");
+			return;
+		}
+		var url_string = "ajax/add_currency_rate.php?lid="+labConfigID+"&defaultCurrency="+
+		defaultCurrency+"&secondaryCurrency="+addedCurrency+"&exchangeRate="+exchangeRate;
+		var reload_url = "lab_config_home.php?id="+labConfigID+"&billingupdate=1";
+		$.ajax({ url: url_string, async: false, success: function() {
+			window.location=reload_url;
+		}});
+	} else {
+		$("#addCurrencyRatioDiv").hide();
+	}
+}
+
+function delete_user(user_id)
+{
+	var labConfigID = $('.main-table').data('lab-config-id');
+	var url_string = "ajax/lab_user_delete.php?uid="+user_id;
+	var reload_url = "lab_config_home.php?id="+labConfigID+"&show_u=1&adel=1";
+	$.ajax({ url: url_string, async: false, success: function() {
+		window.location=reload_url;
+	}});
+}
+
+function submit_goal_tat()
+{
+	$('#tat_progress_spinner').show();
+	$('#goal_tat_form').ajaxSubmit({
+		success: function() {
+			var labConfigID = $('.main-table').data('lab-config-id');
+			$('#tat_progress_spinner').hide();
+			window.location="lab_config_home.php?id="+labConfigID+"&tupdate=1";
+		}
+	});
+}
+
+function updateCurrencyRatio(row_id)
+{
+	var labConfigID = $('.main-table').data('lab-config-id');
+	var defaultCurrency = $("#default_currency").val();
+	var secondaryCurrency= $("#currency"+row_id).text();
+	var exchangeRate = $("#exchangeRate"+row_id).val();
+
+	var numberRegex = /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/;
+	if(exchangeRate == '' || !numberRegex.test(exchangeRate)){
+		alert("Enter a valid exchange rate");
+		return;
+	}
+	
+	var url_string = "ajax/add_currency_rate.php?lid="+labConfigID+"&defaultCurrency="+
+	defaultCurrency+"&secondaryCurrency="+secondaryCurrency+"&exchangeRate="+exchangeRate;
+	var reload_url = "lab_config_home.php?id="+labConfigID+"&billingupdate=1";
+	$.ajax({ url: url_string, async: false, success: function() {
+		window.location=reload_url;
+	}});
+}
+
+function deleteCurrencyRatio(row_id)
+{
+	var labConfigID = $('.main-table').data('lab-config-id');
+	var defaultCurrency = $("#default_currency").val();
+	var secondaryCurrency= $("#currency"+row_id).text();
+	
+	var url_string = "ajax/delete_currency_rate.php?lid="+labConfigID+"&defaultCurrency="+
+	defaultCurrency+"&secondaryCurrency="+secondaryCurrency;
+	var reload_url = "lab_config_home.php?id="+labConfigID+"&billingupdate=1";
+	$.ajax({ url: url_string, async: false, success: function() {
+		window.location=reload_url;
+	}});
+}
+
+function submit_billing_update()
+{
+    //Submit stuff to the db here.
+    $('#billing_progress').show();
+	$('#billing_form').ajaxSubmit({success:function(){
+			$('#billing_progress').hide();
+			var labConfigID = $('.main-table').data('lab-config-id');
+			window.location="lab_config_home.php?id="+labConfigID+"&billingupdate=1";
+		}
+	});
+}
+
+
+function submit_new_currency()
+{
+    //Submit stuff to the db here.
+    var labConfigID = $('.main-table').data('lab-config-id');
+    $('#billing_progress').show();
+    var newCurrency = $('#new_currency_name').val();
+    if(newCurrency == '' || newCurrency == undefined || newCurrency.length == 0){
+		alert("Enter a currency name to be added");
+		return;
+    }
+
+    var url_string ='ajax/lab_config_addCurrency.php?id="+labConfigID+"&currencyName='+newCurrency;
+    $.ajax({
+		url : url_string,
+		async: false,
+		success : function(data) {
+			if ( data.indexOf("true") >= 0 ) {
+				$('#billing_progress').hide();
+				window.location="lab_config_home.php?id="+labConfigID+"&addedCurrency=1";
+			}
+			else {
+				$('#billing_progress').hide();
+				alert("Currency already exists. Enter a different currency name");	
+			}
+		}
+	});
+}
+
+function change_admin()
+{
+	var admin_user_id = $('#lab_admin').attr('value');
+	var url_string = 'ajax/lab_admin_change.php?lid=<?php echo $lab_config->id; ?>&uid='+admin_user_id;
+	$.ajax({ url: url_string, async: false, success: function(){
+		    var labConfigID = $('.main-table').data('lab-config-id');
+			window.location="lab_config_home.php?id="+labConfigID+"&adupdate=1";
+		}
+	});
+}
+
+function agg_checkandsubmit()
+{
+	//Validate
+	//TODO
+	//All okay
+	$('#agg_progress_spinner').show();
+	$('#agg_report_form').ajaxSubmit({
+		success: function() {
+			var labConfigID = $('.main-table').data('lab-config-id');
+			$('#agg_progress_spinner').hide();
+			window.location="lab_config_home.php?id="+labConfigID+"&aggupdate=1";
+		}
+	});
+}
+
+function grouped_checkandsubmit()
+{
+	//Validate
+	//TODO
+	//All okay
+	$('#grouped_count_progress_spinner').show();
+	$('#grouped_count_report_form').ajaxSubmit({
+		success: function() {
+		    var labConfigID = $('.main-table').data('lab-config-id');
+			$('#grouped_count_progress_spinner').hide();
+			window.location="lab_config_home.php?id="+labConfigID+"&grouped_count_update=1";
+		}
+	});
+}
+
+function submit_otherfields()
+{
+	$('#otherfields_progress').show();
+	$('#otherfields_form').ajaxSubmit({
+		success: function() {
+			var labConfigID = $('.main-table').data('lab-config-id');
+			$('#otherfields_progress').hide();
+			window.location="lab_config_home.php?id="+labConfigID+"&ofupdate=1";
+		}
+	});
+}
+
+function submit_otherDoctorfields()
+{
+	$('#otherDoctorfields_progress').show();
+	$('#doctor_otherfields_form').ajaxSubmit({
+		success: function() {
+			var labConfigID = $('.main-table').data('lab-config-id');
+			$('#otherDoctorfields_progress').hide();
+			window.location="lab_config_home.php?id="+labConfigID+"&ofdupdate=1";
+		}
+	});
+}
+
+//NC3065
+function submit_searchconfig()
+{
+	$('#searchfields_progress').show();
+	$('#searchfields_form').ajaxSubmit({
+		success: function() {
+			var labConfigID = $('.main-table').data('lab-config-id');
+			$('#searchfields_progress').hide();
+			window.location="lab_config_home.php?id="+labConfigID+"&sfcupdate=1";
+		}
+	});
+}
+function submit_barcodeconfig()
+{
+	$('#barcodefields_progress').show();
+	$('#barcodefields_form').ajaxSubmit({
+		success: function() {
+			var labConfigID = $('.main-table').data('lab-config-id');
+			$('#barcodefields_progress').hide();
+			window.location="lab_config_home.php?id="+labConfigID+"&brcupdate=1";
+		}
+	});
+}
+//-NC3065
+
+function fetch_report_config()
+{
+	var labConfigID = $('.main-table').data('lab-config-id');
+	var report_type = $("#report_type11").attr("value");
+	var url_string = "ajax/report_config_fetch.php?l="+labConfigID+"&rt="+report_type;
+	$('#report_config_fetch_progress').show();
+	$('#report_config_content').load(url_string, function() {
+		$('#report_config_fetch_progress').hide();
+	});
+}
+
+function fetch_report_summary()
+{
+	var labConfigID = $('.main-table').data('lab-config-id');
+	var report_type = $("#report_type11").attr("value");
+	var url_string = "ajax/report_config_summary.php?l="+labConfigID+"&rt="+report_type;
+	$('#report_config_fetch_progress').show();
+	$('#report_config_content').load(url_string, function() {
+		$('#report_config_fetch_progress').hide();
+	});
+}
+
+function update_file()
+{ 
+	var report_id = $('#report_type11').attr("value");
+	$('#submit_report_config_progress').show();
+	$('#report_config_submit_form').ajaxSubmit({
+		success: function() {
+			var labConfigID = $('.main-table').data('lab-config-id');
+			$('#submit_report_config_progress').hide();
+			window.location="lab_config_home.php?id="+labConfigID+"&rcfgupdate="+report_id;
+		}
+	});
+}
+ function update_report_config()
+{ 
+	var report_id = $('#report_type11').attr("value");
+	$('#submit_report_config_progress').show();
+	$('#report_config_submit_form').ajaxSubmit({
+		success: function() {
+			var labConfigID = $('.main-table').data('lab-config-id');
+			$('#submit_report_config_progress').hide();
+			window.location="lab_config_home.php?id="+labConfigID+"&rcfgupdate="+report_id;
+		}
+	});
+}
+
+function submit_ordered_fields_form()
+{ 
+	$('#ordered_fields_submit_progress').show();
+	
+	var p_fields = document.getElementById('p_fields');
+	var o_fields = document.getElementById('o_fields');
+	var p_fields_left="";
+	var o_fields_left="";
+	
+	for(var i=0;i<p_fields.options.length;i++)
+	{
+		p_fields_left = p_fields_left + ","+ p_fields.options[i].value;
+	}	
+	
+	for(var i=0;i<o_fields.options.length;i++)
+	{
+		o_fields_left = o_fields_left + ","+ o_fields.options[i].value;
+	}
+	
+	$('#p_fields_left').attr('value',p_fields_left);	
+	$('#o_fields_left').attr('value',o_fields_left);		
+	
+	$('#patient_fields_order_from').ajaxSubmit({
+		success: function() {
+			var labConfigID = $('.main-table').data('lab-config-id');
+			$('#ordered_fields_submit_progress').hide();
+			window.location="lab_config_home.php?id="+labConfigID+"&rpfoupdate=orderedfields";
+		}
+	});
+}
+
+function get_test_types_bycat()
+{
+	var cat_code = $('#cat_code12').attr("value");
+	var location_code = $('.main-table').data('lab-config-id');
+	$('#test_type12').load('ajax/tests_selectbycat.php?c='+cat_code+'&l='+location_code+'&all_no');
+}
+
+function fetch_worksheet_config()
+{
+	var labConfigID = $('.main-table').data('lab-config-id');
+	var cat_code = $('#cat_code12').attr("value");
+	var t_type = $('#test_type12').attr("value");
+	var url_string = "ajax/worksheet_config_fetch.php?l="+labConfigID+"&c="+cat_code+"&t="+t_type;
+	$('#worksheet_fetch_progress').show();
+	$('#worksheet_config_content').load(url_string, function() {
+		$('#worksheet_fetch_progress').hide();
+	});
+}
+
+function fetch_worksheet_summary()
+{
+	var labConfigID = $('.main-table').data('lab-config-id');
+	var cat_code = $('#cat_code12').attr("value");
+	var t_type = $('#test_type12').attr("value");
+	var url_string = "ajax/worksheet_config_summary.php?l="+labConfigID+"&c="+cat_code+"&t="+t_type;
+	$('#worksheet_fetch_progress').show();
+	$('#worksheet_config_content').load(url_string, function() {
+		$('#worksheet_fetch_progress').hide();
+	});
+}
+
+function update_worksheet_config()
+{
+	var labConfigID = $('.main-table').data('lab-config-id');
+	var cat_code = $('#cat_code12').attr("value");
+	var t_type = $('#test_type12').attr("value");
+	$('#submit_worksheet_config_progress').show();
+	$('#worksheet_config_submit_form').ajaxSubmit({
+		success: function() {
+			$('#submit_worksheet_config_progress').hide();
+			window.location="lab_config_home.php?id="+labConfigID+"&wcfgupdate="+cat_code+","+t_type;
+		}
+	});
 }
