@@ -1010,7 +1010,7 @@ function misc_checkandsubmit()
 				</p>
 				<b><?php echo LangUtil::$pageTerms['INSTRUMENTATION_INSTALL_DRIVERS']; ?></b> |
 
-				<a href='javascript:void(0)' class='new-driver'>Add New Driver</a>
+				<a href='javascript:void(0)' class='new-driver' data-reload-url='/ajax/instrumentation_reload_driver_list.php'>Add New Driver</a>
 
 				<br><br>
 				<div id='driver_list_table' class='instrumentation'>
@@ -1034,7 +1034,7 @@ function misc_checkandsubmit()
 										echo "<td>".$driver['description']."</td>";
 										echo "<td>".$driver['supported_tests']."</td>";
 										echo "<td>".$driver['provider']."</td>";
-										echo "<td><a href='javascript:void(0)' class='btn driver-delete' ";
+										echo "<td><a href='javascript:void(0)' class='btn instrument-delete' ";
 										echo "data-url='/ajax/instrumentation_delete_driver.php' data-id='".$driver['id']."'>";
 										echo LangUtil::$generalTerms['CMD_DELETE']."</a></td></tr>";
 									}
@@ -1101,7 +1101,7 @@ function misc_checkandsubmit()
 										echo "<td>".$instrument['ip_address']."</td>";
 										echo "<td>".$instrument['hostname']."</td>";
 										echo "<td><a href='javascript:void(0)' ";
-										echo "class='btn device-delete' data-id='".$instrument['id']."'>";
+										echo "class='btn instrument-delete' data-id='".$instrument['id']."'>";
 										echo LangUtil::$generalTerms['CMD_DELETE']."</a></td></tr>";
 									}
 								}else{

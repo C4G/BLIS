@@ -23,21 +23,12 @@ $(document).ready(function(){
 				$( this ).dialog( "close" );
 				var url = $(this).dialog("option", "url");
 				var id = $(this).dialog("option", "id");
-				alert(id + url);
+				$.post( url, { id: id } );
 			},
 			"Cancel": function() {
 				$( this ).dialog( "close" );
 			}
 		}
-	});
-
-	$( ".driver-delete" ).click(function() {
-		var url = $(this).data('url');
-		var id = $(this).data('id');
-
-		$( '#delete-confirm-dialog' ).dialog( "option", "url", url );
-		$( '#delete-confirm-dialog' ).dialog( "option", "id", id );
-		$( '#delete-confirm-dialog' ).dialog( "open" );
 	});
 
 	$( ".new-driver" ).click(function() {
@@ -46,6 +37,10 @@ $(document).ready(function(){
 			$(this).html( "View Driver List" );
 		}else{
 			$(this).html( "Add New Driver" );
+			var url = $(this).data('reload-url');
+			$.post( url, function(data){
+				$('#driver_list_table table tbody').html(data);
+			});
 		}
 
 		$('#driver_list_table').toggle();
@@ -1096,3 +1091,26 @@ function update_worksheet_config()
 		}
 	});
 }
+
+/**
+ *-----------------------------------
+ * Section for AJAX loaded components
+ *-----------------------------------
+ */
+$( document ).ajaxComplete(function() {
+
+	/*
+	 * Instrumentation
+	*/
+
+	$( ".instrument-delete" ).click(function() {
+		var url = $(this).data('url');
+		var id = $(this).data('id');
+
+		$( '#delete-confirm-dialog' ).dialog( "option", "url", url );
+		$( '#delete-confirm-dialog' ).dialog( "option", "id", id );
+		$( '#delete-confirm-dialog' ).dialog( "open" );
+	});
+
+
+});

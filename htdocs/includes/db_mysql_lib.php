@@ -13,6 +13,7 @@ $con = mysql_connect( $DB_HOST, $DB_USER, $DB_PASS );
 if (!$con) {
     die('Could not connect: ' . mysql_error());
 }
+
 $LOG_QUERIES = true;
 
 mysql_select_db( $DB_NAME, $con );
@@ -20,7 +21,7 @@ mysql_select_db( $DB_NAME, $con );
 function query_insert_one($query)
 {
 	# Single insert statement
-	global $con;
+	global $con, $LOG_QUERIES;
 	mysql_query( $query, $con ) or die(mysql_error());
 	if($LOG_QUERIES == true)
         {
@@ -34,9 +35,9 @@ function query_insert_one($query)
 function query_update($query)
 {	
 	# Single update statement
-	global $con;
+	global $con, $LOG_QUERIES;
     mysql_query( $query, $con ) or die(mysql_error());
-    $LOG_QUERIES = true;
+
 	if($LOG_QUERIES == true)	
         {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
@@ -47,7 +48,7 @@ function query_update($query)
 function query_delete($query)
 {
 	# Single delete from statement
-	global $con;
+	global $con, $LOG_QUERIES;
 	mysql_query( $query, $con ) or die(mysql_error());
 	if($LOG_QUERIES == true)
         {
@@ -70,7 +71,7 @@ function query_alter($query)
 
 function query_associative_all( $query, $row_count ) 
 {
-    global $con;
+    global $con, $LOG_QUERIES;
 	if( !($result = mysql_query( $query, $con ) ) ) 
 	{
         return null;
@@ -78,7 +79,7 @@ function query_associative_all( $query, $row_count )
 	$row_count = mysql_num_rows( $result );
     $retval = array();
     while ( $row = mysql_fetch_assoc($result) ){ $retval[] = $row; }
-    $LOG_QUERIES = true;
+
 	if($LOG_QUERIES == true)
         {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
@@ -89,13 +90,13 @@ function query_associative_all( $query, $row_count )
 
 function query_associative_one( $query ) 
 {
-    global $con;
+    global $con, $LOG_QUERIES;
 	if( !($result =  mysql_query( $query, $con ) ) ) 
 	{
         return null;
     }
     $retval = mysql_fetch_assoc( $result );
-    $LOG_QUERIES = true;
+
 	if($LOG_QUERIES == true)
     {
     	DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
