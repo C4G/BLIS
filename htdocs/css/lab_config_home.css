@@ -18,8 +18,11 @@
 *Instrumentation Styles
 */
 
-#install-new-driver,
-#configure-new-device {
+.new-instrument {
+  font-size: 0.9em;
+}
+
+.instruments-panel {
   display: none;
 }
   .instruments-panel{

@@ -1115,6 +1115,7 @@ class LabConfig
 
 	public function getInstrumentationDrivers()
 	{
+		$row_count = 0;
 		$saved_db = DbUtil::switchToGlobal();
 		$query_string = "SELECT id, alias, description, supported_tests, provider ".
 				"FROM machine_drivers ORDER BY alias";
@@ -1126,8 +1127,9 @@ class LabConfig
 
 	public function getInstrumentationMachines()
 	{
+		$row_count = 0;
 		$saved_db = DbUtil::switchToLabConfig($this->id);
-		$query_string = "SELECT name, ip_address, hostname, description ".
+		$query_string = "SELECT id, name, ip_address, hostname, description ".
 				"FROM test_machines ORDER BY name";
 		$resultset = query_associative_all($query_string, $row_count);
 

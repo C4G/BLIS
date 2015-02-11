@@ -1003,14 +1003,17 @@ function misc_checkandsubmit()
 				?>
 				</div>
 			</div>
-					
+					<!-- Instrumentation -->
 			<div class='right_pane' id='driver_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;">
 					<a rel='facebox' href='#UserAccounts_config'>Page Help</a>
 				</p>
 				<b><?php echo LangUtil::$pageTerms['INSTRUMENTATION_INSTALL_DRIVERS']; ?></b> |
 
-				<a href='javascript:void(0)' class='new-driver' data-reload-url='/ajax/instrumentation_reload_driver_list.php'>Add New Driver</a>
+				<a href='javascript:void(0)' class='new-instrument' data-relist='false'
+					data-reload-url='/ajax/instrumentation_reload_driver_list.php'
+					data-reload-element='#driver_list_table table tbody'
+					data-title='Add New Driver' data-title-swap='View Driver List'>Add New Driver</a>
 
 				<br><br>
 				<div id='driver_list_table' class='instrumentation'>
@@ -1045,26 +1048,26 @@ function misc_checkandsubmit()
 						</tbody>
 					</table>
 				</div>
-				<div id="install-new-driver" class="instruments-panel">
+				<div class="instruments-panel">
 					<div class="panel-header">
 						<h3 class="title">Install New Driver</h3>
 					</div><!-- /.panel-header -->
 					<form method='post' action='/ajax/instrumentation_add_driver.php' enctype="multipart/form-data">
-					<div class="panel-body">
-						<div class="panel-logo"></div>
-						<div class="panel-text">
-							<p>Install only drivers obtained from trusted sources!</p>
-							<div>
-								<input type='file' name='import-driver-file' id='import-driver-file' />
+						<div class="panel-body">
+							<div class="panel-logo"></div>
+							<div class="panel-text">
+								<p>Install only drivers obtained from trusted sources!</p>
+								<div>
+									<input type='file' name='import-driver-file' id='import-driver-file' />
+								</div>
 							</div>
-						</div>
-					</div><!-- /.panel-body -->
-					<div class="panel-footer">
-						<a class='btn close-new-driver' href='javascript:void(0)'>Cancel</a>
-						<a class='btn submit-new-driver-form' href='javascript:void(0)'>Save</a>
-					</div><!-- /.panel-footer -->
+						</div><!-- /.panel-body -->
+						<div class="panel-footer">
+							<a class='btn close-instruments-panel' href='javascript:void(0)'>Cancel</a>
+							<a class='btn submit-new-driver-form' href='javascript:void(0)'>Save</a>
+						</div><!-- /.panel-footer -->
 					</form>
-				</div><!-- /#install-new-driver -->
+				</div><!-- /.instruments-panel -->
 			</div>
 
 			<!-- Confirmation Delete modal -->
@@ -1078,7 +1081,10 @@ function misc_checkandsubmit()
 				</p>
 				<b><?php echo LangUtil::$pageTerms['INSTRUMENTATION_CONFIGURE_DEVICE']; ?></b> |
 
-				<a class='new-device' href='javascript:void(0)'>Add New Device</a>
+				<a href='javascript:void(0)' class='new-instrument' data-relist='false'
+					data-reload-url='/ajax/instrumentation_reload_device_list.php'
+					data-reload-element='#device_list_table table tbody'
+					data-title='Add New Device' data-title-swap='View Device List'>Add New Device</a>
 
 				<br><br>
 				<div id='device_list_table' class='instrumentation'>
@@ -1100,8 +1106,8 @@ function misc_checkandsubmit()
 										echo "<td>".$instrument['name']."</td>";
 										echo "<td>".$instrument['ip_address']."</td>";
 										echo "<td>".$instrument['hostname']."</td>";
-										echo "<td><a href='javascript:void(0)' ";
-										echo "class='btn instrument-delete' data-id='".$instrument['id']."'>";
+										echo "<td><a href='javascript:void(0)' class='btn instrument-delete' ";
+										echo "data-url='/ajax/instrumentation_delete_device.php' data-id='".$instrument['id']."'>";
 										echo LangUtil::$generalTerms['CMD_DELETE']."</a></td></tr>";
 									}
 								}else{
@@ -1111,51 +1117,51 @@ function misc_checkandsubmit()
 						</tbody>
 					</table>
 				</div>
-				<div id="configure-new-device" class="instruments-panel">
+				<div class="instruments-panel">
 					<div class="panel-header">
 						<h3 class="title">Configure New Device</h3>
 					</div><!-- /.panel-header -->
-						<form method='POST' action='/ajax/instrumentation_add_device.php' id='form_instruments_add'>
-					<div class="panel-body">
-						<div class="panel-row">
-							<label for='driver'>Driver</label>
-							<select type='text' class='form-input required' id='select-driver' name='driver'>
-								<?php 
-									$drivers = $lab_config->getInstrumentationDrivers();
-									if (count($drivers) > 0) {
-										foreach ($drivers as $driver) {
-											echo "<option value='".$driver['id']."'>".$driver['alias']."</option>";
+					<form method='POST' action='/ajax/instrumentation_add_device.php' id='form_instruments_add'>
+						<div class="panel-body">
+							<div class="panel-row">
+								<label for='driver'>Driver</label>
+								<select type='text' class='form-input required' id='select-driver' name='driver'>
+									<?php 
+										$drivers = $lab_config->getInstrumentationDrivers();
+										if (count($drivers) > 0) {
+											foreach ($drivers as $driver) {
+												echo "<option value='".$driver['id']."'>".$driver['alias']."</option>";
+											}
+										}else{
+											echo "<option value='0'>No drivers installed!</option>";
 										}
-									}else{
-										echo "<option value='0'>No drivers installed!</option>";
-									}
-								?>
-							</select>
-						</div> <!-- /.panel-row -->
-						<div class="panel-row">
-							<label for='name'>Name</label>
-							<input type='text' class='form-input required' name='name' placeholder='Beckman Coulter' />
-						</div> <!-- /.panel-row -->
-						<div class="panel-row">
-							<label for='description'>Description</label>
-							<textarea cols='30' rows='3' class='form-input' name='description' 
-								placeholder='Coulter counter connected to the comp in the Biochem Lab.'></textarea>
-						</div> <!-- /.panel-row -->
-						<div class="panel-row">
-							<label for='ip_address'>IP Address</label>
-							<input type='text' class='form-input required' name='ip_address' placeholder='10.0.0.125' />
-						</div> <!-- /.panel-row -->
-						<div class="panel-row">
-							<label for='host_name'>Host Name</label>
-							<input type='text' class='form-input' name='host_name' placeholder='BIOC_ONE' />
-						</div> <!-- /.panel-row -->
-					</div><!-- /.panel-body -->
-					<div class="panel-footer">
-						<a class='btn close-new-device' href='javascript:void(0)'>Cancel</a>
-						<a class='btn submit-new-device-form' href='javascript:void(0)'>Save</a>
-					</div><!-- /.panel-footer -->
-						</form>
-				</div><!-- /#configure-new-device -->
+									?>
+								</select>
+							</div> <!-- /.panel-row -->
+							<div class="panel-row">
+								<label for='name'>Name</label>
+								<input type='text' class='form-input required' name='name' placeholder='Beckman Coulter' />
+							</div> <!-- /.panel-row -->
+							<div class="panel-row">
+								<label for='description'>Description</label>
+								<textarea cols='30' rows='3' class='form-input' name='description' 
+									placeholder='Coulter counter connected to the comp in the Biochem Lab.'></textarea>
+							</div> <!-- /.panel-row -->
+							<div class="panel-row">
+								<label for='ip_address'>IP Address</label>
+								<input type='text' class='form-input required' name='ip_address' placeholder='10.0.0.125' />
+							</div> <!-- /.panel-row -->
+							<div class="panel-row">
+								<label for='host_name'>Host Name</label>
+								<input type='text' class='form-input' name='host_name' placeholder='BIOC_ONE' />
+							</div> <!-- /.panel-row -->
+						</div><!-- /.panel-body -->
+						<div class="panel-footer">
+							<a class='btn close-instruments-panel' href='javascript:void(0)'>Cancel</a>
+							<a class='btn submit-new-device-form' href='javascript:void(0)'>Save</a>
+						</div><!-- /.panel-footer -->
+					</form>
+				</div><!-- /.instruments-panel -->
 			</div>
 
 				<div class='right_pane' id='inventory_div' style='display:none;margin-left:10px;'>

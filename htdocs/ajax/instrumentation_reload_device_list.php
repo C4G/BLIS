@@ -13,8 +13,8 @@
 			$return_value .= "<td>".$instrument['name']."</td>";
 			$return_value .= "<td>".$instrument['ip_address']."</td>";
 			$return_value .= "<td>".$instrument['hostname']."</td>";
-			$return_value .= "<td><a href='javascript:void(0)' ";
-			$return_value .= "class='btn instrument-delete' data-id='".$instrument['id']."'>";
+			$return_value .= "<td><a href='javascript:void(0)' class='btn instrument-delete' ";
+			$return_value .= "data-url='/ajax/instrumentation_delete_device.php' data-id='".$instrument['id']."'>";
 			$return_value .= LangUtil::$generalTerms['CMD_DELETE']."</a></td></tr>";
 		}
 	}else{

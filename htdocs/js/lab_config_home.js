@@ -7,8 +7,9 @@ $(document).ready(function(){
 	$('#reorder_fields').hide();
 	$('#doctor_reorder_fields').hide();
 	
-	/* 
+	/* ------------------
 	 *Instrumentation JS
+	 * ------------------
 	 */
 	$('#instruments_menu').click(function(){
 		$('#instrumentation_setup').toggle();
@@ -31,40 +32,26 @@ $(document).ready(function(){
 		}
 	});
 
-	$( ".new-driver" ).click(function() {
+	$( ".new-instrument" ).click(function() {
 
-		if ($(this).html() == "Add New Driver") {
-			$(this).html( "View Driver List" );
+		if ($(this).data('relist') == "false") {
+			$(this).data('relist', "true");
+			$(this).html( $(this).data('title') );
 		}else{
-			$(this).html( "Add New Driver" );
+			$(this).html( $(this).data('title-swap') );
+			$(this).data('relist', "false");
 			var url = $(this).data('reload-url');
 			$.post( url, function(data){
-				$('#driver_list_table table tbody').html(data);
+				$( $(this).data('reload-element') ).html(data);
 			});
 		}
 
-		$('#driver_list_table').toggle();
-		$('#install-new-driver').toggle();
+		$(this).siblings('.instrumentation').toggle();
+		$(this).siblings('.instruments-panel').toggle();
 	});
 
-	$('.close-new-driver').click(function(){
-		$( ".new-driver" ).click();
-	});
-
-	$( ".new-device" ).click(function() {
-
-		if ($(this).html() == "Add New Device") {
-			$(this).html( "View Device List" );
-		}else{
-			$(this).html( "Add New Device" );
-		}
-
-		$('#device_list_table').toggle();
-		$('#configure-new-device').toggle();
-	});
-
-	$('.close-new-device').click(function(){
-		$( ".new-device" ).click();
+	$('.close-instruments-panel').click(function(){
+		$(this).closest('.instruments-panel').siblings('.new-instrument').click();
 	});
 
 	$('.submit-new-driver-form').click(function(){ // New driver form
@@ -99,7 +86,7 @@ $(document).ready(function(){
 		};
 	});
 
-	/*
+	/* 
 	 * End Instrumentation
 	 */
 
