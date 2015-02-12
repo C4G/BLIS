@@ -9,7 +9,7 @@
 	if(count($instruments) > 0){
 		$cnt = 1;
 		foreach ($instruments as $instrument) {
-			$return_value = "<tr><td>".$cnt++."</td>";
+			$return_value .= "<tr><td>".$cnt++."</td>";
 			$return_value .= "<td>".$instrument['name']."</td>";
 			$return_value .= "<td>".$instrument['ip_address']."</td>";
 			$return_value .= "<td>".$instrument['hostname']."</td>";

@@ -8,7 +8,7 @@
 
 	$instrument_id = $_POST['id'];
 
-	DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
 
 	$query = sprintf("DELETE FROM test_machines WHERE id = %s", mysql_real_escape_string($instrument_id));
 	query_delete($query);

@@ -130,3 +130,13 @@
   .instrumentation table{
     width: 100%;
   }
+
+.ui-dialog button {
+  height: auto;
+}
+  .ui-dialog button span{
+    padding: 0;
+  }
+  .ui-dialog .ui-dialog-buttonpane button span{
+    height: auto;
+  }

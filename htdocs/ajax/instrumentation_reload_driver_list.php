@@ -10,7 +10,7 @@
 	if(count($drivers) > 0){
 		$cnt = 1;
 		foreach ($drivers as $driver) {
-			$return_value = "<tr><td>".$cnt++."</td>";
+			$return_value .= "<tr><td>".$cnt++."</td>";
 			$return_value .= "<td>".$driver['alias']."</td>";
 			$return_value .= "<td>".$driver['description']."</td>";
 			$return_value .= "<td>".$driver['supported_tests']."</td>";

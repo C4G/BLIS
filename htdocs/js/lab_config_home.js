@@ -8,7 +8,7 @@ $(document).ready(function(){
 	$('#doctor_reorder_fields').hide();
 	
 	/* ------------------
-	 *Instrumentation JS
+	 *  Instrumentation JS
 	 * ------------------
 	 */
 	$('#instruments_menu').click(function(){
@@ -21,10 +21,19 @@ $(document).ready(function(){
 		modal: true,
 		buttons: {
 			"Delete": function() {
-				$( this ).dialog( "close" );
+				$(this).dialog( "close" );
 				var url = $(this).dialog("option", "url");
 				var id = $(this).dialog("option", "id");
+				var link = $($(this).dialog("option", "link")).closest('.instrumentation').siblings('.new-instrument');
+
 				$.post( url, { id: id } );
+
+				var reloadURI = link.data('reload-url');
+				var el = link.data('reload-element');
+
+				$.post( reloadURI, function(data){
+					$( el ).html(data);
+				});
 			},
 			"Cancel": function() {
 				$( this ).dialog( "close" );
@@ -35,15 +44,18 @@ $(document).ready(function(){
 	$( ".new-instrument" ).click(function() {
 
 		if ($(this).data('relist') == "false") {
+
 			$(this).data('relist', "true");
-			$(this).html( $(this).data('title') );
-		}else{
 			$(this).html( $(this).data('title-swap') );
-			$(this).data('relist', "false");
+
 			var url = $(this).data('reload-url');
+			var el = $(this).data('reload-element');
 			$.post( url, function(data){
-				$( $(this).data('reload-element') ).html(data);
+				$( el ).html(data);
 			});
+		}else{
+			$(this).html( $(this).data('title') );
+			$(this).data('relist', "false");
 		}
 
 		$(this).siblings('.instrumentation').toggle();
@@ -63,8 +75,8 @@ $(document).ready(function(){
 
 			$.ajax({ url:formURI, type:"POST", data:formData, async: false, cache: false, contentType: false, processData: false })
 				.done(function(data){
-					alert(data);
-					$( ".new-driver" ).click();
+					// alert(data);
+					$( ".new-instrument" ).click();
 				});
 		}else{
 			alert("Please select a file!");
@@ -77,8 +89,8 @@ $(document).ready(function(){
 		if ($('#select-driver').val() > 0) {
 			$.post( url, form.serialize() )
 				.done(function(data){
-					alert(data);
-					$( ".new-device" ).click();
+					// alert(data);
+					$( ".new-instrument" ).click();
 				});
 		}else{
 
@@ -1096,6 +1108,7 @@ $( document ).ajaxComplete(function() {
 
 		$( '#delete-confirm-dialog' ).dialog( "option", "url", url );
 		$( '#delete-confirm-dialog' ).dialog( "option", "id", id );
+		$( '#delete-confirm-dialog' ).dialog( "option", "link", this );
 		$( '#delete-confirm-dialog' ).dialog( "open" );
 	});
 

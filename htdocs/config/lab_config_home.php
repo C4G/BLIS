@@ -1013,7 +1013,7 @@ function misc_checkandsubmit()
 				<a href='javascript:void(0)' class='new-instrument' data-relist='false'
 					data-reload-url='/ajax/instrumentation_reload_driver_list.php'
 					data-reload-element='#driver_list_table table tbody'
-					data-title='Add New Driver' data-title-swap='View Driver List'>Add New Driver</a>
+					data-title='View Driver List' data-title-swap='Add New Driver'>Add New Driver</a>
 
 				<br><br>
 				<div id='driver_list_table' class='instrumentation'>
@@ -1084,7 +1084,7 @@ function misc_checkandsubmit()
 				<a href='javascript:void(0)' class='new-instrument' data-relist='false'
 					data-reload-url='/ajax/instrumentation_reload_device_list.php'
 					data-reload-element='#device_list_table table tbody'
-					data-title='Add New Device' data-title-swap='View Device List'>Add New Device</a>
+					data-title='View Device List' data-title-swap='Add New Device'>Add New Device</a>
 
 				<br><br>
 				<div id='device_list_table' class='instrumentation'>
