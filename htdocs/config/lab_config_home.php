@@ -1048,7 +1048,7 @@ function misc_checkandsubmit()
 						</tbody>
 					</table>
 				</div>
-				<div class="instruments-panel">
+				<div class="instruments-panel hide">
 					<div class="panel-header">
 						<h3 class="title">Install New Driver</h3>
 					</div><!-- /.panel-header -->
@@ -1076,17 +1076,19 @@ function misc_checkandsubmit()
 			</div>
 
 			<div class='right_pane' id='device_div' style='display:none;margin-left:10px;'>
-				<p style="text-align: right;">
-					<a rel='facebox' href='#UserAccounts_config'>Page Help</a>
-				</p>
+				<div class='alerts-pane'>
+					<div class='alerts-display hide'>...</div>
+					<div class='help-link'>
+						<a rel='facebox' href='#UserAccounts_config'>Page Help</a>
+					</div>
+				</div>
 				<b><?php echo LangUtil::$pageTerms['INSTRUMENTATION_CONFIGURE_DEVICE']; ?></b> |
 
 				<a href='javascript:void(0)' class='new-instrument' data-relist='false'
 					data-reload-url='/ajax/instrumentation_reload_device_list.php'
 					data-reload-element='#device_list_table table tbody'
 					data-title='View Device List' data-title-swap='Add New Device'>Add New Device</a>
-
-				<br><br>
+				<br>
 				<div id='device_list_table' class='instrumentation'>
 					<table class='hor-minimalist-b'>
 						<thead><tr>
@@ -1117,7 +1119,7 @@ function misc_checkandsubmit()
 						</tbody>
 					</table>
 				</div>
-				<div class="instruments-panel">
+				<div class="instruments-panel hide">
 					<div class="panel-header">
 						<h3 class="title">Configure New Device</h3>
 					</div><!-- /.panel-header -->

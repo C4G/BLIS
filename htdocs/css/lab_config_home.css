@@ -18,13 +18,27 @@
 *Instrumentation Styles
 */
 
+.hide {
+  display: none;
+}
+
+.alerts-pane{
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+  .alerts-pane .alerts-display {
+    font-size: 0.85em;
+    font-weight: bold;
+    color: red;
+  }
+  .alerts-pane .help-link {
+    float: right;
+  }
+
 .new-instrument {
   font-size: 0.9em;
 }
 
-.instruments-panel {
-  display: none;
-}
   .instruments-panel{
     min-width: 500px;
     border: 1px solid #B3C6E6;

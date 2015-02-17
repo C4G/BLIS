@@ -7,12 +7,16 @@ $(document).ready(function(){
 	$('#reorder_fields').hide();
 	$('#doctor_reorder_fields').hide();
 	
-	/* ------------------
+	/* ----------------------------------------------------------
 	 *  Instrumentation JS
 	 * ------------------
 	 */
 	$('#instruments_menu').click(function(){
 		$('#instrumentation_setup').toggle();
+
+		if($('#instrumentation_setup').is(':visible')){
+			right_load(51, 'driver_div');
+		}
 	});
 
 	$('#delete-confirm-dialog').dialog({
@@ -28,12 +32,8 @@ $(document).ready(function(){
 
 				$.post( url, { id: id } );
 
-				var reloadURI = link.data('reload-url');
-				var el = link.data('reload-element');
-
-				$.post( reloadURI, function(data){
-					$( el ).html(data);
-				});
+				link.click();
+				link.click();
 			},
 			"Cancel": function() {
 				$( this ).dialog( "close" );
@@ -75,7 +75,6 @@ $(document).ready(function(){
 
 			$.ajax({ url:formURI, type:"POST", data:formData, async: false, cache: false, contentType: false, processData: false })
 				.done(function(data){
-					// alert(data);
 					$( ".new-instrument" ).click();
 				});
 		}else{
@@ -86,20 +85,33 @@ $(document).ready(function(){
 	$('.submit-new-device-form').click(function(){ // New device form
 		var form = $(this).parents('form');
 		var url = form.attr('action');
-		if ($('#select-driver').val() > 0) {
+
+		var required = form.find('.required');
+		var cnt = 0;
+		var errorMessage = "";
+
+		// Validation
+		required.each(function( index, element ) {
+			if($(element).val() == ''){
+				errorMessage = $(element).siblings('label').html() + " is required!";
+				return false;
+			}
+			cnt++;
+		});
+
+		if (required.size() == cnt) {
 			$.post( url, form.serialize() )
 				.done(function(data){
-					// alert(data);
 					$( ".new-instrument" ).click();
 				});
 		}else{
-
-			alert($('#select-driver').siblings('label').html() + " must be selected!");
+			$('.alerts-display').html(errorMessage).show();
 		};
 	});
 
 	/* 
 	 * End Instrumentation
+	 *-----------------------------------------------------
 	 */
 
 	$('#cat_code12').change( function() { get_test_types_bycat() });
