@@ -19,7 +19,7 @@
     }
     // Allow certain file formats
     if($fileType != "php") {
-        echo "Invalid script file!<br>";
+        echo "Invalid driver file!<br>";
         $uploadOk = 0;
     }
     // Check if $uploadOk is set to 0 by an error
@@ -29,31 +29,44 @@
     } else {
         if (move_uploaded_file($_FILES["import-driver-file"]["tmp_name"], $target_file)) {
             $className = basename($_FILES["import-driver-file"]["name"], ".php");
-            echo "The file $className has been uploaded.";
 
             include($_SERVER['DOCUMENT_ROOT'].'/autoloader.php');
 
-            try {
-                $pluginInfo = (new $className('127.0.0.1'))->getEquipmentInfo();
+            if (class_exists($className)) {
+                $instrument = new $className('127.0.0.1');
+                if(method_exists($instrument, 'getEquipmentInfo')){
 
-                $saved_db = DbUtil::switchToGlobal();
+                    try {
+                        $pluginInfo = $instrument->getEquipmentInfo();
 
-                $queryString = "INSERT INTO machine_drivers (driver_name, alias, description, provider, supported_tests)".
-                                " VALUES ('%s', '%s', '%s', '%s', '%s')";
-                $queryString = sprintf($queryString,
-                                mysql_real_escape_string($className),
-                                mysql_real_escape_string($pluginInfo['name']),
-                                mysql_real_escape_string($pluginInfo['description']),
-                                mysql_real_escape_string($pluginInfo['code']),
-                                mysql_real_escape_string(implode(",", $pluginInfo['testTypes'])));
+                        $saved_db = DbUtil::switchToGlobal();
 
-                query_insert_one($queryString);
-                DbUtil::switchRestore($saved_db);
+                        $queryString = "INSERT INTO machine_drivers (driver_name, alias, description, provider, supported_tests)".
+                                        " VALUES ('%s', '%s', '%s', '%s', '%s')";
+                        $queryString = sprintf($queryString,
+                                        mysql_real_escape_string($className),
+                                        mysql_real_escape_string($pluginInfo['name']),
+                                        mysql_real_escape_string($pluginInfo['description']),
+                                        mysql_real_escape_string($pluginInfo['code']),
+                                        mysql_real_escape_string(implode(",", $pluginInfo['testTypes'])));
 
-            } catch (Exception $e) {
-                echo $e->getMessage()."\n";                
+                        query_insert_one($queryString);
+                        DbUtil::switchRestore($saved_db);
+
+                        echo "The file $className has been uploaded.";
+                    } catch (Exception $e) {
+                        // Delete corresponding driver file
+                        unlink(realpath($target_file));
+                        echo "Sorry, there was an error uploading the driver.";
+                    }
+                }else{
+                    echo "Invalid driver file!<br>";
+                    unlink(realpath($target_file));
+                }
+            }else{
+                echo "Invalid driver file!<br>";
+                unlink(realpath($target_file));
             }
-
         } else {
             echo "Sorry, there was an error uploading the driver.";
         }

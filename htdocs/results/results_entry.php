@@ -224,26 +224,6 @@ function fetch_specimen_by_lab_section()
 }
 
 
-/* function fetch_specimenPat(patientId,specimenId)
-{
-var pg=2;
-	$('#fetch_progress_bar').show();
-	var url = 'ajax/specimen_form_fetch.php';
-	//var target_div = "fetch_specimen";
-	$('.result_form_pane_patient_').html("Patient Id - "+patientId+" SpecimenID - "+specimenId);
-	/* var target_div = "result_form_pane_patient_"+specimen_id;
-	$("#"+target_div).load(url, 
-		{sid: specimen_id , page_id:pg}, 
-		function() 
-		{
-			$('#fetch_progress_bar').hide();
-			$("#fetched_specimen").show();
-		}
-	); 
-} */
-
-
-
 function fetch_specimen2(specimen_id)
 {
 var pg=2;
@@ -266,26 +246,20 @@ function fetch_specimen3(specimen_id, test_id)
 {
 	$('#fetch_progress_bar').show();
 	var rows = $('table.tablesorter tr');
-	//$('.related_tests_tr_'+specimen_id).toggle();
-	//alert("Specimen ID "+specimen_id+" And Existing Test ID "+test_id);
-	//$("#result_form_pane_batch_"+specimen_id).html("Specimen Id : "+specimen_id);
-	//rows.hide();
-	//rows.filter('.related_tests_tr_'+specimen_id).hide();
-	//alert("Specimen ID "+specimen_id+" And Existing Test ID "+test_id);
+
 	rows.filter('.related_tests_tr_'+specimen_id).show();
 	var url = "related_tests_results_entry.php";
 	window.location = url+"?specimen_id="+specimen_id+"&test_id="+test_id;
-	//$('#fetch_progress_bar').hide();
 }
 
 function verify_control_selection() {
 	$('#control_testing_error').hide();
 	var test_type_id = $('#verify_test_type_control').attr("value");
 	alert(test_type_id);
-	//var result = $('#control_testing_form').value("controlTesting");
+
 	var result = document.getElementById('controlTesting').value;
 	alert(result);
-	//alert(testName);
+
 	if(test_type_id == "")
 	{	
 		$('#control_testing_error').show();
@@ -293,8 +267,6 @@ function verify_control_selection() {
 	}
 	
 	$('#control_result_done').show();
-	
-	//$('#control_testing_form').submit();
 }
 
 function toggle_form(form_id, checkbox_obj)
@@ -324,7 +296,6 @@ function submit_forms(specimen_id)
 		}
 	}
 
-	//alert(form_id_list.length + " " + resultAvailable);
 	if(resultAvailable>1 && resultAvailable == form_id_list.length){
 		alert("Enter at least one result to submit ");
 		return;
@@ -332,7 +303,7 @@ function submit_forms(specimen_id)
 
 	$('.result_cancel_link').hide();
 	$('.result_progress_spinner').show();
-	//var target_div_id = "fetched_specimen";
+
 	var target_div_id = "result_form_pane_"+specimen_id;
 	var count = 0;
 	for(var i = 0; i < form_id_list.length; i++)
@@ -360,9 +331,6 @@ function submit_forms(specimen_id)
 				}
 				continue;
 			}
-		
-		
-		
 	}
 	$('.result_progress_spinner').hide();
 }
@@ -530,7 +498,7 @@ function update_remarks(test_type_id, count, patient_age, patient_sex)
 	 var url_string = "ajax/fetch_remarks.php";
 	values_csv = encodeURIComponent(values_csv);
 	var data_string = "lid=<?php echo $_SESSION['lab_config_id']; ?>&ttype="+test_type_id+"&values_csv="+values_csv+"&patient_age="+patient_age+"&patient_sex="+patient_sex;
-	// var data_string = "lid=<?php echo $_SESSION['lab_config_id']; ?>&ttype="+test_type_id+"&values_csv="+values_csv;
+
 	 $.ajax({
 	 type: "POST",
 		 url: url_string,
@@ -556,7 +524,8 @@ function hideCondition(p_attrib)
 
 	<?php  
 	global $LIS_VERIFIER;
-	if($user_level != $LIS_VERIFIER){?>
+	if($user_level != $LIS_VERIFIER){
+	?>
 		<a href="javascript:right_load('specimen_results');" title='Enter Test Results for a Single Specimen' 
 			class='menu_option' id='specimen_results_menu'
 		>
