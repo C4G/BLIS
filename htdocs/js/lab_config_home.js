@@ -75,10 +75,12 @@ $(document).ready(function(){
 
 			$.ajax({ url:formURI, type:"POST", data:formData, async: false, cache: false, contentType: false, processData: false })
 				.done(function(data){
+					$('.alerts-display').html(data).show().fadeOut(10000);
 					$( ".new-instrument" ).click();
 				});
 		}else{
-			alert("Please select a file!");
+			var errorMessage = "Please select a file!";
+			$('.alerts-display').html(errorMessage).show().fadeOut(10000);
 		};
 	});
 
@@ -105,7 +107,7 @@ $(document).ready(function(){
 					$( ".new-instrument" ).click();
 				});
 		}else{
-			$('.alerts-display').html(errorMessage).show();
+			$('.alerts-display').html(errorMessage).show().fadeOut(10000);
 		};
 	});
 

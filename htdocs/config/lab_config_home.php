@@ -20,10 +20,10 @@ $script_elems->enableJQueryForm();
 ?>
 
   
-<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="js/jquery-ui-1.10.0.custom.min.js"></script>
 <script src="js/lab_config_home.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" type="text/css" media="all"> 
+<link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.min.css" type="text/css" media="all"> 
 <link rel="stylesheet" href="css/lab_config_home.css" type="text/css" media="all"> 
 
 <div id='Summary_config' class='right_pane' style='display:none;margin-left:10px;'>
@@ -1005,9 +1005,12 @@ function misc_checkandsubmit()
 			</div>
 					<!-- Instrumentation -->
 			<div class='right_pane' id='driver_div' style='display:none;margin-left:10px;'>
-				<p style="text-align: right;">
-					<a rel='facebox' href='#UserAccounts_config'>Page Help</a>
-				</p>
+				<div class='alerts-pane'>
+					<div class='alerts-display hide'>...</div>
+					<div class='help-link'>
+						<a rel='facebox' href='#UserAccounts_config'>Page Help</a>
+					</div>
+				</div>
 				<b><?php echo LangUtil::$pageTerms['INSTRUMENTATION_INSTALL_DRIVERS']; ?></b> |
 
 				<a href='javascript:void(0)' class='new-instrument' data-relist='false'
@@ -1088,7 +1091,7 @@ function misc_checkandsubmit()
 					data-reload-url='/ajax/instrumentation_reload_device_list.php'
 					data-reload-element='#device_list_table table tbody'
 					data-title='View Device List' data-title-swap='Add New Device'>Add New Device</a>
-				<br>
+				<br><br>
 				<div id='device_list_table' class='instrumentation'>
 					<table class='hor-minimalist-b'>
 						<thead><tr>

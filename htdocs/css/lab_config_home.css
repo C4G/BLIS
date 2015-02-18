@@ -27,9 +27,14 @@
   overflow: hidden;
 }
   .alerts-pane .alerts-display {
-    font-size: 0.85em;
+    background-color: #F9EDBE;
+    border: 1px solid #F0C36D;
+    border-radius: 2px;
+    color: #222;
+    float: left;
+    font-size: 0.8em;
     font-weight: bold;
-    color: red;
+    padding: 5px 20px;
   }
   .alerts-pane .help-link {
     float: right;

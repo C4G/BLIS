@@ -9,17 +9,17 @@
 
     // Check if file already exists
     if (file_exists($target_file)) {
-        echo "Sorry, the driver file already exists.";
+        echo "The driver file already exists.<br>";
         $uploadOk = 0;
     }
     // Check file size
     if ($_FILES["import-driver-file"]["size"] > 500000) {
-        echo "Sorry, your file is too large.";
+        echo "Your file is too large.<br>";
         $uploadOk = 0;
     }
     // Allow certain file formats
     if($fileType != "php") {
-        echo "Invalid script file!";
+        echo "Invalid script file!<br>";
         $uploadOk = 0;
     }
     // Check if $uploadOk is set to 0 by an error
