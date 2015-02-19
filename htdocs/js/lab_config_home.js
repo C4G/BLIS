@@ -58,30 +58,54 @@ $(document).ready(function(){
 			$(this).data('relist', "false");
 		}
 
+		if($('.instruments-mapping').is(':visible')){
+			$('.instruments-mapping').hide();
+			$('.instruments-mapping').siblings('.generic').show();
+		}
 		$(this).siblings('.instrumentation').toggle();
-		$(this).siblings('.instruments-panel').toggle();
+		$(this).siblings('.instruments-panel.generic').toggle();
 	});
 
 	$('.close-instruments-panel').click(function(){
 		$(this).closest('.instruments-panel').siblings('.new-instrument').click();
 	});
 
+	$('.close-instruments-mapping').click(function(){
+		var thisPanel = $(this).closest('.instruments-panel');
+
+		thisPanel.siblings('.generic').show();
+		thisPanel.siblings('.new-instrument').click();
+	});
+
 	$('.submit-new-driver-form').click(function(){ // New driver form
 		var form = $(this).parents('form');
 		var formURI = form.attr('action');
 		var formData = new FormData(form[0]);
+		var errorMessage = "Please select a file!";
 
 		if($('#import-driver-file').val() != ''){
 
 			$.ajax({ url:formURI, type:"POST", data:formData, async: false, cache: false, contentType: false, processData: false })
 				.done(function(data){
-					$('.alerts-display').html(data).show().fadeOut(10000);
-					$( ".new-instrument" ).click();
+
+					if (data.trim().localeCompare("The driver has been successfully uploaded.") == 0) {
+						// Show test mapping interface
+						$.post($('.instruments-mapping').data('url'))
+							.done(function(output){
+								$('.instruments-mapping').find('.panel-body').html(output);
+							});
+
+						$('.instruments-panel.generic').hide();
+						$('.instruments-mapping').show();
+
+					} else{
+						$( ".new-instrument" ).click();
+					};
+					errorMessage = data;
 				});
-		}else{
-			var errorMessage = "Please select a file!";
-			$('.alerts-display').html(errorMessage).show().fadeOut(10000);
-		};
+		}
+
+		$('.alerts-display').html(errorMessage).show().fadeOut(8000);
 	});
 
 	$('.submit-new-device-form').click(function(){ // New device form
@@ -107,7 +131,7 @@ $(document).ready(function(){
 					$( ".new-instrument" ).click();
 				});
 		}else{
-			$('.alerts-display').html(errorMessage).show().fadeOut(10000);
+			$('.alerts-display').html(errorMessage).show().fadeOut(8000);
 		};
 	});
 

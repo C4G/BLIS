@@ -1693,6 +1693,19 @@ class TestType
 		
 		return $retVal['name'];
 	}
+	
+	public function hasInstrument()
+	{
+		$query_string = "SELECT COUNT(DISTINCT test_machine_id) AS cnt FROM `test_type_instruments` WHERE `test_type_id` = $testTypeId";
+		
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+
+		$retVal = query_associative_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+		
+		return $retVal['cnt'];
+	}
 }
 
 class SpecimenType

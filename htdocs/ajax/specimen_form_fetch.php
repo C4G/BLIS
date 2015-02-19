@@ -44,7 +44,7 @@ function get_result_form($test_type, $test_id, $num_tests, $patient)
 		* Display fetch button if this test is configured to accept input from an instrument
 		*/
 
-		if($test_type->hasInstrument()){
+		if($test_type->hasInstrument() > 0){
 			echo "<div class='fetch-from-instrument'>";
 			echo "<a href='javascript:void(0);' class='btn' title='Fetch from Instrument'>Fetch</a>";
 			echo "</div>";

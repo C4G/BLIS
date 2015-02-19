@@ -1051,7 +1051,7 @@ function misc_checkandsubmit()
 						</tbody>
 					</table>
 				</div>
-				<div class="instruments-panel hide">
+				<div class="instruments-panel generic hide">
 					<div class="panel-header">
 						<h3 class="title">Install New Driver</h3>
 					</div><!-- /.panel-header -->
@@ -1068,6 +1068,19 @@ function misc_checkandsubmit()
 						<div class="panel-footer">
 							<a class='btn close-instruments-panel' href='javascript:void(0)'>Cancel</a>
 							<a class='btn submit-new-driver-form' href='javascript:void(0)'>Save</a>
+						</div><!-- /.panel-footer -->
+					</form>
+				</div><!-- /.instruments-panel -->
+				<div class="instruments-mapping instruments-panel hide" data-url='/ajax/instrumentation_load_mapping_interface.php'>
+					<div class="panel-header">
+						<h3 class="title">Map Results to Test Types</h3>
+					</div><!-- /.panel-header -->
+					<form method='POST' action='/ajax/instrumentation_save_mappings.php'>
+						<div class="panel-body">
+						</div><!-- /.panel-body -->
+						<div class="panel-footer">
+							<a class='btn close-instruments-mapping' href='javascript:void(0)'>Cancel</a>
+							<a class='btn submit-new-device-mappings-form' href='javascript:void(0)'>Save</a>
 						</div><!-- /.panel-footer -->
 					</form>
 				</div><!-- /.instruments-panel -->
@@ -1122,7 +1135,7 @@ function misc_checkandsubmit()
 						</tbody>
 					</table>
 				</div>
-				<div class="instruments-panel hide">
+				<div class="instruments-panel generic hide">
 					<div class="panel-header">
 						<h3 class="title">Configure New Device</h3>
 					</div><!-- /.panel-header -->

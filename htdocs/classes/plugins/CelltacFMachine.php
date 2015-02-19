@@ -41,14 +41,15 @@ class CelltacFMachine extends AbstractInstrumentor
 	/**
 	* Returns information about an instrument 
 	*
-	* @return array('name' => '', 'description' => '', 'testTypes' => array()) 
+	* @return array('name' => '', 'description' => '', 'testTypes' => array(), 'measures' => array()) 
 	*/
     public function getEquipmentInfo(){
     	return array(
     		'code' => 'CF8222', 
     		'name' => 'Celltac F Mek 8222', 
     		'description' => 'Automatic analyzer with 22 parameters and WBC 5 part diff Hematology Analyzer',
-    		'testTypes' => array("Full Haemogram", "WBC")
+    		'testTypes' => array("Full Haemogram", "WBC"),
+                'measures' => $this->RESULTS_KEYS
     		);
     }
 

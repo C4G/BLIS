@@ -53,7 +53,7 @@
                         query_insert_one($queryString);
                         DbUtil::switchRestore($saved_db);
 
-                        echo "The file $className has been uploaded.";
+                        echo "The driver has been successfully uploaded.";
                     } catch (Exception $e) {
                         // Delete corresponding driver file
                         unlink(realpath($target_file));
