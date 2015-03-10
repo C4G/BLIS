@@ -1136,7 +1136,22 @@ class LabConfig
 		DbUtil::switchRestore($saved_db);
 		return $resultset;
 	}
-	
+
+	public function getInstrumentationTestMappings($driverID = 0)
+	{
+		$row_count = 0;
+		$saved_db = DbUtil::switchToLabConfig($this->id);
+		$query_string = "SELECT tti.result_key, tt.name AS test_type, m.name AS measure ".
+			"FROM test_type_instruments AS tti LEFT JOIN test_type AS tt ON tti.test_type_id = tt.test_type_id ".
+			"LEFT JOIN measure AS m ON tti.measure_id = m.measure_id ";
+		$query_string .= $driverID>0?"WHERE tti.machine_driver_id = $driverID":"";
+
+		$resultset = query_associative_all($query_string, $row_count);
+
+		DbUtil::switchRestore($saved_db);
+		return $resultset;
+	}
+
 }
 
 class ReportConfig

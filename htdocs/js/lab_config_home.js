@@ -11,6 +11,8 @@ $(document).ready(function(){
 	 *  Instrumentation JS
 	 * ------------------
 	 */
+	$('#driver_list_table').load('ajax/instrumentation_reload_driver_list.php');
+
 	$('#instruments_menu').click(function(){
 		$('#instrumentation_setup').toggle();
 
@@ -1150,5 +1152,36 @@ $( document ).ajaxComplete(function() {
 		$( '#delete-confirm-dialog' ).dialog( "open" );
 	});
 
+	$('.instrument-test-types').change(function(){
+		var testTypeID = $(this).val();
+		var url = "/ajax/instrumentation_get_testtype_measures.php";
+		var el = $( this ).closest('.panel-row').find('.instrument-measures');
 
+		$.post( url, { "test_type_id": testTypeID })
+			.done(function(data){
+				el.html(data);
+			});
+	});
+
+	$('.submit-new-device-mappings-form').click(function(){
+		var form = $(this).closest('form');
+		var url = form.attr('action');
+
+		$.post( url, form.serialize() )
+			.done(function(data){
+				$( ".new-instrument" ).click();
+			});
+	});
+
+	$('.instrument-view-details').click(function(){
+		var el = $(this).closest('tr').siblings().first();
+		el.toggle();
+
+		if(el.is(':hidden')){
+			$(this).html('View');
+		}else{
+			$(this).html('Hide');
+		}
+
+	});
 });

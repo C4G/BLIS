@@ -20,9 +20,26 @@
 
                 echo "<input type='hidden' name='machine_driver_id' value='".$record['id']."' />";
 
-                $labConfig = LabConfig::getById($_SESSION['lab_config_id']);
+                /*
+                *---------------------------------------------------------------------------
+                * Example of 2 functions (get_test_types_by_site and labConfig->getTestTypes) 
+                * designed to do the SAME thing 
+                * BUT doing it differently 
+                * AND giving DIFFERENT results for the SAME input
+                *---------------------------------------------------------------------------
+                *
+                * $testTypes = get_test_types_by_site($_SESSION['lab_config_id']);
+                *
+                *      OR
+                *
+                * $labConfig = LabConfig::getById($_SESSION['lab_config_id']);
+                * $testTypes = $labConfig->getTestTypes();
+                *
+                *---------------------------------------------------------------------------
+                */
 
-                $testTypes = $labConfig->getTestTypes();
+                $testTypes = get_test_types_by_site($_SESSION['lab_config_id']);
+
                 $testTypeOptions = "";
 
                 foreach ($testTypes as $testType) {
@@ -32,10 +49,11 @@
                 foreach ($pluginInfo['measures'] as $resultKey) {
                     echo "<div class='panel-row'>";
                     echo "<label>$resultKey</label>";
-                    echo "<select name='test_type' class='instrument-test-types'>";
+                    echo "<select name='test_type[]' class='instrument-test-types'>";
                     echo "<option value='0'>-- Select a test type --</option>$testTypeOptions</select>";
-                    echo "<select name='measure' class='instrument-measures'>";
+                    echo "<select name='measure[]' class='instrument-measures'>";
                     echo "<option value='0'>-- Select a measure --</option></select>";
+                    echo "<input type='hidden' name='result_key[]' value='$resultKey' />";
                     echo "</div>";
                 }
             } else {

@@ -28,6 +28,9 @@
 	$query = sprintf("DELETE FROM test_machines WHERE machine_driver_id = %s", mysql_real_escape_string($driver_id));
 	query_delete($query);
 
+	$query = sprintf("DELETE FROM test_type_instruments WHERE machine_driver_id = %s", mysql_real_escape_string($driver_id));
+	query_delete($query);
+
 	DbUtil::switchRestore($saved_db);
 
 	# Delete corresponding driver file

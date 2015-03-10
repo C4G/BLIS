@@ -22,6 +22,10 @@
   display: none;
 }
 
+.bordered-table{
+  border:1px solid #999999;
+}
+
 .alerts-pane{
   margin-bottom: 10px;
   overflow: hidden;

@@ -1003,7 +1003,7 @@ function misc_checkandsubmit()
 				?>
 				</div>
 			</div>
-					<!-- Instrumentation -->
+					<!-- INSTRUMENTATION -->
 			<div class='right_pane' id='driver_div' style='display:none;margin-left:10px;'>
 				<div class='alerts-pane'>
 					<div class='alerts-display hide'>...</div>
@@ -1015,42 +1015,13 @@ function misc_checkandsubmit()
 
 				<a href='javascript:void(0)' class='new-instrument' data-relist='false'
 					data-reload-url='/ajax/instrumentation_reload_driver_list.php'
-					data-reload-element='#driver_list_table table tbody'
+					data-reload-element='#driver_list_table'
 					data-title='View Driver List' data-title-swap='Add New Driver'>Add New Driver</a>
 
 				<br><br>
 				<div id='driver_list_table' class='instrumentation'>
-					<table class='hor-minimalist-b'>
-						<thead><tr>
-							<th>#</th>
-							<th>Driver Name</th>
-							<th>Description</th>
-							<th>Supported Tests</th>
-							<th>Provider</th>
-							<th></th></tr>
-						</thead>
-						<tbody>
-							<?php
-								$drivers = $lab_config->getInstrumentationDrivers();
-								if(count($drivers) > 0){
-									$cnt = 1;
-									foreach ($drivers as $driver) {
-										echo "<tr><td>".$cnt++."</td>";
-										echo "<td>".$driver['alias']."</td>";
-										echo "<td>".$driver['description']."</td>";
-										echo "<td>".$driver['supported_tests']."</td>";
-										echo "<td>".$driver['provider']."</td>";
-										echo "<td><a href='javascript:void(0)' class='btn instrument-delete' ";
-										echo "data-url='/ajax/instrumentation_delete_driver.php' data-id='".$driver['id']."'>";
-										echo LangUtil::$generalTerms['CMD_DELETE']."</a></td></tr>";
-									}
-								}else{
-									echo "<tr><td colspan='6'>No drivers found!</td></tr>";
-								}
-							?>
-						</tbody>
-					</table>
-				</div>
+					<!-- Loads via js: /ajax/instrumentation_reload_driver_list.php -->
+ 				</div>
 				<div class="instruments-panel generic hide">
 					<div class="panel-header">
 						<h3 class="title">Install New Driver</h3>
