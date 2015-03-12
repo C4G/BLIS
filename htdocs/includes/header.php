@@ -85,7 +85,7 @@ header('Content-Type: text/html; charset=UTF-8');
 	
 	
 	</head>
-	<body class='parent_pane'>
+	<body class='parent_pane' data-lab-config-id='<?php echo $_SESSION['lab_config_id']; ?>'>
 <?php $script_elems->enablePageloadIndicator(); ?>
 	<div id="top_pane">
 		<div id="top_pane_user_info">

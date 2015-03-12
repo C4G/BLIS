@@ -38,19 +38,6 @@ function get_result_form($test_type, $test_id, $num_tests, $patient)
 		update_remarks(<?php echo $test_type->testTypeId; ?>, <?php echo count($measure_list); ?>, <?php echo $patient->getAgeNumber(); ?>, '<?php echo $patient->sex;?>');
 	}
 	</script>
-	<?php
-		/*
-		*
-		* Display fetch button if this test is configured to accept input from an instrument
-		*/
-
-		if($test_type->hasInstrument() > 0){
-			echo "<div class='fetch-from-instrument'>";
-			echo "<a href='javascript:void(0);' class='btn' title='Fetch from Instrument'>Fetch</a>";
-			echo "</div>";
-
-		}
-	?>
 	<form name='<?php echo $curr_form_id; ?>' id='<?php echo $curr_form_id; ?>' action='' method=''>
 		<input type='hidden' name='test_id' value='<?php echo $test_id; ?>'></input>
 		<input type='hidden' name='specimen_id' value='<?php echo $specimen_id; ?>'></input>
@@ -110,7 +97,7 @@ function get_result_form($test_type, $test_id, $num_tests, $patient)
 	?>
         <div class='result-holder'>
 			<?php
-				echo "<label for='$input_id' data-measure='".$measure->getName()."'>$decName\n</label>";
+				echo "<label for='$input_id' class='mid-".$measure->measureId."'>$decName\n</label>";
 				$range = $measure->range;
 				$range_type = $measure->getRangeType();
 				$range_values = $measure->getRangeValues($patient);
@@ -336,29 +323,29 @@ $patient = get_patient_by_id($specimen->patientId);
 <?php
 if(0)
 {
-if($_SESSION['sid'] != 0)
-{
-	echo LangUtil::$generalTerms['SPECIMEN_ID'].": ";
-	$specimen->getAuxId();
-	echo "<br>";
-}
-if($_SESSION['pid'] != 0)
-{
-	echo LangUtil::$generalTerms['PATIENT_ID'].": ".$patient->surrogateId."<br>";
-}
-if($_SESSION['dnum'] != 0)
-{
-	echo LangUtil::$generalTerms['PATIENT_DAILYNUM'].": ".$specimen->getDailyNum()."<br>";
-}
-//if($_SESSION['pnamehide'] == 0)
-if($_SESSION['user_level'] == $LIS_TECH_SHOWPNAME)
-{
-	echo LangUtil::$generalTerms['PATIENT_NAME']; ?>: <?php echo $patient->name; 
-}
-else
-{
-	echo LangUtil::$generalTerms['GENDER']."/".LangUtil::$generalTerms['AGE'].": $patient->sex /".$patient->getAgeNumber()."<br>";
-}
+	if($_SESSION['sid'] != 0)
+	{
+		echo LangUtil::$generalTerms['SPECIMEN_ID'].": ";
+		$specimen->getAuxId();
+		echo "<br>";
+	}
+	if($_SESSION['pid'] != 0)
+	{
+		echo LangUtil::$generalTerms['PATIENT_ID'].": ".$patient->surrogateId."<br>";
+	}
+	if($_SESSION['dnum'] != 0)
+	{
+		echo LangUtil::$generalTerms['PATIENT_DAILYNUM'].": ".$specimen->getDailyNum()."<br>";
+	}
+	//if($_SESSION['pnamehide'] == 0)
+	if($_SESSION['user_level'] == $LIS_TECH_SHOWPNAME)
+	{
+		echo LangUtil::$generalTerms['PATIENT_NAME']; ?>: <?php echo $patient->name; 
+	}
+	else
+	{
+		echo LangUtil::$generalTerms['GENDER']."/".LangUtil::$generalTerms['AGE'].": $patient->sex /".$patient->getAgeNumber()."<br>";
+	}
 }
 ?>
 
@@ -369,63 +356,49 @@ else
 $related_test_count = 0;
 foreach($test_list as $test)
 {
-	//echo "TEST ID is : ".$test_id."<br/>";
-	//echo "TEST TYPE ID is : ".$test->testTypeId."<br/>";
-	if($test_id != -1){
-		if( $test->testTypeId != $test_id){
-	?>
-	<tr valign='top'>
-		<td>
-			<?php 
-			$test_type = get_test_type_by_id($test->testTypeId);
-			echo $test_type->getName(); 
-			?>
-		</td>
-		<td>
-			<?php
-			if($test->isPending() === false)
-			{
-				echo "(".LangUtil::$pageTerms['MSG_ALREADYENTERED'].") ";
-				echo $test->decodeResult();
-			}
-			else
-			{
-				get_result_form($test_type, $test->testId, count($test_list), $patient);
-			}
-			?>
-		</td>
-	</tr>
-	<?php 
+
+	if($test_id != -1 && $test->testTypeId != $test_id){
 		$related_test_count++;
 	}
+
+	if(($test_id != -1 && $test->testTypeId != $test_id) || $test_id == -1){
+	?>
+		<tr valign='top'>
+			<td>
+				<?php 
+				$test_type = get_test_type_by_id($test->testTypeId);
+				echo $test_type->getName(); 
+
+				/*
+				*-----------------Instrumentation--------------------
+				* Display fetch button if this test is configured to accept input from an instrument
+				*/
+
+				$driverID = $test_type->hasInstrument();
+				if($driverID > 0){
+					echo "<br /><br /><a href='javascript:void(0);' data-driver-id='$driverID' ";
+					echo "data-test-type-id='".$test->testTypeId."' class='btn fetch-from-instrument'";
+					echo " title='Fetch from Instrument'>Fetch</a>";
+				}
+				?>
+			</td>
+			<td>
+				<?php
+				if($test->isPending() === false)
+				{
+					echo "(".LangUtil::$pageTerms['MSG_ALREADYENTERED'].") ";
+					echo $test->decodeResult();
+				}
+				else
+				{
+					get_result_form($test_type, $test->testId, count($test_list), $patient);
+				}
+				?>
+			</td>
+		</tr>
+	<?php 
 	}
-	else {
-	?>
-	<tr valign='top'>
-		<td>
-			<?php 
-			$test_type = get_test_type_by_id($test->testTypeId);
-			echo $test_type->getName(); 
-			?>
-		</td>
-		<td>
-			<?php
-			if($test->isPending() === false)
-			{
-				echo "(".LangUtil::$pageTerms['MSG_ALREADYENTERED'].") ";
-				echo $test->decodeResult();
-			}
-			else
-			{
-				get_result_form($test_type, $test->testId, count($test_list), $patient);
-			}
-			?>
-		</td>
-	</tr>
-	
-	<?php }
-	?>
-	<?php
+
 }
 
 if($test_id != -1 && $related_test_count==0){

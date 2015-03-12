@@ -24,7 +24,6 @@ $locale_file = $_SESSION['langdata_path'].$_SESSION['locale'].".php";
 
 include($locale_catalog_file);
 include($locale_file);
-
 require_once("debug_lib.php");
 require_once("date_lib.php");
 //require_once("user_lib.php");
@@ -334,7 +333,7 @@ class FieldOrdering
 	
 	public static function deleteFieldOrderEntry($lab_config_id, $form_id){
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		//$query_delete = "DELETE FROM field_ordering WHERE lab_config_id=$lab_config_id AND form_id=$form_id";
+
 		$query_delete = "DELETE FROM field_order WHERE lab_config_id=$lab_config_id AND form_id=$form_id";
 		query_blind($query_delete);
 		DbUtil::switchRestore($saved_db);
@@ -1711,15 +1710,22 @@ class TestType
 	
 	public function hasInstrument()
 	{
-		$query_string = "SELECT COUNT(DISTINCT test_machine_id) AS cnt FROM `test_type_instruments` WHERE `test_type_id` = $testTypeId";
+		$query_string = "SELECT COUNT(DISTINCT tm.id) AS cnt, tti.machine_driver_id AS mdi
+						FROM `test_type_instruments` AS tti 
+						LEFT JOIN `test_machines` AS tm 
+						ON tti.machine_driver_id = tm.machine_driver_id
+						WHERE tti.`test_type_id` = ".$this->testTypeId;
 		
 		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
 
 		$retVal = query_associative_one($query_string);
 
 		DbUtil::switchRestore($saved_db);
-		
-		return $retVal['cnt'];
+
+		if($retVal['cnt'] > 0)
+			return $retVal['mdi'];
+		else
+			return 0;
 	}
 }
 
@@ -1857,18 +1863,6 @@ class Measure
 		}
 		else
 		{
-                    /*
-                    if(strpos($this->name, "\$sub") !== false)
-                    {
-                        $encName = $this->name;
-                        $start_tag = "\$sub*";
-                        $end_tag = "/\$";
-                        $subm_end = strpos($encName, $end_tag);
-                        $decName = substr($encName, $subm_end + 2);
-                        return $decName;
-                    }
-                    else
-                    */
 			return $this->name;
                     
 		}
@@ -1944,26 +1938,28 @@ class Measure
         #nc50
         public function getSubmeasuresAsObj()
         {
+        	$row_count = 0;
             $id = $this->measureId;
             $tagID = "\$sub*".$id."/\$";
             $submeasureList = array();
-             $query_string =
+			$query_string =
 			"SELECT * FROM measure ";
-		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$recordset = query_associative_all($query_string, $row_count);
-                DbUtil::switchRestore($saved_db);
-                foreach( $recordset as $record ) 
-                {
+			$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+			$recordset = query_associative_all($query_string, $row_count);
+            DbUtil::switchRestore($saved_db);
+
+            foreach( $recordset as $record ) 
+            {
 				$measureName = $record['name'];
-                                $smID = intval($record['measure_id']);
-                                if(strpos($measureName, $tagID) !== false)
-                                {
-                                    //echo "<br>---".strpos($measureName, $tagID);
-                                    $smObj = Measure::getById($record['measure_id']);
-                                    array_push($submeasureList, $smObj);
-                                }
-		}
-                return $submeasureList;
+                $smID = intval($record['measure_id']);
+                if(strpos($measureName, $tagID) !== false)
+                {
+                    //echo "<br>---".strpos($measureName, $tagID);
+                    $smObj = Measure::getById($record['measure_id']);
+                    array_push($submeasureList, $smObj);
+                }
+			}
+            return $submeasureList;
         }
         
         public function getSubmeasures()
@@ -1973,19 +1969,19 @@ class Measure
             $submeasureList = array();
              $query_string =
 			"SELECT * FROM measure ";
-		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$recordset = query_associative_one($query_string);
-                DbUtil::switchRestore($saved_db);
-                foreach( $recordset as $record ) 
-                {
+			$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+			$recordset = query_associative_one($query_string);
+            DbUtil::switchRestore($saved_db);
+            foreach( $recordset as $record ) 
+            {
 				$measureName = $record['name'];
-                                $smID = intval($record['measure_id']);
-                                if(strpos($measureName, $tagID) !== false)
-                                {
-                                    array_push($submeasureList, $smID);
-                                }
-		}
-                return $submeasureList;
+	            $smID = intval($record['measure_id']);
+	            if(strpos($measureName, $tagID) !== false)
+	            {
+	                array_push($submeasureList, $smID);
+	            }
+			}
+            return $submeasureList;
         }
         
 	public function getRangeValues($patient=null)
@@ -4916,6 +4912,7 @@ class ReferenceRange
 	{
 		# Fetches the reference range based on supplied age and sex values
 		global $con;
+		$row_count = 0;
 		$measure_id = mysql_real_escape_string($measure_id, $con);
 		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 		$age = mysql_real_escape_string($age, $con);
@@ -7479,6 +7476,7 @@ function get_pending_tests_by_type_date($test_type_id, $date_from,$date_to)
 function get_tests_by_specimen_id($specimen_id)
 {
 	global $con;
+	$row_count = 0;
 	$specimen_id = mysql_real_escape_string($specimen_id, $con);
 	# Returns list of tests scheduled for this given specimen
 	$query_string = "SELECT * FROM test WHERE specimen_id=$specimen_id";

@@ -44,7 +44,7 @@
 			$return_value .= $driver['description']."<br /><br />$map</td><td></td></tr>";
 		}
 	}else{
-		$return_value = "<tr><td colspan='4'>No drivers found!</td></tr>";
+		$return_value .= "<tr><td colspan='4'>No drivers found!</td></tr>";
 	}
 
 	echo $return_value."</tbody></table>";

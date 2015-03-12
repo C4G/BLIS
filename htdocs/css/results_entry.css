@@ -1,0 +1,31 @@
+label
+{
+	width: 10em;
+	float: left;
+	text-align: right;
+	margin-right: 0.5em;
+	display: block
+}
+
+/*
+*Instrumentation Styles
+*/
+a.btn.fetch-from-instrument{
+	margin-right: 5px;
+	padding: 5px 10px;
+	border: 1px solid #CCCCCC;
+	border-radius: 4px;
+	background-color: #B3C6E6;
+	height: 28px;
+	line-height: 28px;
+	font-weight: bold;
+	min-width: 75px;
+	text-align: center;
+}
+
+a.btn.fetch-from-instrument:hover{
+	background-color: #B6C9E9;
+	border: 1px solid #B3C6E6;
+	color:#2B70B6;
+	text-decoration: none;
+}
