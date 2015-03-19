@@ -1,0 +1,30 @@
+2015-02-02 09:55:20	testlab1_admin	blis_revamp	SELECT * FROM user WHERE user_id=53 LIMIT 1
+2015-02-02 09:55:20	testlab1_admin	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 53 LIMIT 1
+2015-02-02 09:55:20	testlab1_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=53 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=53 ) ORDER BY name
+2015-02-02 09:55:20	testlab1_admin	blis_revamp	SELECT * FROM user WHERE user_id=53 LIMIT 1
+2015-02-02 09:55:20	testlab1_admin	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 53 LIMIT 1
+2015-02-02 09:55:20	testlab1_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=53 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=53 ) ORDER BY name
+2015-02-02 11:19:34	testlab1_admin	blis_revamp	SELECT * FROM user WHERE user_id=53 LIMIT 1
+2015-02-02 11:19:34	testlab1_admin	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 53 LIMIT 1
+2015-02-02 11:19:34	testlab1_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=53 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=53 ) ORDER BY name
+2015-02-02 11:19:34	testlab1_admin	blis_revamp	SELECT * FROM user WHERE user_id=53 LIMIT 1
+2015-02-02 11:19:34	testlab1_admin	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 53 LIMIT 1
+2015-02-02 11:19:34	testlab1_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=53 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=53 ) ORDER BY name
+2015-02-02 11:28:11	testlab1_admin	blis_revamp	SELECT * FROM user WHERE user_id=53 LIMIT 1
+2015-02-02 11:28:11	testlab1_admin	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 53 LIMIT 1
+2015-02-02 11:28:11	testlab1_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=53 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=53 ) ORDER BY name
+2015-02-02 11:28:11	testlab1_admin	blis_revamp	SELECT * FROM user WHERE user_id=53 LIMIT 1
+2015-02-02 11:28:11	testlab1_admin	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 53 LIMIT 1
+2015-02-02 11:28:11	testlab1_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=53 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=53 ) ORDER BY name
+2015-02-02 13:31:35	testlab1_admin	blis_revamp	SELECT * FROM user WHERE user_id=53 LIMIT 1
+2015-02-02 13:31:35	testlab1_admin	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 53 LIMIT 1
+2015-02-02 13:31:35	testlab1_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=53 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=53 ) ORDER BY name
+2015-02-02 13:31:35	testlab1_admin	blis_revamp	SELECT * FROM user WHERE user_id=53 LIMIT 1
+2015-02-02 13:31:35	testlab1_admin	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 53 LIMIT 1
+2015-02-02 13:31:35	testlab1_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=53 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=53 ) ORDER BY name
+2015-02-02 14:49:48	testlab1_admin	blis_revamp	SELECT * FROM user WHERE user_id=53 LIMIT 1
+2015-02-02 14:49:48	testlab1_admin	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 53 LIMIT 1
+2015-02-02 14:49:48	testlab1_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=53 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=53 ) ORDER BY name
+2015-02-02 14:49:48	testlab1_admin	blis_revamp	SELECT * FROM user WHERE user_id=53 LIMIT 1
+2015-02-02 14:49:48	testlab1_admin	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 53 LIMIT 1
+2015-02-02 14:49:48	testlab1_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=53 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=53 ) ORDER BY name

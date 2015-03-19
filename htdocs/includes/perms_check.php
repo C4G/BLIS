@@ -30,6 +30,7 @@ if(isset($TRACK_LOADTIME) && $TRACK_LOADTIME)
 		$lab_config = get_lab_config_by_id($user->labConfigId);
 		$_SESSION['db_name'] = $lab_config->dbName;
 	}
+
 	# Set session variables for recording latency/user props
 	$_SESSION['PROPS_RECORDED'] = false;
 	$_SESSION['DELAY_RECORDED'] = false;

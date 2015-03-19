@@ -1,0 +1,27 @@
+LINUX QUICKSTART
+----------------
+1. Clone git repository to a preferred local location (henceforth BLIS_HOME)
+
+   `git clone xxx.git`
+
+2. Install the database by running the provided SQL script. This is located in BLIS_HOME/db_files/
+
+    `cat scriptname.sql | mysql -uroot -p`
+
+3. Grant the web server user READ and WRITE permissions to the BLIS_HOME/local folder
+
+    `chown -R www-data.www-data BLIS_HOME/local`
+
+4. Declare your database connection settings in `BLIS_HOME/htdocs/db_constants.php`
+    `LOCAL_PATH` is the location of the 'local' directory relative to the 'BLIS_HOME/htdocs/includes' folder.
+
+5. Configure your web server, setting BLIS_HOME/htdocs as the web root.
+
+6. Login with the user credentials provided in the README.md file
+
+
+REQUIRED SOFTWARE
+-----------------
+1. PHP5.x
+2. MySQL 5.x
+3. Web server e.g. Apache2

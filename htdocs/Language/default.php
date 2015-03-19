@@ -256,16 +256,16 @@ $LANG_ARRAY = array (
 		"CMD_UPDPROFILE" => "Update Profile"
 	) , 
 		"doctor_register" => array (
-				"TITLE" => "Patient Look-up",
-				"ADD_NEW_PATIENT" => "Add New Patient",
-				"TIPS_REGISTRATION_1" => "This page allows us to register new patients or lookup existing patients based on name, patient ID or number.",
-				"TIPS_REGISTRATION_2" => "Once a patient has been registered, we can use this page to view,edit the patients profile.",
-				"TIPS_PATIENT_LOOKUP" => "To register a new specimen, enter Patient by ID/Name or add a new Patient first.",
-				"MSG_NOMATCH" => "No match found",
-				"CMD_REGISTERSPECIMEN" => "Register Specimen",
-				"CMD_VIEWPROFILE" => "View Profile",
-				"CMD_DELPROFILE" => "Delete Profile",
-				"CMD_UPDPROFILE" => "Update Profile"
+			"TITLE" => "Patient Look-up",
+			"ADD_NEW_PATIENT" => "Add New Patient",
+			"TIPS_REGISTRATION_1" => "This page allows us to register new patients or lookup existing patients based on name, patient ID or number.",
+			"TIPS_REGISTRATION_2" => "Once a patient has been registered, we can use this page to view,edit the patients profile.",
+			"TIPS_PATIENT_LOOKUP" => "To register a new specimen, enter Patient by ID/Name or add a new Patient first.",
+			"MSG_NOMATCH" => "No match found",
+			"CMD_REGISTERSPECIMEN" => "Register Specimen",
+			"CMD_VIEWPROFILE" => "View Profile",
+			"CMD_DELPROFILE" => "Delete Profile",
+			"CMD_UPDPROFILE" => "Update Profile"
 		) ,
 	"new_patient" => array ( 
 		"TITLE" => "New Patient", 
@@ -455,7 +455,6 @@ $LANG_ARRAY = array (
 		"MENU_PATIENTFIELDSORDER"=>"Patient Fields Order Setup",
 		"RPT_R_BORDER_HOR"=>"Horizontal",
 		"RPT_R_BORDER_VERT"=>"Vertical"
-			
 	) , 
 	"lab_admins" => array ( 
 		"TITLE" => "Lab Managers", 
@@ -692,12 +691,11 @@ $LANG_ARRAY = array (
 		"TIPS_TURNAROUNDTIME" => "Turnaround Time: This option generates the turnaround time for all or chosen test for a particular period of time. It also generates a graph of the statistics. You can choose to include both pending and completed tests or just the completed tests.", 
 		"TIPS_INFECTIONREPORT" => "Infection Report: This option generates an aggregate infection report for a particular period for one or all Lab sections. It also provides an option to create a Word document of the generated report.", 
 		"TIPS_INVENTORY" => "Inventory: This option generates a listing of the current inventory."
-		
 	) ,
 	"search_condition" => array (
-	"SEARCH_BEGIN_WITH"=>"Starts with",
-	"SEARCH_END_WITH"=>"End with",
-	"SEARCH_CONTAINS"=>"Contains"
+		"SEARCH_BEGIN_WITH"=>"Starts with",
+		"SEARCH_END_WITH"=>"End with",
+		"SEARCH_CONTAINS"=>"Contains"
 	)
 );
 

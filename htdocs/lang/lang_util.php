@@ -130,7 +130,9 @@ class LangUtil
 	public static function getSearchCondition($condition)
 	{
 		global $LANG_ARRAY;
-		$retval = $LANG_ARRAY["search_condition"][$condition];		
+
+		$retval = $LANG_ARRAY["search_condition"][$condition];
+
 		if($retval == null)
 		{
 			$retval = "[ERROR]";

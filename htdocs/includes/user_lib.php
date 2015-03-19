@@ -57,7 +57,7 @@ function get_top_menu_options($user_role, $user_rwoption = "") {
 	} 	
 	
 	else if($user_role == $LIS_PHYSICIAN) {
-		$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
+		$page_list [LangUtil::getPageTitle ( "regn" )] = "doctor_register.php";
 		$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
 	}
 	// return $page_list;

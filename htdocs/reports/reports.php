@@ -1654,11 +1654,6 @@ function hideCondition(p_attrib)
 			if ( !is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) ) { 
 				echo LangUtil::$pageTerms['MENU_DAILY']; ?>
 			<ul>
-				<!--
-				<li class='menu_option' id='patient_report_menu'>
-					<a href='javascript:show_patient_report_form();'><?php #echo LangUtil::$pageTerms['MENU_PATIENT']; ?></a>
-				</li>
-				-->
 				<li class='menu_option' id='test_history_menu'>
 					<!--<a href='javascript:show_test_history_form();'><?php #echo LangUtil::$pageTerms['MENU_PHISTORY']; ?></a>-->
 					<a href='javascript:show_test_history_form();'><?php echo LangUtil::$pageTerms['MENU_PATIENT']; ?></a>
@@ -2606,13 +2601,6 @@ function hideCondition(p_attrib)
         <div id='user_stats_div' style='display:none;' class='reports_subdiv'>
 		<b><?php echo "User Statistics"; ?></b>
                 <?php $userStats = new UserStats(); ?>
-		<!--<br><br>
-                
-                <a id="ustats_a" class="ustats_link_u" href='javascript:show_user_stats_submenu(1);'>User Stats for All Users</a>
-                |
-                <a id="ustats_i" class="ustats_link_u" href='javascript:show_user_stats_submenu(2);'>User Logs for Individual Users</a>
-
-                <br><br>-->
                 
 
 		<form name="user_stats_form" id="user_stats_form" action="reports_user_stats_all.php" method='post' target='_blank'>
@@ -2701,36 +2689,31 @@ function hideCondition(p_attrib)
                              </table>
                     </div>
 
-				
-	
-
                 <div id='user_stats_individual' style='display:none;'>
                     <table cellpadding="4px">
 			<?php
 			$site_list = get_site_list($_SESSION['user_id']);
-			//if(count($site_list) == 1)
-                        if(true)
+
+            if(true)
 			{
-				//foreach($site_list as $key=>$value)
-					//echo "<input type='hidden' name='location' id='location7' value='$key'></input>";
-                            $liddd = $_SESSION['lab_config_id'];
-                                        echo "<input type='hidden' name='location' id='location7' value='$liddd'></input>";
-			
-                                $user_ids = array();
-                                array_push($user_ids, $userStats->getAdminUser($lab_config_id));
-                                $user_ids_others =  $userStats->getAllUsers($lab_config_id);
-                                foreach($user_ids_others as $uids)
-                                     array_push($user_ids, $uids);
-                                //print_r($user_ids);
-                        ?>
-                                <tr>
+                $lab_config_id = $_SESSION['lab_config_id'];
+                echo "<input type='hidden' name='location' id='location7' value='$lab_config_id'></input>";
+
+                $user_ids = array();
+                array_push($user_ids, $userStats->getAdminUser($lab_config_id));
+                $user_ids_others =  $userStats->getAllUsers($lab_config_id);
+                foreach($user_ids_others as $uids)
+                     array_push($user_ids, $uids);
+
+            ?>
+                <tr>
 					<td><?php echo "User"; ?> </td>
 					<td>
 						<select name='user_id' id='user_id' class='uniform_width'>
 						<?php foreach($user_ids as $uid) {?>
-                                                    <option value='<?php echo $uid; ?>'><?php echo get_username_by_id($uid); ?></option>	
+                                <option value='<?php echo $uid; ?>'><?php echo get_username_by_id($uid); ?></option>	
 						<?php } ?>
-                                                </select>
+                        </select>
 					</td>
 				</tr>
                         <?php

@@ -200,6 +200,9 @@ RewriteRule ^user_rating_submit\.php$ feedback/user_rating_submit.php
 ## /help folder
 RewriteRule ^help\.php$ feedback/help.php
 
+## /tmp folder
+RewriteRule ^tmp\.txt$ tmp/celltac.txt
+
 
 ## /lang folder
 RewriteRule ^lang_switch$ lang/lang_switch.php

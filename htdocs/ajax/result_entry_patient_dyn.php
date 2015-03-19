@@ -573,7 +573,7 @@ $specimen_id_list = array_values(array_unique($specimen_id_list));
 			if($_SESSION['user_level'] == $LIS_TECH_SHOWPNAME)
 			{
 			?>
-				<td style='min-width:100px;max-width:100px'><a href='javascript:fetch_specimenPat(<?php echo $patient->patientId;?>,<?php echo $specimen->specimenId;?>)'><?php echo $patient->getName();?></a><?php  echo " (".$patient->sex." ".$patient->getAgeNumber().") "; ?></td>
+				<td style='min-width:100px;max-width:100px'><a href='javascript:fetch_specimen(<?php echo $patient->patientId;?>,<?php echo $specimen->specimenId;?>)'><?php echo $patient->getName();?></a><?php  echo " (".$patient->sex." ".$patient->getAgeNumber().") "; ?></td>
 			<?php
 			}
 			else

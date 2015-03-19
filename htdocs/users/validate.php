@@ -8,7 +8,6 @@
 include("redirect.php");
 require_once("includes/db_lib.php");
 
-//include("includes/db_lib.php");
 require_once("includes/user_lib.php");
 
 # Start session if not already started
@@ -18,6 +17,7 @@ if(session_id() == "")
 $username = $_REQUEST['username'];
 $password = $_REQUEST['password'];
 $login_correct = check_user_password($username, $password);
+
 if($login_correct)
 {
 	#Set session variables
@@ -41,7 +41,6 @@ if($login_correct)
 	}
 	
 	
-	//if($user->isAdmin())
 	if(is_admin($user))
 	{
 		
@@ -53,7 +52,7 @@ if($login_correct)
 	}
 	else
 	{
-	$_SESSION['lab_config_id'] = $user->labConfigId;
+		$_SESSION['lab_config_id'] = $user->labConfigId;
 		echo $user->labConfigId;
 		$_SESSION['country'] = $user->country;
 		$lab_config = get_lab_config_by_id($user->labConfigId);
@@ -114,7 +113,7 @@ if($login_correct)
 		<?php
 				session_unset();
 				session_destroy();
-				//$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
+
 				}
 		
 		}		
@@ -130,6 +129,9 @@ if($login_correct)
 	$_SESSION['DELAY_RECORDED'] = false;
 	#TODO: Add other session variables here
 	$_SESSION['user_role'] = "garbage";
+
+	error_log("validate:134. SESSION['lab_config_id'] = ". $_SESSION['lab_config_id']);
+
 	#Redirect to home page
 	header("Location:home.php");
 }
