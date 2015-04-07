@@ -192,7 +192,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 	{
 	?>
 		<tr valign='top'>
-		<?php
+			<?php
 				$patient_num =$patient->getDailyNum();
 				$pieces = explode("-", $patient_num);
 				?>
@@ -300,10 +300,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					<a href='javascript:delete_patient_profile(<?php echo $patient->patientId; ?>)' title='Click to Delete Patient Profile'><?php echo "Delete Profile"; ?></a>
 					</td><td>
 					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>&update=1' title='Click to Update Patient Profile'><?php echo "Update Profile" ?></a>
-					<?php
+                    <?php					
 				}
 				else if (strpos($_SERVER["HTTP_REFERER"], "doctor_register.php") !== false) {
-
+					
 					# Called from doctor_register.php. Show 'profile' and 'register specimen' link
 					?>
 					<a href='new_specimen.php?pid=<?php echo $patient->patientId; ?>&dnum=<?php echo $pieces[1]; ?>'' title='Click to Register New Specimen for this Patient'><?php echo LangUtil::$pageTerms['CMD_REGISTERSPECIMEN']; ?></a>

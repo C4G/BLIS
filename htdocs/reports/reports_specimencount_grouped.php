@@ -180,8 +180,8 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
 	</thead>
 	<tbody>
         <?php
-            # Fetching specimen IDs but keeping the variables similar to reports_testcount_grouped.php
-            $test_type_list = get_lab_config_specimen_types($lab_config->id);
+            # Fetching specimen IDs but keeping the variables similar to reports_testcount_grouped.php			
+            $test_type_list = get_lab_config_specimen_types($lab_config->id);		
             //$test_type_list = get_lab_config_test_types($lab_config->id); // to get test type ids
             $saved_db = DbUtil::switchToLabConfig($lab_config->id);
             $tests_done_list = array();
@@ -216,12 +216,12 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
                         $count_female_p_total = 0;
                         foreach($age_slot_list as $age_slot)
                         {
-                            
-                            $age_from = intval(trim($age_slot[0]));
+                            //I have to cate for days and months as well    
+                            $age_from = trim($age_slot[0]);
                             if(trim($age_slot[1]) == "+")
-                                $age_to = 100;
+                                $age_to = 200;
                             else
-                                $age_to = intval(trim($age_slot[1]));
+                                $age_to = trim($age_slot[1]);
                             
                             if($byGender == 1)
                             {

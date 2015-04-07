@@ -103,6 +103,19 @@ $script_elems->enableJQueryForm();
 			<li><?php echo LangUtil::$pageTerms['TIPS_PATIENTFIELDSORDER']; ?></li>
 		</ul>
 	</div>
+    <div id='DHIMS2INFO' class='right_pane' style='display:none;margin-left:10px;'>
+	<ul>
+			<li><?php echo "This Page is used to configure settings for DHIMS 2 interfacing"; ?></li>
+            <li><?php echo "You have to connect to the internet before you can configure DHIMS2."; ?></li>
+		</ul>
+	</div>
+     <div id='analyzer_setup_INFO' class='right_pane' style='display:none;margin-left:10px;'>
+	<ul>
+			<li><?php echo "This Page list all interfaced equipment"; ?></li>
+            <li><?php echo "Please select the equipment and see how it is interfaced with BLIS"; ?></li>
+             <li><?php echo "Check the configurations that must be set in the <b>BLISInterfaceClient.ini file</b>"; ?></li>
+		</ul>
+	</div>
 
 	<div id='WS_rc' class='right_pane' style='display:none;margin-left:10px;'>
 		<ul>
@@ -725,6 +738,15 @@ $('#report_setup').hide();
 
 }
 
+function api_setup()
+{
+if(document.getElementById('api_setup').style.display =='none')
+$('#api_setup').show();
+else
+$('#api_setup').hide();
+
+}
+
 function check_compatible()
 {
 }
@@ -762,11 +784,12 @@ function blis_update()
 
 function right_load(option_num, div_id)
 {
+	
 	$('#name9').attr("value", "<?php echo $lab_config->name; ?>");
 	$('#loc9').attr("value", "<?php echo $lab_config->location; ?>");
 	$('#misc_errormsg').hide();
 	$('.right_pane').hide();
-	$('.menu_option').removeClass('current_menu_option');
+	$('.menu_option').removeClass('current_menu_option');	
 	$('#'+div_id).show();
 	$('#option'+option_num).addClass('current_menu_option');
 	if ( option_num == 16 ) {
@@ -777,9 +800,9 @@ function right_load(option_num, div_id)
 function language_div_load() {
 	$('#misc_errormsg').hide();
 	$('.right_pane').hide();
-	$('.menu_option').removeClass('current_menu_option');
+	$('.menu_option').removeClass('current_menu_option');	
 	$('#language_div').show();
-	$('#option19').addClass('current_menu_option');
+	$('#option19').addClass('current_menu_option');	
 }
 
 function export_html()
@@ -918,6 +941,17 @@ function toggle_ofield_div()
 	 }
 }
 
+function toggle_DHIMS2()
+{
+	$('#DHIMS2_summary_div').toggle();
+	$('#DHIMS2_form_div').toggle();
+	var curr_link_text = $('#DHIMS2_edit_link').html();
+	if(curr_link_text == "<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>")
+		$('#DHIMS2_edit_link').html("<?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?>");
+	else
+		$('#DHIMS2_edit_link').html("<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>");
+}
+
 function doctor_toggle_ofield_div()
 {
 	$('#doctor_ofield_summary').toggle();
@@ -935,7 +969,6 @@ function doctor_toggle_ofield_div()
 		$('#doctor_field_reorder_link_specimen').show();
 	 }
 }
-
 
 
 $(function() {
@@ -1601,6 +1634,294 @@ function right_load_1(option_num, div_id)
 	$('#option'+option_num).addClass('current_menu_option');
 	
 }
+
+
+function authenticateDHIMS2()
+{
+	$('#DHIMS2AuthenticateProgress').show();
+	$('#dhims2Authenticate').attr({
+	disabled: 'disabled',
+	value: 'Processing'});
+	
+	var username= $('#dhims2username').attr("value");
+	var password= $('#dhims2password').attr("value");	
+	$.ajax({		
+		url :'api/dhims2Authenticate.php?dhims2username='+username+"&dhims2password="+password,				
+		success : function (user) {			
+			$('#DHIMS2AuthenticateProgress').hide();
+			if ( user=="false" ) {
+				$('#dhims2Authenticate').removeAttr('disabled');
+				$('#dhims2Authenticate').attr('value',"Authenticate");
+				alert("Authentication Error: Invalid Login credentials");				
+			}
+			else if ( user=="404" ) {				
+				$('#dhims2Authenticate').removeAttr('disabled');
+				$('#dhims2Authenticate').attr('value',"Authenticate");
+				alert("The DHIMS2 server cannot be found! Please check your internet connection");
+			}
+			else if ( user=="502" ) {				
+				$('#dhims2Authenticate').removeAttr('disabled');
+				$('#dhims2Authenticate').attr('value',"Authenticate");
+				alert("The DHIMS2 server returned Error 502! BAD GATEWAY\n Server might be down for maintenance");
+			}
+			else 
+			{
+				$('#dhims2Authenticate').attr('value',"Success");	
+						
+					var objUser = JSON.parse( user );
+					for(var i=0;i<objUser.organisationUnits.length;i++)
+					{
+						var opt = document.createElement("option");
+						document.getElementById("dhims2orgunit").options.add(opt);       
+						opt.text = objUser.organisationUnits[i].name;
+						opt.value = objUser.organisationUnits[i].id;	
+					}
+					getDHIMS2DataSet(null);
+					
+					$('#addtolist').removeAttr('disabled');
+					
+			}
+		}		
+	});		
+}
+
+function getDHIMS2DataSet(userID)
+{
+	$('#DHIMS2orgunitProgress').show();
+	document.getElementById("dhims2dataset").options.length=0;	
+	if(null == userID)
+	{
+		userID = $('#dhims2orgunit').attr('value');
+	}
+	var username= $('#dhims2username').attr("value");
+	var password= $('#dhims2password').attr("value");		
+	$.ajax({		
+		url :'api/dhims2get_datasets.php?dhims2username='+username+"&dhims2password="+password+"&orgunitid="+userID,				
+		success : function (orgunit) {			
+			$('#DHIMS2orgunitProgress').hide();
+			if ( orgunit=="false" ) {				
+				alert("Authentication Error: Invalid Login credentials");				
+			}
+			else if ( orgunit=="404" ) {							
+				alert("The DHIMS2 server cannot be found! Please check your internet connection");
+			}
+			else 
+			{				
+						
+					var orgunitObj = JSON.parse( orgunit );									
+					for(var i=0;i<orgunitObj.dataSets.length;i++)
+					{
+						var opt = document.createElement("option");
+						document.getElementById("dhims2dataset").options.add(opt);       
+						opt.text = orgunitObj.dataSets[i].name;
+						opt.value = orgunitObj.dataSets[i].id;	
+					}
+					
+					getDHIMS2DataElements(null);
+					
+			}
+		}		
+	});	
+}
+
+function getDHIMS2DataElements(dataSetID)
+{
+	$('#DHIMS2datasetProgress').show();
+	$('#DHIMS2datasetProgressRetry').hide();
+	$('#entryperiod').attr('value','');
+	document.getElementById("dhims2dataelement").options.length=0;
+	document.getElementById("dhims2catCombo").options.length=0;
+	if(null == dataSetID)
+	{
+		dataSetID = $('#dhims2dataset').attr('value');
+	}
+	var username= $('#dhims2username').attr("value");
+	var password= $('#dhims2password').attr("value");		
+	$.ajax({		
+		url :'api/dhims2get_data_elements.php?dhims2username='+username+"&dhims2password="+password+"&datasetid="+dataSetID,				
+		success : function (dataset) {			
+			$('#DHIMS2datasetProgress').hide();
+			if ( dataset=="false" ) {				
+				alert("Authentication Error: Invalid Login credentials");				
+			}
+			else if ( dataset=="404" ) {							
+				alert("The DHIMS2 server cannot be found! Please check your internet connection");
+				$('#DHIMS2datasetProgressRetry').show();
+			}
+			else 
+			{			
+					
+					var datasetObj = JSON.parse( dataset );
+					$('#entryperiod').attr('value',datasetObj.periodType);
+														
+					for(var i=0;i<datasetObj.dataElements.length;i++)
+					{
+						var opt = document.createElement("option");
+						document.getElementById("dhims2dataelement").options.add(opt);       
+						opt.text = datasetObj.dataElements[i].name;
+						opt.value = datasetObj.dataElements[i].id;	
+					}
+					
+					getDHIMS2CatComboOptions(null);
+			}
+		}		
+	});	
+}
+
+
+function getDHIMS2CatComboOptions(dataElementID)
+{
+	$('#DHIMS2ElementProgress').show();
+	$('#DHIMS2ElementProgressRetry').hide();
+	
+	document.getElementById("blistestSelected").options.length=0;
+			
+	//$('#entryperiod').attr('value','');
+	document.getElementById("dhims2catCombo").options.length=0;
+	if(null == dataElementID)
+	{
+		dataElementID = $('#dhims2dataelement').attr('value');
+	}
+	var username= $('#dhims2username').attr("value");
+	var password= $('#dhims2password').attr("value");		
+	$.ajax({		
+		url :'api/dhims2get_data_elements_combo.php?dhims2username='+username+"&dhims2password="+password+"&dataElementID="+dataElementID,				
+		success : function (dataset) {			
+			$('#DHIMS2ElementProgress').hide();
+			if ( dataset=="false" ) {				
+				alert("Authentication Error: Invalid Login credentials");				
+			}
+			else if ( dataset=="404" ) {							
+				alert("The DHIMS2 server cannot be found! Please check your internet connection");
+				$('#DHIMS2ElementProgressRetry').show();
+			}
+			else 
+			{			
+					
+					var datasetObj = JSON.parse( dataset );
+					//$('#entryperiod').attr('value',datasetObj.periodType);
+								
+					for(var i=0;i<datasetObj.categoryOptionCombos.length;i++)
+					{
+						if(!alreadyInList(dataElementID,datasetObj.categoryOptionCombos[i].id))
+						{
+							var opt = document.createElement("option");
+							document.getElementById("dhims2catCombo").options.add(opt);       
+							opt.text = datasetObj.categoryOptionCombos[i].name;
+							opt.value = datasetObj.categoryOptionCombos[i].id;	
+						}
+					}
+					
+			}
+		}		
+	});	
+}
+
+
+function alreadyInList(dataelementID,comboId)
+{
+	var flag = false;
+	var zTree = $.fn.zTree.getZTreeObj("treeDemo" );
+	if(null != zTree)
+	{
+		var	nodeList = [];
+		var node;
+		var value = comboId;
+		var keyType = "id";
+		nodeList = zTree.getNodesByParam(keyType, value);		
+		for( var i=0, l=nodeList.length; i<l; i++) 
+		{			
+				if(startsWith(nodeList[i].pId,dataelementID))
+				{					
+					flag = true;
+					break;
+				}				
+		}
+
+	}
+	
+	return flag;
+}
+
+function startsWith(s,starter) {	
+  for (var i = 0,cur_c; i < starter.length; i++) {
+    cur_c = starter[i];
+    if (s[i] !== starter[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function getSelBLISTests()
+{
+	var tests = "";
+	var o_fields = document.getElementById("blistestSelected");		
+	for(var i=0;i<o_fields.options.length;i++)
+	{
+		if(tests.length > 0)
+		{
+			tests = tests +"|"; 
+		}
+		tests = tests + o_fields.options[i].value + "^";
+		tests = tests + o_fields.options[i].text;					
+	}	
+				
+	
+	
+	return tests;
+	
+}
+function AddnewDHIMS2Config()
+{
+	
+	//I need the text as well. Set the text to the hidden textboxes
+	$('#dhims2orgunit_text').attr('value',$('#dhims2orgunit option:selected').text());
+	$('#dhims2dataset_text').attr('value',$('#dhims2dataset option:selected').text());
+	$('#dhims2dataelement_text').attr('value',$('#dhims2dataelement option:selected').text());
+	$('#blis2dataelement_text').attr('value',getSelBLISTests());
+	$('#dhims2catCombo_text').attr('value',$('#dhims2catCombo option:selected').text());
+		
+	var  dataset = $('#dhims2dataset').attr('value');
+	var  dhims2dataelement = $('#dhims2dataelement').attr('value');
+	var  dhims2catCombo = $('#dhims2catCombo').attr('value');
+	var testsSelected = $('#blis2dataelement_text').attr('value');
+	
+	//return;
+	if(null == dataset || dataset.length == 0)
+	{
+		alert("No DHIMS2 Dataset selected!");
+		return;
+	}
+	if(null == dhims2dataelement || dhims2dataelement.length == 0)
+	{
+		alert("No DHIMS2 Data Element selected!");
+		return;
+	}
+	if(null == dhims2catCombo || dhims2catCombo.length == 0)
+	{
+		alert("No DHIMS2 Category Combo Option selected!");
+		return;
+	}
+	
+	if(null == testsSelected || testsSelected.length == 0)
+	{
+		alert("No Corresponding  BLIS test selected!");
+		return;
+	}
+	$('#DHIMS2ApplyProgress').show();
+	$('#DHIMSconf_from').ajaxSubmit({
+		success: function() {
+			$('#dhims2catCombo option:selected').remove();
+			//alert("Submited");
+			showTree();	
+			
+		}
+	});
+	
+	
+	$('#DHIMS2ApplyProgress').hide();
+}
 </script>
 
 <br>
@@ -1677,7 +1998,14 @@ function right_load_1(option_num, div_id)
 				<br><br>
 				<a id='option14' class='menu_option' href="javascript:export_html();"><?php echo "Setup Network" ?></a>
 				<br><br>
-				
+                <a id='api' class='menu_option' href="javascript:api_setup();"><?php echo "External Interface" ?> </a>
+				<br><br></li>
+				<div id='api_setup' name='api_setup' style='display:none;'>
+					-<a id='option41' class='menu_option' href="javascript:right_load(41, 'dhims2_config_div');"><?php echo "DHIMS 2" ?></a>
+                    <br/><br/>
+                    -<a id='option51' class='menu_option' href="javascript:right_load(51, 'analyzer_setup_config_div');"><?php echo "Interfaced Equipment" ?></a>
+                    <br><br>
+                </div>	                		
 				<?php
 					if($SERVER != $ON_ARC) {
 						?>
@@ -2446,7 +2774,6 @@ function right_load_1(option_num, div_id)
 						{
 							$('#use_dnum_mand').show();
 						}
-
 						if($('#use_sex').is(':checked'))
 						{
 							$('#use_sex_mand').show();
@@ -2658,7 +2985,7 @@ function right_load_1(option_num, div_id)
 					?>
 					</div>
 				</div>
-	
+				
 				<div class='right_pane' id='doctor_fields_div' style='display:none;margin-left:10px;'>
 				
 <div id="doctor-dialog-form-patients" title="Customize Field Order - Patient Registration Form">
@@ -3218,7 +3545,6 @@ function right_load_1(option_num, div_id)
 					<br>
 					
 				</div>
-				
 				<div class='right_pane' id='network_setup_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#SetupNet'>Page Help</a></p>
 				Setup can be accessed from BlisSetup.html in the main folder.
@@ -3244,6 +3570,7 @@ function right_load_1(option_num, div_id)
 						</span>
 					</form>
 				</div>
+				
 				
 
                             <div id='view_stocks_help' class='right_pane' style='display:none;margin-left:10px;'>
@@ -3472,7 +3799,8 @@ function right_load_1(option_num, div_id)
 						<?php $page_elems->getPatientFieldsOrderForm(); ?>                         
 					</form>
                     </div>
-				</div>
+				</div>          
+                           
 
 
 				<div class='right_pane' id='backup_revert_div' style='display:none;margin-left:10px;'>
@@ -3706,6 +4034,7 @@ function right_load_1(option_num, div_id)
 									</span>
 								</td>
 							</tr>
+							</tbody>
 						</table>
 					</form>
 					<br>
@@ -3722,8 +4051,93 @@ function right_load_1(option_num, div_id)
 					<div id='language_contents'></div>
 					<?php
 						include('lang/lang_edit.php'); 
-					?>
+					?>                  
 				</div>
+                
+                <div class='right_pane' id='dhims2_config_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;"><a rel='facebox' href='#DHIMS2INFO'>Page Help</a></p>
+					<b><?php echo "DHIMS 2 Configurations" ?></b> | <a href='javascript:toggle_DHIMS2();' id='DHIMS2_edit_link'><?php echo LangUtil::$generalTerms['CMD_EDIT']; ?></a>
+					<br><br>	                    
+    	
+     				<div id='DHIMS2_msg' class='clean-orange' style='display:none;width:350px;'>
+					</div>						
+                    <div id='DHIMS2_summary_div'>
+						<?php echo $page_elems->DHIMS2ConfigsSummary($lab_config); ?>
+					</div>
+                   
+                    <div id='DHIMS2_form_div' style='display:none;'>
+					<form id='DHIMSconf_from' name='DHIMSconf_from' action='ajax/DHIMS2conf_add.php' method='post'>
+						<?php $page_elems->DHIMS2ConfigsForm($lab_config); ?>                         
+					</form>
+                    
+                    </div>                      
+                                 
+				</div>
+                 
+                  <div class='right_pane' id='analyzer_setup_config_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;"><a rel='facebox' href='#analyzer_setup_INFO'>Page Help</a></p>
+                	<b><?php echo "Equipment Interfaced with BLIS v{$VERSION}"; ?></b> | <?php echo "Java Runtime 1.7 or above is required for BLISInterfaceClient Tool"; ?><br /><br/><?php echo 'Select equipment to see required configuration sections and correct values in <b>BLISInterfaceClient.ini file </b><br/>' ;
+					echo "Please note that you have to add other required configurations in BLISInterfaceClient.ini<br/>";
+					echo "Refer to <b>C4G BLIS INTERFACE CONFIGURATION MANUAL.pdf</b> for more information";
+					?>
+                    <br/><br/>
+                    <?php
+					echo "<b>[BLIS CONFIGURATIONS]</b><br/>";
+					echo  'BLIS_URL = http://'.$_SERVER['HTTP_HOST'];
+					echo  '<br/>BLIS_USERNAME = Equipment account username';
+					echo  '<br/>BLIS_PASSWORD = Equipment account password';
+					?>
+					<br><br>
+                    <form id="analyzer_setup">
+                    <table>
+							<tbody>                           
+								<tr valign='top'>
+									<td><?php echo 'Select Equipment' ?></td>
+									<td>
+										<select name='eq_list' id='eq_list' class='uniform_width' onchange="fetch_equipment_details()">
+											<option value="0">-</option>
+											<?php $page_elems->getEquipmentList(); ?>
+										</select>
+									</td>
+								</tr>
+                                <tr>
+                                <td colspan="2"><div id="eq_con_details"></div></td>
+                                </tr>
+                                </tbody>
+                                </table>
+                    </form>
+                    
+                    <script type="text/javascript">
+						function fetch_equipment_details()
+						{
+							$('#eq_con_details').html("");							
+							$selected_equ = $('#eq_list').attr('value');
+							if($selected_equ !='0')
+							{
+								$.ajax({
+									url : "ajax/getEquipmentDetails.php?id="+$selected_equ,									
+									success : function(data) {									
+										var objData = JSON.parse(data);
+										if(objData.length > 0)
+										{
+											var html ="";
+											html = html+ "BLIS Version Required: "+objData[0].blis_version_required+"<br/>";
+											html = html+ "Communication Type Supported: "+objData[0].comm_type+"<br/>";
+											html = html+ "Equipment version: "+objData[0].equipment_version+"<br/>";
+											html = html+ "Lab Section: "+objData[0].lab_department+"<br/>";
+											html = html+ "Required Configs: <br/>"+objData[0].sample_ini_configs+"<br/>";
+											
+											$('#eq_con_details').html(html);
+										}
+									}	
+								});
+								//$('#eq_con_details').html($selected_equ);
+								
+							}
+							
+						}
+					</script>
+                </div>
 			</td>
 		</tr>
 	</tbody>

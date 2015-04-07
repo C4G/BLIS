@@ -6,7 +6,7 @@
 #
 
 # System version number displayed on page title and footer
-$VERSION = "2.7";
+$VERSION = "2.8.1";
 
 # Debug mode
 $DEBUG = false;
@@ -107,8 +107,8 @@ $SYSTEM_PATIENT_FIELDS = array(
 	'p_field_6' => 'NAME',
 	'p_field_7' =>'TEST',
 	'p_field_8' => 'REGISTRATION_DATE',
-	'p_field_11' => '',
-	'p_field_12' => '');
+	'p_field_11' => 'useRequesterName',
+	'p_field_12' => 'useReferredToHospital');
 
 
 ?>

@@ -216,7 +216,7 @@ $LANG_ARRAY = array (
 		"MSG_NOMATCH" => "No match found", 
 		"CMD_REGISTERSPECIMEN" => "Register Specimen", 
 		"CMD_VIEWPROFILE" => "View Profile"
-	) ,
+	) , 
 		"doctor_register" => array (
 				"TITLE" => "Patient Look-up",
 				"ADD_NEW_PATIENT" => "Add New Patient",
@@ -499,7 +499,7 @@ $LANG_ARRAY = array (
 				"MSG_NOMATCH" => "No match found",
 				"CMD_REGISTERSPECIMEN" => "Register Specimen",
 				"CMD_VIEWPROFILE" => "View Profile"
-		) 
+	) 
 		
 );
 

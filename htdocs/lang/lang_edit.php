@@ -12,7 +12,6 @@ LangUtil::setPageId("lang_modify");
 //$locale = $_REQUEST['locale'];
 //$lab_config_id = $_REQUEST['id'];
 $user = get_user_by_id($_SESSION['user_id']);
-
 if($locale === "default")
 {
 	if(is_super_admin($user) || is_country_dir($user))

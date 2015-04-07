@@ -1350,6 +1350,7 @@ display:none;
 
 <?php $align=$report_config->alignment_header;?>
 
+
 <div id='report_config_content' style='display:block;'>
 
 <div id="docbody" name="docbody">
@@ -1407,9 +1408,9 @@ else if(file_exists($logo_path) === true)
 
 <?php $align=$report_config->alignment_header;?>
 
-<h3 align="<?php echo $align; ?>"><?php //echo $report_config->headerText; ?><?php #echo LangUtil::$pageTerms['MENU_PHISTORY']; ?></h3>
+<h3 align="<?php echo $align; ?>"><?php echo $report_config->headerText; ?><?php echo LangUtil::$pageTerms['MENU_PHISTORY']; ?></h3>
 
-<h4 align="<?php echo $align; ?>"><?php //echo  $report_config->titleText; ?></h4>
+<h4 align="<?php echo $align; ?>"><?php echo  $report_config->titleText; ?></h4>
 
 </div>
 

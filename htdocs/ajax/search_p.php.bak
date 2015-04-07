@@ -24,6 +24,9 @@ $a = $_REQUEST['a'];
 $saved_db = "";
 $lab_config = null;
 $uiinfo = "op=".$a."&qr=".$q;
+
+$c = $_REQUEST['c'];
+
 putUILog('search_p', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 ?>
@@ -56,7 +59,8 @@ if($a == 0)
 else if($a == 1)
 {
 	# Fetch by patient name
-	$patient_list_all = search_patients_by_name($q);
+	$patient_list_all = search_patients_by_name($q,0,$c);
+	//print_r($patient_list_all);exit;
 	//DB Merging - Currently Disabled 
 	# See if there's a patient by the exact same name in another lab
 	//$patient = searchPatientByName($q);
@@ -281,7 +285,14 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					</td><td>
 					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'><?php echo LangUtil::$pageTerms['CMD_VIEWPROFILE']; ?></a>
 					</td><td>
-					<a href='javascript:delete_patient_profile(<?php echo $patient->patientId; ?>)' title='Click to Delete Patient Profile'><?php echo "Delete Profile"; ?></a>
+                    <?php					
+					
+					//print_r($_SESSION);			
+					if($_SESSION['user_level']== 13)
+					{
+					//print_r($_SESSION);
+					?>
+					<a href='javascript:delete_patient_profile(<?php echo $patient->patientId; ?>)' title='Click to Delete Patient Profile'><?php echo "Delete Profile"; ?></a><?php } ?>
 					</td><td>
 					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>&update=1' title='Click to Update Patient Profile'><?php echo "Update Profile" ?></a>
 					<?php

@@ -36,17 +36,18 @@ LangUtil::setPageId("footer");
 		<small>
 		
 		<?php
+		$host = $_SERVER['HTTP_HOST'];
 		if($_SESSION['locale'] == "en")
 		{
-			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank' >User Guide |</a>";
+			echo "<a href='http://$host/userguide/BLIS_User_Guide.pdf' target='_blank' >User Guide |</a>";
 		}
 		else if($_SESSION['locale'] == "fr")
 		{
-			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank' >Guide de l'utilisateur |</a>";
+			echo "<a href='http://$host/userguide/BLIS_User_Guide.pdf' target='_blank' >Guide de l'utilisateur |</a>";
 		}
 		else
 		{
-			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank'>User Guide |</a>";
+			echo "<a href='http://$host/userguide/BLIS_User_Guide.pdf' target='_blank'>User Guide |</a>";
 		}
 		?>
 		

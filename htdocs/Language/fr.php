@@ -254,7 +254,7 @@ $LANG_ARRAY = array (
 		"CMD_VIEWPROFILE" => "Voir le profil",
 		"CMD_DELPROFILE" => "Delete le profil",
 		"CMD_UPDPROFILE" => "Update Profile Fr"
-	) ,
+	) , 
 		"doctor_register" => array (
 				"TITLE" => "Surveillance du Patient",
 				"ADD_NEW_PATIENT" => "Ajouter un Nouveau Patient",

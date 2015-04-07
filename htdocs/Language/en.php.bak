@@ -204,7 +204,8 @@ $LANG_ARRAY = array (
 		"LANGUAGE" => "Language", 
 		"USER_FUNCTIONS" => "Functions", 
 		"APPROX" => "approximate", 
-		"LANDSCAPE" => "Landscape mode"
+		"LANDSCAPE" => "Landscape mode",
+		"TIPS_PATIENTID_EXISTS"=>"Patient ID already exist. Look up for patient to confirm and register specimen"
 	) , 
 	"header" => array ( 
 		"TITLE" => "", 
@@ -434,7 +435,15 @@ $LANG_ARRAY = array (
 		"BACKUP_CURRENT_VERSION" => "Backup current version before reverting?", 
 		"TIPS_REVERTDONE" => "Backup reverted successfully. Please shutdown the system and restart to complete the reverting process.",
 		"TIPS_SETUPNETWORK_3" => "You will now be able to access BLIS by clicking on BlisSetup.html and entering your username and password.",
-		"TIPS_SETUPNETWORK_4" => "In case of a computer restart or network failure click on Setup Network option again."
+		"TIPS_SETUPNETWORK_4" => "In case of a computer restart or network failure click on Setup Network option again.",
+		"RPT_ITEMS_ON_ROW"=>"Items on a row",
+		"RPT_SHOW_DEMO_BORDER"=>"Show Demographics border",
+		"RPT_SHOW_SPM_BORDER"=>"Show Results border",
+		"TIPS_PATIENTFIELDSORDER"=>"This page is used to set how patient fields are ordered on the report. That is; which one comes first...",
+		"MENU_PATIENTFIELDSORDER"=>"Patient Fields Order Setup",
+		"RPT_R_BORDER_HOR"=>"Horizontal",
+		"RPT_R_BORDER_VERT"=>"Vertical"
+			
 	) , 
 	"lab_admins" => array ( 
 		"TITLE" => "Lab Managers", 
@@ -557,7 +566,7 @@ $LANG_ARRAY = array (
 		"TITLE" => "Help"
 	) , 
 	"stocks" => array ( 
-		"Reagent" => "Reagent", 
+		"Reagent" => "Item", 
 		"Lot_Number" => "Lot Number", 
 		"Expiry_Date" => "Expiry Date", 
 		"Manufacturer" => "Manufacturer", 
@@ -658,8 +667,8 @@ $LANG_ARRAY = array (
 		"TIPS_SEARCH_2" => "Once you select the patient, you can view the patient's profile, look up the tests he has undergone and the results of those tests.",
 		"TIPS_SEARCH_3" => "-", 
 		"MENU_INVENTORY" => "Inventory", 
-		"TIPS_INVENTORY_1" => "This page displays the current reagent quantities in stock.", 
-		"TIPS_INVENTORY_2" => "You can update stock as you acquire new reagents by adding the reagent name,quantity received, receiver name and remarks.", 
+		"TIPS_INVENTORY_1" => "This page displays the current Item quantities in stock.", 
+		"TIPS_INVENTORY_2" => "You can update stock as you acquire new items by adding the item name,quantity received, receiver name and remarks.", 
 		"TIPS_INVENTORY_3" => "-", 
 		"MENU_REPORTS" => "Reports", 
 		"MENU_DAILYREPORTS" => "Daily Reports", 
@@ -672,7 +681,12 @@ $LANG_ARRAY = array (
 		"TIPS_INFECTIONREPORT" => "Infection Report: This option generates an aggregate infection report for a particular period for one or all Lab sections. It also provides an option to create a Word document of the generated report.", 
 		"TIPS_INVENTORY" => "Inventory: This option generates a listing of the current inventory."
 		
-	) 
+	) ,
+	"search_condition" => array (
+	"SEARCH_BEGIN_WITH"=>"Starts with",
+	"SEARCH_END_WITH"=>"End with",
+	"SEARCH_CONTAINS"=>"Contains"
+	)
 );
 
 include("../lang/lang_util.php");

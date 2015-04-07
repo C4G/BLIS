@@ -241,6 +241,8 @@ $test_list = get_tests_by_specimen_id($specimen->specimenId);
 						$values_f[$value_map[$js]]= $value_map[$js];						
 					$json_values = list_to_json($values_f, $json_params);					
 					
+					//echo $json_values;
+					//exit;
 					$url_string = "ajax/measure_autocomplete.php?id=".$measure->measureId;
 					$hint_text = "Type to enter results";
 					echo "<div>";

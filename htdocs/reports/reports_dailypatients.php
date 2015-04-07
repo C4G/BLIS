@@ -30,8 +30,8 @@ $saved_db = DbUtil::switchToLabConfig($lab_config_id);
 //$patient_list = Patient::getByAddDate($date_from);
 //$patient_list = Patient::getByAddDateRange($date_from, $date_to);
 
-$patient_list = Patient::getReportedByRegDateRange($date_from, $date_to, $lab_section);
-$patient_list_U=Patient::getUnReportedByRegDateRange($date_from, $date_to, $lab_section);
+$patient_list = Patient::getReportedByRegDateRange($date_from, $date_to, $lab_section,$_REQUEST['cfield'],$_REQUEST['cfield_value']);
+$patient_list_U=Patient::getUnReportedByRegDateRange($date_from, $date_to, $lab_section,$_REQUEST['cfield'],$_REQUEST['cfield_value']);
 
 $lab_section_name = getTestCatName_by_cat_id($lab_config_id, $lab_section);
 //$patient_list = Patient::getByRegDateRange($date_from, $date_to);
@@ -117,6 +117,16 @@ $(document).ready(function(){
 	echo " | ";
 	echo LangUtil::$generalTerms['TO_DATE'].": ".DateLib::mysqlToString($date_to);
  }
+ echo '<br/>';
+ if($_REQUEST['cfield_value']) { 
+ $custom_field = get_custom_fields_patient_by_id(substr($_REQUEST['cfield'],2));
+ echo $custom_field->fieldName;
+  echo " : ";
+	
+		$custom_name =$_REQUEST['cfield_value'];
+		echo $custom_name;
+	echo "|";
+	}
  ?>
   
 <?php
@@ -417,9 +427,11 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 <?php } ?>
 <tbody>
 	<?php
-	$count = 0;
+	
+	$count = 0;	
 	foreach($patient_list_U as $patient)
 	{
+		//if($patient
 		$count++;
 		?>
 		<tr>

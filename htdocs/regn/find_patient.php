@@ -29,16 +29,17 @@ $(document).ready(function() {
 
 function restrictCharacters(e) {
 	
+	//Had issues with labs so I have to disable this for now
+	return;
 	var alphabets = /[A-Za-z]/g;
 	var numbers = /[0-9]/g;
-	var specialCharacter = /[_&.]/g;
 	if(!e) var e = window.event;
 	if( e.keyCode ) code = e.keyCode;
 	else if ( e.which) code = e.which;
 	var character = String.fromCharCode(code);
 	
 	if( !e.ctrlKey && code!=9 && code!=8 && code!=27 && code!=36 && code!=37 && code!=38  && code!=40 &&code!=13 &&code!=32 ) {
-		if ( !character.match(alphabets) && !character.match(numbers) && !character.match(specialCharacter))
+		if ( !character.match(alphabets) && !character.match(numbers) )
 			return false;
 		else
 			return true;
@@ -52,7 +53,9 @@ function fetch_patients()
 	$("#target_div_id_del").hide();
 	$('#psearch_progress_spinner').show();
 	var patient_id = $('#pq').attr("value").trim();
-	patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
+	fetch_patients
+	// had ato allow special charactors
+	//patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
 	var search_attrib = $('#p_attrib').attr("value");
 	var check_url = "ajax/patient_check_name.php?n="+patient_id;
 	$.ajax({ url: check_url, success: function(response){
@@ -104,7 +107,8 @@ function ConfirmDelete()
 function continue_fetch_patients()
 {
 	var patient_id = $('#pq').attr("value").trim();
-	patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
+	// had to allow special charactors
+	//patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
 	var search_attrib = $('#p_attrib').attr("value");
 	var condition_attrib = $('#h_attrib').attr("value");
 	$('#psearch_progress_spinner').show();

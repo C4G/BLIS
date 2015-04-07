@@ -6,7 +6,7 @@
 
 # Start session if not already started
 if(session_id() == "")
-	session_start();
+	@session_start();
 
 
 include("defaults.php");
@@ -1500,11 +1500,13 @@ class ReportConfig
 	
 	public static function getByTestTypeId($lab_config_id, $test_type_id)
 	{
+		
 		global $con;
 		$lab_config_id = mysql_real_escape_string($lab_config_id);
 		$test_type_id = mysql_real_escape_string($test_type_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM report_config WHERE test_type_id=$test_type_id LIMIT 1";
+		//echo $query_string ;
 		$record = query_associative_one($query_string);
 		$retval = ReportConfig::getObject($record, $lab_config_id);
 		DbUtil::switchRestore($saved_db);
@@ -2447,7 +2449,7 @@ class Patient
 			if($this->dob != null && $this->dob != "")
 			{
 				# DoB present in patient record
-				return DateLib::dobToAgeNumber($this->dob);
+				return DateLib::dobToAgeNumber($this->dob,true);
 			}
 			else
 			{	if($this->age<100)
@@ -2472,7 +2474,7 @@ class Patient
 				# Year and month specified
 				$approx_dob = trim($this->partialDob)."-01";
 			}
-			return DateLib::dobToAgeNumber($approx_dob);
+			return DateLib::dobToAgeNumber($approx_dob,true);
 		}
 	}
 	
@@ -2543,8 +2545,11 @@ class Patient
 	
 	}
 
-	public static function getReportedByRegDateRange($date_from , $date_to, $lab_section)
+	public static function getReportedByRegDateRange($date_from , $date_to, $lab_section, $cfield="",$cfield_value="")
 	{
+		
+		
+	
 		$emp="";
 		$query_string = "";
 		if($lab_section == 0){
@@ -2588,6 +2593,16 @@ class Patient
 			
 		}
 		//;
+		$ctable = "";
+		$cus_toadd ="";		
+		if(substr($cfield,0,2) == "p_")
+		{
+			$ctable = ",patient_custom_data";
+			$cfield = substr($cfield,2);
+			$cus_toadd ="AND (patient_custom_data.patient_id=p.patient_id and field_id = $cfield and field_value='$cfield_value')";
+			
+		}	
+		
 		$resultset = query_associative_all($query_string, $row_count);
 		$retval = array();
 		$record_p=array();
@@ -2595,8 +2610,9 @@ class Patient
 		foreach($resultset as $record)
 		{
 			foreach($record as $key=>$value) {
-				$query_string = "SELECT * FROM patient WHERE patient_id=$value";
-				$record_each= query_associative_one($query_string);
+				$query_string = "SELECT * FROM patient p $ctable WHERE p.patient_id=$value $cus_toadd";
+				$record_each = query_associative_one($query_string);
+				if($record_each != NULL)
 				$record_p[]=Patient::getObject($record_each);
 			}
 		}
@@ -2641,7 +2657,7 @@ class Patient
 	}
 	
 
-	public static function getUnReportedByRegDateRange($date_from , $date_to, $lab_section)
+	public static function getUnReportedByRegDateRange($date_from , $date_to, $lab_section,$cfield="",$cfield_value="")
 	{
 		$emp="";
 		$query_string = "";
@@ -2678,10 +2694,20 @@ class Patient
 		$resultset = query_associative_all($query_string, $row_count);
 		$retval = array();
 		$record_p=array();
+		$ctable = "";
+		$cus_toadd ="";		
+		if(substr($cfield,0,2) == "p_")
+		{
+			$ctable = ",patient_custom_data";
+			$cfield = substr($cfield,2);
+			$cus_toadd ="AND (patient_custom_data.patient_id=p.patient_id and field_id = $cfield and field_value='$cfield_value')";
+			
+		}	
 		foreach($resultset as $record) {
 			foreach($record as $key=>$value)
-				$query_string = "SELECT * FROM patient WHERE patient_id=$value";
+				$query_string = "SELECT * FROM patient p $ctable WHERE p.patient_id=$value $cus_toadd";				
 			$record_each= query_associative_one($query_string);
+			if($record_each != NULL)
 			$record_p[]=Patient::getObject($record_each);
 		}
 		return $record_p;
@@ -3009,6 +3035,13 @@ class Specimen
 			return;
 		$query_string = 
 			"UPDATE specimen SET date_reported='$date_reported' WHERE specimen_id=".$this->specimenId;
+		query_blind($query_string);
+	}
+	
+	public function setComplete()
+	{		
+		$query_string = 
+			"UPDATE specimen SET status_code_id=1 WHERE specimen_id=".$this->specimenId;
 		query_blind($query_string);
 	}
 	
@@ -3383,6 +3416,88 @@ class Test
 		$retval = substr($this->result, -1*$PATIENT_HASH_LENGTH);
                 return $retval;
         }
+		
+		
+
+public function getRange_UnitsList($patient)
+{
+	$retval = array();
+	
+	$testType = TestType::getById($this->testTypeId);
+	$measure_list = $testType->getMeasures();
+	
+	foreach($measure_list as $measure) 
+	{			
+			$unit = $measure->unit;
+			$type=$measure->getRangeType();
+			if($type==Measure::$RANGE_NUMERIC) 
+			{
+				$range_list_array=$measure->getRangeString($patient);
+				$lower=$range_list_array[0];
+				$upper=$range_list_array[1];	
+				$retval[] = $lower.','.$upper.':'.$unit;					
+			}
+			else
+			{
+				$retval[]="".':'.$unit;
+			}			
+	}
+	
+	return $retval;
+		
+}
+public	function  getMeasureListArray()
+{
+	$retval = array();
+	$testType = TestType::getById($this->testTypeId);
+		$measure_list = $testType->getMeasures();
+                $submeasure_list = array();
+                $comb_measure_list = array();
+               // print_r($measure_list);
+                
+                foreach($measure_list as $measure)
+                {
+                    
+                    $submeasure_list = $measure->getSubmeasuresAsObj();
+                    //echo "<br>".count($submeasure_list);
+                    //print_r($submeasure_list);
+                    $submeasure_count = count($submeasure_list);
+                    
+                    if($measure->checkIfSubmeasure() == 1)
+                    {
+                        continue;
+                    }
+                        
+                    if($submeasure_count == 0)
+                    {
+                        array_push($comb_measure_list, $measure);
+                    }
+                    else
+                    {
+                        array_push($comb_measure_list, $measure);
+                        foreach($submeasure_list as $submeasure)
+                           array_push($comb_measure_list, $submeasure); 
+                    }
+                }
+                $measure_list = $comb_measure_list;
+		for($i = 0; $i < count($measure_list); $i++) {
+			$curr_measure = $measure_list[$i];
+                        if(strpos($curr_measure->name, "\$sub") !== false)
+                                                            {
+                                                                $decName = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$curr_measure->truncateSubmeasureTag();
+                                                                
+                                                            }
+                                                            else
+                                                            {
+                                                                $decName = $curr_measure->name;
+                                                            }
+                                            
+                        
+			$retval[] = $decName;
+		}
+		return $retval;
+	
+}
 	public function getMeasureList() {
 		$testType = TestType::getById($this->testTypeId);
 		$measure_list = $testType->getMeasures();
@@ -3479,7 +3594,11 @@ class Test
                 else
                 {
                     //$testt = "one,[$]two[/$],[$]twotwo[/$],three";
-                    $testt = $result_csv;
+					$result_csv =  str_replace('[$]','',$result_csv );
+					$result_csv =  str_replace('[/$]','',$result_csv );
+					$result_list = explode(",", $result_csv);
+                    /*					
+					$testt = $result_csv;
                     //$test2 = strstr($testt, $);
                     $start_tag = "[$]";
                     $end_tag = "[/$]";
@@ -3507,6 +3626,7 @@ class Test
                     if(strpos($testt, ",") == 0)
                             $result_csv = substr($testt, 1, strlen($testt)); 
                     $result_list = explode(",", $result_csv);
+					*/
                     //echo "<br>";
                     //print_r($result_list);
                     //echo "<br>";
@@ -3576,7 +3696,7 @@ class Test
                                             if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE)
                                             {
                                                     $result_string = "";
-                                                    $value_list = str_replace("_", ",", $result_list[$i]);
+                                                    $value_list = str_replace("_", "<br/>", $result_list[$i]);
                                                     $retval .= "<b>".$value_list."</b>";
                                             }
                                             else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
@@ -3616,13 +3736,13 @@ class Test
                                             $retval .= $decName."&nbsp;";
                                     }
                                     $retval .= " - <br>";
-                            }
-                            $i++;
+                            }                           
                         }
                         else
                         {
-                            $ft_result = $freetext_results[$j];
-
+                            //$ft_result = $freetext_results[$j];
+							$ft_result = $result_list[$i];
+							//echo $i;
                             if(count($measure_list) == 1)
                             {
                                 $retval .= "<br>".$ft_result."&nbsp;";   
@@ -3650,15 +3770,253 @@ class Test
                                         }
                             $j++;
                             
-                        }$c++;
+                        }$c++;  $i++;
 		}//end
 		//$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
-		return $retval;
+		return "<b>".$retval."</b>";
 	}
 	
-        public function decodeResultWithoutMeasures($show_range=false) {
+public function getTestMeasureRange($measurename,$testresultvalue)
+{
+	$test_type = TestType::getById($this->testTypeId);
+
+	$measure_list = $test_type->getMeasures();
+    $submeasure_list = array();
+    $comb_measure_list = array();
+
+    foreach($measure_list as $measure)
+    {		
+		
+		$submeasure_list = $measure->getSubmeasuresAsObj();
+
+        $submeasure_count = count($submeasure_list);
+                    
+
+                    if($measure->checkIfSubmeasure() == 1)
+
+                    {
+
+                        continue;
+
+                    }
+
+                        
+
+                    if($submeasure_count == 0)
+
+                    {
+
+                        array_push($comb_measure_list, $measure);
+
+                    }
+
+                    else
+
+                    {
+
+                        array_push($comb_measure_list, $measure);
+
+                        foreach($submeasure_list as $submeasure)
+
+                           array_push($comb_measure_list, $submeasure); 
+
+                    }
+
+                }
+
+                $measure_list = $comb_measure_list;
+
+                                                
+						$flag_num = -1;
+						foreach($measure_list as $measure) 
+						{
+							$flag_num++;
+							if($measure->name == $measurename)
+							{
+
+							$type=$measure->getRangeType();
+
+							if($type==Measure::$RANGE_NUMERIC) 
+							{
+
+								$range_list_array=$measure->getRangeString($patient);
+
+								$lower=$range_list_array[0];
+
+								$upper=$range_list_array[1];
+								
+								echo $this->getResultFlaged($testresultvalue,$lower,$upper);
+
+								$unit=$measure->unit;
+
+								if(stripos($unit,",")!=false) {	
+
+									echo "(";
+
+									$units=explode(",",$unit);
+
+									$lower_parts=explode(".",$lower);
+
+									$upper_parts=explode(".",$upper);
+
+				
+
+									if($lower_parts[0]!=0) {
+
+										echo $lower_parts[0];
+
+										echo $units[0];
+
+									}
+
+									
+
+									if($lower_parts[1]!=0) {
+
+										echo $lower_parts[1];
+
+										echo $units[1];
+
+									}
+
+									echo " - ";
+
+				
+
+									if($upper_parts[0]!=0) {
+
+										echo $upper_parts[0];
+
+										echo $units[0];
+
+									}
+
+									
+
+									if($upper_parts[1]!=0) {
+
+										echo $upper_parts[1];
+
+										echo $units[1];
+
+									}
+
+									echo ")";
+
+								} else if(stripos($unit,":")!=false) {
+
+									$units=explode(":",$unit);
+
+									echo "(";	
+
+									echo $lower;
+
+									?><sup><?php echo $units[0]; ?></sup> - 
+
+									<?php echo $upper;?> <sup> <?php echo $units[0]; ?> </sup>
+
+									<?php
+
+									echo " ".$units[1].")";
+
+								} else {	
+
+									echo "(";		
+
+									echo $lower; ?>-<?php echo $upper.")"; 
+
+									echo " ".$measure->unit;
+
+								}?>
+
+								<?php
+
+							} else {
+								$this->Color();
+
+								if($measure->unit=="")
+
+									$measure->unit="-";
+
+								echo "&nbsp;&nbsp;&nbsp;". $measure->unit;
+
+							}
+							
+							break;
+							}
+
+							//echo "<br>";
+
+						}
+}
+	
+	public function getAllResultAsArray()
+	{
+		
+			$result_csv = $this->getResultWithoutHash();
+			$result_csv = str_ireplace("[$]",'',$result_csv);
+			$result_csv = str_ireplace("[/$]",'',$result_csv);
+			$result_list = explode(",", $result_csv);
+			
+			return $result_list;
+         			 
+               
+	}
+	
+	public function getResultAsArray()
+	{			
+		
+		$result_csv = $this->getResultWithoutHash();
+         			 
+                if(strpos($result_csv, "[$]") === false)
+                {
+                    $result_list = explode(",", $result_csv);
+                }
+                else
+                {
+                    //$testt = "one,[$]two[/$],[$]twotwo[/$],three";
+                    $testt = $result_csv;
+                    //$test2 = strstr($testt, $);
+                    $start_tag = "[$]";
+                    $end_tag = "[/$]";
+                    //$testtt = str_replace("[$]two[/$],", "", $testt);
+                    $freetext_results = array();
+                    $ft_count = substr_count($testt, $start_tag);
+                    //echo $ft_count;
+                    $k = 0;
+                    while($k < $ft_count)
+                    {
+                        $ft_beg = strpos($testt, $start_tag);
+                        $ft_end = strpos($testt, $end_tag);
+                        $ft_sub = substr($testt, $ft_beg + 3, $ft_end - $ft_beg - 3);
+                        $ft_left = substr($testt, 0, $ft_beg);
+                        $ft_right = substr($testt, $ft_end + 5);
+                        //echo "<br>".$ft_left."--".$ft_right."<br>";
+                        $testt = $ft_left.$ft_right;
+                        array_push($freetext_results, $ft_sub);
+                        $k++;
+                    }
+                    //echo $freetext_results."<br>".$testt;
+                    //$testtt = str_replace($subb, "", $testt, 1);
+                    //echo "$testto<br>$subb<br>";
+                    $result_csv = $testt;
+                    if(strpos($testt, ",") == 0)
+                            $result_csv = substr($testt, 1, strlen($testt)); 
+                    $result_list = explode(",", $result_csv);
+                    //echo "<br>";
+                    //print_r($result_list);
+                    //echo "<br>";
+                } 
+				
+		
+		return $result_list;
+	}
+	
+	
+        public function decodeResultWithoutMeasures($show_range=false,$patient = null) {
             # Converts stored result value(s) for showing on front-end
 		# Get measure, unit pairs for this test
+				
 		$test_type = TestType::getById($this->testTypeId);
 		$measure_list = $test_type->getMeasures();
                 //print_r($measure_list);
@@ -3769,18 +4127,21 @@ class Test
                                                             $result_string .= $value."<br>";
                                                     }
                                                     $result_string = substr($result_string, 0, -4);
-                                                    $retval .= "<br>".$result_string."&nbsp;";
+                                                    $retval .= "<br>".$this->resetColor($result_string)."&nbsp;";
                                             }
                                             else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
                                             {
                                                     if($result_list[$i] != $curr_measure->unit)
-                                                            $retval .= "<br><b>".$result_list[$i]."</b> &nbsp;";
+                                                            $retval .= "<br><b>".$this->resetColor($result_list[$i])."</b> &nbsp;";
                                                     else
-                                                            $retval .= "<br>".$result_list[$i]."&nbsp;";
+                                                            $retval .= "<br>".$this->resetColor($result_list[$i])."&nbsp;";
                                             }
                                             else
                                             {
-                                                    $retval .= "<br>".$result_list[$i]."&nbsp;";
+												$range_list_array=$curr_measure->getRangeString($patient);
+												$lower=$range_list_array[0];				
+												$upper=$range_list_array[1];
+												$retval .= "<br>".$this->getResultFlaged($result_list[$i],$lower,$upper)."&nbsp;";
                                             }
                                     }
                                     else
@@ -3791,18 +4152,25 @@ class Test
                                             if($curr_measure->getRangeType() == Measure::$RANGE_AUTOCOMPLETE)
                                             {
                                                     $result_string = "";
-                                                    $value_list = str_replace("_", ",", $result_list[$i]);
-                                                    $retval .= "<br><b>".$value_list."</b>";
+                                                    $value_list = str_replace("_", "<br/>", $result_list[$i]);
+                                                    $retval .= "<br><b>".$this->resetColor($value_list)."</b>";
                                             }
                                             else if($curr_measure->getRangeType() == Measure::$RANGE_OPTIONS)
                                             {
                                                     if($result_list[$i]!=$curr_measure->unit)
-                                                            $retval .= "<br><b>".$result_list[$i]."</b>"."&nbsp;";
+                                                            $retval .= "<br><b>".$this->resetColor($result_list[$i])."</b>"."&nbsp;";
                                                     else
-                                                            $retval .= $result_list[$i]."&nbsp;";
+                                                            $retval .= $this->resetColor($result_list[$i])."&nbsp;";
                                             }
                                             else
-                                                    $retval .= "<br><b>".$result_list[$i]."</b>"."&nbsp;";
+											{
+												$range_list_array=$curr_measure->getRangeString($patient);
+												$lower=$range_list_array[0];				
+												$upper=$range_list_array[1];
+												//$this->getFlag($result_list[$i],$lower,$upper);
+								
+                                                    $retval .= "<br><b>".$this->getResultFlaged($result_list[$i],$lower,$upper)."</b>"."&nbsp;";
+											}
                                     }
 
                                     if($show_range === true)
@@ -3821,7 +4189,7 @@ class Test
                                     {
                                             
                                     }
-                                    $retval .= " - <br>";
+                                    $retval .= $this->resetColor(" - ")."<br>";
                             }
                             $i++;
                         }
@@ -3831,11 +4199,11 @@ class Test
 
                             if(count($measure_list) == 1)
                             {
-                                $retval .= "<br>".$ft_result."&nbsp;";   
+                                $retval .= "<br>". $this->resetColor($ft_result)."&nbsp;";   
                             }
                             else
                             {
-                                 $retval .= "<br>".$ft_result."&nbsp;"; 
+                                 $retval .= "<br>".$this->resetColor($ft_result)."&nbsp;"; 
                             }
                             if($show_range === true)
                                         {
@@ -3850,7 +4218,7 @@ class Test
                         }$c++;
 		}//end
 		//$retval = str_replace("_",",",$retval); # Replace all underscores with a comma
-		return $retval;
+		return "<b>".$retval."</b>";
         }
         
         /*
@@ -3945,7 +4313,32 @@ class Test
 		return $retval;
 	}
 	*/
+	
+	function getResultFlaged($result,$minrange,$maxrang)
+	{
+		if($result < $minrange)
+		{
+			return "<font color='#0033FF'>$result<font>";
+		}
+		else if( $result > $maxrang)
+		{
+			return "<font color='#FF0000'>$result<font>";
+		}
+		else
+		{
+			return "<font color='#000000'>$result<font>";
+		}
+	}
         
+	function resetColor($result)
+	{
+		return "<font color='#000000'>$result<font>";
+	}
+	function Color()
+	{
+		echo "<font color='#000000'>$result<font>";
+	}
+
 	public function getComments()
 	{
 		if(trim($this->comments) == "" || $this->comments == null)
@@ -3985,7 +4378,8 @@ class Test
 		$record = query_associative_one($query_string);
 		$existing_entry = Test::getObject($record);
 		$test_id = $existing_entry->testId;
-		$new_result_value = $this->result.$hash_value;
+		$new_result_value = $this->result.$hash_value;	
+		
 		$query_verify = "";
 		if	(
 				$existing_entry->result == $new_result_value && 
@@ -4888,6 +5282,7 @@ class ReferenceRange
 	public $sex;
 	public $rangeLower;
 	public $rangeUpper;
+	public $agetype;
 	
 	public static function getObject($record)
 	{
@@ -4924,6 +5319,12 @@ class ReferenceRange
 			//$reference_range->rangeUpper = intval($record['range_upper']);
 		else
 			$reference_range->rangeUpper = null;
+		if(isset($record['age_type']))
+			$reference_range->agetype = $record['age_type'];
+		else
+			$reference_range->agetype = null;
+				
+		
 		return $reference_range;
 	}
 	
@@ -4932,8 +5333,8 @@ class ReferenceRange
 		# Adds this entry to database
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = 
-			"INSERT INTO reference_range (measure_id, age_min, age_max, sex, range_lower, range_upper) ".
-			"VALUES ($this->measureId, '$this->ageMin', '$this->ageMax', '$this->sex', '$this->rangeLower', '$this->rangeUpper')";
+			"INSERT INTO reference_range (measure_id, age_min, age_max, sex, range_lower, range_upper,age_type) ".
+			"VALUES ($this->measureId, '$this->ageMin', '$this->ageMax', '$this->sex', '$this->rangeLower', '$this->rangeUpper',$this->agetype)";
 		query_insert_one($query_string);
 		DbUtil::switchRestore($saved_db);
 	}
@@ -4953,38 +5354,51 @@ class ReferenceRange
 	}
 	
 	public static function getByAgeAndSex($age, $sex, $measure_id, $lab_config_id)
-	{
+	{		
+		
 		# Fetches the reference range based on supplied age and sex values
 		global $con;
 		$measure_id = mysql_real_escape_string($measure_id, $con);
 		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 		$age = mysql_real_escape_string($age, $con);
-		$sex = mysql_real_escape_string($sex, $con);
+		$sex = trim(mysql_real_escape_string($sex, $con));
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$query_string = "SELECT * FROM reference_range WHERE measure_id=$measure_id";
+		$query_string = "SELECT * FROM reference_range WHERE measure_id=$measure_id";		
 		$retval = null;
 		$resultset = query_associative_all($query_string, $row_count);
 		if($resultset == null || count($resultset) == 0)
 			return $retval;
+			$normalizedage=0;
 		foreach($resultset as $record)
 		{
-			$ref_range = ReferenceRange::getObject($record);
+			$ref_range = ReferenceRange::getObject($record);			
+			//default is in days
+			if($ref_range->agetype == 2)//month
+				$normalizedage = $age / 30;
+			else if($ref_range->agetype == 3)//year							
+				$normalizedage = $age / 365;	
+			else
+				$normalizedage = $age;//days
+					
+			
 			if($ref_range->ageMin == 0 && $ref_range->ageMax == 0)
 			{
 				# No agewise split
-				if($ref_range->sex == "B" || strtolower($ref_range->sex) == strtolower($sex))
+				if($ref_range->sex == "B" || strtolower(trim($ref_range->sex)) == strtolower($sex))
 				{
 					return $ref_range;
 				}
 			}
-			else if($ref_range->ageMin <= $age && $ref_range->ageMax >= $age)
+			else if($normalizedage >= $ref_range->ageMin &&  $normalizedage <= $ref_range->ageMax)
 			{
-				# Age wise split exists
-				if($ref_range->sex == "B" || strtolower($ref_range->sex) == strtolower($sex))
+				
+				# Age wise split exists								
+				if($ref_range->sex == "B" || (strtolower(trim($ref_range->sex)) == strtolower($sex)))
 				{
+					
 					return $ref_range;
 				}
-			}
+			}			
 		}
 		DbUtil::switchRestore($saved_db);
 	}
@@ -6665,7 +7079,8 @@ function check_patient_surr_id($surr_id)
 	# Checks if patient ID already exists in DB, and returns true/false accordingly
 	# Called from ajax/patient_check_surr_id.php
 	global $con;
-	$surr_id = mysql_real_escape_string($surr_id, $con);
+	// Had to allow some special charactors like / and -
+	//$surr_id = mysql_real_escape_string($surr_id, $con);
 	$query_string = "SELECT surr_id FROM patient WHERE surr_id='$surr_id' LIMIT 1";	
 	$retval = query_associative_one($query_string);
 	if($retval == null)
@@ -6707,8 +7122,9 @@ function get_patient_by_id($pid)
 
 function search_patients_by_id($q, $labsection = 0)
 {
+	// Had to allow some special charactors like / and -
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	//$q = mysql_real_escape_string($q, $con);
 	# Searches for patients with similar PID
 	if(! is_admin_check(get_user_by_id($_SESSION['user_id']))){
 		if($labsection == 0){
@@ -6758,7 +7174,8 @@ function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0)
 	# Searches for patients with similar name
 	global $con;
         $offset = $cap * ($counter - 1);
-	$q = mysql_real_escape_string($q, $con);
+		// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	
 	
 	if($labsection == 0){
@@ -6791,7 +7208,8 @@ function search_patients_by_id_count($q, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 		if($labsection == 0){
@@ -6837,7 +7255,8 @@ function search_patients_by_name($q, $labsection = 0,$c="")
 {
 	# Searches for patients with similar name
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	if(empty($c))
 		$q.='%';
     else	
@@ -6890,7 +7309,8 @@ function search_patients_by_name_dyn($q, $cap, $counter, $labsection = 0,$c="")
 	# Searches for patients with similar name
 	global $con;
         $offset = $cap * ($counter - 1);
-	$q = mysql_real_escape_string($q, $con);
+		// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	if(empty($c))
 		$q.='%';
     else	
@@ -6943,7 +7363,8 @@ function search_patients_by_name_count($q, $labsection = 0,$c="")
 {
 	# Searches for patients with similar name
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	if(empty($c))
 		$q.='%';
     else	
@@ -6960,7 +7381,7 @@ function search_patients_by_name_count($q, $labsection = 0,$c="")
 			"p.name LIKE '$q' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
-
+			//;
 		}
 	} else {
 		if($labsection == 0){
@@ -6973,7 +7394,7 @@ function search_patients_by_name_count($q, $labsection = 0,$c="")
 			"p.name LIKE '$q' and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
-			
+			//;
 		}
 	}
 	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
@@ -6981,13 +7402,13 @@ function search_patients_by_name_count($q, $labsection = 0,$c="")
 	DbUtil::switchRestore($saved_db);
 	//$res = implode(",",$resultset);
 	return $resultset['val'];
-	//return $res;
 }
 
 function search_patients_by_addlid($q, $labsection = 0)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	# Searches for patients with similar addl ID
 	
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
@@ -7037,7 +7458,8 @@ function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0)
 	# Searches for patients with similar name
 	global $con;
         $offset = $cap * ($counter - 1);
-	$q = mysql_real_escape_string($q, $con);
+		// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 	
@@ -7085,7 +7507,8 @@ function search_patients_by_addlid_count($q, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 	
@@ -7127,7 +7550,8 @@ function search_patients_by_addlid_count($q, $labsection = 0)
 function search_patients_by_dailynum($q, $labsection = 0)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	# Searches for patients with similar daily number
 
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
@@ -7173,7 +7597,8 @@ function search_patients_by_dailynum_dyn($q, $cap, $counter, $labsection = 0)
 	# Searches for patients with similar name
 	global $con;
         $offset = $cap * ($counter - 1);
-	$q = mysql_real_escape_string($q, $con);
+		// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 	if($labsection == 0){
@@ -7221,7 +7646,8 @@ function search_patients_by_dailynum_count($q, $labsection = 0)
 {
 	# Searches for patients with similar name
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 	if($labsection == 0){
@@ -7278,7 +7704,8 @@ function search_specimens_by_id($q)
 function search_specimens_by_addlid($q)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	# Searches for specimens with similar addl ID
 	$query_string = 
 		"SELECT * FROM specimen ".
@@ -7340,7 +7767,8 @@ function search_specimens_by_patient_name($patient_name)
 function search_specimens_by_session($q)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	# Searched for specimens in a single session
 	$query_string =
 		"SELECT * FROM specimen ".
@@ -7360,7 +7788,8 @@ function search_specimens_by_session($q)
 function search_specimens_by_session_exact($q)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	# Searched for specimens in a single session
 	$query_string =
 		"SELECT * FROM specimen ".
@@ -7380,7 +7809,8 @@ function search_specimens_by_session_exact($q)
 function search_specimens_by_dailynum($q)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($q, $con);
 	# Searched for specimens in a single session
 	$query_string =
 		"SELECT * FROM specimen ".
@@ -7831,6 +8261,29 @@ function get_specimen_by_id($specimen_id)
 	$record = query_associative_one($query_string);
 	DbUtil::switchRestore($saved_db);
 	return Specimen::getObject($record);
+}
+
+function get_specimen_by_auxid($specimen_id)
+{
+	global $con;
+	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	# Fetches a specimen record by specimen id
+	$query_string = 
+		"SELECT * FROM specimen WHERE  aux_id='$specimen_id' LIMIT 1";		
+	//;
+	$record = query_associative_one($query_string);
+	return Specimen::getObject($record);
+}
+
+function get_specimenAndTest($aux_id)
+{
+	global $con;
+	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	# Fetches a specimen record by specimen id
+	$query_string = 
+		"SELECT * FROM specimen WHERE  aux_id='$specimen_id' LIMIT 1";		
+	//;
+	$record = query_associative_one($query_string);
 }
 
 function get_specimen_by_id_api($specimen_id, $lab_config_id)
@@ -10347,7 +10800,7 @@ function get_lab_config_specimen_types($lab_config_id, $to_global=false)
 	if($to_global == false)
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 	else
-		$saved_db = DbUtil::switchToGlobal();
+		$saved_db = DbUtil::switchToGlobal();	
 	$query_string = 
 		"SELECT specimen_type_id FROM lab_config_specimen_type ".
 		"WHERE lab_config_id=$lab_config_id";
@@ -10495,6 +10948,63 @@ function get_custom_fields_patient_by_name($field_name)
 	# Returns a list of all patient custom fields
 	$query_string =
 	"SELECT * FROM patient_custom_field where field_name = '$field_name' LIMIT 1";
+	$record = query_associative_one($query_string);
+	/* . " - ";
+	print_r($record);
+	echo "<br/>"; */
+	$retval = array();
+	//foreach($resultset as $record)
+	//{	
+		$custom_field = CustomField::getObject($record);
+	//	$retval[] = $custom_field;
+	//}
+		//echo "Final Field Name : ".$custom_field->fieldName."<br/>";
+	return $custom_field;
+}
+
+function get_custom_fields_patient_by_id($field_id)
+{
+	# Returns a list of all patient custom fields
+	$query_string =
+	"SELECT * FROM patient_custom_field where id = '$field_id' LIMIT 1";
+	$record = query_associative_one($query_string);
+	/* . " - ";
+	print_r($record);
+	echo "<br/>"; */
+	$retval = array();
+	//foreach($resultset as $record)
+	//{	
+		$custom_field = CustomField::getObject($record);
+	//	$retval[] = $custom_field;
+	//}
+		//echo "Final Field Name : ".$custom_field->fieldName."<br/>";
+	return $custom_field;
+}
+
+function get_custom_fields_specimen_by_id($field_id)
+{
+	# Returns a list of all patient custom fields
+	$query_string =
+	"SELECT * FROM specimen_custom_field where id = '$field_id' LIMIT 1";
+	$record = query_associative_one($query_string);
+	/* . " - ";
+	print_r($record);
+	echo "<br/>"; */
+	$retval = array();
+	//foreach($resultset as $record)
+	//{	
+		$custom_field = CustomField::getObject($record);
+	//	$retval[] = $custom_field;
+	//}
+		//echo "Final Field Name : ".$custom_field->fieldName."<br/>";
+	return $custom_field;
+}
+
+function get_custom_fields_specimen_by_name($field_name)
+{
+	# Returns a list of all patient custom fields
+	$query_string =
+	"SELECT * FROM specimen_custom_field where field_name = '$field_name' LIMIT 1";
 	$record = query_associative_one($query_string);
 	/* . " - ";
 	print_r($record);
@@ -11674,7 +12184,7 @@ class GlobalPatient
 			if($this->dob != null && $this->dob != "")
 			{
 				# DoB present in patient record
-				return DateLib::dobToAgeNumber($this->dob);
+				return DateLib::dobToAgeNumber($this->dob,true);
 			}
 			else
 			{	if($this->age<100)
@@ -11699,7 +12209,7 @@ class GlobalPatient
 				# Year and month specified
 				$approx_dob = trim($this->partialDob)."-01";
 			}
-			return DateLib::dobToAgeNumber($approx_dob);
+			return DateLib::dobToAgeNumber($approx_dob,true);
 		}
 	}
 	
@@ -13194,7 +13704,7 @@ function generate_bill_data_for_patient_and_date_range($patient_id, $first_date,
 	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
     $test_info = get_all_tests_for_patient_and_date_range($patient_id, $first_date, $second_date, $labsection);
 	DbUtil::switchRestore($saved_db);
-	
+
     $test_ids = array();
     $test_dates = array();
     foreach ($test_info as $test) {
@@ -13204,7 +13714,7 @@ function generate_bill_data_for_patient_and_date_range($patient_id, $first_date,
     $saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
     $names_and_costs = get_test_names_and_costs_from_ids($test_ids);
     DbUtil::switchRestore($saved_db);
-	$bill_total = array_sum($names_and_costs['costs']);
+    $bill_total = array_sum($names_and_costs['costs']);
     $bill_fields = array();
     $bill_fields['total'] = $bill_total;
     $bill_fields['names'] = $names_and_costs['names'];
@@ -13961,8 +14471,9 @@ function checkVersionDataTable()
 function checkVersionDataEntry($vers)
 {
    $saved_db = DbUtil::switchToGlobal();
-		
-   $query = "SELECT * FROM version_data WHERE version = '$vers' LIMIT 1";
+	$lab_config_id = $_SESSION['lab_config_id'];
+	
+   $query = "SELECT * FROM version_data WHERE version = '$vers'  and lab_config_id = $lab_config_id LIMIT 1";
    $record = query_associative_one($query);
    if(!$record)
    {
@@ -13983,8 +14494,8 @@ function checkVersionDataEntry($vers)
 function checkVersionDataEntryExists($vers)
 {
    $saved_db = DbUtil::switchToGlobal();
-		
-   $query = "SELECT * FROM version_data WHERE version = '$vers' LIMIT 1";
+	$lab_config_id = $_SESSION['lab_config_id'];
+   $query = "SELECT * FROM version_data WHERE version = '$vers' and lab_config_id = $lab_config_id LIMIT 1";
    $record = query_associative_one($query);
    if(!$record)
    {
@@ -14055,16 +14566,19 @@ function update_language_files(){
 	}
 	
 }
-function insertVersionDataEntry()
+function insertVersionDataEntry($lab_config_id="")
 {
    
    $saved_db = DbUtil::switchToGlobal();
    global $VERSION;
    $vers = $VERSION;
+   if(empty($lab_config_id))
+   		$lab_config_id = $_SESSION['lab_config_id'];
+		
    $status = 1;
    $uid = $_SESSION['user_id'];
-   $query_string = "INSERT INTO version_data (version, status, user_id, i_ts) ".
-                            "VALUES ('$vers', $status, $uid, NOW())";
+   $query_string = "INSERT INTO version_data (version, status, user_id, i_ts,lab_config_id) ".
+                            "VALUES ('$vers', $status, $uid, NOW(),$lab_config_id)";
    query_insert_one($query_string);
    
    
@@ -14142,7 +14656,7 @@ function search_patients_by_db_id_count($patient_code, $labsection)
     			"(select test_type_id as lab_section from test_type where test_category_id = $labsection)))";
     	
     	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);	
-	$resultset = query_associative_one($query_string);
+    	$resultset = query_associative_one($query_string);
 	DbUtil::switchRestore($saved_db);
     	return $resultset['val'];
     }
@@ -15477,10 +15991,9 @@ class API
         return "# API test String".$data." #";
     }
     
-   public function login($username, $password)
-    {
-       print_r($_SESSION);
-        global $con;
+   public function login($username, $password,$getUser_id=false)
+    {      
+     global $con;
 	$username = mysql_real_escape_string($username, $con);
 	$saved_db = DbUtil::switchToGlobal();
 	$password = encrypt_password($password);
@@ -15498,8 +16011,11 @@ class API
         }
         else
         {
-            $tok = API::start_session($username, $password);
-            return $tok;
+            $dbName = API::start_session($username, $password);	
+			if($getUser_id)		
+	            return $dbName.'^'.$record['user_id'];
+			else
+				return $dbName;
         }
     }
     
@@ -15510,9 +16026,8 @@ class API
          session_start();
         
          $sid = session_id();
-         //$_SESSION['tok'] = $sid;
-        
-         $user = get_user_by_name($username);
+         //$_SESSION['tok'] = $sid;        
+   	 $user = get_user_by_name($username);	
 	$_SESSION['username'] = $username;
 	$_SESSION['user_id'] = $user->userId;
 	$_SESSION['user_actualname'] = $user->actualName;
@@ -15521,7 +16036,7 @@ class API
 	$_SESSION['locale'] = $user->langId;
 	if($user->level==17) {
 		$combinedString = $user->rwoptions;
-
+	
 		$_SESSION['doctorConfig'] = $combinedString;
 	}
         
@@ -15588,8 +16103,9 @@ class API
 	$_SESSION['DELAY_RECORDED'] = false;
 	#TODO: Add other session variables here
 	$_SESSION['user_role'] = "garbage";
-         return 1; 
-    }
+         
+		return "blis_".$user->labConfigId;
+	}
     
     public function stop_session()
     {
@@ -15602,7 +16118,8 @@ class API
     {
         //by 1 = name, 2 = id, 3 = number
         global $con;
-	$q = mysql_real_escape_string($str, $con);
+		// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($str, $con);
         
         if($by == 2)
          {
@@ -15643,7 +16160,8 @@ class API
     {
         //by 3 = patient name, 2 = patient id, 1 = specimen_id
         global $con;
-	$q = mysql_real_escape_string($str, $con);
+		// Had to allow some special charactors like / and -
+	//$q = mysql_real_escape_string($str, $con);
         
         if($by == 1)
          {
@@ -15705,7 +16223,7 @@ class API
     
     public function get_specimen($specimen_id)
     {
-        $spec = get_specimen_by_id($specimen_id);
+        $spec = get_specimen_by_auxid($specimen_id);
         if(count($spec) > 0)
                 $ret = $spec;
              else
@@ -15713,7 +16231,181 @@ class API
              
         return $ret;
     }
-     
+    
+	public function update_result($db,$specimen_id,$measure_id,$result,$userid="")
+	{
+		
+		$measurebounds ="";
+		$sql = "select t.test_id,s.specimen_id,t.test_type_id,m.measure_id,s.patient_id from test t 
+inner join specimen s on s.specimen_id=t.specimen_id 
+inner join test_type_measure m on m.test_type_id=t.test_type_id 
+where trim(s.aux_id)='$specimen_id' and m.measure_id=$measure_id limit 1";	
+	$record = query_associative_one($sql,$db);
+	if(count($record) > 0)
+		{			
+			$sql = "select measure_id from test_type_measure where  test_type_id=".$record["test_type_id"];
+			$measures = query_associative_all($sql, $row_count,$db);					
+			if(count($measures)>0)
+			{	
+				$result_index=0;		
+				
+				for($i=0;$i<count($measures);$i++)
+				{
+					if($measures[$i]["measure_id"] == $measure_id)
+					{
+						$result_index = $i;	
+						$measurebounds = API::getMeasureBounds($measure_id,$db);				
+						break;
+					}
+				}	
+							
+				$sql = "SELECT result FROM test where test_id=".$record["test_id"];
+				$test = query_associative_one($sql, $row_count,$db);
+				$results_csv = "";											
+				if(!empty($test['result']))
+				{				
+					
+					$results_parts = explode(",",$test["result"]);					
+					$results_parts[$result_index] = str_ireplace("...",$result,$measurebounds);
+					$results_csv = implode(",",	$results_parts);
+					
+				}
+				else
+				{
+					
+					for($i=0;$i<count($measures);$i++)
+					{						
+						if($i==$result_index)
+							$results_csv .= str_ireplace("...",$result,$measurebounds);
+							
+						$results_csv .=',';								
+							
+					}	
+					$patient = Patient::getById($record["patient_id"]);
+					$hash_value = $patient->getHashValue();
+					$results_csv .= ','.$hash_value;
+				}		
+									
+					//echo 	$results_csv;exit;
+					$sql = "UPDATE test ".
+							"SET  result='$results_csv'";
+							if(!empty($userid))
+							{
+								$sql .= ", user_id= $userid";
+							}
+							$sql .=" where test_id=".$record["test_id"];							
+							query_blind($sql,$db);
+							return 1;
+				
+			}
+			else
+			{
+				return 0;
+			}
+			
+		}
+		else
+		{
+			return 0;
+		}
+		
+	}
+	
+	private function getMeasureBounds($measure_id,$db)
+	{
+		$sql ="SELECT `range` FROM `measure` WHERE measure_id =$measure_id";
+		$resultset = query_associative_one($sql,$db);
+		if( $resultset ==  NULL)
+		{
+			return NULL;
+		}
+		else
+		{
+			if(stristr($resultset['range'],"$freetext$$")!= FALSE)
+				return "[$]...[/$]";			
+			else
+				return "...";
+				
+		}	
+		
+		
+		
+		
+	}
+	public function getSpecimenID($patientid,$sequence,$db)
+	{
+		//echo '['.$db.']';
+		$sql ="SELECT  s.aux_id FROM `specimen` s
+INNER JOIN patient p ON p.surr_id = '$patientid'
+WHERE substring( s.aux_id, 9 ) = '$sequence'
+ORDER BY s.ts DESC LIMIT 1";		
+		
+		$resultset = query_associative_one($sql,$db);	
+		//echo "$db";print_r($resultset);
+		if( $resultset ==  NULL)
+		{
+			return NULL;
+		}
+		else
+		{
+			return $resultset['aux_id'];
+		}
+		
+	}
+	public function getTestDetails($db,$specimenTypefilter ="",$test_typeFilter="",$day=0,$aux_id="")
+	{
+		$sql = "SELECT distinct s.specimen_id,s.aux_id,s.date_collected,s.date_recvd,s.doctor,p.name,p.surr_id,p.sex,p.dob as dob,p.partial_dob,
+t.test_type_id,s.specimen_type_id,st.name as specimentype,tm.measure_id FROM specimen s
+inner join patient p on p.patient_id=s.patient_id
+inner join test t on t.specimen_id=s.specimen_id
+inner join test_type tt on tt.test_type_id=t.test_type_id
+inner join specimen_type st on st.specimen_type_id=s.specimen_type_id
+inner join test_type_measure tm on tm.test_type_id = tt.test_type_id ";
+
+if(!empty($aux_id))
+	$sql .="where s.aux_id = '$aux_id' ";
+else
+	$sql .="where date(s.date_collected) >= curdate()-$day ";
+if(!empty($specimenTypefilter))
+	$sql .=" and st.specimen_type_id in ($specimenTypefilter)";		
+if(!empty($test_typeFilter))
+	$sql .=" and tt.test_type_id in ($test_typeFilter)";	 
+	 $resultset = query_associative_all($sql, $row_count,$db);	
+        if(count($resultset) > 0)
+                $ret = $resultset;
+             else
+                $ret = 0;
+             
+        return $ret;
+		
+	}
+	public function get_specimenAndTest($db,$specimen_id="",$specimenTypefilter="",$test_filter="",$datefrom="",$dateto="")
+	{
+		$sql ="SELECT s.specimen_id,s.aux_id,s.date_collected,s.date_recvd,s.doctor,p.name,p.surr_id,p.sex,p.dob as dob,p.partial_dob,
+t.test_type_id,tm.measure_id,m.name as testname,s.specimen_type_id,st.name as specimentype FROM specimen s
+inner join patient p on p.patient_id=s.patient_id
+inner join test t on t.specimen_id=s.specimen_id
+inner join test_type tt on tt.test_type_id=t.test_type_id
+inner join specimen_type st on st.specimen_type_id=s.specimen_type_id
+inner join test_type_measure tm on tm.test_type_id = tt.test_type_id
+inner join measure m on m.measure_id = tm.measure_id where 1";
+if(!empty($specimen_id))
+	$sql .=" and TRIM(s.aux_id)='$specimen_id'";
+if(!empty($specimenTypefilter))
+	$sql .=" and st.specimen_type_id in ($specimenTypefilter)";
+if(!empty($test_filter))
+	$sql .=" and m.measure_id in ($test_filter)";	
+if(!empty($datefrom) && !empty($dateto))
+	$sql .=" and s.date_collected between '$datefrom' and '$dateto'";
+	$sql .=" order by specimen_id ";
+	$resultset = query_associative_all($sql, $row_count,$db);	
+        if(count($resultset) > 0)
+                $ret = $resultset;
+             else
+                $ret = 0;
+             
+        return $ret;
+	}
     public function get_specimen_catalog()
     {
         global $CATALOG_TRANSLATION;
@@ -16089,8 +16781,273 @@ class API
     }
     
     
-}
-	
-   
+}   
 /* API ends here */
+
+/*
+class for handling BLIS Interface with DHIS2. It is known as DHIMS2 in Ghana.
+*/
+
+class DHIMS2
+{
+	public $ID;
+	public $username;
+	public $password;
+	public $orgUnit;
+	public $dataSet;
+	public $dataElement;
+	public $entryPeriod;
+	public $categoryCombo;
+	public $blisTestID;
+	public $blisAgegroup;
+	public $blisGender;
+	
+	public function Save($lab_config_id)
+	{
+		$sql="INSERT INTO `dhims2_api_config` (
+`id` ,`username` ,`password` ,`orgunit` ,`dataset` ,
+`dataelement` ,`categorycombo` ,`gender` ,`period`)
+VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->dataSet',
+ '$this->dataElement".'|'."$this->blisTestID', '$this->categoryCombo".'|'."$this->blisAgegroup', '$this->blisGender', '$this->entryPeriod');";
+		query_blind($sql,$db);	
+		return 1;
+	}
+	
+	public function deleteItems($lab_config_id,$items)
+	{
+		$sql ="delete from dhims2_api_config where id in ($items)";
+		query_blind($sql,$db);	
+		return 1;
+	}
+	
+	public function getSendingConfigs($lab_config_id)
+	{
+		
+		$sql="select * from dhims2_api_config";
+		$resultset = query_associative_all($sql, $row_count,$lab_config_id);		
+		$results = array();
+		$larr = array();		
+		$icount= count($resultset);	
+		
+		for($i=0;$i<$icount;$i++)
+		{
+			$orgunit = explode('^',$resultset[$i]['orgunit']);						
+			$larr['orgUnit'] = $orgunit[0];					
+			$dataset = explode('^',$resultset[$i]['dataset']);
+			$larr['dataSet'] = $dataset[0];			
+			$dataelement = explode('|',$resultset[$i]['dataelement']);
+			$dsetparts = explode('^',$dataelement[0]);
+			$larr['dataElement'] = $dsetparts[0];
+			
+			$elementname = "";			
+			for($dcount=1;$dcount<count($dataelement);$dcount++)
+			{
+				$tmp = explode('^',$dataelement[$dcount]);
+				if(empty($elementname))
+					$elementname .= $tmp[0];
+				else
+					$elementname .= '+'.$tmp[0];
+			}			
+			
+			$larr['blistestID']=$elementname;			
+			$categorycombo = explode('^',$resultset[$i]['categorycombo']);
+			$larr['categoryOptionCombo'] = $categorycombo[0];
+			$comboname = explode('|',$categorycombo[1]);			
+			$larr['blisageGroup'] = $comboname[1];			
+			$larr['gender'] = $resultset[$i]['gender'];
+			$larr['period'] = $resultset[$i]['period'];			
+			$results[] = $larr;
+			$larr = array();					
+		
+		}
+		//file_put_contents("dhims2.txt",print_r($results));
+				
+		return $results;
+		
+		//print_r($results);
+	}	
+	
+	public function getConfigs($lab_config_id)
+	{		
+		$sql="select * from dhims2_api_config";
+		$resultset = query_associative_all($sql, $row_count,$lab_config_id);		
+		$results = array();
+		$larr = array();	
+		$orgunitTrimList = array();	
+		$datasetTrimList = array();	
+		$dataelementTrimList = array();
+		$genderTrimList = array();
+		$icount= count($resultset);	
+		for($i=0;$i<$icount;$i++)
+		{
+			$orgunit = explode('^',$resultset[$i]['orgunit']);
+			if(!in_array($orgunit[0],$orgunitTrimList))
+			{				
+				$larr['id'] = $orgunit[0];
+				$larr['pId'] = 0;
+				$larr['name'] = $orgunit[1];
+				$larr['open'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+				$orgunitTrimList[] = $orgunit[0];
+			}
+			
+			$dataset = explode('^',$resultset[$i]['dataset']);
+			if(!in_array($dataset[0],$datasetTrimList))
+			{
+				$larr['id'] = $dataset[0];
+				$larr['pId'] = $orgunit[0];
+				$larr['name'] = $dataset[1];
+				$larr['isParent'] = true;
+				$larr['open'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+				$datasetTrimList[] = $dataset[0];
+			}			
+			
+			$dataelement = explode('|',$resultset[$i]['dataelement']);
+			//$elementname = explode('|',$dataelement[1]);
+			$elementname = "";
+			$dsetparts = explode('^',$dataelement[0]);  //.$elementname[1];
+			for($dcount=1;$dcount<count($dataelement);$dcount++)
+			{
+				$tmp = explode('^',$dataelement[$dcount]);
+				if(empty($elementname))
+					$elementname .= $tmp[1];
+				else
+					$elementname .= '+'.$tmp[1];
+			}
+			
+			$dsetElem = $dsetparts[0];
+			if(!in_array($dsetElem,$dataelementTrimList))
+			{
+				$larr['id'] = $dsetElem;
+				$larr['pId'] = $dataset[0];				
+				$larr['name'] = $dsetparts[1].'-->'.$elementname;
+				$larr['open'] = true;
+				$larr['isParent'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+				$dataelementTrimList[] = $dsetElem;
+			}
+			
+					
+			if(	$resultset[$i]['gender'] =="M")
+			{
+				if(!in_array( $dsetElem.'_M',$genderTrimList))
+				{
+					$larr['id'] = $dsetElem.'_M';
+					$larr['pId'] = $dsetElem;
+					$comboname = explode('|',$categorycombo[1]);			
+					$larr['name'] ="Male";
+					$larr['open'] = true;
+					$larr['isParent'] = true;
+					$larr['ename'] = $resultset[$i]['id'];
+					$results[] = $larr;
+					$larr = array();
+					$genderTrimList[] = $dsetElem.'_M';
+				}
+			
+				$categorycombo = explode('^',$resultset[$i]['categorycombo']);
+				$larr['id'] = $categorycombo[0];
+				$larr['pId'] =  $dsetElem.'_M';
+				$comboname = explode('|',$categorycombo[1]);			
+				$larr['name'] = $comboname[0].'-->'.$comboname[1];
+				$larr['open'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+			}
+			elseif(	$resultset[$i]['gender'] =="F")
+			{
+				if(!in_array( $dsetElem.'_F',$genderTrimList))
+				{
+					$larr['id'] = $dsetElem.'_F';
+					$larr['pId'] = $dsetElem;
+					$comboname = explode('|',$categorycombo[1]);			
+					$larr['name'] ="Female";
+					$larr['open'] = true;
+					$larr['isParent'] = true;
+					$larr['ename'] = $resultset[$i]['id'];
+					$results[] = $larr;
+					$larr = array();
+					$genderTrimList[] = $dsetElem.'_F';
+				}
+				
+				$categorycombo = explode('^',$resultset[$i]['categorycombo']);
+				$larr['id'] = $categorycombo[0];
+				$larr['pId'] =  $dsetElem.'_F';
+				$comboname = explode('|',$categorycombo[1]);			
+				$larr['name'] = $comboname[0].'-->'.$comboname[1];
+				$larr['open'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+			}
+			else
+			{
+				if(!in_array( $dsetElem.'_B',$genderTrimList))
+				{
+					$larr['id'] = $dsetElem.'_B';
+					$larr['pId'] = $dsetElem;
+					$comboname = explode('|',$categorycombo[1]);			
+					$larr['name'] ="Male & Female";
+					$larr['open'] = true;
+					$larr['isParent'] = true;
+					$larr['ename'] = $resultset[$i]['id'];
+					$results[] = $larr;
+					$larr = array();
+					$genderTrimList[] = $dsetElem.'_B';
+				}
+				
+				$categorycombo = explode('^',$resultset[$i]['categorycombo']);
+				$larr['id'] = $categorycombo[0];
+				$larr['pId'] =  $dsetElem.'_B';
+				$comboname = explode('|',$categorycombo[1]);			
+				$larr['name'] = $comboname[0].'-->'.$comboname[1];
+				$larr['open'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+			}
+			
+			//if($i==2)
+			//break;
+		}
+		//file_put_contents("dhims2.txt",print_r($results));
+				
+		return $results;
+		
+		//print_r($results);
+	}	
+
+}
+
+	
+	function getEquipmentList()
+	{
+		$saved_db = DbUtil::switchToGlobal();
+		$query_configs = "SELECT id,equipment_name from interfaced_equipment";
+		
+		$resultset = query_associative_all($query_configs,0);
+		
+		   
+		DbUtil::switchRestore($saved_db);
+		return $resultset;
+	}
+	
+	function getEquipmentDetails($id)
+	{
+		$saved_db = DbUtil::switchToGlobal();
+		$query_configs = "SELECT * from interfaced_equipment where id={$id}";
+		
+		$resultset = query_associative_all($query_configs,0);
+		
+		   
+		DbUtil::switchRestore($saved_db);
+		return $resultset;
+	}
 ?>

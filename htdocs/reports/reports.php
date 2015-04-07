@@ -1,6 +1,7 @@
 <?php 
 include("redirect.php");
 include("includes/header.php");
+include_once("includes/user_lib.php");
 LangUtil::setPageId("reports");
 
 putUILog('reports', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
@@ -160,12 +161,18 @@ $(document).ready(function(){
 		if(recordType == 1){
 			$('#cat_row13').show();
 			$('#ttype_row13').show();
+			$('#ttype_row14').show();
+			getCustomFields('s');
 		} else if(recordType == 2) {
 			$('#cat_row13').show();
 			$('#ttype_row13').hide();
+			$('#ttype_row14').show();
+			getCustomFields('p');
 		} else {
 			$('#cat_row13').hide();
 			$('#ttype_row13').hide();
+			$('#ttype_row14').hide();			
+			
 		}
 	});
 	$('#cat_code13').change( function() { get_test_types_bycat() });
@@ -250,6 +257,12 @@ function changeAvailableLocations(dropdown) {
 	var index  = dropdown.selectedIndex;
     var selectValue = dropdown.options[index].value;
 	$('#locationAggregation').load('ajax/locations_bytests.php?l='+selectValue+'&checkBoxName=locationAgg[]');
+}
+
+function getCustomFields(type)
+{
+	
+	$('#custf').load('ajax/getcustomfields.php?type='+type);
 }
 
 function handleChange(dropdown) {
@@ -1270,8 +1283,9 @@ function search_patient_history()
 {
 	var location = $("#location8").attr("value");
 	var search_attrib = $('#p_attrib').attr("value");
-	var condition_attrib = $('#h_attrib').attr("value");
+		var condition_attrib = $('#h_attrib').attr("value");
 	var pid = $('#patient_id8').attr("value");
+	
 	if(pid == "")
 	{
 		alert("<?php echo LangUtil::$generalTerms['TIPS_INCOMPLETEINFO']; ?>");
@@ -1281,7 +1295,7 @@ function search_patient_history()
 	//alert(cat_code); 
 	$('#test_history_progress_spinner').show();
 	var url = 'ajax/search_p_dyn.php';
-	//alert(search_attrib+" "+condition_attrib);
+	//alert(search_attrib+" "+pid);
 	$("#phistory_list").load(url, 
 		{q: pid, a: search_attrib, l: location, lab_section : cat_code, c: condition_attrib }, 
 		function()
@@ -1475,7 +1489,23 @@ function print_daily_patients()
 		alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
 		return;
 	}
-	var url = "reports_dailypatients.php?yt="+yt+"&mt="+mt+"&dt="+dt+"&yf="+yf+"&mf="+mf+"&df="+df+"&l="+l+"&labsec="+cat_code;
+	
+	var cfield = $('#custf').attr("value");
+	var cfield_value = "";
+	var cfield_id=0;
+	if(cfield.length > 1)
+	{
+		cfield_id = cfield.substr(2);	
+		cfield_value = $('#custom_'+cfield_id).attr("value");
+		if(!cfield_value)
+		{
+			cfield_value = $('#custom_'+cfield_id+'_yyyy').attr("value");
+			cfield_value = cfield_value +'-'+$('#custom_'+cfield_id+'_mm').attr("value");
+			cfield_value = cfield_value +'-'+$('#custom_'+cfield_id+'_dd').attr("value");
+		}
+	}
+	
+	var url = "reports_dailypatients.php?yt="+yt+"&mt="+mt+"&dt="+dt+"&yf="+yf+"&mf="+mf+"&df="+df+"&l="+l+"&labsec="+cat_code+"&cfield="+cfield+"&cfield_value="+cfield_value;
 	window.open(url);
 }
 
@@ -1498,7 +1528,22 @@ function print_daily_specimens()
 	var ttype = $('#ttype13').attr("value");
 	var ip= 0;
 	var p=0;
-	var url = "reports_dailyspecimens.php?yt="+yt+"&mt="+mt+"&dt="+dt+"&yf="+yf+"&mf="+mf+"&df="+df+"&l="+l+"&c="+cat_code+"&t="+ttype+"&ip="+ip;
+	var cfield = $('#custf').attr("value");
+	var cfield_value = "";
+	var cfield_id=0;
+	if(cfield.length > 1)
+	{
+		cfield_id = cfield.substr(2);	
+		cfield_value = $('#custom_'+cfield_id).attr("value");
+		if(!cfield_value)
+		{
+			cfield_value = $('#custom_'+cfield_id+'_yyyy').attr("value");
+			cfield_value = cfield_value +'-'+$('#custom_'+cfield_id+'_mm').attr("value");
+			cfield_value = cfield_value +'-'+$('#custom_'+cfield_id+'_dd').attr("value");
+		}
+	}
+	
+	var url = "reports_dailyspecimens.php?yt="+yt+"&mt="+mt+"&dt="+dt+"&yf="+yf+"&mf="+mf+"&df="+df+"&l="+l+"&c="+cat_code+"&t="+ttype+"&ip="+ip+"&cfield="+cfield+"&cfield_value="+cfield_value;
 	window.open(url);
 }
 
@@ -1644,6 +1689,21 @@ function hideCondition(p_attrib)
 	else
 		$('#h_attrib').hide();
 }
+
+function handleCustomeFieldChange(dropdown) 
+{
+	//var seltext = $("option:selected", dropdown).text();
+	var selvalue =	dropdown.value;
+	if(dropdown.value == 0)
+	{
+		$('#customfdiv').html("");
+	}
+	else
+	{		
+		$('#customfdiv').load('ajax/testselectbycustomfield.php?selvalue='+selvalue);
+		//$('#customfdiv').html(dropdown.value);
+	}
+}
 </script>
 <br>
 <table name="page_panes" cellpadding="10px">
@@ -1652,7 +1712,7 @@ function hideCondition(p_attrib)
 		<?php
 			$site_list = get_site_list($_SESSION['user_id']);
 			if ( !is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) ) { 
-				echo LangUtil::$pageTerms['MENU_DAILY']; ?>
+				if($_SESSION['user_level'] != $LIS_DOCTOR) echo LangUtil::$pageTerms['MENU_DAILY']; ?>
 			<ul>
 				<!--
 				<li class='menu_option' id='patient_report_menu'>
@@ -1664,23 +1724,25 @@ function hideCondition(p_attrib)
 					<a href='javascript:show_test_history_form();'><?php echo LangUtil::$pageTerms['MENU_PATIENT']; ?></a>
 				</li>
 				<li class='menu_option' id='session_report_menu' <?php
-				if($SHOW_SPECIMEN_REPORT === false)
+				if($SHOW_SPECIMEN_REPORT === false || $_SESSION['user_level'] == $LIS_DOCTOR)
 					echo " style='display:none;' ";
 				?>>
 					<a href='javascript:show_session_report_form();'><?php echo LangUtil::$pageTerms['MENU_SPECIMEN']; ?></a>
 				</li>
 				<li class='menu_option' id='print_menu' <?php
-				if($SHOW_TESTRECORD_REPORT === false)
+				if($SHOW_TESTRECORD_REPORT === false || $_SESSION['user_level'] == $LIS_DOCTOR)
 					echo " style='display:none;' ";
 				?>>
 					<a href='javascript:show_print_form();'><?php echo LangUtil::$pageTerms['MENU_TESTRECORDS']; ?></a>
 				</li>
 				
-				<li class='menu_option' id='daily_report_menu'>
+				<li class='menu_option' id='daily_report_menu' <?php if($_SESSION['user_level'] == $LIS_DOCTOR)
+					echo " style='display:none;' ";
+				?>>
 					<a href='javascript:show_daily_report_form();'><?php echo LangUtil::$pageTerms['MENU_DAILYLOGS']; ?></a>
 				</li>
 				<li class='menu_option' id='print_menu' <?php
-				if($SHOW_PENDINGTEST_REPORT === false)
+				if($SHOW_PENDINGTEST_REPORT === false || $_SESSION['user_level'] == $LIS_DOCTOR)
 					echo " style='display:none;' ";
 				?>>
 					<a href='javascript:show_pending_tests_form();'><?php echo LangUtil::$pageTerms['MENU_PENDINGTESTS']; ?></a>
@@ -1700,7 +1762,7 @@ function hideCondition(p_attrib)
 					<a href='lab_pin.php'><?php echo "Location Settings"; ?></a>
 					</li>
 				</ul>
-			<?php } echo LangUtil::$pageTerms['MENU_AGGREPORTS']; ?>
+			<?php } if ($_SESSION['user_level'] != $LIS_DOCTOR) echo LangUtil::$pageTerms['MENU_AGGREPORTS']; ?>
 			<ul>
 				<?php
 					$site_list = get_site_list($_SESSION['user_id']);
@@ -1714,7 +1776,7 @@ function hideCondition(p_attrib)
 						<!--<li class='menu_option' id='disease_report_menu'>
 							<a href='javascript:show_selection("infection_aggregate");'><?php echo LangUtil::$pageTerms['MENU_INFECTIONREPORT']; ?></a>
 						</li>-->
-					<?php } else { ?>
+					<?php } else if($_SESSION['user_level'] != $LIS_DOCTOR) { ?>
 						<li class='menu_option' id='summary_menu'>
 							<a href='javascript:show_selection("summary");'><?php echo LangUtil::$pageTerms['MENU_INFECTIONSUMMARY']; ?></a>
 						</li>
@@ -2844,6 +2906,7 @@ function hideCondition(p_attrib)
 						<input type='text' name='patient_id' id='patient_id8' class='uniform_width'></input>
 					</td>
 				</tr>
+              
 				
 				<tr>
 					<td><?php echo LangUtil::$generalTerms['LAB_SECTION']; ?> &nbsp;&nbsp;&nbsp;</td>
@@ -2999,8 +3062,6 @@ function hideCondition(p_attrib)
 			<tbody>
 			<?php
 			$site_list = get_site_list($_SESSION['user_id']);
-			//echo "test ".count($site_list);
-			//print_r($site_list);
 			if(count($site_list) == 1)
 			{
 				foreach($site_list as $key=>$value)
@@ -3018,7 +3079,7 @@ function hideCondition(p_attrib)
 							$page_elems->getSiteOptions();
 						?>
 						</select>
-					</td>
+					</td>                    
 				</tr>
 			<?php
 			}
@@ -3033,7 +3094,7 @@ function hideCondition(p_attrib)
 					$id_list = $name_list;
 					$page_elems->getDatePicker($name_list, $id_list, $value_list, true);
 					?>
-					</td>
+					</td>                    
 				</tr>
 				
 				<tr>
@@ -3044,7 +3105,7 @@ function hideCondition(p_attrib)
 					$id_list = $name_list;
 					$page_elems->getDatePicker($name_list, $id_list, $value_list, true);
 					?>
-					</td>
+					</td>                   
 				</tr>
 				
 				<tr valign='top'>
@@ -3059,7 +3120,7 @@ function hideCondition(p_attrib)
 						<input type='radio' name='rectype13' value='3' />
 							<?php echo LangUtil::$generalTerms['PATIENT_BARCODE']; ?>
 						
-					</td>
+					</td>                    
 				</tr>
 				<tr id='cat_row13'>
 					<td><?php echo LangUtil::$generalTerms['LAB_SECTION']; ?> &nbsp;&nbsp;&nbsp;</td>
@@ -3074,7 +3135,7 @@ function hideCondition(p_attrib)
 							}
 							?>
 						</select>
-					</td>
+					</td>                   
 				</tr>
 				<tr id='ttype_row13'>
 					<td><?php echo LangUtil::$generalTerms['TEST']; ?></td>
@@ -3082,9 +3143,31 @@ function hideCondition(p_attrib)
 						<select name='ttype' id='ttype13' class='uniform_width'>
 							<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
 						</select>
-					</td>
+					</td>                    
 				</tr>
-				
+				<tr id='ttype_row14'>
+					<td><?php echo "Custom Field"; ?></td>
+					<td>
+						<select name='cfield' id='custf' class='uniform_width' onchange='handleCustomeFieldChange(this);'>
+							<option value='0'><?php echo LangUtil::$generalTerms['ALL'];//  ?></option>
+                           <?php
+						   $lab_config = LabConfig::getById($_SESSION['lab_config_id']);
+						  	/*$custom_field_list = $lab_config->getPatientCustomFields();
+							foreach($custom_field_list as $custom_field)
+							{
+								echo "<option value='p_".$custom_field->id."'>".$custom_field->fieldName."</option>"; 
+							}*/
+							
+							$custom_field_list = $lab_config->getSpecimenCustomFields();
+							foreach($custom_field_list as $custom_field)
+							{
+								echo "<option value='s_".$custom_field->id."'>".$custom_field->fieldName."</option>"; 
+							}
+						   ?> 
+                           
+						</select> <br/><div id="customfdiv"></div>
+					</td>
+                    </tr>                
 				<tr>
 					<td></td>
 					<td>
@@ -3180,13 +3263,20 @@ function hideCondition(p_attrib)
 				</tr>
 				<tr id='ttype_row13'>
 					<td><?php echo LangUtil::$generalTerms['TEST']; ?></td>
+					<td >
+						<select name='ttype' id='ttype13' class='uniform_width'>
+							<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
+						</select>
+					</td>
+				</tr>
+				<tr id='ttype_row13'>
+					<td><?php echo "Custom Field"; ?></td>
 					<td>
 						<select name='ttype' id='ttype13' class='uniform_width'>
 							<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
 						</select>
 					</td>
 				</tr>
-				
 				<tr>
 					<td></td>
 					<td>

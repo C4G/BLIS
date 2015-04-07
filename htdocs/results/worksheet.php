@@ -44,15 +44,22 @@ if(is_nan($_REQUEST['num_rows']))
 else
 	$num_rows = intval($_REQUEST['num_rows']);
 
+
 //$test_name = get_test_name_by_id($test_type_id);
 //$test_type = TestType::getById($test_type_id);
 //$measure_list = $test_type->getMeasures();
 $lab_config = LabConfig::getById($_SESSION['lab_config_id']);
 $report_id = $REPORT_ID_ARRAY['worksheet.php'];
 if($test_type_id != 0)
-	$report_config = $lab_config->getWorkSheetConfig($test_type_id);
+{
+	$report_config = $lab_config->getWorkSheetConfig($test_type_id);	
+}
 else
+{
 	$report_config = $lab_config->getReportConfig(5);
+}
+	
+	
 $margin_list = $report_config->margins;
 for($i = 0; $i < count($margin_list); $i++)
 {
@@ -213,6 +220,7 @@ if(count($test_list) == 0 && $is_blank === false)
 			}
 			# Patient Custom fields here
 			$custom_field_list = $lab_config->getPatientCustomFields();
+			//echo 'here';print_r($$report_config);
 			foreach($custom_field_list as $custom_field)
 			{
 				if(in_array($custom_field->id, $report_config->patientCustomFields))

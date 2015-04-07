@@ -57,6 +57,11 @@ class DebugLib
 	
 	public static function logQuery($query_string, $db_name, $username)
 	{
+		global $ENABLE_QUERY_LOG;		
+		
+		
+		if(!$ENABLE_QUERY_LOG)
+			return;		
 		# Adds current query to log
 		$file_name = "../../local/log_".$_SESSION['lab_config_id'].".txt";
 		$file_handle = null;
@@ -72,6 +77,11 @@ class DebugLib
 	
 	public static function logDBUpdates($query_string, $db_name)
 	{
+		global $ENABLE_QUERY_LOG;
+		
+		if(!$ENABLE_QUERY_LOG)
+			return;
+			
 		# Adds current query to update log
 		$file_name = "../../local/log_".$_SESSION['lab_config_id']."_updates.sql";
 		$file_name_revamp = "../../local/log_".$_SESSION['lab_config_id']."_revamp_updates.sql";
