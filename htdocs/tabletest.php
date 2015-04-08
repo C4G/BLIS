@@ -20,8 +20,22 @@ function dobToAgeNumber($dob)
 		return $diff;
 	}
 	
-	echo dobToAgeNumber("2013-04-24").'<br/>';	
+	//echo dobToAgeNumber("2013-04-24").'<br/>';	
+	
+	/* $l_age_s = "-1 day day";
+    $l_age_t = strtotime($l_age_s);
+    $l_age_d = date('Y-m-d', $l_age_t);
+	echo  $l_age_d;
+	
+	 $u_yr = date('Y') - $l_age_d;
+	echo '<br>'.$u_yr;*/
+	
+	///echo date('Ym',strtotime("-1 month"))."</b>";
+	//echo date('Y')."</b>";
 	
 	
+	print_r(getallheaders());
+	echo "\n\n";
+	echo file_get_contents('php://input');
 	 
        

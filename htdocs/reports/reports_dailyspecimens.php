@@ -14,40 +14,56 @@ function get_records_to_print($lab_config, $test_type_id, $date_from, $date_to)
 	$saved_db = DbUtil::switchToLabConfig($lab_config->id);
 	$retval = array();
 	
+	$cfield = $_REQUEST['cfield'];
+	$cfield_value = $_REQUEST['cfield_value'];
+	$ctable = "";
+	$cus_toadd ="";	
+	if(substr($cfield,0,2) == "s_")
+	{
+		$ctable = ",specimen_custom_data";
+		$cfield = substr($cfield,2);
+		$cus_toadd ="AND (specimen_custom_data.specimen_id=t.specimen_id and field_id = $cfield and field_value='$cfield_value')";
+		
+	}	
+	
+	
 	if(isset($_REQUEST['p']) && $_REQUEST['p'] ==1)
 		{
 	
 		$query_string =
-		"SELECT * FROM test WHERE test_type_id=$test_type_id ".
+		"SELECT * FROM test t $ctable WHERE test_type_id=$test_type_id ".
 		"AND result LIKE '' ".
-		"AND specimen_id IN ( ".
+		"AND t.specimen_id IN ( ".
 			"SELECT specimen_id FROM specimen ".
 			"WHERE (date_collected BETWEEN '$date_from' AND '$date_to') ".
-		")";
+		") $cus_toadd ";
 		}
 	 
 		else
 		if(isset($_REQUEST['ip']) && $_REQUEST['ip'] == 0)
 	{
 	$query_string =
-		"SELECT * FROM test WHERE test_type_id=$test_type_id ".
+		"SELECT * FROM test t $ctable WHERE test_type_id=$test_type_id ".
 		"AND result <> '' ".
-		"AND specimen_id IN ( ".
+		"AND t.specimen_id IN ( ".
 			"SELECT specimen_id FROM specimen ".
 			"WHERE (date_collected BETWEEN '$date_from' AND '$date_to') ".
-		")";
+		") $cus_toadd ";
 		}
 		else
 		{
 		
 		$query_string =
-		"SELECT * FROM test WHERE test_type_id=$test_type_id ".
+		"SELECT * FROM test t $ctable WHERE test_type_id=$test_type_id ".
 		//"AND result <> '' ".
-		"AND specimen_id IN ( ".
+		"AND t.specimen_id IN ( ".
 			"SELECT specimen_id FROM specimen ".
 			"WHERE (date_collected BETWEEN '$date_from' AND '$date_to') ".
-		")";
+		") 	$cus_toadd ";
 		}
+		
+		
+		//echo $query_string;
 	$resultset = query_associative_all($query_string, $row_count);
 	
 	foreach($resultset as $record)
@@ -125,13 +141,15 @@ function report_fetch()
 	var l=<?php echo $_REQUEST['l'];?>;
 	var cat_code=<?php echo $_REQUEST['c'];?>;
 	var ttype=<?php echo $_REQUEST['t'];?>;
+	var cfield='<?php echo $_REQUEST['cfield'];?>';
+	var cfield_value='<?php echo $_REQUEST['cfield_value'];?>';
 	var ip = 0;
 	var p=0;
 	if($('#ip').is(":checked"))
 		ip = 1;
 	if($('#p').is(":checked"))
 		p = 1;
-	var url = "reports_dailyspecimens.php?yt="+yt+"&mt="+mt+"&dt="+dt+"&yf="+yf+"&mf="+mf+"&df="+df+"&l="+l+"&c="+cat_code+"&t="+ttype+"&ip="+ip+"&p="+p;
+	var url = "reports_dailyspecimens.php?yt="+yt+"&mt="+mt+"&dt="+dt+"&yf="+yf+"&mf="+mf+"&df="+df+"&l="+l+"&c="+cat_code+"&t="+ttype+"&ip="+ip+"&p="+p+"&cfield="+cfield+"&cfield_value="+cfield_value;
 	window.open(url);
 	}
 
@@ -238,8 +256,17 @@ foreach($record_list as $record)
 		echo $test_name;
 	
 	}
-
-
+?>
+ |<?php 
+ if($_REQUEST['cfield_value']) { 
+ $custom_field = get_custom_fields_specimen_by_id(substr($_REQUEST['cfield'],2));
+ echo $custom_field->fieldName;
+  echo ":";
+	
+		$custom_name =$_REQUEST['cfield_value'];
+		echo $custom_name;
+	echo "|";
+	}
 
 if(count($test_types) == 0)
 {

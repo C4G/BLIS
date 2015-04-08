@@ -53,7 +53,6 @@ putUILog('new_specimen', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X'
 
 	var data_string="<?php echo $php_array;?>";
 	var data=data_string.split("%"); 
-	
 	$("#doc_row_1_input").autocomplete(data);
 
 	//$(".doctors_auto").autocomplete(data);
@@ -360,6 +359,17 @@ function askandback()
 	var todo = confirm("<?php echo LangUtil::$pageTerms['TIPS_SURETOABORT']; ?>");
 	if(todo == true)
 		history.go(-1);
+}
+
+function clearSpecimenID()
+{
+	$('#addl_id').val("");
+}
+function trimSpecimenID()
+{
+	var sid=$('#addl_id').val();
+	sid = sid.replace(/\s+/g,""); 
+	$('#addl_id').val(sid);
 }
 
 function checkandtoggle(select_elem, div_id)

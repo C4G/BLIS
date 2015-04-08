@@ -14,46 +14,6 @@
 			<value>Password</value>
 		</term>
 		<term>
-			<key>DEFAULT_CURRENCY</key>
-			<value>Default Currency Name:</value>
-		</term>
-		<term>
-			<key>CURRENCY_DELIMITER</key>
-			<value>Currency Delimiter:</value>
-		</term>
-		<term>
-			<key>CURRENCY</key>
-			<value>Currency</value>
-		</term>
-		<term>
-			<key>EXCHANGE_RATE</key>
-			<value>Exchange Rate</value>
-		</term>
-		<term>
-			<key>UPDATED_DATE</key>
-			<value>Updated Date</value>
-		</term>
-		<term>
-			<key>RELATED_TESTS_NOTFOUND</key>
-			<value>Related Tests Not Found</value>
-		</term>
-		<term>
-			<key>ACTIONS</key>
-			<value>Actions</value>
-		</term>
-		<term>
-			<key>ADD_CURRENCY_RATEY</key>
-			<value>Add new currency rate</value>
-		</term>
-		<term>
-			<key>ADD_CURRENCY</key>
-			<value>Add a new currency >></value>
-		</term>
-		<term>
-			<key>NEW_CURRENCY</key>
-			<value>New Currency</value>
-		</term>
-		<term>
 			<key>PWD_TEMP</key>
 			<value>Temp Password</value>
 		</term>

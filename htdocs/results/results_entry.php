@@ -177,7 +177,8 @@ function fetch_specimen()
 	var labsection = document.getElementById('cat_code_labsection_specimen').value;
 	
 	var specimen_id = $('#specimen_id').attr("value");
-	specimen_id = specimen_id.replace(/[^a-z0-9 ]/gi,'');
+	//had to allow special charactors
+	//specimen_id = specimen_id.replace(/[^a-z0-9 ]/gi,'');
 	$('#fetch_progress_bar').show();
 	<?php 
 	#Used when Ajax response did not have JavaScript code included 

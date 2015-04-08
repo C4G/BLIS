@@ -22,7 +22,7 @@ $script_elems->enableJQueryForm();
 $script_elems->enableFacebox();
 
 $lab_config = get_lab_config_by_id($_SESSION['lab_config_id']);
-//$daily_num = get_daily_number(); 
+$daily_num = get_daily_number(); 
 $session_num = get_session_number();
 $uiinfo = "qr=".$_REQUEST['n'];
 putUILog('new_patient', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
@@ -80,11 +80,14 @@ function add_patient()
 	var addl_id = $("#addl_id").attr("value");
 	var name = $("#name").attr("value");
 	//name = name.replace(/[^a-z ]/gi,'');
-	var yyyy = $("#yyyy").attr("value");
-	yyyy = yyyy.replace(/[^0-9]/gi,'');
+	var yyyy = $("#yyyy").attr("value");	
+	if(yyyy != null)
+		yyyy = yyyy.replace(/[^0-9]/gi,'')		
 	var mm = $("#mm").attr("value");
-	mm = mm.replace(/[^0-9]/gi,'');
+		if(mm != null)
+	mm = mm.replace(/[^0-9]/gi,'');	
 	var dd = $("#dd").attr("value");
+	if(dd != null)
 	dd = dd.replace(/[^0-9]/gi,'');
 	var receipt_yyyy = $("#receipt_yyyy").attr("value");
 	
@@ -92,13 +95,14 @@ function add_patient()
 	var receipt_mm = $("#receipt_mm").attr("value");
 	receipt_mm = receipt_mm.replace(/[^0-9]/gi,'');
 	var receipt_dd = $("#receipt_dd").attr("value");
-	receipt_dd = receipt_dd.replace(/[^0-9]/gi,'');
+	receipt_dd = receipt_dd.replace(/[^0-9]/gi,'');	
+	
 	var age = $("#age").attr("value");
 	age = age.replace(/[^0-9]/gi,'');
 	var age_param = $('#age_param').attr("value");
 	age_param = age_param.replace(/[^0-9]/gi,'');
 	var sex = "";
-	var pid = $('#pid').attr("value");
+	var pid = $('#pid').attr("value");	
 	for(i = 0; i < document.new_record.sex.length; i++)
 	{
 		if(document.new_record.sex[i].checked)
@@ -142,48 +146,54 @@ function add_patient()
 	}
 	
 	//Age not given
+	
 	if(age.trim() == "")
 	{
+		
 		//Check partial DoB
 		var currentTime = new Date();
-		if(yyyy.trim() != "" && mm.trim() != "" && dd.trim() == "")
-		{
-			dd = currentTime.getDate();
-			if(checkDate(yyyy, mm, dd) == false)
+		if(yyyy != null)
+		{			
+			if(yyyy.trim() != "" && mm.trim() != "" && dd.trim() == "")
 			{
-				alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['DOB']; ?>");
+				dd = currentTime.getDate();
+				if(checkDate(yyyy, mm, dd) == false)
+				{
+					alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['DOB']; ?>");
+					return;
+				}
+				partial_dob_ym =  1;
+				
+			}
+			else if(yyyy.trim() != "" && mm.trim() == "" && dd.trim() == "")
+			{
+				dd = currentTime.getDate();
+				mm = currentTime.getMonth();
+				if(checkDate(yyyy, mm, dd) == false)
+				{
+					alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['DOB']; ?>");
+					return;
+				}
+				partial_dob_y =  1;
+			}
+			else if(yyyy.trim() == "" && mm.trim() == "" && dd.trim() == "")
+			{
+				error_message += "Please enter either Age or Date of Birth\n";//<br>";
+				error_flag = 1;
+				alert("Error: Please enter either Age or Date of Birth");
 				return;
 			}
-			partial_dob_ym =  1;
-			
-		}
-		else if(yyyy.trim() != "" && mm.trim() == "" && dd.trim() == "")
-		{
-			dd = currentTime.getDate();
-			mm = currentTime.getMonth();
-			if(checkDate(yyyy, mm, dd) == false)
+			else
 			{
-				alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['DOB']; ?>");
-				return;
+				//Full DoB - check
+				if(checkDate(yyyy, mm, dd) == false)
+				{
+					alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['DOB']; ?>");
+					return;
+				}
 			}
-			partial_dob_y =  1;
-		}
-		else if(yyyy.trim() == "" && mm.trim() == "" && dd.trim() == "")
-		{
-			error_message += "Please enter either Age or Date of Birth\n";//<br>";
-			error_flag = 1;
-			alert("Error: Please enter either Age or Date of Birth");
-			return;
-		}
-		else
-		{
-			//Full DoB - check
-			if(checkDate(yyyy, mm, dd) == false)
-			{
-				alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['DOB']; ?>");
-				return;
-			}
-		}
+		}		
+		
 	}
 	else if (isNaN(age))
 	{
@@ -368,7 +378,7 @@ function addCustomElements(){
 			params = params+myCustomName[i]+"="+$('[name="'+myCustomName[i]+'"]').val()+"&";
 		}
 		params = params.match(/(.*).$/)[1];
-			
+			//alert(params);
 		$.ajax({
 			url : "ajax/patient_add_custom?"+params,
 			async: false,
@@ -404,6 +414,7 @@ function addCustomElements(){
 		foreach($fieldOrder as $fieldName){
 			$HTMLFactory->generateHTML($fieldName);
 		}
+		
 	?>
 	
 	<?php CustomFieldOrderGeneration_Patient::generate_patient_rdate(); ?>

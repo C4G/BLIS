@@ -18,10 +18,7 @@ $patient = Patient::getById($specimen->patientId);
 $test_list = get_tests_by_specimen_id($specimen->specimenId);
 foreach($test_list as $test_entry)
 {
-	$test_type = get_test_type_by_id($test_entry->testTypeId);	
-	
-	
-	
+	$test_type = get_test_type_by_id($test_entry->testTypeId);		
 	$measure_list = $test_type->getMeasures();
 	$result_value_valid = true;
 	$result_csv = "";
@@ -33,16 +30,18 @@ foreach($test_list as $test_entry)
 		if($_REQUEST[$comment_field_name] != "")
 			$comment_field_value .= $measure->getName().":".$_REQUEST[$comment_field_name].",";		
 		
-		$result_value = $_REQUEST[$result_field_name];
+		$result_value = $_REQUEST[$result_field_name];	
+		//print_r($_REQUEST);exit;
 		if(trim($result_value) == "")
 		{
 			# Result value not provided / is empty:
 			# Do not update result value
-			$result_value_valid = false;
+			//$result_value_valid = false;
+			$result_csv .="_";
 		}
 		else 
 		{ 
-			$result_csv = str_replace("_undefined","",$result_csv);
+			//$result_csv = str_ireplace("_undefined,",",",$result_csv);
 			$range_typee = $measure->getRangeType();
             if($range_typee == Measure::$RANGE_FREETEXT)
             {
@@ -57,13 +56,16 @@ foreach($test_list as $test_entry)
 					$result_csv .= $result_value."_";
 			}
 		}	
-		
+		//echo $result_csv.'<br/>';
 		# replace last underscore with "," to separate multiple measures results
 		$result_csv = substr($result_csv, 0, strlen($result_csv) - 1);
 		$result_csv .= ",";
 		
 	}
-	$comment_field_value=substr($comment_field_value,0,strlen($comment_field_value)-1);
+	$comment_field_value=substr($comment_field_value,0,strlen($comment_field_value)-1);	
+	
+	$result_csv = str_ireplace("_undefined,",",",$result_csv);
+	//echo '<br/><br/>'.$result_csv;exit;
 	
 	if($result_value_valid === true)
 	{
@@ -76,7 +78,8 @@ foreach($test_list as $test_entry)
 		$test_entry->comments = $comment_field_value;
 		$test_entry->verifiedBy = $_SESSION['user_id'];
 		$test_entry->dateVerified = date("Y-m-d H:i:s");
-		$test_entry->verifyAndUpdate($patient->getHashValue());
+		$test_entry->verifyAndUpdate($patient->getHashValue());		
+						
 	}
 }
 header("Location: specimen_info.php?sid=$specimen_id&vd=1");

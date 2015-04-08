@@ -23,7 +23,7 @@
 # Logs and databases #
 ######################
 *.log
-*.sql
+# *.sql New version changes in db has to be uploaded
 *.sqlite
 
 # OS generated files #
@@ -41,6 +41,7 @@ Thumbs.db
 ################
 .buildpath
 .project
+.settings/
 BLIS.exe.manifest
 BlisSetup.html
 FirefoxPortable/

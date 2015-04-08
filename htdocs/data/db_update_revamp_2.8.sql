@@ -1,0 +1,1 @@
+ALTER TABLE user ADD rwoptions varchar(20) NOT NULL default '2,3,4,6,7';

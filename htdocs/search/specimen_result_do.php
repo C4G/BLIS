@@ -71,7 +71,7 @@ foreach($test_list as $test_entry)
 			# Result value not provided / is empty:
 			# Do not update result value
 			//echo " : Not Savable Field "."<br/>";
-			$result_value_valid = false;
+			//$result_value_valid = false;
 			$result_csv .=",";
 		}
 		else { 
@@ -137,6 +137,7 @@ foreach($test_list as $test_entry)
 		//echo $comment_csv; exit;
 		
 		//echo "<br/>Result CSV ".$result_csv;exit;
+		$result_csv = str_ireplace("_undefined,",",",$result_csv);
 		if($test_entry->result == "")
 		{
 			# Test result not yet entered
@@ -155,7 +156,8 @@ foreach($test_list as $test_entry)
 			$test_entry->verifiedBy = $_SESSION['user_id'];
 			$test_entry->dateVerified = date("Y-m-d H:i:s");
 			$test_entry->verifyAndUpdate($patient->getHashValue());
-			echo "TEST";
+			$specimen->setComplete();
+			echo "TEST";			
 		}
 	} else {
 		echo "TEST";

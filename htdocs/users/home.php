@@ -53,23 +53,24 @@ $script_elems->enableLatencyRecord();
 
 <script type='text/javascript'>
 
-/*$(document).ready(function(){
+$(document).ready(function(){
     $.ajax({
 		type : 'POST',
-		url : 'update/check_version.php',
+		url : 'update/check_version.php',		
 		success : function(data) {
-			if ( data=='0' && $VERSION != "2.9") 
+			
+			if ( data=='0') 
              {
-                            $('#update_div').show();
-			}
+                    $('#update_div').show();
+			 }
 			else 
              {
-                             $('#update_div').hide();
+                      $('#update_div').hide();
 			}
 		}
 	});
     //$('#update_div').show();
-});*/
+});
 
 function blis_update_t()
 {

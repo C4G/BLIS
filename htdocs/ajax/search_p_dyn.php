@@ -6,6 +6,7 @@
 #
 include("../includes/db_lib.php");
 include("../includes/script_elems.php");
+include_once("../includes/user_lib.php");
 LangUtil::setPageId("find_patient");
 
 $script_elems = new ScriptElems();
@@ -175,12 +176,11 @@ background-color:#EAF2D3;
         var cap = parseInt($('#rcap').html());
         //console.log(cap);
          $('.prev_link').hide();	
-		//alert(cap);
+		
         $.ajax({ 
 		url: url_string, 
                 async : false,
 		success: function(count){
-					//alert(count);
                     var icount = parseInt(count);
                     //alert(icount+"-"+count);
                      if(icount < cap/*parseInt('<?php echo $_REQUEST['result_cap']; ?>')*/)
@@ -405,6 +405,18 @@ else if($a == 9)
 	$patient_l = getPatientFromBarcode($q);
         }
         $patient_list[0] = $patient_l;
+}
+else if($a == 10)
+{
+	# Fetch by AUX_ID
+    if($dynamic_fetch == 0)
+        {
+	$patient_list = search_patients_by_dailynum("-".$q, $lab_section);
+        }
+        else
+        {
+            $patient_list = search_patients_by_dailynum_dyn("-".$q, $result_cap, $result_counter, $lab_section);
+        }
 }
 if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null) )
 {
@@ -640,7 +652,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					# Called from find_patient.php. Show 'profile' and 'register specimen' link
 					?>
 					<a href='new_specimen.php?pid=<?php echo $patient->patientId; ?>' title='Click to Register New Specimen for this Patient'><?php echo LangUtil::$pageTerms['CMD_REGISTERSPECIMEN']; ?></a>
-					</td><td>
+					</td><td >
 					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'><?php echo LangUtil::$pageTerms['CMD_VIEWPROFILE']; ?></a>
 					<?php
 				}
@@ -656,7 +668,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
                                         ?>
 					<a href='<?php echo $url_string; ?>' title='Click to View Report for this Patient' target='_blank'><?php echo LangUtil::$generalTerms['CMD_VIEW']; ?> Report</a>
 					</td>
-					<td>
+					<td >
 					
 					<?php $user = get_user_by_id($_SESSION['user_id']);
 					$rw_option = array();
@@ -675,12 +687,12 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
                     if($user->level == 16){
 						 if (in_array("52", $rw_option) || in_array("2", $rw_option) || in_array("3", $rw_option) || in_array("4", $rw_option) || in_array("6", $rw_option) || in_array("7", $rw_option)) {
 					?>
-			               <a  target='_blank' href=<?php echo $billing_url_string; ?> title='Click to generate a bill for this patient'>Generate Bill</a>
+                                            <a  target='_blank' href=<?php echo $billing_url_string; ?> title='Click to generate a bill for this patient'>Generate Bill</a>
 					<?php } 
 					} else {?>
 			               <a  target='_blank' href=<?php echo $billing_url_string; ?> title='Click to generate a bill for this patient'>Generate Bill</a>
 					<?php }?>          
-    		                              </td>                                      
+                                        </td>                                      
 					<td>					
 					<?php
 				}

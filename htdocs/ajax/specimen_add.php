@@ -40,7 +40,7 @@ $dnum = $_REQUEST['dnum'];
 $dnum = preg_replace("/[^a-zA-Z0-9\/\s]/", "", $dnum);
 $prefixed_dnum = date("Ymd")."-".$dnum;
 $addl_id = $_REQUEST['addl_id'];
-$addl_id = preg_replace("/[^a-zA-Z0-9\/\s]/", "", $addl_id);
+//$addl_id = preg_replace("/[^a-zA-Z0-9\/\s]/", "", $addl_id);
 $date_recvd = $_REQUEST['receipt_yyyy']."-".$_REQUEST['receipt_mm']."-".$_REQUEST['receipt_dd'];
 if(trim($_REQUEST['collect_yyyy']) == "" && trim($_REQUEST['collect_mm']) == "" && trim($_REQUEST['collect_dd']) == "")
 	# date_collected not entered. Copy value from date_received

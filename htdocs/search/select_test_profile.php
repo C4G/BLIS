@@ -13,7 +13,7 @@ $script_elems->enableDatePicker();
 $script_elems->enableTableSorter();
 $script_elems->enableLatencyRecord();
 $admin = 0;
-if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
+if(is_admin(get_user_by_id($_SESSION['user_id']))) {
      $admin = 1;}
 $rem_recs = get_removed_specimens($_SESSION['lab_config_id'], "test");
 foreach($rem_recs as $rem_rec)
@@ -175,7 +175,7 @@ var url_string = "retrieve_specimens.php?specimen_array="+txt+"&pid="+pid;
 <?php $page_elems->getSelectPatientHistory($pid, $labsection); ?>
 <br>
 
-<p align="right">
+<p align="right" <?php if($_SESSION['user_level'] == $LIS_DOCTOR) print("style='display:none'") ?>>
 <?php $page_elems->getPatientSelectReport($pid); ?>
 </p>
 <?php if($admin == 1){ ?>

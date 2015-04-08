@@ -52,7 +52,7 @@ $patient_id = $specimen_list[0]->patientId;
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			</td>
 			<td>
-			  	<?php $page_elems->getPostSpecimenEntryTaskList($patient_id); ?>
+				<?php $page_elems->getPostSpecimenEntryTaskList($patient_id); ?>
 			</td>
 		</tr>
 	</tbody>

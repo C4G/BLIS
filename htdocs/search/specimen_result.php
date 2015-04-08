@@ -247,7 +247,7 @@ $test_list = get_tests_by_specimen_id($specimen->specimenId);
 					$url_string = "ajax/measure_autocomplete.php?id=".$measure->measureId;
 					$hint_text = "Type to enter results";
 					echo "<div>";
-					$page_elems->getTokenList(-1, $field_id,"result_".$test_type->testTypeId."_".$measure->measureId, $url_string, $hint_text,"");
+					$page_elems->getTokenLis(-1, $field_id,"result_".$test_type->testTypeId."_".$measure->measureId, $url_string, $hint_text,"");
 					echo "</div>";
 				}
                                 else if($range_type == Measure::$RANGE_FREETEXT)

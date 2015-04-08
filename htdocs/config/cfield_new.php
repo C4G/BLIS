@@ -96,7 +96,7 @@ function checkandsubmit()
 		{
 			var val = options[i].value;
 			optionsValueLength += val.length;
-			if(	optionsValueLength > 100 ) {
+			if(	optionsValueLength > 65535 ) {
 				var err_string = "<?php echo LangUtil::$generalTerms['ERROR']; ?>: Length of DropDown options exceeded ";
 				$('#err_msg').html(err_string);
 				$('#err_msg').show();

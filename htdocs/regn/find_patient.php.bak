@@ -29,6 +29,8 @@ $(document).ready(function() {
 
 function restrictCharacters(e) {
 	
+	//Had issues with labs so I have to disable this for now
+	return;
 	var alphabets = /[A-Za-z]/g;
 	var numbers = /[0-9]/g;
 	if(!e) var e = window.event;
@@ -51,7 +53,9 @@ function fetch_patients()
 	$("#target_div_id_del").hide();
 	$('#psearch_progress_spinner').show();
 	var patient_id = $('#pq').attr("value").trim();
-	patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
+	fetch_patients
+	// had ato allow special charactors
+	//patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
 	var search_attrib = $('#p_attrib').attr("value");
 	var check_url = "ajax/patient_check_name.php?n="+patient_id;
 	$.ajax({ url: check_url, success: function(response){
@@ -103,7 +107,8 @@ function ConfirmDelete()
 function continue_fetch_patients()
 {
 	var patient_id = $('#pq').attr("value").trim();
-	patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
+	// had to allow special charactors
+	//patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
 	var search_attrib = $('#p_attrib').attr("value");
 	var condition_attrib = $('#h_attrib').attr("value");
 	$('#psearch_progress_spinner').show();
@@ -133,6 +138,14 @@ function continue_fetch_patients()
 		}
 	);
 }
+
+function hideCondition(p_attrib)
+{
+	if(parseInt(p_attrib)==1)
+		$('#h_attrib').show();
+	else
+		$('#h_attrib').hide();
+}
 </script>
 
 <p style="text-align: right;"><a rel='facebox' href='#Registration'>Page Help</a></p>
@@ -140,8 +153,11 @@ function continue_fetch_patients()
 <!--| <a href='new_patient.php' title='Click to add a new patient in the system'>Add New Patient &raquo;</a>-->
 <br><br>
 <form>
-	<select name='p_attrib' id='p_attrib' style='font-family:Tahoma;'>
+	<select name='p_attrib' id='p_attrib' style='font-family:Tahoma;' onchange="javascript:hideCondition(this.value);">
 		<?php $page_elems->getPatientSearchAttribSelect(); ?>
+	</select><select name='h_attrib' id='h_attrib' style='font-family:Tahoma;'>
+		<?php $page_elems->getPatientSearchCondition(); ?>
+        
 	</select>
 	&nbsp;&nbsp;
 	<input type='text' name='pq' id='pq' style='font-family:Tahoma;' onkeypress="return restrictCharacters(event)" />

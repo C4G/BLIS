@@ -81,13 +81,16 @@ class DateLib
 		return $value;
 	}
 	
-	public static function dobToAgeNumber($dob)
+	public static function dobToAgeNumber($dob, $days=false)
 	{
 		# Converts date of birth to age in years without appendin string " years" 
 		$today = date("m-d-Y");
 		$dob_array = explode("-", $dob); # gives Y-m-d
 		$dob_formatted = $dob_array[1]."-".$dob_array[2]."-".$dob_array[0];
-		$diff = round(DateLib::dateDiff("-", $today, $dob_formatted)/365, 0);
+		if($days)
+			$diff = round(DateLib::dateDiff("-", $today, $dob_formatted), 0);
+		else
+			$diff = round(DateLib::dateDiff("-", $today, $dob_formatted)/365, 0);
 		return $diff;
 	}
 

@@ -69,4 +69,8 @@ if(isset($_SESSION['username']))
 		# Technician user - Narrow down to local instance
 		$DB_NAME = $_SESSION['db_name'];
 }
+
+///handle loging
+/// set to false to disable database query loging
+$ENABLE_QUERY_LOG = true;
 ?>

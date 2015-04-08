@@ -249,10 +249,7 @@ display:none;
 <div id='report_config_content' style='display:block;'>
 <div id="docbody" name="docbody">
 <?php $align=$report_config->alignment_header;?>
-<div id='logo' align="<?php echo $align; ?>">
-<table>
-<tr>
-<td>
+<div id='logo' >
 <?php
 # If hospital logo exists, include it
 $logo_path = "../logos/logo_".$lab_config_id.".jpg";
@@ -273,9 +270,6 @@ else if(file_exists($logo_path) === true)
 	<?php
 }
 ?>
-</td>
-</tr>
-</table>
 </div>
 <!--//If condition for the font size
 <STYLE>H3 {FONT-SIZE: <?php echo $size; ?>}</STYLE>-->

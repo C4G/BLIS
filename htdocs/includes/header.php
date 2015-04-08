@@ -74,6 +74,7 @@ header('Content-Type: text/html; charset=UTF-8');
 			<?php
 		}*/
 		$script_elems->enableJQuery();
+		$script_elems->enableTreeView();// for the tree view at dhims2 configurationns
 		$script_elems->enableFacebox();
 		$script_elems->enableAutoScrollTop();
 		$script_elems->enableMultiSelect();
@@ -116,7 +117,6 @@ header('Content-Type: text/html; charset=UTF-8');
 		});
 	});	
 	</script>
-	
 	
 	</head>
 	<body class='parent_pane'>
@@ -188,7 +188,6 @@ if(strpos($_SERVER['PHP_SELF'], 'login.php') === false)
 	{
 		foreach($top_menu_options as $key => $value)
 		{
-			//echo "hello "."<br/>";
 			
 			echo "<li ";
 			echo "><a href='".$value."' ";
