@@ -4078,7 +4078,8 @@ function AddnewDHIMS2Config()
 				<p style="text-align: right;"><a rel='facebox' href='#analyzer_setup_INFO'>Page Help</a></p>
                 	<b><?php echo "Equipment Interfaced with BLIS v{$VERSION}"; ?></b> | <?php echo "Java Runtime 1.7 or above is required for BLISInterfaceClient Tool"; ?><br /><br/><?php echo 'Select equipment to see required configuration sections and correct values in <b>BLISInterfaceClient.ini file </b><br/>' ;
 					echo "Please note that you have to add other required configurations in BLISInterfaceClient.ini<br/>";
-					echo "Refer to <b>C4G BLIS INTERFACE CONFIGURATION MANUAL.pdf</b> for more information";
+					echo "Refer to <b>C4G BLIS INTERFACE CONFIGURATION MANUAL.pdf</b> for more information<br/>";
+					echo "You will have to modify equipment specific tests configuration files whcih have been created with sample tests.<br/>";
 					?>
                     <br/><br/>
                     <?php

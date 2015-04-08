@@ -20,6 +20,6 @@ CREATE TABLE IF NOT EXISTS `dhims2_api_config` (
   `gender` varchar(5) collate latin1_general_ci default NULL,
   `period` varchar(10) collate latin1_general_ci default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
 
 ALTER TABLE `dhims2_api_config` CHANGE `dataelement` `dataelement` TEXT CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ;
