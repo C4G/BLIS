@@ -25,7 +25,10 @@ class ScriptElems
 	public $enabledDragTable = false;
 	public $enabledEditInPlace = false;
 	public $enabledAutocomplete = false;
-        public $enabledJQueryMask = false;
+    public $enabledJQueryMask = false;
+
+    //Tree view
+    public $enabledTreeView = false;
 	
 	public function enableJQuery()
 	{
@@ -453,6 +456,20 @@ class ScriptElems
 		$this->enabledEditInPlace = true;
 	}
 	
-	
+	public function enableTreeView()
+    {
+        # Enables autologout after inactivity for a few seconds on the system
+        if($this->enabledTreeView === false)
+        {
+        ?>
+            <link rel="stylesheet" href="js/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+            <script type="text/javascript" src="js/ztree/js/jquery-1.4.4.min.js"></script>  
+            <script type="text/javascript" src="js/ztree/js/jquery.ztree.core-3.5.js"></script>
+            <script type="text/javascript" src="js/ztree/js/jquery.ztree.excheck-3.5.js"></script>
+            <script type="text/javascript" src="js/ztree/js/jquery.ztree.exhide-3.5.js"></script>
+        <?php
+        }
+        $this->enabledTreeView = true;
+    }
 }
 ?>

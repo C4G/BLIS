@@ -74,6 +74,7 @@ header('Content-Type: text/html; charset=UTF-8');
 			<?php
 		}*/
 		$script_elems->enableJQuery();
+		$script_elems->enableTreeView();
 		$script_elems->enableFacebox();
 		$script_elems->enableAutoScrollTop();
 		$script_elems->enableMultiSelect();
@@ -127,7 +128,7 @@ header('Content-Type: text/html; charset=UTF-8');
 if(isset($_SESSION['username']))
 {
 ?>
-	<?php echo LangUtil::getPageTerm("LOGGEDINAS"); ?>: <?php echo $_SESSION['username']; ?> | 
+	<?php echo LangUtil::getPageTerm("LOGGEDINAS"); ?>: <?php echo $_SESSION['username'];?> | 
 	<a href='edit_profile.php'><?php echo LangUtil::$pageTerms['EDITPROFILE']; ?></a> | 
 	<?php
 	//echo "test".$_SESSION['admin_as_tech'];
@@ -169,7 +170,7 @@ if(isset($_SESSION['username']))
 		<table cellspacing="10px">
 			<tr>
 				<td>
-					<span class="lis_title">Basic Laboratory Information System</span>
+					<span class="lis_title">Basic Laboratory Information System </span>
 				</td>
 				<td>
 				</td>

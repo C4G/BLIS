@@ -1,27 +1,33 @@
-<?php
-function dateDiff($dformat, $endDate, $beginDate)
-	{
-		# Calculates difference between two dates
-		# Input date format m, d, Y
-		$date_parts1=explode($dformat, $beginDate);
-		$date_parts2=explode($dformat, $endDate);
-		$start_date=gregoriantojd($date_parts1[0], $date_parts1[1], $date_parts1[2]);
-		$end_date=gregoriantojd($date_parts2[0], $date_parts2[1], $date_parts2[2]);
-		return $end_date - $start_date;
-	}
-
-function dobToAgeNumber($dob)
-	{
-		# Converts date of birth to age in years without appendin string " years" 
-		$today = date("m-d-Y");
-		$dob_array = explode("-", $dob); # gives Y-m-d
-		$dob_formatted = $dob_array[1]."-".$dob_array[2]."-".$dob_array[0];
-		$diff = round(dateDiff("-", $today, $dob_formatted), 0);
-		return $diff;
-	}
-	
-	echo dobToAgeNumber("2013-04-24").'<br/>';	
-	
-	
-	 
-       
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+<style type="text/css">
+.tbl {
+	border-top-width: thin;
+	border-right-width: thin;
+	border-bottom-width: thin;
+	border-left-width: thin;
+	border-top-style: none;
+	border-right-style: solid;
+	border-bottom-style: none;
+	border-left-style: solid;
+}
+</style>
+</head>
+<body>
+<table  height="50%" width="50%" cellspacing="0" >
+<tr>
+	<td class="tbl">1</td>
+    <td class="tbl">2</td>
+    <td class="tbl">3</td>
+</tr>
+<tr>
+	<td>4</td>
+    <td>5</td>
+    <td>6</td>
+</tr>
+</table>
+</body>
+</html>

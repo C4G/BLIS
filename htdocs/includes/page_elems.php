@@ -358,9 +358,9 @@ class PageElems
 	}
 	
 	public function getLabUserReadWriteOption($user_level="", $user_rwoptions=""){
-		if($user_level == 17) {
-			$user_rwoptions= "2,4";
-		}
+		// if($user_level == 17) {
+		// 	$user_rwoptions= "2,4";
+		// }
 
 		echo " 	<td> <div id='readOrWrite' name='readOrWrite' >";
 		if($user_level < 16 || $user_level == 17)
@@ -416,53 +416,73 @@ class PageElems
 	{
 		# Returns accessible sites for drop down <select> boxes
 		# TODO: Link the hard-coded values below to includes/user_lib.php
-		$LIS_TECH_RW = 0;
-		$LIS_TECH_RO = 1;
-		$LIS_ADMIN = 3;
-		$LIS_SUPERADMIN = 4;
-		$LIS_COUNTRYDIR = 5;
-		$LIS_CLERK = 6;
-		
-		$LIS_VERIFIER = 15;
-		$LIS_TECH_SHOWPNAME = 13;
 
-		$LIS_DOCTOR = 16;		
-		$LIS_PHYSICIAN = 17;
+
+		$saved_db = DbUtil::switchToGlobal();
+		$query = "SELECT * FROM user_type where defaultdisplay = 1";
+		$resultset = query_associative_all($query, $count);
 		
-		echo "<option value='$LIS_TECH_RW'";
-		if($selected_value == $LIS_TECH_RW)
-			echo " selected ";
-		echo ">".LangUtil::$generalTerms['LAB_TECH']."</option>";
-		/*
-		echo "<option value='$LIS_TECH_RO'";
-		if($selected_value == $LIS_TECH_RO)
-			echo " selected ";
-		echo ">Tech read-only</option>";
-		*/
-		echo "<option value='$LIS_CLERK'";
-		if($selected_value == $LIS_CLERK)
-			echo " selected ";
-		echo ">".LangUtil::$generalTerms['LAB_RECEPTIONIST']."</option>";
+		if( count($resultset) > 0 ) { ?>
+			<?php 
+				foreach($resultset as $record) {
+					echo "<option value='".$record['level']."'";
+					if($selected_value == $record['level'])
+						echo " selected ";
+					echo ">". $record['name']."</option>";
+				}
+			?>s
+		<?php }
+
+		DbUtil::switchRestore($saved_db);
+
+
+		// $LIS_TECH_RW = 0;
+		// $LIS_TECH_RO = 1;
+		// $LIS_ADMIN = 3;
+		// $LIS_SUPERADMIN = 4;
+		// $LIS_COUNTRYDIR = 5;
+		// $LIS_CLERK = 6;
 		
-		echo "<option value='$LIS_VERIFIER'";
-		if($selected_value == $LIS_VERIFIER)
-			echo " selected ";
-		echo ">Verifier</option>";
+		// $LIS_VERIFIER = 15;
+		// $LIS_TECH_SHOWPNAME = 13;
+
+		// $LIS_DOCTOR = 16;		
+		// $LIS_PHYSICIAN = 17;
 		
-		echo "<option value='$LIS_DOCTOR'";
-		if($selected_value == $LIS_DOCTOR)
-			echo " selected ";
-		echo ">Requester</option>";
+		// echo "<option value='$LIS_TECH_RW'";
+		// if($selected_value == $LIS_TECH_RW)
+		// 	echo " selected ";
+		// echo ">".LangUtil::$generalTerms['LAB_TECH']."</option>";
+		// /*
+		// echo "<option value='$LIS_TECH_RO'";
+		// if($selected_value == $LIS_TECH_RO)
+		// 	echo " selected ";
+		// echo ">Tech read-only</option>";
+		// */
+		// echo "<option value='$LIS_CLERK'";
+		// if($selected_value == $LIS_CLERK)
+		// 	echo " selected ";
+		// echo ">".LangUtil::$generalTerms['LAB_RECEPTIONIST']."</option>";
 		
-		echo "<option value='$LIS_READONLY'";
-		if($selected_value == $LIS_READONLY)
-			echo " selected ";
-		echo ">Read-Only Mode</option>";
+		// echo "<option value='$LIS_VERIFIER'";
+		// if($selected_value == $LIS_VERIFIER)
+		// 	echo " selected ";
+		// echo ">Verifier</option>";
 		
-		echo "<option value='$LIS_PHYSICIAN'";
-		if($selected_value == $LIS_PHYSICIAN)
-			echo " selected ";
-		echo ">Doctor</option>";
+		// echo "<option value='$LIS_DOCTOR'";
+		// if($selected_value == $LIS_DOCTOR)
+		// 	echo " selected ";
+		// echo ">Requester</option>";
+		
+		// echo "<option value='$LIS_READONLY'";
+		// if($selected_value == $LIS_READONLY)
+		// 	echo " selected ";
+		// echo ">Read-Only Mode</option>";
+		
+		// echo "<option value='$LIS_PHYSICIAN'";
+		// if($selected_value == $LIS_PHYSICIAN)
+		// 	echo " selected ";
+		// echo ">Doctor</option>";
 		
 	}	
 		
@@ -1886,17 +1906,17 @@ class PageElems
 							<?php echo $user->username; ?>
 						</td>
 						<td>
-							<?php echo get_level_name($user->level); //echo $user->level; ?>
+							<?php $l_name = get_level_name($user->level); 
+							if ($l_name == null) 
+								$l_name = get_level_name_db($user->level); 
+							echo $l_name;
+							?>
 						</td>
 						<?php
 						if($to_export == false)
 						{
 						?>
 						<td>
-							<a href='reports_userlog.php?username=<?php echo $user->userId; ?>&location=<?php echo $lab_config_id; ?>' target='_blank'>
-							<?php echo LangUtil::$pageTerms['RECENT_ACTIVITY']; ?>
-							</a>
-							&nbsp;&nbsp;&nbsp;&nbsp;
 							<a href="lab_user_edit.php?id=<?php echo $user->userId; ?>&backurl=lab_config_home.php?id=<?php echo $lab_config_id; ?>">
 							<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>
 							</a>
@@ -1907,6 +1927,99 @@ class PageElems
 							$div_id = 'delete_confirm_'.$user->userId;
 							$message = "'$user->username' - ".LangUtil::$generalTerms['TIPS_ACC_CONFIRMDELETE'];
 							$ok_function_call = "javascript:delete_user($user->userId);";
+							$cancel_function_call = "javascript:toggle('$div_id');";
+							$this->getConfirmDialog($div_id, $message, $ok_function_call, $cancel_function_call, $width=200);
+							?>
+						</td>
+						<?php
+						}
+						?>
+					</tr>
+				<?php
+				$count++;
+			}
+			?>
+			</tbody>
+		</table>
+		<?php
+	}
+
+	public function getLabUserTypesTable($user_list, $lab_config_id, $to_export=false)
+	{
+		# Returns HTML table of lab users
+		# Called from lab_config_home.php
+		if(count($user_list) == 0)
+		{
+			echo "<div class='sidetip_nopos'>".LangUtil::$generalTerms['MSG_NOTFOUND']."</div>";
+			return;
+		}
+		?>
+		<table class='hor-minimalist-b' style='width:700px;'>
+			<thead>
+				<tr valign='top'>
+					<th>
+						Level
+					</th>
+					<th>
+						Type
+					</th>
+					<th>
+						Default
+					</th>
+					<?php
+					if($to_export == false)
+					{
+					?>
+					<th>
+					</th>
+					<?php
+					}
+					?>
+				</tr>
+			</thead>
+			<tbody>
+			<?php
+			$count = 1;
+			foreach($user_list as $user)
+			{
+
+				?>
+					<tr valign='top'>
+						<td>
+							<?php echo $user->level; ?>.
+						</td>
+						<td>
+							<?php $val = get_level_name($user->level); 
+								if ($val == null) 
+									echo  $user->name; 
+								else 
+									echo $val; 
+							?>
+						</td>
+						<td>
+							<?php 
+								if($user->defaultdisplay)
+									echo "Yes";
+								else
+									echo "No"; 
+							?>
+						</td>
+						<?php
+						if($to_export == false)
+						{
+						?>
+						<td>
+							<a href="lab_user_type_edit.php?type=<?php echo $user->level; ?>&backurl=lab_config_home.php?id=<?php echo $lab_config_id; ?>"> 
+							<!-- <a href="lab_user_edit.php?id=<?php echo "521"; ?>&backurl=lab_config_home.php?id=<?php echo $lab_config_id; ?>"> -->
+							<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>
+							</a>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href='javascript:ask_to_delete_user_type(<?php echo $user->level; ?>);'><?php echo LangUtil::$generalTerms['CMD_DELETE']; ?></a>
+							<br>
+							<?php
+							$div_id = 'delete_confirm_'.$user->level;
+							$message = "'$user->name' - Are you sure you want to delete this user type?";
+							$ok_function_call = "javascript:delete_user_type($user->level);";
 							$cancel_function_call = "javascript:toggle('$div_id');";
 							$this->getConfirmDialog($div_id, $message, $ok_function_call, $cancel_function_call, $width=200);
 							?>
@@ -7171,7 +7284,34 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</td>
 				
 			</tr>
-			
+			<tr valign='top'<?php
+			if($report_config->reportId == 6 || $report_config->reportId == 2)
+				echo " style='display:none;' ";
+			?>>
+				<td>
+					<input type='checkbox' name='t_field_10' <?php
+						if($report_config->usePrintConfirm == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo "Confirm before print" ?>
+				</td>
+				
+			</tr>
+			<tr valign='top'<?php
+			if($report_config->reportId == 6 || $report_config->reportId == 2)
+				echo " style='display:none;' ";
+			?>>
+				<td>
+					<input type='checkbox' name='t_field_11' <?php
+						if($report_config->useResultConfirm == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo "Confirm before updating results" ?>
+				</td>
+				
+			</tr>
 		</table>
 		<table>
 			<tr valign='top'>
@@ -7702,7 +7842,30 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</td>
 				
 			</tr>
-			
+			<tr valign='top'<?php
+			if($report_config->reportId == 6 || $report_config->reportId == 2)
+				echo " style='display:none;' ";
+			?>>
+				<td>
+					<?php
+					if($report_config->usePrintConfirm == 1)
+						echo 'Confirm before print';
+					?>
+				</td>
+				
+			</tr>
+			<tr valign='top'<?php
+			if($report_config->reportId == 6 || $report_config->reportId == 2)
+				echo " style='display:none;' ";
+			?>>
+				<td>
+					<?php
+					if($report_config->useResultConfirm == 1)
+						echo 'Confirm before updating results';
+					?>
+				</td>
+				
+			</tr>			
 			</tbody>
 		</table>
 		<?php
@@ -9181,7 +9344,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
             </select>          
             </td>
             <td valign="middle">
-            <input type="button" id="o_up" name="o_up" value="ʌ"  onclick="javascript:reorder('up');"/><br /> 
+            <input type="button" id="o_up" name="o_up" value="ÊŒ"  onclick="javascript:reorder('up');"/><br /> 
              <input type="button" id="o_down" name="o_down" value="v" onclick="javascript:reorder('down');" />  
             </td>
             </tr>
@@ -9295,6 +9458,459 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		}
 		</script>			
   <?php
+	}
+	public function DHIMS2ConfigsForm($lab_config_id)
+	{ ?>    
+   	<div class='pretty_box' style='width:800px;'>
+   	  <table class='hor-minimalist-b'>
+            <tr>
+                    <th></th>
+                    <th><b>Authentication:</b></th>
+        </tr>
+    	<tbody>
+        <tr>
+        <td>Username:</td>
+        <td><input type="text"  name="dhims2username"  id="dhims2username"/></td>  
+        </tr>      
+        <tr>
+         <td>Password:</td>
+        <td><input type="password"  name="dhims2password"  id="dhims2password"/></td>       
+       
+        </tr>
+        <tr>
+         <td></td>
+        <td><input type="button" id="dhims2Authenticate" name="dhims2Authenticate" value="Authenticate" onclick="javascript:authenticateDHIMS2();" />
+        	<span id='DHIMS2AuthenticateProgress' style='display:none'>
+            <br />
+											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait..."); 
+											?>
+                                            
+		  </span>  
+        </td>       
+       
+        </tr>
+         <tr>
+         <td>Organisation Unit:</td>
+        <td><select id="dhims2orgunit" name="dhims2orgunit" onchange="javascript:getDHIMS2DataSet(this.value);">        
+        </select><span id='DHIMS2orgunitProgress' style='display:none'>
+            <br />
+											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait..."); 
+											?>
+                                            
+										</span>  </td>       
+       
+        </tr>
+        <th></th>
+          <th><b>Dataset Mapping:</b></th>
+          </tr>
+         <tr>
+         <td>Dataset:</td>
+        <td><select id="dhims2dataset" name="dhims2dataset" onchange="javascript:getDHIMS2DataElements(this.value);">       
+        </select><a style="display:none" id="DHIMS2datasetProgressRetry" href="javascript:getDHIMS2DataElements(null);">Retry</a><span id='DHIMS2datasetProgress' style='display:none'>
+            <br />
+											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait..."); 
+											?>
+                                            
+										</span> </td>       
+       
+        </tr>
+        <tr>
+        <td>Entry Period:</td>
+         <td><input type="text" name="entryperiod" id="entryperiod"  readonly="readonly"/></td>
+        </tr>
+       <tr><th></th>
+          <th><b>DataElements Mapping:</b></th>
+        </tr>     
+        </tbody>
+        </table>
+        <table class='hor-minimalist-b'>
+         <tbody>
+         <tr>
+        <th><b>DHIMS2</b></th>
+          <th colspan="2"><b>BLIS</b></th>
+          </tr>
+           <tr valign="middle">
+         <td>DataElement:<select id="dhims2dataelement" name="dhims2dataelement" onchange="javascript:getDHIMS2CatComboOptions(this.value);">
+        
+        </select><a style="display:none" id="DHIMS2ElementProgressRetry" href="javascript:getDHIMS2CatComboOptions(null);">Retry</a><span id='DHIMS2ElementProgress' style='display:none'>
+            <br />
+											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait..."); 
+											?>
+                                            
+										</span> </td>
+        <td valign="middle">   
+        <select id="blis2dataelement" name="blis2dataelement" class='uniform_width' onchange="javascript:setSelB(this);">
+        <option value="">-</option>
+        <?php
+			$this->getTestTypesSelect($lab_config_id->id);
+		?>
+        </select><input type="button" id="addBlisTest" value=">" onclick="javascript:addtoBlisList();" /><input type="button" id="removeBlisTest"  onclick="javascript: remBOrder();" value="<" /></td><td>Selected:<select id="blistestSelected" name="blistestSelected" size="5" onchange="javascript: setSelB(this);">
+        </select></td> 
+           </tr>      
+          <tr>
+         <td>Date Range:<select id="dhims2catCombo" name="dhims2catCombo">
+         </select></td>
+        <td colspan="2"><select id="bliscat" name="bliscat">
+        <?php
+		$configArray = getTestCountGroupedConfig($lab_config_id->id);
+		$ageGroups = $configArray['age_groups'];
+		if(!empty($ageGroups))
+		{
+			$age_parts = explode(",", $ageGroups);
+			foreach($age_parts as $age_part)
+			{
+				if(trim($age_part) == "")
+					continue;
+					$age_bounds = explode(":", $age_part);
+					echo '<option value="'.$age_bounds[0]."-".$age_bounds[1].'">'.$age_bounds[0]."-".$age_bounds[1].'</option>';
+			}
+		}
+		?>
+        </select>
+        
+        Sex:<input type="text" id="blisgender" name="blisgender" size="1" value="B" /><input type="button" id="addtolist" name="addtolist" value="Apply"  onclick="javascript:AddnewDHIMS2Config();" disabled="disabled"/><span id='DHIMS2ApplyProgress' style='display:none'>
+											<?php $this->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); 
+											?>                                            
+										</span>
+         <input type="hidden" name="dhims2orgunit_text"  id="dhims2orgunit_text" />
+         <input type="hidden" name="dhims2dataset_text" id="dhims2dataset_text" />
+         <input type="hidden" name="dhims2dataelement_text" id="dhims2dataelement_text" />
+         <input type="hidden" name="blis2dataelement_text" id="blis2dataelement_text" />
+         <input type="hidden" name="dhims2catCombo_text" id="dhims2catCombo_text" />
+         <input type="hidden" name="lid" id="lid" value="<?php echo $lab_config_id->id?>" />
+        </td>       
+       
+        </tr>
+        <tr>
+        <td colspan="3"><?php $this->getDHIMSConfigs($lab_config_id->id);?></td>
+        </tr>
+          <tr>
+         <td colspan="3" align="center"><a href="javascript:toggle_DHIMS2();"><?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?></a></td>
+           
+        </tr>
+         </tbody>
+        </table>         
+    </div>
+	<?php	
+	}
+	
+	
+	public function getDHIMSConfigs($lab_config_id)
+	{
+		?>
+        <script type='text/javascript'>
+		var selvalue;
+		var seltext;
+		var selIndex;		
+		function setSelB(sel)
+		{			
+			selvalue=sel.options[sel.selectedIndex].value;
+			seltext=sel.options[sel.selectedIndex].text;
+			selIndex=sel.selectedIndex;			
+		}
+		function addtoBlisList()
+		{			
+			 if (isNaN(parseInt(selvalue)))
+				return;
+			
+			var opt = document.createElement("option");
+			document.getElementById("blistestSelected").options.add(opt);       
+			opt.text = seltext;
+			opt.value = selvalue;		
+			//document.getElementById("p_fields").options.remove(selIndex);
+			//document.getElementById("AddOrder").disabled=true;
+		}
+		
+		function remBOrder()
+		{
+			if (isNaN(parseInt(selvalue)))
+				return;
+			//var opt = document.createElement("option");
+			//document.getElementById("p_fields").options.add(opt);       
+			//opt.text = seltext;
+			//opt.value = selvalue;		
+			document.getElementById("blistestSelected").options.remove(selIndex);
+			//document.getElementById("remBOrder").disabled=true;
+		}
+		var zTree, rMenu;
+		$(document).ready(function(){
+			showTree();			
+			zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			rMenu = $("#rMenu");
+
+		});
+		
+		function showTree()
+		{
+			//alert("here");			
+			var setting = {
+				check: {
+					enable: true
+				},
+				async: {
+					enable: true,
+					url:"ajax/getDHIMS2Config.php",
+					autoParam:["id", "name=n", "level=lv"],
+					otherParam:{"l":"<?php echo $lab_config_id ?>"}				
+				},
+				callback: {
+					onRightClick: OnRightClick
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				}
+			};	
+		
+			try{	
+				$.fn.zTree.init($("#treeDemo"), setting);
+				$.fn.zTree.init($("#treeDemo2"), setting);
+			}catch(err){ alert(err.message);}
+		}
+			
+function OnRightClick(event, treeId, treeNode) {
+			if (!treeNode && event.target.tagName.toLowerCase() != "button" && $(event.target).parents("a").length == 0) {
+				zTree.cancelSelectedNode();
+				showRMenu("root", event.pageX, event.pageY);
+			} else if (treeNode && !treeNode.noR) {
+				zTree.selectNode(treeNode);
+				showRMenu("node", event.pageX, event.pageY);
+			}
+		}
+
+		function showRMenu(type, x, y) {
+			$("#rMenu ul").show();
+			if (type=="root") {
+				$("#m_del").hide();
+				$("#m_check").hide();
+				$("#m_unCheck").hide();
+			} else {
+				$("#m_del").show();
+				$("#m_check").show();
+				$("#m_unCheck").show();
+			}
+			rMenu.css({"top":y+"px", "left":x+"px", "visibility":"visible"});
+
+			$("body").bind("mousedown", onBodyMouseDown);
+		}
+		function hideRMenu() {
+			if (rMenu) rMenu.css({"visibility": "hidden"});
+			$("body").unbind("mousedown", onBodyMouseDown);
+		}
+		function onBodyMouseDown(event){
+			if (!(event.target.id == "rMenu" || $(event.target).parents("#rMenu").length>0)) {
+				rMenu.css({"visibility" : "hidden"});
+			}
+		}
+		var addCount = 1;
+		function addTreeNode() {
+			hideRMenu();
+			var newNode = { name:"newNode " + (addCount++)};
+			if (zTree.getSelectedNodes()[0]) {
+				newNode.checked = zTree.getSelectedNodes()[0].checked;
+				zTree.addNodes(zTree.getSelectedNodes()[0], newNode);
+			} else {
+				zTree.addNodes(null, newNode);
+			}
+		}
+		function removeTreeNode() {
+			hideRMenu();
+			var nodes = zTree.getSelectedNodes();
+			if (nodes && nodes.length>0) {
+				if (nodes[0].children && nodes[0].children.length > 0) {
+					var msg = "Deleting this node will also delete all sub-nodes under it. \n\nPlease confirm!";
+					//alert(nodes[0].ename);
+					if (confirm(msg)==true){
+						//zTree.removeNode(nodes[0]);
+						prepareDeleteList(nodes[0]);
+						deleteItems();
+						getDHIMS2CatComboOptions(null);
+					}
+				} else {
+					//zTree.removeNode(nodes[0]);
+					prepareDeleteList(nodes[0]);
+					deleteItems();
+					getDHIMS2CatComboOptions(null);
+				}
+			}
+		}
+		
+		var listtodelete="";
+		
+		function prepareDeleteList(node)
+		{			
+			if (node.children && node.children.length > 0)
+			{
+				for(var i=0; i<node.children.length;i++)
+				{
+					prepareDeleteList(node.children[i]);
+				}
+			}
+			else
+			{
+				if(listtodelete.length > 0)
+					listtodelete = listtodelete +","+node.ename;
+				else
+					listtodelete = node.ename;
+			}
+		}
+		
+		function deleteItems()
+		{
+			//alert(listtodelete);
+			var url_string = "ajax/deleteDHIMS2Config.php?items="+listtodelete+"&l=<?php echo $lab_config_id ?>";
+			$.ajax({ url: url_string, async: false, success: function() {
+				listtodelete ="";
+				resetTree();
+			}});
+		}
+		
+		function resetTree() {
+			hideRMenu();
+			showTree();
+		}
+		
+		function hideNodes()
+		{
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			var nodes = zTree.getNodes();
+			for(var i=0;i<nodes.length;i++)
+			{	
+				zTree.hideNodes(nodes[i].children);	
+				zTree.hideNode(nodes[i]);		
+			}
+		}
+		
+		function showNodes()
+		{
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			var nodes = zTree.getNodes();
+			for(var i=0;i<nodes.length;i++)
+			{	
+				zTree.showNodes(nodes[i].children);
+			}
+		}
+		function clearsearch()
+		{
+			//var value = $('#listSearch').attr('value');
+			$('#listSearch').attr('value','');
+		}
+		
+		function searchList(value)
+		{
+			hideNodes();
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			var	nodeList = [];
+			var node;
+			var value = value;
+			var keyType = "name";
+			nodeList = zTree.getNodesByParamFuzzy(keyType, value);	
+			for(var i=0;i<nodeList.length;i++)
+			{
+				showNode(nodeList[i]);		
+			}				
+				
+		}
+		
+		function showNode(node)
+		{
+			var flag = false;
+			try{			
+				var nodeParent = node.getParentNode();
+				flag = true;
+			}catch(err){ nodeParent = "";}			
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			zTree.showNode(node);	
+			if(flag)
+			{
+				//alert("hasParent");				
+				showNode(nodeParent);				
+			}
+		}
+		
+				
+		function resetsearch()
+		{
+			var value = $('#listSearch').attr('value');
+			if(value.length == 0)
+			{
+				$('#listSearch').attr('value','Search here');
+				showNodes();
+			}
+			
+		}
+		</script>
+        
+        <table class='tablesorter' id='dhims_config_list'  style='width:750px'>
+	<thead>
+    <tr align='left'>
+    <th colspan="4"><b>Saved Interface mappings</b>&nbsp;&nbsp;(Right click on item to delete or show details)&nbsp;&nbsp;
+    <input type="text" id="listSearch" name="listSearch" value="Search here" onclick="javascript:clearsearch();" onkeyup="javascript:searchList(this.value);" onblur="javascript:resetsearch();" /> </th>  
+   
+    </tr>
+    </thead>
+    <tbody>
+    <tr align='left'>
+    <td colspan="4"><ul id="treeDemo" class="ztree"></ul></td>    
+    </tr>
+    </tbody>
+    </table>
+    <link rel="stylesheet" href="css/popoupmenu/style.css" type="text/css" />
+    <style type="text/css">._css3m{display:none}</style>
+    <style type="text/css">
+div#rMenu {position:absolute; visibility:visible; top:0;}
+div#rMenu ul li{	
+	cursor: pointer;
+	list-style: none outside none;	
+}
+
+	</style>
+
+    <div id="rMenu">
+	<ul id="css3menu1">	
+	<ul>		
+		<li><a href="javascript:removeTreeNode();">Delete Node</a></li>
+		<li class="sublast"><a href="javascript:resetTree();">Refresh Tree</a></li>
+        
+	</ul>	
+</ul>
+</div>
+
+        <?php		
+	}
+	public function DHIMS2ConfigsSummary($lab_config_id)
+	{ ?>   
+    	<div class='pretty_box' style='width:750px;'>
+		  <table class='tablesorter' id='dhims_config_list'  style='width:750px'>
+			<thead>
+    			<tr align='left'>
+    			<th colspan="4"><b>Saved Interface mappings</b></th>  	   
+    			</tr>
+    		</thead>
+    		<tbody>
+    			<tr align='left'>
+    			<td colspan="4"><ul id="treeDemo2" class="ztree"></ul></td>    
+    			</tr>
+    		</tbody>
+    	  </table>
+   		</div>
+	<?php	
+	}
+
+	
+	public function getEquipmentList()
+	{
+		# Returns a set of drop down options for equipment List
+		$list = getEquipmentList();		
+		if(is_array($list) && count($list) > 0)
+		{
+			foreach($list as $Equipment)
+			{
+				echo "<option value='".$Equipment['id']."'>".$Equipment['equipment_name']."</option>";
+			}
+		}
+		
 	}
 }
 

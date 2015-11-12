@@ -4,7 +4,6 @@
 # Main page for adding new lab user account
 # Called from lab_config_home.php
 #
-
 include("../users/accesslist.php");
 if( !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList)) 
      && !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList)) 
@@ -95,7 +94,6 @@ function add_lab_user()
 		alert("Select at least one read or write options");
 		return;
 	}
-
 	$('#error_msg').hide();
 	var url_string = 'ajax/lab_user_add.php';
 	//var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&ut='+ut+'&lid=<?php echo $lab_config_id; ?>&lang='+lang_id+"&fn_reports="+fn_reports+"&fn_results="+fn_results+"&fn_regn="+fn_regn;
@@ -106,54 +104,109 @@ function add_lab_user()
 		url: url_string,
 		data: data_string,
 		success: function(msg) {
-			document.getElementById('server_msg').innerHTML="<small>"+msg+"</small>";
-			$('#add_user_progress').hide();
-			$('#form_table').hide();
-			$('#server_msg').show();
-			window.location="<?php echo $reload_url; ?>&aadd="+username;
+			if (msg == "User already exists"){
+				alert("This username has been taken already. Please try a different username.")
+			}
+			else{
+				document.getElementById('server_msg').innerHTML="<small>"+msg+"</small>";
+				$('#add_user_progress').hide();
+				$('#form_table').hide();
+				$('#server_msg').show();
+				window.location="<?php echo $reload_url; ?>&aadd="+username;
+			}
 		}
 	});
 }
+function add_user_type(){
+	var user_type = prompt("Please enter a name for your custom user type");
+	
+	//Add to user_type table and return the id
+	var data_string = 'u='+user_type;
+	$.ajax({
+		type: "POST",
+		url: 'ajax/lab_user_type_add.php',
+		data: data_string,
+		success: function(msg) {
+			var x = document.getElementById("user_type");
+			var option = document.createElement("option");
+			option.text = user_type;
+			option.value = msg;
+			option.selected = "selected";
+			x.add(option);
+		}
+	});
 
+}
 
 function add_read_mode(){
-	var usermode = $('select[name="user_type"]').val();
-	if(usermode == 16){
-		$("#readOrWrite").empty();
-		$("#readOrWrite").append("Read Options");
+	var user_type = $('select[name="user_type"]').val();
+	var data_string = 'u='+user_type;
+	$.ajax({
+		type: "POST",
+		url: 'ajax/get_user_type_options.php',
+		data: data_string,
+		success: function(msg) {
+			var msg1 = msg.trim();
+			var rwarray = msg1.split(",");
+			document.getElementById('readwriteOpt2').checked = false;
+			document.getElementById('readwriteOpt3').checked = false;
+			document.getElementById('readwriteOpt4').checked = false;
+			document.getElementById('readwriteOpt6').checked = false;
+			document.getElementById('readwriteOpt7').checked = false;
+			if($.inArray('2', rwarray) != -1){
+				document.getElementById('readwriteOpt2').checked = true;
+			}
+			if($.inArray('3', rwarray) != -1){
+				document.getElementById('readwriteOpt3').checked = true;
+			}
+			if($.inArray('4', rwarray) != -1){
+				document.getElementById('readwriteOpt4').checked = true;
+			}
+			if($.inArray('6', rwarray) != -1){
+				document.getElementById('readwriteOpt6').checked = true;
+			}
+			if($.inArray('7', rwarray) != -1){
+				document.getElementById('readwriteOpt7').checked = true;
+			}
+		}
+	});
 
-		$("#readWrite_options").empty();
-		$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt' value='51'>Select Test - option<br><input type='checkbox' id='readwriteOpt' name='readwriteOpt' value='52'>Generate Bill - option");
-	} /*else if(usermode == 15){
-		$("#readOrWrite").empty();
-		$("#readOrWrite").append("Selected Write Options");
-		$("#readWrite_options").empty();
-		$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3'>Test Results<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt4' value='4'>Search<br>");
-		checkAllReadWriteOptions();
-	} else if(usermode == 6){
-		$("#readOrWrite").empty();
-		$("#readOrWrite").append("Selected Read Options");
-		$("#readWrite_options").empty();
-		$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' value='2'>Patient Registration<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3'>Test Results<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt4' value='4'>Search<br>");
-		checkAllReadWriteOptions();
-	}*/ else {
-		$("#readOrWrite").empty();
-		$("#readOrWrite").append("Write Options");
-		$("#readWrite_options").empty();
-		$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' checked='true' value='2'>Patient Registration<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3'>Test Results<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt4'  checked='true' value='4'>Search<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt6' value='6'>Inventory<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt7' value='7'>Backup Data <br>");
-	}
-	if(usermode!=17) {
-		checkAllReadWriteOptions();
-	}
-	if(usermode==17){
-			$("#patient-entry").hide();
-			$("#patient-entry_check").hide();
-}
-	else
-	{
-		$("#patient-entry").show();
-		$("#patient-entry_check").show();
-	}
+	// if(usermode == 16){
+	// 	$("#readOrWrite").empty();
+	// 	$("#readOrWrite").append("Read Options");
+
+	// 	$("#readWrite_options").empty();
+	// 	$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt' value='51'>Select Test - option<br><input type='checkbox' id='readwriteOpt' name='readwriteOpt' value='52'>Generate Bill - option");
+	// } else if(usermode == 15){
+	// 	$("#readOrWrite").empty();
+	// 	$("#readOrWrite").append("Selected Write Options");
+	// 	$("#readWrite_options").empty();
+	// 	$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3'>Test Results<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt4' value='4'>Search<br>");
+	// 	checkAllReadWriteOptions();
+	// } else if(usermode == 6){
+	// 	$("#readOrWrite").empty();
+	// 	$("#readOrWrite").append("Selected Read Options");
+	// 	$("#readWrite_options").empty();
+	// 	$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' value='2'>Patient Registration<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3'>Test Results<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt4' value='4'>Search<br>");
+	// 	checkAllReadWriteOptions();
+	// } else {
+	// 	$("#readOrWrite").empty();
+	// 	$("#readOrWrite").append("Write Options");
+	// 	$("#readWrite_options").empty();
+	// 	$("#readWrite_options").append("<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' checked='true' value='2'>Patient Registration<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3'>Test Results<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt4'  checked='true' value='4'>Search<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt6' value='6'>Inventory<br><input type='checkbox' name='readwriteOpt' id='readwriteOpt7' value='7'>Backup Data <br>");
+	// }
+	// // if(usermode!=17) {
+	// // 	checkAllReadWriteOptions();
+	// // }
+	// if(usermode==17){
+	// 		$("#patient-entry").hide();
+	// 		$("#patient-entry_check").hide();
+	// }
+	// else
+	// {
+	// 	$("#patient-entry").show();
+	// 	$("#patient-entry_check").show();
+	// }
 }
 
 function checkAllReadWriteOptions(){
@@ -177,7 +230,7 @@ $(document).ready(function(){
 <br><br>
 <?php $page_elems->getAsteriskMessage(); ?>
 <form name='admin_ops' action='ajax/lab_user_add.php' method='post'>
-	<table id='form_table'>
+	<table id='form_table' width = "500px">
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['USERNAME']; ?><?php $page_elems->getAsterisk(); ?></td>
 			<td><input name='lab_user' id='lab_user' type='text' class='uniform_width' /></td>
@@ -194,6 +247,7 @@ $(document).ready(function(){
 			$page_elems->getLabUserTypeOptions();
 			?>
 			</select>
+			<!-- <img src = "includes/img/Add-icon.png" width = "20px" height= "20px" title="Add custom user" align="center" onclick="javascript:add_user_type();"> -->
 			</td>
 		</tr>
 		<tr>

@@ -1,0 +1,32 @@
+;*********************************************************************************************************************
+;	
+;Equipment Name section
+;This section contains the list of all supported equipment this version of BLIS Interface Client can connect.
+;Please note that if your equipment is not listed here you cannot connect with this Version of BLIS Interface Client.
+;To use any of the equipment listed here just uncomment that line with the equipment name.
+;Only 1 equipment can be connected at a time. To connect to more equipment at a time from the same PC, create multiple instances of BLIS Interface Client and set their configurations accordingly
+;
+;PLEASE TAKE NOTE OF THE SUPPORTED FEED SOURCE ASSIGNED TO EACH EQUIPMENT AND SET THEM ACCORDINGLY AT THE FEED SOURCE SECTION
+;
+;**********************************************************************************************************************
+[EQUIPMENT] 		
+	--EQUIP_NAME--
+	
+	
+;***********************************************************************************************************************
+;Other miscellaneous application configurations
+;***********************************************************************************************************************
+[MISCELLANEOUS]
+	; options are yes/no
+	ENABLE_LOG = yes
+	;Option to enable writing messages received from analyzer to file. Options are yes/no
+	WRITE_TO_FILE = yes
+	;How many days old data to pull from BLIS. 0: is for current day, 1: for yesterday, 2: for 2 days ago, etc
+	;This configuration is only applicable to ABX Pentra 60C+
+	POOL_DAY = 0
+	;Time interval in Seconds to wait and fetch for data. Default is 30 seconds
+	POOL_INTERVAL = 30	
+	; Set whether automatic data retrieval is enabled or not. Options are yes/no
+	ENABLE_AUTO_POOL = yes
+	;Set whether LAB is using BLIS auto generated specimen IDs. Options are yes/no
+	AUTO_SPECIMEN_ID = yes

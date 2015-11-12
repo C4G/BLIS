@@ -1,0 +1,11 @@
+;***************************************************
+;
+;Configuration settings for Microsoft Access database connection
+;
+;***************************************************
+[MSACCESS CONFIGURATIONS]
+	;The ODBC Datasouce name
+	--DATASOURCE--
+	;How many days old test data should be imported into msacess database.
+	;Default is 1 day old test data
+	--DAYS--

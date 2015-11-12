@@ -173,7 +173,6 @@ function hide_result_form(specimen_id)
 
 function fetch_specimen()
 {
-	
 	var labsection = document.getElementById('cat_code_labsection_specimen').value;
 	
 	var specimen_id = $('#specimen_id').attr("value");
@@ -246,20 +245,46 @@ var pg=2;
 
 function fetch_specimen2(specimen_id)
 {
-var pg=2;
-	$('#fetch_progress_bar').show();
-	var url = 'ajax/specimen_form_fetch.php';
-	//var target_div = "fetch_specimen";
-	$('.result_form_pane').html("");
-	var target_div = "result_form_pane_"+specimen_id;
-	$("#"+target_div).load(url, 
-		{sid: specimen_id , page_id:pg}, 
-		function() 
-		{
-			$('#fetch_progress_bar').hide();
-			$("#fetched_specimen").show();
+	var user_id = <?php echo $_SESSION['user_id']; ?>;
+	var p_id;
+	$.ajax({
+		type : 'POST',
+		url : 'ajax/specimentopatient.php',
+		data: "sid="+specimen_id,
+		success : function (data) {
+			p_id= data;
+			$.ajax({
+				type : 'POST',
+				url : 'ajax/fetchUserLog.php',
+				data: "p_id="+p_id+"&log_type=RESULT",
+				success : function (data) {
+					if ( data != "false" ) {
+						var content = "The test results for this patient have been updated already by the following users.";
+						content+= "\n\n"+data+"\n\n";
+						content += "\nDo you wish to update again?";
+						var r = confirm(content);
+						if (r == false) {
+							return;
+						} 				
+					}
+					var pg=2;
+					$('#fetch_progress_bar').show();
+					var url = 'ajax/specimen_form_fetch.php';
+					//var target_div = "fetch_specimen";
+					$('.result_form_pane').html("");
+					var target_div = "result_form_pane_"+specimen_id;
+					$("#"+target_div).load(url, 
+						{sid: specimen_id , page_id:pg}, 
+						function() 
+						{
+							$('#fetch_progress_bar').hide();
+							$("#fetched_specimen").show();
+						}
+					);
+				}
+			});
 		}
-	);
+	});
 }
 
 function fetch_specimen3(specimen_id, test_id)
@@ -313,58 +338,72 @@ function toggle_form(form_id, checkbox_obj)
 
 function submit_forms(specimen_id)
 {
-	var form_id_csv = $('#form_id_list').attr("value");
-	var form_id_list = form_id_csv.split(",");
-	var resultAvailable = 0;
-	for(var i = 0; i < form_id_list.length; i++)
-	{
-		if(!$('#'+form_id_list[i]+'_skip').is(':checked'))
-		{
-			resultAvailable++;
-		}
-	}
-
-	//alert(form_id_list.length + " " + resultAvailable);
-	if(resultAvailable>1 && resultAvailable == form_id_list.length){
-		alert("Enter at least one result to submit ");
-		return;
-	}
-
-	$('.result_cancel_link').hide();
-	$('.result_progress_spinner').show();
-	//var target_div_id = "fetched_specimen";
-	var target_div_id = "result_form_pane_"+specimen_id;
-	var count = 0;
-	for(var i = 0; i < form_id_list.length; i++)
-	{
-		
-			if($('#'+form_id_list[i]+'_skip').is(':checked'))
+	var user_id = <?php echo $_SESSION['user_id']; ?>;
+	var p_id;
+	$.ajax({
+		type : 'POST',
+		url : 'ajax/specimentopatient.php',
+		data: "sid="+specimen_id,
+		success : function (data) {
+			p_id= data;
+			var form_id_csv = $('#form_id_list').attr("value");
+			var form_id_list = form_id_csv.split(",");
+			var resultAvailable = 0;
+			for(var i = 0; i < form_id_list.length; i++)
 			{
-				var params = $('#'+form_id_list[i]).formSerialize();
-				
-				 $.ajax({
-					type: "POST",
-					url: "ajax/result_add.php",
-					data: params,
-					success: function(msg) {
-						$("#"+target_div_id).html(msg);
-					}
-				}); 
-			} else {
-				count++;
-				if(form_id_list.length == count){
-					$('.result_cancel_link').show();
-					$('.result_progress_spinner').hide();
-					alert("Enter the test result to save by enabling the checkbox");
-					return;
+				if(!$('#'+form_id_list[i]+'_skip').is(':checked'))
+				{
+					resultAvailable++;
 				}
-				continue;
 			}
-		
-		
-		
-	}
-	$('.result_progress_spinner').hide();
+
+			//alert(form_id_list.length + " " + resultAvailable);
+			if(resultAvailable>1 && resultAvailable == form_id_list.length){
+				alert("Enter at least one result to submit ");
+				return;
+			}
+
+			$('.result_cancel_link').hide();
+			$('.result_progress_spinner').show();
+			//var target_div_id = "fetched_specimen";
+			var target_div_id = "result_form_pane_"+specimen_id;
+			var count = 0;
+			for(var i = 0; i < form_id_list.length; i++)
+			{
+				
+					if($('#'+form_id_list[i]+'_skip').is(':checked'))
+					{
+						var params = $('#'+form_id_list[i]).formSerialize();
+						
+						 $.ajax({
+							type: "POST",
+							url: "ajax/result_add.php",
+							data: params,
+							success: function(msg) {
+								$("#"+target_div_id).html(msg);
+							}
+						}); 
+					} else {
+						count++;
+						if(form_id_list.length == count){
+							$('.result_cancel_link').show();
+							$('.result_progress_spinner').hide();
+							alert("Enter the test result to save by enabling the checkbox");
+							return;
+						}
+						continue;
+					}
+			}
+			var data_string = "user_id="+user_id+"&p_id="+p_id+"&log_type=RESULT";
+			$.ajax({
+				type : 'POST',
+				url : 'ajax/addUserLog.php',
+				data: data_string
+			});	
+			$('.result_progress_spinner').hide();
+		}
+	});
+
 }
 
 function get_batch_form()

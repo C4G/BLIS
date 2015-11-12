@@ -53,12 +53,12 @@ $script_elems->enableLatencyRecord();
 
 <script type='text/javascript'>
 
-/*$(document).ready(function(){
+$(document).ready(function(){
     $.ajax({
 		type : 'POST',
 		url : 'update/check_version.php',
 		success : function(data) {
-			if ( data=='0' && $VERSION != "2.9") 
+			if ( data=='0' ) 
              {
                             $('#update_div').show();
 			}
@@ -69,7 +69,7 @@ $script_elems->enableLatencyRecord();
 		}
 	});
     //$('#update_div').show();
-});*/
+});
 
 function blis_update_t()
 {
@@ -109,7 +109,6 @@ function blis_update()
 <?php 
 echo LangUtil::getPageTerm("WELCOME").", " . $_SESSION['username'] . ".<br><br>";
 echo LangUtil::getPageTerm("TIPS_BLISINTRO");
-
 ?>
 <br><br>
     <div id="update_div2" style="display:none;" class="warning">
@@ -129,7 +128,7 @@ $page_elems->getProgressSpinnerBig($spinner_message);
 
  <div id="update_failure" style="display:none;" class="update_error">
     Update Error! Please Try Again by clicking <a id='update_link' href='javascript:blis_update_t();'>here</a><br>
-    If still unsuccessful report error UE5 to madhavanmurrali@gatech.edu
+    If still unsuccessful report error UE5 to arajagopal@gatech.edu
     </div>
 
  <div id="update_success"  style="display:none;" class="update_success">
@@ -151,7 +150,7 @@ if($_SESSION['user_level'] == $LIS_ADMIN || $_SESSION['user_level'] == $LIS_SUPE
 ?>
 <?php
 # If technician user, show lab workflow
-if($_SESSION['user_level'] == $LIS_TECH_RW || $_SESSION['user_level'] == $LIS_TECH_SHOWPNAME || $_SESSION['user_level'] == $LIS_TECH_RO || $_SESSION['user_level'] == $LIS_PHYSICIAN )
+if($_SESSION['user_level'] == $LIS_TECH_RW || $_SESSION['user_level'] == $LIS_TECH_SHOWPNAME || $_SESSION['user_level'] == $LIS_TECH_RO)
 {
 	//$page_elems->getLabConfigStatus($_SESSION['lab_config_id']);
 }

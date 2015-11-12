@@ -1,0 +1,18 @@
+;***************************************************
+;
+;configuration of BLIS server
+;
+;***************************************************
+
+[BLIS CONFIGURATIONS]
+	;BLIS URL local
+	;BLIS_URL = --BLIS_URL--/
+	;username
+	;BLIS_USERNAME = blis_revamp
+	;BLIS_PASSWORD = blis123
+	
+	;Live server
+	BLIS_URL = --BLIS_URL--/
+	BLIS_USERNAME = blis_revamp
+	BLIS_PASSWORD = blis123
+	

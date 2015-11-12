@@ -77,8 +77,6 @@ function update_lab_user()
 
 	
 	var data_string = 'id=<?php echo $user_id; ?>&un='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&lev='+level+'&lang='+lang_id+"&showpname="+showpname+"&opt="+rwoptions;
-	//alert(data_string);
-	//return;
 	$('#edit_user_progress').show();
 	$.ajax({
 		type: "POST",
@@ -112,12 +110,12 @@ function add_read_mode(){
 	if(usermode==17){
 		$("#patient-entry").hide();
 		$("#patient-entry_check").hide();
-}
-else
-{
-	$("#patient-entry").show();
-	$("#patient-entry_check").show();
-}
+	}
+	else
+	{
+		$("#patient-entry").show();
+		$("#patient-entry_check").show();
+	}
 }
 
 function checkAllReadWriteOptions(){

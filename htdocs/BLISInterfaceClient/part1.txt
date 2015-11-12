@@ -1,0 +1,24 @@
+;************************** BLIS INTERFACE CLIENT CONFIGURATION FILE **********************************************
+;This is the main configuration file for C4G BLIS Interface Client.
+;BLIS Interface Client is a very lightweight client for Interfacing BLIS with external systems using Protocols like
+;RS232 Serial Port,TCP/IP, HTTP
+;
+; 
+;   C4G BLIS Equipment Interface Client
+;  
+;   Project funded by PEPFAR
+;  
+;   Philip Boakye      - Team Lead  
+;   Patricia Enninful  - Technical Officer
+;   Stephen Adjei-Kyei - Software Developer
+;  
+; 
+;Author: Stephen Adjei-Kyei <stephen.adjei.kyei@gmail.com>
+;*
+
+;******************************************************
+;The source from which information will be received 
+;Supported protocols are (RS232,TCP/IP, MSACCESS,HTTP,TEXT)
+;*******************************************************
+[FEED SOURCE]
+	--FS--

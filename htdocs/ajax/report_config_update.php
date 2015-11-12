@@ -124,16 +124,22 @@ for($i = 0; $i < $specimen_main_field_count; $i++)
 }
 
 # Test main fields
-$test_main_field_count = 9;
+$test_main_field_count = 12;
 $test_main_field_map = array();
 for($i = 0; $i < $test_main_field_count; $i++)
 {
-	if(isset($_REQUEST['t_field_'.$i]))
-		$test_main_field_map[$i] = 1;
-	else
-		$test_main_field_map[$i] = 0;
+	if($i == 9){
+		$test_main_field_map[9]=$ClinicalData;
+	}
+	else{
+		if(isset($_REQUEST['t_field_'.$i]))
+			$test_main_field_map[$i] = 1;
+		else
+			$test_main_field_map[$i] = 0;
+	}
+	
 }
-$test_main_field_map[9]=$ClinicalData;
+
 # Custom fields (patients and specimens)
 $patient_custom_field_map = array();
 $specimen_custom_field_map = array();

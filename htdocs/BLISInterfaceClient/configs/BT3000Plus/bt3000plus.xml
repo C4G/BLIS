@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created by Stephen Adjei-Kyei (GHSS) -->
+<configuration>
+	<supportedtestTypes>
+		<testtype>		
+			<testtypeid>18</testtypeid>
+			<testtypename>Full Blood Count (FBC) - MICROS</testtypename>
+		</testtype>			
+	</supportedtestTypes>
+	<supportedsamples>		
+		<sample>
+			<equipmentsampleid>S</equipmentsampleid>
+			<lissampleid>1</lissampleid>
+			<samplename>Serum</samplename>
+		</sample>	
+		<sample>
+			<equipmentsampleid>U</equipmentsampleid>
+			<lissampleid>4</lissampleid>
+			<samplename>Urine</samplename>
+		</sample>	
+	</supportedsamples>
+	<supportedtests>
+		<listest>
+			<equipmenttestid>TBIL</equipmenttestid>
+			<listestid>1</listestid>
+			<listestname>TOTAL BILIRUBIN</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>DBIL</equipmenttestid>
+			<listestid>2</listestid>
+			<listestname>DIRECT BILIRUBIN</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>IBL</equipmenttestid>
+			<listestid>3</listestid>
+			<listestname>INDIRECT BILIRUBIN</listestname>
+		</listest>	
+	</supportedtests>
+</configuration>

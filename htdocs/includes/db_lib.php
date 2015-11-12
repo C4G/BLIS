@@ -37,7 +37,26 @@ require_once('../tcpdf/tcpdf.php');
 #
 # Entity classes for database backend
 #
-
+class UserType{
+	public $level;
+	public $name;
+	public $defaultdisplay;
+	public $rwoption;
+	public static function getObject($record)
+	{
+		global $DEFAULT_LANG;
+		# Converts a user record in DB into a User object
+		if($record == null)
+			return null;
+		$usertype = new UserType();
+		$usertype->defaultdisplay = $record['defaultdisplay'];
+		$usertype->level = $record['level'];
+		$usertype->name = $record['name'];
+		$usertype->createdBy = $record['created_by'];		
+		$usertype->rwoption = $record['rwoption'];	
+		return $usertype;
+	}
+}
 class User
 {
 	public $userId;
@@ -605,6 +624,17 @@ class LabConfig
 		//echo "from db sid ".$record['sid'];
 		return LabConfig::getObject($record);
 	}
+
+	// public static function getById($lab_config_id) {
+	// 	$saved_db = DbUtil::switchToGlobal();
+	// 	//global $con;
+	// 	//$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	// 	$query_config = "SELECT * FROM lab_config WHERE lab_config_id = $lab_config_id LIMIT 1";
+	// 	$record = query_associative_one($query_config);
+	// 	DbUtil::switchRestore($saved_db);
+	// 	//echo "from db sid ".$record['sid'];
+	// 	return LabConfig::getObject($record);
+	// }
 	
 	public static function getDoctorConfig($lab_config_id) {
 		$saved_db = DbUtil::switchToGlobal();
@@ -656,12 +686,33 @@ class LabConfig
 		$query_string = 
 			"SELECT u.* FROM user u ".
 			"WHERE lab_config_id=$lab_config_id ORDER BY u.username";
+			
 		$resultset = query_associative_all($query_string, $row_count);
 		if($resultset != null)
 		{
 			foreach($resultset as $record)
 			{
 				$retval[] = User::getObject($record);
+			}
+		}
+		DbUtil::switchRestore($saved_db);
+		return $retval;
+	}
+
+	public function getUserTypes()
+	{
+		$saved_db = DbUtil::switchToGlobal();
+		$lab_config_id = $this->id;
+		$retval = array();
+		$query_string = 
+			"SELECT * FROM user_type";
+			
+		$resultset = query_associative_all($query_string, $row_count);
+		if($resultset != null)
+		{
+			foreach($resultset as $record)
+			{
+				$retval[] = UserType::getObject($record);
 			}
 		}
 		DbUtil::switchRestore($saved_db);
@@ -1096,7 +1147,7 @@ class LabConfig
 	
 	public function getReportConfig($report_id)
 	{
-		# Returns report config parameters for this lab
+		# Returns report config parameters getByIdfor this lab
 		return ReportConfig::getById($this->id, $report_id);
 	}
 	
@@ -1256,6 +1307,8 @@ class ReportConfig
 	public $useStatus;
 	public $useTestName;
 	public $useClinicalData;
+	public $usePrintConfirm;
+	public $useResultConfirm;
 	
 	public $useRequesterName;
 	public $useReferredToHospital;
@@ -1440,10 +1493,6 @@ class ReportConfig
 		
 		# Test main fields
 		$test_field_list = explode(",", $record['t_fields']);
-		if(!isset($test_field_list[8]))
-			$report_config->useMeasures = 0;
-		else
-			$report_config->useMeasures = $test_field_list[8];
 		if(!isset($test_field_list[0]))
 			$report_config->useResults = 0;
 		else
@@ -1476,10 +1525,22 @@ class ReportConfig
 			$report_config->useTestName = 0;
 		else
 			$report_config->useTestName = $test_field_list[7];
+		if(!isset($test_field_list[8]))
+			$report_config->useMeasures = 0;
+		else
+			$report_config->useMeasures = $test_field_list[8];
 		if(!isset($test_field_list[9]))
 			$report_config->useClinicalData = 0;
 		else
 			$report_config->useClinicalData =$test_field_list[9];
+		if(!isset($test_field_list[10]))
+			$report_config->usePrintConfirm = 0;
+		else
+			$report_config->usePrintConfirm =$test_field_list[10];
+		if(!isset($test_field_list[11]))
+			$report_config->useResultConfirm = 0;
+		else
+			$report_config->useResultConfirm =$test_field_list[11];
 		
 		# Return data object
 		return $report_config;		
@@ -6181,19 +6242,95 @@ function check_user_exists($username)
 function add_user($user)
 {
 	# Adds a new user account
+	if (!check_user_exists($user->username)){
+		$saved_db = DbUtil::switchToGlobal();
+		$password = encrypt_password($user->password);
+		$rwoptions = $user->rwoptions;
+		if($user->level == 17) {
+			$user->rwoptions = LabConfig::getDoctorUserOptions();
+		}
+		$query_string = 
+			"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions) ".
+			"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions')";
+		
+		query_insert_one($query_string);
+		DbUtil::switchRestore($saved_db);
+
+		$saved_db = DbUtil::switchToGlobal();
+		$query_string = "SELECT user_id FROM user WHERE username='$user->username' LIMIT 1";
+		$record = query_associative_one($query_string);
+		$query_string = 
+			"INSERT INTO user_config(user_id, level, parameter, value, created_by, created_on, modified_by, modified_on) ".
+			"VALUES ('".$record['user_id']."',$user->level, 'rwoptions', '$rwoptions', $user->createdBy, curdate(), $user->createdBy, curdate())";
+		query_insert_one($query_string);
+
+		DbUtil::switchRestore($saved_db);
+		return true;
+	}	
+	return false;
+}
+function fetch_user_log($patientId,$logType){
 	$saved_db = DbUtil::switchToGlobal();
-	$password = encrypt_password($user->password);
-	if($user->level == 17) {
-		$user->rwoptions = LabConfig::getDoctorUserOptions();
-	}
-	$query_string = 
-		"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions) ".
-		"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions')";
-	
-	query_insert_one($query_string);
+	$queryString = "SELECT created_by, creation_date from user_log where patient_id =  ".$patientId." and log_type = '".$logType."'";
+	$resultset = query_associative_all($query_string, 0);
 	DbUtil::switchRestore($saved_db);
+	return $resultset;
 }
 
+function add_user_type($user_type, $defaultdisplay, $rwoption)
+{
+	# Adds a new user account
+	$saved_db = DbUtil::switchToGlobal();
+	$password = encrypt_password($user->password);
+	$query_string = "SELECT count(1) as count from user_type where lower(name) = lower('$user_type')";
+	
+	$retVal = query_associative_one($query_string);
+
+	if($retVal['count'] == 0){
+		$query_string = 
+		"INSERT INTO user_type(name, defaultdisplay, created_by) ".
+		"VALUES ('$user_type',$defaultdisplay,'".$_SESSION['user_id']."')";
+	
+		query_insert_one($query_string);
+
+		$query_string = "SELECT level from user_type where name = '$user_type'";	
+		$retVal = query_associative_one($query_string);
+
+		$query_string = "insert into user_type_config(level, parameter, value, created_by, modified_by) values ('".$retVal['level']."','rwoptions', '$rwoption', '".$_SESSION['user_id']."', '".$_SESSION['user_id']."')";
+		query_insert_one($query_string);
+	}
+
+	DbUtil::switchRestore($saved_db);
+
+	return $retVal['count'];
+
+}
+
+function get_user_type_options($user_type)
+{
+	# Adds a new user account
+	$saved_db = DbUtil::switchToGlobal();
+	$password = encrypt_password($user->password);
+	$query_string = "SELECT value from user_type_config where level = $user_type and parameter ='rwoptions'";	
+	$retVal = query_associative_one($query_string);
+	
+	DbUtil::switchRestore($saved_db);
+
+	return $retVal['value'];
+
+}
+
+function get_level_name_db($user_level)
+{
+	$saved_db = DbUtil::switchToGlobal();
+	$password = encrypt_password($user->password);
+	$query_string = "SELECT name FROM user_type where level = $user_level";	
+	$retVal = query_associative_one($query_string);
+	
+	DbUtil::switchRestore($saved_db);
+
+	return $retVal['name'];
+}
 // Delete Tests related to specimen
 function delete_tests_by_test_id($tests_list){
 	if(sizeof($tests_list)>0){
@@ -6308,10 +6445,18 @@ function update_user_level($updated_entry)
 {
 	# Changes user access level
 	$saved_db = DbUtil::switchToGlobal();
+	$user_id = $updated_entry->userId;
 	$query_string = 
 		"UPDATE user ".
 		"SET level=$updated_entry->level ".
 		"WHERE user_id=$updated_entry->userId";
+	query_blind($query_string);
+	DbUtil::switchRestore($saved_db);
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string = 
+		"UPDATE user_config ".
+		"SET level=$updated_entry->level ".
+		"WHERE user_id=$user_id";
 	query_blind($query_string);
 	DbUtil::switchRestore($saved_db);
 }
@@ -6339,9 +6484,9 @@ function update_lab_user($updated_entry)
 {
 	# Updates lab user (non-admin) account
 	$saved_db = DbUtil::switchToGlobal();
-	if($updated_entry->level == 17) {
-		$updated_entry->rwoption = LabConfig::getDoctorUserOptions();
-	}
+	// if($updated_entry->level == 17) {
+	// 	$updated_entry->rwoption = LabConfig::getDoctorUserOptions();
+	// }
 	$query_string = 
 		"UPDATE user ".
 		"SET actualname='$updated_entry->actualName', ".
@@ -6352,10 +6497,41 @@ function update_lab_user($updated_entry)
 		"rwoptions='$updated_entry->rwoption' ".
 		"WHERE user_id=$updated_entry->userId";
 	query_blind($query_string);
+
 	if($updated_entry->password != "")
 	{
 		change_user_password($updated_entry->username, $updated_entry->password);
 	}
+	DbUtil::switchRestore($saved_db);
+	# Updates user_config
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string =
+		"UPDATE user_config 
+		SET level=".$updated_entry->level.", ".
+		"value='".$updated_entry->rwoption."' ".
+		" WHERE user_id=".$updated_entry->userId." and parameter = 'rwoptions'";
+	query_blind($query_string);
+	DbUtil::switchRestore($saved_db);
+
+
+}
+
+function update_lab_user_type($updated_entry, $rwoption)
+{
+	# Updates lab user (non-admin) account
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string = 
+		"UPDATE user_type ".
+		"SET defaultdisplay=$updated_entry->defaultdisplay ".
+		"WHERE level=$updated_entry->level";
+	query_blind($query_string);
+
+	$query_string = 
+		"UPDATE user_type_config ".
+		"SET value='$rwoption' ".
+		"WHERE level=$updated_entry->level and parameter='rwoptions'";
+	query_blind($query_string);
+	
 	DbUtil::switchRestore($saved_db);
 }
 
@@ -6369,6 +6545,15 @@ function update_lab_RWOptions($config)
 	"WHERE level=17 and lab_config_id = ".$_SESSION['lab_config_id']."";
 	query_blind($query_string);	
 	DbUtil::switchRestore($saved_db);
+
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string = 
+	"UPDATE user ".
+	"SET value='$config'".
+	"WHERE level=17 and lab_config_id = ".$_SESSION['lab_config_id']." and parameter = 'rwoptions'";
+	query_blind($query_string);	
+	DbUtil::switchRestore($saved_db);
+
 }
 
 function delete_user_by_id($user_id)
@@ -6387,18 +6572,59 @@ function delete_user_by_id($user_id)
 		"DELETE FROM user WHERE user_id=$user_id";
 	query_blind($query_string);
 	DbUtil::switchRestore($saved_db);
-}
+	# Remove user_config record
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string =
+		"DELETE FROM user_config WHERE user_id=$user_id";
+	query_blind($query_string);
+	DbUtil::switchRestore($saved_db);
 
+}
+function delete_user_type($user_type)
+{
+	# Deletes a user from DB
+	global $con;
+	//$user_id = mysql_real_escape_string($user_id, $con);
+	$saved_db = DbUtil::switchToGlobal();
+	# Remove entries from lab_config_access
+	$query_string = 
+		"DELETE FROM user_type ".
+		"WHERE level=$user_type";
+	query_blind($query_string);
+
+	$query_string = 
+	"DELETE FROM user_type_config ".
+	"WHERE level=$user_type";
+	query_blind($query_string);
+	# Remove user record
+	$query_string =
+		"DELETE FROM user WHERE level=$user_type";
+	query_blind($query_string);
+	DbUtil::switchRestore($saved_db);
+}
 function get_user_by_id($user_id)
 {
 	global $con;
 	$user_id = mysql_real_escape_string($user_id, $con);
 	# Fetches user record by primary key
 	$saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT * FROM user WHERE user_id=$user_id LIMIT 1";
+	$query_string = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions 
+	FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.user_id=$user_id LIMIT 1";
 	$record = query_associative_one($query_string);
 	DbUtil::switchRestore($saved_db);
 	return User::getObject($record);
+}
+
+function get_user_by_level($user_level)
+{
+	global $con;
+	//$user_id = mysql_real_escape_string($user_id, $con);
+	# Fetches user record by primary key
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string = "SELECT  a.*,b.value as rwoption from user_type a, user_type_config b WHERE a.level = $user_level and a.level = b.level and b.parameter = 'rwoptions' LIMIT 1";
+	$record = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
+	return UserType::getObject($record);
 }
 
 function get_username_by_id($user_id)
@@ -6473,8 +6699,18 @@ function get_user_by_name($username)
 	$username = mysql_real_escape_string($username, $con);
 	# Fetches user record by username
 	$saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT * FROM user WHERE username='$username' LIMIT 1";
+	#$query_string = "SELECT * FROM user WHERE username='$username' LIMIT 1";
+	$query_string = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions 
+	FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.username='$username' LIMIT 1";
 	$record = query_associative_one($query_string);
+	if ($record == null){
+		$query_string = "SELECT user_id, username, password, actualname, email, created_by, ts, lab_config_id, level, phone, lang_id, rwoptions FROM user WHERE username='$username' LIMIT 1";
+		$record = query_associative_one($query_string);
+	}
+	if ($record == null){
+		$query_string = "SELECT user_id, username, password, actualname, email, created_by, ts, lab_config_id, level, phone, lang_id FROM user WHERE username='$username' LIMIT 1";
+		$record = query_associative_one($query_string);
+	}
 	DbUtil::switchRestore($saved_db);
 	return User::getObject($record);
 }
@@ -6489,9 +6725,11 @@ function get_admin_users()
 	if($_SESSION['user_level'] == $LIS_SUPERADMIN)
 	{
 		# Return all admin accounts
-		$query_string = 
-			"SELECT * FROM user ".
-			"WHERE level=$LIS_ADMIN ORDER BY username";
+		#$query_string = 
+		#	"SELECT * FROM user ".
+		#	"WHERE level=$LIS_ADMIN ORDER BY username";
+		$query_string = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions 
+		FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.username='$LIS_ADMIN' ORDER BY username";
 	}
 	else if($_SESSION['user_level'] == $LIS_COUNTRYDIR)
 	{
@@ -6537,9 +6775,11 @@ function get_admin_user_list($user_id)
 	if(true)//is_super_admin($user))
 	{
 		# Super-admin level user: Return all admin accounts
-		$query_string = 
-			"SELECT * FROM user ".
-			"WHERE level=$LIS_ADMIN";
+		#$query_string = 
+		#	"SELECT * FROM user ".
+		#	"WHERE level=$LIS_ADMIN";
+		$query_string = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions 
+		FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.username='$LIS_ADMIN'";
 	}
 	else if(is_country_dir($user))
 	{
@@ -6556,7 +6796,9 @@ function get_admin_user_list($user_id)
 	else
 	{
 		# Only admin level user: Return single option
-		$query_string = "SELECT * FROM user WHERE user_id=$user_id";
+		#$query_string = "SELECT * FROM user WHERE user_id=$user_id";
+		$query_string = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions 
+		FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.user_id='$user_id' ";
 	}
 	$resultset = query_associative_all($query_string, $row_count);
 	foreach($resultset as $record)
@@ -7887,8 +8129,10 @@ function checkAndAddAdmin($adminName, $labConfigId) {
 	global $con;
 	$labConfigId = mysql_real_escape_string($labConfigId, $con);
 	$saved_db = DbUtil::switchToGlobal();
-	$query_check = "SELECT * FROM users ".
-				   "WHERE username like '$adminName' ";
+	#$query_check = "SELECT * FROM users ".
+	#			   "WHERE username like '$adminName' ";
+	$query_string = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions 
+	FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.username like '$adminName'";
 	$record = query_associative_one($query_check);
 	if($record) {
 		DbUtil::switchRestore($saved_db);
@@ -13957,7 +14201,9 @@ function checkVersionDataTable()
    DbUtil::switchRestore($saved_db);
    return $code; 
 }
+function checkUsernameAvailability($user_name){
 
+}
 function checkVersionDataEntry($vers)
 {
    $saved_db = DbUtil::switchToGlobal();
@@ -14323,7 +14569,7 @@ function get_prevalence_data_per_test_per_lab_dir($test_type_id, $lab_config_id,
 						"AND p.sex LIKE '$gender' ".
 						"AND t.specimen_id=s.specimen_id ".
 						"AND (s.date_collected BETWEEN '$date_fromp' AND '$date_top') ".
-						"AND  (t.result LIKE 'N,%' OR t.result LIKE 'nÃ¯Â¿Â½gatif,%' OR t.result LIKE 'negatif,%' OR t.result LIKE 'n,%' OR t.result LIKE 'negative,%')";
+						"AND  (t.result LIKE 'N,%' OR t.result LIKE 'nÃƒÂ¯Ã‚Â¿Ã‚Â½gatif,%' OR t.result LIKE 'negatif,%' OR t.result LIKE 'n,%' OR t.result LIKE 'negative,%')";
 			}
 			else {
 				$query_string = 
@@ -14331,7 +14577,7 @@ function get_prevalence_data_per_test_per_lab_dir($test_type_id, $lab_config_id,
 				"WHERE t.test_type_id=$test_type_id ".
 				"AND t.specimen_id=s.specimen_id ".
 				"AND ( s.date_collected BETWEEN '$date_fromp' AND '$date_top' )".
-				"AND  (result LIKE 'N,%' OR result LIKE 'nÃ¯Â¿Â½gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
+				"AND  (result LIKE 'N,%' OR result LIKE 'nÃƒÂ¯Ã‚Â¿Ã‚Â½gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
 
 				}
 			$record = query_associative_one($query_string);
@@ -14398,7 +14644,7 @@ function get_prevalence_data_per_test_per_lab_dir22($test_type_id, $lab_config_i
 							"WHERE t.test_type_id=$test_type_id ".
 							"AND t.specimen_id=s.specimen_id ".
 							"AND ( s.date_collected BETWEEN '$date_from' AND '$date_to' ) ".
-							"AND (result LIKE 'N,%' OR result LIKE 'nÃ¯Â¿Â½gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
+							"AND (result LIKE 'N,%' OR result LIKE 'nÃƒÂ¯Ã‚Â¿Ã‚Â½gatif,%' OR result LIKE 'negatif,%' OR result LIKE 'n,%' OR result LIKE 'negative,%')";
 						$record = query_associative_one($query_string);
 						$count_negative = intval($record['count_val']);
 						$query_string = 
@@ -15487,7 +15733,7 @@ class API
 	$query_string = 
 		"SELECT * FROM user ".
 		"WHERE username='$username' ".
-		"AND password='$password' LIMIT 1";
+		"AND password='$password' AND lab_config_id != 0 LIMIT 1";
 	$record = query_associative_one($query_string);
 	# Return user profile (null if incorrect username/password)
 	DbUtil::switchRestore($saved_db);
@@ -16088,9 +16334,281 @@ class API
         return $ret;
     }
     
-    
 }
 	
    
 /* API ends here */
+class DHIMS2
+{
+	public $ID;
+	public $username;
+	public $password;
+	public $orgUnit;
+	public $dataSet;
+	public $dataElement;
+	public $entryPeriod;
+	public $categoryCombo;
+	public $blisTestID;
+	public $blisAgegroup;
+	public $blisGender;
+	
+	public function Save($lab_config_id)
+	{
+		$sql="INSERT INTO `dhims2_api_config` (
+`id` ,`username` ,`password` ,`orgunit` ,`dataset` ,
+`dataelement` ,`categorycombo` ,`gender` ,`period`)
+VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->dataSet',
+ '$this->dataElement".'|'."$this->blisTestID', '$this->categoryCombo".'|'."$this->blisAgegroup', '$this->blisGender', '$this->entryPeriod');";
+		query_blind($sql,$db);	
+		return 1;
+	}
+	
+	public function deleteItems($lab_config_id,$items)
+	{
+		$sql ="delete from dhims2_api_config where id in ($items)";
+		query_blind($sql,$db);	
+		return 1;
+	}
+	
+	public function getSendingConfigs($lab_config_id)
+	{
+		
+		$sql="select * from dhims2_api_config";
+		$resultset = query_associative_all($sql, $row_count,$lab_config_id);		
+		$results = array();
+		$larr = array();		
+		$icount= count($resultset);	
+		
+		for($i=0;$i<$icount;$i++)
+		{
+			$orgunit = explode('^',$resultset[$i]['orgunit']);						
+			$larr['orgUnit'] = $orgunit[0];					
+			$dataset = explode('^',$resultset[$i]['dataset']);
+			$larr['dataSet'] = $dataset[0];			
+			$dataelement = explode('|',$resultset[$i]['dataelement']);
+			$dsetparts = explode('^',$dataelement[0]);
+			$larr['dataElement'] = $dsetparts[0];
+			
+			$elementname = "";			
+			for($dcount=1;$dcount<count($dataelement);$dcount++)
+			{
+				$tmp = explode('^',$dataelement[$dcount]);
+				if(empty($elementname))
+					$elementname .= $tmp[0];
+				else
+					$elementname .= '+'.$tmp[0];
+			}			
+			
+			$larr['blistestID']=$elementname;			
+			$categorycombo = explode('^',$resultset[$i]['categorycombo']);
+			$larr['categoryOptionCombo'] = $categorycombo[0];
+			$comboname = explode('|',$categorycombo[1]);			
+			$larr['blisageGroup'] = $comboname[1];			
+			$larr['gender'] = $resultset[$i]['gender'];
+			$larr['period'] = $resultset[$i]['period'];			
+			$results[] = $larr;
+			$larr = array();					
+		
+		}
+		//file_put_contents("dhims2.txt",print_r($results));
+				
+		return $results;
+		
+		//print_r($results);
+	}	
+	
+	public function getConfigs($lab_config_id)
+	{		
+		$sql="select * from dhims2_api_config";
+		$resultset = query_associative_all($sql, $row_count,$lab_config_id);		
+		$results = array();
+		$larr = array();	
+		$orgunitTrimList = array();	
+		$datasetTrimList = array();	
+		$dataelementTrimList = array();
+		$genderTrimList = array();
+		$icount= count($resultset);	
+		for($i=0;$i<$icount;$i++)
+		{
+			$orgunit = explode('^',$resultset[$i]['orgunit']);
+			if(!in_array($orgunit[0],$orgunitTrimList))
+			{				
+				$larr['id'] = $orgunit[0];
+				$larr['pId'] = 0;
+				$larr['name'] = $orgunit[1];
+				$larr['open'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+				$orgunitTrimList[] = $orgunit[0];
+			}
+			
+			$dataset = explode('^',$resultset[$i]['dataset']);
+			if(!in_array($dataset[0],$datasetTrimList))
+			{
+				$larr['id'] = $dataset[0];
+				$larr['pId'] = $orgunit[0];
+				$larr['name'] = $dataset[1];
+				$larr['isParent'] = true;
+				$larr['open'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+				$datasetTrimList[] = $dataset[0];
+			}			
+			
+			$dataelement = explode('|',$resultset[$i]['dataelement']);
+			//$elementname = explode('|',$dataelement[1]);
+			$elementname = "";
+			$dsetparts = explode('^',$dataelement[0]);  //.$elementname[1];
+			for($dcount=1;$dcount<count($dataelement);$dcount++)
+			{
+				$tmp = explode('^',$dataelement[$dcount]);
+				if(empty($elementname))
+					$elementname .= $tmp[1];
+				else
+					$elementname .= '+'.$tmp[1];
+			}
+			
+			$dsetElem = $dsetparts[0];
+			if(!in_array($dsetElem,$dataelementTrimList))
+			{
+				$larr['id'] = $dsetElem;
+				$larr['pId'] = $dataset[0];				
+				$larr['name'] = $dsetparts[1].'-->'.$elementname;
+				$larr['open'] = true;
+				$larr['isParent'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+				$dataelementTrimList[] = $dsetElem;
+			}
+			
+					
+			if(	$resultset[$i]['gender'] =="M")
+			{
+				if(!in_array( $dsetElem.'_M',$genderTrimList))
+				{
+					$larr['id'] = $dsetElem.'_M';
+					$larr['pId'] = $dsetElem;
+					$comboname = explode('|',$categorycombo[1]);			
+					$larr['name'] ="Male";
+					$larr['open'] = true;
+					$larr['isParent'] = true;
+					$larr['ename'] = $resultset[$i]['id'];
+					$results[] = $larr;
+					$larr = array();
+					$genderTrimList[] = $dsetElem.'_M';
+				}
+			
+				$categorycombo = explode('^',$resultset[$i]['categorycombo']);
+				$larr['id'] = $categorycombo[0];
+				$larr['pId'] =  $dsetElem.'_M';
+				$comboname = explode('|',$categorycombo[1]);			
+				$larr['name'] = $comboname[0].'-->'.$comboname[1];
+				$larr['open'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+			}
+			elseif(	$resultset[$i]['gender'] =="F")
+			{
+				if(!in_array( $dsetElem.'_F',$genderTrimList))
+				{
+					$larr['id'] = $dsetElem.'_F';
+					$larr['pId'] = $dsetElem;
+					$comboname = explode('|',$categorycombo[1]);			
+					$larr['name'] ="Female";
+					$larr['open'] = true;
+					$larr['isParent'] = true;
+					$larr['ename'] = $resultset[$i]['id'];
+					$results[] = $larr;
+					$larr = array();
+					$genderTrimList[] = $dsetElem.'_F';
+				}
+				
+				$categorycombo = explode('^',$resultset[$i]['categorycombo']);
+				$larr['id'] = $categorycombo[0];
+				$larr['pId'] =  $dsetElem.'_F';
+				$comboname = explode('|',$categorycombo[1]);			
+				$larr['name'] = $comboname[0].'-->'.$comboname[1];
+				$larr['open'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+			}
+			else
+			{
+				if(!in_array( $dsetElem.'_B',$genderTrimList))
+				{
+					$larr['id'] = $dsetElem.'_B';
+					$larr['pId'] = $dsetElem;
+					$comboname = explode('|',$categorycombo[1]);			
+					$larr['name'] ="Male & Female";
+					$larr['open'] = true;
+					$larr['isParent'] = true;
+					$larr['ename'] = $resultset[$i]['id'];
+					$results[] = $larr;
+					$larr = array();
+					$genderTrimList[] = $dsetElem.'_B';
+				}
+				
+				$categorycombo = explode('^',$resultset[$i]['categorycombo']);
+				$larr['id'] = $categorycombo[0];
+				$larr['pId'] =  $dsetElem.'_B';
+				$comboname = explode('|',$categorycombo[1]);			
+				$larr['name'] = $comboname[0].'-->'.$comboname[1];
+				$larr['open'] = true;
+				$larr['ename'] = $resultset[$i]['id'];
+				$results[] = $larr;
+				$larr = array();
+			}
+			
+			//if($i==2)
+			//break;
+		}
+		//file_put_contents("dhims2.txt",print_r($results));
+				
+		return $results;
+		
+		//print_r($results);
+	}	
+
+}
+
+	
+	function getEquipmentList()
+	{
+		$saved_db = DbUtil::switchToGlobal();
+		$query_configs = "SELECT id,equipment_name from interfaced_equipment";
+		
+		$resultset = query_associative_all($query_configs,0);
+		
+		   
+		DbUtil::switchRestore($saved_db);
+		return $resultset;
+	}
+	
+	function getEquipmentDetails($id)
+	{
+		$saved_db = DbUtil::switchToGlobal();
+		$query_configs = "SELECT * from interfaced_equipment where id={$id}";
+		
+		$resultset = query_associative_all($query_configs,0);
+		
+		   
+		DbUtil::switchRestore($saved_db);
+		return $resultset;
+	}
+	function getEquipmentProps($id)
+	{
+		$saved_db = DbUtil::switchToGlobal();
+		$query_configs = "SELECT * from equip_config where equip_id={$id}";
+		
+		$resultset = query_associative_all($query_configs,0);
+		
+		   
+		DbUtil::switchRestore($saved_db);
+		return $resultset;
+	}
 ?>

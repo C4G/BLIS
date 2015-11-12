@@ -1,0 +1,16 @@
+;***************************************************
+;
+;Configuration settings for TCP/IP connection
+;
+;***************************************************
+[TCP/IP CONFIGURATIONS]
+	;Port on which to listen for data
+	--PORT--
+	;equipment IP address if applicable
+	--EQUIPMENT_IP--
+	;How should the application connect to analyser. options (server/client)
+	--MODE--
+	;This setting is used only if MODE=client
+	;Reset client Connection when server sends "End of Transmission (EOT)". Options (yes/no)
+	--CLIENT_RECONNECT--
+	

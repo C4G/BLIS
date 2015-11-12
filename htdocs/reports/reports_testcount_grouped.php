@@ -1,4 +1,6 @@
 <?php
+ini_set('max_execution_time', 300); 
+ini_set('memory_limit','300M');
 #
 # Main page for showing disease report and options to export
 # Called via POST from reports.php
@@ -15,9 +17,52 @@ include("../users/accesslist.php");
  
 $script_elems = new ScriptElems();
 $script_elems->enableJQuery();
+$script_elems->enableJQueryForm();
+$script_elems->enableFacebox();
+
 
 
 ?>
+
+<style type='text/css'>
+.warning {
+    
+    border: 1px solid;
+    width: 350px;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url(../includes/img/knob_attention.png);
+}
+.update_error {
+    
+    border: 1px solid;
+    width: 400px;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('../includes/img/knob_cancel.png');
+}
+.update_success {
+    
+    border: 1px solid;
+    width: 350px;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    color: #000000;
+    background-color: #99FF99;
+    background-image: url('../includes/img/knob_valid_green.png');
+}
+</style>
+
 <script type='text/javascript'>
 function export_as_word()
 {
@@ -56,6 +101,7 @@ function print_content(div_id)
 <br><br>
 
 <?php
+//print_r($_REQUEST);
 $lab_config_id = $_REQUEST['location'];
 $lab_config = LabConfig::getById($lab_config_id);
 if($lab_config == null)
@@ -79,6 +125,7 @@ $age_group_list = decodeAgeGroups($configArray['age_groups']);
 $byGender = $configArray['group_by_gender'];
 $bySection = $configArray['measure_id'];
 $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending 
+
 /*
 $byAge = 1;
 $bySection = 1;
@@ -112,8 +159,12 @@ $byGender = 0;
 		
 	</tbody>
 </table>
+
 <?php
 
+$dhims2_test_config = array();
+$dhims2_test_item = array();
+			
 if($bySection == 0)
 {
 $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
@@ -164,6 +215,7 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
 			
 			if($byAge == 1)
 			{
+			
                             
 				foreach($age_group_list as $age_slot)
 				{
@@ -187,12 +239,11 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
                         if($byAge == 1 || $byGender == 1)
                             echo "<th ></th>";
 			?>
-		<tr>
+		</tr>
 	</thead>
 	<tbody>
         <?php
-            $test_type_list = get_lab_config_test_types($lab_config->id); // to get test type ids
-            
+            $test_type_list = get_lab_config_test_types($lab_config->id); // to get test type ids            
             /*$cat_test_types = TestType::getByCategory($cat_codes[$cc]);
             $cat_test_ids = array();
             $selected_test_ids = $lab_config->getTestTypeIds();
@@ -206,9 +257,10 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
             $saved_db = DbUtil::switchToLabConfig($lab_config->id);
             $tests_done_list = array();
             $tests_list=array();
-            $summ = 0;
+            $summ = 0;			
             foreach($test_type_list as $test_type_id)
 		{
+				
                     $test_name = get_test_name_by_id($test_type_id);
                     echo "<tr valign='top'>";
                         echo "<td>";
@@ -226,9 +278,9 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
                 
                     # Group by age set to true: Fetch age slots from DB
                     if($byAge == 1)
-                    {
+                    {						
                         //$age_slot_list = $site_settings->getAgeGroupAsList();
-                        $age_slot_list = decodeAgeGroups($configArray['age_groups']);
+                        $age_slot_list = decodeAgeGroups($configArray['age_groups']);						
                         $count_male_t_total = 0;
                         $count_female_t_total = 0;
                         $count_male_c_total = 0;
@@ -236,13 +288,13 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
                         $count_male_p_total = 0;
                         $count_female_p_total = 0;
                         foreach($age_slot_list as $age_slot)
-                        {
-                            
-                            $age_from = intval(trim($age_slot[0]));
+                        {                        
+							//I have to cate for days and months as well    
+                            $age_from = trim($age_slot[0]); 
                             if(trim($age_slot[1]) == "+")
-                                $age_to = 100;
+                                $age_to = 200;
                             else
-                                $age_to = intval(trim($age_slot[1]));
+                                $age_to = trim($age_slot[1]);
                             
                             if($byGender == 1)
                             {
@@ -260,6 +312,20 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
                                     echo "<br>";
                                     echo $count_female_t;
                                     echo "</td>";
+									$dhims2_test_item['test_type_id']=$test_type_id;
+									$dhims2_test_item['gender']='M';
+									$dhims2_test_item['value']=$count_male_t;									
+									$dhims2_test_item['age_group']=$age_slot[0].'-'.$age_slot[1];									
+									$dhims2_test_config[] = $dhims2_test_item;
+									$dhims2_test_item = array();
+									
+									$dhims2_test_item['test_type_id']=$test_type_id;
+									$dhims2_test_item['gender']='F';
+									$dhims2_test_item['value']=$count_female_t;								
+									$dhims2_test_item['age_group']=$age_slot[0].'-'.$age_slot[1];									
+									$dhims2_test_config[] = $dhims2_test_item;
+									$dhims2_test_item = array();
+									
                                     
                                 }
                                 else if ($combo == 2)
@@ -275,6 +341,20 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
                                     echo "<br>";
                                     echo $count_female_c;
                                     echo "</td>";
+									
+									$dhims2_test_item['test_type_id']=$test_type_id;
+									$dhims2_test_item['gender']='M';
+									$dhims2_test_item['value']=$count_male_c;									
+									$dhims2_test_item['age_group']=$age_slot[0].'-'.$age_slot[1];									
+									$dhims2_test_config[] = $dhims2_test_item;
+									$dhims2_test_item = array();
+									
+									$dhims2_test_item['test_type_id']=$test_type_id;
+									$dhims2_test_item['gender']='F';									
+									$dhims2_test_item['value']=$count_female_c;
+									$dhims2_test_item['age_group']=$age_slot[0].'-'.$age_slot[1];									
+									$dhims2_test_config[] = $dhims2_test_item;
+									$dhims2_test_item = array();
                                 }
                                 else if ($combo == 3)
                                 {
@@ -498,7 +578,9 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
                                 }
                             }
                     }
-                    echo "</tr>";
+                    echo "</tr>";				
+					
+					
                 } 
         ?>
  <!-- ********************************************************************** -->
@@ -506,7 +588,7 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
 	</tbody>
 </table>
 <br><br><br>
-............................................
+
 </div>
 <?php
 }
@@ -655,12 +737,12 @@ echo "Section: </td><td>".$sec_name."</td></tr></table>";
                         $count_female_p_total = 0;
                         foreach($age_slot_list as $age_slot)
                         {
-                            
-                            $age_from = intval(trim($age_slot[0]));
+                            //I have to cate for days and months as well  
+                            $age_from = trim($age_slot[0]);
                             if(trim($age_slot[1]) == "+")
-                                $age_to = 100;
+                                $age_to = 200;
                             else
-                                $age_to = intval(trim($age_slot[1]));
+                                $age_to = trim($age_slot[1]);
                             
                             if($byGender == 1)
                             {
@@ -678,6 +760,20 @@ echo "Section: </td><td>".$sec_name."</td></tr></table>";
                                     echo "<br>";
                                     echo $count_female_t;
                                     echo "</td>";
+									
+									$dhims2_test_item['test_type_id']=$test_type_id;
+									$dhims2_test_item['gender']='M';
+									$dhims2_test_item['value']=$count_male_t;									
+									$dhims2_test_item['age_group']=$age_slot[0].'-'.$age_slot[1];									
+									$dhims2_test_config[] = $dhims2_test_item;
+									$dhims2_test_item = array();
+									
+									$dhims2_test_item['test_type_id']=$test_type_id;	
+									$dhims2_test_item['gender']='F';								
+									$dhims2_test_item['value']=$count_female_t;
+									$dhims2_test_item['age_group']=$age_slot[0].'-'.$age_slot[1];									
+									$dhims2_test_config[] = $dhims2_test_item;
+									$dhims2_test_item = array();
                                     
                                 }
                                 else if ($combo == 2)
@@ -693,6 +789,20 @@ echo "Section: </td><td>".$sec_name."</td></tr></table>";
                                     echo "<br>";
                                     echo $count_female_c;
                                     echo "</td>";
+									
+									$dhims2_test_item['test_type_id']=$test_type_id;
+									$dhims2_test_item['gender']='M';
+									$dhims2_test_item['value']=$count_male_c;									
+									$dhims2_test_item['age_group']=$age_slot[0].'-'.$age_slot[1];									
+									$dhims2_test_config[] = $dhims2_test_item;
+									$dhims2_test_item = array();
+									
+									$dhims2_test_item['test_type_id']=$test_type_id;
+									$dhims2_test_item['gender']='F';									
+									$dhims2_test_item['value']=$count_female_c;
+									$dhims2_test_item['age_group']=$age_slot[0].'-'.$age_slot[1];									
+									$dhims2_test_config[] = $dhims2_test_item;
+									$dhims2_test_item = array();
                                 }
                                 else if ($combo == 3)
                                 {
@@ -923,14 +1033,136 @@ echo "Section: </td><td>".$sec_name."</td></tr></table>";
 	
 	</tbody>
 </table>
-
 <?php
 }
 ?>
 <br><br><br>
-............................................
 </div>
-
 <?php
 }
 ?>
+<table width="100%"><tr><td style="border:dotted thin #000"></td></tr></table>
+<?php
+if($byAge == 1 && $byGender == 1 && $combo !=3 )
+{
+	include_once("includes/page_elems.php");	
+	$user = get_user_by_id($_SESSION['user_id']);
+	//Enable the click to DHIMS2 button for all users
+	//if(isAdmin($user))
+	//{
+		?>
+        <table width="100%">
+        <tr>
+        <td align="center">
+        <span id='dhims2_send_progress' style='display:none'><?php
+        
+        $page_elems = new PageElems();
+        $page_elems->getProgressSpinnerBig("Connecting to DHIMS2, Please wait...");?> </span>        
+        </td>
+        </tr>
+        <tr>
+        <td align="center"> 
+        <div id="dhims2_send_link" style="display:block;" class="warning"><b>DHIMS2 INTERFACE</b>
+            	<form name="dhims2_frm" id="dhims2_frm" action="../api/dhims2_send.php" method="post">
+                <input type="hidden" value='<?php echo json_encode($dhims2_test_config);?>' name="dhims2_test_counts" id="dhims2_test_counts"  />
+                <input type="hidden" name="lab_config_id" id="lab_config_id" value="<?php  echo $lab_config_id?>" />
+                Username:<input type="text" name="dhims2_username" id="dhims2_username" /><br />
+                Password:<input type="password" name="dhims2_password" id="dhims2_username" /> <br />
+                 <a id='update_link' href='javascript:send_to_dhims();'>SEND TO DHIMS</a>              
+                </form>               
+            </div>
+            <div id="dhims2_send_failure" style="display:none;" class="update_error">
+   <b>Sending Error!</b><form name="dhims2_frm_retry" id="dhims2_frm_retry" action="../api/dhims2_send.php" method="post">
+                <input type="hidden" value='<?php echo json_encode($dhims2_test_config);?>' name="dhims2_test_counts" id="dhims2_test_counts"  />
+                <input type="hidden" name="lab_config_id" id="lab_config_id" value="<?php  echo $lab_config_id?>" />
+                Username:<input type="text" name="dhims2_username" id="dhims2_username" /><br />
+                Password:<input type="password" name="dhims2_password" id="dhims2_username" /> <br />                            
+                </form> Please try again by clicking <a id='update_link' href='javascript:send_to_dhims_retry();'>here</a><br>
+    If still unsuccessful report error to BLIS Team
+    </div>
+
+ <div id="dhims2_send_success"  style="display:none;" class="update_success">
+    <b>Sending Successful!</b><br /> Configured test counts have been sent to DHIMS2 successfully
+    <br />
+    <a rel='facebox' href='#response_success'>DHIMS2 response</a>
+   
+    </div>
+            </td>
+        </tr>
+        </table>  
+        
+         <div id='response_success' class='update_success' style='display:none;margin-left:10px; width:auto; height:auto'> 
+         </div>
+ <?php
+	//}
+ }
+?>
+
+<script type="text/javascript">
+	function send_to_dhims()
+	{
+		var period = Date('Ym');
+		var msg = "This will send only DHIMS2 configured tests with values on this page.\nAlso note that system will set reporting period as LAST MONTH. \n\nPlease confirm!";
+				
+		if (confirm(msg)==false){
+			return;
+		}
+	
+		$('#dhims2_send_link').hide();
+		$('#dhims2_send_failure').hide();
+		$('#dhims2_send_progress').show();	
+		try
+		{	
+		$('#dhims2_frm').ajaxSubmit({
+		success: function(status) {
+			handleDHIMS2Response(status);
+		}
+	});
+		}catch(err){alert(err.message);}
+	
+	}
+	
+	function send_to_dhims_retry()
+	{		
+		$('#dhims2_send_link').hide();
+		$('#dhims2_send_failure').hide();
+		$('#dhims2_send_progress').show();	
+		try
+		{	
+		$('#dhims2_frm_retry').ajaxSubmit({
+		success: function(status) {
+			handleDHIMS2Response(status);
+		}
+	});
+		}catch(err){alert(err.message);}
+	
+		
+	}
+	
+	function handleDHIMS2Response(status)
+	{
+		$('#dhims2_send_progress').hide();
+			if ( status == "false" ) {
+				$('#dhims2_send_link').show();				
+				alert("Authentication Error: Invalid Login credentials");				
+			}
+			else if ( status =="404" ) {				
+				$('#dhims2_send_link').show();			
+				alert("The DHIMS2 server cannot be found! Please check your internet connection");				
+			}
+			else if ( status =="no" ) {				
+				$('#dhims2_send_link').show();			
+				alert("Error! DHIMS2 Interface has not been configured. or No DHIMS2 test values found.\nPlease contact your administrator");				
+			}
+			else if ( status=="0" ) {					
+				
+				$('#dhims2_send_failure').show();				
+			}
+			else
+			{				
+				$('#response_success').html(status);
+				$('#dhims2_send_success').show();
+			}	
+	}
+
+</script>

@@ -173,7 +173,8 @@ $LANG_ARRAY = array (
 		"PREVALENCE_RATE" => "Prevalence Rate", 
 		"LANGUAGE" => "Language", 
 		"USER_FUNCTIONS" => "Functions", 
-		"APPROX" => "approximate"
+		"APPROX" => "approximate",
+		"ADD_USER_TYPE" => "Add New User Type"
 	) , 
 	"header" => array ( 
 		"TITLE" => "", 
@@ -324,6 +325,7 @@ $LANG_ARRAY = array (
 		"INCLUDE_LANGUAGE_SETTINGS" => "Include Language Settings", 
 		"MENU_ST_TYPES" => "Specimen/Test Types", 
 		"MENU_USERS" => "User Accounts", 
+		"ADD_USER_TYPE" => "Add New User Type", 
 		"MENU_CUSTOM" => "Registration Fields", 
 		"MENU_TAT" => "Target TAT", 
 		"MENU_INFECTION" => "Infection Report", 

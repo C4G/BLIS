@@ -22,6 +22,10 @@
 			<value>Reset Password</value>
 		</term>
 		<term>
+			<key>ADD_USER_TYPE</key>
+			<value>Add New User Type</value>
+		</term>
+		<term>
 			<key>NAME</key>
 			<value>Name</value>
 		</term>

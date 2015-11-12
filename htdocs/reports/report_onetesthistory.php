@@ -69,7 +69,38 @@ function export_as_word(div_id)
 
 function print_content(div_id)
 {
-	javascript:window.print();
+	var user_id = <?php echo $_SESSION['user_id']; ?>;
+	var p_id = <?php echo $patient_id; ?>;
+	$.ajax({
+		type : 'POST',
+		url : 'ajax/fetchUserLog.php',
+		data: "p_id="+p_id+"&log_type=PRINT",
+		success : function (data) {
+			if ( data != "false" ) {
+					
+				var content = "The results for this patient have been printed already by the following users.";
+				content+= "\n\n"+data+"\n\n";
+				content += "\nDo you wish to print again?";
+				// document.getElementById("dialog").innerHTML = content;
+				// $(function() {
+				// 	$( "#dialog" ).dialog();
+				// });
+				var r = confirm(content);
+				if (r == false) {
+					return;
+				} 
+				
+			}
+			$("#myNicPanel").hide();
+			javascript:window.print();
+			var data_string = "user_id="+user_id+"&p_id="+p_id+"&log_type=PRINT";
+			$.ajax({
+				type : 'POST',
+				url : 'ajax/addUserLog.php',
+				data: data_string
+			});	
+		}
+	});
 }
 
 $(document).ready(function(){

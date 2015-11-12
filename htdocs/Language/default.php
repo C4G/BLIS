@@ -205,7 +205,8 @@ $LANG_ARRAY = array (
 		"USER_FUNCTIONS" => "Functions", 
 		"APPROX" => "approximate", 
 		"LANDSCAPE" => "Landscape mode",
-		"TIPS_PATIENTID_EXISTS"=>"Patient ID already exist. Look up for patient to confirm and register specimen"
+		"TIPS_PATIENTID_EXISTS"=>"Patient ID already exist. Look up for patient to confirm and register specimen",
+		"ADD_USER_TYPE" => "Add New User Type"
 	) , 
 	"header" => array ( 
 		"TITLE" => "", 
@@ -381,6 +382,7 @@ $LANG_ARRAY = array (
 		"TIPS_TARGETTAT" => "Target TAT - This option list the turnaround time for each test type. We can modify the TAT using the Edit option and changing the value.",
 		"TIPS_RESULTINTERPRETATION" => "Result Interpretation - This option allows us to specify the interpretation for multiple ranges of values for each test type.",
 		"MENU_USERS" => "User Accounts", 
+		"ADD_USER_TYPE" => "Add New User Type", 
 		"TIPS_USERACCOUNTS_1" => "This page gives a summary of the various users given access to the system.",
 		"TIPS_USERACCOUNTS_2" => "It also allows for creation of new user accounts.",
 		"TIPS_USERACCOUNTS_3" => "It allows to edit account settings, delete accounts and monitor account activity.",

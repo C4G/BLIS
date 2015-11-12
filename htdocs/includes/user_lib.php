@@ -57,8 +57,21 @@ function get_top_menu_options($user_role, $user_rwoption = "") {
 	} 	
 	
 	else if($user_role == $LIS_PHYSICIAN) {
-		$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
-		$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
+		if (in_array ( "2", $rw_option ))
+			$page_list [LangUtil::getPageTitle ( "regn" )] = "doctor_register.php";
+		if (in_array ( "3", $rw_option ))
+			$page_list [LangUtil::getPageTitle ( "results_entry" )] = "results_entry.php";
+		if (in_array ( "4", $rw_option ))
+			$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
+		if (in_array ( "5", $rw_option ))
+			$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
+		if (in_array ( "6", $rw_option ))
+			$page_list ["Inventory"] = "view_stock.php";
+		if (in_array ( "7", $rw_option ))
+			$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
+		
+		// $page_list [LangUtil::getPageTitle ( "regn" )] = "doctor_register.php";
+		// $page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
 	}
 	// return $page_list;
 	
@@ -244,6 +257,27 @@ function get_level_name($level_code) {
 			{
 				return "Doctor";
 			}
+		case 7:{
+			return "LIS_010";
+		}
+		case 8:{
+			return "LIS_011";
+		}
+		case 9:{
+			return "LIS_100";
+		}
+		case 10:{
+			return "LIS_101";
+		}
+		case 11:{
+			return "LIS_110";
+		}
+		case 12:{
+			return "LIS_111";
+		}
+		case 14:{
+			return "LIS_TECH_RW";
+		}
 	}
 }
 ?>

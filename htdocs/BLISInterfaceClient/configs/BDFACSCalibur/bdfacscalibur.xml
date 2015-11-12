@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created by Stephen Adjei-Kyei (GHSS) -->
+<configuration>
+	<supportedtestTypes>
+		<testtype>		
+			<testtypeid>41</testtypeid>
+			<testtypename>CD4+ Count</testtypename>
+		</testtype>			
+	</supportedtestTypes>
+	<supportedsamples>		
+		<sample>
+			<equipmentsampleid>3</equipmentsampleid>
+			<lissampleid>9</lissampleid>
+			<samplename>Whole Blood</samplename>
+		</sample>		
+	</supportedsamples>
+	<supportedtests>
+		<listest>
+			<equipmenttestid>43</equipmenttestid>
+			<listestid>215</listestid>
+			<listestname>CD3+</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>47</equipmenttestid>
+			<listestid>216</listestid>
+			<listestname>CD8+</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>45</equipmenttestid>
+			<listestid>217</listestid>
+			<listestname>CD4+</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>54</equipmenttestid>
+			<listestid>218</listestid>
+			<listestname>CD45+</listestname>
+		</listest>		
+		<listest>
+			<equipmenttestid>42</equipmenttestid>
+			<listestid>480</listestid>
+			<listestname>CD3+%</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>46</equipmenttestid>
+			<listestid>481</listestid>
+			<listestname>CD8+%</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>44</equipmenttestid>
+			<listestid>482</listestid>
+			<listestname>CD4+%</listestname>
+		</listest>	
+	</supportedtests>
+</configuration>

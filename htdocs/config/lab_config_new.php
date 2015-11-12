@@ -69,9 +69,59 @@ function check_compatible()
 }
 	
 function loadnext(divout,divin){
-	$("." + divout).hide();
-	//$("." + divin).fadeIn("fast");
-	$("." + divin).show();
+	if (divout == 1 && divin == 4){
+		userlist = document.getElementById("lab_admin").value;
+		var url_string = 'ajax/check_user_exists.php';
+		var data_string = 'userlist='+userlist;
+		$.ajax({
+			type: "POST",
+			url: url_string,
+			data: data_string,
+			success: function(msg) {
+				if (msg != "success"){
+					alert(msg);
+					return;
+				}
+				else{
+					$("." + divout).hide();
+					$("." + divin).show();
+				}
+			}
+		});
+	}
+	else if (divout == 4 && divin == 7){
+		 var userlist = $('input[name="username[]"]').map(function(){
+	       return this.value
+		 }).get();
+		 prev_user = document.getElementById("lab_admin").value;
+		 if (userlist.indexOf(prev_user) > -1) {
+		    alert("The user name '"+prev_user+"' has been assigned for the lab manager on the previous screen.");
+		    return;
+		 }
+		 var url_string = 'ajax/check_user_exists.php';
+		 var data_string = 'userlist='+userlist;
+		$.ajax({
+			type: "POST",
+			url: url_string,
+			data: data_string,
+			success: function(msg) {
+				if (msg != "success"){
+					alert(msg);
+					return;
+				}
+				else{
+					$("." + divout).hide();
+					$("." + divin).show();
+				}
+			}
+		});
+	}
+	else {
+		$("." + divout).hide();
+		//$("." + divin).fadeIn("fast");
+		$("." + divin).show();	
+	}
+	
 }
 
 function get_testbox2(stype_id)

@@ -692,6 +692,10 @@
 			<key>LANDSCAPE</key>
 			<value>Landscape mode</value>
 		</term>
+		<term>
+			<key>ADD_USER_TYPE</key>
+			<value>Add New User Type</value>
+		</term>
 	</page>
 	<page id="header" descr="Page Header">
 		<term>

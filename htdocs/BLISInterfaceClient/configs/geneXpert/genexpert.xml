@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created by Stephen Adjei-Kyei (GHSS) HO Configuration -->
+<configuration>
+	<supportedtestTypes>
+		<testtype>		
+			<testtypeid>12</testtypeid>
+			<testtypename>GeneXpert</testtypename>
+		</testtype>			
+	</supportedtestTypes>
+	<supportedsamples>		
+		<sample>
+			<equipmentsampleid>1</equipmentsampleid>
+			<lissampleid>1</lissampleid>
+			<samplename>Extrapulmonary Specimen</samplename>
+		</sample>
+		<sample>
+			<equipmentsampleid>6</equipmentsampleid>
+			<lissampleid>6</lissampleid>
+			<samplename>Sputum</samplename>
+		</sample>		
+	</supportedsamples>
+	<supportedtests>
+		<listest>
+			<equipmenttestid>59</equipmenttestid>
+			<listestid>59</listestid>
+			<listestname>MTB</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>214</equipmenttestid>
+			<listestid>214</listestid>
+			<listestname>RIF Resistance</listestname>
+		</listest>			
+	</supportedtests>
+</configuration>

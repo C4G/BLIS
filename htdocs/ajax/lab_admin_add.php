@@ -32,18 +32,29 @@ $user->email = $email;
 $user->phone = $phone;
 $user->createdBy = $_SESSION['user_id'];
 $user->langId = $lang_id;
-add_user($user);
+$user_exists = check_user_exists($username);
+if($user_exists == false) 
+{
+	add_user($user);
+	?>
+	<table cellspacing="20px">
+		<tr>
+			<td>
+				<?php
+					echo LangUtil::$generalTerms['MSG_ACC_ADDED']."<br>";
+					echo LangUtil::$generalTerms['USERNAME'].": ".$user->username;
+					echo "<br>";
+					echo LangUtil::$generalTerms['PWD_TEMP'].": ".$user->password;
+				?>
+			</td>
+		</tr>
+	</table>
+<?php }
+else
+{
+	echo "This user already exists. Please edit or create a different user";
+}
+
 ?>
-<table cellspacing="20px">
-	<tr>
-		<td>
-			<?php
-				echo LangUtil::$generalTerms['MSG_ACC_ADDED']."<br>";
-				echo LangUtil::$generalTerms['USERNAME'].": ".$user->username;
-				echo "<br>";
-				echo LangUtil::$generalTerms['PWD_TEMP'].": ".$user->password;
-			?>
-		</td>
-	</tr>
-</table>
+
 <?php SessionUtil::restore($saved_session); ?>

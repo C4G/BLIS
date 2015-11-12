@@ -1309,6 +1309,10 @@
 			<value>User Accounts</value>
 		</term>
 		<term>
+			<key>ADD_USER_TYPE</key>
+			<value>Add New User Type</value>
+		</term>
+		<term>
 			<key>TIPS_USERACCOUNTS_1</key>
 			<value>This page gives a summary of the various users given access to the system.</value>
 		</term>

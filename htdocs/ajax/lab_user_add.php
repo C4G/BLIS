@@ -69,7 +69,9 @@ $user->phone = $phone;
 $user->createdBy = $_SESSION['user_id'];
 $user->langId = $lang_id;
 $user->rwoptions = $user_rwoption;
-add_user($user);
+$success_var = add_user($user);
+if ($success_var){
+
 ?>
 <table cellspacing="20px">
 	<tr>
@@ -83,4 +85,9 @@ add_user($user);
 		</td>
 	</tr>
 </table>
-<?php SessionUtil::restore($saved_session); ?>
+<?php 
+}
+else
+	echo "User already exists";
+
+SessionUtil::restore($saved_session); ?>

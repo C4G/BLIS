@@ -26,6 +26,10 @@
 			<value>Currency</value>
 		</term>
 		<term>
+			<key>ADD_USER_TYPE</key>
+			<value>Add New User Type</value>
+		</term>
+		<term>
 			<key>EXCHANGE_RATE</key>
 			<value>Exchange Rate</value>
 		</term>
@@ -1307,6 +1311,10 @@
 		<term>
 			<key>MENU_USERS</key>
 			<value>User Accounts</value>
+		</term>
+		<term>
+			<key>ADD_USER_TYPE</key>
+			<value>Add New User Type</value>
 		</term>
 		<term>
 			<key>TIPS_USERACCOUNTS_1</key>

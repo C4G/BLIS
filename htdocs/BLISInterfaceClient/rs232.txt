@@ -1,0 +1,20 @@
+;********************************************************
+;	
+;configuration settings for serial port connection
+;
+;********************************************************
+[RS232 CONFIGURATIONS]
+	;The comm port on which to connect
+	--COMPORT--
+	;The speed of connection.eg (4800,9600,38400,57600,115200)
+	--BAUD_RATE--
+	;How should data be checked for errors. Available options are (Odd,Even,None)
+	--PARITY--
+	;Choose the time between character transmission for your serial device. Available options are (1,2)
+	--STOP_BITS--
+	;Choose the number of data bits used by your serial device to represent characters. Available options are (7,8)
+	--DATA_BITS--
+	;Should the data transfer be appended with the Newline(/n) character (Yes/No)
+	--APPEND_NEWLINE--
+	;Should the data transfer be appended with the Enter(/r) character (Yes/No)
+	--APPEND_CARRIAGE_RETURN--

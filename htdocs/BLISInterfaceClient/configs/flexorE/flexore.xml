@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created by Stephen Adjei-Kyei (GHSS) -->
+<configuration>
+	<supportedtestTypes>
+		<testtype>		
+			<testtypeid>*</testtypeid>
+			<testtypename>*</testtypename>
+		</testtype>			
+	</supportedtestTypes>
+	<supportedsamples>	
+		<sample>
+			<equipmentsampleid>1</equipmentsampleid>
+			<lissampleid>16</lissampleid>
+			<samplename>Serum</samplename>
+		</sample>	
+		<sample>
+			<equipmentsampleid>1</equipmentsampleid>
+			<lissampleid>16</lissampleid>
+			<samplename>Serum</samplename>
+		</sample>	
+		<sample>
+			<equipmentsampleid>1</equipmentsampleid>
+			<lissampleid>16</lissampleid>
+			<samplename>Serum</samplename>
+		</sample>	
+		
+	</supportedsamples>
+	<supportedtests>		
+		<listest>
+			<equipmenttestid>GLUC</equipmenttestid>
+			<listestid>37</listestid>
+			<listestname>FBS (Glucose)</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>TPRO</equipmenttestid>
+			<listestid>525</listestid>
+			<listestname>Total Protein</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>ALB</equipmenttestid>
+			<listestid>524</listestid>
+			<listestname>Albumin</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>GBL</equipmenttestid>
+			<listestid>510</listestid>
+			<listestname>Globulins</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>TBIL</equipmenttestid>
+			<listestid>532</listestid>
+			<listestname>Total Bilirubin</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>DBIL</equipmenttestid>
+			<listestid>530</listestid>
+			<listestname>Direct Bilirubin</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>IBIL</equipmenttestid>
+			<listestid>531</listestid>
+			<listestname>Indirect Bilirubin</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>AST</equipmenttestid>
+			<listestid>526</listestid>
+			<listestname>AST</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>ALT</equipmenttestid>
+			<listestid>527</listestid>
+			<listestname>ALT</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>AMYL</equipmenttestid>
+			<listestid>500</listestid>
+			<listestname>AMYLASE</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>GGT</equipmenttestid>
+			<listestid>529</listestid>
+			<listestname>GGT</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>ALP</equipmenttestid>
+			<listestid>528</listestid>
+			<listestname>ALKALINE PHOS</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>UREA</equipmenttestid>
+			<listestid>518</listestid>
+			<listestname>Urea</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CREA</equipmenttestid>
+			<listestid>519</listestid>
+			<listestname>Creatinine</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CKNA</equipmenttestid>
+			<listestid>502</listestid>
+			<listestname>Creatinine Kinase</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CAL</equipmenttestid>
+			<listestid>501</listestid>
+			<listestname>CALCIUM</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>Na</equipmenttestid>
+			<listestid>515</listestid>
+			<listestname>Sodium</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>K</equipmenttestid>
+			<listestid>516</listestid>
+			<listestname>Potassium</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>U/A</equipmenttestid>
+			<listestid>540</listestid>
+			<listestname>Uric Acid</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CHOL</equipmenttestid>
+			<listestid>523</listestid>
+			<listestname>Total Cholesterol</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>TRIG</equipmenttestid>
+			<listestid>522</listestid>
+			<listestname>Triglycerides</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>HDL</equipmenttestid>
+			<listestid>520</listestid>
+			<listestname>HDL Cholesterol</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>LDL</equipmenttestid>
+			<listestid>521</listestid>
+			<listestname>LDL Cholesterol</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>VLDL</equipmenttestid>
+			<listestid>774</listestid>
+			<listestname>VLDL Cholesterol</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CR</equipmenttestid>
+			<listestid>775</listestid>
+			<listestname>Coronary Risk</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>LDH</equipmenttestid>
+			<listestid>159</listestid>
+			<listestname>LDH</listestname>
+		</listest>				
+		<listest> 
+			<equipmenttestid>CKMB</equipmenttestid>
+			<listestid>505</listestid>
+			<listestname>CK-MB</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>CI</equipmenttestid>
+			<listestid>517</listestid>
+			<listestname>Chloride</listestname>
+		</listest>
+	</supportedtests>
+	<calculatedTests>
+		<calcTest>
+			<testcode>LDL</testcode>
+			<formula>CHOL-HDL-(TRIG/2.2000)</formula>
+		</calcTest>
+		<calcTest>
+			<testcode>VLDL</testcode>
+			<formula>TRIG/2.2000</formula>
+		</calcTest>
+		<calcTest>
+			<testcode>CR</testcode>
+			<formula>CHOL/HDL</formula>
+		</calcTest>
+		<calcTest>
+			<testcode>IBIL</testcode>
+			<formula>TBIL-DBIL</formula>
+		</calcTest>
+		<calcTest>
+			<testcode>GLB</testcode>
+			<formula>TP-ALB</formula>
+		</calcTest>
+		<Misc>
+			<m1>8</m1>
+		</Misc>
+	</calculatedTests>
+</configuration>

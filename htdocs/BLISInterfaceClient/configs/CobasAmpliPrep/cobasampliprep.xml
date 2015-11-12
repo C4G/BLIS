@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created by Stephen Adjei-Kyei (GHSS) HO Configuration-->
+<configuration>
+	<supportedtestTypes>
+		<testtype>		
+			<testtypeid>*</testtypeid>
+			<testtypename>*</testtypename>
+		</testtype>			
+	</supportedtestTypes>
+	<supportedsamples>		
+		<sample>
+			<equipmentsampleid>3</equipmentsampleid>
+			<lissampleid>25</lissampleid>
+			<samplename>ASCITIC FUID</samplename>
+		</sample>	
+		<sample>
+			<equipmentsampleid>3</equipmentsampleid>
+			<lissampleid>9</lissampleid>
+			<samplename>CSF</samplename>
+		</sample>	
+		<sample>
+			<equipmentsampleid>3</equipmentsampleid>
+			<lissampleid>24</lissampleid>
+			<samplename>Pleural Fluid</samplename>
+		</sample>	
+		<sample>
+			<equipmentsampleid>1</equipmentsampleid>
+			<lissampleid>2</lissampleid>
+			<samplename>Serum</samplename>
+		</sample>	
+		<sample>
+			<equipmentsampleid>3</equipmentsampleid>
+			<lissampleid>26</lissampleid>
+			<samplename>Peritoneal Fluid</samplename>
+		</sample>			
+	</supportedsamples>
+	<supportedtests>
+		<listest>
+			<equipmenttestid>GTT0</equipmenttestid>
+			<listestid>651</listestid>
+			<listestname>Glucose (SI)</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>GTT1</equipmenttestid>
+			<listestid>428</listestid>
+			<listestname>1HrPP</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>GTT2</equipmenttestid>
+			<listestid>429</listestid>
+			<listestname>2HrPP</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>GTT3</equipmenttestid>
+			<listestid>670</listestid>
+			<listestname>3HrPP</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>A/G</equipmenttestid>
+			<listestid>32</listestid>
+			<listestname>A/G</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>A1c</equipmenttestid>
+			<listestid>204</listestid>
+			<listestname>Hemoglobin A1c</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>AGAP</equipmenttestid>
+			<listestid>676</listestid>
+			<listestname>Anion Gap</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>ALB</equipmenttestid>
+			<listestid>27</listestid>
+			<listestname>ALBUMIN</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>ALB (SI)</equipmenttestid>
+			<listestid>28</listestid>
+			<listestname>ALBUMIN (SI)</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>ALKP</equipmenttestid>
+			<listestid>677</listestid>
+			<listestname>Alk Phos</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>AFP</equipmenttestid>
+			<listestid>600</listestid>
+			<listestname>Alpha Fetoprotein</listestname>
+		</listest>			
+		<listest>
+			<equipmenttestid>ALT</equipmenttestid>
+			<listestid>33</listestid>
+			<listestname>ALT</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>AMYL</equipmenttestid>
+			<listestid>201</listestid>
+			<listestname>AMYLASE</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>AST</equipmenttestid>
+			<listestid>34</listestid>
+			<listestname>AST</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>B/C</equipmenttestid>
+			<listestid>645</listestid>
+			<listestname>B/C</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>BUN</equipmenttestid>
+			<listestid>51</listestid>
+			<listestname>BUN</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>BUN (SI)</equipmenttestid>
+			<listestid>646</listestid>
+			<listestname>BUN(SI)</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>C/H</equipmenttestid>
+			<listestid>679</listestid>
+			<listestname>CORONARY RISK</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CA</equipmenttestid>
+			<listestid>205</listestid>
+			<listestname>CALCIUM</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CA (SI)</equipmenttestid>
+			<listestid>673</listestid>
+			<listestname>CALCIUM (SI)</listestname>		
+		</listest>	
+		<listest>
+			<equipmenttestid>CHOL</equipmenttestid>
+			<listestid>89</listestid>
+			<listestname>CHOLESTEROL</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CHOL (SI)</equipmenttestid>
+			<listestid>92</listestid>
+			<listestname>TOTAL CHOLESTEROL(SI)</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CK-MB</equipmenttestid>
+			<listestid>598</listestid>
+			<listestname>CK-MB</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CL</equipmenttestid>
+			<listestid>39</listestid>
+			<listestname>CHLORIDE</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CLDL</equipmenttestid>
+			<listestid>680</listestid>
+			<listestname>LDL-Calculated</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CLDL (SI)</equipmenttestid>
+			<listestid>681</listestid>
+			<listestname>LDL-Calculated (SI)</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CO2</equipmenttestid>
+			<listestid>40</listestid>
+			<listestname>CARBON DIOXIDE</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CPK</equipmenttestid>
+			<listestid>43</listestid>
+			<listestname>CPK</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CRE</equipmenttestid>
+			<listestid>52</listestid>
+			<listestname>CREATININE</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>CRE (SI)</equipmenttestid>
+			<listestid>647</listestid>
+			<listestname>CREATININE(SI)</listestname>
+		</listest>		
+		<listest>
+			<equipmenttestid>DBIL</equipmenttestid>
+			<listestid>649</listestid>
+			<listestname>DIRECT BILIRUBIN</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>DBIL (SI)</equipmenttestid>
+			<listestid>650</listestid>
+			<listestname>DIRECT BILIRUBIN (SI)</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>ESTR</equipmenttestid>
+			<listestid>297</listestid>
+			<listestname>Estradiol</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>FSH</equipmenttestid>
+			<listestid>279</listestid>
+			<listestname>FSH</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>FT3</equipmenttestid>
+			<listestid>595</listestid>
+			<listestname>FT3</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>FT4</equipmenttestid>
+			<listestid>596</listestid>
+			<listestname>FREE T4</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>GGT</equipmenttestid>
+			<listestid>431</listestid>
+			<listestname>GGT</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>GLOB</equipmenttestid>
+			<listestid>678</listestid>
+			<listestname>Globulin</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>GLU</equipmenttestid>
+			<listestid>36</listestid>
+			<listestname>GLUCOSE</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>GLU (SI)</equipmenttestid>
+			<listestid>651</listestid>
+			<listestname>GLUCOSE (SI)</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>hCG</equipmenttestid>
+			<listestid>597</listestid>
+			<listestname>HCG (Serum)</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>HDL</equipmenttestid>
+			<listestid>682</listestid>
+			<listestname>HDL</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>HDL (SI)</equipmenttestid>
+			<listestid>683</listestid>
+			<listestname>HDL (SI)</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>IBIL</equipmenttestid>
+			<listestid>496</listestid>
+			<listestname>INDIRECT BILIRUBIN</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>IBIL (SI)</equipmenttestid>
+			<listestid>648</listestid>
+			<listestname>INDIRECT BILIRUBIN(SI)</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>IRON</equipmenttestid>
+			<listestid>684</listestid>
+			<listestname>IRON</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>IRON (SI)</equipmenttestid>
+			<listestid>685</listestid>
+			<listestname>IRON(SI)</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>K</equipmenttestid>
+			<listestid>38</listestid>
+			<listestname>POTASSIUM</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>LDH</equipmenttestid>
+			<listestid>42</listestid>
+			<listestname>LDH</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>LDL</equipmenttestid>
+			<listestid>686</listestid>
+			<listestname>LDL-Direct</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>LH</equipmenttestid>
+			<listestid>687</listestid>
+			<listestname>LH</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>MAG</equipmenttestid>
+			<listestid>202</listestid>
+			<listestname>MAGNESIUM</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>MAG (SI)</equipmenttestid>
+			<listestid>208</listestid>
+			<listestname>MAGNESIUM (SI)</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>NA</equipmenttestid>
+			<listestid>37</listestid>
+			<listestname>SODIUM</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>PHOS</equipmenttestid>
+			<listestid>206</listestid>
+			<listestname>Phosphorus</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>PHOS (SI)</equipmenttestid>
+			<listestid>674</listestid>
+			<listestname>Phosphorus(SI)</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>PRO</equipmenttestid>
+			<listestid>26</listestid>
+			<listestname>TOTAL PROTEIN</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>PRO (SI)</equipmenttestid>
+			<listestid>432</listestid>
+			<listestname>TOTAL PROTEIN(SI)</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>PRL</equipmenttestid>
+			<listestid>289</listestid>
+			<listestname>Prolactin</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>PROG</equipmenttestid>
+			<listestid>284</listestid>
+			<listestname>Progesterone</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>PSA</equipmenttestid>
+			<listestid>302</listestid>
+			<listestname>PSA</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>RBS</equipmenttestid>
+			<listestid>207</listestid>
+			<listestname>RBS</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>T4</equipmenttestid>
+			<listestid>675</listestid>
+			<listestname>T4</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>TBIL</equipmenttestid>
+			<listestid>494</listestid>
+			<listestname>TOTAL BILIRUBIN</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>TBIL (SI)</equipmenttestid>
+			<listestid>495</listestid>
+			<listestname>TOTAL BILIRUBIN (SI)</listestname>
+		</listest>	
+		<listest>
+			<equipmenttestid>TESTO</equipmenttestid>
+			<listestid>291</listestid>
+			<listestname>Testosterone</listestname>
+		</listest>			
+		<listest>
+			<equipmenttestid>TRIG</equipmenttestid>
+			<listestid>90</listestid>
+			<listestname>TRIGLYCERIDE</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>TRIG (SI)</equipmenttestid>
+			<listestid>652</listestid>
+			<listestname>TRIGLYCERIDE (SI)</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>Troponin-I</equipmenttestid>
+			<listestid>599</listestid>
+			<listestname>Troponin I</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>TSH</equipmenttestid>
+			<listestid>430</listestid>
+			<listestname>TSH</listestname>
+		</listest>			
+		<listest>
+			<equipmenttestid>VLDL</equipmenttestid>
+			<listestid>91</listestid>
+			<listestname>VLDL</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>URIC</equipmenttestid>
+			<listestid>79</listestid>
+			<listestname>URIC ACID</listestname>
+		</listest>
+		<listest>
+			<equipmenttestid>URIC (SI)</equipmenttestid>
+			<listestid>80</listestid>
+			<listestname>URIC ACID(SI)</listestname>
+		</listest>	
+	</supportedtests>
+</configuration>

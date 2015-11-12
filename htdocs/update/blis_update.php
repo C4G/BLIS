@@ -6,9 +6,9 @@
 
 /*include("../users/accesslist.php");
 if( !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList)) 
-	&& !(isSuperAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $superAdminPageList)) &&
-	!(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList)) )
-	header( 'Location: home.php' );
+    && !(isSuperAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $superAdminPageList)) &&
+    !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList)) )
+    header( 'Location: home.php' );
 */
 include("redirect.php");
 include("../includes/db_lib.php");
@@ -19,57 +19,88 @@ LangUtil::setPageId("update");
 $user = get_user_by_id($_SESSION['user_id']);
 
 $def = '';
+global $VERSION;
+
+$saved_db = DbUtil::switchToGlobal();
+$query = "SELECT max(version) version FROM version_data";
+$record = query_associative_one($query);
+DbUtil::switchRestore($saved_db);
+
+$vers = $record['version']; 
+
+$version_list = array("2.2","2.3","2.4","2.5","2.6","2.7","2.8","2.9","2.91", "3.0");
+
+$version_doc_admin = array("db_update_v2-2","db_update_revamp_2.3","db_update_revamp_2.4","db_update_revamp_2.5","db_update_revamp_2.6","db_update_revamp_2.7","db_update_revamp_admin_2.8","","db_update_revamp_2.91", "db_update_revamp_3.0");
+$version_doc_revamp = array("db_update_v2-2","db_update_revamp_2.3","db_update_revamp_2.4","db_update_revamp_2.5","db_update_revamp_2.6","db_update_revamp_2.7","db_update_revamp_2.8","","db_update_revamp_2.91", "db_update_revamp_3.0");
+$version_doc_lab = array("db_update_v2-2","db_update_lab_2.3","db_update_lab_2.4","db_update_lab_2.5","db_update_lab_2.6","db_update_lab_2.7","db_update_lab_2.8","","","db_update_lab_3.0");
+
+$retstr1 = "";
+$retstr2 = "";
+$retstr3 = "";
+
+$v_index = 0;
+while($v_index<count($version_list)) {
+    if($version_list[$v_index] == $vers)
+    {
+        $v_index++;
+        while($v_index<count($version_list)){
+            if ( is_super_admin($user) || is_country_dir($user) ) {
+                if($version_doc_admin[$v_index] != ""){
+                    $db_name = "blis_revamp";
+                    $ufile = $version_doc_admin[$v_index];
+                    blis_db_update($lab_config_id, $db_name, $ufile);
+                    $retstr1 =  $retstr1.$version_doc_admin[$v_index]; 
+                }
+                
+            }
+            else {
+                $lab_config_id = $_SESSION['lab_config_id'];
+
+                # revamp update
+                if($version_doc_revamp[$v_index] != ""){
+                    $db_name = "blis_revamp";
+                    $ufile =  $version_doc_revamp[$v_index];
+                    blis_db_update($lab_config_id, $db_name, $ufile);
+                    $retstr2 =  $retstr2.$version_doc_revamp[$v_index];
+                }
+
+                # lab update
+                if($version_doc_lab[$v_index] != ""){
+                    $db_name = "blis_".$lab_config_id;
+                    $ufile = $version_doc_lab[$v_index];
+                    blis_db_update($lab_config_id, $db_name, $ufile);
+                    
+                    $retstr3 =  $retstr3.$version_doc_lab[$v_index];
+                }
+                //runGlobalUpdate();
+            }
+            $v_index++;
+        }
+        break;
+    }
+    $v_index++;
+}
 
 if ( is_super_admin($user) || is_country_dir($user) ) {
-	//$labConfigList = get_lab_configs($user->userId);
-	//foreach($labConfigList as $labConfig) {
-		//$labConfigId = $labConfig->id;
-		//runUpdate($labConfigId);
-//          }
-	//runGlobalUpdate();
-    $db_name = "blis_revamp";
-        $ufile = "db_update_revamp";
-        blis_db_update($lab_config_id, $db_name, $ufile);
-        update_language_files();
-        insertVersionDataEntry();
+    update_language_files();
+    // insertVersionDataEntry();
 }
 else {
-	$lab_config_id = $_SESSION['lab_config_id'];
-	//runUpdate($labConfigId);
-        # revamp update
-        $db_name = "blis_revamp";
-        $ufile = "db_update_revamp_2.8";
-        blis_db_update($lab_config_id, $db_name, $ufile);
-        
-        # lab update
-        $db_name = "blis_".$lab_config_id;
-        #$ufile = "db_update_lab_2.7.1";
-        $ufile = "db_update_lab_2.8";
-        blis_db_update($lab_config_id, $db_name, $ufile);
-        update_language_files();
-        $def = default_currency_copy($lab_config_id);
-        insertVersionDataEntry();
-        
-	//runGlobalUpdate();
+    $lab_config_id = $_SESSION['lab_config_id'];
+    update_language_files();
+    $def = default_currency_copy($lab_config_id);
+    // insertVersionDataEntry();
 }
-/*
-function runUpdate($lab_config_id) {
-        
-        # revamp update
-        $db_name = "blis_revamp";
-        $ufile = "db_update_revamp_test";
-        blis_db_update($lab_config_id, $db_name, $ufile);
-        
-        # lab update
-        $db_name = "blis_".$lab_config_id;
-        $ufile = "db_update_lab_test";
-        blis_db_update($lab_config_id, $db_name, $ufile);
-        
-        insertVersionDataEntry();
-}*/
 
-//echo "Updated";
+$saved_db = DbUtil::switchToGlobal();
+global $VERSION;
+$vers = $VERSION;
+$status = 1;
+$uid = $_SESSION['user_id'];
+$query_string = "INSERT INTO version_data (version, status, user_id, i_ts) VALUES ('$vers', $status, '$uid', NOW())";
+query_insert_one($query_string);
+DbUtil::switchRestore($saved_db);
 
-//echo $def;
-echo "true";
+// echo $retstr1.$retstr2.$retstr3;
+echo "true"
 ?>

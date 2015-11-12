@@ -173,7 +173,8 @@ $LANG_ARRAY = array (
 		"LANGUAGE" => "Language", 
 		"USER_FUNCTIONS" => "Functions", 
 		"APPROX" => "approximate", 
-		"LANDSCAPE" => "Landscape mode"
+		"LANDSCAPE" => "Landscape mode",
+		"ADD_USER_TYPE" => "Add New User Type"
 	) , 
 	"header" => array ( 
 		"TITLE" => "", 
