@@ -122,6 +122,7 @@ for($i = 0; $i < count($user_list); $i++)
 	$user->createdBy = $_SESSION['user_id'];
 	$user->labConfigId = $lab_config_id;
 	$user->langId = "default";
+	$user->rwoptions = "2,3,4,6,7";
 	add_user($user);
 }
 

@@ -6548,7 +6548,7 @@ function update_lab_RWOptions($config)
 
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string = 
-	"UPDATE user ".
+	"UPDATE user_config ".
 	"SET value='$config'".
 	"WHERE level=17 and lab_config_id = ".$_SESSION['lab_config_id']." and parameter = 'rwoptions'";
 	query_blind($query_string);	
@@ -8146,6 +8146,11 @@ function checkAndAddAdmin($adminName, $labConfigId) {
 		$query_insert = "INSERT INTO user (user_id, username, password, created_by, lab_config_id, level, lang_id) ".
 						"VALUES ($newAdminUserId, '$adminName', '18865bfdeed2fd380316ecde609d94d7285af83f', $userId, '$labConfigId', 2, 'default') ";
 		query_insert_one($query_insert);
+		$query_string = 
+			"INSERT INTO user_config(user_id, level, parameter, value, created_by, created_on, modified_by, modified_on) ".
+			"VALUES ($newAdminUserId, 2, 'rwoptions', '2,3,4,6,7', $userId, curdate(), $userId, curdate())";
+		query_insert_one($query_string);
+
 		DbUtil::switchRestore($saved_db);
 		return $newAdminUserId;
 	}	
