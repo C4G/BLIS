@@ -42,6 +42,7 @@ CVS/
 ################
 .buildpath
 .project
+.metadata/
 BLIS.exe.manifest
 BlisSetup.html
 FirefoxPortable/
