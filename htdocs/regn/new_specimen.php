@@ -217,7 +217,7 @@ function add_specimens()
 			alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$pageTerms['MSG_SID_INVALID']; ?>");
 			return;
 		}
-		
+
 		var ry = $("#"+form_id+" [name='receipt_yyyy']").attr("value");
 		ry = ry.replace(/[^0-9]/gi,'');
 		var rm = $("#"+form_id+" [name='receipt_mm']").attr("value");
@@ -256,6 +256,7 @@ function add_specimens()
 		}
 		//All okay
 	}
+	console.log("Reached all ok");
 	$('#progress_spinner').show();
 	
 	for(var j = 1; j <= specimen_count; j++)

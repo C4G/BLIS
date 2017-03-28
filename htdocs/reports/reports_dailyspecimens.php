@@ -178,7 +178,7 @@ $(document).ready(function(){
 &nbsp;&nbsp;&nbsp;&nbsp;
 <input type='button' onclick="javascript:window.close();" value='<?php echo LangUtil::$generalTerms['CMD_CLOSEPAGE']; ?>'></input>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<?php $page_elems->getTableSortTip(); ?>
+<!--?php $page_elems->getTableSortTip(); ?-->
 <hr>
 
 <div id='export_content'>

@@ -40,13 +40,13 @@ else
 if($_SESSION['locale'] != "fr")
 {
 ?>
-	Please email any comments or suggestions to Santosh Vempala (vempala@cc.gatech.edu) or Amol Shintre (a.shintre@gatech.edu)
+	Please email any comments or suggestions to Santosh Vempala (vempala@cc.gatech.edu) or Sai Teja(dsaiteja@gatech.edu)
 <?php
 }
 else
 {
 ?>
-	S'il vous pla&icirc;t e-mail des commentaires ou des suggestions &agrave; Santosh Vempala (vempala@cc.gatech.edu) ou Amol Shintre (a.shintre@gatech.edu)
+	S'il vous pla&icirc;t e-mail des commentaires ou des suggestions &agrave; Santosh Vempala (vempala@cc.gatech.edu) ou Sai Teja(dsaiteja@gatech.edu)
 <?php
 }
 ?>

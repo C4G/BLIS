@@ -36,11 +36,13 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+CVS/
 
 # Custom Stuff #
 ################
 .buildpath
 .project
+.metadata/
 BLIS.exe.manifest
 BlisSetup.html
 FirefoxPortable/

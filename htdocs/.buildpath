@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<buildpath>
-	<buildpathentry excluding="ajax/|api/|barcode/|billing/|catalog/|config/|css/|CVS/|data/|debug/|director/|dist/|encryption/|export/|facebox/|feedback/|help/|includes/|inventory/|js/|lang/|Language/|logos/|nbproject/|regn/|reports/|results/|search/|sqlbuddy/|tcpdf/|uilog/|update/|userguide/|users/" kind="src" path=""/>
-	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
-</buildpath>

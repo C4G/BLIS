@@ -22,6 +22,35 @@ $lab_config_id = $_REQUEST['lid'];
 $type = $_REQUEST['t'];
 ?>
 <script type='text/javascript'>
+$(document).ready(function(){
+	$('#ftype').change(function() {
+		checkandshowoptions();
+	});
+	checkandshowoptions();
+	$("#control_7").multiSelect({ oneOrMoreSelected: '*' });
+});
+function checkandshowoptions()
+{
+	var ftype = $('#ftype').attr("value");
+	if(ftype == <?php echo CustomField::$FIELD_OPTIONS; ?> || ftype == <?php echo CustomField::$FIELD_MULTISELECT; ?>)
+	{
+		$('#options_row').show();
+	}
+	else
+	{
+		$('#options_row').hide();
+	}
+	if(ftype == <?php echo CustomField::$FIELD_NUMERIC; ?>)
+	{
+		$('#range_row').show();
+		$('#unit_row').show();
+	}
+	else
+	{
+		$('#range_row').hide();
+		$('#unit_row').hide();
+	}
+}
 function checkandsubmit()
 {
 	//Validate

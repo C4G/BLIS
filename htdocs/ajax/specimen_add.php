@@ -57,6 +57,7 @@ $doctor = $_REQUEST['doctor'];
 $doctor = preg_replace("/[^a-zA-Z\s]/", "", $doctor);
 $title=$_REQUEST['title'];
 $tests_list = $_REQUEST['t_type_list'];
+$site_id = $_REQUEST['collection_sites'];
 
 putUILog('specimen_add', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
@@ -93,6 +94,7 @@ $specimen->reportTo = $report_to;
 $specimen->doctor = $title.$doctor;
 else
 $specimen->doctor=$doctor;
+$specimen->site_id = $site_id;
 # Add entry to 'specimen' table
 add_specimen($specimen);
 # Add entries to 'specimen_custom_data'

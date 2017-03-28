@@ -186,7 +186,10 @@ echo "<br>";
 <form id='SQLimportForm' name='SQLimportForm' action='import_data_director.php' method='post' enctype="multipart/form-data" target="upload_target" >
 Select update file
 <input type="file" id="sqlFile" name="sqlFile" size="40" /></td>
-
+<br>
+Please copy and paste langdata folder path present in backup folder 
+<input type="text" name="lang_data_folder_path" id="lang_data_folder_path" value=" ">
+<br>
 <input type="button" id="import" value="Import" onclick="javascript:confirmationMsg();">
 </form>
 <br>
