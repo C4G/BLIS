@@ -177,11 +177,9 @@ public static function install_first_order($lab_config, $formId){
 				$field_order = $field_order.",".$value->fieldName;
 				$count++;
 			}
-			
 		}
-		
-		
-		
+
+
 		/* //agelimit
 		if(isset($lab_config->agelimit) && $lab_config->agelimit > 0){
 		    $field_ordering->{field.$count} = "Age Limit";

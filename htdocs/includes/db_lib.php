@@ -101,6 +101,17 @@ class User
 		
 		return $user;
 	}
+
+	public static function getByUserId($id)
+    {
+        $saved_db = DbUtil::switchToGlobal();
+
+        $query = "SELECT * FROM user ".
+            "WHERE user_id='$id'";
+        $user = query_associative_one($query);
+
+        return self::getObject($user);
+    }
 	
 	public static function onlyOneLabConfig($user_id, $user_level)
 	{
@@ -405,6 +416,7 @@ class FieldOrdering
 
 
 
+
 class LabConfig
 {
 	public $id;
@@ -432,6 +444,7 @@ class LabConfig
 	public $hidePatientName; # Flag to hide patient name at results entry
 	public $ageLimit;
 	public $country;
+    public $site_choice_enabled;
 	
 	public static $ID_AUTOINCR = 1;
 	public static $ID_MANUAL = 2;
@@ -466,7 +479,7 @@ class LabConfig
 		if(isset($record['p_addl']))
 			$lab_config->patientAddl = $record['p_addl'];
 		else
-			$lab_config_id->patientAddl = 0;
+			$lab_config->patientAddl = 0;
 		if(isset($record['s_addl']))
 			$lab_config->specimenAddl = $record['s_addl'];
 		else
@@ -474,11 +487,11 @@ class LabConfig
 		if(isset($record['daily_num']))
 			$lab_config->dailyNum = $record['daily_num'];
 		else
-			$lab_config_id->dailyNum = 0;
+			$lab_config->dailyNum = 0;
 		if(isset($record['dnum_reset']))
 			$lab_config->dailyNumReset = $record['dnum_reset'];
 		else
-			$lab_config_id->dailyNumReset = LabConfig::$RESET_DAILY;
+			$lab_config->dailyNumReset = LabConfig::$RESET_DAILY;
 		if(isset($record['pid']))
 			$lab_config->pid = $record['pid'];
 		else
@@ -486,11 +499,11 @@ class LabConfig
 		if(isset($record['pname']))
 			$lab_config->pname = $record['pname'];
 		else
-			$lab_config_id->pname = 0;
+			$lab_config->pname = 0;
 		if(isset($record['sex']))
 			$lab_config->sex = $record['sex'];
 		else
-			$lab_config_id->sex = 0;
+			$lab_config->sex = 0;
 		if(isset($record['age']))
 			$lab_config->age = $record['age'];
 		else
@@ -498,7 +511,7 @@ class LabConfig
 		if(isset($record['dob']))
 			$lab_config->dob = $record['dob'];
 		else
-			$lab_config_id->dob = 0;
+			$lab_config->dob = 0;
 		if(isset($record['sid']))
 			$lab_config->sid = $record['sid'];
 		else
@@ -531,6 +544,7 @@ class LabConfig
 			$lab_config->ageLimit = $record['ageLimit'];
 		else
 			$lab_config->ageLimit = 5;
+        $lab_config->site_choice_enabled = $record['site_choice_enabled'];
 		return $lab_config;
 	}
 	
@@ -741,7 +755,7 @@ class LabConfig
 			*/
 			$query_string = 
 				"SELECT target_tat FROM test_type ".
-				"WHERE test_type_id=$test_type->testTypeId ORDER BY ts DESC LIMIT 1";
+				"WHERE test_type_id=$test_type->testTypeId";
 			$record = query_associative_one($query_string);
 			if($record == null)
 			{
@@ -755,7 +769,7 @@ class LabConfig
 		}
 		# Append TAT value for pending tests
 		//$query_string = "SELECT tat FROM test_type_tat WHERE test_type_id=0 LIMIT 1";
-		$query_string = "SELECT target_tat FROM test_type_tat WHERE test_type_id=0 LIMIT 1";
+		/*$query_string = "SELECT target_tat FROM test_type_tat WHERE test_type_id=0 LIMIT 1";
 		$record = query_associative_one($query_string);
 		if($record == null)
 		{
@@ -769,7 +783,7 @@ class LabConfig
 		{
 			# Default value present in table
 			$retval[0] = $record['tat'];
-		}
+		}*/
 		DbUtil::switchRestore($saved_db);
 		return $retval;
 	}
@@ -864,8 +878,8 @@ class LabConfig
 		## Adds a new entry for every update to have time-versioned goal TAT values
 		$saved_db = DbUtil::switchToLabConfig($this->id);
 		global $con;
-		$test_type_id = mysql_real_escape_string($tat_value, $con);
-		$tat_value = mysql_real_escape_string($test_type_id, $con);
+		$test_type_id = mysql_real_escape_string($test_type_id, $con);
+		$tat_value = mysql_real_escape_string($tat_value, $con);
 		# Create new entry
 		/*
 		$query_string = 
@@ -873,10 +887,10 @@ class LabConfig
 			"WHERE test_type_id=$test_type_id ORDER BY ts DESC LIMIT 1";
 		*/
 		$query_string =
-			"SELECT target_tat FROM test_type ".
-			"WHERE test_type_id=$test_type_id ORDER BY ts DESC LIMIT 1";
+			"SELECT target_tat FROM test_type "."WHERE test_type_id=$test_type_id";
+			//"WHERE test_type_id=$test_type_id ORDER BY ts DESC LIMIT 1";
 		$existing_record = query_associative_one($query_string);
-		if($existing_record != null) {
+		if($existing_record) {
 			if($existing_record['target_tat'] != $tat_value) {
 				# Update TAT value
 				$query_string = 
@@ -1255,6 +1269,194 @@ class LabConfig
 		DbUtil::switchRestore($saved_db);
 		return $retval;
 	}
+
+	public function updateSiteEntryChoice($choice)
+    {
+        $saved_db = DbUtil::switchToGlobal();
+
+        $query = "UPDATE lab_config SET site_choice_enabled='$choice' WHERE ".
+            "lab_config_id='$this->id'";
+        query_update($query);
+        DbUtil::switchRestore($saved_db);
+    }
+}
+
+class Sites
+{
+    public $id;
+    public $name;
+    public $lab_id;
+
+    public static function getObject($record)
+    {
+        # Process a record and return the Sites object
+        if ($record == null)
+            return null;
+
+        $obj = new Sites();
+        $obj->id = $record['id'];
+        $obj->name = $record['name'];
+        $obj->lab_id = $record['lab_id'];
+
+        return $obj;
+    }
+
+    public static function getDefaultSite($lab_config)
+    {
+        $query = "SELECT * FROM sites ".
+            "WHERE name='$lab_config->name'";
+
+        $result = query_associative_one($query);
+
+        return self::getObject($result);
+
+    }
+
+    public static function getById($id)
+    {
+        $query = "SELECT * FROM sites ".
+            "WHERE id='$id'";
+        $result = query_associative_one($query);
+
+        return self::getObject($result);
+    }
+
+    public static function getByLabConfigId($id)
+    {
+        $saved_db = DbUtil::switchToLabConfig($id);
+        global $con;
+
+        $query = "SELECT * FROM sites ".
+            "WHERE lab_id=". $id;
+        $result = query_associative_all($query, null);
+
+        if ($result == NULL)
+        {
+            $lab_config = LabConfig::getById($id);
+            $lab_name = mysql_real_escape_string($lab_config->name, $con);
+            $query = "INSERT INTO sites ".
+                "(name, lab_id) VALUES ".
+                "('$lab_name', '$id')";
+            query_insert_one($query);
+        }
+
+        $query = "SELECT * FROM sites ".
+            "WHERE lab_id=". $id;
+        $result = query_associative_all($query, null);
+
+        $resultset = array();
+        foreach ($result as $record)
+            $resultset[] = self::getObject($record);
+
+        DbUtil::switchRestore($saved_db);
+
+        return $resultset;
+
+    }
+
+    public static function addSite($lab_config_id, $site_name)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        global $con;
+
+        $name = mysql_real_escape_string($site_name, $con);
+
+        $query = "INSERT INTO sites ".
+            "(name, lab_id) VALUES ".
+            "('$name', '$lab_config_id')";
+        query_insert_one($query);
+
+        DbUtil::switchRestore($saved_db);
+    }
+
+    public static function removeSite($id)
+    {
+        $query = "DELETE FROM sites ".
+            "WHERE id='$id'";
+        query_delete($query);
+    }
+}
+
+class TestAggReportConfig
+{
+    public $id;
+    public $test_type_id;
+
+    public $title;
+    public $landscape;
+    public $report_type;
+
+    public $group_by_age;
+    public $age_unit;
+    public $age_groups;
+
+    public static function getObject($record)
+    {
+        global $DEFAULT_DATE_FORMAT;
+
+        if ($record == null)
+            return null;
+
+        $report_config = new TestAggReportConfig();
+
+        $report_config->id = $record['id'];
+        $report_config->test_type_id = $record['test_type_id'];
+        $report_config->title = $record['title'];
+        $report_config->landscape = $record['landscape'];
+        $report_config->group_by_age = $record['group_by_age'];
+        $report_config->age_unit = $record['age_unit'];
+        $report_config->age_groups = explode(',', $record['age_groups']);
+        $report_config->report_type = $record['report_type'];
+
+        return $report_config;
+    }
+
+    public static function getByTestTypeId(
+        $lab_config_id,
+        $test_type_id,
+        $report_type)
+    {
+        global $con;
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+        $test_type = TestType::getById($test_type_id);
+        $test_name = mysql_real_escape_string($test_type->name, $con);
+
+        $query = "SELECT * FROM test_agg_report_config ".
+            "WHERE test_type_id=".$test_type_id.
+            " AND report_type=".$report_type;
+        $result = query_associative_one($query);
+
+        if ($result == null)
+        {
+            $query = "INSERT INTO test_agg_report_config ".
+                "(test_type_id, title, report_type) VALUES ".
+                "('$test_type_id', '$test_name', '$report_type')";
+            query_insert_one($query);
+
+            $query = "SELECT * FROM test_agg_report_config ".
+                "WHERE test_type_id=".$test_type_id.
+                " AND report_type=".$report_type;
+            $result = query_associative_one($query);
+        }
+        DbUtil::switchRestore($saved_db);
+
+        return self::getObject($result);
+    }
+
+    public static function updateRecord($lab_config_id, $record)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+
+        $query = "UPDATE test_agg_report_config ".
+            "SET group_by_age='$record->group_by_age', ".
+            "age_unit='$record->age_unit', ".
+            "age_groups='$record->age_groups' ".
+            "WHERE test_type_id='$record->test_type_id' ".
+            "AND report_type='$record->report_type'";
+        query_update($query);
+        DbUtil::switchRestore($saved_db);
+    }
 }
 
 class ReportConfig
@@ -1652,6 +1854,7 @@ class TestType
 	public $hidePatientName;
 	public $prevalenceThreshold;
 	public $targetTat;
+    public $is_report_enabled;
 	
 	public static function getObject($record)
 	{
@@ -1667,6 +1870,7 @@ class TestType
 		$test_type->hidePatientName = $record['hide_patient_name'];
 		$test_type->prevalenceThreshold = $record['prevalence_threshold'];
 		$test_type->targetTat = $record['target_tat'];
+        $test_type->is_report_enabled = $record['is_report_enabled'];
 		if($record['is_panel'] != null && $record['is_panel'] == 1)
 		{
 			$test_type->isPanel = true;
@@ -1740,6 +1944,46 @@ class TestType
 		DbUtil::switchRestore($saved_db);
 		return TestType::getObject($record);
 	}
+
+	public static function getByReportingStatus($status)
+    {
+        # Return all test types that have reporting enabled/disabled
+        $retval = array();
+        $query_string = "SELECT * FROM test_type ".
+            "WHERE is_reporting_enabled='$status'".
+            "ORDER BY name";
+        $saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+        $resultset = query_associative_all($query_string, $row_count);
+        foreach ($resultset as $record)
+        {
+            $retval[] = TestType::getObject($record);
+        }
+        DbUtil::switchRestore($saved_db);
+        return $retval;
+    }
+
+    public static function updateReportingStatus($unadded, $added)
+    {
+        $query_string = "SELECT test_type_id FROM test_type ".
+            "WHERE is_reporting_enabled=1";
+        $test_id_list = query_associative_all($query_string, $row_count);
+        foreach ($test_id_list as $k=>$v)
+            $temp[$k] = $v['test_type_id'];
+        $test_id_list = $temp;
+
+        if (is_array($test_id_list))
+            $added = array_merge($added, $test_id_list);
+
+        $query_string = "UPDATE test_type SET is_reporting_enabled=0";
+        query_update($query_string);
+
+        foreach($added as $id)
+        {
+            $query_string = "UPDATE test_type SET is_reporting_enabled=1 ".
+                "WHERE test_type_id=".$id;
+            query_update($query_string);
+        }
+    }
 	
 	public function getMeasures()
 	{
@@ -2905,6 +3149,7 @@ class Specimen
 	public $dateReported;
 	public $referredToName;
 	public $dailyNum;
+    public $site_id;
 	
 	public $referredFromName;
 	
@@ -2983,6 +3228,13 @@ class Specimen
 			$specimen->dailyNum = $record['daily_num'];
 		else
 			$specimen->dailyNum = null;
+
+        if(isset($record['site_id']))
+            $specimen->site_id = $record['site_id'];
+        else {
+            $lab_config = LabConfig::getById($_SESSION['lab_config_id']);
+            $specimen->site_id = Sites::getDefaultSite($lab_config)->id;
+        }
 		return $specimen;
 	}
 	
@@ -3198,6 +3450,24 @@ class Specimen
 			
 			
 	}
+
+	public static function getSpecimensByDateRange($specimen_type_id, $from, $to)
+    {
+        $query = "SELECT * FROM specimen WHERE ".
+            "specimen_type_id='$specimen_type_id' AND ".
+            "date_collected BETWEEN '$from' AND '$to' ";
+        $result = query_associative_all($query, null);
+
+        if ($result == null)
+            return null;
+
+        $ret = array();
+        foreach ($result as $record) {
+            $ret[] = self::getObject($record);
+        }
+
+        return $ret;
+    }
 }
 
 class Test
@@ -3281,6 +3551,19 @@ class Test
 		$record = query_associative_one($query_string);
 		return Test::getObject($record);
 	}
+	
+	public static function getAllTestsBySpecimenId($id)
+    {
+        $query = "SELECT * FROM test WHERE specimen_id='$id'";
+        $results = query_associative_all($query, null);
+        if ($results == null)
+            return null;
+        $ret = array();
+        foreach ($results as $record) {
+            $ret[] = Test::getObject($record);
+        }
+        return $ret;
+    }
 	
 	public static function getById($test_id)
 	{
@@ -3380,48 +3663,50 @@ class Test
 	
 	public function getResultWithoutHash()
 	{
-		global $PATIENT_HASH_LENGTH;
+	    global $PATIENT_HASH_LENGTH;
 		if(trim($this->result) == "")
 			# Results not yet entered
 			return "";
 		$retval = substr($this->result, 0, -1*$PATIENT_HASH_LENGTH);
-                # nc44
-                $testt = $retval;
-                    //$test2 = strstr($testt, $);
-                    $del_tag = "##";
-                    $start_tag = "[$]";
-                    $end_tag = "[/$]";
-                    $comma = ',';
-                    //$testtt = str_replace("[$]two[/$],", "", $testt);
-                    $del_count = substr_count($testt, $del_tag);
-                    //echo $ft_count;
-                    $k = 0;
-                    //echo "-".$del_count."-";
-                    while($k < $del_count)
-                    {
-                       $del_beg = strpos($testt, $del_tag);
-                        if($testt[$del_beg] == "[" && $testt[$del_beg + 1] == "$")
-                        {
-                            $del_end = strpos($testt, $end_tag, $del_beg);
-                            //$ft_sub = substr($testt, $ft_beg + 3, $ft_end - $ft_beg - 3);
-                            $res_left = substr($testt, 0, $del_beg);
-                            $res_right = substr($testt, $del_end + 5);
-                            
-                        }
-                        else
-                        {
-                            $del_end = strpos($testt, $comma, $del_beg);
-                            //$ft_sub = substr($testt, $ft_beg + 2, $ft_end - $ft_beg - 3);
-                            $res_left = substr($testt, 0, $del_beg);
-                            $res_right = substr($testt, $del_end + 1);
-                        }
-                        //echo "<br>".$ft_left."--".$ft_right."<br>";
-                        $testt = $res_left.$res_right;
-                        //array_push($freetext_results, $ft_sub);
-                        $k++;
-                    }
-                    //echo $testt;
-                    $retval = $testt;
+        if ($retval == '')
+            $retval = substr($this->result, 0, -1);
+        # nc44
+        $testt = $retval;
+        //$test2 = strstr($testt, $);
+        $del_tag = "##";
+        $start_tag = "[$]";
+        $end_tag = "[/$]";
+        $comma = ',';
+        //$testtt = str_replace("[$]two[/$],", "", $testt);
+        $del_count = substr_count($testt, $del_tag);
+        //echo $ft_count;
+        $k = 0;
+        //echo "-".$del_count."-";
+        while($k < $del_count)
+        {
+           $del_beg = strpos($testt, $del_tag);
+            if($testt[$del_beg] == "[" && $testt[$del_beg + 1] == "$")
+            {
+                $del_end = strpos($testt, $end_tag, $del_beg);
+                //$ft_sub = substr($testt, $ft_beg + 3, $ft_end - $ft_beg - 3);
+                $res_left = substr($testt, 0, $del_beg);
+                $res_right = substr($testt, $del_end + 5);
+
+            }
+            else
+            {
+                $del_end = strpos($testt, $comma, $del_beg);
+                //$ft_sub = substr($testt, $ft_beg + 2, $ft_end - $ft_beg - 3);
+                $res_left = substr($testt, 0, $del_beg);
+                $res_right = substr($testt, $del_end + 1);
+            }
+            //echo "<br>".$ft_left."--".$ft_right."<br>";
+            $testt = $res_left.$res_right;
+            //array_push($freetext_results, $ft_sub);
+            $k++;
+        }
+        //echo $testt;
+        $retval = $testt;
 		return $retval;
 	}
 	
@@ -3499,35 +3784,34 @@ class Test
 		# Get measure, unit pairs for this test
 		$test_type = TestType::getById($this->testTypeId);
 		$measure_list = $test_type->getMeasures();
-                //print_r($measure_list);
-                $submeasure_list = array();
-                $comb_measure_list = array();
-               // print_r($measure_list);
-                foreach($measure_list as $measure)
-                {
-                    
-                    $submeasure_list = $measure->getSubmeasuresAsObj();
-                    //echo "<br>".count($submeasure_list);
-                    //print_r($submeasure_list);
-                    $submeasure_count = count($submeasure_list);
-                    
-                    if($measure->checkIfSubmeasure() == 1)
-                    {
-                        continue;
-                    }
+        # print_r($measure_list);
+        $submeasure_list = array();
+        $comb_measure_list = array();
+        // print_r($measure_list);
+        foreach($measure_list as $measure)
+        {
+            $submeasure_list = $measure->getSubmeasuresAsObj();
+            //echo "<br>".count($submeasure_list);
+            # print_r($submeasure_list);
+            $submeasure_count = count($submeasure_list);
+
+            if($measure->checkIfSubmeasure() == 1)
+            {
+                continue;
+            }
                         
-                    if($submeasure_count == 0)
-                    {
-                        array_push($comb_measure_list, $measure);
-                    }
-                    else
-                    {
-                        array_push($comb_measure_list, $measure);
-                        foreach($submeasure_list as $submeasure)
-                           array_push($comb_measure_list, $submeasure); 
-                    }
-                }
-                $measure_list = $comb_measure_list;
+            if($submeasure_count == 0)
+            {
+                array_push($comb_measure_list, $measure);
+            }
+            else
+            {
+                array_push($comb_measure_list, $measure);
+                foreach($submeasure_list as $submeasure)
+                   array_push($comb_measure_list, $submeasure);
+            }
+        }
+        $measure_list = $comb_measure_list;
 		$result_csv = $this->getResultWithoutHash();
                 //$result_csv = $this->getResultWithoutHash();
                 //echo "<br>";
@@ -4323,7 +4607,8 @@ class CustomField
 			"UPDATE $table_name ".
 			"SET field_name='$updated_entry->fieldName', ".
 			"id='$new_id', ".
-			"field_options='$updated_entry->fieldOptions '".
+			"field_options='$updated_entry->fieldOptions', ".
+			"field_type_id=$updated_entry->fieldTypeId ".
 			"WHERE id=$updated_entry->id";
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		query_blind($query_string);
@@ -4436,6 +4721,41 @@ class SpecimenCustomData
 			return $field_value;
 		}
 	}
+}
+
+class SpecimenTest
+{
+    public $test_type_id;
+    public $specimen_type_id;
+
+    public static function getObject($record)
+    {
+        # Converts a record from the table specimen_test in DB into a SpecimenTest object
+        if ($record == null)
+            return null;
+
+        $obj = new SpecimenTest();
+        $obj->test_type_id = $record['test_type_id'];
+        $obj->specimen_type_id = $record['specimen_type_id'];
+
+        return $obj;
+    }
+
+    public static function getSpecimenIdsByTestTypeId($id)
+    {
+        $query = "SELECT specimen_type_id FROM specimen_test ".
+            "WHERE test_type_id=". $id;
+        $result = query_associative_all($query, null);
+
+        if ($result == null)
+            return null;
+
+        $ret = array();
+        foreach ($result as $key=>$value)
+            $ret[] = $value;
+
+        return $ret;
+    }
 }
 
 class PatientCustomData
@@ -7917,9 +8237,9 @@ function add_specimen($specimen)
 	# Adds a new specimen record in DB
 	$query_string = 
 		"INSERT INTO `specimen` ( specimen_id, patient_id, specimen_type_id, date_collected, date_recvd, user_id, status_code_id, referred_to, comments, aux_id, ".
-		"session_num, time_collected, report_to, doctor, referred_to_name, referred_from_name, daily_num ) VALUES ( $specimen->specimenId, $specimen->patientId, $specimen->specimenTypeId, ". 
+		"session_num, time_collected, report_to, doctor, referred_to_name, referred_from_name, daily_num, site_id) VALUES ( $specimen->specimenId, $specimen->patientId, $specimen->specimenTypeId, ".
 		"'$specimen->dateCollected', '$specimen->dateRecvd', $specimen->userId, $specimen->statusCodeId, $specimen->referredTo, '$specimen->comments', ".
-		"'$specimen->auxId', '$specimen->sessionNum', '$specimen->timeCollected', $specimen->reportTo, '$specimen->doctor', '$specimen->referredToName', '$specimen->referredFromName',  '$specimen->dailyNum' )";
+		"'$specimen->auxId', '$specimen->sessionNum', '$specimen->timeCollected', $specimen->reportTo, '$specimen->doctor', '$specimen->referredToName', '$specimen->referredFromName',  '$specimen->dailyNum', '$specimen->site_id' )";
 	//;
 	query_insert_one($query_string);
 	return $specimen->specimenId;
@@ -8125,15 +8445,19 @@ function get_specimens_by_session($session_num)
 /*
 * Checks if an administrator is present. If not, adds administrator to users table and returns id
 */
-function checkAndAddAdmin($adminName, $labConfigId) {
+function checkAndAddAdmin($adminName, $labConfigId, $dev=0) {
 	global $con;
 	$labConfigId = mysql_real_escape_string($labConfigId, $con);
 	$saved_db = DbUtil::switchToGlobal();
-	#$query_check = "SELECT * FROM users ".
-	#			   "WHERE username like '$adminName' ";
-	$query_string = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions 
-	FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.username like '$adminName'";
+	if($dev == 0)
+		$query_check = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions 
+					FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.username like '$adminName'";
+	else if($dev == 1)
+		$query_check = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id
+					FROM user a WHERE a.lab_config_id = $labConfigId";
+
 	$record = query_associative_one($query_check);
+	
 	if($record) {
 		DbUtil::switchRestore($saved_db);
 		return $record['user_id'];
@@ -8143,27 +8467,68 @@ function checkAndAddAdmin($adminName, $labConfigId) {
 		$query_select = "SELECT max(user_id) AS maxUserId FROM user";
 		$record = query_associative_one($query_select);
 		$newAdminUserId = intval($record['maxUserId']) + 1;
-		$query_insert = "INSERT INTO user (user_id, username, password, created_by, lab_config_id, level, lang_id) ".
-						"VALUES ($newAdminUserId, '$adminName', '18865bfdeed2fd380316ecde609d94d7285af83f', $userId, '$labConfigId', 2, 'default') ";
+		$query_insert = "INSERT INTO user (user_id, username, password, created_by, ts, lab_config_id, level, lang_id) ".
+						"VALUES ($newAdminUserId, '$adminName', '18865bfdeed2fd380316ecde609d94d7285af83f', $userId, CURDATE(), '$labConfigId', 2, 'default') ";
 		query_insert_one($query_insert);
-		$query_string = 
-			"INSERT INTO user_config(user_id, level, parameter, value, created_by, created_on, modified_by, modified_on) ".
-			"VALUES ($newAdminUserId, 2, 'rwoptions', '2,3,4,6,7', $userId, curdate(), $userId, curdate())";
-		query_insert_one($query_string);
-
 		DbUtil::switchRestore($saved_db);
 		return $newAdminUserId;
 	}	
 }
 
-function add_lab_config($lab_config)
+/* Checks if the lab admin user is added to user_config table or not and then adds it if it doesn't exist*/
+function checkAndAddUserConfig($lab_admin_id){
+	global $con;
+	$saved_db = DbUtil::switchToGlobal();
+	$userId = $_SESSION['user_id'];
+
+	$query_check = "SELECT user_id from user_config where user_id=$lab_admin_id";
+	$record = query_associative_one($query_check);
+	
+	if(!$record) {
+		#this branch is taken when developers import a backup into their application from a country director's interface
+		#query to insert into user_config
+		$query_insert = "INSERT INTO user_config (user_id, level, parameter, value, created_by, created_on, modified_by, modified_on) ".
+						"VALUES ($lab_admin_id, 2, 'rwoptions', '2,3,4,6,7', $userId, CURDATE(), $userId, CURDATE()) ";
+		query_insert_one($query_insert);
+	}
+	
+	DbUtil::switchRestore($saved_db);
+	return;
+}
+
+function add_lab_config($lab_config, $dev=0)
 {
 	# Adds a new lab configuration to DB
 	$saved_db = DbUtil::switchToGlobal();
-	$query_add_lab_config = 
-		"INSERT INTO lab_config(name, location, admin_user_id, id_mode, lab_config_id, country) ".
-		"VALUES ('$lab_config->name', '$lab_config->location', $lab_config->adminUserId, $lab_config->idMode, '$lab_config->id', '$lab_config->country')";
-	query_insert_one($query_add_lab_config);
+	$query_check = "SELECT admin_user_id FROM lab_config WHERE lab_config_id = $lab_config->id";
+	$record = query_associative_one($query_check);
+
+	if($dev == 0){
+		#This branch is taken when a new lab is created by a country director 
+		# Adds a new lab configuration to DB
+		$query_add_lab_config = 
+			"INSERT INTO lab_config(name, location, admin_user_id, id_mode, lab_config_id, country) ".
+			"VALUES ('$lab_config->name', '$lab_config->location', $lab_config->adminUserId, $lab_config->idMode, '$lab_config->id', '$lab_config->country')";
+		query_insert_one($query_add_lab_config);
+	}
+	else if($dev == 1  && is_null($record)){
+		# This branch is taken when an entry for lab in the config param doesn't exist in revamp db 
+		# (for devs importing lab backups using country director's interface)
+		$query_add_lab_config = 
+			"INSERT INTO lab_config(admin_user_id, lab_config_id) ".
+			"VALUES ($lab_config->adminUserId, $lab_config->id)";
+		query_insert_one($query_add_lab_config);
+	}
+	else if($dev == 1 && (intval($record['admin_user_id']) != intval($lab_config->adminUserId))){
+		# This branch is taken when a lab backup is imported by developers in country director's interface, 
+		# and when an entry exists with an admin userid which is not the same as the one in lab config object param 
+		#Update the admin user id for the lab config in the object param passed
+		$query_update_lab_config = 
+			"UPDATE lab_config ".
+			"SET admin_user_id = $lab_config->adminUserId WHERE lab_config_id = $lab_config->id";
+		query_update($query_update_lab_config);	
+	}
+
 	DbUtil::switchRestore($saved_db);
 	return;
 }
@@ -10588,15 +10953,25 @@ function get_lab_config_test_types($lab_config_id, $to_global=false)
 	return $lab_config->getTestTypeIds();
 }
 
-function get_lab_config_specimen_types($lab_config_id, $to_global=false)
+function get_lab_config_specimen_types($lab_config_id, $to_global=false, $lab_config_id_filter=0)
 {
 	global $con;
+
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	# Returns a list of all specimen types added to the lab configuration
-	if($to_global == false)
+	if($to_global == false){
 		$saved_db = DbUtil::switchToLabConfigRevamp();
+	}
 	else
 		$saved_db = DbUtil::switchToGlobal();
+
+	if($lab_config_id_filter == 1){
+		#this branch is entered when the call is made from specimen_aggregate_report.php
+		#because the db context has to remain either blis_revamp or  blis_lab_config_id
+		#for the $query_string to work
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	}
+
 	$query_string = 
 		"SELECT specimen_type_id FROM lab_config_specimen_type ".
 		"WHERE lab_config_id=$lab_config_id";
@@ -12582,6 +12957,52 @@ function getTestCountGroupedConfig($lab_config_id)
                 
 }
 
+function getTestCountGroupedConfigCountryDir($lab_config_id)
+{
+	/*$query_string =
+	"SELECT * FROM report_disease ".
+	"WHERE lab_config_id = 9999009";
+     * 
+     */
+    $nineID = 9999009;
+    $query_string = "SELECT * FROM report_config WHERE landscape = $nineID";
+	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$record = query_associative_one($query_string);
+    if($record == '')
+    {
+        /*
+        $query_string_add = "INSERT INTO report_disease (group_by_age, group_by_gender, age_groups, measure_groups, measure_id, lab_config_id, test_type_id) VALUES (1, 1, '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+', '0', 1, 9999009, 1)";
+        query_insert_one($query_string_add);
+        $record = query_associative_one($query_string);
+         
+         */
+        $query_string_add = "INSERT INTO report_config (header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields, test_type_id, title, landscape, age_unit ) VALUES ('Grouped Test Count Report Configuration', '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+', '0', '1', '1', '1', '1', '0', '$nineID' , '0', $nineID, 4)";
+        query_insert_one($query_string_add);
+        $record = query_insert_one($query_string);
+        $query_string = "SELECT * FROM report_config WHERE landscape = $nineID";
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        $record = query_associative_one($query_string);
+    }
+                
+                
+	DbUtil::switchRestore($saved_db);
+    $retval = array();
+    /*$byAge = $configArray['group_by_age'];
+    $age_group_list = decodeAgeGroups($configArray['age_groups']);
+    $byGender = $configArray['group_by_gender'];
+    $bySection = $configArray['measure_id'];
+    $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending */
+    
+    $retval['group_by_age'] = intval($record['p_fields']); //group_by_age
+    $retval['age_groups'] = $record['footer']; //age_groups
+    $retval['group_by_gender'] = intval($record['s_fields']); //group_by_gender
+    $retval['measure_id'] = intval($record['t_fields']); //group_by_section
+    $retval['test_type_id'] = intval($record['p_custom_fields']); //combo
+    $retval['age_unit'] = intval($record['age_unit']); //the unit of age represented by integer [1: Years, 2: Months, 3: Weeks, 4: Days]           
+	return $retval;
+                
+}
+
 # nc40
 function decodeAgeGroups($ageGroups)
 	{
@@ -12639,6 +13060,47 @@ function getSpecimenCountGroupedConfig($lab_config_id)
 		return $retval;
 }
 
+function getSpecimenCountGroupedConfigCountryDir($lab_config_id)
+{
+    $nineID = 9999019;
+    $query_string = "SELECT * FROM report_config WHERE landscape = $nineID";
+	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+	$record = query_associative_one($query_string);
+    if($record == '')
+    {
+        /*
+        $query_string_add = "INSERT INTO report_disease (group_by_age, group_by_gender, age_groups, measure_groups, measure_id, lab_config_id, test_type_id) VALUES (1, 1, '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+', '0', 1, 9999009, 1)";
+        query_insert_one($query_string_add);
+        $record = query_associative_one($query_string);
+         
+         */
+        $query_string_add = "INSERT INTO report_config (header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields, test_type_id, title, landscape, age_unit ) VALUES ('Grouped Specimen Count Report Configuration', '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+', '0', '1', '1', '1', '1', '0', '$nineID' , '0', $nineID, 4)";
+        query_insert_one($query_string_add);
+        $record = query_insert_one($query_string);
+        $query_string = "SELECT * FROM report_config WHERE landscape = $nineID";
+            $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+            $record = query_associative_one($query_string);
+    }
+            
+            
+	DbUtil::switchRestore($saved_db);
+    $retval = array();
+    /*$byAge = $configArray['group_by_age'];
+    $age_group_list = decodeAgeGroups($configArray['age_groups']);
+    $byGender = $configArray['group_by_gender'];
+    $bySection = $configArray['measure_id'];
+    $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending */
+    
+    $retval['group_by_age'] = intval($record['p_fields']); //group_by_age
+    $retval['age_groups'] = $record['footer']; //age_groups
+    $retval['group_by_gender'] = intval($record['s_fields']); //group_by_gender
+    $retval['measure_id'] = intval($record['t_fields']); //group_by_section
+    $retval['test_type_id'] = intval($record['p_custom_fields']); //combo
+    $retval['age_unit'] = intval($record['age_unit']); //the unit of age represented by integer [1: Years, 2: Months, 3: Weeks, 4: Days]
+
+	return $retval;
+}
+
 # nc40
 function updateGroupedReportsConfig($byAge, $byGender, $ageGroups, $bySection, $combo, $entryID, $lab_config_id)
 	{
@@ -12687,7 +13149,56 @@ function updateGroupedReportsConfig($byAge, $byGender, $ageGroups, $bySection, $
 		query_insert_one($query_string);
 		DbUtil::switchRestore($saved_db);
 	}
-        
+     
+     function updateGroupedReportsConfigCountryDir($byAge, $byGender, $ageGroups, $bySection, $combo, $entryID, $lab_config_id, $age_unit)
+	{
+                $saved_db = DbUtil::switchToLabConfig($lab_config_id);		
+                
+                if($entryID == 9999019)
+                    $header = "Grouped Specimen Count Report Configuration";
+                else
+                    $header = "Grouped Test Count Report Configuration";
+                
+                # Remove existing entry
+		$query_string =
+			"DELETE FROM report_config ".
+			"WHERE landscape = $entryID ";
+			
+		query_blind($query_string);
+		
+                # Add updated entry
+		$query_string = 
+			"INSERT INTO report_config( ".
+				"header, ".
+				"footer, ".
+				"margins, ".
+				"p_fields, ".
+				"s_fields, ".
+				"t_fields, ".
+				"p_custom_fields, ".
+                                "s_custom_fields, ".
+                                "test_type_id, ".
+                                "title, ".
+                                "landscape, ".
+                                "age_unit ".
+			") ".
+			"VALUES ( ".
+				"'$header', ".
+				"'$ageGroups', ".
+				"'0', ".
+				"'$byAge', ".
+				"'$byGender', ".
+				"'$bySection', ".
+				"'$combo', ".
+                                "'0', ".
+                                "'$entryID', ".
+                                "'0', ".
+                                "$entryID, ".
+                                "$age_unit ".
+			")";
+		query_insert_one($query_string);
+		DbUtil::switchRestore($saved_db);
+	}   
         #nc44
         function getTestRecordsByDate($date, $test_type_id)
 	{

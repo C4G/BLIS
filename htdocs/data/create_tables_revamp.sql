@@ -53,9 +53,26 @@ CREATE TABLE `lab_config` (
    `dformat` varchar(45) not null default 'd-m-Y',
    `dnum_reset` int(10) unsigned not null default '1',
    `doctor` int(10) unsigned not null default '1',
+   'site_choice_enabled' boolean default '0',
    PRIMARY KEY (`lab_config_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=213;
 
+CREATE TABLE report_config (
+  report_id int(10) unsigned NOT NULL auto_increment,
+  header varchar(500) NOT NULL default '',
+  footer varchar(500) NOT NULL default '',
+  margins varchar(45) NOT NULL default '',
+  p_fields varchar(45) NOT NULL default '',
+  s_fields varchar(45) NOT NULL default '',
+  t_fields varchar(45) NOT NULL default '',
+  p_custom_fields varchar(45) NOT NULL default '',
+  s_custom_fields varchar(45) NOT NULL default '',
+  test_type_id varchar(45) NOT NULL default '',
+  title varchar(500) NOT NULL default '',
+  landscape int(10) unsigned NOT NULL default 0,
+  age_unit INT(11)
+  PRIMARY KEY  (report_id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `lab_config_access` (
    `user_id` int(10) unsigned not null default '0',
@@ -599,3 +616,11 @@ INSERT INTO `test_type_measure` (`test_type_id`, `measure_id`, `ts`) VALUES
 ('92', '23', '2010-05-20 05:19:19'),
 ('92', '22', '2010-05-20 05:19:19'),
 ('92', '21', '2010-05-20 05:19:19');
+
+INSERT INTO report_config (header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields, test_type_id, title, 
+landscape, age_unit) VALUES ( 'Grouped Test Count Report Configuration', '0:4,5:9,10:14,15:19,20:24,25:29,29:34,35:39,39:44,45:49,49:54,55:59,59:64,65:+',
+'0', '1', '1', '0', '1', '0', '9999009', '0', 9999009, 1);
+
+INSERT INTO report_config (header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields, test_type_id, title, 
+landscape, age_unit) VALUES ( 'Grouped Specimen Count Report Configuration', '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+',
+'0', '1', '1', '0', '1', '0', '9999019', '0', 9999019, 1);

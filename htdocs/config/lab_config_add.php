@@ -81,6 +81,7 @@ $lab_config_id = $lab_config->country."_".$count;
 $lab_config_id = $count;
 $lab_config->id = $lab_config_id;
 $lab_admin_id = checkAndAddAdmin($lab_admin, $lab_config_id);
+checkAndAddUserConfig($lab_admin_id);
 # Link admin user id to session variable of selection box value
 $lab_config->adminUserId = $lab_admin_id;
 # Add new lab configuration entry to DB

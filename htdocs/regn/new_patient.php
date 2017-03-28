@@ -94,7 +94,33 @@ function add_patient()
 	var receipt_dd = $("#receipt_dd").attr("value");
 	receipt_dd = receipt_dd.replace(/[^0-9]/gi,'');
 	var age = $("#age").attr("value");
-	age = age.replace(/[^0-9]/gi,'');
+	var nan_flag=0;
+	if((/^([>][0-9]*)$/.test(age) === true))
+	{
+		//this branch is for age range inputs of form greater than some number
+		age = age.replace(/[^0-9]/gi,'');
+	}
+	else if(/^([' ']*[0-9]+[' ']*[-][' ']*[0-9]+[' ']*)$/.test(age) === true)
+	{
+		//this branch is for age range inputs of form start age to end end separated by a hyphen
+		age_split = age.split("-")
+		start_age=parseInt(age_split[0].trim());
+		end_age=parseInt(age_split[1].trim());
+		if(start_age<=end_age)
+		{
+		    age=(Math.round((start_age+end_age)/2)).toString();
+		}
+		else
+		{
+		    age=0;
+		}
+	}
+	else if((/^([-][0-9]+)$/.test(age) === false) && (/^([0-9]*)$/.test(age) === false))
+	{
+		nan_flag = 1;
+		age = 0;
+	}
+
 	var age_param = $('#age_param').attr("value");
 	age_param = age_param.replace(/[^0-9]/gi,'');
 	var sex = "";
@@ -185,14 +211,10 @@ function add_patient()
 			}
 		}
 	}
-	else if (isNaN(age))
+	else if (nan_flag==1)
 	{
-	
-		if(age_param!=5)
-		{
-			alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['AGE']; ?>");
-			return;
-		}
+		alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['AGE']; ?>");
+		return;
 	}	
 	if(sex == "" || !sex)
 	{

@@ -76,20 +76,22 @@ if(trim($_REQUEST['yyyy']) == "" && trim($_REQUEST['mm']) == "" && trim($_REQUES
 	}
 	else if($age_param == 5) {
 		#age specified in range:
-		$pos=1;
-		$pos = strpos($age, ">");
-		$pos1=strpos($age,"-");
-	 
-		if($pos1==2||$pos1==1) {
-			$age_parts=explode("-",$age);
-			$age=$age_parts[0]+$age_parts[1];
-			$age=-1*$age/2;
-		
-		} 
-		else if($pos==0){
-			$age1 = substr($age,1); 
-			$age=$age1-200;
-		}
+		// $pos=1;
+
+		// $pos = strpos($age, ">");
+		// $pos1=strpos($age,"-");
+
+		// if($pos1==2||$pos1==1) {
+		// 	// $age_parts=explode("-",$age);
+		// 	// $age=$age_parts[0]+$age_parts[1];
+		// 	// $age=-1*$age/2;
+		// } 
+		// else if($pos==0){
+		// 	// $age1 = substr($age,1); 
+		// 	// $age=intval($age1);
+		// 	$age=intval($age);
+		// }
+		$age = intval($age);
 		$dob="";
 		$partial_dob="";
 	}

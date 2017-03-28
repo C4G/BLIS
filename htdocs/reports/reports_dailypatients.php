@@ -93,7 +93,7 @@ $(document).ready(function(){
 &nbsp;&nbsp;&nbsp;&nbsp;
 <input type='button' onclick="javascript:window.close();" value='<?php echo LangUtil::$generalTerms['CMD_CLOSEPAGE']; ?>'></input>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<?php $page_elems->getTableSortTip(); ?>
+<!--?php $page_elems->getTableSortTip(); ?-->
 <hr>
 <div id='export_content'>
 <link rel='stylesheet' type='text/css' href='css/table_print.css' />
@@ -131,6 +131,16 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 <br><br>
 <b>Reported</b>
 <?php if(count($patient_list) > 0 ) { ?>
+<style type='text/css'>
+	tbody td, thead th { padding: .3em;  border: 1px <?php if( $report_config->showResultBorder) echo "black"; else echo "white" ?> solid;} 
+	.rstyle 
+	{
+		border-top-style: <?php if( $report_config->resultborderHorizontal == 1) echo "solid"; else echo "none"?>;
+		border-bottom-style: <?php if( $report_config->resultborderHorizontal == 1) echo "solid"; else echo "none"?>;
+		border-right-style: <?php if( $report_config->resultborderVertical == 1) echo "solid"; else echo "none"?>;		
+		border-left-style: <?php if( $report_config->resultborderVertical == 1) echo "solid"; else echo "none"?>;
+	}
+</style>
 <table class='print_entry_border draggable' id='report_content_table5'>
 <thead>
 	<tr valign='top'>
@@ -214,6 +224,24 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 				<th><?php echo LangUtil::$generalTerms['PATIENT_SIGNATURE']; ?></th>
 			<?php 
 		}
+		if($report_config->usePatientBarcode == 1)
+		{
+			?>
+				<th><?php echo LangUtil::$generalTerms['PATIENT_BARCODE']; ?></th>
+			<?php 
+		}
+		if($report_config->usePatientRegistrationDate == 1)
+		{
+			?>
+				<th><?php echo 'Date of Registration'; ?></th>
+			<?php 
+		}
+		if($report_config->useTest == 1)
+		{
+			?>
+				<th><?php echo 'Test'; ?></th>
+			<?php 
+		}
 		?>
 	</tr>
 </thead>
@@ -229,49 +257,49 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 		if($report_config->usePatientId == 1)
 		{
 		?>
-			<td><?php echo $patient->getSurrogateId(); ?></td>
+			<td class='rstyle'><?php echo $patient->getSurrogateId(); ?></td>
 		<?php
 		}
 		if($report_config->useDailyNum == 1)
 		{
 		?>
-			<td><?php echo $patient->getDailyNum(); ?></td>
+			<td class='rstyle'><?php echo $patient->getDailyNum(); ?></td>
 		<?php
 		}
 		if($report_config->usePatientAddlId == 1)
 		{
 		?>
-			<td><?php echo $patient->getAddlId(); ?></td>
+			<td class='rstyle'><?php echo $patient->getAddlId(); ?></td>
 		<?php
 		}
 		if($report_config->usePatientName == 1)
 		{
 		?>
-			<td><?php echo $patient->name; ?></td>
+			<td class='rstyle'><?php echo $patient->name; ?></td>
 		<?php
 		}
 		if($report_config->useAge == 1)
 		{
 		?>
-			<td><?php echo $patient->getAge(); ?></td>
+			<td class='rstyle'><?php echo $patient->getAge(); ?></td>
 		<?php
 		}
 		if($report_config->useGender == 1)
 		{
 		?>			
-			<td><?php echo $patient->sex; ?></td>
+			<td class='rstyle'><?php echo $patient->sex; ?></td>
 		<?php
 		}
 		if($report_config->useDob == 1)
 		{
 		?>
-			<td><?php echo $patient->getDob(); ?></td>
+			<td class='rstyle'><?php echo $patient->getDob(); ?></td>
 		<?php 
 		}
 		if($report_config->useTest == 1)
 		{
 		?>
-			<td><?php echo $patient->getAssociatedTests(); ?></td>
+			<td class='rstyle'><?php echo $patient->getAssociatedTests(); ?></td>
 		<?php
 		}
 		
@@ -283,7 +311,7 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 			{	
 				$field_name = $custom_field->fieldName;				
 				$custom_data = get_custom_data_patient_bytype($patient->patientId, $custom_field->id);
-				echo "<td>";
+				echo "<td class='rstyle'>";
 				if($custom_data == null)
 				{
 					echo "-";
@@ -312,15 +340,33 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 			}
 			
 		?>		
-				<td><?php echo $docNames;?></td>
+				<td class='rstyle'><?php echo $docNames;?></td>
 		<?php }
 		}
 		
 		if($report_config->usePatientSignature == 1)
 		{
 			?>
-									<td>&nbsp;&nbsp;&nbsp;&nbsp; </td>
+				<td class='rstyle'>&nbsp;&nbsp;&nbsp;&nbsp; </td>
 		<?php 
+		}
+		if($report_config->usePatientBarcode == 1)
+		{
+			?>
+				<td class='rstyle'> <?php echo encodePatientBarcode($patient->getSurrogateId(),0); ?> </td>
+		<?php 
+		}
+		if($report_config->usePatientRegistrationDate == 1)
+		{
+			?>
+				<td class='rstyle'> <?php echo $patient->regDate; ?> </td>
+			<?php 
+		}
+		if($report_config->useTest == 1)
+		{
+			?>
+				<td class='rstyle'> <?php echo $patient->getAssociatedTests(); ?> </td>
+			<?php 
 		}
 		?>
 
@@ -336,6 +382,17 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 </table>
 <br><br>
 <b>Unreported</b>
+
+<style type='text/css'>
+			tbody td, thead th { padding: .3em;  border: 1px <?php if( $report_config->showResultBorder) echo "black"; else echo "white" ?> solid;} 
+			.rstyle 
+			{
+				border-top-style: <?php if( $report_config->resultborderHorizontal == 1) echo "solid"; else echo "none"?>;
+				border-bottom-style: <?php if( $report_config->resultborderHorizontal == 1) echo "solid"; else echo "none"?>;
+				border-right-style: <?php if( $report_config->resultborderVertical == 1) echo "solid"; else echo "none"?>;		
+				border-left-style: <?php if( $report_config->resultborderVertical == 1) echo "solid"; else echo "none"?>;
+			}
+		</style>
 <table class='print_entry_border draggable' id='report_content_table5'>
 <?php if( count($patient_list_U) > 0 ) { ?>
 <thead>
@@ -409,6 +466,24 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 					<th><?php echo LangUtil::$generalTerms['PATIENT_SIGNATURE']; ?></th>
 				<?php 
 		}
+		if($report_config->usePatientBarcode == 1)
+		{
+			?>
+					<th><?php echo LangUtil::$generalTerms['PATIENT_BARCODE']; ?></th>
+				<?php 
+		}
+		if($report_config->usePatientRegistrationDate == 1)
+		{
+			?>
+				<th><?php echo 'Date of Registration'; ?></th>
+			<?php 
+		}
+		if($report_config->useTest == 1)
+		{
+			?>
+				<th><?php echo 'Test'; ?></th>
+			<?php 
+		}
 		?>
 		
 		
@@ -427,43 +502,43 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 		if($report_config->usePatientId == 1)
 		{
 		?>
-			<td><?php echo $patient->getSurrogateId(); ?></td>
+			<td class='rstyle'><?php echo $patient->getSurrogateId(); ?></td>
 		<?php
 		}
 		if($report_config->useDailyNum == 1)
 		{
 		?>
-			<td><?php echo $patient->getDailyNum(); ?></td>
+			<td class='rstyle'><?php echo $patient->getDailyNum(); ?></td>
 		<?php
 		}
 		if($report_config->usePatientAddlId == 1)
 		{
 		?>
-			<td><?php echo $patient->getAddlId(); ?></td>
+			<td class='rstyle'><?php echo $patient->getAddlId(); ?></td>
 		<?php
 		}
 		if($report_config->usePatientName == 1)
 		{
 		?>
-			<td><?php echo $patient->name; ?></td>
+			<td class='rstyle'><?php echo $patient->name; ?></td>
 		<?php
 		}
 		if($report_config->useAge == 1)
 		{
 		?>
-			<td><?php echo $patient->getAge(); ?></td>
+			<td class='rstyle'><?php echo $patient->getAge(); ?></td>
 		<?php
 		}
 		if($report_config->useGender == 1)
 		{
 		?>			
-			<td><?php echo $patient->sex; ?></td>
+			<td class='rstyle'><?php echo $patient->sex; ?></td>
 		<?php
 		}
 		if($report_config->useDob == 1)
 		{
 		?>
-			<td><?php echo $patient->getDob(); ?></td>
+			<td class='rstyle'><?php echo $patient->getDob(); ?></td>
 		<?php 
 		}
 		
@@ -475,7 +550,7 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 			{	
 				$field_name = $custom_field->fieldName;				
 				$custom_data = get_custom_data_patient_bytype($patient->patientId, $custom_field->id);
-				echo "<td>";
+				echo "<td class='rstyle'>";
 				if($custom_data == null)
 				{
 					echo "-";
@@ -503,14 +578,32 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 			}
 			
 		?>		
-				<td><?php echo $docNames;?></td>
+				<td class='rstyle'><?php echo $docNames;?></td>
 		<?php }
 		}
 		if($report_config->usePatientSignature == 1)
 		{
 			?>
-					<td>&nbsp;&nbsp;&nbsp;&nbsp; </td>
+					<td class='rstyle'>&nbsp;&nbsp;&nbsp;&nbsp; </td>
 				<?php 
+		}
+		if($report_config->usePatientBarcode == 1)
+		{
+			?>
+				<td class='rstyle'> <?php echo encodePatientBarcode($patient->getSurrogateId(),0); ?> </td>
+		<?php 
+		}
+		if($report_config->usePatientRegistrationDate == 1)
+		{
+			?>
+				<td class='rstyle'> <?php echo $patient->regDate; ?> </td>
+			<?php 
+		}
+		if($report_config->useTest == 1)
+		{
+			?>
+				<td class='rstyle'> <?php echo $patient->getAssociatedTests(); ?> </td>
+			<?php 
 		}
 		?>
 		
@@ -523,8 +616,27 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 </table>
 
 <br>
-<?php # Line for Signature ?>
-.............................
+<?php 
+
+$designation=explode(";" ,$report_config->designation);
+?>
+<tr>
+<?php
+for($j=0;$j<count($designation);$j++) {?>
+
+	<td style="font-size:14pt;" >
+		<?php echo $designation[$j]; ?>
+	</td>
+	<?php } ?>
+</tr>
+<tr>
+	<br> <?php
+	for($j=0;$j<count($designation);$j++) {?>
+	<td style="font-size:14pt;" >
+		<?php echo "................"; ?>
+	</td>
+	<?php } ?>
+</tr>	
 <h4><?php echo $report_config->footerText; ?></h4>
 </div>
 </div>
