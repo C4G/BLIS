@@ -30,7 +30,7 @@ $field_odering = field_order_update::install_first_order($lab_config);
 <script type='text/javascript'>
 $(document).ready(function(){
 	$('#progress_spinner').hide();
-	<?
+	<?php
 	if(isset($_REQUEST['n']))
 	{
 		# Prefill patient name field

@@ -345,7 +345,7 @@ $(document).ready(function(){
 		# Preload the inventory pane
 		?>
 		right_load(15, 'inventory_div');
-		<?
+		<?php
 	}
 	else if(isset($_REQUEST['set_locale']))
 	{
