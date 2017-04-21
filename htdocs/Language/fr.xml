@@ -15,7 +15,7 @@
 		</term>
 		<term>
 			<key>DEFAULT_CURRENCY</key>
-			<value>Default Currency Name:</value>
+			<value>Devise par defaux:</value>
 		</term>
 		<term>
 			<key>CURRENCY_DELIMITER</key>
@@ -24,6 +24,10 @@
 		<term>
 			<key>CURRENCY</key>
 			<value>Currency</value>
+		</term>
+		<term>
+			<key>ADD_USER_TYPE</key>
+			<value>Ajouter Nouveau Utilisateur Type</value>
 		</term>
 		<term>
 			<key>EXCHANGE_RATE</key>
@@ -35,7 +39,7 @@
 		</term>
 		<term>
 			<key>RELATED_TESTS_NOTFOUND</key>
-			<value>Related Tests Not Found</value>
+			<value>Essais relatifs introuvable</value>
 		</term>
 		<term>
 			<key>ACTIONS</key>
@@ -47,7 +51,7 @@
 		</term>
 		<term>
 			<key>ADD_CURRENCY</key>
-			<value>Add a new currency >></value>
+			<value>Add a new currency &gt;&gt;</value>
 		</term>
 		<term>
 			<key>NEW_CURRENCY</key>
@@ -144,6 +148,14 @@
 		<term>
 			<key>CMD_GETREPORT</key>
 			<value>Obtenir un Rapport</value>
+		</term>
+		<term>
+			<key>CMD_GET_SPECIMEN_REPORT</key>
+			<value>Avoir Echantillon Rapport</value>
+		</term>
+		<term>
+			<key>CMD_GET_TEST_REPORT</key>
+			<value>Avoir Examine Rapport</value>
 		</term>
 		<term>
 			<key>MSG_SELECT_TTYPE</key>
@@ -324,6 +336,10 @@
 		<term>
 			<key>MONTHS</key>
 			<value>mois</value>
+		</term>
+		<term>
+			<key>WEEKS</key>
+			<value>Semaines</value>
 		</term>
 		<term>
 			<key>DAYS</key>
@@ -751,7 +767,11 @@
 		</term>
 		<term>
 			<key>TIPS_PATIENTID_EXISTS</key>
-			<value>Patient ID existe déjà. S'il vous plaît vérifier et essayer à nouveau.</value>
+			<value>Patient ID existe déjà. S\\\'il vous plaît vérifier et essayer à nouveau.</value>
+		</term>
+		<term>
+			<key>LAB_STAFF</key>
+			<value>Personnel de laboratoire</value>
 		</term>
 	</page>
 	<page id="header" descr="Page Header">
@@ -930,11 +950,11 @@
 		</term>
 		<term>
 			<key>TIPS_REGN_NEW</key>
-			<value>Patient ID, Name and Gender are mandatory fields.</value>
+			<value>Patient ID, nom et le sexe sont des champs obligatoires.</value>
 		</term>
 		<term>
-			<key>TIPS_REGN_NEW</key>
-			<value>Patient ID, nom et le sexe sont des champs obligatoires.</value>
+			<key>TIPS_REGN</key>
+			<value>Toi pouvez deplacer a prochain zone par pressage &lt;i&gt;Tab&lt;/i&gt; cle ou en cliquant sur il en utilisant la souris.</value>
 		</term>
 		<term>
 			<key>TIPS_DOB_AGE</key>
@@ -1262,7 +1282,7 @@
 		</term>
 		<term>
 			<key>TIPS_SUMMARY_1</key>
-			<value>Donne un résumé de l'installation de laboratoire, y compris les comptes personnel de laboratoire, les essais et les types d'échantillons.</value>
+			<value>Donne un résumé de l\'installation de laboratoire, y compris les comptes personnel de laboratoire, les essais et les types d\'échantillons.</value>
 		</term>
 		<term>
 			<key>TIPS_SUMMARY_2</key>
@@ -1278,7 +1298,7 @@
 		</term>
 		<term>
 			<key>TIPS_REVERT</key>
-			<value>En cas de défaillance du système, si nous voulons revenir à une copie précédemment sauvegardé des données, nous pouvons utiliser cette option. Vous pouvez choisir la version actuelle de sauvegarde avant de faire cela. Vous pouvez également choisir d'inclure de revenir les paramètres de langue.</value>
+			<value>En cas de défaillance du système, si nous voulons revenir à une copie précédemment sauvegardé des données, nous pouvons utiliser cette option. Vous pouvez choisir la version actuelle de sauvegarde avant de faire cela. Vous pouvez également choisir d\'inclure de revenir les paramètres de langue.</value>
 		</term>
 		<term>
 			<key>BACKUP_LOCATION</key>
@@ -1298,15 +1318,19 @@
 		</term>
 		<term>
 			<key>TIPS_TARGETTAT</key>
-			<value>Cible TAT - Cette liste d'options le délai d'exécution pour chaque type de test. Nous pouvons modifier le TAT en utilisant l'option Modifier et modifier la valeur.</value>
+			<value>Cible TAT - Cette liste d\'options le délai d\'exécution pour chaque type de test. Nous pouvons modifier le TAT en utilisant l\'option Modifier et modifier la valeur.</value>
 		</term>
 		<term>
 			<key>TIPS_RESULTINTERPRETATION</key>
-			<value>Interprétation des résultats - Cette option nous permet de préciser l'interprétation de plusieurs plages de valeurs pour chaque type de test.</value>
+			<value>Interprétation des résultats - Cette option nous permet de préciser l\'interprétation de plusieurs plages de valeurs pour chaque type de test.</value>
 		</term>
 		<term>
 			<key>MENU_USERS</key>
 			<value>Compte Utilisateur</value>
+		</term>
+		<term>
+			<key>ADD_USER_TYPE</key>
+			<value>Ajouter Nouveau Utilisateur Type</value>
 		</term>
 		<term>
 			<key>TIPS_USERACCOUNTS_1</key>
@@ -1318,7 +1342,7 @@
 		</term>
 		<term>
 			<key>TIPS_USERACCOUNTS_3</key>
-			<value>Il permet de modifier les paramètres du compte, supprimer des comptes et de surveiller l'activité du compte.</value>
+			<value>Il permet de modifier les paramètres du compte, supprimer des comptes et de surveiller l\'activité du compte.</value>
 		</term>
 		<term>
 			<key>MENU_CUSTOM</key>
@@ -1326,11 +1350,11 @@
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_1</key>
-			<value>Cette page permet la configuration de la page d'inscription des patients. Il permet de créer des champs obligatoires et cache certains domaines si elles ne sont pas souhaités à pourvoir.</value>
+			<value>Cette page permet la configuration de la page d\'inscription des patients. Il permet de créer des champs obligatoires et cache certains domaines si elles ne sont pas souhaités à pourvoir.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_2</key>
-			<value>Il permet aussi la création de certains des champs personnalisés pour l'enregistrement des patients et de nouveaux addition de l'échantillon qui peut être requis par certains laboratoires seulement.</value>
+			<value>Il permet aussi la création de certains des champs personnalisés pour l\'enregistrement des patients et de nouveaux addition de l\'échantillon qui peut être requis par certains laboratoires seulement.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_3</key>
@@ -1346,7 +1370,7 @@
 		</term>
 		<term>
 			<key>TIPS_INFECTIONREPORT</key>
-			<value>Ceci est une page modifiable pour le réglage des différents paramètres associaated chaque type d'épreuve individuelle.</value>
+			<value>Ceci est une page modifiable pour le réglage des différents paramètres associaated chaque type d\'épreuve individuelle.</value>
 		</term>
 		<term>
 			<key>MENU_GENERAL</key>
@@ -1570,12 +1594,72 @@
 		</term>	
 		<term>
 			<key>TIPS_SETUPNETWORK_3</key>
-			<value>Vous allez maintenant être en mesure d'accéder en cliquant sur ??BLIS BlisSetup.html et en entrant votre nom d'utilisateur et mot de passe.</value>
+			<value>Vous allez maintenant être en mesure d\'accéder en cliquant sur ??BLIS BlisSetup.html et en entrant votre nom d\'utilisateur et mot de passe.</value>
 		</term>
 		<term>
 			<key>TIPS_SETUPNETWORK_4</key>
-			<value>Dans le cas d'un redémarrage de l'ordinateur ou cliquez sur une défaillance du réseau d'installation de réseau option à nouveau.</value>
-		</term>		
+			<value>Dans le cas d\'un redémarrage de l\'ordinateur ou cliquez sur une défaillance du réseau d\'installation de réseau option à nouveau.</value>
+		</term>
+		<term>
+			<key>MENU_TOGGLE_TEST_REPORTS</key>
+			<value>Activer/Désactiver les rapports d</value>
+		</term>
+		<term>
+			<key>TIPS_TOGGLETESTREPORTS</key>
+			<value>Permettre/Désactiver test de génération de rapports dans ce laboratoire</value>
+		</term>
+		<term>
+			<key>MENU_TEST_REPORT_CONFIGURATION</key>
+			<value>Configuration du rapport d</value>
+		</term>
+		<term>
+			<key>TIPS_TESTREPORTCONFIGURATION</key>
+			<value>Configurez les différents champs dans un rapport d\'essai</value>
+		</term>
+		<term>
+			<key>MENU_TEST_TYPES</key>
+			<value>Type de test</value>
+		</term>
+		<term>
+			<key>COUNT_REPORT</key>
+			<value>Rapport de comptage</value>
+		</term>
+		<term>
+			<key>SITE_REPORT</key>
+			<value>Rapport du site</value>
+		</term>
+		<term>
+			<key>AGE_UNIT</key>
+			<value>Unité d</value>
+		</term>
+		<term>
+			<key>SITES</key>
+			<value>Sites</value>
+		</term>
+		<term>
+			<key>TIPS_SITECONFIG</key>
+			<value>Ajout / Suppression de sites de collecte de spécimens pour les dossiers de laboratoire</value>
+		</term>
+		<term>
+			<key>MENU_SITECONFIG</key>
+			<value>La configuration du site</value>
+		</term>
+		<term>
+			<key>ADD_SITE</key>
+			<value>Entrez le nouveau nom du site</value>
+		</term>
+		<term>
+			<key>SAMPLES_RECEIVED</key>
+			<value>Les échantillons reçus</value>
+		</term>
+		<term>
+			<key>ENABLE_SITE_ENTRY</key>
+			<value>Activer l</value>
+		</term>
+		<term>
+			<key>SELECT_SITE_FOR_REMOVAL</key>
+			<value>Sélection de sites pour l</value>
+		</term>
 	</page>
 	<page id="lab_admins" descr="Lab Managers Page">
 		<term>
@@ -1723,6 +1807,18 @@
 	</page>
 	<page id="reports" descr="Main Reports Page">
 		<term>
+			<key>AGE_UNIT</key>
+			<value>Unite de Age</value>
+		</term>
+		<term>
+			<key>GROUP_BYGENDER</key>
+			<value>Groupe De Genre</value>
+		</term>
+		<term>
+			<key>GROUP_BYAGE</key>
+			<value>Groupe De Age</value>
+		</term>
+		<term>
 			<key>TITLE</key>
 			<value>Bilans</value>
 		</term>
@@ -1757,6 +1853,18 @@
 		<term>
 			<key>MENU_AGGREPORTS</key>
 			<value>Rapport Groupés</value>
+		</term>
+		<term>
+			<key>MENU_TEST_SPECIMEN_AGGREGATE_REPORT_CONFIG</key>
+			<value>Examine/Echantillon Aggrege Configuration</value>
+		</term>
+		<term>
+			<key>MENU_SPECIMEN_AGGREGATE_REPORT_FORM</key>
+			<value>Echantillon Aggrege Rapport</value>
+		</term>
+		<term>
+			<key>MENU_TEST_AGGREGATE_REPORT_FORM</key>
+			<value>Examnie Aggrege Rapport</value>
 		</term>
 		<term>
 			<key>MENU_INFECTIONSUMMARY</key>
@@ -1966,6 +2074,38 @@
 			<key>MSG_ALLTESTSCOMPLETED</key>
 			<value>Tous les examens sont complets.</value>
 		</term>
+		<term>
+			<key>MENU_TESTWISE_REPORTS</key>
+			<value>Rapports spécifiques au test</value>
+		</term>
+		<term>
+			<key>SITE</key>
+			<value>Site</value>
+		</term>
+		<term>
+			<key>ALL_SITES</key>
+			<value>Tous les sites</value>
+		</term>
+		<term>
+			<key>MENU_TEST_TYPES</key>
+			<value>Type de test</value>
+		</term>
+		<term>
+			<key>COUNT_REPORT</key>
+			<value>Compte rendu</value>
+		</term>
+		<term>
+			<key>SITE_REPORT</key>
+			<value>Rapport de site</value>
+		</term>
+		<term>
+			<key>TOTAL_SAMPLES</key>
+			<value>Nombre total d'échantillons</value>
+		</term>
+		<term>
+			<key>SAMPLES_RECEIVED</key>
+			<value>Echantillon reçu</value>
+		</term>
 	</page>
 	<page id="edit_profile" descr="Edit Profile Page">
 		<term>
@@ -2110,7 +2250,7 @@
 		</term>
 		<term>
 			<key>Total_Quantity</key>
-			<value/>
+			<value>Au total quantité</value>
 		</term>
 		<term>
 			<key>Quantity_In_Stock</key>

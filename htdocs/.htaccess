@@ -28,6 +28,7 @@ RewriteRule ^lang_update\.php$ Language/lang_update.php
 ## /config folder
 RewriteRule ^lab_configs\.php$ config/lab_configs.php
 RewriteRule ^lab_config_home\.php$ config/lab_config_home.php
+RewriteRule ^grouped_report_config\.php$ config/grouped_report_config.php
 RewriteRule ^lab_config_new\.php$ config/lab_config_new.php
 RewriteRule ^lab_config_add\.php$ config/lab_config_add.php
 RewriteRule ^lab_config_addd\.php$ config/lab_config_addd.php
@@ -77,6 +78,8 @@ RewriteRule ^report_prevalence_agg\.php$ reports/report_prevalence_agg.php
 RewriteRule ^reports_tat_aggregate\.php$ reports/reports_tat_aggregate.php
 RewriteRule ^reports_billing\.php$ reports/reports_billing.php
 RewriteRule ^reports_billing_specific\.php$ reports/reports_billing_specific.php
+RewriteRule ^specimen_aggregate_report\.php$ reports/specimen_aggregate_report.php
+RewriteRule ^tests_aggregate_report\.php$ reports/tests_aggregate_report.php
 #-Currently unused php report files-
 RewriteRule ^reports_session\.php$ reports/reports_session.php
 RewriteRule ^reports_tat_org\.php$ reports/reports_tat_org.php
@@ -147,6 +150,7 @@ RewriteRule ^viewPatientInfo\.php$ search/viewPatientInfo.php
 
 ## /export folder
 RewriteRule ^export_word\.php$ export/export_word.php
+RewriteRule ^export_word_aggregate\.php$ export/export_word_aggregate.php
 RewriteRule ^export_txt\.php$ export/export_txt.php
 RewriteRule ^export_pdf\.php$ export/export_pdf.php
 RewriteRule ^data_backup$ export/data_backup2.php

@@ -1,0 +1,7 @@
+- Instructions on how to perform the update are as follows, 
+    1. Download and Extract the upgrade file. 
+    2. Open the folder called "Upgrade" and Copy all the files inside and replace them to your C4G BLIS folder. 
+    3. Run update_C4GBLIS_v3.2.bat to start the update process. 
+    4. Wait for C4G BLIS to startup. Click on the update button on the home page.
+    
+    5. Once the update completes, you can continue to use the system.

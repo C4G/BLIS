@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<pages lang="en" descr="English" version="0.8.4">
+<pages lang="default" descr="Default" version="0.8.4">
 	<page id="general" descr="General Terms">
 		<term>
 			<key>TIPS</key>
@@ -26,6 +26,10 @@
 			<value>Currency</value>
 		</term>
 		<term>
+			<key>ADD_USER_TYPE</key>
+			<value>Add New User Type</value>
+		</term>
+		<term>
 			<key>EXCHANGE_RATE</key>
 			<value>Exchange Rate</value>
 		</term>
@@ -47,7 +51,7 @@
 		</term>
 		<term>
 			<key>ADD_CURRENCY</key>
-			<value>Add a new currency >></value>
+			<value>Add a new currency &gt;&gt;</value>
 		</term>
 		<term>
 			<key>NEW_CURRENCY</key>
@@ -144,6 +148,14 @@
 		<term>
 			<key>CMD_GETREPORT</key>
 			<value>Get Report</value>
+		</term>
+		<term>
+			<key>CMD_GET_SPECIMEN_REPORT</key>
+			<value>Get Specimen Report</value>
+		</term>
+		<term>
+			<key>CMD_GET_TEST_REPORT</key>
+			<value>Get Test Report</value>
 		</term>
 		<term>
 			<key>MSG_SELECT_TTYPE</key>
@@ -324,6 +336,10 @@
 		<term>
 			<key>MONTHS</key>
 			<value>Months</value>
+		</term>
+		<term>
+			<key>WEEKS</key>
+			<value>Weeks</value>
 		</term>
 		<term>
 			<key>DAYS</key>
@@ -752,6 +768,10 @@
 		<term>
 			<key>TIPS_PATIENTID_EXISTS</key>
 			<value>Patient ID already exists. Please check and try again.</value>
+		</term>
+		<term>
+			<key>LAB_STAFF</key>
+			<value>Lab Staff</value>
 		</term>
 	</page>
 	<page id="header" descr="Page Header">
@@ -1580,6 +1600,66 @@
 			<key>TIPS_SETUPNETWORK_4</key>
 			<value>In case of a computer restart or network failure click on Setup Network option again.</value>
 		</term>
+		<term>
+			<key>MENU_TOGGLE_TEST_REPORTS</key>
+			<value>Enable/Disable Test Reports</value>
+		</term>
+		<term>
+			<key>TIPS_TOGGLETESTREPORTS</key>
+			<value>Enable/Disable test report generation in this lab</value>
+		</term>
+		<term>
+			<key>MENU_TEST_REPORT_CONFIGURATION</key>
+			<value>Test Report Configuration</value>
+		</term>
+		<term>
+			<key>TIPS_TESTREPORTCONFIGURATION</key>
+			<value>Configure the different fields in a test report</value>
+		</term>
+		<term>
+			<key>MENU_TEST_TYPES</key>
+			<value>Test Type</value>
+		</term>
+		<term>
+			<key>COUNT_REPORT</key>
+			<value>Count Report</value>
+		</term>
+		<term>
+			<key>SITE_REPORT</key>
+			<value>Site Report</value>
+		</term>
+		<term>
+			<key>AGE_UNIT</key>
+			<value>Age Unit</value>
+		</term>
+		<term>
+			<key>SITES</key>
+			<value>Sites</value>
+		</term>
+		<term>
+			<key>TIPS_SITECONFIG</key>
+			<value>Add/Remove specimen collection sites to the laboratory records</value>
+		</term>
+		<term>
+			<key>MENU_SITECONFIG</key>
+			<value>Site Configuration</value>
+		</term>
+		<term>
+			<key>ADD_SITE</key>
+			<value>Enter New Site Name</value>
+		</term>
+		<term>
+			<key>SAMPLES_RECEIVED</key>
+			<value>Samples Received</value>
+		</term>
+		<term>
+			<key>ENABLE_SITE_ENTRY</key>
+			<value>Enable Site Entry for a Specimen</value>
+		</term>
+		<term>
+			<key>SELECT_SITE_FOR_REMOVAL</key>
+			<value>Select sites for removal</value>
+		</term>
 	</page>
 	<page id="lab_admins" descr="Lab Managers Page">
 		<term>
@@ -1727,6 +1807,18 @@
 	</page>
 	<page id="reports" descr="Main Reports Page">
 		<term>
+			<key>AGE_UNIT</key>
+			<value>Unit of Age</value>
+		</term>
+		<term>
+			<key>GROUP_BYGENDER</key>
+			<value>Group By Gender</value>
+		</term>
+		<term>
+			<key>GROUP_BYAGE</key>
+			<value>Group By Age</value>
+		</term>
+		<term>
 			<key>TITLE</key>
 			<value>Reports</value>
 		</term>
@@ -1761,6 +1853,18 @@
 		<term>
 			<key>MENU_AGGREPORTS</key>
 			<value>Aggregate Reports</value>
+		</term>
+		<term>
+			<key>MENU_TEST_SPECIMEN_AGGREGATE_REPORT_CONFIG</key>
+			<value>Test/Specimen Aggregate Configuration</value>
+		</term>
+		<term>
+			<key>MENU_SPECIMEN_AGGREGATE_REPORT_FORM</key>
+			<value>Specimen Aggregate Report</value>
+		</term>
+		<term>
+			<key>MENU_TEST_AGGREGATE_REPORT_FORM</key>
+			<value>Test Aggregate Report</value>
 		</term>
 		<term>
 			<key>MENU_INFECTIONSUMMARY</key>
@@ -1969,6 +2073,38 @@
 		<term>
 			<key>MSG_ALLTESTSCOMPLETED</key>
 			<value>All tests completed</value>
+		</term>
+		<term>
+			<key>MENU_TESTWISE_REPORTS</key>
+			<value>Test Specific Reports</value>
+		</term>
+		<term>
+			<key>SITE</key>
+			<value>Site</value>
+		</term>
+		<term>
+			<key>ALL_SITES</key>
+			<value>All Sites</value>
+		</term>
+		<term>
+			<key>MENU_TEST_TYPES</key>
+			<value>Test Type</value>
+		</term>
+		<term>
+			<key>COUNT_REPORT</key>
+			<value>Count Report</value>
+		</term>
+		<term>
+			<key>SITE_REPORT</key>
+			<value>Site Report</value>
+		</term>
+		<term>
+			<key>TOTAL_SAMPLES</key>
+			<value>Total number of samples</value>
+		</term>
+		<term>
+			<key>SAMPLES_RECEIVED</key>
+			<value>Samples Received</value>
 		</term>
 	</page>
 	<page id="edit_profile" descr="Edit Profile Page">

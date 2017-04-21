@@ -10,6 +10,7 @@ $field_id = $_REQUEST['id'];
 $lab_config_id = $_REQUEST['lid'];
 $type = $_REQUEST['t'];
 $field_name = $_REQUEST['fname'];
+$field_type = $_REQUEST['ftype'];
 $options_csv = "";
 $enable=$_REQUEST['Enable'];
 $flag=$_REQUEST['flag'];
@@ -36,7 +37,7 @@ if($enable!="enable")
 	if($flag!=0)
 	$offset=-2;
 }
-	if(isset($_REQUEST['option']))
+if($field_type == CustomField::$FIELD_OPTIONS || $field_type == CustomField::$FIELD_MULTISELECT)
 {
 	# Option-type field
 	$options_list = $_REQUEST['option'];
@@ -54,7 +55,7 @@ if($enable!="enable")
 			$options_csv .= "/";
 	}
 }
-else if(isset($_REQUEST['range_lower']))
+else if($field_type == CustomField::$FIELD_NUMERIC)
 {
 	$range_lower = trim($_REQUEST['range_lower']);
 	$range_upper = trim($_REQUEST['range_upper']);
@@ -64,6 +65,7 @@ else if(isset($_REQUEST['range_lower']))
 
 $updated_entry = new CustomField();
 $updated_entry->id = $field_id;
+$updated_entry->fieldTypeId = $field_type;
 $updated_entry->fieldName = $field_name;
 $updated_entry->fieldOptions = $options_csv;
 if($del=="Delete"){

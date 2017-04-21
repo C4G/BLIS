@@ -1,0 +1,17 @@
+Feature List for BLIS 3.21
+===========================
+
+1. Lab Admin Role
+  a. Lab Configuration Menu -> Reports
+     i. Enable/Disable Test Reports: In this menu, you can enable/disable aggregate reports for specific tests.
+     ii. Test Report Configuration: You can configure the test reports for each of the tests. You can select the appropriate age-groups into which to divide the aggregate test report data.
+  b. Lab Configuration Menu -> Sites
+     i. You can add site names from where specimens are collected and reported at the specific laboratory.
+     ii. Enable ‘Site entry for specimen’ enables a lab technician to select the site at which the specimen was collected. If this menu is disabled, a technician cannot select the site, and by default, the laboratory itself will be chosen as the site.
+  c. Reports -> Test Specific Reports
+     i. You can select the specific test, date-range to get the test specific aggregate reports.
+     ii. Here, selecting the option ‘All Sites’ generates the ‘Count Report’. By selecting a specific site, a report is generated for that specific ‘Site Report’
+
+2. Lab Technician
+  a. Specimen Registration
+     i. If the feature ‘Site entry’ is enabled above as per 1.b.ii, then the lab technician can select a site as the collection site during the registration. If the feature is disabled, then the technician cannot select the site.

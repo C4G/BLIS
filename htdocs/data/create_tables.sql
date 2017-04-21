@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `patient_custom_data` (
 CREATE TABLE IF NOT EXISTS `patient_custom_field` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `field_name` varchar(45) NOT NULL default '',
-  `field_options` varchar(45) NOT NULL default '',
+  `field_options` varchar(65474) NOT NULL default '',
   `field_type_id` int(11) unsigned NOT NULL default '0',
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
@@ -260,6 +260,11 @@ CREATE TABLE IF NOT EXISTS `report_config` (
   `test_type_id` varchar(45) NOT NULL default '0',
   `title` varchar(500) NOT NULL default '',
   `landscape` int(10) unsigned NOT NULL default '0',
+  `row_items` int(1) unsigned NOT NULL default '3',
+  `show_border` int(1) unsigned NOT NULL default '1',
+  `show_result_border` int(1) unsigned NOT NULL default '1',
+  `result_border_horizontal` int(1) unsigned NOT NULL default '0',
+  `result_border_vertical` int(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`report_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -320,7 +325,7 @@ CREATE TABLE IF NOT EXISTS `specimen_custom_data` (
 CREATE TABLE IF NOT EXISTS `specimen_custom_field` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `field_name` varchar(45) NOT NULL default '',
-  `field_options` varchar(45) NOT NULL default '',
+  `field_options` varchar(65474) NOT NULL default '',
   `field_type_id` int(11) unsigned NOT NULL default '0',
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
@@ -598,8 +603,10 @@ CREATE  TABLE IF NOT EXISTS `user_feedback` (
   PRIMARY KEY (`id`) );
 
 
+INSERT INTO `report_config` (`report_id`, `header`, `footer`, `margins`, `p_fields`, `s_fields`, `t_fields`, `p_custom_fields`, `s_custom_fields`,`test_type_id`,`title`,`landscape`,`row_items`,`show_border`,`show_result_border`,`result_border_horizontal`,`result_border_vertical`) VALUES 
+('1', 'Patient Report', '', '2,0,10,0', '1,1,0,1,1,0,1,0,0,0,0,0,0', '1,0,0,0,0,1,1', '1,1,1,0,0,0,0,1,0,1,1,1', '', '', '0', 'Patient Report', 0, 1, 1, 1, 1, 1);
+
 INSERT INTO `report_config` (`report_id`, `header`, `footer`, `margins`, `p_fields`, `s_fields`, `t_fields`, `p_custom_fields`, `s_custom_fields`) VALUES 
-('1', 'Patient Report', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
 ('2', 'Specimen Report', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
 ('3', 'Test Records', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
 ('4', 'Daily Log - Specimens', '', '2,0,10,0', '1,1,1,1,1,1,1', '1,1,1,1,1,1', '1,0,1,1,1,0,1,1', '', ''),
@@ -632,3 +639,26 @@ CREATE TABLE `field_order` (
 alter table removal_record add category varchar(20) default "test";
 
 ALTER TABLE specimen ADD COLUMN referred_from_name varchar(20);
+
+CREATE TABLE IF NOT EXISTS sites (
+  id INT AUTO_INCREMENT NOT NULL,
+  name VARCHAR(255),
+  lab_id INT,
+  PRIMARY KEY (id)
+);
+
+ALTER TABLE specimen ADD COLUMN site_id INT;
+
+CREATE TABLE IF NOT EXISTS test_agg_report_config (
+  id INT NOT NULL AUTO_INCREMENT,
+  test_type_id INT,
+  title VARCHAR(255),
+  landscape BOOLEAN DEFAULT 1,
+  group_by_age BOOLEAN DEFAULT 1,
+  age_unit INT DEFAULT 1,
+  age_groups VARCHAR(255),
+  report_type INT,
+  PRIMARY KEY (id)
+);
+
+ALTER TABLE test_type ADD COLUMN is_reporting_enabled BOOLEAN DEFAULT 0;

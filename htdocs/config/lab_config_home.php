@@ -76,6 +76,12 @@ $script_elems->enableJQueryForm();
 	</ul>
 </div>
 
+<div id="site_config" class="right_pane" style="display: none;margin-left: 10px;">
+	<ul>
+		<li><?php echo LangUtil::$pageTerms['TIPS_SITECONFIG']; ?></li>
+	</ul>
+</div>
+
 <div id='Billing_config' class='right_pane' style='display:none;margin-left:10px;'>
     <u>This has the following options</u>
     <ul>
@@ -339,7 +345,7 @@ $(document).ready(function(){
 		# Preload the inventory pane
 		?>
 		right_load(15, 'inventory_div');
-		<?
+		<?php
 	}
 	else if(isset($_REQUEST['set_locale']))
 	{
@@ -414,6 +420,14 @@ $(document).ready(function(){
 		}
 
 		
+	}
+	else if(isset($_REQUEST['siteupdate']))
+	{
+		?>
+		$('#site_config_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('site_config_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+		$('#site_config_msg').show();
+		right_load(54, 'site_config_div');
+		<?php
 	}
 	else if(isset($_REQUEST['tupdate']))
 	{
@@ -580,6 +594,21 @@ $(document).ready(function(){
 		$('#report_type11').attr("value", report_type);
 		//fetch_report_config();
 		fetch_report_summary();
+		<?php
+	}
+	else if(isset($_REQUEST['ttrupdate']))
+	{
+		?>
+		$('#toggle_test_reports_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('toggle_test_reports_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+    	$('#toggle_test_reports_msg').show();
+		right_load(52, 'toggle_test_reports_div');
+		<?php
+	}
+	else if(isset($_REQUEST['treport_conf_update']))
+	{
+		?>
+		$('#test_agg_report_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('test_agg_report_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+		$('#test_agg_report_msg').show();
 		<?php
 	}
 	else if(isset($_REQUEST['rpfoupdate']))
@@ -900,6 +929,24 @@ function submit_goal_tat()
 	});
 }
 
+function submit_site_add()
+{
+	$('#site_config_add_form').ajaxSubmit({
+		success: function() {
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&siteupdate=1";
+		}
+	})
+}
+
+function submit_site_remove()
+{
+	$('#site_config_form').ajaxSubmit({
+		success: function() {
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&siteupdate=1";
+		}
+	})
+}
+
 function toggletatdivs()
 {
 	$('#goal_tat_list').toggle();
@@ -972,6 +1019,54 @@ function toggle_grouped_count_report()
 		$('#grouped_count_edit_link').html("<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>");
 }
 
+function toggle_test_agg_report_conf()
+{
+	$('#test_agg_report_config_summary').toggle();
+	$('#test_agg_report_form_div').toggle();
+	var cur_link_text = $('#test_agg_report_edit_link').html();
+	if (cur_link_text == "<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>")
+		$('#test_agg_report_edit_link').html("<?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?>");
+	else
+		$('#test_agg_report_edit_link').html("<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>");
+
+}
+
+function edit_test_agg_report_conf()
+{
+	var test_type_id = $("#select_test_for_config").attr("value");
+	$('#test_agg_report_config_summary').hide();
+	$('#test_agg_report_form_div').show();
+	var url_string = "ajax/test_report_config_fetch.php?id=<?php echo $lab_config->id; ?>&ttype="+test_type_id;
+	$('#test_report_config_fetch_progress').show();
+	$('#test_agg_report_form_div').load(url_string, function() {
+		$('#test_report_config_fetch_progress').hide();
+	});
+
+}
+
+function cancel_test_agg_report_conf()
+{
+	var test_type_id = $("#select_test_for_config").attr("value");
+	$('#test_agg_report_form_div').hide();
+	$('#test_agg_report_config_summary').show();
+	var url_string = "ajax/test_report_config_summary.php?id=<?php echo $lab_config->id; ?>&ttype="+test_type_id;
+	$('#test_report_config_fetch_progress').show();
+	$('#test_agg_report_config_summary').load(url_string, function() {
+		$('#test_report_config_fetch_progress').hide();
+	});
+
+}
+
+function toggle_site_config_div()
+{
+	$('#site_config_form_div').toggle();
+	$('#site_config_add_form_div').toggle();
+	var cur_link_text = $('#toggle_site_config_link').html();
+	if (cur_link_text == "<?php echo LangUtil::$generalTerms['ADDANOTHER']; ?>")
+		$('#toggle_site_config_link').html("<?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?>");
+	else
+		$('#toggle_site_config_link').html("<?php echo LangUtil::$generalTerms['ADDANOTHER']; ?>");
+}
 
 function toggle_ofield_div()
 {
@@ -1453,6 +1548,18 @@ function s_agegrouplist_append()
 	$('#s_agegrouplist_inner').append(html_code);
 }
 
+function agegrouplist_append_tcount()
+{
+	var html_code = "&nbsp;&nbsp;<input type='text' name='age_limit_lower_count[]' class='range_field'>-<input type='text' name='age_limit_upper_count[]' class='range_field'>";
+	$('#age_group_split_span_count').append(html_code);
+}
+
+function agegrouplist_append_tsite()
+{
+	var html_code = "&nbsp;&nbsp;<input type='text' name='age_limit_lower_site[]' class='range_field'>-<input type='text' name='age_limit_upper_site[]' class='range_field'>";
+	$('#age_group_split_span_site').append(html_code);
+}
+
 function add_slot(span_id, field_name1, field_name2)
 {
 	var html_code = "&nbsp;&nbsp;&nbsp;<input type='text' class='range_field' name='"+field_name1+"[]' value=''></input>-<input type='text' class='range_field' name='"+field_name2+"[]' value=''></input>";
@@ -1585,6 +1692,43 @@ function fetch_report_summary()
 	});
 }
 
+function fetch_test_report_config()
+{
+	var test_type_id = $("#select_test_for_config").attr("value");
+	var url_string = "ajax/test_report_config_summary.php?id=<?php $lab_config->id; ?>&ttype="+test_type_id;
+	$("#test_report_config_fetch_progress").show();
+	$("#test_report_config_content").load(url_string, function() {
+		$('#test_report_config_fetch_progress').hide();
+	});
+}
+
+function hide_test_report_config_content()
+{
+	$('#test_report_config_content').html("");
+}
+
+function fetch_test_report_config_summary()
+{
+	var test_type_id = $("#select_test_for_config").attr("value");
+	var url_string = "ajax/test_report_config_summary.php?id=<?php echo $lab_config->id; ?>&ttype="+test_type_id;
+	$('#test_report_config_fetch_progress').show();
+	$('#test_agg_report_config_summary').load(url_string, function() {
+		$('#test_report_config_fetch_progress').hide();
+	});
+}
+
+function test_report_conf_submit()
+{
+	var test_type_id = $("#select_test_for_config").attr("value");
+	$('#test_report_config_submit_spinner').show();
+	$('#test_agg_report_form').ajaxSubmit({
+		success: function() {
+			$('test_report_config_submit_spinner').hide();
+			window.location = "lab_config_home.php?id=<?php echo $lab_config->id; ?>&treport_conf_update="+test_type_id;
+		}
+	});
+}
+
 function update_file()
 { 
 var report_id = $('#report_type11').attr("value");
@@ -1604,6 +1748,32 @@ var report_id = $('#report_type11').attr("value");
 		success: function() {
 		$('#submit_report_config_progress').hide();
 			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&rcfgupdate="+report_id;
+		}
+	});
+}
+
+function submit_toggle_test_reports_form()
+{
+	$('#toggle_test_reports_submit_progress').show();
+
+	var test_list_left = document.getElementById('test_list_left');
+	var test_list_right = document.getElementById('test_list_right');
+	var test_id_left = Array();
+	var test_id_right = Array();
+
+	for (var i = 0; i < test_list_left.options.length; i++)
+		test_id_left[i] = test_list_left.options[i].id;
+
+	for (var i = 0; i < test_list_right.options.length; i++)
+		test_id_right[i] = test_list_right.options[i].id;
+
+	$('#test_id_left').attr('id', test_id_left);
+	$('#test_id_right').attr('id', test_id_right);
+
+	$('#toggle_test_reports_form').ajaxSubmit({
+		success: function() {
+			$('#toggle_test_reports_submit_progress').hide();
+			window.location = "lab_config_home.php?id=<?php echo $_SESSION['lab_config_id']; ?>&ttrupdate=testreports";
 		}
 	});
 }
@@ -2052,8 +2222,8 @@ function AddnewDHIMS2Config()
 					<br><br>
 				</div>
                                 
-                                <a id='option21' class='menu_option' href="javascript:right_load(21, 'search_div');"><?php echo "Search" ?></a>
-                                <br><br>
+                <a id='option21' class='menu_option' href="javascript:right_load(21, 'search_div');"><?php echo "Search" ?></a>
+                <br><br>
                                 
 				<a id='report' class='menu_option' href="javascript:report_setup();"><?php echo LangUtil::$pageTerms['Reports']; ?> </a>
 				<br><br></li>
@@ -2064,11 +2234,21 @@ function AddnewDHIMS2Config()
 					<br><br>
 					-<a id='option11' class='menu_option' href="javascript:right_load(11, 'report_config_div');"><?php echo LangUtil::$pageTerms['MENU_REPORTCONFIG']; ?></a>
 					<br><br>
+					-<a id='option52' class='menu_option' href="javascript:right_load(52, 'toggle_test_reports_div');"><?php echo LangUtil::$pageTerms['MENU_TOGGLE_TEST_REPORTS']; ?></a>
+					<br><br>
+					-<a id='option53' class='menu_option' href="javascript:right_load(53, 'test_report_config_div');"><?php echo LangUtil::$pageTerms['MENU_TEST_REPORT_CONFIGURATION']; ?></a>
+					<br><br>
 					-<a id='option12' class='menu_option' href="javascript:right_load(12, 'worksheet_config_div');"><?php echo LangUtil::$pageTerms['MENU_WORKSHEETCONFIG']; ?></a>
 					<br><br>
  					-<a id='option40' class='menu_option' href="javascript:right_load(40, 'patient_fields_config_div');"><?php echo "Order Patient Fields"; ?></a>
 					<br><br>
 				</div>
+
+				<a id="sites" class="menu_option"
+					href="javascript:right_load(54, 'site_config_div');">
+					<?php echo LangUtil::$pageTerms['SITES']; ?>
+				</a>
+                <br><br>
 
 				<a id='option15' class='menu_option' href="javascript:right_load(15, 'inventory_div');"><?php echo LangUtil::$pageTerms['Inventory']; ?></a>
 				<br><br>
@@ -2285,6 +2465,43 @@ function AddnewDHIMS2Config()
 					?>
 					</div>
 				</div>
+
+				<div class="right_pane" id="site_config_div" style="display: none;margin-left: 10px;">
+					<p style="text-align: right;"><a rel='facebox' href='#site_config'>Page Help</a></p>
+					<b><?php echo LangUtil::$pageTerms['MENU_SITECONFIG']; ?></b>
+                    | <a href='javascript:toggle_site_config_div();' id='toggle_site_config_link'><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?></a>>
+					<div id="site_config_msg" class="clean-orange" style="display: none;width: 350px;"></div>
+					<div id="site_config_form_div" class="pretty_box">
+						<form id="site_config_form" name="site_config_form"
+							  action="../ajax/site_config_update.php"
+							  method="post">
+							<br> <?php echo LangUtil::$pageTerms['SELECT_SITE_FOR_REMOVAL']; ?> <br>
+							<?php
+							$page_elems->getSiteConfigForm($_SESSION['lab_config_id']);
+							?>
+							<br><br>
+							<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>'
+								   onsubmit="return confirm('Are you sure?');"
+								   onclick="submit_site_remove()">
+						</form>
+					</div>
+                    <div id="site_config_add_form_div" class="pretty_box" style="display: none; margin-left: 10px;">
+                        <form id="site_config_add_form"
+							  name="site_config_add_form"
+							  action="../ajax/site_config_add.php"
+							  method="post">
+							<input type="hidden" id="lab_config_id"
+								   name="lab_config_id"
+								   value="<?php echo $lab_config_id; ?>">
+							<?php echo LangUtil::$pageTerms['ADD_SITE']; ?>
+                            <input type="text" id="add_site_name" name="add_site_name">
+							<br><br>
+							<input type="button"
+								   value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>"
+								   onclick="submit_site_add();">
+						</form>
+					</div>
+				</div>
 					
 				<div class='right_pane' id='inventory_div' style='display:none;margin-left:10px;'>
 				</div>
@@ -2308,7 +2525,7 @@ function AddnewDHIMS2Config()
                                         ?>
                                         <input type="checkbox" value="enable_billing" name="enable_billing" <?php echo $checkbox ?>/><?php echo "Enable Billing"; ?>
                                         <br><br>
-                                        <?php echo "Default Currency Name:"; ?>
+                                        <?php echo LangUtil::$generalTerms['DEFAULT_CURRENCY']; ?>
                                         <!-- <input type="text" name="currency_name" value="<?php echo get_currency_type_from_lab_config_settings() ?>" />  -->
                                         <select name='default_currency' id='default_currency'>
                                         <?php $allCurrencies = currencyConfig::getAllDifferenctCurrencies($lab_config_id);
@@ -2328,7 +2545,7 @@ function AddnewDHIMS2Config()
 											
 										</select>
                                         <br><br>
-                                        <?php echo "Currency Delimiter:"; ?>
+                                        <?php echo LangUtil::$generalTerms['CURRENCY_DELIMITER']; ?>
                                         <input type="text" name="currency_delimiter" value="<?php echo get_currency_delimiter_from_lab_config_settings() ?>" size="1" maxlength="1" />
                                         <br><br>
                                         Currency will display as: 00<?php echo get_currency_delimiter_from_lab_config_settings(); ?>00 <?php echo get_currency_type_from_lab_config_settings() ?>
@@ -3887,8 +4104,60 @@ function AddnewDHIMS2Config()
 						</div>
 					</form>	
 				</div>
-				
-				<!-- Form for setting patients fields order -->              
+
+				<!-- Form for enabling/disabling test reports -->
+				<div class='right_pane' id='toggle_test_reports_div' style='display:none;margin-left:10px;'>
+					<p style="text-align: right;"><a rel='facebox' href='#PFO'>Page Help</a></p>
+					<b><?php echo LangUtil::$pageTerms['MENU_TOGGLE_TEST_REPORTS']; ?></b>
+					<br><br>
+					<div id='toggle_test_reports_msg' class='clean-orange' style='display:none;width:350px;'>
+					</div>
+					<br>
+					<div class='pretty_box' style="text-align: center;">
+						<form id='toggle_test_reports_form'
+							  name='toggle_test_reports_form'
+							  action='ajax/toggle_test_reports.php'
+							  method='post'>
+							<?php $page_elems->getToggleTestReportsForm(); ?>
+						</form>
+					</div>
+				</div>
+
+				<!-- Form for configuring aggregated test reports -->
+				<div class='right_pane' id='test_report_config_div' style='display:none;margin-left:10px;'>
+					<p style="text-align: right;"><a rel='facebox' href='#PFO'>Page Help</a></p>
+					<b><?php echo LangUtil::$pageTerms['MENU_TEST_REPORT_CONFIGURATION']; ?></b>
+					<br><br>
+					<div id='test_report_configuration_msg' class='clean-orange' style='display:none;width:350px;'>
+					</div>
+					<br>
+					<div id="test_report_configuration_form_div"
+						 style="text-align: center;">
+						<form id='test_report_configuration_form'
+							  name='test_report_configuration_form'>
+                            <?php echo LangUtil::$pageTerms['MENU_TEST_TYPES']; ?>
+							<select id="select_test_for_config"
+									name="select_test_for_config[]">
+								<?php
+								$page_elems->getTestTypesByReportingStatusOptions(1);
+								?>
+							</select>
+							<input type='button' id='test_report_config_button'
+								   value="<?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?>"
+								   onclick="javascript:fetch_test_report_config_summary();">
+							<span id='test_report_config_fetch_progress' style='display:none;'>
+								<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SEARCHING']); ?>
+							</span>
+						</form>
+						<br><br>
+						<div id='test_agg_report_config_summary'>
+						</div>
+						<div id="test_agg_report_form_div" style="display: none;">
+						</div>
+					</div>
+				</div>
+
+				<!-- Form for setting patients fields order -->
 				<div class='right_pane' id='patient_fields_config_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#PFO'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_PATIENTFIELDSORDER']; ?></b>
