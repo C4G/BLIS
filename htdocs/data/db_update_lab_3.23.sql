@@ -1,0 +1,4 @@
+ALTER TABLE `sites`
+ADD COLUMN `Region` VARCHAR(40);
+ALTER TABLE `sites`
+ADD COLUMN `District` VARCHAR(40);

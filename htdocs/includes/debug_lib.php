@@ -58,6 +58,7 @@ class DebugLib
 	public static function logQuery($query_string, $db_name, $username)
 	{
 		# Adds current query to log
+        date_default_timezone_set("UTC");
 		$file_name = "../../local/log_".$_SESSION['lab_config_id'].".txt";
 		$file_handle = null;
 		if(file_exists($file_name))

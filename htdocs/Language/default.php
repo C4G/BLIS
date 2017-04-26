@@ -209,7 +209,11 @@ $LANG_ARRAY = array (
 		"APPROX" => "approximate", 
 		"LANDSCAPE" => "Landscape mode",
 		"TIPS_PATIENTID_EXISTS"=>"Patient ID already exist. Look up for patient to confirm and register specimen",
-        "LAB_STAFF" => "Lab Staff"
+        "LAB_STAFF" => "Lab Staff",
+            "ALL_FACILITIES" => "All Facilities",
+            "ALL_SITES" => "All Sites",
+            "DISTRICT" => "District",
+            "REGION" => "Region"
 	) , 
 	"header" => array ( 
 		"TITLE" => "", 
@@ -474,7 +478,10 @@ $LANG_ARRAY = array (
         "ADD_SITE" => "Enter New Site Name",
         "SAMPLES_RECIVED" => "Samples Received",
         "ENABLE_SITE_ENTRY" => "Enable Site Entry for a Specimen",
-        "SELECT_SITE_FOR_REMOVAL" => "Select sites for removal"
+        "SELECT_SITE_FOR_REMOVAL" => "Select sites for removal",
+        "OUT_OF_RANGE" => "Out of range",
+        "INTERPRETATION" => "Interpretation",
+        "MODIFY_SITE" => "Modify sites"
 
 	) ,
 	"lab_admins" => array ( 
@@ -591,8 +598,11 @@ $LANG_ARRAY = array (
         "COUNT_REPORT" => "Count Report",
         "SITE_REPORT" => "Site Report",
         "TOTAL_SAMPLES" => "Total number of samples",
-        "SAMPLES_RECEIVED" => "Samples Received"
-	) ,
+        "SAMPLES_RECEIVED" => "Samples Received",
+        "OUT_OF_RANGE" => "Out of range",
+        "INTERPRETATION" => "Interpretation"
+
+    ) ,
 	"edit_profile" => array ( 
 		"LINK_CHANGEPWD" => "Change Password", 
 		"TIPS_CASEPWD" => "Please note that passwords are case-sensitive.", 

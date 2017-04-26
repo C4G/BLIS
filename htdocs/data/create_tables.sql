@@ -644,6 +644,8 @@ CREATE TABLE IF NOT EXISTS sites (
   id INT AUTO_INCREMENT NOT NULL,
   name VARCHAR(255),
   lab_id INT,
+  District VARCHAR(40),
+ Region VARCHAR(40),
   PRIMARY KEY (id)
 );
 

@@ -1,3 +1,4 @@
+
 <?php
 #
 # Main page for registering new specimen(s) in a single session/accession
@@ -11,6 +12,9 @@ $page_start = $load_time;
 
 include("redirect.php");
 include("includes/header.php");
+?>
+
+<?php
 include_once ("includes/db_lib.php");
 include_once("includes/field_order_update.php");
 
@@ -48,13 +52,28 @@ $refTo_array= addslashes(implode("%", $ref_array));
 $uiinfo = "pid=".$_REQUEST['pid']."&dnum=".$_REQUEST['dnum'];
 putUILog('new_specimen', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 ?>
+<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="js/select2.js"></script>
+<script>
+    var jq = $.noConflict(true); // <== Do not pass true
+</script>
+
 	<script>
   $(document).ready(function(){
 
 	var data_string="<?php echo $php_array;?>";
-	var data=data_string.split("%"); 
-	
-	$("#doc_row_1_input").autocomplete(data);
+
+	var data=data_string.split("%");
+
+	console.log(data_string)
+      jq("#doc_row_1_input").select2({
+          data: data,
+          dropdownAutoWidth : true
+      });
+
+      jq("#doc_row_1_input").css("width","120px");
+      //$("#doc_row_1_input").attr("autocomplete","on");
+	//$("#doc_row_1_input").autocomplete(data);
 
 	//$(".doctors_auto").autocomplete(data);
 
@@ -62,7 +81,7 @@ putUILog('new_specimen', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X'
   var refTo_string="<?php echo $refTo_array;?>";
   var refTodata=refTo_string.split("%"); 
   //alert("RefTo : "+refTodata);
-  $("#refTo_row_1_input").autocomplete(refTodata);
+ // $("#refTo_row_1_input").autocomplete(refTodata);
     });
   </script>
 <script>
@@ -139,10 +158,6 @@ function set_compatible_tests()
 {
 	var specimen_type_id = $("#s_type").attr("value");
 	if(specimen_type_id == "")
-	{	
-		$('#test_type_box').html("Select specimen type to view compatible tests");
-		return;
-	}
 	$('#test_type_box').load(
 		"ajax/test_type_options.php", 
 		{
@@ -395,6 +410,7 @@ function checkandtoggle_ref(ref_check_id, ref_row_id, ref_from_row_id)
 
 // ]]> -->
 </script>
+
 <p style="text-align: right;"><a rel='facebox' href='#NEW_SPECIMEN'>Page Help</a></p>
 <span class='page_title'><?php echo LangUtil::getTitle(); ?></span>
  | <?php echo LangUtil::$generalTerms['ACCESSION_NUM']; ?> <?php echo $session_num; ?>

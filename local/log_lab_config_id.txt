@@ -1,0 +1,783 @@
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT username FROM user WHERE user_id=53
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=127 ORDER BY st.name
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=127 ORDER BY u.username
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=325 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=56 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=57 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=127
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=127
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=127 ORDER BY u.username
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT * FROM specimen_custom_field
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT * FROM patient_custom_field
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT * FROM labtitle_custom_field
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=19 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=32 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=7 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=40 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=lab_config_id ORDER BY tt.name
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=19 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=32 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=7 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=40 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=127 AND lctt.test_type_id=tt.test_type_id
+2011-09-30 18:27:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=7
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=4 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=5 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=4 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=5 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=6 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=8 AND measure_id=6 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=51 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=52 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=139 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=51 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=52 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=139 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=54 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=55 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=54 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=55 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=19
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=17 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=19 AND measure_id=17 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=32
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=30 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=32 AND measure_id=30 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=16 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=18 AND measure_id=16 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=40
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=34 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=40 AND measure_id=34 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=127 AND lctt.test_type_id=tt.test_type_id
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=7
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=4 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=5 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=4 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=5 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=6 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=8 AND measure_id=6 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=51 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=52 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=139 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=51 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=52 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=139 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=54 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=55 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=54 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=55 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=19
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=17 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=19 AND measure_id=17 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=32
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=30 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=32 AND measure_id=30 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=16 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=18 AND measure_id=16 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=40
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=34 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=40 AND measure_id=34 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT test_category_id, name FROM test_category
+2011-09-30 18:27:28	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:27:28	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT * FROM worksheet_custom
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT test_type_id, measure_id, width FROM worksheet_custom_test WHERE worksheet_id=1 ORDER BY test_type_id
+2011-09-30 18:27:28	bamenda_admin	blis_128	SELECT name,width,field_id FROM worksheet_custom_userfield WHERE worksheet_id=1 ORDER BY name
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT username FROM user WHERE user_id=53
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=127 ORDER BY st.name
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=127 ORDER BY u.username
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=325 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=56 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=57 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=127
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=127
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=127 ORDER BY u.username
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM specimen_custom_field
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM patient_custom_field
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM labtitle_custom_field
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=19 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=32 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=7 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=40 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=lab_config_id ORDER BY tt.name
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=19 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=32 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=7 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=40 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=127 AND lctt.test_type_id=tt.test_type_id
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=7
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=4 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=5 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=4 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=5 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=6 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=8 AND measure_id=6 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=51 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=52 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=139 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=51 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=52 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=139 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=54 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=55 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=54 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=55 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=19
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=17 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=19 AND measure_id=17 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=32
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=30 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=32 AND measure_id=30 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=16 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=18 AND measure_id=16 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=40
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=34 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=40 AND measure_id=34 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=127 AND lctt.test_type_id=tt.test_type_id
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=7
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=4 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=5 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=4 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=5 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=6 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=8 AND measure_id=6 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=51 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=52 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=139 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=51 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=52 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=139 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=54 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=55 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=54 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=55 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=19
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=17 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=19 AND measure_id=17 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=32
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=30 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=32 AND measure_id=30 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=16 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=18 AND measure_id=16 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=40
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=34 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=40 AND measure_id=34 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_category_id, name FROM test_category
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:29:42	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT * FROM worksheet_custom
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT test_type_id, measure_id, width FROM worksheet_custom_test WHERE worksheet_id=1 ORDER BY test_type_id
+2011-09-30 18:29:42	bamenda_admin	blis_128	SELECT name,width,field_id FROM worksheet_custom_userfield WHERE worksheet_id=1 ORDER BY name
+2011-09-30 18:29:56	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:29:56	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:29:56	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:29:56	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT username FROM user WHERE user_id=53
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=127 ORDER BY st.name
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=127 ORDER BY u.username
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=325 LIMIT 1
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=56 LIMIT 1
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=57 LIMIT 1
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=127
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:15	bamenda_admin	blis_128	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:15	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=127
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=127 ORDER BY u.username
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM specimen_custom_field
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM patient_custom_field
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM labtitle_custom_field
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=19 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=32 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=7 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=40 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=lab_config_id ORDER BY tt.name
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=19 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=32 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=7 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=40 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=127 AND lctt.test_type_id=tt.test_type_id
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=7
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=4 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=5 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=4 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=5 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=6 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=8 AND measure_id=6 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=51 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=52 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=139 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=51 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=52 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=139 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=54 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=55 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=54 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=55 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=19
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=17 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=19 AND measure_id=17 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=32
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=30 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=32 AND measure_id=30 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=16 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=18 AND measure_id=16 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=40
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=34 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=40 AND measure_id=34 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=127 AND lctt.test_type_id=tt.test_type_id
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=7
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=4 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=5 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=4 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=5 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=6 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=8 AND measure_id=6 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=51 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=52 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=139 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=51 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=52 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=139 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=54 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=55 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=54 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=55 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=19
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=17 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=19 AND measure_id=17 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=32
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=30 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=32 AND measure_id=30 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=16 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=18 AND measure_id=16 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=40
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=34 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=40 AND measure_id=34 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT test_category_id, name FROM test_category
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:30:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT * FROM worksheet_custom
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT test_type_id, measure_id, width FROM worksheet_custom_test WHERE worksheet_id=1 ORDER BY test_type_id
+2011-09-30 18:30:16	bamenda_admin	blis_128	SELECT name,width,field_id FROM worksheet_custom_userfield WHERE worksheet_id=1 ORDER BY name
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT username FROM user WHERE user_id=53
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=127 ORDER BY st.name
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=127 ORDER BY u.username
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=325 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=56 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=57 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=127
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=127
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=127 ORDER BY u.username
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT * FROM specimen_custom_field
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT * FROM patient_custom_field
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT * FROM labtitle_custom_field
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=19 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=32 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=7 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=40 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=lab_config_id ORDER BY tt.name
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:32:26	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=19 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=32 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=7 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=40 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-09-30 18:32:26	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=127 AND lctt.test_type_id=tt.test_type_id
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=7
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=4 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=5 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=4 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=5 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=6 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=8 AND measure_id=6 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=51 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=52 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=139 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=51 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=52 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=139 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=54 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=55 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=54 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=55 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=19
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=17 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=19 AND measure_id=17 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=32
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=30 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=32 AND measure_id=30 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=16 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=18 AND measure_id=16 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=40
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=34 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=40 AND measure_id=34 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=127 AND lctt.test_type_id=tt.test_type_id
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=7
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=4 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=5 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=4 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=5 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=6 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=8 AND measure_id=6 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=51 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=52 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=139 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=51 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=52 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=139 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=54 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=55 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=54 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=55 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=19
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=17 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=19 AND measure_id=17 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=32
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=30 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=32 AND measure_id=30 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=16 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=18 AND measure_id=16 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=40
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=34 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=40 AND measure_id=34 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT test_category_id, name FROM test_category
+2011-09-30 18:32:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:32:27	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT * FROM worksheet_custom
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT test_type_id, measure_id, width FROM worksheet_custom_test WHERE worksheet_id=1 ORDER BY test_type_id
+2011-09-30 18:32:27	bamenda_admin	blis_128	SELECT name,width,field_id FROM worksheet_custom_userfield WHERE worksheet_id=1 ORDER BY name
+2011-09-30 18:32:32	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:32	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:32:32	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:32	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:32:32	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:32	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:32:32	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:32	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT username FROM user WHERE user_id=53
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=127 ORDER BY st.name
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=127 ORDER BY u.username
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=325 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=56 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=57 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=127
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=127
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=127 ORDER BY u.username
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM specimen_custom_field
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM patient_custom_field
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM labtitle_custom_field
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=19 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=32 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=7 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=40 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=lab_config_id ORDER BY tt.name
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=lab_config_id LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=19 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=32 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=7 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=40 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=127 AND lctt.test_type_id=tt.test_type_id
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=7
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=4 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=5 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=4 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=5 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=6 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=8 AND measure_id=6 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=51 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=52 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=139 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=51 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=52 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=139 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=54 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=55 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=54 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=55 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=19
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=17 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=19 AND measure_id=17 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=32
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=30 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=32 AND measure_id=30 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=16 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=18 AND measure_id=16 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=40
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=34 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=40 AND measure_id=34 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=127 AND lctt.test_type_id=tt.test_type_id
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=7
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=4 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=5 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=4 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=7 AND measure_id=5 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=6 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=8 AND measure_id=6 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=51 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=52 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=139 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=51 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=52 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=56 AND measure_id=139 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=54 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=55 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=54 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=71 AND measure_id=55 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=19
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=17 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=19 AND measure_id=17 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=32
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=30 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=32 AND measure_id=30 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=16 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=18 AND measure_id=16 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT measure_id FROM test_type_measure WHERE test_type_id=40
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM measure WHERE measure_id=34 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM report_disease WHERE lab_config_id=127 AND test_type_id=40 AND measure_id=34 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_category_id, name FROM test_category
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=127 ORDER BY tt.name
+2011-09-30 18:32:45	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=127 LIMIT 1
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT * FROM worksheet_custom
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT test_type_id, measure_id, width FROM worksheet_custom_test WHERE worksheet_id=1 ORDER BY test_type_id
+2011-09-30 18:32:45	bamenda_admin	blis_128	SELECT name,width,field_id FROM worksheet_custom_userfield WHERE worksheet_id=1 ORDER BY name
+2011-09-30 18:33:16	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:33:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:33:16	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:33:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:33:16	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:33:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name
+2011-09-30 18:33:16	bamenda_admin	blis_revamp	SELECT * FROM user WHERE user_id=115 LIMIT 1
+2011-09-30 18:33:16	bamenda_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=115 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=115 ) ORDER BY name

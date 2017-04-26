@@ -358,11 +358,35 @@ class PageElems
 	public function getCollectionSitesCheckboxes($site_records, $lab_config_id)
 	{
 		$lab_config = LabConfig::getById($lab_config_id);
-		foreach ($site_records as $site)
+		if (is_array($site_records)) {
+		foreach ($site_records as $site){
 			if ($lab_config->name == $site->name)
-				echo "<input type='checkbox' name='sites[]' value='$site->id' disabled>$site->name";
+			    {   
+			        echo "<br/>";
+			         echo "$site->name";
+			          echo "<br/>";
+			          echo "<input type='hidden' name='all_sites[][site]' value='$site->id'>";
+			         echo "District: <input type='text' name='sites_district[$site->id]' placeholder = 'District' value='$site->district'/>&nbsp;<br/>";
+			         echo "Region: <input type='text' name='sites_region[$site->id]' placeholder='Region' value='$site->region'/>";
+			           echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+			            echo "<br/><input type='checkbox' name='sites[]' value='$site->id' >Delete?";
+			        echo "<br/><br/>";
+			    }
+
 			else
-				echo "<input type='checkbox' name='sites[]' value='$site->id'>$site->name";
+			    {
+                    echo "<br/>";
+			       echo "$site->name";
+			          echo "<br/>";
+			          echo "<input type='hidden' name='all_sites[][site]' value='$site->id'>";
+                    echo "District: <input type='text' name='all_sites[][district]' placeholder = 'District' value='$site->district'/>&nbsp;";
+                    echo "Region: <input type='text' name='all_sites[][region]' placeholder='Region' value='$site->region'/>";
+			           echo "<br/>";
+			            echo "<input type='checkbox' name='sites[]' value='$site->id' >Delete?";
+			        echo "<br/><br/>";
+			    }
+        }
+        }
 	}
 
 	public function getCollectionSitesOptions($lab_config_id)
@@ -383,7 +407,116 @@ class PageElems
 			echo "<option value='$key'>$value</option>";
 		}
 	}
-	
+
+	public function getCollectionSitesOptions2($lab_config_id)
+	{
+		# Returns accessible sites for drop down <select> boxes
+        $config_list = get_lab_configs_imported();
+        $districts = array();
+        $regions = array();
+        $strings = array();
+        $site_counter = 0;
+        foreach($config_list as $lab_config) {
+			//$strippedLabName = substr($lab_config->name,0,strpos($lab_config->name,'-')-1);
+			$lab_sites = Sites::getByLabConfigId($lab_config-> id);
+
+			if($lab_sites!=null){
+			foreach ($lab_sites as $site)
+		    {
+            $site_counter = $site_counter+1;
+		    echo "<br><input type='checkbox' name='sites[]' id='$site->id' value='$site->id|$lab_config->id|$site->name' >$site->name</input>";
+
+                if( $site->region!="")    {
+                    $regions[$site->region] = array($site->region,$lab_config->id);
+                }
+                if( $site->district!="" )    {
+                    $districts[$site->district] = array($site->district,$lab_config->id);
+                }
+
+
+
+		    if(empty($strings[$site->district]) && $site->district!="" )    {
+		        $strings[$site->district] = array();
+		    }
+		    if(empty($strings[$site->region]) && $site->region!="")    {
+		        $string[$site->region] = array();
+		    }
+		    
+
+
+                if( $site->region!="")    {
+                    $string[$site->region][] = $site->id;
+                }
+
+                if( $site->district!="" )    {
+                    $string[$site->district][] = $site->id;
+                }
+		        
+		    }
+			}
+		}
+
+		$districts = array_values($districts);
+		$regions = array_values($regions);
+       
+        if (count($districts) != 0){
+             echo"<br/>Districts";
+        }
+        else{
+            echo "<br/><br/>No Districts found";
+        }
+
+		foreach ($districts as $site)
+		    {
+                $str = implode(",",$string[$site[0]]);
+		    echo "<br><input type='checkbox' name='sites[]' id='$site[0]' value='$str|$site[1]|$site[0]' >$site[0]</input>";
+
+		    }
+
+		    if(count($regions)!=0)
+		        {
+		            echo"<br/></br>Regions";
+		        }
+            else{
+                echo "<br/><br/>No Regions found";
+            }
+
+		  foreach ($regions as $site)
+		    {
+             $str = implode(",",$string[$site[0]]);
+
+		    echo "<br><input type='checkbox' name='sites[]' id='$site[0]' value='$str|$site[1]|$site[0]' >$site[0]</input>";
+
+		    }
+        if($site_counter==0){
+            echo "No sites available in imported data.";
+        }
+	}
+
+
+	public function getCollectionSiteRegionOptions($lab_config_id)
+	{
+		# Returns accessible sites for drop down <select> boxes
+        $config_list = get_lab_configs_imported();
+        foreach($config_list as $lab_config) {
+			//$strippedLabName = substr($lab_config->name,0,strpos($lab_config->name,'-')-1);
+			$lab_sites = Sites::getByLabConfigId($lab_config-> id);
+
+			if($lab_sites!=null){
+			foreach ($lab_sites as $site)
+		    {
+
+		    echo "<br><input type='checkbox' name='sites[]' id='$site->id' value='$site->id;$lab_config->id' checked>$site->district</input>";
+
+		    }
+			}
+		}
+
+
+	}
+
+
+
 	public function getSiteOptionsCheckBoxes($checkBoxName)
 	{
 		//$site_list = get_site_list($_SESSION['user_id']);
@@ -395,6 +528,7 @@ class PageElems
 			echo "<br><input type='checkbox' name='$checkBoxName' id='$checkBoxName' value='$lab_config->id'>$lab_config->name</input>";
 		}
 	}
+
 	public function getSiteOptionsCheckBoxesCountryDir($checkBoxName)
 	{
 		//$site_list = get_site_list($_SESSION['user_id']); 
@@ -722,7 +856,7 @@ class PageElems
 		<tr>
 		<td></td>		
 		<td><input type="button" id="submit" type="submit" onclick="submitTestNames();" value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>" size="20" />
-		<?php
+		<?
 	}
         
         public function getTestNamesSelectorForEdit($mapping) {
@@ -761,7 +895,7 @@ class PageElems
 		<tr>
 		<td></td>		
 		<td><input type="button" id="submit" type="submit" onclick="submitTestNames();" value="<?php echo LangUtil::$generalTerms['CMD_UPDATE']; ?>" size="20" />
-		<?php
+		<?
 	}
 	
 	public function getSpecimenTypesCountrySelect()
@@ -806,7 +940,7 @@ class PageElems
 		<tr>
 		<td></td>		
 		<td><input type="button" id="submit" type="submit" onclick="submitTestCategoryNames();" value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>" size="20" />
-		<?php
+		<?
 	}
 	
 	public function getTestCategoryTypesCountrySelect() {
@@ -2789,7 +2923,7 @@ class PageElems
                             {
                             ?>
                                 <td><a href="javascript:print_specimen_barcode(<?php echo $pid;?>,<?php echo $sid;?> )">Print Barcode</a> </td>
-                            <?php 
+                            <? 
                             }
                                 
                         ?>
@@ -2921,7 +3055,7 @@ class PageElems
                             {
                             ?>
                                  <th></th>
-                            <?php 
+                            <? 
                             }
                                 
                         ?>
@@ -3495,7 +3629,7 @@ class PageElems
 				if($test->isPending())
 					echo LangUtil::$generalTerms['PENDING_RESULTS'];
 				else
-					echo $test->decodeResult();
+					echo $test->decodeResult(false,false);
 				?>
 			</td>
 			<td>
@@ -4410,6 +4544,11 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						}
 						echo " >".$option."</option>";
 			}
+
+        echo "</select></td><td>
+        <select name='doctor'  class ='doctors_auto' id='".$doc_row_id."_input'  ></select></td>
+            ";
+			/*
 		echo "	</SELECT>
 				</td>
 				<td>
@@ -4417,6 +4556,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 
 				</td>
 			</tr>";
+			*/
 	}
 	
 	function generate_refOut($ref_out_check_id, $ref_out_row_id, $refTo_row_id, $ref_from_row_id, $refTo=""){
@@ -5014,35 +5154,35 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	{
 		# Returns <select> options for custom field type
 		?>
-		<?php if ($edit==0): ?>
+		<? if ($edit==0): ?>
 			<option value='<?php echo CustomField::$FIELD_FREETEXT; ?>'><?php echo LangUtil::$generalTerms['FREETEXT']; ?></option>
 			<option value='<?php echo CustomField::$FIELD_DATE; ?>'><?php echo LangUtil::$generalTerms['DATE']; ?></option>
 			<option value='<?php echo CustomField::$FIELD_NUMERIC; ?>'><?php echo LangUtil::$generalTerms['NUMERIC_FIELD']; ?></option>
 			<option value='<?php echo CustomField::$FIELD_OPTIONS; ?>'><?php echo LangUtil::$generalTerms['DROPDOWN']; ?></option>
 			<!--<option value='<?php #echo CustomField::$FIELD_MULTISELECT; ?>'><?php #echo LangUtil::$generalTerms['MULTISELECT']; ?></option>-->
-		<?php endif; ?>
-		<?php if ($edit==1): ?>
-	  		<?php if (strcmp($type,LangUtil::$generalTerms['FREETEXT'])==0): ?>
+		<? endif; ?>
+		<? if ($edit==1): ?>
+	  		<? if (strcmp($type,LangUtil::$generalTerms['FREETEXT'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_FREETEXT; ?>' selected><?php echo LangUtil::$generalTerms['FREETEXT']; ?></option>
-			<?php else: ?>
+			<? else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_FREETEXT; ?>' ><?php echo LangUtil::$generalTerms['FREETEXT']; ?></option>
-			<?php endif; ?>
-			<?php if (strcmp($type,LangUtil::$generalTerms['DATE'])==0): ?>
+			<? endif; ?>
+			<? if (strcmp($type,LangUtil::$generalTerms['DATE'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_DATE; ?>' selected><?php echo LangUtil::$generalTerms['DATE']; ?></option>
-			<?php else: ?>
+			<? else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_DATE; ?>' ><?php echo LangUtil::$generalTerms['DATE']; ?></option>
-			<?php endif; ?>
-			<?php if (strcmp($type,LangUtil::$generalTerms['NUMERIC_FIELD'])==0): ?>
+			<? endif; ?>
+			<? if (strcmp($type,LangUtil::$generalTerms['NUMERIC_FIELD'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_NUMERIC; ?>' selected><?php echo LangUtil::$generalTerms['NUMERIC_FIELD']; ?></option>
-			<?php else: ?>
+			<? else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_NUMERIC; ?>' ><?php echo LangUtil::$generalTerms['NUMERIC_FIELD']; ?></option>
-			<?php endif; ?>
-			<?php if (strcmp($type,LangUtil::$generalTerms['DROPDOWN'])==0): ?>
+			<? endif; ?>
+			<? if (strcmp($type,LangUtil::$generalTerms['DROPDOWN'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_OPTIONS; ?>' selected><?php echo LangUtil::$generalTerms['DROPDOWN']; ?></option>
-			<?php else: ?>
+			<? else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_OPTIONS; ?>' ><?php echo LangUtil::$generalTerms['DROPDOWN']; ?></option>
-			<?php endif; ?>
-		<?php endif; ?>
+			<? endif; ?>
+		<? endif; ?>
 
 	<?php
 	}
@@ -6782,7 +6922,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							#$data['result'] = $sample->specimenId;
 							$data['result'] = "N/A";
 						else {
-							$data['result'] = $record->decodeResult();
+							$data['result'] = $record->decodeResult(false,false);
 						}
 						$data['lab_staff'] = $sample->doctor;
 						$table_data[] = $data;

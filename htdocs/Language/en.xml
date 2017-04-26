@@ -773,6 +773,22 @@
 			<key>LAB_STAFF</key>
 			<value>Lab Staff</value>
 		</term>
+		<term>
+			<key>ALL_FACILITIES</key>
+			<value>All Facilities</value>
+		</term>
+		<term>
+			<key>ALL_SITES</key>
+			<value>All Sites</value>
+		</term>
+		<term>
+			<key>DISTRICT</key>
+			<value>District</value>
+		</term>
+		<term>
+			<key>REGION</key>
+			<value>Region</value>
+		</term>
 	</page>
 	<page id="header" descr="Page Header">
 		<term>
@@ -1660,6 +1676,21 @@
 			<key>SELECT_SITE_FOR_REMOVAL</key>
 			<value>Select sites for removal</value>
 		</term>
+			<term>
+			<key>OUT_OF_RANGE</key>
+			<value>Out of Range</value>
+		</term>
+
+		<term>
+			<key>INTERPRETATION</key>
+			<value>Interpretation</value>
+		</term>
+
+		<term>
+			<key>MODIFY_SITE</key>
+			<value>Modiify site</value>
+		</term>
+		
 	</page>
 	<page id="lab_admins" descr="Lab Managers Page">
 		<term>
@@ -2105,6 +2136,15 @@
 		<term>
 			<key>SAMPLES_RECEIVED</key>
 			<value>Samples Received</value>
+		</term>
+		<term>
+			<key>OUT_OF_RANGE</key>
+			<value>Out of Range</value>
+		</term>
+
+		<term>
+			<key>INTERPRETATION</key>
+			<value>Interpretation</value>
 		</term>
 	</page>
 	<page id="edit_profile" descr="Edit Profile Page">

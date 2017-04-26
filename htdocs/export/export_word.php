@@ -20,7 +20,7 @@ header("Content-Disposition: attachment; filename=$file_name");
 <?php
 $id=$_REQUEST['lab_id'];
 $var=dirname(dirname(__FILE__))."\logos\logo_".$id.".jpg";
-$html_content = "<img src='".$var."'"." height='140' width='140' />" . $_REQUEST['data'];
+$html_content = "<img src='".$var."'"." height='140' width='140' />" . stripcslashes($_REQUEST['data']);
 print $html_content;
 ?>
 </body>

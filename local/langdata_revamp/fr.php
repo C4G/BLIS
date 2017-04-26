@@ -209,8 +209,12 @@ $LANG_ARRAY = array (
 		"APPROX" => "Approximatif", 
 		"LANDSCAPE" => "Mode paysage",
          "TIPS_PATIENTID_EXISTS"=>"Patient ID existent déjà. Consulter pour le patient pour confirmer et enregistrer spécimen",
-        "LAB_STAFF" => "Le personnel de laboratoire"
-	) , 
+        "LAB_STAFF" => "Le personnel de laboratoire",
+            "ALL_FACILITIES" => "Toutes les installations",
+            "ALL_SITES" => "Tous les sites",
+            "DISTRICT" => "District",
+            "REGION" => "Région"
+        ) ,
 	"header" => array ( 
 		"TITLE" => "", 
 		"LOGGEDINAS" => "Cliquer comme", 
@@ -474,7 +478,10 @@ $LANG_ARRAY = array (
         "ADD_SITE" => "Entrez le nouveau nom du site",
         "SAMPLES_RECEIVED" => "Les échantillons reçus",
         "ENABLE_SITE_ENTRY" => "Activer l'entrée du site pour un spécimen",
-        "SELECT_SITE_FOR_REMOVAL" => "Sélection de sites pour l'élimination"
+        "SELECT_SITE_FOR_REMOVAL" => "Sélection de sites pour l'élimination",
+		 "OUT_OF_RANGE" => "hors de portée",
+        "INTERPRETATION" => "Interprétation"
+        "MODIFY_SITE" => "Modifier les sites"
 
     ) ,
 	"lab_admins" => array ( 
@@ -591,7 +598,9 @@ $LANG_ARRAY = array (
         "COUNT_REPORT" => "Compte rendu",
         "SITE_REPORT" => "Rapport de site",
         "TOTAL_SAMPLES" => "Nombre total d'échantillons",
-        "SAMPLES_RECEIVED" => "Echantillon reçu"
+        "SAMPLES_RECEIVED" => "Echantillon reçu",
+         "OUT_OF_RANGE" => "hors de portée",
+        "INTERPRETATION" => "Interprétation"
 	) , 
 	"edit_profile" => array ( 
 		"LINK_CHANGEPWD" => "Changer votre Mot de passe.", 

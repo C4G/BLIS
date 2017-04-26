@@ -9,10 +9,23 @@
 include('../includes/db_lib.php');
 include('../includes/page_elems.php');
 
-$site_id_list = $_REQUEST['sites'];
+
+$site_list =  $_REQUEST['all_sites'];
+$site_district = $_REQUEST['sites_district'];
+$sites_region = $_REQUEST['sites_region'];
+
+foreach ($site_list as $site)
+{
+    $id =  $site["site"];
+    echo $site_data[$id];
+    Sites::updateSite($_SESSION['lab_config_id'],$id,$sites_region[$id],$site_district[$id]);
+}
+
+$delete_site_id_list = $_REQUEST['sites'];
 $site_choice_enabled = $_REQUEST['site_choice_enabled'];
 
-foreach ($site_id_list as $site_id)
+echo $delete_site_id_list;
+foreach ($delete_site_id_list as $site_id)
 {
     Sites::removeSite($site_id);
 }

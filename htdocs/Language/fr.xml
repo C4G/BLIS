@@ -99,7 +99,7 @@
 		</term>
 		<term>
 			<key>MSG_UPDATED</key>
-			<value>Actualisé</value>
+			<value>Actualisï¿½</value>
 		</term>
 		<term>
 			<key>CMD_CANCEL</key>
@@ -131,7 +131,7 @@
 		</term>
 		<term>
 			<key>REPORTED</key>
-			<value>Enregistré</value>
+			<value>Enregistrï¿½</value>
 		</term>
 		<term>
 			<key>REPORTED_NOT</key>
@@ -139,7 +139,7 @@
 		</term>
 		<term>
 			<key>SKIPPED</key>
-			<value>Sauté/passé</value>
+			<value>Sautï¿½/passï¿½</value>
 		</term>
 		<term>
 			<key>CMD_BACK</key>
@@ -159,7 +159,7 @@
 		</term>
 		<term>
 			<key>MSG_SELECT_TTYPE</key>
-			<value>Sélectioner Examen en priorité</value>
+			<value>Sï¿½lectioner Examen en prioritï¿½</value>
 		</term>
 		<term>
 			<key>CMD_EDIT</key>
@@ -211,15 +211,15 @@
 		</term>
 		<term>
 			<key>MSG_DELETED</key>
-			<value>Supprimé</value>
+			<value>Supprimï¿½</value>
 		</term>
 		<term>
 			<key>MSG_RESET</key>
-			<value>Réinitialiser</value>
+			<value>Rï¿½initialiser</value>
 		</term>
 		<term>
 			<key>SELECT_ONE</key>
-			<value>Sélectionner un</value>
+			<value>Sï¿½lectionner un</value>
 		</term>
 		<term>
 			<key>CMD_CLOSEPAGE</key>
@@ -227,11 +227,11 @@
 		</term>
 		<term>
 			<key>CMD_CLOSEPREVIEW</key>
-			<value>Fermeture précédente</value>
+			<value>Fermeture prï¿½cï¿½dente</value>
 		</term>
 		<term>
 			<key>FACILITY</key>
-			<value>Facilité</value>
+			<value>Facilitï¿½</value>
 		</term>
 		<term>
 			<key>LOCATION</key>
@@ -271,7 +271,7 @@
 		</term>
 		<term>
 			<key>DOCTOR</key>
-			<value>Médecin/Infirmier</value>
+			<value>Mï¿½decin/Infirmier</value>
 		</term>		
 		<term>
 			<key>PATIENT</key>
@@ -351,7 +351,7 @@
 		</term>
 		<term>
 			<key>DROPDOWN</key>
-			<value>Menu déroulant</value>
+			<value>Menu dï¿½roulant</value>
 		</term>
 		<term>
 			<key>FREETEXT</key>
@@ -363,11 +363,11 @@
 		</term>
 		<term>
 			<key>MULTISELECT</key>
-			<value>Sélection Multiple</value>
+			<value>Sï¿½lection Multiple</value>
 		</term>
 		<term>
 			<key>ACCESSION_NUM</key>
-			<value>No Accées</value>
+			<value>No Accï¿½es</value>
 		</term>
 		<term>
 			<key>SPECIMEN</key>
@@ -391,11 +391,11 @@
 		</term>
 		<term>
 			<key>SPECIMEN_TYPE</key>
-			<value>Type échantillon</value>
+			<value>Type ï¿½chantillon</value>
 		</term>
 		<term>
 			<key>SPECIMEN_TYPES</key>
-			<value>Types échantillons</value>
+			<value>Types ï¿½chantillons</value>
 		</term>
 		<term>
 			<key>TEST</key>
@@ -431,15 +431,15 @@
 		</term>
 		<term>
 			<key>C_DATE</key>
-			<value>Date de prélèvement</value>
+			<value>Date de prï¿½lï¿½vement</value>
 		</term>
 		<term>
 			<key>C_TIME</key>
-			<value>Temps de prélèvement</value>
+			<value>Temps de prï¿½lï¿½vement</value>
 		</term>
 		<term>
 			<key>E_DATE</key>
-			<value>Date entrée des résultats</value>
+			<value>Date entrï¿½e des rï¿½sultats</value>
 		</term>
 		<term>
 			<key>RE_DATE</key>
@@ -487,7 +487,7 @@
 		</term>
 		<term>
 			<key>DETAILS</key>
-			<value>Détails</value>
+			<value>Dï¿½tails</value>
 		</term>
 		<term>
 			<key>OPTIONAL</key>
@@ -495,7 +495,7 @@
 		</term>
 		<term>
 			<key>REF_OUT</key>
-			<value>Refferé à:</value>
+			<value>Refferï¿½ ï¿½:</value>
 		</term>
 		<term>
 			<key>PENDING_RESULTS</key>
@@ -503,15 +503,15 @@
 		</term>
 		<term>
 			<key>PENDING_VER</key>
-			<value>Vérification en Attente</value>
+			<value>Vï¿½rification en Attente</value>
 		</term>
 		<term>
 			<key>DONE</key>
-			<value>Complété</value>
+			<value>Complï¿½tï¿½</value>
 		</term>
 		<term>
 			<key>REF_RETURNED</key>
-			<value>Referré en dehors et retouné</value>
+			<value>Referrï¿½ en dehors et retounï¿½</value>
 		</term>
 		<term>
 			<key>MEASURES</key>
@@ -527,15 +527,15 @@
 		</term>
 		<term>
 			<key>UNIT</key>
-			<value>Unité</value>
+			<value>Unitï¿½</value>
 		</term>
 		<term>
 			<key>RANGE_NUMERIC</key>
-			<value>Valeur Numérique</value>
+			<value>Valeur Numï¿½rique</value>
 		</term>
 		<term>
 			<key>RANGE_ALPHANUM</key>
-			<value>Valeur alphanumérique</value>
+			<value>Valeur alphanumï¿½rique</value>
 		</term>
 		<term>
 			<key>RANGE_AUTOCOMPLETE</key>
@@ -571,7 +571,7 @@
 		</term>
 		<term>
 			<key>VERIFIED_BY</key>
-			<value>Vérifié par:</value>
+			<value>Vï¿½rifiï¿½ par:</value>
 		</term>
 		<term>
 			<key>ACTION</key>
@@ -587,7 +587,7 @@
 		</term>
 		<term>
 			<key>RECORDS_SPECIMEN</key>
-			<value>Bilans échantillons</value>
+			<value>Bilans ï¿½chantillons</value>
 		</term>
 		<term>
 			<key>RECORDS_PATIENT</key>
@@ -599,7 +599,7 @@
 		</term>
 		<term>
 			<key>CMD_VIEW</key>
-			<value>Présenter</value>
+			<value>Prï¿½senter</value>
 		</term>
 		<term>
 			<key>CMD_ADD</key>
@@ -607,7 +607,7 @@
 		</term>
 		<term>
 			<key>PREVIEW</key>
-			<value>Précédent</value>
+			<value>Prï¿½cï¿½dent</value>
 		</term>
 		<term>
 			<key>ALL</key>
@@ -623,7 +623,7 @@
 		</term>
 		<term>
 			<key>MSG_NOTFOUND</key>
-			<value>Non Retrouvé</value>
+			<value>Non Retrouvï¿½</value>
 		</term>
 			<term>
 			<key>RELATED_TESTS_NOTFOUND</key>
@@ -631,11 +631,11 @@
 		</term>
 		<term>
 			<key>MSG_SIMILARNOTFOUND</key>
-			<value>Aucune entrée similaire retrouvée</value>
+			<value>Aucune entrï¿½e similaire retrouvï¿½e</value>
 		</term>
 		<term>
 			<key>REF_TO</key>
-			<value>Referer à:</value>
+			<value>Referer ï¿½:</value>
 		</term>
 		<term>
 			<key>CMD_REMOVE</key>
@@ -643,11 +643,11 @@
 		</term>
 		<term>
 			<key>CMD_VERIFY</key>
-			<value>Vérifier</value>
+			<value>Vï¿½rifier</value>
 		</term>
 		<term>
 			<key>ENTER_RESULTS</key>
-			<value>Entrer les Résultats</value>
+			<value>Entrer les Rï¿½sultats</value>
 		</term>
 		<term>
 			<key>MSG_ADDED</key>
@@ -679,11 +679,11 @@
 		</term>
 		<term>
 			<key>TIPS_SELECTSITE</key>
-			<value>Prière de sélectionner un site de localisation.</value>
+			<value>Priï¿½re de sï¿½lectionner un site de localisation.</value>
 		</term>
 		<term>
 			<key>TIPS_INCOMPLETEINFO</key>
-			<value>Information incomplète. Prière de ressaisir et entrer à nouveau.</value>
+			<value>Information incomplï¿½te. Priï¿½re de ressaisir et entrer ï¿½ nouveau.</value>
 		</term>
 		<term>
 			<key>TIPS_DATEINVALID</key>
@@ -719,35 +719,35 @@
 		</term>
 		<term>
 			<key>MSG_ACC_ADDED</key>
-			<value>Compte ajouté</value>
+			<value>Compte ajoutï¿½</value>
 		</term>
 		<term>
 			<key>MSG_ACC_DELETED</key>
-			<value>Compte supprimé</value>
+			<value>Compte supprimï¿½</value>
 		</term>
 		<term>
 			<key>MSG_ACC_UPDATED</key>
-			<value>Compte actualisé</value>
+			<value>Compte actualisï¿½</value>
 		</term>
 		<term>
 			<key>TAT</key>
-			<value>Delai exécution</value>
+			<value>Delai exï¿½cution</value>
 		</term>
 		<term>
 			<key>TAT_AVG</key>
-			<value>Delai Exsécution Moyen</value>
+			<value>Delai Exsï¿½cution Moyen</value>
 		</term>
 		<term>
 			<key>TAT_TARGET</key>
-			<value>Cible du Felai Exécution Moyen</value>
+			<value>Cible du Felai Exï¿½cution Moyen</value>
 		</term>
 		<term>
 			<key>TAT_ILE</key>
-			<value>90th percentile Delai Exécution Moyen</value>
+			<value>90th percentile Delai Exï¿½cution Moyen</value>
 		</term>
 		<term>
 			<key>PREVALENCE_RATE</key>
-			<value>Prévalence</value>
+			<value>Prï¿½valence</value>
 		</term>
 		<term>
 			<key>LANGUAGE</key>
@@ -767,12 +767,31 @@
 		</term>
 		<term>
 			<key>TIPS_PATIENTID_EXISTS</key>
-			<value>Patient ID existe déjà. S\\\'il vous plaît vérifier et essayer à nouveau.</value>
+			<value>Patient ID existe dï¿½jï¿½. S\\\'il vous plaï¿½t vï¿½rifier et essayer ï¿½ nouveau.</value>
 		</term>
 		<term>
 			<key>LAB_STAFF</key>
 			<value>Personnel de laboratoire</value>
 		</term>
+
+		<term>
+			<key>ALL_FACILITIES</key>
+			<value>Toutes les installations</value>
+		</term>
+		<term>
+			<key>ALL_SITES</key>
+			<value>Tous les sites</value>
+		</term>
+		<term>
+			<key>DISTRICT</key>
+			<value>District</value>
+		</term>
+		<term>
+			<key>REGION</key>
+			<value>RÃ©gion</value>
+		</term>
+
+
 	</page>
 	<page id="header" descr="Page Header">
 		<term>
@@ -801,7 +820,7 @@
 		</term>
 		<term>
 			<key>MENU_BACKUP</key>
-			<value>Sauvegarder les Données</value>
+			<value>Sauvegarder les Donnï¿½es</value>
 		</term>
 		<term>
 			<key>SWITCH_TOTECH</key>
@@ -823,7 +842,7 @@
 		</term>
 		<term>
 			<key>SWITCHLANG</key>
-			<value>Traduire en Français</value>
+			<value>Traduire en Franï¿½ais</value>
 		</term>
 	</page>
 	<page id="login" descr="Login Page">
@@ -833,11 +852,11 @@
 		</term>
 		<term>
 			<key>MSG_PLSLOGIN</key>
-			<value>Prière de cliquer dessus prioritairement</value>
+			<value>Priï¿½re de cliquer dessus prioritairement</value>
 		</term>
 		<term>
 			<key>MSG_TIMED_OUT</key>
-			<value>Temps de session suspendue à cause de inactivité</value>
+			<value>Temps de session suspendue ï¿½ cause de inactivitï¿½</value>
 		</term>
 		<term>
 			<key>MSG_ERR_PWD</key>
@@ -845,7 +864,7 @@
 		</term>
 		<term>
 			<key>MSG_CAPSLOCK</key>
-			<value>Majuscule activée</value>
+			<value>Majuscule activï¿½e</value>
 		</term>
 		<term>
 			<key>MSG_NEWPWD</key>
@@ -853,7 +872,7 @@
 		</term>
 		<term>
 			<key>TIPS_NEWPWD</key>
-			<value>Si vous avez oublié votre mot de passe, cliquer sur Demande un nouveau mot de passe et suivez le lien Nouveau, Un mot de passe temporaire vous sera communiquer à travers votre adtresse E-mail.</value>
+			<value>Si vous avez oubliï¿½ votre mot de passe, cliquer sur Demande un nouveau mot de passe et suivez le lien Nouveau, Un mot de passe temporaire vous sera communiquer ï¿½ travers votre adtresse E-mail.</value>
 		</term>
 	</page>
 	<page id="home" descr="Home Page">
@@ -867,11 +886,11 @@
 		</term>
 		<term>
 			<key>TIPS_BLISINTRO</key>
-			<value>Le Basic Laboratory Information System (BLIS) pistes échantillons du patient et des résultats de laboratoire.</value>
+			<value>Le Basic Laboratory Information System (BLIS) pistes ï¿½chantillons du patient et des rï¿½sultats de laboratoire.</value>
 		</term>
 		<term>
 			<key>TIPS_PWD</key>
-			<value>Vous pouver mettre à jour votre profile en cliquant sur Modifier votre profile.</value>
+			<value>Vous pouver mettre ï¿½ jour votre profile en cliquant sur Modifier votre profile.</value>
 		</term>
 		
 	</page>	
@@ -892,19 +911,19 @@
 		</term>
 		<term>
 			<key>TIPS_REGISTRATION_1</key>
-			<value>Cette page nous permet d'enregistrer de nouveaux patients ou de patients de recherche existants basés sur le nom, l'identité du patient ou le numéro.</value>
+			<value>Cette page nous permet d'enregistrer de nouveaux patients ou de patients de recherche existants basï¿½s sur le nom, l'identitï¿½ du patient ou le numï¿½ro.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATION_2</key>
-			<value>Une fois qu'un patient a été enregistré, nous pouvons utiliser cette page pour visualiser, modifier le profil des patients.</value>
+			<value>Une fois qu'un patient a ï¿½tï¿½ enregistrï¿½, nous pouvons utiliser cette page pour visualiser, modifier le profil des patients.</value>
 		</term>
 		<term>
 			<key>TIPS_PATIENT_LOOKUP</key>
-			<value>Pour enregistrer un nouvel échantillon, entrer le patient par son ID/Nom ou ajouter un nouvel échantillon.</value>
+			<value>Pour enregistrer un nouvel ï¿½chantillon, entrer le patient par son ID/Nom ou ajouter un nouvel ï¿½chantillon.</value>
 		</term>
 		<term>
 			<key>MSG_NOMATCH</key>
-			<value>Pas de sélection retrouvée</value>
+			<value>Pas de sï¿½lection retrouvï¿½e</value>
 		</term>
 		<term>
 			<key>CMD_REGISTERSPECIMEN</key>
@@ -920,7 +939,7 @@
 		</term>
 		<term>
 			<key>CMD_UPDPROFILE</key>
-			<value>Mettre à jour le profil</value>
+			<value>Mettre ï¿½ jour le profil</value>
 		</term>
 	</page>
 	<page id="new_patient" descr="Patient Registration Page">
@@ -930,15 +949,15 @@
 		</term>
 		<term>
 			<key>MSG_BACKTOLOOKUP</key>
-			<value>Retour à Idetification du Patient</value>
+			<value>Retour ï¿½ Idetification du Patient</value>
 		</term>
 		<term>
 			<key>MSG_ADDNEWENTRY</key>
-			<value>Priére de saisir une nouvelle entrée.</value>
+			<value>Priï¿½re de saisir une nouvelle entrï¿½e.</value>
 		</term>
 		<term>
 			<key>CMD_SELECTFORREGN</key>
-			<value>Sélectionner pour enregistrer</value>
+			<value>Sï¿½lectionner pour enregistrer</value>
 		</term>
 		<term>
 			<key>SIMILAR_NAMES</key>
@@ -946,7 +965,7 @@
 		</term>
 		<term>
 			<key>MSG_PID_INVALID</key>
-			<value>ID du patient Invalide/existe déjà.</value>
+			<value>ID du patient Invalide/existe dï¿½jï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_REGN_NEW</key>
@@ -958,45 +977,45 @@
 		</term>
 		<term>
 			<key>TIPS_DOB_AGE</key>
-			<value>Seule Age ou Date de naissance est requis pour cette entrée.</value>
+			<value>Seule Age ou Date de naissance est requis pour cette entrï¿½e.</value>
 		</term>
 	</page>
 	<page id="new_specimen" descr="Specimen Registration Page">
 		<term>
 			<key>TITLE</key>
-			<value>Enregistrement échantillon</value>
+			<value>Enregistrement ï¿½chantillon</value>
 		</term>
 		<term>
 			<key>ADD_ANOTHER_SPECIMEN</key>
-			<value>Ajouter un autre échantillon</value>
+			<value>Ajouter un autre ï¿½chantillon</value>
 		</term>
 		<term>
 			<key>MSG_SELECT_STYPE</key>
-			<value>Sélectionner le type échantillon premièrement</value>
+			<value>Sï¿½lectionner le type ï¿½chantillon premiï¿½rement</value>
 		</term>
 		<term>
 			<key>MSG_SURETO_REMOVE</key>
-			<value>Etes vous sure de vouloir supprimer cette forme échantillon?</value>
+			<value>Etes vous sure de vouloir supprimer cette forme ï¿½chantillon?</value>
 		</term>
 		<term>
 			<key>MSG_ADD_PATIENT</key>
-			<value>Prière sélectionner ou ajouter un nouveau patient en priorité.</value>
+			<value>Priï¿½re sï¿½lectionner ou ajouter un nouveau patient en prioritï¿½.</value>
 		</term>
 		<term>
 			<key>MSG_STYPE_MISSING</key>
-			<value>Type échantillon manquant</value>
+			<value>Type ï¿½chantillon manquant</value>
 		</term>
 		<term>
 			<key>MSG_NOTESTS_SELECTED</key>
-			<value>Aucun examen sélecionné</value>
+			<value>Aucun examen sï¿½lecionnï¿½</value>
 		</term>
 		<term>
 			<key>MSG_SID_MISSING</key>
-			<value>Id échantillon manquant</value>
+			<value>Id ï¿½chantillon manquant</value>
 		</term>
 		<term>
 			<key>MSG_SID_INVALID</key>
-			<value>ID échantiloin manquant /Existe déja</value>
+			<value>ID ï¿½chantiloin manquant /Existe dï¿½ja</value>
 		</term>
 		<term>
 			<key>MSG_RDATE_INVALID</key>
@@ -1004,7 +1023,7 @@
 		</term>
 		<term>
 			<key>MSG_CDATE_INVALID</key>
-			<value>Date de prélèvement invalide</value>
+			<value>Date de prï¿½lï¿½vement invalide</value>
 		</term>
 		<term>
 			<key>MSG_NOTESTMATCH</key>
@@ -1016,17 +1035,17 @@
 		</term>	
 		<term>
 			<key>TIPS_REGISTRATION_SPECIMEN</key>
-			<value>S'il vous plaît sélectionner un type d'échantillon pour voir les essais de ce spécimen.</value>
+			<value>S'il vous plaï¿½t sï¿½lectionner un type d'ï¿½chantillon pour voir les essais de ce spï¿½cimen.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATION_SPECIMEN_1</key>
-			<value>Pour ajouter plus d'un spécimen cliquez sur Ajouter une autre option échantillons.</value>
+			<value>Pour ajouter plus d'un spï¿½cimen cliquez sur Ajouter une autre option ï¿½chantillons.</value>
 		</term>
 	</page>
 	<page id="specimen_added" descr="Specimen Confirmation Page">
 		<term>
 			<key>TITLE</key>
-			<value>Echantillons Enregistrés</value>
+			<value>Echantillons Enregistrï¿½s</value>
 		</term>
 		<term>
 			<key>MSG_NEXTSPECIMEN</key>
@@ -1036,11 +1055,11 @@
 	<page id="results_entry" descr="Results Entry Page">
 		<term>
 			<key>TITLE</key>
-			<value>Résultats</value>
+			<value>Rï¿½sultats</value>
 		</term>
 		<term>
 			<key>MENU_SINGLESPECIMEN</key>
-			<value>Résultas pour un seul Echantillon</value>
+			<value>Rï¿½sultas pour un seul Echantillon</value>
 		</term>
 		<term>
 			<key>MENU_LABSECTION</key>
@@ -1048,19 +1067,19 @@
 		</term>
 		<term>
 			<key>MENU_BATCHRESULTS</key>
-			<value>Résultats Groupés</value>
+			<value>Rï¿½sultats Groupï¿½s</value>
 		</term>
 		<term>
 			<key>MENU_VERIFYRESULTS</key>
-			<value>Vérifier les Résultats</value>
+			<value>Vï¿½rifier les Rï¿½sultats</value>
 		</term>
 		<term>
 			<key>RELATED_RESULTS</key>
-			<value>Test Résultats connexe Entrée</value>
+			<value>Test Rï¿½sultats connexe Entrï¿½e</value>
 		</term>
 		<term>
 			<key>RELATED_RESULTS_EMPTY</key>
-			<value>Pas de tests liés à ce spécimen</value>
+			<value>Pas de tests liï¿½s ï¿½ ce spï¿½cimen</value>
 		</term>
 		<term>
 			<key>CONTROL_TESTING_RESULTS</key>
@@ -1084,15 +1103,15 @@
 		</term>
 		<term>
 			<key>MSG_PENDINGNOTFOUND</key>
-			<value>Aucun Echantillon manquant retrouvé</value>
+			<value>Aucun Echantillon manquant retrouvï¿½</value>
 		</term>
 		<term>
 			<key>MSG_ALREADYENTERED</key>
-			<value>Resultats Présent</value>
+			<value>Resultats Prï¿½sent</value>
 		</term>
 		<term>
 			<key>MSG_RESULTSUBMITTED</key>
-			<value>Résultats Soumis</value>
+			<value>Rï¿½sultats Soumis</value>
 		</term>
 		<term>
 			<key>MSG_RESULTMISSING</key>
@@ -1100,27 +1119,27 @@
 		</term>
 		<term>
 			<key>TIPS_VERIFYCONFIRM</key>
-			<value>Résultats final, etes vous sure?</value>
+			<value>Rï¿½sultats final, etes vous sure?</value>
 		</term>
 		<term>
 			<key>TIPS_VERIFYNOTFOUND</key>
-			<value>Aucun résultat non vérifié retrouvé.</value>
+			<value>Aucun rï¿½sultat non vï¿½rifiï¿½ retrouvï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_VERIFYDONE</key>
-			<value>Résultats marqué comme vérifié.</value>
+			<value>Rï¿½sultats marquï¿½ comme vï¿½rifiï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_NOSPECIMENSTOTEST</key>
-			<value>Pas échantillon pour examen.</value>
+			<value>Pas ï¿½chantillon pour examen.</value>
 		</term>
 		<term>
 			<key>TIPS_NOUNREPORTEDFOUND</key>
-			<value>Aucun échantiollon non reporté retrouvé.</value>
+			<value>Aucun ï¿½chantiollon non reportï¿½ retrouvï¿½.</value>
 		</term>
 		<term>
 			<key>CMD_MARKASREPORTED</key>
-			<value>Marqué comme reporté.</value>
+			<value>Marquï¿½ comme reportï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_MARKEDREPORTED</key>
@@ -1128,7 +1147,7 @@
 		</term>
 		<term>
 			<key>MSG_RESULTSUBMITTEDALL</key>
-			<value>Tous ls résultats soumis pour ce patient.</value>
+			<value>Tous ls rï¿½sultats soumis pour ce patient.</value>
 		</term>
 		<term>
 			<key>CUSTOM_WORKSHEET</key>
@@ -1142,15 +1161,15 @@
 		</term>
 		<term>
 			<key>TIPS_SEARCH_1</key>
-			<value>Vous pouvez utiliser cette page pour rechercher des patients inscrits. Entrez un nom partiel de générer une liste de patients contenant la chaîne.</value>
+			<value>Vous pouvez utiliser cette page pour rechercher des patients inscrits. Entrez un nom partiel de gï¿½nï¿½rer une liste de patients contenant la chaï¿½ne.</value>
 		</term>
 		<term>
 			<key>TIPS_SEARCH_2</key>
-			<value>Une fois que vous sélectionnez le patient, vous pouvez visualiser le profil du patient, rechercher les tests qu'il a subis et les résultats de ces tests.</value>
+			<value>Une fois que vous sï¿½lectionnez le patient, vous pouvez visualiser le profil du patient, rechercher les tests qu'il a subis et les rï¿½sultats de ces tests.</value>
 		</term>
 		<term>
 			<key>TIPS_SEARCH</key>
-			<value>Rechercher votre échantillon par son ID ou par Nom</value>
+			<value>Rechercher votre ï¿½chantillon par son ID ou par Nom</value>
 		</term>
 	</page>
 	<page id="patient_profile" descr="Patient Profile Page">
@@ -1160,7 +1179,7 @@
 		</term>
 		<term>
 			<key>MSG_REGNEWSPECIMEN</key>
-			<value>Enregistrer un nouvel échantillon</value>
+			<value>Enregistrer un nouvel ï¿½chantillon</value>
 		</term>
 		<term>
 			<key>MSG_UPDATEPROFILE</key>
@@ -1172,41 +1191,41 @@
 		</term>
 		<term>
 			<key>TIPS_AGEORDOB</key>
-			<value>Prière de saisir Age ou date de naissance du patient uniquement.</value>
+			<value>Priï¿½re de saisir Age ou date de naissance du patient uniquement.</value>
 		</term>
 	</page>
 	<page id="specimen_info" descr="Specimen Info Page">
 		<term>
 			<key>TITLE</key>
-			<value>Info sur échantillon</value>
+			<value>Info sur ï¿½chantillon</value>
 		</term>
 		<term>
 			<key>REGDTESTS</key>
-			<value>Examen(s) enregistré(s)</value>
+			<value>Examen(s) enregistrï¿½(s)</value>
 		</term>
 		<term>
 			<key>TIPS_NOTESTSREGD</key>
-			<value>Aucun examen enregistré pour cet éhantillon.</value>
+			<value>Aucun examen enregistrï¿½ pour cet ï¿½hantillon.</value>
 		</term>
 		<term>
 			<key>TIPS_VERIFYDONE</key>
-			<value>Résultas Echantillon vérifié et mis à jour.</value>
+			<value>Rï¿½sultas Echantillon vï¿½rifiï¿½ et mis ï¿½ jour.</value>
 		</term>
 		<term>
 			<key>TIPS_ENTRYDONE</key>
-			<value>Résultats Echantillons saisies</value>
+			<value>Rï¿½sultats Echantillons saisies</value>
 		</term>
 		<term>
 			<key>TITLE_VERIFY</key>
-			<value>Vérifier les résultas Echantillons</value>
+			<value>Vï¿½rifier les rï¿½sultas Echantillons</value>
 		</term>
 		<term>
 			<key>TITLE_ENTRY</key>
-			<value>Résultats Echantillons Saisis</value>
+			<value>Rï¿½sultats Echantillons Saisis</value>
 		</term>
 		<term>
 			<key>TIPS_VERIFY</key>
-			<value>Vérifier ces résultats pour cet Echantillon et faire la correction si possible.</value>
+			<value>Vï¿½rifier ces rï¿½sultats pour cet Echantillon et faire la correction si possible.</value>
 		</term>
 		<term>
 			<key>TIPS_ENTRY</key>
@@ -1240,15 +1259,15 @@
 		</term>
 		<term>
 			<key>TIPS_CUSTOM</key>
-			<value>N.B: Un champs commercial peut être ajouter aprés la configuration du Laboratoire, utiliser option de configuration de l\\\'administrateur.</value>
+			<value>N.B: Un champs commercial peut ï¿½tre ajouter aprï¿½s la configuration du Laboratoire, utiliser option de configuration de l\\\'administrateur.</value>
 		</term>
 		<term>
 			<key>TIPS_CONFIRMNEWLAB</key>
-			<value>Prière de revoir toutes les mises à jour et cliquer sur AJOUTER pour créer une configuration du Laboratoire.</value>
+			<value>Priï¿½re de revoir toutes les mises ï¿½ jour et cliquer sur AJOUTER pour crï¿½er une configuration du Laboratoire.</value>
 		</term>
 		<term>
 			<key>TIPS_CREATINGLAB</key>
-			<value>Prière de patienter que le système crée une configuration du Lab, celà peut prendre quelques minutes.</value>
+			<value>Priï¿½re de patienter que le systï¿½me crï¿½e une configuration du Lab, celï¿½ peut prendre quelques minutes.</value>
 		</term>
 		<term>
 			<key>TIPS_MISSING_FACILITY</key>
@@ -1260,15 +1279,15 @@
 		</term>
 		<term>
 			<key>TIPS_MISSING_MGR</key>
-			<value>Erreur: Aministrateur de Laboratoire non sélectionner.</value>
+			<value>Erreur: Aministrateur de Laboratoire non sï¿½lectionner.</value>
 		</term>
 		<term>
 			<key>TIPS_MISSING_STYPES</key>
-			<value>Erreur: Aucun échantillon sélectionné.</value>
+			<value>Erreur: Aucun ï¿½chantillon sï¿½lectionnï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_MISSING_TTYPES</key>
-			<value>Erreur: Aucun Examen selectionné</value>
+			<value>Erreur: Aucun Examen selectionnï¿½</value>
 		</term>
 	</page>
 	<page id="lab_config_home" descr="Lab Configuration Page">
@@ -1278,11 +1297,11 @@
 		</term>
 		<term>
 			<key>MENU_SUMMARY</key>
-			<value>Résumer</value>
+			<value>Rï¿½sumer</value>
 		</term>
 		<term>
 			<key>TIPS_SUMMARY_1</key>
-			<value>Donne un résumé de l\'installation de laboratoire, y compris les comptes personnel de laboratoire, les essais et les types d\'échantillons.</value>
+			<value>Donne un rï¿½sumï¿½ de l\'installation de laboratoire, y compris les comptes personnel de laboratoire, les essais et les types d\'ï¿½chantillons.</value>
 		</term>
 		<term>
 			<key>TIPS_SUMMARY_2</key>
@@ -1294,11 +1313,11 @@
 		</term>
 		<term>
 			<key>MENU_BACKUP_REVERT</key>
-			<value>Retour à la sauvegarde</value>
+			<value>Retour ï¿½ la sauvegarde</value>
 		</term>
 		<term>
 			<key>TIPS_REVERT</key>
-			<value>En cas de défaillance du système, si nous voulons revenir à une copie précédemment sauvegardé des données, nous pouvons utiliser cette option. Vous pouvez choisir la version actuelle de sauvegarde avant de faire cela. Vous pouvez également choisir d\'inclure de revenir les paramètres de langue.</value>
+			<value>En cas de dï¿½faillance du systï¿½me, si nous voulons revenir ï¿½ une copie prï¿½cï¿½demment sauvegardï¿½ des donnï¿½es, nous pouvons utiliser cette option. Vous pouvez choisir la version actuelle de sauvegarde avant de faire cela. Vous pouvez ï¿½galement choisir d\'inclure de revenir les paramï¿½tres de langue.</value>
 		</term>
 		<term>
 			<key>BACKUP_LOCATION</key>
@@ -1306,7 +1325,7 @@
 		</term>
 		<term>
 			<key>INCLUDE_LANGUAGE_SETTINGS</key>
-			<value>Inclure la mise à jour de la langue</value>
+			<value>Inclure la mise ï¿½ jour de la langue</value>
 		</term>
 		<term>
 			<key>MENU_ST_TYPES</key>
@@ -1314,15 +1333,15 @@
 		</term>
 		<term>
 			<key>TIPS_SPECIMENTESTTYPES</key>
-			<value>Spécimen / Types de test - Cette option nous permet de configurer les échantillons peuvent être collectés et des essais qui sont effectués au laboratoire particulier.</value>
+			<value>Spï¿½cimen / Types de test - Cette option nous permet de configurer les ï¿½chantillons peuvent ï¿½tre collectï¿½s et des essais qui sont effectuï¿½s au laboratoire particulier.</value>
 		</term>
 		<term>
 			<key>TIPS_TARGETTAT</key>
-			<value>Cible TAT - Cette liste d\'options le délai d\'exécution pour chaque type de test. Nous pouvons modifier le TAT en utilisant l\'option Modifier et modifier la valeur.</value>
+			<value>Cible TAT - Cette liste d\'options le dï¿½lai d\'exï¿½cution pour chaque type de test. Nous pouvons modifier le TAT en utilisant l\'option Modifier et modifier la valeur.</value>
 		</term>
 		<term>
 			<key>TIPS_RESULTINTERPRETATION</key>
-			<value>Interprétation des résultats - Cette option nous permet de préciser l\'interprétation de plusieurs plages de valeurs pour chaque type de test.</value>
+			<value>Interprï¿½tation des rï¿½sultats - Cette option nous permet de prï¿½ciser l\'interprï¿½tation de plusieurs plages de valeurs pour chaque type de test.</value>
 		</term>
 		<term>
 			<key>MENU_USERS</key>
@@ -1334,15 +1353,15 @@
 		</term>
 		<term>
 			<key>TIPS_USERACCOUNTS_1</key>
-			<value>Cette page donne un résumé des différents utilisateurs ont accès au système.</value>
+			<value>Cette page donne un rï¿½sumï¿½ des diffï¿½rents utilisateurs ont accï¿½s au systï¿½me.</value>
 		</term>
 		<term>
 			<key>TIPS_USERACCOUNTS_2</key>
-			<value>Il permet aussi la création de nouveaux comptes utilisateurs.</value>
+			<value>Il permet aussi la crï¿½ation de nouveaux comptes utilisateurs.</value>
 		</term>
 		<term>
 			<key>TIPS_USERACCOUNTS_3</key>
-			<value>Il permet de modifier les paramètres du compte, supprimer des comptes et de surveiller l\'activité du compte.</value>
+			<value>Il permet de modifier les paramï¿½tres du compte, supprimer des comptes et de surveiller l\'activitï¿½ du compte.</value>
 		</term>
 		<term>
 			<key>MENU_CUSTOM</key>
@@ -1350,11 +1369,11 @@
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_1</key>
-			<value>Cette page permet la configuration de la page d\'inscription des patients. Il permet de créer des champs obligatoires et cache certains domaines si elles ne sont pas souhaités à pourvoir.</value>
+			<value>Cette page permet la configuration de la page d\'inscription des patients. Il permet de crï¿½er des champs obligatoires et cache certains domaines si elles ne sont pas souhaitï¿½s ï¿½ pourvoir.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_2</key>
-			<value>Il permet aussi la création de certains des champs personnalisés pour l\'enregistrement des patients et de nouveaux addition de l\'échantillon qui peut être requis par certains laboratoires seulement.</value>
+			<value>Il permet aussi la crï¿½ation de certains des champs personnalisï¿½s pour l\'enregistrement des patients et de nouveaux addition de l\'ï¿½chantillon qui peut ï¿½tre requis par certains laboratoires seulement.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_3</key>
@@ -1370,7 +1389,7 @@
 		</term>
 		<term>
 			<key>TIPS_INFECTIONREPORT</key>
-			<value>Ceci est une page modifiable pour le réglage des différents paramètres associaated chaque type d\'épreuve individuelle.</value>
+			<value>Ceci est une page modifiable pour le rï¿½glage des diffï¿½rents paramï¿½tres associaated chaque type d\'ï¿½preuve individuelle.</value>
 		</term>
 		<term>
 			<key>MENU_GENERAL</key>
@@ -1402,7 +1421,7 @@
 		</term>
 		<term>
 			<key>TIPS_DAILYREPORTSETTINGS</key>
-			<value>Ceci est une page modifiable pour la mise la mise en page du journal de patient, journal de log des échantillons et quotidiennes des patients.</value>
+			<value>Ceci est une page modifiable pour la mise la mise en page du journal de patient, journal de log des ï¿½chantillons et quotidiennes des patients.</value>
 		</term>
 		<term>
 			<key>MENU_WORKSHEETCONFIG</key>
@@ -1410,7 +1429,7 @@
 		</term>
 		<term>
 			<key>TIPS_WORKSHEETS</key>
-			<value>Ceci est une page modifiable pour créer des feuilles de calcul personnalisées.</value>
+			<value>Ceci est une page modifiable pour crï¿½er des feuilles de calcul personnalisï¿½es.</value>
 		</term>
 		<term>
 			<key>MENU_MGR</key>
@@ -1426,11 +1445,11 @@
 		</term>
 		<term>
 			<key>RECENT_ACTIVITY</key>
-			<value>Activité Récente.</value>
+			<value>Activitï¿½ Rï¿½cente.</value>
 		</term>
 		<term>
 			<key>SP_REGNS</key>
-			<value>Enregistrement des échantillons</value>
+			<value>Enregistrement des ï¿½chantillons</value>
 		</term>
 		<term>
 			<key>RE_ENTRIES</key>
@@ -1438,7 +1457,7 @@
 		</term>
 		<term>
 			<key>TIPS_RECENTACT</key>
-			<value>Aucune activité recente retrouvée.</value>
+			<value>Aucune activitï¿½ recente retrouvï¿½e.</value>
 		</term>
 		<term>
 			<key>NEW_LAB_USER</key>
@@ -1466,23 +1485,23 @@
 		</term>
 		<term>
 			<key>ASSIGN_TO</key>
-			<value>Tranmettre à:</value>
+			<value>Tranmettre ï¿½:</value>
 		</term>
 		<term>
 			<key>TIPS_LABDELETE</key>
-			<value>Etes vous sure de vouloir effacer cette configuration du Lab? Toutes les données et les comptes des techniciens seront supprimés définitivement.</value>
+			<value>Etes vous sure de vouloir effacer cette configuration du Lab? Toutes les donnï¿½es et les comptes des techniciens seront supprimï¿½s dï¿½finitivement.</value>
 		</term>
 		<term>
 			<key>TIPS_SPECIMENSNOTSELECTED</key>
-			<value>Erreur: Aucun Echantillon sélectionné.</value>
+			<value>Erreur: Aucun Echantillon sï¿½lectionnï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_TESTSNOTSELECTED</key>
-			<value>Erreur:Aucun Examen sélectionner.</value>
+			<value>Erreur:Aucun Examen sï¿½lectionner.</value>
 		</term>
 		<term>
 			<key>TIPS_USERACC</key>
-			<value>Modifier le compte le détail utilisateur ou restaurer le mot de passe en saisissant un nouveau.</value>
+			<value>Modifier le compte le dï¿½tail utilisateur ou restaurer le mot de passe en saisissant un nouveau.</value>
 		</term>
 		<term>
 			<key>GROUP_BYGENDER</key>
@@ -1498,7 +1517,7 @@
 		</term>
 		<term>
 			<key>RANGE_NOTREQD</key>
-			<value>Pas de valeur configurée nécessaire</value>
+			<value>Pas de valeur configurï¿½e nï¿½cessaire</value>
 		</term>
 		<term>
 			<key>MSG_PENDINGTAT</key>
@@ -1526,7 +1545,7 @@
 		</term>
 		<term>
 			<key>TOP</key>
-			<value>Entète</value>
+			<value>Entï¿½te</value>
 		</term>
 		<term>
 			<key>BOTTOM</key>
@@ -1582,7 +1601,7 @@
 		</term>
 		<term>
 			<key>BACK_TOCONFIG</key>
-			<value>Retourner à la configuration</value>
+			<value>Retourner ï¿½ la configuration</value>
 		</term>
 		<term>
 			<key>BACKUP_CURRENT_VERSION</key>
@@ -1590,23 +1609,23 @@
 		</term>
 		<term>
 			<key>TIPS_REVERTDONE</key>
-			<value>La Sauvegarde a réussite. Prière de redemarer pour achener le procedé inverse.</value>
+			<value>La Sauvegarde a rï¿½ussite. Priï¿½re de redemarer pour achener le procedï¿½ inverse.</value>
 		</term>	
 		<term>
 			<key>TIPS_SETUPNETWORK_3</key>
-			<value>Vous allez maintenant être en mesure d\'accéder en cliquant sur ??BLIS BlisSetup.html et en entrant votre nom d\'utilisateur et mot de passe.</value>
+			<value>Vous allez maintenant ï¿½tre en mesure d\'accï¿½der en cliquant sur ??BLIS BlisSetup.html et en entrant votre nom d\'utilisateur et mot de passe.</value>
 		</term>
 		<term>
 			<key>TIPS_SETUPNETWORK_4</key>
-			<value>Dans le cas d\'un redémarrage de l\'ordinateur ou cliquez sur une défaillance du réseau d\'installation de réseau option à nouveau.</value>
+			<value>Dans le cas d\'un redï¿½marrage de l\'ordinateur ou cliquez sur une dï¿½faillance du rï¿½seau d\'installation de rï¿½seau option ï¿½ nouveau.</value>
 		</term>
 		<term>
 			<key>MENU_TOGGLE_TEST_REPORTS</key>
-			<value>Activer/Désactiver les rapports d</value>
+			<value>Activer/Dï¿½sactiver les rapports d</value>
 		</term>
 		<term>
 			<key>TIPS_TOGGLETESTREPORTS</key>
-			<value>Permettre/Désactiver test de génération de rapports dans ce laboratoire</value>
+			<value>Permettre/Dï¿½sactiver test de gï¿½nï¿½ration de rapports dans ce laboratoire</value>
 		</term>
 		<term>
 			<key>MENU_TEST_REPORT_CONFIGURATION</key>
@@ -1614,7 +1633,7 @@
 		</term>
 		<term>
 			<key>TIPS_TESTREPORTCONFIGURATION</key>
-			<value>Configurez les différents champs dans un rapport d\'essai</value>
+			<value>Configurez les diffï¿½rents champs dans un rapport d\'essai</value>
 		</term>
 		<term>
 			<key>MENU_TEST_TYPES</key>
@@ -1630,7 +1649,7 @@
 		</term>
 		<term>
 			<key>AGE_UNIT</key>
-			<value>Unité d</value>
+			<value>Unitï¿½ d</value>
 		</term>
 		<term>
 			<key>SITES</key>
@@ -1638,7 +1657,7 @@
 		</term>
 		<term>
 			<key>TIPS_SITECONFIG</key>
-			<value>Ajout / Suppression de sites de collecte de spécimens pour les dossiers de laboratoire</value>
+			<value>Ajout / Suppression de sites de collecte de spï¿½cimens pour les dossiers de laboratoire</value>
 		</term>
 		<term>
 			<key>MENU_SITECONFIG</key>
@@ -1650,7 +1669,7 @@
 		</term>
 		<term>
 			<key>SAMPLES_RECEIVED</key>
-			<value>Les échantillons reçus</value>
+			<value>Les ï¿½chantillons reï¿½us</value>
 		</term>
 		<term>
 			<key>ENABLE_SITE_ENTRY</key>
@@ -1658,7 +1677,20 @@
 		</term>
 		<term>
 			<key>SELECT_SITE_FOR_REMOVAL</key>
-			<value>Sélection de sites pour l</value>
+			<value>Sï¿½lection de sites pour l</value>
+		</term>
+			<term>
+			<key>OUT_OF_RANGE</key>
+			<value>hors de portÃ©e</value>
+		</term>
+		<term>
+			<key>INTERPRETATION</key>
+			<value>InterprÃ©tation</value>
+		</term>
+
+		<term>
+			<key>MODIFY_SITE</key>
+			<value>Modifier les sites</value>
 		</term>
 	</page>
 	<page id="lab_admins" descr="Lab Managers Page">
@@ -1694,11 +1726,11 @@
 		</term>
 		<term>
 			<key>MENU_REMOVEDATA</key>
-			<value>Effacer les données du catalogue</value>
+			<value>Effacer les donnï¿½es du catalogue</value>
 		</term>
 		<term>
 			<key>TIPS_CATALOG</key>
-			<value>Vous pouvez ajouter, supprimer ou modifier les types Echantillons, lles types Examens etintervale de validité dans cette page.</value>
+			<value>Vous pouvez ajouter, supprimer ou modifier les types Echantillons, lles types Examens etintervale de validitï¿½ dans cette page.</value>
 		</term>
 		<term>
 			<key>TIPS_TESTSNOTFOUND</key>
@@ -1746,31 +1778,31 @@
 		</term>
 		<term>
 			<key>TIPS_MISSING_SELECTEDSPECIMEN</key>
-			<value>Erreur: Aucun Echantillon compatible sélectionné.</value>
+			<value>Erreur: Aucun Echantillon compatible sï¿½lectionnï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_MISSING_SELECTEDTESTS</key>
-			<value>Erreur:Aucun examen compatible sélectinné.</value>
+			<value>Erreur:Aucun examen compatible sï¿½lectinnï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_MISSING_SELECTEDMEASURES</key>
-			<value>Erreur: Aucune Mésure sélectionner pour cet Examen.</value>
+			<value>Erreur: Aucune Mï¿½sure sï¿½lectionner pour cet Examen.</value>
 		</term>
 		<term>
 			<key>TEST_TYPE_ADDED</key>
-			<value>Examen ajouté</value>
+			<value>Examen ajoutï¿½</value>
 		</term>
 		<term>
 			<key>SPECIMEN_TYPE_ADDED</key>
-			<value>Echantillon Ajouté</value>
+			<value>Echantillon Ajoutï¿½</value>
 		</term>
 		<term>
 			<key>TEST_TYPE_UPDATED</key>
-			<value>Examen mis-à-jour</value>
+			<value>Examen mis-ï¿½-jour</value>
 		</term>
 		<term>
 			<key>SPECIMEN_TYPE_UPDATED</key>
-			<value>Echantillon mis-à-jour.</value>
+			<value>Echantillon mis-ï¿½-jour.</value>
 		</term>
 		<term>
 			<key>CMD_BACK_TOCATALOG</key>
@@ -1778,11 +1810,11 @@
 		</term>
 		<term>
 			<key>TIPS_MEASURES</key>
-			<value>Seuls les numéros et alphabets doivent être utilisés tout en ajoutant l'option measures.For gamme s'il vous plaît spécifier la limite inférieure et la borne supérieure.</value>
+			<value>Seuls les numï¿½ros et alphabets doivent ï¿½tre utilisï¿½s tout en ajoutant l'option measures.For gamme s'il vous plaï¿½t spï¿½cifier la limite infï¿½rieure et la borne supï¿½rieure.</value>
 		</term>
 		<term>
 			<key>TIPS_TC_TESTTYPE_1</key>
-			<value>Donne une liste complète des types de tests disponibles.</value>
+			<value>Donne une liste complï¿½te des types de tests disponibles.</value>
 		</term>
 		<term>
 			<key>TIPS_TC_TESTTYPE_2</key>
@@ -1790,19 +1822,19 @@
 		</term>
 		<term>
 			<key>TIPS_TC_TESTTYPE_3</key>
-			<value>Vous pouvez également ajouter de nouveaux types d'essai utilisant l'option 'Ajouter' situé près du haut de la page.</value>
+			<value>Vous pouvez ï¿½galement ajouter de nouveaux types d'essai utilisant l'option 'Ajouter' situï¿½ prï¿½s du haut de la page.</value>
 		</term>
 		<term>
 			<key>TIPS_TC_SPECIMENTYPE_1</key>
-			<value>Donne une liste complète des types d'échantillons disponibles.</value>
+			<value>Donne une liste complï¿½te des types d'ï¿½chantillons disponibles.</value>
 		</term>
 		<term>
 			<key>TIPS_TC_SPECIMENTYPE_2</key>
-			<value>Utilisez cette page pour modifier les types d'échantillons existants. Tests compatible avec un type de spécimen particulier peut ajouter / supprimer en cochant les cases appropriées trouve ici.</value>
+			<value>Utilisez cette page pour modifier les types d'ï¿½chantillons existants. Tests compatible avec un type de spï¿½cimen particulier peut ajouter / supprimer en cochant les cases appropriï¿½es trouve ici.</value>
 		</term>
 		<term>
 			<key>TIPS_TC_SPECIMENTYPE_3</key>
-			<value>Vous pouvez également ajouter de nouveaux types des échantillons en utilisant l'option 'Ajouter' situé près du haut de la page.</value>
+			<value>Vous pouvez ï¿½galement ajouter de nouveaux types des ï¿½chantillons en utilisant l'option 'Ajouter' situï¿½ prï¿½s du haut de la page.</value>
 		</term>
 	</page>
 	<page id="reports" descr="Main Reports Page">
@@ -1852,7 +1884,7 @@
 		</term>
 		<term>
 			<key>MENU_AGGREPORTS</key>
-			<value>Rapport Groupés</value>
+			<value>Rapport Groupï¿½s</value>
 		</term>
 		<term>
 			<key>MENU_TEST_SPECIMEN_AGGREGATE_REPORT_CONFIG</key>
@@ -1868,11 +1900,11 @@
 		</term>
 		<term>
 			<key>MENU_INFECTIONSUMMARY</key>
-			<value>Prévalence</value>
+			<value>Prï¿½valence</value>
 		</term>
 		<term>
 			<key>MENU_COUNTS</key>
-			<value>Dénombrement</value>
+			<value>Dï¿½nombrement</value>
 		</term>
 		<term>
 			<key>MENU_CONTROLREPORT</key>
@@ -1880,7 +1912,7 @@
 		</term>
 		<term>
 			<key>MENU_TAT</key>
-			<value>Delais de Rendu des Résultats</value>
+			<value>Delais de Rendu des Rï¿½sultats</value>
 		</term>
 		<term>
 			<key>MENU_INFECTIONREPORT</key>
@@ -1892,15 +1924,15 @@
 		</term>
 		<term>
 			<key>COUNT_TEST</key>
-			<value>Comptabilité des Examens</value>
+			<value>Comptabilitï¿½ des Examens</value>
 		</term>
 		<term>
 			<key>COUNT_SPECIMEN</key>
-			<value>Comptabilité Echantillon</value>
+			<value>Comptabilitï¿½ Echantillon</value>
 		</term>
 		<term>
 			<key>TIPS_PHISTORY</key>
-			<value>Sélectionner le site et ID du Patient pour imprimer Historique des examens.</value>
+			<value>Sï¿½lectionner le site et ID du Patient pour imprimer Historique des examens.</value>
 		</term>
 		<term>
 			<key>TIPS_SPECIMEN</key>
@@ -1916,23 +1948,23 @@
 		</term>
 		<term>
 			<key>TIPS_DAILYLOGS</key>
-			<value>Imprimer tous les rapports manuels pour la journée indiquée.</value>
+			<value>Imprimer tous les rapports manuels pour la journï¿½e indiquï¿½e.</value>
 		</term>
 		<term>
 			<key>TIPS_INFECTIONSUMMARY</key>
-			<value>Sélectionner le facilitateur et Intervale de la Date pour voir le graphe des infections et la prévalence.</value>
+			<value>Sï¿½lectionner le facilitateur et Intervale de la Date pour voir le graphe des infections et la prï¿½valence.</value>
 		</term>
 		<term>
 			<key>TIPS_COUNTS</key>
-			<value>Sélectionner le site et Intervale de la Date pour voir le nombre des échantillons ou des examens réalisés pendant un temps spécifié.</value>
+			<value>Sï¿½lectionner le site et Intervale de la Date pour voir le nombre des ï¿½chantillons ou des examens rï¿½alisï¿½s pendant un temps spï¿½cifiï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_TAT</key>
-			<value>Sélectionner le site et la période pour voir le delai moyen de rendu de résultat pendant la période spécifiée.</value>
+			<value>Sï¿½lectionner le site et la pï¿½riode pour voir le delai moyen de rendu de rï¿½sultat pendant la pï¿½riode spï¿½cifiï¿½e.</value>
 		</term>
 		<term>
 			<key>TIPS_INFECTIONREPORT</key>
-			<value>Sélectionner le type d\'examen pour genérer la prévalence en fonction de qge et du sexe.</value>
+			<value>Sï¿½lectionner le type d\'examen pour genï¿½rer la prï¿½valence en fonction de qge et du sexe.</value>
 		</term>	
 		<term>
 			<key>TIPS_GETACCESSIONREPORT</key>
@@ -1948,7 +1980,7 @@
 		</term>
 		<term>
 			<key>TIPS_RECNOTFOUND</key>
-			<value>Pas de bilan retrouvé.</value>
+			<value>Pas de bilan retrouvï¿½.</value>
 		</term>
 		<term>
 			<key>TOTAL</key>
@@ -1968,7 +2000,7 @@
 		</term>
 		<term>
 			<key>TESTED_N</key>
-			<value>Examen Négatifs</value>
+			<value>Examen Nï¿½gatifs</value>
 		</term>
 		<term>
 			<key>TESTED_P</key>
@@ -1988,15 +2020,15 @@
 		</term>
 		<term>
 			<key>TIPS_NONEWTESTS</key>
-			<value>Aucun nouveeau examen enregistré aujourdhui</value>
+			<value>Aucun nouveeau examen enregistrï¿½ aujourdhui</value>
 		</term>
 		<term>
 			<key>TIPS_NONEWPATIENTS</key>
-			<value>Aucun nouveau patient enregistré aujourdhui.</value>
+			<value>Aucun nouveau patient enregistrï¿½ aujourdhui.</value>
 		</term>
 		<term>
 			<key>MSG_SHOWTABLE</key>
-			<value>Présenter sous forme de tableau.</value>
+			<value>Prï¿½senter sous forme de tableau.</value>
 		</term>
 		<term>
 			<key>MSG_HIDETABLE</key>
@@ -2004,7 +2036,7 @@
 		</term>
 		<term>
 			<key>MSG_SHOWGRAPH</key>
-			<value>Présenter sur forme de Graphe.</value>
+			<value>Prï¿½senter sur forme de Graphe.</value>
 		</term>
 		<term>
 			<key>MSG_HIDEGRAPH</key>
@@ -2012,7 +2044,7 @@
 		</term>
 		<term>
 			<key>TIPS_NODISCRETE</key>
-			<value>Erreur: Aucune valeur numérique pour Examen Spécifié.</value>
+			<value>Erreur: Aucune valeur numï¿½rique pour Examen Spï¿½cifiï¿½.</value>
 		</term>
 		<term>
 			<key>PROGRESSION_M</key>
@@ -2028,19 +2060,19 @@
 		</term>
 		<term>
 			<key>REPORT_PERIOD</key>
-			<value>Période de Enregistrement</value>
+			<value>Pï¿½riode de Enregistrement</value>
 		</term>
 		<term>
 			<key>TIPS_NOTATTESTS</key>
-			<value>Aucun examen correspondant pour la période indiquée.</value>
+			<value>Aucun examen correspondant pour la pï¿½riode indiquï¿½e.</value>
 		</term>
 		<term>
 			<key>TIPS_TATEXCEED</key>
-			<value>Aucun echantillon a exédé le delai de rendu des resultats.</value>
+			<value>Aucun echantillon a exï¿½dï¿½ le delai de rendu des resultats.</value>
 		</term>
 		<term>
 			<key>TIPS_TATEXCEEDNUM</key>
-			<value>Echantillons eyant exédés le delai de rendu des resultats.</value>
+			<value>Echantillons eyant exï¿½dï¿½s le delai de rendu des resultats.</value>
 		</term>
 		<term>
 			<key>TIPS_TATNOPENDING</key>
@@ -2052,15 +2084,15 @@
 		</term>
 		<term>
 			<key>TIPS_CONFIGINFECTION</key>
-			<value>Erreur: Le bilan des infections non configuré pour cette facilité. Prière de contacter le Chef de Lab.</value>
+			<value>Erreur: Le bilan des infections non configurï¿½ pour cette facilitï¿½. Priï¿½re de contacter le Chef de Lab.</value>
 		</term>
 		<term>
 			<key>TIPS_NOMATCHSPECIMENS</key>
-			<value>Aucun échantillon retrouvé.</value>
+			<value>Aucun ï¿½chantillon retrouvï¿½.</value>
 		</term>	
 		<term>
 			<key>TIPS_MULTPATIENTS</key>
-			<value>Sélectionner les échantillons pour différents patients. Prière de recommencer.</value>
+			<value>Sï¿½lectionner les ï¿½chantillons pour diffï¿½rents patients. Priï¿½re de recommencer.</value>
 		</term>
 		<term>
 			<key>MSG_INCLUDEPENDING</key>
@@ -2076,7 +2108,7 @@
 		</term>
 		<term>
 			<key>MENU_TESTWISE_REPORTS</key>
-			<value>Rapports spécifiques au test</value>
+			<value>Rapports spï¿½cifiques au test</value>
 		</term>
 		<term>
 			<key>SITE</key>
@@ -2100,12 +2132,27 @@
 		</term>
 		<term>
 			<key>TOTAL_SAMPLES</key>
-			<value>Nombre total d'échantillons</value>
+			<value>Nombre total d'ï¿½chantillons</value>
 		</term>
 		<term>
 			<key>SAMPLES_RECEIVED</key>
-			<value>Echantillon reçu</value>
+			<value>Echantillon reï¿½u</value>
 		</term>
+
+		<term>
+			<key>OUT_OF_RANGE</key>
+			<value>hors de portÃ©e</value>
+		</term>
+		<term>
+			<key>INTERPRETATION</key>
+			<value>InterprÃ©tation</value>
+		</term>
+
+		<term>
+			<key>MODIFY_SITE</key>
+			<value>Modifier les sites</value>
+		</term>
+
 	</page>
 	<page id="edit_profile" descr="Edit Profile Page">
 		<term>
@@ -2114,11 +2161,11 @@
 		</term>
 		<term>
 			<key>TIPS_CASEPWD</key>
-			<value>NB: Le mot de passe est très sensible.</value>
+			<value>NB: Le mot de passe est trï¿½s sensible.</value>
 		</term>
 		<term>
 			<key>MSG_NOFIELDUPDATE</key>
-			<value>Pas de champs à actualiser.</value>
+			<value>Pas de champs ï¿½ actualiser.</value>
 		</term>
 		<term>
 			<key>CURRPWD</key>
@@ -2138,7 +2185,7 @@
 		</term>
 		<term>
 			<key>MSG_PWDNOMATCH</key>
-			<value>Mot de passe non spécifié.</value>
+			<value>Mot de passe non spï¿½cifiï¿½.</value>
 		</term>
 		<term>
 			<key>MSG_PWDMINLENGTH</key>
@@ -2146,19 +2193,19 @@
 		</term>
 		<term>
 			<key>MSG_PROFILEUPDATED</key>
-			<value>Profil mis à jour.</value>
+			<value>Profil mis ï¿½ jour.</value>
 		</term>
 		<term>
 			<key>MSG_PWDUPDATEERROR</key>
-			<value>Erreur pendant la mise à jour du Mot de Passe.</value>
+			<value>Erreur pendant la mise ï¿½ jour du Mot de Passe.</value>
 		</term>
 		<term>
 			<key>MSG_PWDMATCHERROR</key>
-			<value>Erreur: Ancien Mot de Passe non spécifié.</value>
+			<value>Erreur: Ancien Mot de Passe non spï¿½cifiï¿½.</value>
 		</term>
 		<term>
 			<key>MSG_PWDUPDATED</key>
-			<value>Mot de Passe mis à jour.</value>
+			<value>Mot de Passe mis ï¿½ jour.</value>
 		</term>
 	</page>
 	<page id="help" descr="Main Help Page">
@@ -2170,11 +2217,11 @@
 	<page id="stocks" descr="Stock Related Terms">
 	<term>
 			<key>Reagent</key>
-			<value>Réactif</value>
+			<value>Rï¿½actif</value>
 		</term>
 		<term>
 			<key>Lot_Number</key>
-			<value>Numéro de lot</value>
+			<value>Numï¿½ro de lot</value>
 		</term>
 		<term>
 			<key>Expiry_Date</key>
@@ -2190,23 +2237,23 @@
 		</term>
 		<term>
 			<key>Quantity_Supplied</key>
-			<value>Quantité fournie</value>
+			<value>Quantitï¿½ fournie</value>
 		</term>
 		<term>
 			<key>Units</key>
-			<value>Unités</value>
+			<value>Unitï¿½s</value>
 		</term>
 		<term>
 			<key>Cost_per_Unit</key>
-			<value>Coût unitaire</value>
+			<value>Coï¿½t unitaire</value>
 		</term>
 		<term>
 			<key>Date_received</key>
-			<value>Date de réception de</value>
+			<value>Date de rï¿½ception de</value>
 		</term>
 		<term>
 			<key>Quantity</key>
-			<value>Quantité</value>
+			<value>Quantitï¿½</value>
 		</term>
 		<term>
 			<key>Edit</key>
@@ -2222,11 +2269,11 @@
 		</term>
 		<term>
 			<key>Quantity_Signed_Out</key>
-			<value>Quantité Signé Out</value>
+			<value>Quantitï¿½ Signï¿½ Out</value>
 		</term>
 		<term>
 			<key>Receiver</key>
-			<value>Récepteur</value>
+			<value>Rï¿½cepteur</value>
 		</term>
 		<term>
 			<key>Remarks</key>
@@ -2250,19 +2297,19 @@
 		</term>
 		<term>
 			<key>Total_Quantity</key>
-			<value>Au total quantité</value>
+			<value>Au total quantitï¿½</value>
 		</term>
 		<term>
 			<key>Quantity_In_Stock</key>
-			<value>Quantité totale</value>
+			<value>Quantitï¿½ totale</value>
 		</term>
 		<term>
 			<key>TIPS_ADD</key>
-			<value>Ajouter les détails du stock sous la forme proposée. Pour ajouter plus d'un des articles en stock, vous pouvez sélectionner Ajouter un autre.</value>
+			<value>Ajouter les dï¿½tails du stock sous la forme proposï¿½e. Pour ajouter plus d'un des articles en stock, vous pouvez sï¿½lectionner Ajouter un autre.</value>
 		</term>
 		<term>
 			<key>TIPS_UPDATE</key>
-			<value>Entrez la quantité du stock en cours d'extraction. Le tableau ci-dessous donne compte de l'inventaire actuel.</value>
+			<value>Entrez la quantitï¿½ du stock en cours d'extraction. Le tableau ci-dessous donne compte de l'inventaire actuel.</value>
 		</term>
 	</page>
 	<page id="lang_modify" descr="Language Modification Page">
@@ -2272,15 +2319,15 @@
 		</term>
 		<term>
 			<key>CATEGORY</key>
-			<value>Catégorie</value>
+			<value>Catï¿½gorie</value>
 		</term>
 		<term>
 			<key>TIPS_MODIFYLANG_1</key>
-			<value>Cette page permet de basculer entre les langues. Il vous permet également de changer le contenu affiché.</value>
+			<value>Cette page permet de basculer entre les langues. Il vous permet ï¿½galement de changer le contenu affichï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_MODIFYLANG_2</key>
-			<value>Vous pouvez également choisir de changer la langue pour quelques pages en utilisant cette option. Les pages sont répertoriées sous forme de menu déroulant.</value>
+			<value>Vous pouvez ï¿½galement choisir de changer la langue pour quelques pages en utilisant cette option. Les pages sont rï¿½pertoriï¿½es sous forme de menu dï¿½roulant.</value>
 		</term>
 	</page>
 	<page id="blis_help_page" descr="Help Page">
@@ -2298,7 +2345,7 @@
 		</term>
 		<term>
 			<key>TIPS_SUMMARY_1</key>
-			<value>Donne un résumé de l'installation de laboratoire, y compris les comptes personnel de laboratoire, les essais et les types d'échantillons.</value>
+			<value>Donne un rï¿½sumï¿½ de l'installation de laboratoire, y compris les comptes personnel de laboratoire, les essais et les types d'ï¿½chantillons.</value>
 		</term>
 		<term>
 			<key>TIPS_SUMMARY_2</key>
@@ -2314,15 +2361,15 @@
 		</term>
 		<term>
 			<key>TIPS_SPECIMENTESTTYPES</key>
-			<value>Spécimen / Types de test - Cette option nous permet de configurer les échantillons peuvent être collectés et des essais qui sont effectués au laboratoire particulier.</value>
+			<value>Spï¿½cimen / Types de test - Cette option nous permet de configurer les ï¿½chantillons peuvent ï¿½tre collectï¿½s et des essais qui sont effectuï¿½s au laboratoire particulier.</value>
 		</term>
 		<term>
 			<key>TIPS_TARGETTAT</key>
-			<value>Cible TAT - Cette liste d'options le délai d'exécution pour chaque type de test. Nous pouvons modifier le TAT en utilisant l'option Modifier et modifier la valeur.</value>
+			<value>Cible TAT - Cette liste d'options le dï¿½lai d'exï¿½cution pour chaque type de test. Nous pouvons modifier le TAT en utilisant l'option Modifier et modifier la valeur.</value>
 		</term>
 		<term>
 			<key>TIPS_RESULTINTERPRETATION</key>
-			<value>Interprétation des résultats - Cette option nous permet de préciser l'interprétation de plusieurs plages de valeurs pour chaque type de test.</value>
+			<value>Interprï¿½tation des rï¿½sultats - Cette option nous permet de prï¿½ciser l'interprï¿½tation de plusieurs plages de valeurs pour chaque type de test.</value>
 		</term>
 		<term>
 			<key>MENU_L_REPORTS</key>
@@ -2334,15 +2381,15 @@
 		</term>
 		<term>
 			<key>TIPS_INFECTIONREPORT</key>
-			<value>Ceci est une page modifiable pour le réglage des différents paramètres associaated chaque type d'épreuve individuelle.</value>
+			<value>Ceci est une page modifiable pour le rï¿½glage des diffï¿½rents paramï¿½tres associaated chaque type d'ï¿½preuve individuelle.</value>
 		</term>
 		<term>
 			<key>MENU_R_DRS</key>
-			<value>Paramètres Rapport journalier</value>
+			<value>Paramï¿½tres Rapport journalier</value>
 		</term>
 		<term>
 			<key>TIPS_DAILYREPORTSETTINGS</key>
-			<value>Ceci est une page modifiable pour la mise la mise en page du journal de patient, journal de log des échantillons et quotidiennes des patients.</value>
+			<value>Ceci est une page modifiable pour la mise la mise en page du journal de patient, journal de log des ï¿½chantillons et quotidiennes des patients.</value>
 		</term>
 		<term>
 			<key>MENU_R_WORKSHEETS</key>
@@ -2350,7 +2397,7 @@
 		</term>
 		<term>
 			<key>TIPS_WORKSHEETS</key>
-			<value>Ceci est une page modifiable pour créer des feuilles de calcul personnalisées.</value>
+			<value>Ceci est une page modifiable pour crï¿½er des feuilles de calcul personnalisï¿½es.</value>
 		</term>
 		<term>
 			<key>MENU_USERACCOUNTS</key>
@@ -2358,15 +2405,15 @@
 		</term>
 		<term>
 			<key>TIPS_USERACCOUNTS_1</key>
-			<value>Cette page donne un résumé des différents utilisateurs ont accès au système.</value>
+			<value>Cette page donne un rï¿½sumï¿½ des diffï¿½rents utilisateurs ont accï¿½s au systï¿½me.</value>
 		</term>
 		<term>
 			<key>TIPS_USERACCOUNTS_2</key>
-			<value>Il permet aussi la création de nouveaux comptes utilisateurs.</value>
+			<value>Il permet aussi la crï¿½ation de nouveaux comptes utilisateurs.</value>
 		</term>
 		<term>
 			<key>TIPS_USERACCOUNTS_3</key>
-			<value>Il permet de modifier les paramètres du compte, supprimer des comptes et de surveiller l'activité du compte.</value>
+			<value>Il permet de modifier les paramï¿½tres du compte, supprimer des comptes et de surveiller l'activitï¿½ du compte.</value>
 		</term>
 		<term>
 			<key>MENU_REGISTRATIONFIELDS</key>
@@ -2374,11 +2421,11 @@
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_1</key>
-			<value>Cette page permet la configuration de la page d'inscription des patients. Il permet de créer des champs obligatoires et cache certains domaines si elles ne sont pas souhaités à pourvoir.</value>
+			<value>Cette page permet la configuration de la page d'inscription des patients. Il permet de crï¿½er des champs obligatoires et cache certains domaines si elles ne sont pas souhaitï¿½s ï¿½ pourvoir.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_2</key>
-			<value>Il permet aussi la création de certains des champs personnalisés pour l'enregistrement des patients et de nouveaux addition de l'échantillon qui peut être requis par certains laboratoires seulement.</value>
+			<value>Il permet aussi la crï¿½ation de certains des champs personnalisï¿½s pour l'enregistrement des patients et de nouveaux addition de l'ï¿½chantillon qui peut ï¿½tre requis par certains laboratoires seulement.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_3</key>
@@ -2394,11 +2441,11 @@
 		</term>
 		<term>
 			<key>TIPS_MODIFYLANG_2</key>
-			<value>Vous pouvez également choisir de changer la langue pour quelques pages en utilisant cette option. Les pages sont répertoriées sous forme de menu déroulant.</value>
+			<value>Vous pouvez ï¿½galement choisir de changer la langue pour quelques pages en utilisant cette option. Les pages sont rï¿½pertoriï¿½es sous forme de menu dï¿½roulant.</value>
 		</term>
 		<term>
 			<key>MENU_SETUPNETWORK</key>
-			<value>Configuration du réseau</value>
+			<value>Configuration du rï¿½seau</value>
 		</term>
 		<term>
 			<key>TIPS_SETUPNETWORK_1</key>
@@ -2406,15 +2453,15 @@
 		</term>
 		<term>
 			<key>TIPS_SETUPNETWORK_2</key>
-			<value>Cliquez sur l'option de configuration du réseau dans l'onglet Configuration Lab.</value>
+			<value>Cliquez sur l'option de configuration du rï¿½seau dans l'onglet Configuration Lab.</value>
 		</term>
 		<term>
 			<key>TIPS_SETUPNETWORK_3</key>
-			<value>Vous allez maintenant être en mesure d'accéder en cliquant sur ??BLIS BlisSetup.html et en entrant votre nom d'utilisateur et mot de passe.</value>
+			<value>Vous allez maintenant ï¿½tre en mesure d'accï¿½der en cliquant sur ??BLIS BlisSetup.html et en entrant votre nom d'utilisateur et mot de passe.</value>
 		</term>
 		<term>
 			<key>TIPS_SETUPNETWORK_4</key>
-			<value>Dans le cas d'un redémarrage de l'ordinateur ou cliquez sur une défaillance du réseau d'installation de réseau option à nouveau.</value>
+			<value>Dans le cas d'un redï¿½marrage de l'ordinateur ou cliquez sur une dï¿½faillance du rï¿½seau d'installation de rï¿½seau option ï¿½ nouveau.</value>
 		</term>		
 		<term>
 			<key>MENU_EXPORTCONFIG</key>
@@ -2422,23 +2469,23 @@
 		</term>
 		<term>
 			<key>TIPS_EXPORTCONFIG</key>
-			<value>Cette option donne le résumé de la configuration pour l'ensemble du système en tant que document Microsoft Word.</value>
+			<value>Cette option donne le rï¿½sumï¿½ de la configuration pour l'ensemble du systï¿½me en tant que document Microsoft Word.</value>
 		</term>
 		<term>
 			<key>MENU_BACKUP</key>
-			<value>Sauvegarde des données</value>
+			<value>Sauvegarde des donnï¿½es</value>
 		</term>
 		<term>
 			<key>TIPS_BACKUP</key>
-			<value>Cette option permet de faire une sauvegarde de l'ensemble du système pour éviter la perte de données.</value>
+			<value>Cette option permet de faire une sauvegarde de l'ensemble du systï¿½me pour ï¿½viter la perte de donnï¿½es.</value>
 		</term>
 		<term>
 			<key>MENU_REVERT</key>
-			<value>Revenir à la sauvegarde</value>
+			<value>Revenir ï¿½ la sauvegarde</value>
 		</term>
 		<term>
 			<key>TIPS_REVERT</key>
-			<value>En cas de défaillance du système, si nous voulons revenir à une copie précédemment backedup des données, nous pouvons utiliser cette option.</value>
+			<value>En cas de dï¿½faillance du systï¿½me, si nous voulons revenir ï¿½ une copie prï¿½cï¿½demment backedup des donnï¿½es, nous pouvons utiliser cette option.</value>
 		</term>
 		<term>
 			<key>MENU_TESTCATALOG</key>
@@ -2450,7 +2497,7 @@
 		</term>
 		<term>
 			<key>TIPS_TC_TESTTYPE_1</key>
-			<value>Donne une liste complète des types de tests disponibles.</value>
+			<value>Donne une liste complï¿½te des types de tests disponibles.</value>
 		</term>
 		<term>
 			<key>TIPS_TC_TESTTYPE_2</key>
@@ -2458,31 +2505,31 @@
 		</term>
 		<term>
 			<key>TIPS_TC_TESTTYPE_3</key>
-			<value>Nouveaux types de tests peuvent également être ajoutés en utilisant l'option Ajouter situé près du haut de la page.</value>
+			<value>Nouveaux types de tests peuvent ï¿½galement ï¿½tre ajoutï¿½s en utilisant l'option Ajouter situï¿½ prï¿½s du haut de la page.</value>
 		</term>
 		<term>
 			<key>MENU_TC_SPECIMENTYPE</key>
-			<value>Type d'échantillon</value>
+			<value>Type d'ï¿½chantillon</value>
 		</term>
 		<term>
 			<key>TIPS_TC_SPECIMENTYPE_1</key>
-			<value>Donne une liste complète des types d'échantillons disponibles.</value>
+			<value>Donne une liste complï¿½te des types d'ï¿½chantillons disponibles.</value>
 		</term>
 		<term>
 			<key>TIPS_TC_SPECIMENTYPE_2</key>
-			<value>Nous pouvons utiliser cette page pour modifier les types d'échantillons existants. Tests compatible avec un type de spécimen particulier peut ajouter / supprimer en cochant les cases appropriées trouve ici.</value>
+			<value>Nous pouvons utiliser cette page pour modifier les types d'ï¿½chantillons existants. Tests compatible avec un type de spï¿½cimen particulier peut ajouter / supprimer en cochant les cases appropriï¿½es trouve ici.</value>
 		</term>
 		<term>
 			<key>TIPS_TC_SPECIMENTYPE_3</key>
-			<value>Types d'échantillons New peuvent également être ajoutés en utilisant l'option Ajouter situé près du haut de la page.</value>
+			<value>Types d'ï¿½chantillons New peuvent ï¿½galement ï¿½tre ajoutï¿½s en utilisant l'option Ajouter situï¿½ prï¿½s du haut de la page.</value>
 		</term>
 		<term>
 			<key>MENU_BACKUPDATA</key>
-			<value>Sauvegarde des données</value>
+			<value>Sauvegarde des donnï¿½es</value>
 		</term>
 		<term>
 			<key>TIPS_BACKUPDATA</key>
-			<value>Cette option prend une sauvegarde du système et le stocke sur le disque local. Cette option n'est disponible que pour l'administrateur.</value>
+			<value>Cette option prend une sauvegarde du systï¿½me et le stocke sur le disque local. Cette option n'est disponible que pour l'administrateur.</value>
 		</term>
 		<term>
 			<key>MENU_REGISTRATION</key>
@@ -2490,43 +2537,43 @@
 		</term>
 		<term>
 			<key>TIPS_REGISTRATION_1</key>
-			<value>Cette page nous permet d'enregistrer de nouveaux patients ou de patients de recherche existants basés sur le nom, l'identité du patient ou le numéro.</value>
+			<value>Cette page nous permet d'enregistrer de nouveaux patients ou de patients de recherche existants basï¿½s sur le nom, l'identitï¿½ du patient ou le numï¿½ro.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATION_2</key>
-			<value>Une fois qu'un patient a été enregistré, nous pouvons utiliser cette page pour visualiser, modifier le profil des patients.</value>
+			<value>Une fois qu'un patient a ï¿½tï¿½ enregistrï¿½, nous pouvons utiliser cette page pour visualiser, modifier le profil des patients.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATION_3</key>
-			<value>Nous pouvons également enregistrer un spécimen du patient a fourni pour un test donné.</value>
+			<value>Nous pouvons ï¿½galement enregistrer un spï¿½cimen du patient a fourni pour un test donnï¿½.</value>
 		</term>
 		<term>
 			<key>MENU_RESULTS</key>
-			<value>Résultats</value>
+			<value>Rï¿½sultats</value>
 		</term>
 		<term>
 			<key>MENU_R_SINGLESPECIMENRESULTS</key>
-			<value>Résultats seul spécimen</value>
+			<value>Rï¿½sultats seul spï¿½cimen</value>
 		</term>
 		<term>
 			<key>TIPS_R_SINGLESPECIMENRESULTS</key>
-			<value>Cette option nous permet d'ajouter de résultats pour un patient particulier sur la base des spécimens qu'il a fournies.</value>
+			<value>Cette option nous permet d'ajouter de rï¿½sultats pour un patient particulier sur la base des spï¿½cimens qu'il a fournies.</value>
 		</term>
 		<term>
 			<key>MENU_R_BATCHRESULTS</key>
-			<value>Résultats lot</value>
+			<value>Rï¿½sultats lot</value>
 		</term>
 		<term>
 			<key>TIPS_R_BATCHRESULTS</key>
-			<value>Cette option nous permet d'ajouter les résultats d'un essai de type particulier.</value>
+			<value>Cette option nous permet d'ajouter les rï¿½sultats d'un essai de type particulier.</value>
 		</term>
 		<term>
 			<key>MENU_R_VERIFYRESULTS</key>
-			<value>Vérifier les résultats</value>
+			<value>Vï¿½rifier les rï¿½sultats</value>
 		</term>
 		<term>
 			<key>TIPS_R_VERIFYRESULTS</key>
-			<value>Cette option nous permet de vérifier le résultat en fonction du type de test. Il affiche la liste des résultats pour tous les patients dont les résultats n'ont pas été vérifiées. Vous pouvez modifier les résultats et entrez remarques avant de vérifier les résultats.</value>
+			<value>Cette option nous permet de vï¿½rifier le rï¿½sultat en fonction du type de test. Il affiche la liste des rï¿½sultats pour tous les patients dont les rï¿½sultats n'ont pas ï¿½tï¿½ vï¿½rifiï¿½es. Vous pouvez modifier les rï¿½sultats et entrez remarques avant de vï¿½rifier les rï¿½sultats.</value>
 		</term>
 		<term>
 			<key>MENU_R_WORKSHEET</key>
@@ -2534,11 +2581,11 @@
 		</term>
 		<term>
 			<key>TIPS_R_WORKSHEET_1</key>
-			<value>Cette option génère une feuille de calcul basée sur la section de laboratoire et d'essai de type. Vous pouvez également utiliser une feuille de calcul personnalisé qui peut être créé par les Admins en utilisant Lab Configuration&gt; Tests&gt; Rapports&gt; Feuille de travail.</value>
+			<value>Cette option gï¿½nï¿½re une feuille de calcul basï¿½e sur la section de laboratoire et d'essai de type. Vous pouvez ï¿½galement utiliser une feuille de calcul personnalisï¿½ qui peut ï¿½tre crï¿½ï¿½ par les Admins en utilisant Lab Configuration&gt; Tests&gt; Rapports&gt; Feuille de travail.</value>
 		</term>
 		<term>
 			<key>TIPS_R_WORKSHEET_2</key>
-			<value>Vous pouvez créer une feuille de calcul vide en choisissant l'option Conserver les blancs et précisant le nombre de lignes dont vous avez besoin.</value>
+			<value>Vous pouvez crï¿½er une feuille de calcul vide en choisissant l'option Conserver les blancs et prï¿½cisant le nombre de lignes dont vous avez besoin.</value>
 		</term>
 		<term>
 			<key>MENU_SEARCH</key>
@@ -2546,11 +2593,11 @@
 		</term>
 		<term>
 			<key>TIPS_SEARCH_1</key>
-			<value>Vous pouvez utiliser cette page pour rechercher des patients inscrits. Entrez un nom partiel de générer une liste de patients contenant la chaîne.</value>
+			<value>Vous pouvez utiliser cette page pour rechercher des patients inscrits. Entrez un nom partiel de gï¿½nï¿½rer une liste de patients contenant la chaï¿½ne.</value>
 		</term>
 		<term>
 			<key>TIPS_SEARCH_2</key>
-			<value>Une fois que vous sélectionnez le patient, vous pouvez visualiser le profil du patient, rechercher les tests qu'il a subis et les résultats de ces tests.</value>
+			<value>Une fois que vous sï¿½lectionnez le patient, vous pouvez visualiser le profil du patient, rechercher les tests qu'il a subis et les rï¿½sultats de ces tests.</value>
 		</term>
 		<term>
 			<key>TIPS_SEARCH_3</key>
@@ -2562,11 +2609,11 @@
 		</term>
 		<term>
 			<key>TIPS_INVENTORY_1</key>
-			<value>Cette page affiche les quantités actuelles réactif en stock.</value>
+			<value>Cette page affiche les quantitï¿½s actuelles rï¿½actif en stock.</value>
 		</term>
 		<term>
 			<key>TIPS_INVENTORY_2</key>
-			<value>Vous pouvez mettre à jour des stocks que vous acquérez de nouveaux réactifs en ajoutant le nom du réactif, la quantité reçue, le nom du destinataire et remarques.</value>
+			<value>Vous pouvez mettre ï¿½ jour des stocks que vous acquï¿½rez de nouveaux rï¿½actifs en ajoutant le nom du rï¿½actif, la quantitï¿½ reï¿½ue, le nom du destinataire et remarques.</value>
 		</term>
 		<term>
 			<key>TIPS_INVENTORY_3</key>
@@ -2582,35 +2629,35 @@
 		</term>
 		<term>
 			<key>TIPS_PATIENTREPORT</key>
-			<value>Patient Rapport: Cette option nous permet de générer le rapport pour un patient particulier sur la base soit, le nom du patient, le numéro du patient ou de l'identité du patient.</value>
+			<value>Patient Rapport: Cette option nous permet de gï¿½nï¿½rer le rapport pour un patient particulier sur la base soit, le nom du patient, le numï¿½ro du patient ou de l'identitï¿½ du patient.</value>
 		</term>
 		<term>
 			<key>TIPS_DAILYLOG</key>
-			<value>Daily news: Cette option génère un jour ou l'autre des dossiers des patients ou de test à partir de la date de début particulière à la date de fin. Vous pouvez personnaliser le type de rapport que vous souhaitez en choisissant une option de la section (par exemple, sérologie, hématologie) et / ou du type d'essai (par exemple ALT / SGPT, HGB) menus déroulants.</value>
+			<value>Daily news: Cette option gï¿½nï¿½re un jour ou l'autre des dossiers des patients ou de test ï¿½ partir de la date de dï¿½but particuliï¿½re ï¿½ la date de fin. Vous pouvez personnaliser le type de rapport que vous souhaitez en choisissant une option de la section (par exemple, sï¿½rologie, hï¿½matologie) et / ou du type d'essai (par exemple ALT / SGPT, HGB) menus dï¿½roulants.</value>
 		</term>
 		<term>
 			<key>MENU_AGGREGATEREPORTS</key>
-			<value>Des rapports agrégés</value>
+			<value>Des rapports agrï¿½gï¿½s</value>
 		</term>
 		<term>
 			<key>TIPS_PREVALENCERATE</key>
-			<value>Taux de prévalence: Ce rapport donne la prévalence de l'infection par un type particulier basé sur le nombre de tests effectués et les résultats. Vous pouvez entrer dans la période déterminée pour laquelle vous voulez vérifier le taux de prévalence d'une infection particulière. Vous pouvez également vues sur les tendances de l'infection pendant la période définie, comme un graphique, en cliquant sur l'option Tendances lorsque le rapport est affiché.</value>
+			<value>Taux de prï¿½valence: Ce rapport donne la prï¿½valence de l'infection par un type particulier basï¿½ sur le nombre de tests effectuï¿½s et les rï¿½sultats. Vous pouvez entrer dans la pï¿½riode dï¿½terminï¿½e pour laquelle vous voulez vï¿½rifier le taux de prï¿½valence d'une infection particuliï¿½re. Vous pouvez ï¿½galement vues sur les tendances de l'infection pendant la pï¿½riode dï¿½finie, comme un graphique, en cliquant sur l'option Tendances lorsque le rapport est affichï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_COUNTS</key>
-			<value>Chiffres: Cette option génère un rapport pour une période donnée de temps basé sur le nombre de tests, le spécimen ou statistiques médecin.</value>
+			<value>Chiffres: Cette option gï¿½nï¿½re un rapport pour une pï¿½riode donnï¿½e de temps basï¿½ sur le nombre de tests, le spï¿½cimen ou statistiques mï¿½decin.</value>
 		</term>
 		<term>
 			<key>TIPS_TURNAROUNDTIME</key>
-			<value>Délai d'exécution: Cette option génère le délai d'exécution pour la totalité ou d'essai choisie pour une période de temps donnée. Il génère également un graphique des statistiques. Vous pouvez choisir d'inclure les deux essais en cours ou terminées ou tout simplement les tests effectués.</value>
+			<value>Dï¿½lai d'exï¿½cution: Cette option gï¿½nï¿½re le dï¿½lai d'exï¿½cution pour la totalitï¿½ ou d'essai choisie pour une pï¿½riode de temps donnï¿½e. Il gï¿½nï¿½re ï¿½galement un graphique des statistiques. Vous pouvez choisir d'inclure les deux essais en cours ou terminï¿½es ou tout simplement les tests effectuï¿½s.</value>
 		</term>
 		<term>
 			<key>TIPS_INFECTIONREPORT</key>
-			<value>Infection Rapport: Cette option génère un rapport global d'infection pour une période donnée pour une ou toutes les sections de laboratoire. Il propose également une option pour créer un document Word du rapport généré.</value>
+			<value>Infection Rapport: Cette option gï¿½nï¿½re un rapport global d'infection pour une pï¿½riode donnï¿½e pour une ou toutes les sections de laboratoire. Il propose ï¿½galement une option pour crï¿½er un document Word du rapport gï¿½nï¿½rï¿½.</value>
 		</term>
 		<term>
 			<key>TIPS_INVENTORY</key>
-			<value>Inventaire: Cette option génère une liste de l'inventaire actuel.</value>
+			<value>Inventaire: Cette option gï¿½nï¿½re une liste de l'inventaire actuel.</value>
 		</term>
 	</page>
 	<page id="search_condition" descr="Search Conditions">

@@ -1,0 +1,116 @@
+2011-09-23 13:54:55	douala_admin	INSERT INTO test (
+			test_type_id, 
+			specimen_id, 
+			result, 
+			comments,
+			verified_by,
+			user_id ) 
+		VALUES (
+			165,  
+			37096, 
+			'', 
+			'', 
+			0, 
+			114 )
+2011-09-23 13:55:58	douala_admin	INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `partial_dob`, `surr_id`, `created_by`, `hash_value`,`ts`) VALUES (16472, '', 'Sept23 Test5', 0, 'M', '1961-09', '', 114, '68eb70a9f72225280a2990c01176f1611278f71b', '2011-09-23 00:00:00')
+2011-09-23 13:56:09	douala_admin	INSERT INTO specimen (
+			specimen_id, 
+			patient_id, 
+			specimen_type_id, 
+			date_collected, 
+			date_recvd, 
+			user_id, 
+			status_code_id, 
+			referred_to, 
+			comments, 
+			aux_id,
+			session_num, 
+			time_collected, 
+			report_to, 
+			doctor, 
+			referred_to_name, 
+			daily_num
+		) 
+		VALUES (
+			37097, 
+			16472, 
+			9, 
+			'2011-09-23', 
+			'2011-09-23', 
+			114, 
+			0, 
+			0, 
+			'', 
+			'', 
+			'20110923-5', 
+			'13:55', 
+			1, 
+			'Dr.Dr.GUI', 
+			'', 
+			'20110923-5'
+		)
+2011-09-23 13:56:09	douala_admin	INSERT INTO test (
+			test_type_id, 
+			specimen_id, 
+			result, 
+			comments,
+			verified_by,
+			user_id ) 
+		VALUES (
+			83,  
+			37097, 
+			'', 
+			'', 
+			0, 
+			114 )
+2011-09-23 14:08:36	douala_admin	INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `partial_dob`, `surr_id`, `created_by`, `hash_value`,`ts`) VALUES (16473, '', 'Sept23 Test6', 0, 'M', '1991-09', '', 114, '0674df39f08252700b6df28edfb8bff92c02c3ed', '2011-09-23 00:00:00')
+2011-09-23 14:08:53	douala_admin	INSERT INTO specimen (
+			specimen_id, 
+			patient_id, 
+			specimen_type_id, 
+			date_collected, 
+			date_recvd, 
+			user_id, 
+			status_code_id, 
+			referred_to, 
+			comments, 
+			aux_id,
+			session_num, 
+			time_collected, 
+			report_to, 
+			doctor, 
+			referred_to_name, 
+			daily_num
+		) 
+		VALUES (
+			37098, 
+			16473, 
+			7, 
+			'2011-09-23', 
+			'2011-09-23', 
+			114, 
+			0, 
+			0, 
+			'', 
+			'', 
+			'20110923-6', 
+			'14:08', 
+			1, 
+			'Dr.Dr.COULIBALY', 
+			'', 
+			'20110923-6'
+		)
+2011-09-23 14:08:53	douala_admin	INSERT INTO test (
+			test_type_id, 
+			specimen_id, 
+			result, 
+			comments,
+			verified_by,
+			user_id ) 
+		VALUES (
+			142,  
+			37098, 
+			'', 
+			'', 
+			0, 
+			114 )

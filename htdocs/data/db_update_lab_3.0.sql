@@ -1,0 +1,1 @@
+update  report_config set t_fields = "1,1,1,0,0,0,0,1,0,0,0" where report_id = 1

@@ -1,0 +1,1620 @@
+2011-10-01 17:36:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-10-01 17:36:51	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=151 ORDER BY st.name
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=151
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=151
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT * FROM specimen_custom_field
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT * FROM patient_custom_field
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT * FROM labtitle_custom_field
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT test_category_id, name FROM test_category
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:36:52	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:36:52	tema_admin	blis_151	SELECT * FROM worksheet_custom
+2011-10-01 17:37:02	tema_tech1	blis_revamp	INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id) VALUES ('tema_tech1', '56cbdfb7197c476fdd872cf2872f38131d24c8be', '', 0, 340, 151, '', '', 'default')
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=151 ORDER BY st.name
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=343 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=151
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=151
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT * FROM specimen_custom_field
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT * FROM patient_custom_field
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT * FROM labtitle_custom_field
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT test_category_id, name FROM test_category
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:37:03	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:03	tema_admin	blis_151	SELECT * FROM worksheet_custom
+2011-10-01 17:37:06	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:06	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:06	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:06	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:06	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:06	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:06	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:06	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:06	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:06	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=151 ORDER BY st.name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=343 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=151
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=151
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT * FROM specimen_custom_field
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT * FROM patient_custom_field
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT * FROM labtitle_custom_field
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT test_category_id, name FROM test_category
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:37:10	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:37:10	tema_admin	blis_151	SELECT * FROM worksheet_custom
+2011-10-01 17:42:43	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:42:43	tema_admin	blis_151	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:42:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:43	tema_admin	blis_revamp	UPDATE lab_config SET name='Tema Polyclinic Laboratory', location='Ghana', admin_user_id=340, id_mode=1 WHERE lab_config_id=151
+2011-10-01 17:42:43	tema_admin	blis_151	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=151
+2011-10-01 17:42:43	tema_admin	blis_151	INSERT INTO lab_config_specimen_type(lab_config_id, specimen_type_id) VALUES (151, 11)
+2011-10-01 17:42:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:43	tema_admin	blis_151	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=151
+2011-10-01 17:42:43	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 85)
+2011-10-01 17:42:43	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 8)
+2011-10-01 17:42:43	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 18)
+2011-10-01 17:42:44	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 25)
+2011-10-01 17:42:44	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 22)
+2011-10-01 17:42:44	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 103)
+2011-10-01 17:42:44	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 9)
+2011-10-01 17:42:44	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 90)
+2011-10-01 17:42:44	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 49)
+2011-10-01 17:42:44	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 29)
+2011-10-01 17:42:44	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 37)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 24)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 30)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 23)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 31)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 59)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 53)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 71)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 102)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 28)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 108)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 56)
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO lab_config_test_type(lab_config_id, test_type_id) VALUES (151, 96)
+2011-10-01 17:42:45	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:45	tema_admin	blis_151	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=151
+2011-10-01 17:42:45	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:45	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=85 LIMIT 1
+2011-10-01 17:42:45	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='85' LIMIT 1
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('85', 'Worksheet - AFB', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:45	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-10-01 17:42:45	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='8' LIMIT 1
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('8', 'Worksheet - ALT/SGPT', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:45	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-10-01 17:42:45	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='18' LIMIT 1
+2011-10-01 17:42:45	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('18', 'Worksheet - AST/SGOT', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=25 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='25' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('25', 'Worksheet - Cl- ', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=22 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='22' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('22', 'Worksheet - Creatinine', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=103 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='103' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('103', 'Worksheet - Direct Bilirubin', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=9 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='9' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=90 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='90' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('90', 'Worksheet - Hb', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=49 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='49' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('49', 'Worksheet - Hb Electropherosis', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=29 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='29' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=37 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='37' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=24 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='24' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('24', 'Worksheet - K+', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=30 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='30' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=23 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='23' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('23', 'Worksheet - Na+', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=31 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='31' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=59 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='59' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=53 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='53' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='71' LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('71', 'Worksheet - Stool Analysis', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=102 LIMIT 1
+2011-10-01 17:42:46	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='102' LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('102', 'Worksheet - Total Bilirubin', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=28 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='28' LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=108 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='108' LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	INSERT INTO report_config (test_type_id, header, footer, margins, p_fields, s_fields, t_fields, p_custom_fields, s_custom_fields ) VALUES ('108', 'Worksheet - Urea', '', '5,0,5,0', '0,1,0,1,1,0,0', '0,0,1,1,0,0', '1,0,1,0,0,0,0,1', '', '' )
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='56' LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT * FROM test_type WHERE test_type_id=96 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT report_id FROM report_config WHERE test_type_id='96' LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	DELETE FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=151 ORDER BY st.name
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=343 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:42:47	tema_admin	blis_151	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=151
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=151
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT * FROM specimen_custom_field
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT * FROM patient_custom_field
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT * FROM labtitle_custom_field
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=85 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=25 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=22 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=103 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=9 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=90 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=49 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=29 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=37 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=24 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=30 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=23 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=31 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=59 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=53 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=102 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=28 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=108 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=96 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=85 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=25 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=22 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=103 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=9 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=90 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=49 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=29 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=37 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=24 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=30 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=23 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=31 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=59 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=53 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=102 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=28 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=108 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=96 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=85
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=25
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=22
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=103
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=9
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=90
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=49
+2011-10-01 17:42:48	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=29
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=37
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=24
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=30
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=23
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=31
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=59
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=53
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=102
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=28
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=108
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=96
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:42:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=85
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=25
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=22
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=103
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=9
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=90
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=49
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=29
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=37
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=24
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=30
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=23
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=31
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=59
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=53
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=102
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=28
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=108
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=96
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT test_category_id, name FROM test_category
+2011-10-01 17:42:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:42:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:42:49	tema_admin	blis_151	SELECT * FROM worksheet_custom
+2011-10-01 17:43:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=151 ORDER BY st.name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=343 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:43:53	tema_admin	blis_151	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=151
+2011-10-01 17:43:53	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=151
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT * FROM specimen_custom_field
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT * FROM patient_custom_field
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT * FROM labtitle_custom_field
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=85 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=25 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=22 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=103 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=9 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=90 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=49 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=29 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=37 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=24 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=30 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=23 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=31 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=59 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=53 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=102 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=28 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=108 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=96 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=85 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=25 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=22 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=103 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=9 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=90 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=49 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=29 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=37 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=24 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=30 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=23 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=31 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=59 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=53 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=102 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=28 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=108 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=96 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=85
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=25
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=22
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=103
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=9
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=90
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=49
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=29
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=37
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=24
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=30
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=23
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=31
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=59
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=53
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=102
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=28
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=108
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=96
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=85
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=25
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=22
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=103
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=9
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=90
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=49
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=29
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=37
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=24
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=30
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=23
+2011-10-01 17:43:54	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=31
+2011-10-01 17:43:55	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=59
+2011-10-01 17:43:55	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=53
+2011-10-01 17:43:55	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-10-01 17:43:55	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=102
+2011-10-01 17:43:55	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=28
+2011-10-01 17:43:55	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=108
+2011-10-01 17:43:55	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-10-01 17:43:55	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=96
+2011-10-01 17:43:55	tema_admin	blis_151	SELECT test_category_id, name FROM test_category
+2011-10-01 17:43:55	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:55	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:43:55	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:43:55	tema_admin	blis_151	SELECT * FROM worksheet_custom
+2011-10-01 17:43:59	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:59	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:59	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:59	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:59	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:59	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:59	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:59	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:43:59	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:43:59	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:14	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:14	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:14	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:14	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:14	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:14	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:14	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:14	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:14	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:14	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:37	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:37	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:37	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:37	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=151 ORDER BY st.name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=343 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=151
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=151
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT * FROM specimen_custom_field
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT * FROM patient_custom_field
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT * FROM labtitle_custom_field
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=85 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=25 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=22 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=103 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=9 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=90 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=49 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=29 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=37 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=24 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=30 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=23 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=31 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=59 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=53 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=102 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=28 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=108 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=96 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:45:38	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=85 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=25 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=22 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=103 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=9 LIMIT 1
+2011-10-01 17:45:38	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=90 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=49 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=29 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=37 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=24 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=30 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=23 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=31 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=59 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=53 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=102 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=28 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=108 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=96 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=85
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=25
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=22
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=103
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=9
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=90
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=49
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=29
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=37
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=24
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=30
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=23
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=31
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=59
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=53
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=102
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=28
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=108
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=96
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=85
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=25
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=22
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=103
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=9
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=90
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=49
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=29
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=37
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=24
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=30
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=23
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=31
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=59
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=53
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=102
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=28
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=108
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=96
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT test_category_id, name FROM test_category
+2011-10-01 17:45:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 17:45:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 17:45:39	tema_admin	blis_151	SELECT * FROM worksheet_custom
+2011-10-01 17:45:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:45:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:45:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:46	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:46	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:46	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:46	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:46	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:46	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:46	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:46	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:46	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:46	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:50	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:50	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:50	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:50	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:50	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:50	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:50	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:50	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:50	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 17:48:50	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 17:48:52	tema_admin	blis_151	INSERT INTO user_rating (user_id, rating) VALUES (340, 6)
+2011-10-01 20:28:05	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:05	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:05	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:05	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:05	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:05	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:05	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:05	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:05	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:05	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=13
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=10
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=8
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=14
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=18
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=16
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=15
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=7
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=24
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=9
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=12
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=17
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=23
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=22
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=11
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=21
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM specimen_test WHERE specimen_type_id=6
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id AND lcst.lab_config_id=151 ORDER BY st.name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=343 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=151
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=151
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT * FROM specimen_custom_field
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT * FROM patient_custom_field
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT * FROM labtitle_custom_field
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=85 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=25 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=22 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=103 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=9 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=90 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=49 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=29 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=37 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=24 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=30 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=23 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=31 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=59 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=53 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=102 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=28 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=108 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=96 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:08	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 20:28:09	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=85 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=8 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=18 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=25 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=22 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=103 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=9 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=90 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=49 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=29 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=37 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=24 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=30 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=23 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=31 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=59 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=53 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=71 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=102 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=28 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=108 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=56 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT name FROM test_type WHERE test_type_id=96 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_revamp	SELECT * FROM user WHERE level=2
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=85
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=25
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=22
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=103
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=9
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=90
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=49
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=29
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=37
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=24
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=30
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=23
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=31
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=59
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=53
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=102
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=28
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=108
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=96
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT * FROM report_disease WHERE lab_config_id=151 AND test_type_id=0 AND measure_id=0 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE lctt.lab_config_id=151 AND lctt.test_type_id=tt.test_type_id
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=85
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=8
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=18
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=25
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=22
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=103
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=9
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=90
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=49
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=29
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=37
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=24
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=30
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=23
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=31
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=59
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=53
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=71
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=102
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=28
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=108
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=56
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT measure_id FROM test_type_measure WHERE test_type_id=96
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT test_category_id, name FROM test_category
+2011-10-01 20:28:09	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT tt.* FROM test_type tt, lab_config_test_type lctt WHERE tt.test_type_id=lctt.test_type_id AND lctt.lab_config_id=151 ORDER BY tt.name
+2011-10-01 20:28:09	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2011-10-01 20:28:09	tema_admin	blis_151	SELECT * FROM worksheet_custom
+2011-10-01 20:28:13	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:13	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:13	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:13	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:13	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:13	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:13	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:13	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:13	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2011-10-01 20:28:13	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2011-10-01 20:28:15	tema_admin	blis_151	INSERT INTO user_rating (user_id, rating) VALUES (340, 6)
+2012-03-10 21:46:37	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:37	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:37	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:37	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:37	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:37	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:37	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:37	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:37	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:37	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:39	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM test_mapping WHERE user_id = 340
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM test_mapping WHERE user_id = 340
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM test_category_mapping WHERE user_id = 340
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM infection_report_settings WHERE user_id=340 AND test_id=0 AND measure_id=0 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM infection_report_settings WHERE user_id=340 AND test_id=0 AND measure_id=0 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM test_mapping WHERE user_id = 340
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:40	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM test_mapping WHERE user_id = 340
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM test_category_mapping WHERE user_id = 340
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM infection_report_settings WHERE user_id=340 AND test_id=0 AND measure_id=0 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM infection_report_settings WHERE user_id=340 AND test_id=0 AND measure_id=0 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:41	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM test_mapping WHERE user_id = 340
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM test_mapping WHERE user_id = 340
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM test_category_mapping WHERE user_id = 340
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM infection_report_settings WHERE user_id=340 AND test_id=0 AND measure_id=0 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM infection_report_settings WHERE user_id=340 AND test_id=0 AND measure_id=0 LIMIT 1
+2012-03-10 21:46:42	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:43	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:47	tema_admin	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2012-03-10 21:46:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:47	tema_admin	blis_revamp	SELECT username FROM user WHERE user_id=340
+2012-03-10 21:46:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:47	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM user WHERE user_id=340 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE admin_user_id=340 OR lab_config_id IN ( 	SELECT lab_config_id FROM lab_config_access 	WHERE user_id=340 ) ORDER BY name
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:49	tema_admin	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id=151 LIMIT 1
+2012-03-10 21:46:54	tema_admin	blis_151	INSERT INTO user_rating (user_id, rating) VALUES (340, 6)
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT username FROM user WHERE user_id=340
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id = 151 ORDER BY u.username
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=151
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=151
+2012-05-24 17:24:08	monu	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM user WHERE level=2
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:24:08	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	DELETE FROM lab_config_access WHERE lab_config_id=151
+2012-05-24 17:24:11	monu	blis_revamp	DELETE FROM user WHERE lab_config_id=151
+2012-05-24 17:24:11	monu	blis_revamp	DELETE FROM report_disease WHERE lab_config_id=151
+2012-05-24 17:24:11	monu	blis_revamp	DELETE FROM lab_config WHERE lab_config_id=151
+2012-05-24 17:24:11	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	SELECT * FROM lab_config ORDER BY name
+2012-05-24 17:24:11	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	SELECT * FROM lab_config ORDER BY name
+2012-05-24 17:24:11	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:24:11	monu	blis_revamp	SELECT * FROM lab_config ORDER BY name
+2012-05-24 17:24:11	monu	blis_revamp	SELECT username FROM user WHERE user_id=115
+2012-05-24 17:24:11	monu	blis_revamp	SELECT username FROM user WHERE user_id=116
+2012-05-24 17:24:12	monu	blis_revamp	SELECT username FROM user WHERE user_id=234
+2012-05-24 17:24:12	monu	blis_revamp	SELECT username FROM user WHERE user_id=339
+2012-05-24 17:24:12	monu	blis_revamp	SELECT username FROM user WHERE user_id=227
+2012-05-24 17:24:12	monu	blis_revamp	SELECT username FROM user WHERE user_id=53
+2012-05-24 17:24:13	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:24:13	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:24:13	monu	blis_revamp	SELECT * FROM lab_config ORDER BY name
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT username FROM user WHERE user_id=340
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id = 151 ORDER BY u.username
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT specimen_type_id FROM lab_config_specimen_type WHERE lab_config_id=151
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT test_type_id FROM lab_config_test_type WHERE lab_config_id=151
+2012-05-24 17:30:11	monu	blis_revamp	SELECT u.* FROM user u WHERE lab_config_id=151 ORDER BY u.username
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM user WHERE level=2
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:11	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:12	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:12	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:12	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:12	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:12	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:30:12	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	SELECT * FROM lab_config WHERE lab_config_id = 151 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	DELETE FROM lab_config_access WHERE lab_config_id=151
+2012-05-24 17:30:14	monu	blis_revamp	DELETE FROM user WHERE lab_config_id=151
+2012-05-24 17:30:14	monu	blis_revamp	DELETE FROM report_disease WHERE lab_config_id=151
+2012-05-24 17:30:14	monu	blis_revamp	DELETE FROM lab_config WHERE lab_config_id=151
+2012-05-24 17:30:14	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	SELECT * FROM lab_config ORDER BY name
+2012-05-24 17:30:14	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	SELECT * FROM lab_config ORDER BY name
+2012-05-24 17:30:14	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:30:14	monu	blis_revamp	SELECT * FROM lab_config ORDER BY name
+2012-05-24 17:30:14	monu	blis_revamp	SELECT username FROM user WHERE user_id=115
+2012-05-24 17:30:14	monu	blis_revamp	SELECT username FROM user WHERE user_id=116
+2012-05-24 17:30:14	monu	blis_revamp	SELECT username FROM user WHERE user_id=53
+2012-05-24 17:30:16	monu	blis_revamp	SELECT * FROM user WHERE user_id=26 LIMIT 1
+2012-05-24 17:30:16	monu	blis_revamp	SELECT lab_config_id FROM lab_config_access where user_id = 26 LIMIT 1
+2012-05-24 17:30:16	monu	blis_revamp	SELECT * FROM lab_config ORDER BY name

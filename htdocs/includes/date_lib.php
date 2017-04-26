@@ -107,7 +107,7 @@ class DateLib
 			$target_format = $lab_config->dateFormat;
 		}
 		$date_parts = explode("-", $date);
-		$retval = date($target_format, mktime(0, 0, 0, $date_parts[1], $date_parts[2], $date_parts[0]));
+		$retval = date($target_format, mktime(0, 0, 0,(int)$date_parts[1], (int)$date_parts[2], (int)$date_parts[0]));
 		return $retval;
 	}
 }

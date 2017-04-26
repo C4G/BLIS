@@ -7,18 +7,29 @@
 #
 
 include("../users/accesslist.php");
-if( !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList)) 
-	&& !(isSuperAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $superAdminPageList)) )
-	header( 'Location: home.php' );
-
 include("redirect.php");
 include("includes/user_lib.php");
 
+
+if( !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList))
+	&& !(isSuperAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $superAdminPageList))
+    && !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $superAdminPageList)))
+	header( 'Location: home.php' );
+
+get_user_by_id($_SESSION['user_id']);
+$_SESSION['user_level'];
+
+
+
 if(User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level']))
 {
+    
 	$lab_config_list = get_lab_configs($_SESSION['user_id']);
+    $_SESSION['lab_config_id']=$lab_config_list[0]->id;
 	header("location:lab_config_home.php?id=".$lab_config_list[0]->id);
 }
+
+
 include("includes/header.php");
 LangUtil::setPageId("lab_configs");
 ?>
@@ -141,7 +152,9 @@ if(isset($_REQUEST['msg']))
 </p>
 <?php 
 $admin_user_id = $_SESSION['user_id'];
+
 $lab_config_list = get_lab_configs($admin_user_id);
+
 $lab_config_list_imported = get_lab_configs_imported();
 //print_r($lab_config_list);
 //echo "<br>";

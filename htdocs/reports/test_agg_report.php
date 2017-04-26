@@ -47,6 +47,7 @@ if ($site == LangUtil::$pageTerms['ALL_SITES'])
 }
 ?>
 
+
 <script type="text/javascript">
     function export_as_word() {
         var html_data = $('#report_content').html();

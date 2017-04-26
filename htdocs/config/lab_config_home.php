@@ -8,6 +8,7 @@ include("includes/new_image.php");
 include("includes/header.php");
 include("includes/random.php");
 include("includes/stats_lib.php");
+
 include_once("includes/field_order_update.php");
 
 LangUtil::setPageId("lab_config_home");
@@ -241,7 +242,11 @@ $lab_config_id = $_REQUEST['id'];
 $user = get_user_by_id($_SESSION['user_id']);
 if ( !((is_country_dir($user)) || (is_super_admin($user)) ) ) {
 	$saved_db = DbUtil::switchToGlobal();
-	$query = "SELECT lab_config_id FROM lab_config WHERE admin_user_id = ".$_SESSION['user_id'];
+	$query = "SELECT lab_config_id FROM lab_config WHERE admin_user_id = ".$_SESSION['user_id'].
+    " OR lab_config_id IN ( ".
+    "	SELECT lab_config_id FROM lab_config_access ".
+    "	WHERE user_id='".$_SESSION['user_id'] .
+    "') ORDER BY name";
 	$record = query_associative_one($query);
 	$labId = $record['lab_config_id'];
 	if($labId != $lab_config_id) {
@@ -345,7 +350,7 @@ $(document).ready(function(){
 		# Preload the inventory pane
 		?>
 		right_load(15, 'inventory_div');
-		<?php
+		<?
 	}
 	else if(isset($_REQUEST['set_locale']))
 	{
@@ -942,7 +947,8 @@ function submit_site_remove()
 {
 	$('#site_config_form').ajaxSubmit({
 		success: function() {
-			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&siteupdate=1";
+		    alert("submitted")
+			//window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&siteupdate=1";
 		}
 	})
 }
@@ -2475,7 +2481,7 @@ function AddnewDHIMS2Config()
 						<form id="site_config_form" name="site_config_form"
 							  action="../ajax/site_config_update.php"
 							  method="post">
-							<br> <?php echo LangUtil::$pageTerms['SELECT_SITE_FOR_REMOVAL']; ?> <br>
+							<br> <?php echo LangUtil::$pageTerms['MODIFY_SITE'];  ?> :<br>
 							<?php
 							$page_elems->getSiteConfigForm($_SESSION['lab_config_id']);
 							?>
@@ -2485,6 +2491,8 @@ function AddnewDHIMS2Config()
 								   onclick="submit_site_remove()">
 						</form>
 					</div>
+
+
                     <div id="site_config_add_form_div" class="pretty_box" style="display: none; margin-left: 10px;">
                         <form id="site_config_add_form"
 							  name="site_config_add_form"

@@ -118,6 +118,7 @@ class User
 		# Checks if only one lab config exists for this admin level user
 		global $LIS_ADMIN;
 		$lab_config_list = get_lab_configs($user_id, $user_level);
+		
 		if(count($lab_config_list) == 1 && $user_level == $LIS_ADMIN)
 			return true;
 		else
@@ -404,7 +405,7 @@ class FieldOrdering
 		$query_string =
 		"INSERT INTO `field_order`(`lab_config_id`, `field_order`,`form_id`) ".
 		"VALUES ($lab_config_id, '$field_order', $form_id)";
-		
+		//echo $query_string;
 		//print $query_string;
 		query_insert_one($query_string);
 		
@@ -814,7 +815,8 @@ class LabConfig
 		DbUtil::switchRestore($saved_db);
 		return $retval;		
 	}
-	
+
+
 	public function getGoalTatValue($test_type_id, $timestamp="") {
 		global $DEFAULT_TARGET_TAT, $con;
 		$saved_db = DbUtil::switchToLabConfig($this->id);
@@ -1297,7 +1299,8 @@ class Sites
         $obj->id = $record['id'];
         $obj->name = $record['name'];
         $obj->lab_id = $record['lab_id'];
-
+        $obj->district = $record['District'];
+        $obj->region = $record['Region'];
         return $obj;
     }
 
@@ -1325,32 +1328,42 @@ class Sites
     {
         $saved_db = DbUtil::switchToLabConfig($id);
         global $con;
+        $val = mysql_query('select 1 from `sites` LIMIT 1');
 
-        $query = "SELECT * FROM sites ".
-            "WHERE lab_id=". $id;
-        $result = query_associative_all($query, null);
-
-        if ($result == NULL)
+        if($val !== FALSE)
         {
-            $lab_config = LabConfig::getById($id);
-            $lab_name = mysql_real_escape_string($lab_config->name, $con);
-            $query = "INSERT INTO sites ".
-                "(name, lab_id) VALUES ".
-                "('$lab_name', '$id')";
-            query_insert_one($query);
+            $query = "SELECT * FROM sites ".
+                "WHERE lab_id=". $id;
+            $result = query_associative_all($query, null);
+
+            if ($result == NULL)
+            {
+                $lab_config = LabConfig::getById($id);
+                $lab_name = mysql_real_escape_string($lab_config->name, $con);
+                $query = "INSERT INTO sites ".
+                    "(name, lab_id) VALUES ".
+                    "('$lab_name', '$id')";
+                query_insert_one($query);
+            }
+
+            $query = "SELECT * FROM sites ".
+                "WHERE lab_id=". $id;
+            $result = query_associative_all($query, null);
+
+            $resultset = array();
+            foreach ($result as $record)
+                $resultset[] = self::getObject($record);
+
+            DbUtil::switchRestore($saved_db);
+
+            return $resultset;
+        }
+        else
+        {
+            return null;
         }
 
-        $query = "SELECT * FROM sites ".
-            "WHERE lab_id=". $id;
-        $result = query_associative_all($query, null);
 
-        $resultset = array();
-        foreach ($result as $record)
-            $resultset[] = self::getObject($record);
-
-        DbUtil::switchRestore($saved_db);
-
-        return $resultset;
 
     }
 
@@ -1364,6 +1377,24 @@ class Sites
         $query = "INSERT INTO sites ".
             "(name, lab_id) VALUES ".
             "('$name', '$lab_config_id')";
+        query_insert_one($query);
+
+        DbUtil::switchRestore($saved_db);
+    }
+
+    public static function updateSite($lab_config_id, $site_id, $site_region, $site_district)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        global $con;
+
+        //$id = mysql_real_escape_string($site_id, $con);
+        $region = mysql_real_escape_string($site_region, $con);
+        $district = mysql_real_escape_string($site_district, $con);
+        echo $site_region;
+        echo $site_district;
+       
+        $query = "UPDATE sites SET Region = '".$region."' , District = '".$district."' where id = '$site_id' ";
+        echo $query;
         query_insert_one($query);
 
         DbUtil::switchRestore($saved_db);
@@ -3779,7 +3810,8 @@ class Test
 		return $retval;
 	}	
 	
-	public function decodeResult($show_range=false) {
+	public function decodeResult($show_range=false,$add_units) {
+
 		# Converts stored result value(s) for showing on front-end
 		# Get measure, unit pairs for this test
 		$test_type = TestType::getById($this->testTypeId);
@@ -3903,6 +3935,8 @@ class Test
                                             {
                                                     $retval .= "<br>".$result_list[$i]."&nbsp;";
                                             }
+                                            if($add_units == true)
+                                                $retval.=$measure->unit."&nbsp";
                                     }
                                     else
                                     {
@@ -3933,7 +3967,10 @@ class Test
                                             }
                                             else
                                                     $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;";
+                                        if($add_units == true)
+                                            $retval.=$measure->unit."&nbsp";
                                     }
+
 
                                     if($show_range === true)
                                     {
@@ -9324,6 +9361,7 @@ function get_lab_configs($admin_user_id = "")
 	else
 	{
 		# Fetch all lab configs
+
 		$query_configs = 
 			"SELECT * FROM lab_config ".
 			"WHERE admin_user_id=$admin_user_id ".
@@ -9441,6 +9479,45 @@ function get_tests_done_this_month($lab_config)
 	return $retval;
 }
 
+
+
+function get_site_lab($site_id)
+{
+    # Returns lab id of site
+
+    $query_string = "SELECT * FROM sites WHERE id='$site_id'";
+    $record = query_associative_one($query_string);
+    $retval = 0;
+    if($record == null)
+    {
+        return null;
+    }
+    else
+    {
+        $retval = $record['lab_id'];
+    }
+    return $retval;
+}
+
+
+function get_site_info($site_id)
+{
+    # Returns lab id of site
+
+    $query_string = "SELECT * FROM sites WHERE id='$site_id'";
+    $record = query_associative_one($query_string);
+    $retval = 0;
+    if($record == null)
+    {
+        return null;
+    }
+    else
+    {
+        $retval = $record;
+    }
+    return $retval;
+}
+
 function get_site_list($user_id)
 {
 	# Returns a list of accessible site names and ids for a given user (admin or technician)
@@ -9472,6 +9549,10 @@ function get_site_list($user_id)
 	DbUtil::switchRestore($saved_db);
 	return $retval;
 }
+
+
+
+
 
 function get_test_types_by_site($lab_config_id="")
 {
@@ -13641,6 +13722,11 @@ function import_test_between_labs($test_id, $from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $test_type = $tt->getById($test_id);
     //print_r($test_obj);
+    if(is_null($test_type)){
+        echo "Could not load test ID: ".$test_id;
+        return;
+    }
+
     $measure_objs = $test_type->getMeasures();
     //print_r($measure_objs);
     DbUtil::switchRestore($saved_db);
@@ -14970,7 +15056,7 @@ function get_tat_data_per_test_per_lab_dir_new($test_type_id, $lab_config_id, $d
     global $DEFAULT_PENDING_TAT; # Default TAT value for pending tests (in days)
     $i = 7;
                     $lab_config = LabConfig::getById($lab_config_id);
-                date_default_timezone_set('UTC');
+               // date_default_timezone_set('UTC');
 		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
 		/////////////////////////$resultset = get_completed_tests_by_type($test_type_id, $date_from, $date_to);
 		# {resultentry_ts, specimen_id, date_collected_ts}
@@ -15316,7 +15402,7 @@ function get_tat_data_per_test_per_lab_dir($test_type_id, $lab_config_id, $date_
  {
     global $DEFAULT_PENDING_TAT; # Default TAT value for pending tests (in days)
                     $lab_config = LabConfig::getById($lab_config_id);
-                date_default_timezone_set('UTC');
+                //
 		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
 		$resultset = get_completed_tests_by_type($test_type_id, $date_from, $date_to);
 		# {resultentry_ts, specimen_id, date_collected_ts}

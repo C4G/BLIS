@@ -75,7 +75,7 @@ return $short_name;
 
 public static function install_first_order($lab_config, $formId){ 
 	$field_ordering_for_curent_lab = FieldOrdering::getByFormId($_SESSION['lab_config_id'], $formId);
-	
+
 	if($field_ordering_for_curent_lab == null){
 	// insert the order for the first time
 	// 1. Get the current lab config info from the LabConfig Class
@@ -84,10 +84,11 @@ public static function install_first_order($lab_config, $formId){
 	// 2. Parse the object and populate the new fieldOrder Object
 		//$fieldOrdering_new = new FieldOrdering();
 		$field_ordering = new FieldOrdering();
+
 		 // default values
 		$field_ordering->form_id = $formId;
 		$field_ordering->id = $_SESSION['lab_config_id'];
-		
+
 		$count = 1;
 		
 		$field_order = "";
@@ -130,9 +131,9 @@ public static function install_first_order($lab_config, $formId){
 				$field_order = $field_order.","."Date of Birth";
 				$count++;
 			}
-			
+
 			$custom_field_list_patients = get_lab_config_patient_custom_fields($lab_config->id);
-			
+
 			foreach($custom_field_list_patients as $value){
 				//$field_ordering->{field.$count} = $value->fieldName;
 				$field_order = $field_order.",".$value->fieldName;
@@ -169,7 +170,7 @@ public static function install_first_order($lab_config, $formId){
 				$field_order = $field_order.","."Physician";
 				$count++;
 			}
-			
+
 			$custom_field_list_specimen = get_lab_config_specimen_custom_fields($lab_config->id);
 				
 			foreach($custom_field_list_specimen as $value){
@@ -185,10 +186,12 @@ public static function install_first_order($lab_config, $formId){
 		    $field_ordering->{field.$count} = "Age Limit";
 			$count++;
 		} */
-	
+
 	// 3. Insert the newly created order
 		$field_ordering->form_field_inOrder = $field_order;
+
 		FieldOrdering::add_fieldOrdering($field_ordering);
+
 		$field_ordering_for_curent_lab = $field_ordering;
 	}
 

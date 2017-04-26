@@ -75,20 +75,35 @@ class ScriptElems
 	
 				function checkDate(y, m, d)
 				{
+
 					var today = new Date();
 					var today_y = today.getFullYear();
 					var today_m = today.getMonth()+1;
 					var today_d = today.getDate();
-					if(parseInt(y) > today_y)
-						return false;
-					if(y.trim() == "" || m.trim() == "" || d.trim() == "")
-						return false;
-					else if(parseInt(y) == today_y && parseInt(m) > today_m)
-						return false;
-					else if(parseInt(y) == today_y && parseInt(m) == today_m && parseInt(d) > today_d)
-						return false;
-					if(parseInt(y) < 1900)
-						return false;
+					if(parseInt(y) > today_y){
+                        return false;
+                    }
+
+					if(y.trim() == "" || m.trim() == "" || d.trim() == ""){
+					    console.log(1);
+                        return false;
+                    }
+
+					else if(parseInt(y) == today_y && parseInt(m) > today_m){
+                        console.log(2);
+					    return false;
+                }
+
+					else if(parseInt(y) == today_y && parseInt(m) == today_m && parseInt(d) > today_d){
+                        console.log(3);
+					    return false;
+                }
+
+					if(parseInt(y) < 1900){
+                        console.log(4);
+					    return false;
+                    }
+
 					return checkDateRegex(y+"-"+m+"-"+d);
 				}
 	
@@ -238,7 +253,7 @@ class ScriptElems
   <script type="text/javascript" src="js/jquery.bgiframe.min.js"></script>
  <script type="text/javascript" src="js/jquery.dimensions.js"></script>
   <script type="text/javascript" src="js/jquery.autocomplete.js"></script>
-  
+   <link rel="stylesheet" type="text/css" media="screen" href="css/select2.css"></link>
 	<?php
 		 }
 		 $this->enabledAutocomplete = true;
@@ -463,7 +478,7 @@ class ScriptElems
         {
         ?>
             <link rel="stylesheet" href="js/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
-            <script type="text/javascript" src="js/ztree/js/jquery-1.4.4.min.js"></script>  
+            <script type="text/javascript" src="js/ztree/js/jquery-1.4.4.min.js"></script>
             <script type="text/javascript" src="js/ztree/js/jquery.ztree.core-3.5.js"></script>
             <script type="text/javascript" src="js/ztree/js/jquery.ztree.excheck-3.5.js"></script>
             <script type="text/javascript" src="js/ztree/js/jquery.ztree.exhide-3.5.js"></script>

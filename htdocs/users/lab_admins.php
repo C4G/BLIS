@@ -1,4 +1,4 @@
-<?php
+    <?php
 #
 # (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
 # Main page that lists all lab admin accounts and related options
