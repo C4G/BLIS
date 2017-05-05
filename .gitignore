@@ -75,3 +75,4 @@ server/
 *_copy.php
 *.bak
 /htdocs/regn/new_patient_updated.php
+*~
