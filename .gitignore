@@ -43,6 +43,7 @@ CVS/
 .buildpath
 .project
 .metadata/
+.idle/
 BLIS.exe.manifest
 BlisSetup.html
 FirefoxPortable/
@@ -50,3 +51,26 @@ autorun.inf
 dbdir/
 pms_config.ini
 server/
+/htdocs/config/lab_configdffs.php
+/htdocs/ajax/search_p_1.php
+/htdocs/ajax/search_p_2.php
+/htdocs/ajax/search_p_dyn_1.php
+/htdocs/api/dhims2_send1.php
+/htdocs/config/lab_configs_1.php
+/htdocs/catalog/test_type_edit_v2.1.php
+/htdocs/catalog/test_type_edit_dir_1.php
+/htdocs/lang/current_inventory_1.php
+/htdocs/reports/reports_1.php
+/htdocs/reports/reports1.php
+/htdocs/reports/reports_testhistory2.php
+/htdocs/reports/reports_testhistory_new.php
+/htdocs/export/export_word2.php
+/local/myFile.txt
+/local/log_*
+/local/UILog_*
+/includes/*dff.php
+*\ \-\ Copy*
+*_old.php
+*_old.xml
+*_copy.php
+*.bak
