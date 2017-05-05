@@ -856,7 +856,7 @@ class PageElems
 		<tr>
 		<td></td>		
 		<td><input type="button" id="submit" type="submit" onclick="submitTestNames();" value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>" size="20" />
-		<?
+		<?php
 	}
         
         public function getTestNamesSelectorForEdit($mapping) {
@@ -895,7 +895,7 @@ class PageElems
 		<tr>
 		<td></td>		
 		<td><input type="button" id="submit" type="submit" onclick="submitTestNames();" value="<?php echo LangUtil::$generalTerms['CMD_UPDATE']; ?>" size="20" />
-		<?
+		<?php
 	}
 	
 	public function getSpecimenTypesCountrySelect()
@@ -940,7 +940,7 @@ class PageElems
 		<tr>
 		<td></td>		
 		<td><input type="button" id="submit" type="submit" onclick="submitTestCategoryNames();" value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>" size="20" />
-		<?
+		<?php
 	}
 	
 	public function getTestCategoryTypesCountrySelect() {
@@ -2923,7 +2923,7 @@ class PageElems
                             {
                             ?>
                                 <td><a href="javascript:print_specimen_barcode(<?php echo $pid;?>,<?php echo $sid;?> )">Print Barcode</a> </td>
-                            <? 
+                            <?php 
                             }
                                 
                         ?>
@@ -3055,7 +3055,7 @@ class PageElems
                             {
                             ?>
                                  <th></th>
-                            <? 
+                            <?php 
                             }
                                 
                         ?>
@@ -5154,35 +5154,35 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	{
 		# Returns <select> options for custom field type
 		?>
-		<? if ($edit==0): ?>
+		<?php if ($edit==0): ?>
 			<option value='<?php echo CustomField::$FIELD_FREETEXT; ?>'><?php echo LangUtil::$generalTerms['FREETEXT']; ?></option>
 			<option value='<?php echo CustomField::$FIELD_DATE; ?>'><?php echo LangUtil::$generalTerms['DATE']; ?></option>
 			<option value='<?php echo CustomField::$FIELD_NUMERIC; ?>'><?php echo LangUtil::$generalTerms['NUMERIC_FIELD']; ?></option>
 			<option value='<?php echo CustomField::$FIELD_OPTIONS; ?>'><?php echo LangUtil::$generalTerms['DROPDOWN']; ?></option>
 			<!--<option value='<?php #echo CustomField::$FIELD_MULTISELECT; ?>'><?php #echo LangUtil::$generalTerms['MULTISELECT']; ?></option>-->
-		<? endif; ?>
-		<? if ($edit==1): ?>
-	  		<? if (strcmp($type,LangUtil::$generalTerms['FREETEXT'])==0): ?>
+		<?php endif; ?>
+		<?php if ($edit==1): ?>
+	  		<?php if (strcmp($type,LangUtil::$generalTerms['FREETEXT'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_FREETEXT; ?>' selected><?php echo LangUtil::$generalTerms['FREETEXT']; ?></option>
-			<? else: ?>
+			<?php else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_FREETEXT; ?>' ><?php echo LangUtil::$generalTerms['FREETEXT']; ?></option>
-			<? endif; ?>
-			<? if (strcmp($type,LangUtil::$generalTerms['DATE'])==0): ?>
+			<?php endif; ?>
+			<?php if (strcmp($type,LangUtil::$generalTerms['DATE'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_DATE; ?>' selected><?php echo LangUtil::$generalTerms['DATE']; ?></option>
-			<? else: ?>
+			<?php else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_DATE; ?>' ><?php echo LangUtil::$generalTerms['DATE']; ?></option>
-			<? endif; ?>
-			<? if (strcmp($type,LangUtil::$generalTerms['NUMERIC_FIELD'])==0): ?>
+			<?php endif; ?>
+			<?php if (strcmp($type,LangUtil::$generalTerms['NUMERIC_FIELD'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_NUMERIC; ?>' selected><?php echo LangUtil::$generalTerms['NUMERIC_FIELD']; ?></option>
-			<? else: ?>
+			<?php else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_NUMERIC; ?>' ><?php echo LangUtil::$generalTerms['NUMERIC_FIELD']; ?></option>
-			<? endif; ?>
-			<? if (strcmp($type,LangUtil::$generalTerms['DROPDOWN'])==0): ?>
+			<?php endif; ?>
+			<?php if (strcmp($type,LangUtil::$generalTerms['DROPDOWN'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_OPTIONS; ?>' selected><?php echo LangUtil::$generalTerms['DROPDOWN']; ?></option>
-			<? else: ?>
+			<?php else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_OPTIONS; ?>' ><?php echo LangUtil::$generalTerms['DROPDOWN']; ?></option>
-			<? endif; ?>
-		<? endif; ?>
+			<?php endif; ?>
+		<?php endif; ?>
 
 	<?php
 	}
