@@ -76,4 +76,4 @@ server/
 *.bak
 /htdocs/regn/new_patient_updated.php
 *~
-/htdocs/nbproject
+*nbproject/
