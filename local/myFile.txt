@@ -1,1 +1,0 @@
-UPDATE patient SET name='July', surr_id='', addl_id='', sex='M', age=0, partial_dob='', dob='1980-05-22' WHERE patient_id=13013

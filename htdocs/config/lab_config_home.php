@@ -8,7 +8,6 @@ include("includes/new_image.php");
 include("includes/header.php");
 include("includes/random.php");
 include("includes/stats_lib.php");
-
 include_once("includes/field_order_update.php");
 
 LangUtil::setPageId("lab_config_home");
@@ -350,7 +349,7 @@ $(document).ready(function(){
 		# Preload the inventory pane
 		?>
 		right_load(15, 'inventory_div');
-		<?
+		<?php
 	}
 	else if(isset($_REQUEST['set_locale']))
 	{
@@ -2491,8 +2490,6 @@ function AddnewDHIMS2Config()
 								   onclick="submit_site_remove()">
 						</form>
 					</div>
-
-
                     <div id="site_config_add_form_div" class="pretty_box" style="display: none; margin-left: 10px;">
                         <form id="site_config_add_form"
 							  name="site_config_add_form"
