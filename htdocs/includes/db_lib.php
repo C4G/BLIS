@@ -3810,7 +3810,7 @@ class Test
 		return $retval;
 	}	
 	
-	public function decodeResult($show_range=false,$add_units) {
+	public function decodeResult($show_range=false,$add_units=true) {
 
 		# Converts stored result value(s) for showing on front-end
 		# Get measure, unit pairs for this test
