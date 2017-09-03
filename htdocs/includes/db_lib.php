@@ -3936,7 +3936,7 @@ class Test
                                                     $retval .= "<br>".$result_list[$i]."&nbsp;";
                                             }
                                             if($add_units == true)
-                                                $retval.=$measure->unit."&nbsp";
+                                                $retval.=$curr_measure->unit."&nbsp";
                                     }
                                     else
                                     {
@@ -3968,7 +3968,7 @@ class Test
                                             else
                                                     $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;";
                                         if($add_units == true)
-                                            $retval.=$measure->unit."&nbsp";
+                                            $retval.=$curr_measure->unit."&nbsp";
                                     }
 
 
