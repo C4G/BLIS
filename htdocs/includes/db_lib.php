@@ -3810,7 +3810,7 @@ class Test
 		return $retval;
 	}	
 	
-	public function decodeResult($show_range=false,$add_units) {
+	public function decodeResult($show_range=false,$add_units=true) {
 
 		# Converts stored result value(s) for showing on front-end
 		# Get measure, unit pairs for this test
@@ -3936,7 +3936,7 @@ class Test
                                                     $retval .= "<br>".$result_list[$i]."&nbsp;";
                                             }
                                             if($add_units == true)
-                                                $retval.=$measure->unit."&nbsp";
+                                                $retval.=$curr_measure->unit."&nbsp";
                                     }
                                     else
                                     {
@@ -3968,7 +3968,7 @@ class Test
                                             else
                                                     $retval .= "<b>".$result_list[$i]."</b>"."&nbsp;";
                                         if($add_units == true)
-                                            $retval.=$measure->unit."&nbsp";
+                                            $retval.=$curr_measure->unit."&nbsp";
                                     }
 
 
