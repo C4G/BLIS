@@ -89,7 +89,8 @@ $LANG_ARRAY = array (
 		"MONTHS" => "Months", 
 		"WEEKS" => "Weeks",
 		"DAYS" => "Days", 
-		"HOURS" => "Hours", 
+		"HOURS" => "Hours",
+		"MINUTES" => "Minutes", 
 		"DROPDOWN" => "Drop-down Options", 
 		"FREETEXT" => "Free-text", 
 		"NUMERIC_FIELD" => "Numeric", 
@@ -479,7 +480,8 @@ $LANG_ARRAY = array (
         "SAMPLES_RECIVED" => "Samples Received",
         "ENABLE_SITE_ENTRY" => "Enable Site Entry for a Specimen",
         "SELECT_SITE_FOR_REMOVAL" => "Select sites for removal",
-        "MODIFY_SITE" => "Modify sites"
+        "MODIFY_SITE" => "Modify sites",
+        "PRINT_UNVERIFIED" => "Allow printing of unverified tests"
 
 	) ,
 	"lab_admins" => array ( 

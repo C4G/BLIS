@@ -102,6 +102,7 @@ if ($site == LangUtil::$pageTerms['ALL_SITES'])
     echo "<br>";
     echo "Laboratory: ".$lab_config->name;
     echo "<br>";
+
     if ($report_type_code == 1)
         $page_elems->showAggregateCountReport($lab_config, $test, $test_report_config);
     elseif ($report_type_code == 2)

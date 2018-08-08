@@ -170,7 +170,7 @@ if(isset($_SESSION['username']))
 		<table cellspacing="10px">
 			<tr>
 				<td>
-					<span class="lis_title">Basic Laboratory Information System </span>
+					<span class="lis_title">Basic Laboratory Information System v<?php echo $VERSION; ?> </span>
 				</td>
 				<td>
 				</td>

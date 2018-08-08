@@ -28,10 +28,10 @@ DbUtil::switchRestore($saved_db);
 
 $vers = $record['version']; 
 
-$version_list = array("2.2","2.3","2.4","2.5","2.6","2.7","2.8","2.9","2.91","3.0","3.1","3.2","3.21","3.3");
+$version_list = array("2.2","2.3","2.4","2.5","2.6","2.7","2.8","2.9","2.91","3.0","3.1","3.2","3.21","3.3", "3.4");
 
-$version_doc_admin = array("db_update_v2-2","db_update_revamp_2.3","db_update_revamp_2.4","db_update_revamp_2.5","db_update_revamp_2.6","db_update_revamp_2.7","db_update_revamp_admin_2.8","","db_update_revamp_2.91","db_update_revamp_3.0","","db_update_revamp_3.2","db_update_revamp_3.21","");
-$version_doc_revamp = array("db_update_v2-2","db_update_revamp_2.3","db_update_revamp_2.4","db_update_revamp_2.5","db_update_revamp_2.6","db_update_revamp_2.7","db_update_revamp_2.8","","db_update_revamp_2.91", "db_update_revamp_3.0","","db_update_revamp_3.2","db_update_revamp_3.21","");
+$version_doc_admin = array("db_update_v2-2","db_update_revamp_2.3","db_update_revamp_2.4","db_update_revamp_2.5","db_update_revamp_2.6","db_update_revamp_2.7","db_update_revamp_admin_2.8","","db_update_revamp_2.91","db_update_revamp_3.0","","db_update_revamp_3.2","db_update_revamp_3.21","", "db_update_revamp_3.4");
+$version_doc_revamp = array("db_update_v2-2","db_update_revamp_2.3","db_update_revamp_2.4","db_update_revamp_2.5","db_update_revamp_2.6","db_update_revamp_2.7","db_update_revamp_2.8","","db_update_revamp_2.91", "db_update_revamp_3.0","","db_update_revamp_3.2","db_update_revamp_3.21","", "db_update_revamp_3.4");
 $version_doc_lab = array("db_update_v2-2","db_update_lab_2.3","db_update_lab_2.4","db_update_lab_2.5","db_update_lab_2.6","db_update_lab_2.7","db_update_lab_2.8","","","db_update_lab_3.0","","db_update_lab_3.2","db_update_lab_3.21","db_update_lab_3.3");
 
 $retstr1 = "";

@@ -18,6 +18,7 @@ else
 
 
 $a = $_REQUEST['a'];
+$c = $_REQUEST['c'];
 $saved_db = "";
 $lab_config = null;
 $q = $_REQUEST['q'];
@@ -56,7 +57,7 @@ else if($a == 1)
         }
         else
         {
-            $patient_list = search_patients_by_name_dyn($q, $result_cap, $result_counter);
+            $patient_list = search_patients_by_name_dyn($q, $result_cap, $result_counter, $c);
         }
 	//DB Merging - Currently Disabled 
 	# See if there's a patient by the exact same name in another lab
@@ -301,19 +302,19 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
    <?php 
         if(isset($_REQUEST['l']))
         { 
-            $next_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter+1); 
+            $next_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter+1); 
         }
         else
         {
-            $next_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&result_cap=".$result_cap."&result_counter=".($result_counter+1);             
+            $next_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&result_cap=".$result_cap."&result_counter=".($result_counter+1);             
         }
         if(isset($_REQUEST['l']))
         { 
-            $prev_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1); 
+            $prev_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1); 
         }
         else
         {
-            $prev_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1);             
+            $prev_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1);             
         }
     ?>
                    <?php if($_REQUEST['result_counter'] != 1) {?>

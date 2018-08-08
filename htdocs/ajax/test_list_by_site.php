@@ -39,7 +39,7 @@ LangUtil::setPageId("test_list_by_site");
 	/*color: #009;*/
 }
 </style>
-<?php
+<?
 $site_id = $_REQUEST['site_id'];
 $test_type_list = get_test_types_by_site($site_id);
 /*if($site_id <= 0)

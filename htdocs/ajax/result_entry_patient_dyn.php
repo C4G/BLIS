@@ -8,8 +8,8 @@ include("../includes/db_lib.php");
 include("../includes/user_lib.php");
 LangUtil::setPageId("results_entry");
 
-$attrib_value = $_REQUEST['a'];
-$attrib_type = $_REQUEST['t'];
+$attrib_value = $_REQUEST['t'];
+$attrib_type = $_REQUEST['a'];
 $c = $_REQUEST['c'];
 
 $lab_section = 0; // All lab section by default
@@ -21,7 +21,7 @@ $dynamic = 1;
 $search_settings = get_lab_config_settings_search();
 $rcap = $search_settings['results_per_page'];
 $lab_config = LabConfig::getById($_SESSION['lab_config_id']);
-$uiinfo = "op=".$_REQUEST['t']."&qr=".$_REQUEST['a'];
+$uiinfo = "op=".$_REQUEST['a']."&qr=".$_REQUEST['t'];
 putUILog('result_entry_patient_dyn', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 ?>
@@ -83,7 +83,7 @@ background-color:#EAF2D3;
 </style>
 <script type='text/javascript'>
     $(document).ready(function(){
-        url_string = 'ajax/result_data_count.php?a='+'<?php echo $_REQUEST['t']; ?>'+'&q='+'<?php echo $_REQUEST['a']; ?>'+'&labsec='+'<?php echo $lab_section; ?>&c=<?php echo $_REQUEST['c'] ?>';
+        url_string = 'ajax/result_data_count.php?a='+'<?php echo $_REQUEST['a']; ?>'+'&q='+'<?php echo $_REQUEST['t']; ?>'+'&labsec='+'<?php echo $lab_section; ?>&c=<?php echo $_REQUEST['c'] ?>';
         var cap = parseInt($('#rcap').html());
         //console.log(cap);
         //alert(<?php echo $_REQUEST['t']; ?>+"-"+<?php echo $_REQUEST['a']; ?>);
@@ -349,7 +349,7 @@ else
                     "SELECT specimen_id FROM specimen ".
                     "WHERE daily_num LIKE '%-$attrib_value' ".
                     "AND ( status_code_id=".Specimen::$STATUS_PENDING." ".
-                    "OR status_code_id=".Specimen::$STATUS_REFERRED." ) AND s.specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) ".
+                    "OR status_code_id=".Specimen::$STATUS_REFERRED." ) AND specimen_id NOT IN (select r_id from removal_record where category='specimen' AND status=1) ".
                     "ORDER BY date_collected DESC LIMIT 0,$rcap";
     	} else {
 			$query_string =

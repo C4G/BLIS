@@ -75,6 +75,6 @@ $siteList = get_site_list($_SESSION['user_id']);
 </tr>
 </table>
 </form>
-<?php
+<?
 include("../includes/footer.php");
 ?>

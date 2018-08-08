@@ -193,7 +193,7 @@ function fetch_specimen()
 
 	
 	$("#fetched_patient_entry").load(url, 
-		{a: specimen_id, t: attrib, labsec: labsection, c: condition_attrib }, 
+		{a: attrib, t: specimen_id, labsec: labsection, c: condition_attrib }, 
 		function() 
 		{
 			$('#fetch_progress_bar').hide();

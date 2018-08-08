@@ -290,6 +290,10 @@
 			<value>Hours</value>
 		</term>
 		<term>
+			<key>MINUTES</key>
+			<value>Minutes</value>
+		</term>
+		<term>
 			<key>DROPDOWN</key>
 			<value>Drop-down Options</value>
 		</term>

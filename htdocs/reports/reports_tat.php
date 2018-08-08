@@ -14,6 +14,8 @@ $script_elems->enableLatencyRecord();
 $script_elems->enableDatePicker();
 
 $lab_config_id = $_REQUEST['location'];
+$lab_config = get_lab_config_by_id($lab_config_id);
+$site_list = get_site_list($_SESSION['user_id']);
 $date_from = $_REQUEST['yyyy_from']."-".$_REQUEST['mm_from']."-".$_REQUEST['dd_from'];
 $date_to = $_REQUEST['yyyy_to']."-".$_REQUEST['mm_to']."-".$_REQUEST['dd_to'];
 $include_pending = false;
@@ -39,10 +41,11 @@ $(document).ready(function(){
 
 function toggle_stat_table()
 {
+	$('#stats_testwise_div').toggle();
 	$('#stat_table').toggle();
 	var linktext = $('#showtablelink').text();
 	if(linktext.indexOf("<?php echo LangUtil::$pageTerms['MSG_SHOWTABLE']; ?>") != -1)
-		$('#showtablelink').text("<?php echo LangUtil::$pageTerms['MSG_HIDETABLE']; ?>");
+		$('#showtablelink').text("<?php echo LangUtil::$pageTerms['MSG_SHOWGRAPH']; ?>");
 	else
 		$('#showtablelink').text("<?php echo LangUtil::$pageTerms['MSG_SHOWTABLE']; ?>");
 }
@@ -81,6 +84,8 @@ function view_testwise_monthly()
 		$('#stats_testwise_div').show();
 		$('#stats_cumul_div').hide();
 		$('#progress_spinner').hide();
+		var url_string = "ajax/tat_table.php?tt="+ttype+"&df="+date_from+"&dt="+date_to+"&l=<?php echo $lab_config_id; ?>&p="+include_pending;
+		$('#stat_table').load(url_string);
 	});
 }
 
@@ -110,6 +115,8 @@ function view_testwise_weekly()
 		$('#stats_testwise_div').show();
 		$('#stats_cumul_div').hide();
 		$('#progress_spinner').hide();
+		var url_string = "ajax/tat_table.php?tt="+ttype+"&df="+date_from+"&dt="+date_to+"&l=<?php echo $lab_config_id; ?>&p="+include_pending;
+		$('#stat_table').load(url_string);
 	});
 }
 
@@ -139,18 +146,23 @@ function view_testwise_daily()
 		$('#stats_testwise_div').show();
 		$('#stats_cumul_div').hide();
 		$('#progress_spinner').hide();
+		var url_string = "ajax/tat_table.php?tt="+ttype+"&df="+date_from+"&dt="+date_to+"&l=<?php echo $lab_config_id; ?>&p="+include_pending;
+		$('#stat_table').load(url_string);
 	});
 }
 
 function view_tat()
 {
+	$('#stat_table').hide();
+	$('#stat_table').empty();
+	$('#showtablelink').text("<?php echo LangUtil::$pageTerms['MSG_SHOWTABLE']; ?>");
 	var tat_type = $('#tattype').attr("value");
 	if(tat_type == 'm')
 		view_testwise_monthly();
 	else if(tat_type == 'w')
 		view_testwise_weekly();
 	else if(tat_type == 'd')
-		view_testwise_daily();		
+		view_testwise_daily();	
 }
 </script>
 <style type='text/css'>
@@ -166,8 +178,6 @@ function view_tat()
 <br>
 <b><?php echo LangUtil::$pageTerms['MENU_TAT']; ?></b>
 <?php
-$lab_config = get_lab_config_by_id($lab_config_id);
-$site_list = get_site_list($_SESSION['user_id']);
 if($lab_config != null && count($site_list) != 1)
 {
 	?>
@@ -175,6 +185,7 @@ if($lab_config != null && count($site_list) != 1)
 	<?php
 }
 ?>
+ | <a href="javascript:toggle_stat_table();" id='showtablelink'><?php echo LangUtil::$pageTerms['MSG_SHOWTABLE']; ?></a>
  | <a href='reports.php?show_t'>&laquo; <?php echo LangUtil::$pageTerms['MSG_BACKTOREPORTS']; ?></a>
 <br><br>
 <?php
@@ -254,7 +265,7 @@ if(count($stat_list) == 0)
 }
 ?>
 <div id='stats_testwise_div'></div>
-<div id='stats_cumul_div'>
+<div id='stats_cumul_div'></div>
 
-</div>
+<div id='stat_table' style='display:none'></div>
 <?php include("includes/footer.php"); ?>

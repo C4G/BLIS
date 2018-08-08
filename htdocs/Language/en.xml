@@ -350,6 +350,10 @@
 			<value>Hours</value>
 		</term>
 		<term>
+			<key>MINUTES</key>
+			<value>Minutes</value>
+		</term>
+		<term>
 			<key>DROPDOWN</key>
 			<value>Drop-down Options</value>
 		</term>
@@ -1689,6 +1693,10 @@
 		<term>
 			<key>MODIFY_SITE</key>
 			<value>Modiify site</value>
+		</term>
+		<term>
+			<key>PRINT_UNVERIFIED</key>
+			<value>Allow printing of unverified tests</value>
 		</term>
 		
 	</page>

@@ -296,7 +296,6 @@ dl dt label {
 	font-weight: normal;
 	/*color: #039;*/
 	padding: 10px 8px;
-	border-bottom: 2px solid #6678b1;
 }
 .hor-minimalist-c td
 {
@@ -307,6 +306,53 @@ dl dt label {
 .hor-minimalist-c tbody tr:hover td
 {
 	/*color: red; /*#009;*/
+}
+
+#patients_found table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#patients_found thead, #patients_found tbody, #patients_found tr, #patients_found td, #patients_found th { display: block; }
+
+#patients_found tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+#patients_found thead th { 
+    height: 30px;
+    line-height: 30px;
+    /*text-align: left;*/
+}
+
+#patients_found tbody {
+    height: 400px;
+    overflow-y: auto;
+}
+
+#patients_found thead {
+    /* fallback */
+    width: 97%;
+    /* minus scroll bar width */
+    width: calc(100% - 17px);
+}
+
+#patients_found tbody { border-top: 1px solid #9a9a9a; }
+
+#patients_found tbody td, #patients_found thead th {
+    width: 10.75%;
+    float: left;
+    height: 20px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+#patients_found tbody td:last-child, #patients_found thead th:last-child {
+    border-right: none;
 }
 
 

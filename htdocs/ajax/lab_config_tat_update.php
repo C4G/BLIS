@@ -13,24 +13,37 @@ if( !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVE
 $lab_config_id = $_REQUEST['lid'];
 $lab_config = get_lab_config_by_id($lab_config_id);
 $test_type_list = $_REQUEST['ttype'];
-$tat_value_list = $_REQUEST['tat'];
-$tat_unit_list = $_REQUEST['unit'];
+$tat_value_days_list = $_REQUEST['tat_days'];
+$tat_value_hours_list = $_REQUEST['tat_hours'];
+$tat_value_mins_list = $_REQUEST['tat_mins'];
 
 $count = 0;
 foreach($test_type_list as $test_type_id)
 {
-	$curr_tat_value = $tat_value_list[$count];
-	$curr_tat_value = preg_replace("/[^0-9]/" ,"", $curr_tat_value);
+	$curr_tat_day_value = $tat_value_days_list[$count];
+	$curr_tat_hours_value = $tat_value_hours_list[$count];
+	$curr_tat_mins_value = $tat_value_mins_list[$count];
+
+	$curr_tat_day_value = preg_replace("/[^0-9]/" ,"", $curr_tat_day_value);
+	$curr_tat_hours_value = preg_replace("/[^0-9]/" ,"", $curr_tat_hours_value);
+	$curr_tat_mins_value = preg_replace("/[^0-9]/" ,"", $curr_tat_mins_value);
+
+	$curr_tat_value = 0;
+
+	if(trim($curr_tat_hours_value) != "" ) {
+		$curr_tat_value = $curr_tat_hours_value;
+	}
+	if(trim($curr_tat_day_value) != "" ) {
+		$curr_tat_value += $curr_tat_day_value*24;
+	}
+	if(trim($curr_tat_mins_value) != "" ) {
+		$curr_tat_value +=  $curr_tat_mins_value/60;
+	}
 	if(trim($curr_tat_value) == "")
 	{
 		# Empty TAT entry
 		$count++;
 		continue;
-	}
-	if($tat_unit_list[$count] == 2)
-	{
-		# Multiply by 24 to store in hours
-		$curr_tat_value *= 24;
 	}
 	$lab_config->updateGoalTatValue($test_type_id, $curr_tat_value);
 	$count++;

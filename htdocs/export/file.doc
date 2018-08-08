@@ -1,0 +1,188 @@
+<img src='D:\BLIS\C4G_BLIS_Fresh\C4G_BLIS_v3.0\C4G BLIS 3.0\C4G BLIS v3.0\htdocs\logos\logo_127.jpg' height='140' width='140' />
+
+
+
+
+<br><br>
+
+<h3 align="left">Test Lab (1st Street, Atl, 30000)</h3>
+
+<h4 align="left">Patient Report</h4>
+
+
+
+<br>From: 25-04-2000 | To: 25-04-2017<br>
+
+
+<br>
+
+
+	<div id="printhead" name="printhead"> </div>
+
+	
+<table class="print_entry_border tblborder">
+		<tbody>
+		<tr valign="top">                    <td class="heading ">Patient ID</td>                        
+                    <td>
+                    	72097                    </td><td style="border:none" width="15px"></td>                      
+					</tr><tr valign="top"></tr><tr valign="top"></tr><tr valign="top">                    <td class="heading ">Patient Number</td>                        
+                    <td>
+                    	-                    </td><td style="border:none" width="15px"></td>                      
+					</tr><tr valign="top"></tr><tr valign="top">                    <td class="heading ">Gender</td>                        
+                    <td>
+                    	M                    </td><td style="border:none" width="15px"></td>                      
+					</tr><tr valign="top">                    <td class="heading ">Age</td>                        
+                    <td>
+                    	51 Years                    </td><td style="border:none" width="15px"></td>                      
+					</tr><tr valign="top"></tr><tr valign="top">                    <td class="heading ">Name</td>                        
+                    <td>
+                    	Aaron Acevedo                    </td><td style="border:none" width="15px"></td>                      
+					</tr><tr valign="top"></tr><tr valign="top"></tr><tr valign="top"></tr><tr valign="top">		
+		</tr></tbody>
+</table>
+<br>
+	<span style="font-weight:bold">Tests</span>
+	<br>
+			<style type="text/css">
+			tbody td, thead th { padding: .3em;  border: 1px black solid;} 
+			.rstyle 
+			{
+				border-top-style: solid;
+				border-bottom-style: solid;
+				border-right-style: solid;		
+				border-left-style: solid;
+			}
+		</style>
+		<div unselectable="on" id="myNicPanel" style="width: 525px;"><div unselectable="on" class=" nicEdit-panelContain" style="overflow: hidden; width: 100%; border: 1px solid rgb(204, 204, 204); background-color: rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-panel" style="margin: 0px 2px 2px; overflow: hidden; display: none;"><div style="float: left; margin-top: 2px; display: none;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -414px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div unselectable="on" class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div unselectable="on" class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -36px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div unselectable="on" class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div unselectable="on" class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -108px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div unselectable="on" class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div unselectable="on" class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -324px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div unselectable="on" class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div unselectable="on" class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -144px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div unselectable="on" class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div unselectable="on" class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -54px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div unselectable="on" class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div unselectable="on" class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -216px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div unselectable="on" class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div unselectable="on" class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -126px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div unselectable="on" class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div unselectable="on" class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -162px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div unselectable="on" class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div unselectable="on" class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -306px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin: 2px 1px 0px;"><div unselectable="on" class=" nicEdit-selectContain" style="width: 90px; height: 20px; cursor: pointer; overflow: hidden; opacity: 0.6;"><div unselectable="on" style="overflow: hidden; border: 1px solid rgb(204, 204, 204); padding-left: 3px; background-color: rgb(255, 255, 255);"><div unselectable="on" class=" nicEdit-selectControl" style="overflow: hidden; float: right; height: 18px; width: 16px; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -432px 0px;"></div><div unselectable="on" class=" nicEdit-selectTxt" style="overflow: hidden; float: left; width: 66px; height: 14px; margin-top: 1px; font-family: sans-serif; text-align: center; font-size: 12px;">Font&nbsp;Size...</div></div></div></div><div unselectable="on" style="float: left; margin: 2px 1px 0px;"><div unselectable="on" class=" nicEdit-selectContain" style="width: 90px; height: 20px; cursor: pointer; overflow: hidden; opacity: 0.6;"><div unselectable="on" style="overflow: hidden; border: 1px solid rgb(204, 204, 204); padding-left: 3px; background-color: rgb(255, 255, 255);"><div unselectable="on" class=" nicEdit-selectControl" style="overflow: hidden; float: right; height: 18px; width: 16px; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -432px 0px;"></div><div unselectable="on" class=" nicEdit-selectTxt" style="overflow: hidden; float: left; width: 66px; height: 14px; margin-top: 1px; font-family: sans-serif; text-align: center; font-size: 12px;">Font&nbsp;Family...</div></div></div></div><div unselectable="on" style="float: left; margin: 2px 1px 0px;"><div unselectable="on" class=" nicEdit-selectContain" style="width: 90px; height: 20px; cursor: pointer; overflow: hidden; opacity: 0.6;"><div unselectable="on" style="overflow: hidden; border: 1px solid rgb(204, 204, 204); padding-left: 3px; background-color: rgb(255, 255, 255);"><div unselectable="on" class=" nicEdit-selectControl" style="overflow: hidden; float: right; height: 18px; width: 16px; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -432px 0px;"></div><div unselectable="on" class=" nicEdit-selectTxt" style="overflow: hidden; float: left; width: 66px; height: 14px; margin-top: 1px; font-family: sans-serif; text-align: center; font-size: 12px;">Font&nbsp;Format...</div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div unselectable="on" class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div unselectable="on" class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -90px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div unselectable="on" class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div unselectable="on" class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -180px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -342px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -360px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -378px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: -18px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div unselectable="on" class=" nicEdit-button" style="width: 18px; height: 18px; overflow: hidden; cursor: pointer; background-image: url(&quot;../nicEditorIcons.gif&quot;); background-position: 0px 0px;"></div></div></div></div></div></div></div>
+		<div id="patient_table" contenteditable="false">
+		<table class="print_entry_border draggable" id="report_content_table1">
+		<thead>
+		<tr valign="top">
+		<th class="header">Patient Number</th><th class="header">Type</th><th class="header">Test</th><th class="header">Physician</th><th class="header">Results</th><th class="header">Range</th><th class="header">Remarks</th>
+	</tr>
+	</thead>
+	<tbody>
+		<tr valign="top">
+	<td class="rstyle">1836</td><td class="rstyle">GBS</td><td class="rstyle">Viral Load</td><td class="rstyle">Dr.Guzman</td><td class="rstyle"><br><span style="color:red; font-weight:bold">2000000 Copies/ml&nbsp;</span><br></td><td class="rstyle"><br>(0-999) Copies/ml
+								&nbsp;&nbsp;	
+
+								<br></td><td class="rstyle"><br><span style="color:red">&lt;Out of range&gt;</span><br><br>Interpretation: Target detected: above 1000 copies</td>
+				</tr>
+
+				<tr valign="top">
+	<td class="rstyle">1836</td><td class="rstyle">Whole Blood</td><td class="rstyle">FACSCount</td><td class="rstyle">Dr.DrDillards</td><td class="rstyle"><br>CD4: <b>100_000</b> &nbsp;<br><br>CD8: <b>100_000</b> &nbsp;<br><br>CD4/CD8: <b></b> &nbsp;<br></td><td class="rstyle"><br>(-) cell/ul
+								&nbsp;&nbsp;	
+
+								<br><br>(-) cell/ul
+								&nbsp;&nbsp;	
+
+								<br><br>&nbsp;&nbsp;&nbsp;-<br></td><td class="rstyle"><br><br><br><br><br><br><br></td>
+				</tr>
+
+				<tr valign="top">
+	<td class="rstyle">1836</td><td class="rstyle">Whole Blood</td><td class="rstyle">HGB</td><td class="rstyle">Dr.Harrel</td><td class="rstyle"><br><span style="color:red; font-weight:bold">100_000 g/dl&nbsp;</span><br></td><td class="rstyle"><br>(14.0-18.0) g/dl
+								&nbsp;&nbsp;	
+
+								<br></td><td class="rstyle"><br><span style="color:red">&lt;Out of range&gt;</span><br><br>Interpretation: WDAWDAWDAWD</td>
+				</tr>
+
+				<tr valign="top">
+	<td class="rstyle">-</td><td class="rstyle">Whole Blood</td><td class="rstyle">Bleeding Time (BT)</td><td class="rstyle">Sweeney</td><td class="rstyle"><br><span style="color:red; font-weight:bold">0 min&nbsp;</span><br></td><td class="rstyle"><br>(1-4) min
+								&nbsp;&nbsp;	
+
+								<br></td><td class="rstyle"><br><span style="color:red">&lt;Out of range&gt;</span><br><br></td>
+				</tr>
+
+				<tr valign="top">
+	<td class="rstyle">-</td><td class="rstyle">Whole Blood</td><td class="rstyle">Malaria</td><td class="rstyle">Sweeney</td><td class="rstyle"><br><b>Positive</b>  &nbsp;<br></td><td class="rstyle"><br>&nbsp;&nbsp;&nbsp;-<br></td><td class="rstyle"><br><br><br></td>
+				</tr>
+
+				<tr valign="top">
+	<td class="rstyle">-</td><td class="rstyle">Whole Blood</td><td class="rstyle">FBS</td><td class="rstyle">Sweeney</td><td class="rstyle"><br><span style="color:red; font-weight:bold">0 mg/dl&nbsp;</span><br></td><td class="rstyle"><br>(60-110) mg/dl
+								&nbsp;&nbsp;	
+
+								<br></td><td class="rstyle"><br><span style="color:red">&lt;Out of range&gt;</span><br><br></td>
+				</tr>
+
+				<tr valign="top">
+	<td class="rstyle">-</td><td class="rstyle">Whole Blood</td><td class="rstyle">Bleeding Time (BT)</td><td class="rstyle">Sweeney</td><td class="rstyle"><br><span style="color:red; font-weight:bold">0 min&nbsp;</span><br></td><td class="rstyle"><br>(1-4) min
+								&nbsp;&nbsp;	
+
+								<br></td><td class="rstyle"><br><span style="color:red">&lt;Out of range&gt;</span><br><br></td>
+				</tr>
+
+				<tr valign="top">
+	<td class="rstyle">-</td><td class="rstyle">Whole Blood</td><td class="rstyle">Malaria</td><td class="rstyle">Sweeney</td><td class="rstyle"><br><b>Negative</b>  &nbsp;<br></td><td class="rstyle"><br>&nbsp;&nbsp;&nbsp;-<br></td><td class="rstyle"><br><br><br></td>
+				</tr>
+
+				<tr valign="top">
+	<td class="rstyle">-</td><td class="rstyle">Whole Blood</td><td class="rstyle">FBS</td><td class="rstyle">Sweeney</td><td class="rstyle"><br><span style="color:red; font-weight:bold">0 mg/dl&nbsp;</span><br></td><td class="rstyle"><br>(60-110) mg/dl
+								&nbsp;&nbsp;	
+
+								<br></td><td class="rstyle"><br><span style="color:red">&lt;Out of range&gt;</span><br><br></td>
+				</tr>
+
+					</tbody>
+	</table>
+</div>
+<br><br>
+1). <b>Test Name:</b>
+
+					HGB
+					<br><b>
+
+					Clinical Data:
+
+					</b>
+
+					  
+					<br><br>
+
+					
+<div class="editable" title="Click to Edit">
+
+</div>
+
+<div class="editable" title="Click to Edit">
+
+</div>
+
+<div class="editable" title="Click to Edit">
+
+</div>
+
+<!--p class="main">
+
+............................................-->
+
+
+
+
+<table class="no_border" "="" border="0" width="100%">
+
+<tbody><tr>
+
+
+<td></td>
+
+
+</tr>
+
+<tr>
+
+
+<td align="center"></td>
+
+
+</tr>
+
+<tr>
+
+
+<td align="center"></td>
+
+
+</tr>
+
+</tbody></table>
+

@@ -856,7 +856,7 @@ class PageElems
 		<tr>
 		<td></td>		
 		<td><input type="button" id="submit" type="submit" onclick="submitTestNames();" value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>" size="20" />
-		<?php
+		<?
 	}
         
         public function getTestNamesSelectorForEdit($mapping) {
@@ -895,7 +895,7 @@ class PageElems
 		<tr>
 		<td></td>		
 		<td><input type="button" id="submit" type="submit" onclick="submitTestNames();" value="<?php echo LangUtil::$generalTerms['CMD_UPDATE']; ?>" size="20" />
-		<?php
+		<?
 	}
 	
 	public function getSpecimenTypesCountrySelect()
@@ -940,7 +940,7 @@ class PageElems
 		<tr>
 		<td></td>		
 		<td><input type="button" id="submit" type="submit" onclick="submitTestCategoryNames();" value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>" size="20" />
-		<?php
+		<?
 	}
 	
 	public function getTestCategoryTypesCountrySelect() {
@@ -2923,7 +2923,7 @@ class PageElems
                             {
                             ?>
                                 <td><a href="javascript:print_specimen_barcode(<?php echo $pid;?>,<?php echo $sid;?> )">Print Barcode</a> </td>
-                            <?php 
+                            <? 
                             }
                                 
                         ?>
@@ -3055,7 +3055,7 @@ class PageElems
                             {
                             ?>
                                  <th></th>
-                            <?php 
+                            <? 
                             }
                                 
                         ?>
@@ -3500,6 +3500,8 @@ class PageElems
 		# Lists patient-profile related tasks in a tips box
 		global $LIS_CLERK,$LIS_VERIFIER;
 		$specimen = Specimen::getById($specimen_id);
+		$test = Test::getTestBySpecimenID($specimen_id);
+		$print_unverified = LabConfig::getPrintUnverified($_SESSION['lab_config_id']);
 		$deleted = false;
 		if(check_removal_record($_SESSION['lab_config_id'], $specimen_id, "specimen")){
 			$deleted = true;
@@ -3510,8 +3512,12 @@ class PageElems
 			$date_parts = explode("-", $specimen->dateCollected);
 			$report_url = "reports_testhistory.php?location=".$_SESSION['lab_config_id']."&patient_id=".$specimen->patientId."&yf=$date_parts[0]&mf=$date_parts[1]&df=$date_parts[2]&yt=$date_parts[0]&mt=$date_parts[1]&dt=$date_parts[2]";
 			//$report_url = "reports_specimen.php?location=".$_SESSION['lab_config_id']."specimen_id=".$specimen_id;
+			if($test->isVerified() || $print_unverified) {
+				?>
+				<p><a href='<?php echo $report_url; ?>' title='Click to Generate Specimen Report' target='_blank'><?php echo LangUtil::$generalTerms['CMD_GETREPORT']; ?></a></p>
+				<?php
+			}
 			?>
-			<p><a href='<?php echo $report_url; ?>' title='Click to Generate Specimen Report' target='_blank'><?php echo LangUtil::$generalTerms['CMD_GETREPORT']; ?></a></p>
 			<p><a href='reports_specimenlog.php?location=<?php echo $_SESSION['lab_config_id']; ?>&specimen_id=<?php echo $specimen_id; ?>' title='Click to View a Log of Actions Performed on this Specimen' target='_blank'><?php echo LangUtil::$generalTerms['CMD_TRACK']; ?></a></p>
 			<?php
 			if($_SESSION['user_level'] != $LIS_CLERK && $deleted == false)
@@ -3671,7 +3677,7 @@ class PageElems
 	}
 	
 	
-	public function getTatStatsTable($stat_list)
+	public function getTatStatsTable($lab_config, $date_from, $date_to)
 	{
 		# Returns HTML table showing Turnaround time values
 		# Called from reports_tat.php
@@ -3691,6 +3697,7 @@ class PageElems
 		</thead>
 		<tbody>
 		<?php
+		$stat_list = StatsLib::getTatStats($lab_config, $date_from, $date_to);
 		foreach($stat_list as $key=>$value)
 		{
 			$test_type_id = $key;
@@ -3702,15 +3709,20 @@ class PageElems
 				<td><?php echo $num_specimens; ?></td>
 				<td>
 					<?php
-					if($tat_value > 1)
-					{
-						echo $tat_value." days";
+					$days = floor($tat_value);
+					$hours = floor(($tat_value - $days)*24);
+					$mins = floor(((($tat_value - $days)*24) - $hours)*60);
+					$avg_tat = "";
+					if($days > 0) {
+						$avg_tat = $avg_tat.$days." days ";
 					}
-					else
-					{
-						$hours_value = $tat_value*24;
-						echo $hours_value." hours";
+					if($hours > 0) {
+						$avg_tat = $avg_tat.$hours." hours ";
 					}
+					if($mins > 0) {
+						$avg_tat = $avg_tat.$mins." mins";
+					}
+					echo $avg_tat;
 					?>
 				</td>
 			</tr>
@@ -4966,6 +4978,21 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			foreach($tat_list as $key=>$value)
 			{
 				$curr_tat_value = $value;
+				$days = 0;
+				$hours = 0;
+				$minutes = 0;
+				// minutes exist
+				if($value !=  floor($value)) {
+					$hours = floor($value);
+					$minutes = 60*($value - $hours);
+					$curr_tat_value = $hours;
+				}
+				// days exists
+				if($value >= 24) {
+					$days = round($curr_tat_value/24);
+					$hours = $curr_tat_value - $days*24;
+				}
+
 				?>
 				<tr valign='top'>
 					<td>
@@ -4982,42 +5009,29 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						<input type='hidden' name='ttype[]' value='<?php echo $key; ?>'></input>
 					</td>
 					<td>
-						<input type='text' name='tat[]'
-						value='<?php
-						if($curr_tat_value != null)
-						{	
-							echo $curr_tat_value;
-							/*
-							if($curr_tat_value >=24)
-								echo round($curr_tat_value/24, 2);
-							else
-								echo $curr_tat_value;
-							*/
-						}
-						else
-						{
-							# Entry not yet present
-							# Show default value in form
-							echo $DEFAULT_TARGET_TAT*24;
-						}
-						?>'></input>
-						&nbsp;&nbsp;&nbsp;
-						<select name='unit[]'>
-							<option value='1'
-							<?php
-							//if($curr_tat_value != null && $curr_tat_value < 24)
-							if(true)
-								echo " selected ";
-							?>
-							><?php echo LangUtil::$generalTerms['HOURS']; ?></option>
-							<option value='2'
-							<?php
-							//if($curr_tat_value != null && $curr_tat_value >= 24)
-							if(false)
-								echo " selected ";
-							?>
-							><?php echo LangUtil::$generalTerms['DAYS']; ?></option>
-						</select>
+						<div>
+							<!-- input box for days -->
+							<input type='text' name='tat_days[]' value='<?php echo $days;?>'></input>
+							&nbsp;&nbsp;&nbsp;
+							<span>Days</span>
+							&nbsp;&nbsp;&nbsp;
+						</div>
+
+						<div>
+							<!-- input box for days -->
+							<input type='text' name='tat_hours[]' value='<?php echo $hours;?>'></input>
+							&nbsp;&nbsp;&nbsp;
+							<span>Hours</span>
+							&nbsp;&nbsp;&nbsp;
+						</div>
+
+						<div>
+							<!-- input box for days -->
+							<input type='text' name='tat_mins[]' value='<?php echo $minutes;?>'></input>
+							&nbsp;&nbsp;&nbsp;
+							<span>Minutes</span>
+							&nbsp;&nbsp;&nbsp;
+						</div>
 					</td>
 				</tr>
 				<?php
@@ -5045,6 +5059,21 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<?php
 			foreach($tat_list as $key=>$value)
 			{
+				$days = 0;
+				$hours = $value;
+				$minutes = 0;
+				// minutes exist
+				if($value !=  floor($value)) {
+				  	$hours = floor($value);
+				  	$minutes = 60*($value - $hours);
+				  	$value = $hours;
+				}
+			  	// days exists^M
+			 	if($value >= 24) {
+			  		$days = round($value/24); 
+			  		$hours = $value - $days*24;
+			  	}
+
 				?>
 				<tr valign='top'>
 					<td>
@@ -5061,7 +5090,9 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</td>
 					<td>
 						<?php
-						echo "$value ".LangUtil::$generalTerms['HOURS'];
+						echo "$days ".LangUtil::$generalTerms['DAYS']." ";
+						echo "$hours ".LangUtil::$generalTerms['HOURS']." ";
+						echo "$minutes ".LangUtil::$generalTerms['MINUTES'];
 						/*
 						if($value < 24)
 							echo "$value hours";
@@ -5154,35 +5185,35 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	{
 		# Returns <select> options for custom field type
 		?>
-		<?php if ($edit==0): ?>
+		<? if ($edit==0): ?>
 			<option value='<?php echo CustomField::$FIELD_FREETEXT; ?>'><?php echo LangUtil::$generalTerms['FREETEXT']; ?></option>
 			<option value='<?php echo CustomField::$FIELD_DATE; ?>'><?php echo LangUtil::$generalTerms['DATE']; ?></option>
 			<option value='<?php echo CustomField::$FIELD_NUMERIC; ?>'><?php echo LangUtil::$generalTerms['NUMERIC_FIELD']; ?></option>
 			<option value='<?php echo CustomField::$FIELD_OPTIONS; ?>'><?php echo LangUtil::$generalTerms['DROPDOWN']; ?></option>
 			<!--<option value='<?php #echo CustomField::$FIELD_MULTISELECT; ?>'><?php #echo LangUtil::$generalTerms['MULTISELECT']; ?></option>-->
-		<?php endif; ?>
-		<?php if ($edit==1): ?>
-	  		<?php if (strcmp($type,LangUtil::$generalTerms['FREETEXT'])==0): ?>
+		<? endif; ?>
+		<? if ($edit==1): ?>
+	  		<? if (strcmp($type,LangUtil::$generalTerms['FREETEXT'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_FREETEXT; ?>' selected><?php echo LangUtil::$generalTerms['FREETEXT']; ?></option>
-			<?php else: ?>
+			<? else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_FREETEXT; ?>' ><?php echo LangUtil::$generalTerms['FREETEXT']; ?></option>
-			<?php endif; ?>
-			<?php if (strcmp($type,LangUtil::$generalTerms['DATE'])==0): ?>
+			<? endif; ?>
+			<? if (strcmp($type,LangUtil::$generalTerms['DATE'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_DATE; ?>' selected><?php echo LangUtil::$generalTerms['DATE']; ?></option>
-			<?php else: ?>
+			<? else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_DATE; ?>' ><?php echo LangUtil::$generalTerms['DATE']; ?></option>
-			<?php endif; ?>
-			<?php if (strcmp($type,LangUtil::$generalTerms['NUMERIC_FIELD'])==0): ?>
+			<? endif; ?>
+			<? if (strcmp($type,LangUtil::$generalTerms['NUMERIC_FIELD'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_NUMERIC; ?>' selected><?php echo LangUtil::$generalTerms['NUMERIC_FIELD']; ?></option>
-			<?php else: ?>
+			<? else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_NUMERIC; ?>' ><?php echo LangUtil::$generalTerms['NUMERIC_FIELD']; ?></option>
-			<?php endif; ?>
-			<?php if (strcmp($type,LangUtil::$generalTerms['DROPDOWN'])==0): ?>
+			<? endif; ?>
+			<? if (strcmp($type,LangUtil::$generalTerms['DROPDOWN'])==0): ?>
 	  			<option value='<?php echo CustomField::$FIELD_OPTIONS; ?>' selected><?php echo LangUtil::$generalTerms['DROPDOWN']; ?></option>
-			<?php else: ?>
+			<? else: ?>
 	  			<option value='<?php echo CustomField::$FIELD_OPTIONS; ?>' ><?php echo LangUtil::$generalTerms['DROPDOWN']; ?></option>
-			<?php endif; ?>
-		<?php endif; ?>
+			<? endif; ?>
+		<? endif; ?>
 
 	<?php
 	}
@@ -6839,9 +6870,12 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
             			<th><?php echo LangUtil::$pageTerms['SITE']; ?></th>
             			<?php
 						foreach ($test_report_config->age_groups as $range) {
-            			?>
-            				<th><?php echo $range ?></th>
-            			<?php
+                            if ($range != "") {
+
+                            ?>
+                            <th><?php echo $range ?></th>
+                            <?php
+                                }
 						}
 						?>
             			<th><?php echo LangUtil::$pageTerms['SAMPLES_RECEIVED']; ?></th>
@@ -6861,17 +6895,19 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 								$ages[] = $pair['age'];
 						}
 						foreach ($test_report_config->age_groups as $range) {
-							$limits = explode('-', $range);
-						    $count = 0;
-							if ($limits[1] == '+')
-								$limits[1] = 100;
-							foreach ($ages as $age) {
-								if ($age >= $limits[0] && $age <= $limits[1])
-									$count++;
-							}
-							?>
-							<td><?php echo $count; ?></td>
-						<?php
+                        if ($range != "") {
+                            $limits = explode('-', $range);
+                            $count = 0;
+                            if ($limits[1] == '+')
+                                $limits[1] = 100;
+                            foreach ($ages as $age) {
+                                if ($age >= $limits[0] && $age <= $limits[1])
+                                    $count++;
+                            }
+                            ?>
+                            <td><?php echo $count; ?></td>
+                            <?php
+                            }
 						}
 						?>
 						<td> <?php echo count($ages); ?></td>
@@ -10631,6 +10667,12 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</script>
 		<?php
 	}
+
+	public function getPrintUnverified($lab_config)
+	{
+	    return LabConfig::getPrintUnverified($lab_config);
+	}
+
 
 	public function getTestTypesByReportingStatusOptions($enabled)
 	{
