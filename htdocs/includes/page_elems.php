@@ -1174,6 +1174,16 @@ class PageElems
 		foreach($final_cat_list as $value)
 			echo "<option value='$value'>$value</option>";
 	}
+//AS 09/04/2018 Fill the lab drop down BEGIN
+	public function getLabSelect()
+	{
+		$lcs = LabConfig::getAllLabs();
+		foreach($lcs as $lc)
+{
+echo "<option value='$lc->id'>$lc->name</option>";
+}
+	}
+//AS 09/04/2018 END
 	
 	public function getLangSelect()
 	{
@@ -2007,7 +2017,9 @@ class PageElems
 					</td>
 					<td>
 						<?php
-						$lab_list = $this->listOwnedLabs($lab_admin->userId);
+//AS 09/044/2018 Fixed missing lab name issue BEGIN
+						$lab_list =LabConfig::getById($lab_admin->labConfigId)->name; //$this->listOwnedLabs($lab_admin->userId);
+//AS 09/04/2018 END
 						echo $lab_list;
 						?>
 						<br>
