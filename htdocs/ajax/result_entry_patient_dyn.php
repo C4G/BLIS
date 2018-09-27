@@ -95,7 +95,6 @@ background-color:#EAF2D3;
         url_string = 'ajax/result_data_count_new.php?a='+'<?php echo $_REQUEST['a']; ?>'+'&q='+'<?php echo $_REQUEST['t']; ?>'+'&labsec='+'<?php echo $lab_section; ?>&c=<?php echo $_REQUEST['c'] ?>';
         var cap = parseInt($('#rcap').html());
         //console.log(cap);
-        //alert(<?php echo $_REQUEST['t']; ?>+"-"+<?php echo $_REQUEST['a']; ?>);
                                         $('.prev_link').hide();
         $.ajax({ 
 		url: url_string, 
@@ -237,6 +236,20 @@ if(displayed>=tot)
 
 function get_prev(url, sno, cap)
 {
+<?php
+        if(isset($_REQUEST['labsec']))
+        { 
+?>
+url= "../ajax/result_data_page_new.php?a=<?php echo $_REQUEST['a'];?>&t=<?php echo $_REQUEST['t'];?>&l=<?php echo $_REQUEST['labsec']?>&result_cap=<?php echo $rcap;?>&result_counter="+sno+"&c=<?php echo $_REQUEST['c'];?>"; 
+<?php
+        }
+        else
+        {
+?>
+url= "../ajax/result_data_page_new.php?a=<?php echo $_REQUEST['a'];?>&t=<?php echo $_REQUEST['t'];?>&result_cap=<?php echo $rcap;?>&result_counter="+sno+"&c=<?php echo $_REQUEST['c'];?>"; 
+<?php
+        }
+?>
     var page = parseInt($('#page').html()); 
     page = page - 1;
     $('#page').html(page);
@@ -246,6 +259,7 @@ function get_prev(url, sno, cap)
     var mpage = parseInt($('#mpage').html());
 
      rem = rem + cap;
+//alert(rem);
     $('#rem').html(rem);
     var displayed = tot - rem;
     if(displayed > tot)
@@ -256,6 +270,7 @@ function get_prev(url, sno, cap)
     $('.prev_link').hide();
     $('.next_link').hide();
     url = url + '&rem=' + rem;
+//alert(url);
     var div_name = 'resultset'+sno;
     var html_content = "<div id='"+div_name+"'</div>";
     //$('#data_table').html(html_content);

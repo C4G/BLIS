@@ -13,6 +13,7 @@ $attrib_type = $_REQUEST['a'];//~~
 $dynamic = 1;
 
 $c = $_REQUEST['c'];
+//echo $c;
 $lab_section = 0; // All lab section by default
 if(isset($_REQUEST['l']))
 	$lab_section = $_REQUEST['l']; // change the value based on the query
@@ -29,9 +30,12 @@ else
 $lab_config = LabConfig::getById($_SESSION['lab_config_id']);
 
  $offset = $result_cap * ($result_counter - 1);
+//echo "off:".$offset;
 $count_q=$result_cap;
 if($rem<0)
 $count_q=$count_q+$rem;
+//echo "count:".$count_q;
+//echo "rem:".$rem;
 $query_string = "";
 if($dynamic == 0)
 {
@@ -65,6 +69,7 @@ if($dynamic == 0)
 				
             $query_string = 
                     "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '$attrib_value'";
+//echo $query_string;
             $record = query_associative_one($query_string);
             if($record['val'] == 0)
             {
@@ -80,7 +85,8 @@ if($dynamic == 0)
                     "WHERE s.specimen_id=t.specimen_id ".
                     "AND t.result = '' ".
                     "AND s.patient_id=p.patient_id ".
-                    "AND p.name LIKE '$attrib_value'";
+                    "AND p.name LIKE '$attrib_value'".
+" order by p.name";
     }
     else if($attrib_type == 3)
     {
@@ -146,6 +152,7 @@ else
 				
             $query_string = 
                     "SELECT COUNT(*) AS val FROM patient WHERE name LIKE '$attrib_value'";
+//echo $query_string;
             $record = query_associative_one($query_string);
             if($record['val'] == 0)
             {
@@ -163,7 +170,10 @@ else
                     "WHERE s.specimen_id=t.specimen_id ".
                     "AND t.result = '' ".
                     "AND s.patient_id=p.patient_id ".
-                    "AND p.name LIKE '$attrib_value' LIMIT $offset,$count_q"; }
+                    "AND p.name LIKE '$attrib_value'".
+" order by p.name".
+" LIMIT $offset,$count_q";
+ }
             else {
 			$query_string =
 					"SELECT distinct s.specimen_id FROM specimen s, test t, patient p ".
@@ -171,7 +181,8 @@ else
 					"AND t.result = '' ".
 					"AND s.patient_id=p.patient_id ".
 					"AND p.name LIKE '$attrib_value' AND test_type_id IN
-					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) LIMIT $offset,$count_q";
+					(SELECT test_type_id FROM test_type WHERE test_category_id=$lab_section) LIMIT $offset,$count_q".
+" order by p.name";
 			}
     }
     else if($attrib_type == 3)
@@ -217,6 +228,7 @@ else
 				}
     } 
 	}
+//echo $query_string;
 $resultset = query_associative_all($query_string, $row_count);
 if(count($resultset) == 0 || $resultset == null)
 {
@@ -408,19 +420,19 @@ if($attrib_type == 3 && $count > 2)
 <?php 
         if(isset($_REQUEST['l']))
         { 
-            $next_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter+1); 
+            $next_link = "../ajax/result_data_page_new.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter+1); 
         }
         else
         {
-            $next_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&result_cap=".$result_cap."&result_counter=".($result_counter+1);             
+            $next_link = "../ajax/result_data_page_new.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&result_cap=".$result_cap."&result_counter=".($result_counter+1);             
         }
         if(isset($_REQUEST['l']))
         { 
-            $prev_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1); 
+            $prev_link = "../ajax/result_data_page_new.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1); 
         }
         else
         {
-            $prev_link = "../ajax/result_data_page.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1);             
+            $prev_link = "../ajax/result_data_page_new.php?a=".$_REQUEST['a']."&t=".$_REQUEST['t']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1);             
         }
     ?>        
 <div class="prev_link">                       
