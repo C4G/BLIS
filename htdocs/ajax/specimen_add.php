@@ -91,7 +91,7 @@ $specimen->referredTo = 0;
 $specimen->reportTo = $report_to;
 
 		if($doctor!="")
-$specimen->doctor = $title.$doctor;
+$specimen->doctor = $doctor;
 else
 $specimen->doctor=$doctor;
 $specimen->site_id = $site_id;

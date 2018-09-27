@@ -4569,9 +4569,16 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						echo " >".$option."</option>";
 			}
 
-        echo "</select></td><td>
-        <select name='doctor'  class ='doctors_auto' id='".$doc_row_id."_input'  ></select></td>
-            ";
+        echo "</select></td>";
+		// [Sep 3, 2018 - Jung Wook] The input method of physician's name is changed from Selector to Input
+		echo "<td><input name='doctor'  class ='doctors_auto' id='".$doc_row_id."_input' placeholder='Enter physician&apos;s name' list='physicians' size='30'></input>";
+		echo "<datalist id='physicians'>";
+		foreach ($doc as $option)
+		{
+			echo "<option value='" .$option. "'>";
+		}
+		
+		echo "</datalist></td>";
 			/*
 		echo "	</SELECT>
 				</td>
