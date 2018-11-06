@@ -1,0 +1,1 @@
+ALTER TABLE `test` ADD COLUMN `result` VARCHAR(5000);

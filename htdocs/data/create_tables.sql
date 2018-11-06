@@ -393,7 +393,7 @@ CREATE TABLE IF NOT EXISTS `stock_details` (
 CREATE TABLE IF NOT EXISTS `test` (
   `test_id` int(10) unsigned NOT NULL auto_increment,
   `test_type_id` int(11) unsigned NOT NULL default '0',
-  `result` varchar(201) default NULL,
+  `result` varchar(5000) default NULL,
   `comments` varchar(200) default NULL,
   `user_id` int(11) unsigned default NULL,
   `verified_by` int(11) unsigned default NULL,
