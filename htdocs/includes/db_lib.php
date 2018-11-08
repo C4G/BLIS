@@ -3739,7 +3739,9 @@ class Test
 		if(trim($this->result) == "")
 			# Results not yet entered
 			return "";
-		$retval = substr($this->result, 0, -1*$PATIENT_HASH_LENGTH);
+		
+        #$retval = substr($this->result, 0, -1*$PATIENT_HASH_LENGTH);
+        
         if ($retval == '')
             $retval = substr($this->result, 0, -1);
         # nc44
