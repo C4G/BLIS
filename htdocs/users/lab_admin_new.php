@@ -27,6 +27,7 @@ function add_lab_admin()
 	var phone = $('#phone').attr('value');
 	var fullname = $('#fullname').attr('value');
 	var lang_id = $('#lang_id').attr("value");
+	var lab_id = $('#lab_id').attr("value");//AS 09/04/2018 Fetching lab ID
 	if(username == "" || pwd == "")
 	{
 		document.getElementById('error_msg').innerHTML="<?php echo LangUtil::$generalTerms['TIPS_INCOMPLETEINFO']; ?>";
@@ -35,7 +36,7 @@ function add_lab_admin()
 	}
 	$('#error_msg').hide();
 	var url_string = 'ajax/lab_admin_add.php';
-	var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&lang='+lang_id;
+	var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&lang='+lang_id+'&lab='+lab_id;
 	$('#add_admin_progress').show();
 	$.ajax({
 		type: "POST",
@@ -81,6 +82,16 @@ function add_lab_admin()
 			<td><?php echo LangUtil::$generalTerms['PHONE']; ?>&nbsp;&nbsp;&nbsp;</td>
 			<td><input type="text" name="phone" id="phone" value="" class='uniform_width' /><br></td>
 		</tr>
+<!--AS 09/04/2018 Lab select BEGIN-->
+		<tr>
+			<td><?php echo LangUtil::$generalTerms['FACILITY'] ?>&nbsp;&nbsp;&nbsp;</td>
+			<td>
+				<select name='lab_id' id='lab_id' class='uniform_width'>
+					<?php echo $page_elems->getLabSelect(); ?>
+				</select>
+			</td>
+		</tr>
+<!--AS 09/04/2018 END-->
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['LANGUAGE'] ?>&nbsp;&nbsp;&nbsp;</td>
 			<td>
