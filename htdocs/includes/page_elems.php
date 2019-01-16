@@ -1174,6 +1174,16 @@ class PageElems
 		foreach($final_cat_list as $value)
 			echo "<option value='$value'>$value</option>";
 	}
+//AS 09/04/2018 Fill the lab drop down BEGIN
+	public function getLabSelect()
+	{
+		$lcs = LabConfig::getAllLabs();
+		foreach($lcs as $lc)
+{
+echo "<option value='$lc->id'>$lc->name</option>";
+}
+	}
+//AS 09/04/2018 END
 	
 	public function getLangSelect()
 	{
@@ -2007,7 +2017,9 @@ class PageElems
 					</td>
 					<td>
 						<?php
-						$lab_list = $this->listOwnedLabs($lab_admin->userId);
+//AS 09/044/2018 Fixed missing lab name issue BEGIN
+						$lab_list =LabConfig::getById($lab_admin->labConfigId)->name; //$this->listOwnedLabs($lab_admin->userId);
+//AS 09/04/2018 END
 						echo $lab_list;
 						?>
 						<br>
@@ -4557,9 +4569,16 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						echo " >".$option."</option>";
 			}
 
-        echo "</select></td><td>
-        <select name='doctor'  class ='doctors_auto' id='".$doc_row_id."_input'  ></select></td>
-            ";
+        echo "</select></td>";
+		// [Sep 3, 2018 - Jung Wook] The input method of physician's name is changed from Selector to Input
+		echo "<td><input name='doctor'  class ='doctors_auto' id='".$doc_row_id."_input' placeholder='Enter physician&apos;s name' list='physicians' size='30'></input>";
+		echo "<datalist id='physicians'>";
+		foreach ($doc as $option)
+		{
+			echo "<option value='" .$option. "'>";
+		}
+		
+		echo "</datalist></td>";
 			/*
 		echo "	</SELECT>
 				</td>

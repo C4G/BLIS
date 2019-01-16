@@ -21,13 +21,14 @@ $fullname = $_REQUEST['fn'];
 $email = $_REQUEST['em'];
 $phone = $_REQUEST['ph'];
 $lang_id = $_REQUEST['lang'];
+$lab_id = $_REQUEST['lab'];//AS 09/04/2018 Added lab ID
 
 $user = new User();
 $user->username = $username;
 $user->password = $password;
 $user->level = $LIS_ADMIN;
 $user->actualName = $fullname;
-$user->labConfigId = 0;
+$user->labConfigId = $lab_id;//AS 09/04/2018 Lab ID
 $user->email = $email;
 $user->phone = $phone;
 $user->createdBy = $_SESSION['user_id'];

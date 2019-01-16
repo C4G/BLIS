@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 # 
 # (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
 # This file contains entity classes and functions for DB queries
@@ -627,7 +627,24 @@ class LabConfig
 				$lab_config->ageLimit = 5;
 			return $lab_config;
 	}
-
+//AS 09/04/2018 fetch all labs BEGIN
+    public static function getAllLabs()
+    {
+        $saved_db = DbUtil::switchToGlobal();
+        $query_string = 			"SELECT lab_config_id,name from lab_config";
+	$retval = array();
+	$resultset = query_associative_all($query_string, $row_count);
+	foreach($resultset as $record)
+	{
+$lc=new LabConfig();
+$lc->id=$record['lab_config_id'];
+$lc->name=$record['name'];
+             $retval[] = $lc;
+	}
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+    }
+    //AS 09/04/2018 END
 	
 	public static function getById($lab_config_id) {
 		$saved_db = DbUtil::switchToGlobal();
@@ -3722,7 +3739,9 @@ class Test
 		if(trim($this->result) == "")
 			# Results not yet entered
 			return "";
-		$retval = substr($this->result, 0, -1*$PATIENT_HASH_LENGTH);
+		
+        #$retval = substr($this->result, 0, -1*$PATIENT_HASH_LENGTH);
+        
         if ($retval == '')
             $retval = substr($this->result, 0, -1);
         # nc44
@@ -6644,7 +6663,11 @@ function add_user($user)
 			"INSERT INTO user_config(user_id, level, parameter, value, created_by, created_on, modified_by, modified_on) ".
 			"VALUES ('".$record['user_id']."',$user->level, 'rwoptions', '$rwoptions', $user->createdBy, curdate(), $user->createdBy, curdate())";
 		query_insert_one($query_string);
-
+//AS 08/29/2018 For access to lab configurations for admin users BEGIN.
+		if($user->level == 2) {
+add_lab_config_access($record['user_id'],$user->labConfigId);
+}
+//AS 08/29/2018 END
 		DbUtil::switchRestore($saved_db);
 		return true;
 	}	
@@ -6868,6 +6891,7 @@ function update_lab_user($updated_entry)
 	// if($updated_entry->level == 17) {
 	// 	$updated_entry->rwoption = LabConfig::getDoctorUserOptions();
 	// }
+	$user = get_user_by_id($updated_entry->userId);
 	$query_string = 
 		"UPDATE user ".
 		"SET actualname='$updated_entry->actualName', ".
@@ -6892,6 +6916,20 @@ function update_lab_user($updated_entry)
 		"value='".$updated_entry->rwoption."' ".
 		" WHERE user_id=".$updated_entry->userId." and parameter = 'rwoptions'";
 	query_blind($query_string);
+//AS 08/29/2018 For access to lab configurations for admin users BEGIN.
+//When updating, if the role changes from admin to something else, delete the entry from lab config access
+if($user->level==2 && $updated_entry->level != 2)
+{
+delete_lab_config_access_by_id($updated_entry->userId);
+}
+//When updating, if the role changes to blis_admin, jadd entry to lab_config_access
+		if($updated_entry->level == 2) {
+add_lab_config_access($updated_entry->userId,$user->labConfigId);
+}
+//~~Pending: replace hard coding of "2" with variable for blis_admin role.
+//~~ Pending: Figure out if the same required for super admin role or not.
+//AS 08/29/2018 END
+
 	DbUtil::switchRestore($saved_db);
 
 
@@ -6936,7 +6974,17 @@ function update_lab_RWOptions($config)
 	DbUtil::switchRestore($saved_db);
 
 }
-
+function delete_lab_config_access_by_id($user_id)
+{
+	global $con;
+	$saved_db = DbUtil::switchToGlobal();
+	# Remove entries from lab_config_access
+	$query_string = 
+		"DELETE FROM lab_config_access ".
+		"WHERE user_id=$user_id";
+	query_blind($query_string);
+	DbUtil::switchRestore($saved_db);
+}
 function delete_user_by_id($user_id)
 {
 	# Deletes a user from DB
@@ -7124,6 +7172,7 @@ function get_admin_users()
 			"AND lca.user_id=".$_SESSION['user_id']." )) ".
 			"OR u.created_by=".$_SESSION['user_id']." ".
 			"ORDER BY u.username";
+/*"select u.* from user u where u.level=$LIS_ADMIN";*/
 	}
 	$retval = array();
 	$resultset = query_associative_all($query_string, $row_count);

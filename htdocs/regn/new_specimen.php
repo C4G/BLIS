@@ -58,32 +58,12 @@ putUILog('new_specimen', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X'
     var jq = $.noConflict(true); // <== Do not pass true
 </script>
 
-	<script>
-  $(document).ready(function(){
-
-	var data_string="<?php echo $php_array;?>";
-
-	var data=data_string.split("%");
-
-	console.log(data_string)
-      jq("#doc_row_1_input").select2({
-          data: data,
-          dropdownAutoWidth : true
-      });
-
-      jq("#doc_row_1_input").css("width","120px");
-      //$("#doc_row_1_input").attr("autocomplete","on");
-	//$("#doc_row_1_input").autocomplete(data);
-
-	//$(".doctors_auto").autocomplete(data);
-
-
-  var refTo_string="<?php echo $refTo_array;?>";
-  var refTodata=refTo_string.split("%"); 
-  //alert("RefTo : "+refTodata);
- // $("#refTo_row_1_input").autocomplete(refTodata);
-    });
-  </script>
+<script>
+$(document).ready(function(){
+    var refTo_string="<?php echo $refTo_array;?>";
+    var refTodata=refTo_string.split("%"); 
+});
+</script>
 <script>
 // <!-- <![CDATA[
 specimen_count = 1;
@@ -451,8 +431,8 @@ if($patient == null)
 		<tr valign='top'>
 			<td>
 				<span id='specimenboxes'>
-				
-				<?php echo $page_elems->getNewSpecimenForm(1, $pid, $dnum, $session_num); ?>
+				<!--[Sep 3, 2018 - Jung Wook] Add a $doc_array variable to the argument of the getNewSpecimenForm function  -->
+				<?php echo $page_elems->getNewSpecimenForm(1, $pid, $dnum, $session_num, $GLOBALS['doc_array']); ?>
 				</span>
 				<br>
 				<a href='javascript:add_specimenbox();'><?php echo LangUtil::$pageTerms['ADD_ANOTHER_SPECIMEN']; ?> &raquo;</a>
