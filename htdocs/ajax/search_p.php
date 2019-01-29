@@ -6,7 +6,7 @@
 #
 include("../includes/db_lib.php");
 include("../includes/script_elems.php");
-LangUtil::setPageId("find_patient");
+LangUtil::setPageId("doctor_register");
 
 $script_elems = new ScriptElems();
 //$script_elems->enableTableSorter();
@@ -94,7 +94,8 @@ if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null
 {
 	?>
 	<br>
-	<div class='sidetip_nopos'>
+	<div class="alert alert-danger" role="alert">
+        <center>
 	<?php
 	echo LangUtil::$pageTerms['MSG_NOMATCH']." -";
 	if($a == 0)
@@ -114,6 +115,7 @@ if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null
 		<?php
 	}
 	?>
+        </center>
 	</div>
 	<?php
 	SessionUtil::restore($saved_session);
@@ -136,10 +138,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 }
 # Build HTML table
 ?>
-<table class='hor-minimalist-c' id='patientListTable' name='patientListTable'>
+<table class="table card-table table-vcenter text-nowrap" id="patientListTable" name="patientListTable">
 	<thead>
-		<tr valign='top'>
-		<th>Patient Number</th>
+		<tr>
+		<th class="w-1">Patient Number</th>
 			<?php
 			if($lab_config->pid != 0)
 			{
@@ -181,9 +183,9 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			}
 			?>
 			<th></th>
-			<th></th>
-			<th></th>
-			<th></th>
+            <th></th>
+            <th></th>
+            <th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -191,7 +193,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 	foreach($patient_list as $patient)
 	{
 	?>
-		<tr valign='top'>
+		<tr>
 		<?php
 				$patient_num =$patient->getDailyNum();
 				$pieces = explode("-", $patient_num);
@@ -293,20 +295,21 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					# Called from find_patient.php. Show 'profile' and 'register specimen' link
 					
 					?>
-					<a href='new_specimen.php?pid=<?php echo $patient->patientId; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register New Specimen for this Patient'><?php echo LangUtil::$pageTerms['CMD_REGISTERSPECIMEN']; ?></a>
+					<a href='new_specimen.php?pid=<?php echo $patient->patientId; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register New Specimen for this Patient' class="btn btn-secondary btn-sm"><?php echo LangUtil::$pageTerms['CMD_REGISTERSPECIMEN']; ?></a>
 					</td><td>
-					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'><?php echo LangUtil::$pageTerms['CMD_VIEWPROFILE']; ?></a>
+					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'  class="btn btn-secondary btn-sm"><?php echo LangUtil::$pageTerms['CMD_VIEWPROFILE']; ?></a>
 					</td><td>
-					<a href='javascript:delete_patient_profile(<?php echo $patient->patientId; ?>)' title='Click to Delete Patient Profile'><?php echo "Delete Profile"; ?></a>
-					</td><td>
-					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>&update=1' title='Click to Update Patient Profile'><?php echo "Update Profile" ?></a>
+					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>&update=1' title='Click to Update Patient Profile'  class="btn btn-secondary btn-sm"><?php echo LangUtil::$pageTerms['CMD_UPDPROFILE']; ?></a></td>
+                    <td>
+					<a href='javascript:delete_patient_profile(<?php echo $patient->patientId; ?>)' title='Click to Delete Patient Profile'  class="btn btn-danger btn-sm" style="color:white"><?php echo LangUtil::$pageTerms['CMD_DELPROFILE']; ?></a>
+					
 					<?php
 				}
 				else if (strpos($_SERVER["HTTP_REFERER"], "doctor_register.php") !== false) {
 
 					# Called from doctor_register.php. Show 'profile' and 'register specimen' link
 					?>
-					<a href='new_specimen.php?pid=<?php echo $patient->patientId; ?>&dnum=<?php echo $pieces[1]; ?>'' title='Click to Register New Specimen for this Patient'><?php echo LangUtil::$pageTerms['CMD_REGISTERSPECIMEN']; ?></a>
+					<a class="btn btn-secondary btn-sm" href='new_specimen.php?pid=<?php echo $patient->patientId; ?>&dnum=<?php echo $pieces[1]; ?>'' title='Click to Register New Specimen for this Patient' ><?php echo LangUtil::$pageTerms['CMD_REGISTERSPECIMEN']; ?></a>
 					</td><td>
 					<?php
 				}
@@ -320,10 +323,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
        					$billing_url_string = "reports_billing.php?patient_id=".$patient->patientId."&location=".$_REQUEST['l']."&yf=".$today_parts[0]."&mf=".$today_parts[1]."&df=".$today_parts[2]."&yt=".$today_parts[0]."&mt=".$today_parts[1]."&dt=".$today_parts[2]."&ip=0";
 
 					?>
-					<a href='<?php echo $url_string; ?>' title='Click to View Report for this Patient' target='_blank'><?php echo LangUtil::$generalTerms['CMD_VIEW']; ?> Report</a>
+					<a class="btn btn-secondary btn-sm" href='<?php echo $url_string; ?>' title='Click to View Report for this Patient' target='_blank'><?php echo LangUtil::$generalTerms['CMD_VIEW']; ?> Report</a>
 					</td>
 					<td>
-					<a href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'>Select Tests</a>
+					<a class="btn btn-secondary btn-sm" href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'>Select Tests</a>
 										</td>
                                         <td <?php (is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none'")) ?> >
                                        
@@ -336,7 +339,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				{
 					# Called from search.php. Show only 'profile' link
 					?>
-					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'><?php echo LangUtil::$pageTerms['CMD_VIEWPROFILE']; ?></a>
+					<a class="btn btn-secondary btn-sm" href='patient_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'><?php echo LangUtil::$pageTerms['CMD_VIEWPROFILE']; ?></a>
 					</td><td>
 					<?php
 				}
