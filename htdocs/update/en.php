@@ -260,8 +260,8 @@ $LANG_ARRAY = array (
 		"TIPS_PATIENT_LOOKUP" => "To register a new specimen, enter Patient by ID/Name or add a new Patient first.", 
 		"MSG_NOMATCH" => "No match found", 
 		"CMD_REGISTERSPECIMEN" => "Register Specimen", 
-		"CMD_VIEWPROFILE" => "View Profile",
-		"CMD_DELPROFILE" => "Delete Profile",
+		"CMD_VIEWPROFILE" => "View",
+		"CMD_DELPROFILE" => "Delete",
 		"CMD_UPDPROFILE" => "Update Profile"
 	) ,
 		"doctor_register" => array (

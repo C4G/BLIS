@@ -76,7 +76,7 @@ class PageElems
 		<?php
 	}
 	
-	public function getDatePicker($name_list, $id_list, $value_list, $show_format=true, $lab_config=null)
+    public function getDatePicker($name_list, $id_list, $value_list, $show_format=true, $lab_config=null)
 	{
 		# Returns a date picker element based on passed parameters
 		# Element ID ise determined using random number generator
@@ -235,6 +235,156 @@ class PageElems
 		}
 		?>
 		
+	<?php
+	}
+    
+	public function getDatePickerForNewDesign($name_list, $id_list, $value_list, $show_format=true, $lab_config=null)
+	{
+		# Returns a date picker element based on passed parameters
+		# Element ID ise determined using random number generator
+		$date_format = "";
+		$date_format_js = "";
+		$start_date = "";
+		if($lab_config == null)
+		{
+			# Logged in as technician: Use session variable to fetch format
+			$date_format = $_SESSION['dformat'];
+		}
+		else
+		{
+			# Logged in as admin
+			$date_format = $lab_config->dateFormat;
+		}
+		$order_list = array(0, 1, 2); # Y-m-d
+		switch($date_format)
+		{
+			case "d-m-Y":
+				$order_list[0] = 2;
+				$order_list[1] = 1;
+				$order_list[2] = 0;
+				$date_format_js = "dd-mm-yyyy";
+				$start_date = "01-01-1950";
+				break;
+			case "m-d-Y":
+				$order_list[0] = 1;
+				$order_list[1] = 2;
+				$order_list[2] = 0;
+				$date_format_js = "mm-dd-yyyy";
+				$start_date = "01-01-1950";
+				break;
+			case "Y-m-d":
+				$order_list[0] = 0;
+				$order_list[1] = 1;
+				$order_list[2] = 2;
+				$date_format_js = "yyyy-mm-dd";
+				$start_date = "1950-01-01";
+				break;			
+		}
+		$date_format_js_parts = explode("-", $date_format_js);
+		$picker_id = rand();
+		if(DebugLib::isOldIe() === true || strpos($_SERVER['PHP_SELF'], "reports_tat.php") !== false)
+		{
+			# Show only date fields and not datepicker
+			?>
+            <div class="row gutters-xs">
+                <div class="col-4">
+                    <input type="text" class="form-control" name="<?php echo $name_list[$order_list[0]]; ?>" id="<?php echo $id_list[$order_list[0]]; ?>" onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[0]]; ?>" maxlength="2" <?php if($show_format == true){echo "placeholder=\"$date_format_js_parts[0]\"" ;}?>/>
+                </div>
+                <div class="col-4">
+                    <input type="text" class="form-control" name="<?php echo $name_list[$order_list[1]]; ?>" id="<?php echo $id_list[$order_list[1]]; ?>" onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[1]]; ?>" maxlength="2" <?php if($show_format == true){echo "placeholder=\"$date_format_js_parts[1]\"" ;}?> />
+                </div>
+                <div class="col-4">
+                    <input type="text" class="form-control" name="<?php echo $name_list[$order_list[2]]; ?>" id="<?php echo $id_list[$order_list[2]]; ?>" onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[2]]; ?>" maxlength="4" <?php if($show_format == true){echo "placeholder=\"$date_format_js_parts[2]\"" ;}?> />
+                </div>
+            </div>
+			<?php
+			return;
+		}
+		?>
+		<SCRIPT type="text/javascript" charset="utf-8">
+		    <!--
+			function isNumberKey(evt)
+			{
+				var charCode = (evt.which) ? evt.which : event.keyCode
+				if (charCode > 31 && (charCode < 48 || charCode > 57))
+					return false;
+
+					return true;
+			}
+			//-->
+
+		Date.format = '<?php echo $date_format_js; ?>';
+		$(function()
+		{
+			$('#<?php echo $picker_id; ?>').datePicker({startDate:'<?php echo $start_date; ?>'});
+		});
+
+		$(function()
+		{
+			$('#<?php echo $picker_id; ?>')
+				.datePicker({createButton:false})
+				.bind(
+					'click',
+					function()
+					{
+						$(this).dpDisplay();
+						this.blur();
+						return false;
+					}
+				)
+				.bind(
+					'dateSelected',
+					function(e, selectedDate, $td)
+					{
+						var date_selected = $('#<?php echo $picker_id; ?>').val();
+						var date_parts = date_selected.split('-');
+						$('#<?php echo $id_list[$order_list[0]]; ?>').attr("value", date_parts[0]);
+						$('#<?php echo $id_list[$order_list[1]]; ?>').attr("value", date_parts[1]);
+						$('#<?php echo $id_list[$order_list[2]]; ?>').attr("value", date_parts[2]);
+					}
+				);
+		});
+		
+		</SCRIPT>
+				
+		<style type='text/css'>
+		a.dp-choose-date {
+			float: right;
+			width: 16px;
+			height: 16px;
+			padding: 0;
+			margin: 5px 3px 0;
+			display: block;
+			text-indent: -2000px;
+			overflow: hidden;
+			background: url('includes/img/calendar_icon.gif') no-repeat;
+		}
+		a.dp-choose-date.dp-disabled {
+			background-position: 0 -20px;
+			cursor: default;
+		}
+		/* makes the input field shorter once the date picker code
+		* has run (to allow space for the calendar icon
+		*/
+		input.dp-applied {
+			width: 140px;
+			float: right;
+		}
+		</style>
+		<div class="row gutters-xs">
+            <div class="col-3">
+                <input type="text" class="form-control" name="<?php echo $name_list[$order_list[0]]; ?>" id="<?php echo $id_list[$order_list[0]]; ?>" onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[0]]; ?>" maxlength="2" <?php if($show_format == true){echo "placeholder=\"$date_format_js_parts[0]\"" ;}?> >
+            </div>
+            <div class="col-4">
+                <input type="text" class="form-control" name="<?php echo $name_list[$order_list[1]]; ?>" id="<?php echo $id_list[$order_list[1]]; ?>" onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[1]]; ?>" maxlength="2"  <?php if($show_format == true){echo "placeholder=\"$date_format_js_parts[1]\"" ;}?> >
+            </div>
+            <div class="col-4">
+                <input type="text" class="form-control" name="<?php echo $name_list[$order_list[2]]; ?>" id="<?php echo $id_list[$order_list[2]]; ?>" onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[2]]; ?>" maxlength="4"  <?php if($show_format == true){echo "placeholder=\"$date_format_js_parts[2]\"" ;}?> >
+            </div>
+            <div class="col-1">
+                <input name="<?php echo $picker_id; ?>" id="<?php echo $picker_id; ?>" class="date-pick dp-applied" style='display:none'>
+            </div>
+        </div>
 	<?php
 	}
 	
@@ -2543,15 +2693,14 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		}
 		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
 		?>
-		<table class='hor-minimalist-b' <?php  if($width!="") echo " style='width:".$width."px;' "; ?>>
-			<tbody>
+		<table class="table card-table">
 				<?php
 				//if($_SESSION['pid'] != 0)
 				if(0)//$lab_config->pid != 0)
 				{
 				?>
-				<tr valign='top'>
-					<td><u><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></u></td>
+				<tr>
+					<td><b><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></b></td>
 					<td><?php echo $patient->surrogateId; ?></td>
 				</tr>
 				<?php
@@ -2560,7 +2709,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				{
 				?>
 				<tr>
-					<td><u><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></u></td>
+					<td><b><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></b></td>
 					<td>
 						<?php echo $patient->getAddlId(); ?>
 					</td>
@@ -2569,15 +2718,15 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				}
 				?>
 				<tr>
-					<td><u><?php echo LangUtil::$generalTerms['NAME']; ?></u></td>
+					<td><b><?php echo LangUtil::$generalTerms['NAME']; ?></b></td>
 					<td><?php echo $patient->getName(); ?></td>
 				</tr>
 				<tr>
-					<td><u><?php echo LangUtil::$generalTerms['GENDER']; ?></u></td>
+					<td><b><?php echo LangUtil::$generalTerms['GENDER']; ?></b></td>
 					<td><?php echo $patient->sex; ?></td>
 				</tr>
 				<tr>
-					<td><u><?php echo LangUtil::$generalTerms['AGE']; ?></u></td>
+					<td><b><?php echo LangUtil::$generalTerms['AGE']; ?></b></td>
 					<td>
 						<?php
 							echo $patient->getAge();
@@ -2590,7 +2739,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				{
 				?>
 				<tr>
-					<td><u><?php echo LangUtil::$generalTerms['DOB']; ?></u></td>
+					<td><b><?php echo LangUtil::$generalTerms['DOB']; ?></b></td>
 					<td><?php
 							echo $patient->getDob();
 						?>
@@ -2610,9 +2759,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					
 					?>
 					<tr>
-						<td><u><?php
-						
-						echo $field_name; ?></u></td>
+						<td><b><?php echo $field_name; ?></b></td>
 						<td>
 							<?php
 							echo $custom_data->getFieldValueString($lab_config->id , 2);
@@ -2623,7 +2770,6 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					}
 				}
 				?>
-			</tbody>
 		</table>
 		
 		<?php
@@ -2634,132 +2780,111 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		$patient = get_patient_by_id($pid);
 		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
 		?>
-		<form name='profile_update_form' id='profile_update_form'>
-		<input type='hidden' value='<?php echo $patient->patientId; ?>' name='patient_id'></input>
-		<input type='hidden' value='0' name='pd_ym' id='pd_ym'></input>
-		<input type='hidden' value='0' name='pd_y' id='pd_y'></input>
+		<form name="profile_update_form" id="profile_update_form" class="modal-content" action="">
+            
+		<input type="hidden" value="<?php echo $patient->patientId; ?>" name="patient_id">
+		<input type="hidden" value="0" name="pd_ym" id="pd_ym">
+		<input type="hidden" value="0" name="pd_y" id="pd_y">
+
+        <div class="form-group"  <?php if($lab_config->pid == 0) {echo " style=\"display:none\" ";} ?> >
+            <label class="form-label"><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></label>
+            <input name="surr_id" id="surr_id" type="text" class="form-control"  value="<?php if($patient->surrogateId != undefined) { echo $patient->surrogateId; }?>">
+        </div>
+            
+        <div class="form-group" <?php if($lab_config->patientAddl == 0) { echo " style='display:none;' "; } ?>>
+            <label class="form-label"><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></label>
+            <input type="text" class="form-control" name="addl_id"  value="<?php echo $patient->addlId; ?>">
+        </div>
+         
+        <div class="form-group">
+            <label class="form-label"><?php echo LangUtil::$generalTerms['NAME']; ?></label>
+            <input type="text" class="form-control" name="name"  value="<?php echo $patient->name; ?>">
+        </div>
+            
+        <div class="form-group">
+            <label class="form-label"><?php echo LangUtil::$generalTerms['GENDER']; ?></label>
+            <select name="sex" id="sex" class="form-control custom-select">
+                <option value="M" <?php if($patient->sex == 'M') echo " selected "; ?> ><?php echo LangUtil::$generalTerms['MALE']; ?></option>
+                <option value="F" <?php if($patient->sex == 'F') echo " selected "; ?> ><?php echo LangUtil::$generalTerms['FEMALE']; ?></option>
+            </select>
+        </div>
+            
+        <div class="form-group">
+            <label class="form-label" title="Enter either Age or Date of Birth"><?php echo LangUtil::$generalTerms['AGE']; ?></label>
+            
+            <div class="input-group">
+                <?php
+                    if($patient->age != null and $patient->age != "" and $patient->age != "0")
+                    {
+                    ?>
+                        <input type="text" name="age" id="age" value="<?php echo $patient->age; ?>"  class="form-control">
+                    <?php
+                    }
+                    else
+                    {
+                    ?>
+                        <input type="text" name="age" id="age" value="<?php $pieces = explode(" ", $patient->getAge()); echo $pieces[0]  ?>"  class="form-control">
+                    <?php
+                    }
+                ?>
+            
+                <div class="input-group-prepend">
+                    <select name="age_param" id="age_param" class="form-control custom-select">
+                        <option value="1"><?php echo LangUtil::$generalTerms['YEARS']; ?></option>
+                        <option value="2"><?php echo LangUtil::$generalTerms['MONTHS']; ?></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+            
+        <div class="form-group">
+            <label class="form-label"><?php echo LangUtil::$generalTerms['DOB']; ?></label>
+            <?php
+                $value_list = array();
+                $name_list = array();
+                $id_list = array();
+                $name_list[] = "yyyy";
+                $name_list[] = "mm";
+                $name_list[] = "dd";
+                $id_list = $name_list;
+                if($patient->partialDob != null && $patient->partialDob != "")
+                {
+                    # Partial DoB value is present
+                    if(strpos($patient->partialDob, "-") === false)
+                    {
+                        # Year-only available
+                        $value_list[] = $patient->partialDob;
+                        $value_list[] = "";
+                        $value_list[] = "";
+                    }
+                    else
+                    {
+                        # Year and month available
+                        $partial_dob_parts = explode("-", $patient->partialDob);
+                        $value_list[] = $partial_dob_parts[0];
+                        $value_list[] = $partial_dob_parts[1];
+                        $value_list[] = "";
+                    }
+                }
+                else if($patient->dob == null || $patient->dob == "")
+                {
+                    # DoB not previously entered
+                    $value_list[] = "";
+                    $value_list[] = "";
+                    $value_list[] = "";
+                }
+                else
+                {
+                    # Previous DoB value exists
+                    $dob_parts = explode("-", $patient->dob);
+                    $value_list = $dob_parts;
+                }
+                $this->getDatePickerForNewDesign($name_list, $id_list, $value_list, $show_format=true);
+            ?>
+        </div>
+            
 		<table class='hor-minimalist-b'>
 			<tbody>
-				<tr <?php
-				if($lab_config->pid == 0)
-				{
-					echo " style='display:none;' ";
-				}
-				?>>
-					<td><u><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></u></td>
-					<td>
-						<input type='text' name='surr_id' id='surr_id' value='<?php if($patient->surrogateId != undefined) { echo $patient->surrogateId; }?>' class='uniform_width'></input>
-					</td>
-				</tr>
-				
-				<tr <?php
-				if($lab_config->patientAddl == 0)
-				{
-					echo " style='display:none;' ";
-				}
-				?>>
-					<td><u><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></u></td>
-					<td>
-						<input type='text' value='<?php echo $patient->addlId; ?>' name='addl_id' class='uniform_width'></input>
-					</td>
-				</tr>
-				<tr>
-					<td><u><?php echo LangUtil::$generalTerms['NAME']; ?></u></td>
-					<td>
-					<input type='text' value='<?php echo $patient->name; ?>' name='name' class='uniform_width'></input>
-					</td>
-				</tr>
-				<tr>
-					<td><u><?php echo LangUtil::$generalTerms['GENDER']; ?></u></td>
-					<td>
-						<select name='sex'  class='uniform_width'>
-						<option value='M'
-						<?php
-						if($patient->sex == 'M')
-							echo " selected ";
-						?>
-						>
-						<?php echo LangUtil::$generalTerms['MALE']; ?>
-						</option>
-						<option value='F'
-						<?php
-						if($patient->sex == 'F')
-							echo " selected ";
-						?>
-						>
-						<?php echo LangUtil::$generalTerms['FEMALE']; ?>
-						</option>
-						</select>
-				</tr>
-				<tr>
-					<td><u title='Enter either Age or Date of Birth'><?php echo LangUtil::$generalTerms['AGE']; ?></u></td>
-					<td>
-						<?php
-						if($patient->age != null and $patient->age != "" and $patient->age != "0")
-						{
-						?>
-							<input type='text' name='age' id='age' value='<?php  echo $patient->age; ?>'  class='uniform_width'></input>
-						<?php
-						}
-						else
-						{
-						?>
-							<input type='text' name='age' id='age' value=' <?php $pieces = explode(" ", $patient->getAge()); echo $pieces[0]  ?>'  class='uniform_width'></input>
-						<?php
-						}
-						?>
-						<select name='age_param' id='age_param'>
-							<option value='1'><?php echo LangUtil::$generalTerms['YEARS']; ?></option>
-							<option value='2'><?php echo LangUtil::$generalTerms['MONTHS']; ?></option>
-						</select>
-					</td>
-				</tr>
-				<tr valign='top'>
-					<td><u title='Enter either Age or Date of Birth'><?php echo LangUtil::$generalTerms['DOB']; ?></u></td>
-					<td><?php
-						$value_list = array();
-						$name_list = array();
-						$id_list = array();
-						$name_list[] = "yyyy";
-						$name_list[] = "mm";
-						$name_list[] = "dd";
-						$id_list = $name_list;
-						if($patient->partialDob != null && $patient->partialDob != "")
-						{
-							# Partial DoB value is present
-							if(strpos($patient->partialDob, "-") === false)
-							{
-								# Year-only available
-								$value_list[] = $patient->partialDob;
-								$value_list[] = "";
-								$value_list[] = "";
-							}
-							else
-							{
-								# Year and month available
-								$partial_dob_parts = explode("-", $patient->partialDob);
-								$value_list[] = $partial_dob_parts[0];
-								$value_list[] = $partial_dob_parts[1];
-								$value_list[] = "";
-							}
-						}
-						else if($patient->dob == null || $patient->dob == "")
-						{
-							# DoB not previously entered
-							$value_list[] = "";
-							$value_list[] = "";
-							$value_list[] = "";
-						}
-						else
-						{
-							# Previous DoB value exists
-							$dob_parts = explode("-", $patient->dob);
-							$value_list = $dob_parts;
-						}
-						$this->getDatePicker($name_list, $id_list, $value_list, $show_format=true);
-						?>
-					</td>
-				</tr>
 				<?php
 				# Custom fields here
 				$custom_field_list = get_custom_fields_patient();
@@ -2787,19 +2912,20 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<?php
 				}
 				?>
-				<tr>
-					<td>
-					</td>
-					<td>
-						<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_UPDATE']; ?>' onclick='javascript:update_profile();'></input>
-						&nbsp;&nbsp;&nbsp;
-						<a href='javascript:toggle_profile_divs();'><?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?></a>
-						&nbsp;&nbsp;&nbsp;
-						<span id='update_profile_progress' style='display:none;'><?php $this->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?></span>
-					</td>
-				</tr>
 			</tbody>
 		</table>
+        
+        <div class="form-group">
+            <center>
+                <span id='update_profile_progress' style='display:none;'><?php $this->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?></span>
+            </center>
+        </div>
+            
+        <div class="btn-list">
+            <a onclick="javascript:update_profile();" class="btn btn-primary btn-block"><?php echo LangUtil::$generalTerms['CMD_UPDATE']; ?></a>
+            <a class="btn btn-secondary btn-block" onclick="closeUpdateProfileDialog()" ><?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?></a>
+        </div>
+        
 		</form>
 	<?php
 	}
@@ -2867,7 +2993,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
                 $specimenBarcode = specimenBarcodeCheck();
 		?>
                         
-		<tr valign='top'>
+		<tr>
 			<?php
 			if($_SESSION['s_addl'] != 0)
 			{
@@ -2909,7 +3035,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
                                 ?>
 			</td>
 			<td>
-				<a href='specimen_info.php?sid=<?php echo $specimen->specimenId; ?>' title='Click to View Details of this Specimen'><?php echo LangUtil::$generalTerms['DETAILS']; ?></a>
+				<a href="specimen_info.php?sid=<?php echo $specimen->specimenId; ?>" title="Click to View Details of this Specimen" class="btn btn-secondary btn-sm"><?php echo LangUtil::$generalTerms['DETAILS']; ?></a>
 			</td>
 			<?php
 			$sid=$specimen->specimenId;
@@ -2917,28 +3043,29 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			
 			?>
 			<td>
-			<a href="javascript:get_report(<?php echo $pid;?>,<?php echo $sid;?> )">Report</a> </td>
+			<a href="javascript:get_report(<?php echo $pid;?>,<?php echo $sid;?> )" class="btn btn-secondary btn-sm">Report</a> </td>
+             <?php
+                if($specimenBarcode)
+                {
+                ?>
+                    <td><a href="javascript:print_specimen_barcode(<?php echo $pid;?>,<?php echo $sid;?> )" class="btn btn-secondary btn-sm">Print Barcode</a> </td>
+                <? 
+                }
+
+            ?>
 			<td><!-- <a href="javascript:update_specimen(<?php echo $sid;?>)"> Update</a> &nbsp;/&nbsp; --> 
 			<?php if($removed == false){?>
-			<a href="javascript:delete_specimen(<?php echo $sid;?>)"> Delete</a>
+			<a href="javascript:delete_specimen(<?php echo $sid;?>)" class="btn btn-danger btn-sm" style="color:white">Delete</a>
 			<?php } else {
 					if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 						?>
-						<a href="javascript:retrieve_deleted(<?php echo $sid;?>,'specimen')"> Retrieve</a>
+						<a href="javascript:retrieve_deleted(<?php echo $sid;?>,'specimen')" class="btn btn-secondary btn-sm">Retrieve</a>
 					<?php } else {
 			   echo "Request Admin to undo delete"; 
 			   }
 			}?>
 			</td>
-                        <?php
-                            if($specimenBarcode)
-                            {
-                            ?>
-                                <td><a href="javascript:print_specimen_barcode(<?php echo $pid;?>,<?php echo $sid;?> )">Print Barcode</a> </td>
-                            <? 
-                            }
-                                
-                        ?>
+                       
 		</tr>
 		<?php
 	}
@@ -2992,7 +3119,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		{
 			?>
 			<br>
-			<div class='sidetip_nopos'><?php echo LangUtil::$generalTerms['TESTS']." - ".LangUtil::$generalTerms['MSG_NOTFOUND']; ?></div>
+			<div><?php echo LangUtil::$generalTerms['TESTS']." - ".LangUtil::$generalTerms['MSG_NOTFOUND']; ?></div>
 			<?php
 			return;
 		}
@@ -3044,9 +3171,9 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		}
 		
 		</script>
-		<table class='tablesorter' id='test_history_table'>
+		<table class="table card-table table-vcenter text-nowrap" id='test_history_table'>
 			<thead>
-				<tr valign='top'>
+				<tr>
 					<?php
 					if($_SESSION['s_addl'] != 0)
 					{
@@ -3067,7 +3194,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
                             {
                             ?>
                                  <th></th>
-                            <? 
+                            <?php 
                             }
                                 
                         ?>
@@ -3215,40 +3342,30 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		if($_SESSION['user_level'] != $LIS_TECH_RO)
 		{
 		?>
-			<div class='sidetip_nopos'>
-			<p>
-				<a href='new_specimen.php?pid=<?php echo $patient_id; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register a New Specimen for this Patient'>
-					<?php echo LangUtil::$pageTerms['MSG_REGNEWSPECIMEN']; ?>
-				</a>
-			</p>
+                <a href="new_specimen.php?pid=<?php echo $patient_id; ?>&dnum=<?php echo $pieces[1]; ?>" title="Click to Register a New Specimen for this Patient" class="btn btn-secondary btn-block"><i class="fe fe-plus mr-2"></i>
+                    <?php echo LangUtil::$pageTerms['MSG_REGNEWSPECIMEN']; ?>
+                </a>
 			<?php
 			if(($DISABLE_UPDATE_PATIENT_PROFILE === false)&&(get_level_by_id($_SESSION['user_id']) ==2))
 			{
 				?>
-				<p>
-					<a href='javascript:toggle_profile_divs();' title='Click to Update Patient Profile'>
-						<?php echo LangUtil::$pageTerms['MSG_UPDATEPROFILE']; ?>
-					</a>
-					
-				</p>
+                <a href="javascript:showUpdateProfileDialog()" title="Click to Update Patient Profile" class="btn btn-secondary btn-block"><i class="fe fe-user mr-2"></i>
+                    <?php echo LangUtil::$pageTerms['MSG_UPDATEPROFILE']; ?>
+                </a>
 				<?php
 			}
 			?>
-			<p>
-				<a href='reports_testhistory.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>' title='Click to Generate Test History Report for this Patient' target='_blank'>
-					<?php echo LangUtil::$pageTerms['MSG_PRINTHISTORY']; ?>
-				</a>
-			</p>
+                <a href="reports_testhistory.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>" title="Click to Generate Test History Report for this Patient" target="_blank" class="btn btn-secondary btn-block"><i class="fe fe-printer mr-2"></i>
+                    <?php echo LangUtil::$pageTerms['MSG_PRINTHISTORY']; ?>
+                </a>
+			
                         <?php
 			if($patientBarcodes == 1)
 			{
 				?>
-				<p>
-					<a href='javascript:print_patient_barcode();' title='Click to Print Patient Barcode'>
-						<?php echo "Print Patient Barcode" ?>
-					</a>
-					
-				</p>
+                <a href="javascript:print_patient_barcode();" title="Click to Print Patient Barcode" class="btn btn-secondary btn-block"><i class="fe fe-printer mr-2"></i>
+                    <?php echo "Print Patient Barcode" ?>
+                </a>
 				<?php
 			}
 			?>
@@ -3256,13 +3373,11 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				<?php
 				if (is_billing_enabled($_SESSION['lab_config_id']))
 					{ ?>
-				<p>
-					<a rel='facebox' href='bill_generator.php?location=<?php echo$_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>' title='Click to generate a billing statement for this Patient' target='_blank'>
-						<?php echo "Billing Report" ?>
-					</a>
-				</p>
+                <a rel="facebox" href="bill_generator.php?location=<?php echo$_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>" title="Click to generate a billing statement for this Patient" target="_blank" class="btn btn-secondary btn-block"><i class="fe fe-dollar-sign mr-2"></i>
+                    <?php echo "Billing Report" ?>
+                </a>
 				<?php } ?>
-			</div>
+			
 		<?php
 		}
 	}
