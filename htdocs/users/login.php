@@ -11,7 +11,7 @@ $content =<<<content
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <META HTTP-EQUIV="Refresh"
-CONTENT="1; URL=http://{$_SERVER['SERVER_ADDR']}:4001/login.php">
+CONTENT="1; URL=http://{$_SERVER['SERVER_ADDR']}:4 001/login.php">
 </head>
 </html>
 content;
