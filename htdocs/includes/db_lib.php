@@ -8133,13 +8133,15 @@ $pid = $modified_record->patientId;
 		}
 	}
 	$modified_record->age = 0;
-	if($modified_record->partialDob != "")
+	if($modified_record->dob != ""){
+        $query_string .= "age=$modified_record->age, partial_dob='', dob='$modified_record->dob' ";   
+    }
+    else{
 		$query_string .= "age=$modified_record->age, partial_dob='$modified_record->partialDob' ";
-	else if($modified_record->dob != "")
-		$query_string .= "age=$modified_record->age, partial_dob='', dob='$modified_record->dob' ";
-	$query_string .= "WHERE patient_id=$pid";
+    }
+	$query_string .= "WHERE patient_id=$pid";   
 	fwrite($fh, $query_string);
-fclose($fh);
+    fclose($fh);
 	query_blind($query_string);
 	# Addition of custom fields: done from calling function/page	
 	return true;

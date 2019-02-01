@@ -30,6 +30,7 @@ $font_size = $barcodeSettings['textsize']; //11;
 ?>
 <script type="text/javascript" src="facebox/facebox.js"></script>
 <script type='text/javascript'>
+
 $(document).ready(function(){
     var code = $('#patientID').val();
     $("#patientBarcodeDiv").barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'bmp'});
@@ -42,6 +43,24 @@ $(document).ready(function(){
 
 });
 
+// Close the dialog when the user clicks anywhere outside of the modal
+window.onclick = function(event) {
+    if (event.target == document.getElementById('profile_update_dialog_div')) {
+        document.getElementById('profile_update_dialog_div').style.display = "none";
+    }
+}
+
+function showUpdateProfileDialog() {
+    document.getElementById('profile_update_dialog_div').style.display = 'block';
+    document.getElementById('surr_id').focus();
+}
+
+function closeUpdateProfileDialog() {
+    document.getElementById('profile_update_dialog_div').style.display = 'none';
+    document.getElementById('profile_update_dialog_div').blur();
+}
+    
+    
 function retrieve_deleted(sid, category){
 	var params = "item_id="+sid+"&ret_cat="+category;
 	 $.ajax({
@@ -60,12 +79,9 @@ function retrieve_deleted(sid, category){
 	
 }
 
-
-
 function toggle_profile_divs()
 {
 	$('#profile_div').toggle();
-	$('#profile_update_div').toggle();
 	$('#profile_update_form').resetForm();
 }
 
@@ -108,39 +124,40 @@ function Popup(data)
 
 function update_profile()
 {
-	$('#pd_ym').attr("value", "0");
-	$('#pd_y').attr("value", "0");
-	var yyyy = $('#yyyy').attr("value");
-	var mm = $('#mm').attr("value");
-	var dd = $('#dd').attr("value");
-	var age = $('#age').attr("value");
+	var yyyy = $("#yyyy").val();
+	var mm = $("#mm").val();
+	var dd = $("#dd").val();
+	var age = $("#age").val();
 	var error_message = "";
 	var error_flag = 0;
 	//Age not given
-	if(age.trim() == "")
+	if(age.trim().length > 0)
 	{
-		//Check partial DoB
-		if(yyyy.trim() != "" && mm.trim() != "" && dd.trim() == "")
+        //Check partial DoB
+		if(yyyy.trim().length > 0 && mm.trim().length > 0 && dd.trim().length == 0)
 		{
-			dd = "01";
+			$("#dd").val("01");
+            dd = "01";
 			if(checkDate(yyyy, mm, dd) == false)
 			{
 				alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['DOB']." ".LangUtil::$generalTerms['INVALID']; ?>");
 				return;
 			}
-			$('#pd_ym').attr("value", "1");
+			$("#pd_ym").val("1");
 			
 		}
-		else if(yyyy.trim() != "" && mm.trim() == "" && dd.trim() == "")
+		else if(yyyy.trim().length > 0 && mm.trim().length == 0 && dd.trim().length == 0)
 		{
-			mm = "01";
-			dd = "01";
+			$("#mm").val("01");
+			$("#dd").val("01");
+            mm = "01";
+            dd = "01";
 			if(checkDate(yyyy, mm, dd) == false)
 			{
 				alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['DOB']." ".LangUtil::$generalTerms['INVALID']; ?>");
 				return;
 			}
-			$('#pd_y').attr("value", "1");
+			$("#pd_y").val("1");
 		}
 		else if(yyyy.trim() == "" && mm.trim() == "" && dd.trim() == "")
 		{
@@ -166,53 +183,66 @@ function update_profile()
 	}	
 	
 	$('#update_profile_progress').show();
-	var params = $('#profile_update_form').formSerialize();
+	var params = $('#profile_update_form').serialize();
 	$.ajax({
 		type: "POST",
 		url: "ajax/patient_update.php",
 		data: params,
 		success: function(msg) {
 			$('#update_profile_progress').hide();
+            closeUpdateProfileDialog();
 			alert("Successfully updated");
 			window.location.reload();
 		}
 	});	
 }
 </script>
-<br>
-<b><?php echo LangUtil::getTitle(); ?></b>
- | <a href='javascript:history.go(-1);'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>
- &nbsp;&nbsp; <?php 
-    			if($isSpecDel){ 
-    		?>
-    			<span class='clean-orange' id='msg_box_specimen'>
-					<?php echo "Specimen Deleted Successfully" ?> &nbsp;&nbsp;<a href="javascript:toggle('msg_box_specimen');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>&nbsp;&nbsp;
-				</span>
-			<?php } ?>
-<br><br>
-<table>
-	<tr valign='top'>
-		<td>
-			<div id='profile_div'>
-				<?php $page_elems->getPatientInfo($pid); ?>
-			</div>
-			<div id='profile_update_div' style='display:none;' >
-				<?php $page_elems->getPatientUpdateForm($pid); ?>
-			</div>
-		</td>
-		<td>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		</td>
-		<td>
-			<?php $page_elems->getPatientTaskList($pid); ?>
-		</td>
-	</tr>
-</table>
-<br>
+<div class="page-header">
+    <h1 class="page-title"><a href="javascript:history.go(-1);" class="btn btn-secondary" role="button"><i class="fe fe-chevron-left mr-2"></i><?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>&nbsp;&nbsp;<?php echo LangUtil::getTitle(); ?></h1>
+    
+    <?php 
+    if($isSpecDel){ 
+    ?>
+        <span class='clean-orange' id='msg_box_specimen'>
+            <?php echo "Specimen Deleted Successfully" ?> &nbsp;&nbsp;<a href="javascript:toggle('msg_box_specimen');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>&nbsp;&nbsp;
+        </span>
+    <?php } ?>
+</div>
 
-<b><?php echo LangUtil::$generalTerms['CMD_THISTORY']; ?></b><br>
-<?php $page_elems->getPatientHistory($pid); ?>
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <div id="profile_div" class="p-lg-6">
+                    <?php $page_elems->getPatientInfo($pid); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-wrap p-lg-6">
+                    <?php $page_elems->getPatientTaskList($pid); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <!-- Result Table Start -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><?php echo LangUtil::$generalTerms['CMD_THISTORY']; ?></h3>
+            </div>
+            <div class="table-responsive">
+                <?php $page_elems->getPatientHistory($pid); ?>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="barcodeData" style="display:none;">
 <input type="text" id="patientID" value='<?php echo encodePatientBarcode($_REQUEST['pid'],0); ?>' />
 <br><br>
@@ -220,4 +250,15 @@ function update_profile()
 <br><br>
 <div id="specimenBarcodeDiv"></div>
 </div>
+<!-- A pop-up form to update the profile -->
+
+<div id="profile_update_dialog_div" class="modal">
+
+    <?php $page_elems->getPatientUpdateForm($pid); ?>
+    
+</div>
+<script>
+    require(['input-mask']);
+</script>
+
 <?php include("includes/footer.php"); ?>
