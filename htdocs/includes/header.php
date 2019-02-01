@@ -8,7 +8,15 @@ set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 # Start session if not already started
 if(session_id() == "")
 	session_start();
-	
+# Include required libraries
+require_once("includes/db_lib.php");
+require_once("includes/user_lib.php");
+		$user = get_user_by_name($_SESSION['username']);
+if(!is_allowed(basename($_SERVER['PHP_SELF']),$user->rwoptions))
+{
+header("Location: home.php");
+die();
+}
 $TRACK_LOADTIME = false;
 $TRACK_LOADTIMEJS = false;
 if($TRACK_LOADTIME)
@@ -18,8 +26,7 @@ if($TRACK_LOADTIME)
 	$starttime = $startarray[1] + $startarray[0];
 }
 
-# Include required libraries
-require_once("includes/db_lib.php");
+
 require_once("includes/page_elems.php");
 require_once("includes/script_elems.php");
 LangUtil::setPageId("header");

@@ -1,0 +1,1 @@
+ALTER TABLE `test` MODIFY COLUMN `result` VARCHAR(5000);

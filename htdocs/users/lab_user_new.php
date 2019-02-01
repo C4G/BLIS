@@ -80,7 +80,7 @@ function add_lab_user()
 	// End email address test
 
 	// readwriteOption = $('#readwriteOpt:checked').length;
-    var readwriteOption = 0;
+/*    var readwriteOption = 0;
     var rwoptions = ',';
     
 	$('input[name="readwriteOpt"]:checked').each(function() {
@@ -89,15 +89,18 @@ function add_lab_user()
 	});
 
 	rwoptions = rwoptions.slice(1,-1);
-	
+
 	if(readwriteOption < 1){
 		alert("Select at least one read or write options");
 		return;
-	}
+	}*/
 	$('#error_msg').hide();
 	var url_string = 'ajax/lab_user_add.php';
 	//var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&ut='+ut+'&lid=<?php echo $lab_config_id; ?>&lang='+lang_id+"&fn_reports="+fn_reports+"&fn_results="+fn_results+"&fn_regn="+fn_regn;
+var rwoptions=document.getElementById('hdn_rwopt').value;
+//alert(rwoptions);
 	var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&ut='+ut+'&lid=<?php echo $lab_config_id; ?>&lang='+lang_id+"&showpname="+showpname+"&opt="+rwoptions;
+//alert(data_string);
 	$('#add_user_progress').show();
 	$.ajax({
 		type: "POST",
@@ -139,6 +142,7 @@ function add_user_type(){
 }
 
 function add_read_mode(){
+//var x=			document.getElementById('readWrite_options');
 	var user_type = $('select[name="user_type"]').val();
 	var data_string = 'u='+user_type;
 	$.ajax({
@@ -147,26 +151,44 @@ function add_read_mode(){
 		data: data_string,
 		success: function(msg) {
 			var msg1 = msg.trim();
+//alert("ok");
+document.getElementById('hdn_rwopt').value=msg1;
+//alert("ok");
+//alert(msg1);
 			var rwarray = msg1.split(",");
-			document.getElementById('readwriteOpt2').checked = false;
-			document.getElementById('readwriteOpt3').checked = false;
-			document.getElementById('readwriteOpt4').checked = false;
-			document.getElementById('readwriteOpt6').checked = false;
-			document.getElementById('readwriteOpt7').checked = false;
+//			document.getElementById('readwriteOpt2').checked = false;
+//			document.getElementById('readwriteOpt3').checked = false;
+//			document.getElementById('readwriteOpt4').checked = false;
+//			document.getElementById('readwriteOpt6').checked = false;
+//			document.getElementById('readwriteOpt7').checked = false;
+
+
+			document.getElementById('readwriteOpt2').innerHTML = "N";
+
+			document.getElementById('readwriteOpt3').innerHTML = "N";
+			document.getElementById('readwriteOpt4').innerHTML = "N";
+			document.getElementById('readwriteOpt6').innerHTML = "N";
+			document.getElementById('readwriteOpt7').innerHTML="N";
+
 			if($.inArray('2', rwarray) != -1){
-				document.getElementById('readwriteOpt2').checked = true;
+//				document.getElementById('readwriteOpt2').checked = true;
+				document.getElementById('readwriteOpt2').innerHTML = "Y";
 			}
 			if($.inArray('3', rwarray) != -1){
-				document.getElementById('readwriteOpt3').checked = true;
+//				document.getElementById('readwriteOpt3').checked = true;
+				document.getElementById('readwriteOpt3').innerHTML = "Y";
 			}
 			if($.inArray('4', rwarray) != -1){
-				document.getElementById('readwriteOpt4').checked = true;
+//				document.getElementById('readwriteOpt4').checked = true;
+				document.getElementById('readwriteOpt4').innerHTML = "Y";
 			}
 			if($.inArray('6', rwarray) != -1){
-				document.getElementById('readwriteOpt6').checked = true;
+//				document.getElementById('readwriteOpt6').checked = true;
+				document.getElementById('readwriteOpt6').innerHTML = "Y";
 			}
 			if($.inArray('7', rwarray) != -1){
-				document.getElementById('readwriteOpt7').checked = true;
+//				document.getElementById('readwriteOpt7').checked = true;
+				document.getElementById('readwriteOpt7').innerHTML = "Y";
 			}
 		}
 	});
@@ -209,15 +231,16 @@ function add_read_mode(){
 	// }
 }
 
-function checkAllReadWriteOptions(){
+/*function checkAllReadWriteOptions(){
 	checkboxes = document.getElementsByName('readwriteOpt');
 	  for(var i=0, n=checkboxes.length;i<n;i++) {
 	    checkboxes[i].checked = true;
 	  }
-}
+}*/
 
 $(document).ready(function(){
-	checkAllReadWriteOptions();
+//	checkAllReadWriteOptions();
+add_read_mode();
 });
 
 </script>
@@ -237,7 +260,7 @@ $(document).ready(function(){
 		</tr>
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['PWD_TEMP']; ?><?php $page_elems->getAsterisk(); ?>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td><input name='pwd' id='pwd' type='text' class='uniform_width' /></td>
+			<td><input name='pwd' id='pwd' type='password' class='uniform_width' /></td>
 		</tr>
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['TYPE']; ?><?php $page_elems->getAsterisk(); ?>&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -255,13 +278,44 @@ $(document).ready(function(){
 		 	<td> <div id="readOrWrite" name="readOrWrite" > Writeable Options </div><?php $page_elems->getAsterisk(); ?>
 		 	</td>
 		 	<td><div id="readWrite_options" name="readWrite_options">
-		 		
-					<input type="checkbox" name="readwriteOpt" id='readwriteOpt2' value="2">Patient Registration<br>
+<input type="hidden" id="hdn_rwopt"/>
+		<table>
+<tr>
+<th>
+Patient Registration
+</th>
+<th>
+Test Results
+</th>
+<th>
+Search
+</th>
+<th>
+Inventory
+</th>
+<th>
+Backup Data
+</th>
+</tr>
+<tr>
+<td id="readwriteOpt2">
+</td>
+<td id="readwriteOpt3">
+</td>
+<td id="readwriteOpt4">
+</td>
+<td id="readwriteOpt6">
+</td>
+<td id="readwriteOpt7">
+</td>
+</tr>
+</table> 		
+<!--					<input type="checkbox" name="readwriteOpt" id='readwriteOpt2' value="2">Patient Registration<br>
 					<input type="checkbox" name="readwriteOpt" id='readwriteOpt3' value="3">Test Results<br>
 					<input type="checkbox" name="readwriteOpt" id='readwriteOpt4' value="4">Search<br>
 					<input type="checkbox" name="readwriteOpt" id='readwriteOpt6' value="6">Inventory<br>
 					<input type="checkbox" name="readwriteOpt" id='readwriteOpt7' value="7">Backup Data <br>
-				
+	-->			
 				</div>
 		 	</td>
 		</tr>

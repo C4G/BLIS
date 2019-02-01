@@ -558,54 +558,112 @@ class PageElems
 		// if($user_level == 17) {
 		// 	$user_rwoptions= "2,4";
 		// }
-
+echo "<tr>";
 		echo " 	<td> <div id='readOrWrite' name='readOrWrite' >";
-		if($user_level < 16 || $user_level == 17)
+//		if($user_level < 16 || $user_level == 17)
 			echo "Writeable Options ";
-		else
-			echo "Readable Options";
+//		else
+//			echo "Readable Options";
 		
 		echo "</div>".$this->getAsterisk()."</td>";
 		$userRWoptions = explode( ',', $user_rwoptions );
-		if($user_level < 16 || $user_level == 17)
-		{
-			
-			echo "<td><div id='readWrite_options' name='readWrite_options'>
-		 			<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' value='2' ";
+//		if($user_level < 16 || $user_level == 17)
+//		{
+echo "<td><div id='readWrite_options' name='readWrite_options'>";
+echo "<table>";
+echo "<tr>";
+echo "<th>";
+echo "Patient Registration";
+echo "</th>";
+echo "<th>";
+echo "Test Results";
+echo "</th>";
+echo "<th>";
+echo "Search";
+echo "</th>";
+echo "<th>";
+echo "Inventory";
+echo "</th>";
+echo "<th>";
+echo "Backup Data";
+echo "</th>";
+echo "</tr>";
+echo "<tr>";
+//		 			<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' value='2' ";
 			if(in_array("2", $userRWoptions))
-				echo "checked";
-			echo ">Patient Registration<br>
+echo "<td>Y</td>";
+else
+echo "<td>N</td>";
+//				echo "checked";
+//			echo ">Patient Registration<br>
 					
-					<input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3' ";
+//					<input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3' ";
 					if(in_array("3", $userRWoptions))
-						echo " checked";
-					echo ">Test Results<br>
-						<input type='checkbox' name='readwriteOpt' id='readwriteOpt4' value='4' ";
+echo "<td>Y</td>";
+else
+echo "<td>N</td>";
+//						echo " checked";
+//					echo ">Test Results<br>
+//						<input type='checkbox' name='readwriteOpt' id='readwriteOpt4' value='4' ";
 					if(in_array("4", $userRWoptions))
-						echo " checked";
-					echo ">Search<br>
-					<input type='checkbox' name='readwriteOpt' id='readwriteOpt6' value='6' ";
+echo "<td>Y</td>";
+else
+echo "<td>N</td>";
+//						echo " checked";
+//					echo ">Search<br>
+//					<input type='checkbox' name='readwriteOpt' id='readwriteOpt6' value='6' ";
 					if(in_array("6", $userRWoptions))
-						echo " checked";
-					echo ">Inventory<br>
-					<input type='checkbox' name='readwriteOpt' id='readwriteOpt7' value='7' ";
+echo "<td>Y</td>";
+else
+echo "<td>N</td>";
+//						echo " checked";
+//					echo ">Inventory<br>
+//					<input type='checkbox' name='readwriteOpt' id='readwriteOpt7' value='7' ";
 					if(in_array("7", $userRWoptions))
-						echo " checked";
-					echo ">Backup Data <br>
-				</div>
-		 	</td>";
-		} else {
-		echo "<td><div id='readWrite_options' name='readWrite_options'>
-			<input type='checkbox' name='readwriteOpt' id='readwriteOpt51' value='51' ";
+echo "<td>Y</td>";
+else
+echo "<td>N</td>";
+//						echo " checked";
+//					echo ">Backup Data <br>
+echo "</tr></table>";
+echo "</div></td>";
+echo "</tr>";
+//		} else {
+echo "<tr>";
+		echo " 	<td> <div id='readOrWrite' name='readOrWrite' >";
+echo "Readable Options";
+		echo "</div>".$this->getAsterisk()."</td>";
+echo "<td><div id='readWrite_options' name='readWrite_options'>";
+echo "<table>";
+echo "<tr>";
+echo "<th>";
+echo "Select Test - option";
+echo "</th>";
+echo "<th>";
+echo "Generate Bill - option";
+echo "</th>";
+echo "</tr>";
+echo "<tr>";
+//		echo "<td><div id='readWrite_options' name='readWrite_options'>
+//			<input type='checkbox' name='readwriteOpt' id='readwriteOpt51' value='51' ";
 			if(in_array("51", $userRWoptions))
-				echo " checked";
-			echo ">Select Test - option<br>
-			<input type='checkbox' name='readwriteOpt' id='readwriteOpt52' value='52' ";
+echo "<td>Y</td>";
+else
+echo "<td>N</td>";
+//				echo " checked";
+//			echo ">Select Test - option<br>
+//			<input type='checkbox' name='readwriteOpt' id='readwriteOpt52' value='52' ";
 			if(in_array("52", $userRWoptions))
-				echo " checked";
-			echo ">Generate Bill - option<br>";
-
-		}		
+echo "<td>Y</td>";
+else
+echo "<td>N</td>";
+//				echo " checked";
+//			echo ">Generate Bill - option<br>";
+echo "</tr>";
+echo "</table>";
+echo "</td>";
+echo "</tr>";
+//		}		
 
 	}
 	
