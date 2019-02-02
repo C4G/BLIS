@@ -19,7 +19,6 @@ include_once("includes/field_order_update.php");
 LangUtil::setPageId("new_patient");
 $script_elems->enableDatePicker();
 $script_elems->enableJQueryForm();
-$script_elems->enableFacebox();
 
 $lab_config = get_lab_config_by_id($_SESSION['lab_config_id']);
 //$daily_num = get_daily_number(); 
@@ -62,7 +61,7 @@ $(document).ready(function(){
 
 function prefetch_pname()
 {
-	var name = $('#name').attr("value");
+	var name = $('#name').val();
 	name = name.replace(" ", "%20");
 	if(name == "" || name.length < 3)
 	{
@@ -75,25 +74,25 @@ function prefetch_pname()
 
 function add_patient()
 {
-	var card_num = $("#card_num").attr("value");
-	$('#pid2').attr("value", card_num);
-	var addl_id = $("#addl_id").attr("value");
-	var name = $("#name").attr("value");
+    var card_num = $("#card_num").val();
+	$('#pid2').val(card_num);
+	var addl_id = $("#addl_id").val();
+	var name = $("#name").val();
 	//name = name.replace(/[^a-z ]/gi,'');
-	var yyyy = $("#yyyy").attr("value");
+	var yyyy = $("#yyyy").val();
 	yyyy = yyyy.replace(/[^0-9]/gi,'');
-	var mm = $("#mm").attr("value");
+	var mm = $("#mm").val();
 	mm = mm.replace(/[^0-9]/gi,'');
-	var dd = $("#dd").attr("value");
+	var dd = $("#dd").val();
 	dd = dd.replace(/[^0-9]/gi,'');
-	var receipt_yyyy = $("#receipt_yyyy").attr("value");
+	var receipt_yyyy = $("#receipt_yyyy").val();
 	
 	receipt_yyyy = receipt_yyyy.replace(/[^0-9]/gi,'');
-	var receipt_mm = $("#receipt_mm").attr("value");
+	var receipt_mm = $("#receipt_mm").val();
 	receipt_mm = receipt_mm.replace(/[^0-9]/gi,'');
-	var receipt_dd = $("#receipt_dd").attr("value");
+	var receipt_dd = $("#receipt_dd").val();
 	receipt_dd = receipt_dd.replace(/[^0-9]/gi,'');
-	var age = $("#age").attr("value");
+	var age = $("#age").val();
 	var nan_flag=0;
 	if((/^([>][0-9]*)$/.test(age) === true))
 	{
@@ -121,17 +120,17 @@ function add_patient()
 		age = 0;
 	}
 
-	var age_param = $('#age_param').attr("value");
+	var age_param = $('#age_param').val();
 	age_param = age_param.replace(/[^0-9]/gi,'');
 	var sex = "";
-	var pid = $('#pid').attr("value");
+	var pid = $('#pid').val();
 	for(i = 0; i < document.new_record.sex.length; i++)
 	{
 		if(document.new_record.sex[i].checked)
 			sex = document.new_record.sex[i].value;
 	}
-	var email = $("#email").attr("value");
-	var phone = $("#phone").attr("value");
+	var email = $("#email").val();
+	var phone = $("#phone").val();
 	var error_message = "";
 	var error_flag = 0;
 	var partial_dob_ym = 0;
@@ -311,7 +310,7 @@ function add_patient()
 
 function fetchPatientAjax()
 {
-	var card_num = $("#card_num").attr("value");
+	var card_num = $("#card_num").val();
 	if(card_num == "")
 	{
 		document.getElementById("card_num_msg").innerHTML = "";
@@ -383,7 +382,7 @@ function addCustomElements(){
 	});
 	
 	if(myCustomName.length > 0){
-		var card_num = $("#card_num").attr("value");
+		var card_num = $("#card_num").val();
 		var params = "pid2="+card_num+"&";
 		for (var i = 0; i < myCustomName.length; i++) {
 			myCustomVal.push($('[name="'+myCustomName[i]+'"]').val());
@@ -402,60 +401,52 @@ function addCustomElements(){
 	
 }
 </script>
-<p style="text-align: right;"><a rel='facebox' href='#regn_sidetip'>Page Help</a></p>
-<b><?php echo LangUtil::getTitle(); ?></b>
- | <a href='find_patient.php'>&laquo; <?php echo LangUtil::$pageTerms['MSG_BACKTOLOOKUP']; ?></a>
-<br><br>
-<div id='new_patient_msg' class='sidetip_nopos' style='display:none;width:510px;'>
-</div>
+<div class="page-header"></div>
+    <h1 class="page-title"><a href="javascript:history.go(-1);" class="btn btn-secondary" role="button"><i class="fe fe-chevron-left mr-2"></i><?php echo LangUtil::$pageTerms['MSG_BACKTOLOOKUP']; ?></a>&nbsp;&nbsp;<?php echo LangUtil::getTitle(); ?></h1>
+
+
 <br>
-<table cellspacing='0px'>
-<tr valign='top'>
-<td>
-<div id='patient_new'>
-<div class='pretty_box' style='width:500px'>
-<form name="new_record" action="add_patient.php" method="post" id="new_record" class="new_record">
-	<?php # Hidden field for db key ?>
-	<input type='hidden' name='card_num' id='card_num' value="<?php echo get_max_patient_id()+1; ?>" ></input>
-	<table cellpadding="2" class='regn_form_table'>
-	<?php CustomFieldOrderGeneration_Patient::init(); 
-		  $HTMLFactory = new field_htmlFactory(); ?>
-	<?php 
-		$fieldOrder = $field_odering->form_field_inOrder;
-		$fieldOrder = explode(',', $fieldOrder);
-		foreach($fieldOrder as $fieldName){
-			$HTMLFactory->generateHTML($fieldName);
-		}
-	?>
-	
-	<?php CustomFieldOrderGeneration_Patient::generate_patient_rdate(); ?>
+<div class="row">
+    <div class="col-lg-12">
+         <div class="card">
+            <div class="card-body">
+                <div class="text-wrap p-lg-12"> 
+                    <div id='patient_new'>
+                            <form name="new_record" action="add_patient.php" method="post" id="new_record" class="new_record">
+	                       
+                                <!-- Hidden field for db key -->
+                                <input type='hidden' name='card_num' id='card_num' value="<?php echo get_max_patient_id()+1; ?>" >
+                                <input type='hidden' name='pid2' id='pid2' value=''>
 
-	</form>
-	
-	<input type='hidden' name='pid2' id='pid2' value=''></input>
-	
-	<tr>
-		<td></td>
-		<td>
-			<input type="button" id='submit_button' onclick="add_patient();" value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>" />
-			&nbsp;&nbsp;
-			<a href='find_patient.php'><?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?></a>
-			&nbsp;&nbsp;
-			<span id='progress_spinner' style='display:none'>
-				<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
-			</span>
-		</td>
-	</tr>
-</table>
+                                <table class="table card-table table-vcenter text-nowrap regn_form_table">
+                                    <?php CustomFieldOrderGeneration_Patient::init(); 
+                                          $HTMLFactory = new field_htmlFactory(); ?>
+                                    
+                                    <?php 
+                                        $fieldOrder = $field_odering->form_field_inOrder;
+                                        $fieldOrder = explode(',', $fieldOrder);
+                                        foreach($fieldOrder as $fieldName){
+                                            $HTMLFactory->generateHTML($fieldName);
+                                        }
+                                    ?>
 
-<?php 
-/*
-$load_time = microtime(); 
-$load_time = explode(' ',$load_time); 
-$load_time = $load_time[1] + $load_time[0]; 
-$page_end = $load_time; 
-$final_time = ($page_end - $page_start); 
-$page_load_time = number_format($final_time, 4, '.', ''); 
-echo("Page generated in " . $page_load_time . " seconds"); 
-*/
-include("includes/footer.php"); ?>
+                                    <?php CustomFieldOrderGeneration_Patient::generate_patient_rdate(); ?>
+                                </table>
+                                <div class="form-group">
+                                    <center>
+                                        <span id='progress_spinner' style='display:none'><?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?></span>
+                                    </center>
+                                </div>
+                                 <div class="btn-list">
+                                    <a onclick="javascript:add_patient();" class="btn btn-primary btn-block" id="submit_button"><?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?></a>
+                                    <a class="btn btn-secondary btn-block" href="find_patient.php" ><?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?></a>
+                                </div>
+    	                   </form>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>
+</div>
+
+<?php include("includes/footer.php"); ?>

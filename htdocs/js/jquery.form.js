@@ -53,7 +53,7 @@ $.fn.ajaxSubmit = function(options) {
 	if (typeof options == 'function')
 		options = { success: options };
 
-	var url = $.trim(this.attr('action'));
+	var url = $.trim(this.val('action'));
 	if (url) {
 		// clean url (don't include hash vaue)
 		url = (url.match(/^([^#]+)/)||[])[1];
@@ -62,7 +62,7 @@ $.fn.ajaxSubmit = function(options) {
 
 	options = $.extend({
 		url:  url,
-		type: this.attr('method') || 'GET',
+		type: this.val('method') || 'GET',
 		iframeSrc: /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank'
 	}, options || {});
 
