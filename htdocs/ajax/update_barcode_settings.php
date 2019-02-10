@@ -1,7 +1,7 @@
 
 <?php
 include('../includes/db_lib.php');
-
+include("../includes/SessionCheck.php");
 $type = $_REQUEST['brfields_type'];
 $width = intval($_REQUEST['brfields_width']);
 $height = intval($_REQUEST['brfields_height']);

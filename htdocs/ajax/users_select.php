@@ -2,7 +2,7 @@
 # Returns a JSON list of usernames for a site location via Ajax
 # Called from reports.php
 include("../includes/db_lib.php");
-
+include("../includes/SessionCheck.php");
 function list_to_json($value_list, $json_params)
 {
 	$count = 0;

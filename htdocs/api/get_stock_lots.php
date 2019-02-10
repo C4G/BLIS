@@ -1,7 +1,7 @@
 <?php
 
 include "../includes/db_lib.php";
-
+include("../includes/SessionCheck.php");
 if(!isset($_REQUEST['reagent_id']))
 {
     echo -2;

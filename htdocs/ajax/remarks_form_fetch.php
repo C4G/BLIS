@@ -6,6 +6,7 @@
 
 include("../includes/db_lib.php");
 include("../includes/page_elems.php");
+include("../includes/SessionCheck.php");
 $page_elems = new PageElems();
 
 $lab_config_id = $_REQUEST['lid'];

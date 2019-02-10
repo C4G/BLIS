@@ -37,6 +37,7 @@ function goback()
 function update_lab_user()
 {
 
+
 	// Begin email address test
 	var email_regex = new RegExp(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i);
 
@@ -60,7 +61,7 @@ function update_lab_user()
 		showpname = 1;
 	}
 
-	var readwriteOption = 0;
+/*	var readwriteOption = 0;
     var rwoptions = ',';
     
 	$('input[name="readwriteOpt"]:checked').each(function() {
@@ -75,7 +76,10 @@ function update_lab_user()
 		return;
 	}
 
-	
+*/	
+
+var rwoptions=document.getElementById('hdn_rwopts').value;
+
 	var data_string = 'id=<?php echo $user_id; ?>&un='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&lev='+level+'&lang='+lang_id+"&showpname="+showpname+"&opt="+rwoptions;
 	$('#edit_user_progress').show();
 	$.ajax({
@@ -153,6 +157,7 @@ else
 });
 
 </script>
+<input type="hidden" value="<?php echo $user->rwoptions;?>" id="hdn_rwopts"/>
 <br>
 <a href='javascript:goback();'><?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a> |<b><?php echo LangUtil::$pageTerms['EDIT_LAB_USER']; ?></b>
  
@@ -202,20 +207,22 @@ if($user == null)
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['TYPE'] ?></td>
 			<td>
-			<select name='level' id='level' class='uniform_width' onchange="javascript:add_read_mode();">
+<!--			<select name='level' id='level' class='uniform_width' onchange="javascript:add_read_mode();">-->
+<select name='level' id='level' class='uniform_width'>
 			<?php
 			$page_elems->getLabUserTypeOptions($user->level);
 			?>
 			</select>
 			</td>
 		</tr>
-		<tr>
+<!--		<tr>-->
 			<?php 
 			$page_elems->getLabUserReadWriteOption($user->level, $user->rwoptions);
+
 			?>
 			
 			
-		</tr>
+<!--		</tr>-->
 		<tr valign='top'>
 		
 			<td><div id="patient-entry"><?php echo LangUtil::$pageTerms['USE_PNAME_RESULTS']; ?>?</div></td>
@@ -257,6 +264,7 @@ if($user == null)
 			</td>
 		</tr>
 	</table>
+
 </form>
 <?php 
 SessionUtil::restore($saved_session);

@@ -51,9 +51,9 @@ function fetch_patients()
 {
 	$("#target_div_id_del").hide();
 	$('#psearch_progress_spinner').show();
-	var patient_id = $('#pq').val().trim();
+	var patient_id = $('#pq').attr("value").trim();
 	patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
-	var search_attrib = $('#p_attrib').val();
+	var search_attrib = $('#p_attrib').attr("value");
 	var check_url = "ajax/patient_check_name.php?n="+patient_id;
 	$.ajax({ url: check_url, success: function(response){
 			if(response == "false" && search_attrib == 1)
@@ -71,24 +71,24 @@ function fetch_patients()
 
 function delete_patient_profile(patientId){
 	if(ConfirmDelete()){
-        var params = "patient_id="+patientId+"&lab_config_id="+<?php echo $lab_config->id;?>;
-        //alert("patient Id " + patient_id);
-        $.ajax({
-            type: "POST",
-            url: "ajax/delete_patient.php",
-            data: params,
-            success: function(msg) {
-                if(msg.indexOf("1")> -1){
-                    $("#target_div_id_del").html("Patient successfully deleted");
-                } else {
-                    $("#target_div_id_del").html("Patient cannot be deleted");
-                }
-                $("#target_div_id_del").show();
-                $("#patients_search_results").html('');
-                $("#add_anyway_div").hide();
-            }
-        }); 
-    }
+	var params = "patient_id="+patientId+"&lab_config_id="+<?php echo $lab_config->id;?>;
+	//alert("patient Id " + patient_id);
+	$.ajax({
+		type: "POST",
+		url: "ajax/delete_patient.php",
+		data: params,
+		success: function(msg) {
+			if(msg.indexOf("1")> -1){
+				$("#target_div_id_del").html("Patient successfully deleted");
+			} else {
+				$("#target_div_id_del").html("Patient cannot be deleted");
+			}
+			$("#target_div_id_del").show();
+			$("#patients_found").html('');
+			$("#add_anyway_div").hide();
+		}
+	}); 
+}
 }
 
 function ConfirmDelete()
@@ -100,12 +100,13 @@ function ConfirmDelete()
     return false;
 }
 
+
 function continue_fetch_patients()
 {
-	var patient_id = $('#pq').val().trim();
+	var patient_id = $('#pq').attr("value").trim();
 	patient_id = patient_id.replace(/[^a-z0-9 ]/gi,'');
-	var search_attrib = $('#p_attrib').val();
-	var condition_attrib = $('#h_attrib').val();
+	var search_attrib = $('#p_attrib').attr("value");
+	var condition_attrib = $('#h_attrib').attr("value");
 	$('#psearch_progress_spinner').show();
 	if(patient_id == "")
 	{
@@ -114,7 +115,7 @@ function continue_fetch_patients()
 		return;
 	}
 	var url = 'ajax/search_p.php';
-	$("#patients_search_results").load(url, 
+	$("#patients_found").load(url, 
 		{q: patient_id, a: search_attrib, c: condition_attrib}, 
 		function(response)
 		{
@@ -134,7 +135,6 @@ function continue_fetch_patients()
 	);
 }
 
-
 function hideCondition(p_attrib)
 {
 	if(parseInt(p_attrib)==1)
@@ -143,112 +143,68 @@ function hideCondition(p_attrib)
 		$('#h_attrib').hide();
 }
 </script>
-<div class="page-header">
-    <h1 class="page-title"><?php echo LangUtil::getTitle(); ?></h1>
-</div>
-<div class="row">
-    <div class="col-lg-4 order-lg-1 mb-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="text-wrap p-lg-6">
-                    <h3 class="mt-0 mb-4"><?php echo LangUtil::getGeneralTerm("TIPS"); ?></h3>
-                    <small>
-                    
-                        <?php
-                        if(LangUtil::$pageTerms['TIPS_REGISTRATION_1']!="-") {
-                            echo "<p>";
-                            echo LangUtil::$pageTerms['TIPS_REGISTRATION_1'];
-                            echo "</p>";
-                        }	
-                        if(LangUtil::$pageTerms['TIPS_REGISTRATION_2']!="-") {
-                            echo "<p>"; 
-                            echo LangUtil::$pageTerms['TIPS_REGISTRATION_2'];
-                            echo "</p>";
-                        }
-                        if(LangUtil::$pageTerms['TIPS_PATIENT_LOOKUP']!="-")	{
-                            echo "<p>"; 
-                            echo LangUtil::$pageTerms['TIPS_PATIENT_LOOKUP'];
-                            echo "</p>"; 
-                        }
-                        ?>
-                    
-                    </small>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-8">
-        <div class="card">
-            <div class="card-body">
-                <div class="text-wrap p-lg-6">
-                    <p>
-                        <?php
-                        if(LangUtil::$pageTerms['TIPS_REGISTRATION_1']!="-") {
-                            echo "This page allows us to register new patients or lookup existing patients based on name, patient ID or number.";
-                            echo "</br>";
-                        }	
-                        ?>
-                    </p>
-                    <!-- start of search -->
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <select name="p_attrib" id="p_attrib" class="form-control custom-select" onchange="javascript:hideCondition(this.value);">
-                                    <?php $page_elems->getPatientSearchAttribSelect(); ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <select name="h_attrib" id="h_attrib" class="form-control custom-select">
-                                <?php $page_elems->getPatientSearchCondition(); ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="pq" id="pq" onkeypress="return restrictCharacters(event)" />
-                                    <span class="input-group-append">
-                                        <button class="btn btn-primary" type="button" id="psearch_button" onclick="fetch_patients()"><?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?></button></span>
-                                </div>    
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <center>
-                                <span id='psearch_progress_spinner'>
-                                <?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SEARCHING']); ?>
-                                </span>
-                            </center>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-12">
-        <!-- end of search -->
-        <!-- start of results -->
-        <div class="card">
-            <div class="table-responsive" id="patients_search_results">
-                
-            </div>
-        </div>
-        <!-- end of results -->
-        <!-- start of new patient -->
-        <div id="target_div_id_del" ></div>
-        <div id="add_anyway_div" style="display:none">
-        <a class="btn btn-primary btn-block" id="add_anyway_link" href="new_patient.php" style="color:white"><?php echo LangUtil::$pageTerms['ADD_NEW_PATIENT']; ?> &raquo;</a>
-        </div>
-        <br>
-        <br>
-        <?php $script_elems->bindEnterToClick('#pq', '#psearch_button'); ?>
-        <!-- end of new patient -->
-    </div>
-</div>
 
+<p style="text-align: right;"><a rel='facebox' href='#Registration'>Page Help</a></p>
+<div class='sidetip_patient'>
+<b> Tips </b>
+<br />
+<br />
+		<?php
+		if(LangUtil::$pageTerms['TIPS_REGISTRATION_1']!="-") {
+			echo "This page allows us to register new patients or lookup existing patients based on name, patient ID or number.";
+			echo "</br>";
+		}	
+		
+		?>
+</div>
+<span class='page_title'><?php echo LangUtil::getTitle(); ?></span>
+<!--| <a href='new_patient.php' title='Click to add a new patient in the system'>Add New Patient &raquo;</a>-->
+<br><br>
+<form>
+	<select name='p_attrib' id='p_attrib' style='font-family:Tahoma;' onchange="javascript:hideCondition(this.value);">
+		<?php $page_elems->getPatientSearchAttribSelect(); ?>
+	</select><select name='h_attrib' id='h_attrib' style='font-family:Tahoma;'>
+		<?php $page_elems->getPatientSearchCondition(); ?>
+        
+	</select>
+	&nbsp;&nbsp;
+	<input type='text' name='pq' id='pq' style='font-family:Tahoma;' onkeypress="return restrictCharacters(event)" />
+	&nbsp;&nbsp;
+	<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?>' id='psearch_button' onclick="javascript:fetch_patients();" />
+	&nbsp;&nbsp;&nbsp;
+	<span id='psearch_progress_spinner'>
+	<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SEARCHING']); ?>
+	</span>
+</form>
+<br>
+<div id='Registration' class='right_pane' style='display:none;margin-left:10px;'>
+	<ul>
+		<?php
+		if(LangUtil::$pageTerms['TIPS_REGISTRATION_1']!="-") {
+			echo "<li>";
+			echo LangUtil::$pageTerms['TIPS_REGISTRATION_1'];
+			echo "</li>";
+		}	
+		if(LangUtil::$pageTerms['TIPS_REGISTRATION_2']!="-") {
+			echo "<li>"; 
+			echo LangUtil::$pageTerms['TIPS_REGISTRATION_2'];
+			echo "</li>";
+		}
+		if(LangUtil::$pageTerms['TIPS_PATIENT_LOOKUP']!="-")	{
+			echo "<li>"; 
+			echo LangUtil::$pageTerms['TIPS_PATIENT_LOOKUP'];
+			echo "</li>"; 
+		}
+		?>
+	</ul>
+</div>
+<div id='patients_found' style='position:relative;left:10px;'> </div><br/>
+<div id='target_div_id_del' style='position:relative;left:10px;'></div>
+<br>
+<div id='add_anyway_div' style='display:none'>
+<a id='add_anyway_link' href='new_patient.php'><?php echo LangUtil::$pageTerms['ADD_NEW_PATIENT']; ?> &raquo;</a>
+</div>
+<br>
+<br>
+<?php $script_elems->bindEnterToClick('#pq', '#psearch_button'); ?>
 <?php include("includes/footer.php"); ?>

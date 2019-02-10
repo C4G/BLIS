@@ -14,7 +14,6 @@ $type=$_REQUEST['lab_user_type'];
 $defaultoption=$_REQUEST['showpname'];
 
 $rwoption=$_REQUEST['rw'];
-
 $usertype = new UserType();
 $usertype->level = $type;
 $usertype->defaultdisplay = $defaultoption;
