@@ -6,6 +6,7 @@
 
 include("../includes/db_lib.php");
 include("../includes/user_lib.php");
+include("../includes/SessionCheck.php");
 LangUtil::setPageId("results_entry");
 if(!isset($_REQUEST['result_cap']))
     $result_cap = $rcap;

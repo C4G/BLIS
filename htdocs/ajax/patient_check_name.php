@@ -6,7 +6,7 @@
 
 include("../includes/db_lib.php");
 include("../includes/user_lib.php");
-
+include("../includes/SessionCheck.php");
 if(isset($_SESSION['country']))
 	$country = $_SESSION['country'];
 else

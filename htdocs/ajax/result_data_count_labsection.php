@@ -1,6 +1,6 @@
 <?php
 include("../includes/db_lib.php");
-
+include("../includes/SessionCheck.php");
 $attrib_value = $_REQUEST['q'];
 $count = 0;
 
