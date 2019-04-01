@@ -52,7 +52,7 @@ if($login_correct)
     else
     {
     $_SESSION['lab_config_id'] = $user->labConfigId;
-        echo $user->labConfigId;
+//        echo $user->labConfigId;
         $_SESSION['country'] = $user->country;
         $lab_config = get_lab_config_by_id($user->labConfigId);
         $_SESSION['db_name'] = $lab_config->dbName;
@@ -101,7 +101,7 @@ if($login_correct)
     {
         $lab_config_list = get_lab_configs($_SESSION['user_id']);
         $_SESSION['dformat'] = $lab_config_list[0]->dateFormat;
-        $_SESSION['lab_config_id'] = $lab_config_list[0]->id;
+//        $_SESSION['lab_config_id'] = $lab_config_list[0]->id;
         if($SERVER == $ON_PORTABLE) {
             $langdata_path1 = $LOCAL_PATH."langdata_".$lab_config_list[0]->id."/";
             if(is_dir($LOCAL_PATH."langdata_".$lab_config_list[0]->id."/"))

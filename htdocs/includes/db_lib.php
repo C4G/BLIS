@@ -88,7 +88,7 @@ class User
 		$user->email = $record['email'];
 		$user->phone = $record['phone'];
 		$user->createdBy = $record['created_by'];
-		$user->labConfigId = $record['lab_config_id'];
+		$user->labConfigId = get_lab_config_id($user->userId);//$record['lab_config_id'];
 		if(isset($record['lang_id']))
 			$user->langId = $record['lang_id'];
 		else
@@ -1370,15 +1370,13 @@ class Sites
         $saved_db = DbUtil::switchToLabConfig($id);
         global $con;
         $val = mysql_query('select 1 from `sites` LIMIT 1');
-
         if($val !== FALSE)
         {
             $query = "SELECT * FROM sites ".
-                "WHERE lab_id=". $id;
+                "WHERE lab_id=".$id;
             $result = query_associative_all($query, null);
-
-            if ($result == NULL)
-            {
+            if ($result == NULL)        
+   {
                 $lab_config = LabConfig::getById($id);
                 $lab_name = mysql_real_escape_string($lab_config->name, $con);
                 $query = "INSERT INTO sites ".
@@ -1388,15 +1386,19 @@ class Sites
             }
 
             $query = "SELECT * FROM sites ".
-                "WHERE lab_id=". $id;
+                "WHERE lab_id=".$id;
             $result = query_associative_all($query, null);
 
             $resultset = array();
             foreach ($result as $record)
-                $resultset[] = self::getObject($record);
+{
+//echo "id:".$record["id"]."name:".$record["name"];
+                $resultset[] =self::getObject($record);
+//$record["name"]; //
+}
 
             DbUtil::switchRestore($saved_db);
-
+//echo "rsult:".implode("|",$resultset);
             return $resultset;
         }
         else
@@ -2022,7 +2024,7 @@ class TestType
         # Return all test types that have reporting enabled/disabled
         $retval = array();
         $query_string = "SELECT * FROM test_type ".
-            "WHERE is_reporting_enabled='$status'".
+            "WHERE is_reporting_enabled='$status' ".
             "ORDER BY name";
         $saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
         $resultset = query_associative_all($query_string, $row_count);
@@ -2031,7 +2033,8 @@ class TestType
             $retval[] = TestType::getObject($record);
         }
         DbUtil::switchRestore($saved_db);
-        return $retval;
+/*        return $retval;*/
+return $retval;
     }
 
     public static function updateReportingStatus($unadded, $added)
@@ -9345,6 +9348,10 @@ function get_lab_config_id($user_id)
 	$query_string = "SELECT lab_config_id FROM user WHERE user_id='$user_id'";
 	$record = query_associative_one($query_string);
 	$id = $record['lab_config_id'];
+//echo "first:".$id;
+if($id==0)
+$id=get_lab_config_id_admin($user_id);
+//echo "second:".$id;
 	DbUtil::switchRestore($saved_db);	
 	return $id;
 }
@@ -9444,6 +9451,7 @@ function get_lab_configs($admin_user_id = "")
 			") ORDER BY name";
 	}
 	$retval = array();
+//echo $query_configs;
 	$resultset = query_associative_all($query_configs, $row_count);
 	if($resultset == null)
 	{
@@ -9607,12 +9615,21 @@ function get_site_list($user_id)
 		if(is_super_admin($user))
 			$lab_config_list = get_lab_configs();
 		else
+{
+/*//echo "user:".$user_id;
+$retval=Sites::getByLabConfigId(get_lab_config_id($user_id));
+}*/
 			$lab_config_list = get_lab_configs($user_id);
 		foreach($lab_config_list as $lab_config)
 		{
-			$retval[$lab_config->id] = $lab_config->getSiteName();
+$sites=Sites::getByLabConfigId($lab_config->id);
+foreach($sites as $site)
+{
+			$retval[$site->id]=$site->name;
 		}
 	}
+}
+}
 	else
 	{
 		# Technician user -> Return local lab configuration

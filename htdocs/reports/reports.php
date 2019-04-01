@@ -2145,7 +2145,7 @@ db_get_current();
                                         </select>
                                     </td>
                                 </tr>
-                                <tr class="location_row_aggregate" id="location_row_aggregate">
+<!--                                <tr class="location_row_aggregate" id="location_row_aggregate">
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> &nbsp;&nbsp;&nbsp;</td>
                                     <td id='locationAggregation'>
                                         <input type='checkbox' name='locationAgg' id='locationAgg' value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></input>
@@ -2153,7 +2153,7 @@ db_get_current();
                                         $page_elems->getSiteOptionsCheckBoxes("locationAgg");
                                         ?>
                                     </td>
-                                </tr>
+                                </tr>-->
                                 <?php
                             } else {
                                 foreach($site_list as $key=>$value)
@@ -3278,8 +3278,7 @@ db_get_current();
                             <tr valign="top">
                                 <td><?php echo LangUtil::$pageTerms['MENU_TEST_TYPES']; ?></td>
                                 <td>
-                                    <select id="select_test_for_report"
-                                            name="select_test_for_report">
+                                    <select id="select_test_for_report" name="select_test_for_report">
                                         <?php
                                         $page_elems->getTestTypesByReportingStatusOptions(1);
                                         ?>
@@ -3291,11 +3290,10 @@ db_get_current();
                                 <td>
                                     <select id="select_site_for_report"
                                             name="select_site_for_report">
-                                        <option id="all_sites" name="all_sites"
-                                                value="<?php echo LangUtil::$pageTerms['ALL_SITES']; ?>">
-                                            <?php echo LangUtil::$pageTerms['ALL_SITES']; ?>
-                                        </option>
-                                        <?php $page_elems->getCollectionSitesOptions($lab_config_id); ?>
+                                            <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
+                                            <?php
+                                            $page_elems->getSiteOptions();
+                                            ?>
                                     </select>
                                 </td>
                             </tr>
@@ -3887,19 +3885,20 @@ db_get_current();
                             <tbody>
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
-                                    echo "<input type='hidden' name='location' id='location14' value='$key'></input>";
-                            }
-                            else
-                            {
+$lab_id=get_lab_config_id($_SESSION['user_id']);
+//                            if(count($site_list) == 1)
+//                            {
+//                                foreach($site_list as $key=>$value)
+                                    echo "<input type='hidden' name='location' id='location14' value='".$lab_id."'></input>";
+//                            }
+//                            else
+//                            {
                                 ?>
                                 <tr class="location_row" id="location_row">
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> &nbsp;&nbsp;&nbsp;</td>
                                     <td>
-                                        <select name='location' id='location14' class='uniform_width'>
-                                            <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
+                                        <select name='site_list[]' id='site14' class='uniform_width' multiple>
+                                            <option value='0' selected><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
                                             $page_elems->getSiteOptions();
                                             ?>
@@ -3907,7 +3906,7 @@ db_get_current();
                                     </td>
                                 </tr>
                                 <?php
-                            }
+//                            }
                             ?>
                             <tr class="sdate_row" id="sdate_row" valign='top'>
                                 <td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?> </td>
@@ -3947,7 +3946,7 @@ db_get_current();
                                     </select>
                                 </td>
                             </tr>
-                            <?php
+<!--                            <?php
                             $site_list = get_site_list($_SESSION['user_id']);
                             if(count($site_list) == 1) {
                                 foreach($site_list as $key=>$value)
@@ -3965,7 +3964,7 @@ db_get_current();
                                 </tr>
                                 <?php
                             }
-                            ?>
+                            ?>-->
                             <tr>
                                 <td></td>
                                 <td>

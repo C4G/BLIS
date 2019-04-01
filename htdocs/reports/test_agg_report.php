@@ -31,9 +31,10 @@ $test_id = $_REQUEST['select_test_for_report'];
 $test = TestType::getById($test_id);
 
 $site = $_REQUEST['select_site_for_report'];
+
 $report_type = "";
 
-if ($site == LangUtil::$pageTerms['ALL_SITES'])
+if ($site ==0)
 {
     $report_type = LangUtil::$pageTerms['COUNT_REPORT'];
     $report_type_code = 1;
@@ -69,7 +70,7 @@ if ($site == LangUtil::$pageTerms['ALL_SITES'])
 <form name="word_format_form" id="word_format_form"
       action="../export/export_word_aggregate.php" method="post"
       target="_blank">
-    <input type="hidden" name="data" value="" id="word_data">;
+    <input type="hidden" name="data" value="" id="word_data">
     <input type="hidden" name="report_type" value="test_aggregate_report"
            id="report_type">
     <input type="button" onclick="print_content('report_content');"
@@ -104,9 +105,13 @@ if ($site == LangUtil::$pageTerms['ALL_SITES'])
     echo "<br>";
 
     if ($report_type_code == 1)
+{
         $page_elems->showAggregateCountReport($lab_config, $test, $test_report_config);
+}
     elseif ($report_type_code == 2)
+{
         $page_elems->showAggregateSiteReport($site, $test, $test_report_config);
+}
     ?>
     <br>
 

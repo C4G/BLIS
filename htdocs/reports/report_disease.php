@@ -55,6 +55,21 @@ function print_content(div_id)
 <br><br>
 <?php
 $lab_config_id = $_REQUEST['location'];
+$site_list_id = $_REQUEST['site_list'];
+if (in_array("0",$site_list_id)) {
+$site_list_name="All Sites, ";
+$site_list="0";
+}
+else
+{
+$site_list=implode(",",$site_list_id);
+$site_list_name="";
+foreach($site_list_id as $id)
+{
+$site_list_name=$site_list_name.Sites::getById($id)->name.", ";
+}
+}
+//echo "sites:".$site_list;
 $lab_config = LabConfig::getById($lab_config_id);
 if($lab_config == null)
 {
@@ -99,7 +114,7 @@ $age_group_list = $site_settings->getAgeGroupAsList();
 	<tbody>
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['FACILITY']; ?>:</td>
-			<td><?php echo $lab_config->getSiteName(); ?></td>
+			<td><?php echo substr($site_list_name,0,-2); ?></td>
 		</tr>
 		<tr>
 			<td><?php echo LangUtil::$pageTerms['REPORT_PERIOD']; ?>:</td>
@@ -197,9 +212,12 @@ $table_css = "style='padding: .3em; border: 1px black solid; font-size:14px;'";
 	</thead>
 	<tbody>
 	<?php
+$add_site_condition=true;
+if($site_list=="0")
+$add_site_condition=false;
 	foreach($selected_test_types as $test)
 	{
-		StatsLib::setDiseaseSetList($lab_config, $test, $date_from, $date_to);
+		StatsLib::setDiseaseSetList($lab_config, $test, $date_from, $date_to,0,$site_list,$add_site_condition);
 		$measures = $test->getMeasures();
 		foreach($measures as $measure)
 		{

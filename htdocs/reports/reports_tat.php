@@ -13,9 +13,9 @@ $script_elems->enableTableSorter();
 $script_elems->enableLatencyRecord();
 $script_elems->enableDatePicker();
 
-$lab_config_id = $_REQUEST['location'];
+$lab_config_id =get_lab_config_id($_SESSION['user_id']); //$_REQUEST['location'];
 $lab_config = get_lab_config_by_id($lab_config_id);
-$site_list = get_site_list($_SESSION['user_id']);
+$site_list = $_REQUEST['location'];//get_site_list($_SESSION['user_id']);
 $date_from = $_REQUEST['yyyy_from']."-".$_REQUEST['mm_from']."-".$_REQUEST['dd_from'];
 $date_to = $_REQUEST['yyyy_to']."-".$_REQUEST['mm_to']."-".$_REQUEST['dd_to'];
 $include_pending = false;

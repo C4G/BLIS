@@ -1,6 +1,5 @@
 <?php
 include("redirect.php");
-
 include("includes/header.php");
 LangUtil::setPageId("home");
 
