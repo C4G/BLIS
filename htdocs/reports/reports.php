@@ -691,7 +691,7 @@ db_get_current();
             else if(checkDate(yyyy_from, mm_from, dd_from) == false)
             {
 
-                alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
+                alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID'];?>");
                 return;
             }
             else if(checkDate(yyyy_to, mm_to, dd_to) == false)
@@ -1307,7 +1307,7 @@ db_get_current();
             var dd_from = $('#dd_from').attr('value');
 
             var yyyy_to = $('#yyyy_to').attr('value');
-            var mm_to = $('#mm_to').attr('value');
+            var mm_to = $('#mm1_to').attr('value');
             var dd_to = $('#dd_to').attr('value');
 
             var test_id = $('#select_test_for_report').attr('value');
@@ -1317,7 +1317,10 @@ db_get_current();
                 alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
                 return;
             } else if(checkDate(yyyy_to, mm_to, dd_to) == false) {
-                alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
+alert(yyyy_to);
+alert(mm_to);
+alert(dd_to);
+                alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>"+"def");
                 return;
             }
 
@@ -3269,7 +3272,7 @@ db_get_current();
                                 <td>
                                     <?php
                                     $name_list = array('yyyy_to', 'mm_to', 'dd_to');
-                                    $id_list = array('yyyy_to', 'mm_to', 'dd_to');
+                                    $id_list = array('yyyy_to', 'mm1_to', 'dd_to');
                                     $value_list = $today_array;
                                     $page_elems->getDatePicker($name_list, $id_list, $value_list);
                                     ?>
