@@ -2,7 +2,6 @@
 include("../includes/header.php");
 //$labConfigId = $_REQUEST['id'];
 $labConfigId =$_SESSION['lab_config_id'];
-echo "lab".$labConfigId;
 putUILog('backup_data_ui', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 ?>
 
