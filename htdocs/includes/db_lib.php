@@ -14499,7 +14499,6 @@ function insert_lab_config_settings_search($num)
     $id = 2; // ID for search settings
     
     $lab_config_id = $_SESSION['lab_config_id'];
-            
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
     
     $query_string = "SELECT count(*) as val from lab_config_settings WHERE id = $id";
@@ -16337,7 +16336,7 @@ function is_admin_check($user)
 {
 	# Returns true for admin and superadmin level users
 	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_CLERK, $LIS_TECH_SHOWPNAME, $LIS_COUNTRYDIR, $READONLYMODE, $LIS_PHYSICIAN;
-	if
+/*	if
 	(
 		$user->level == $LIS_TECH_RO || 
 		$user->level == $LIS_TECH_RW || 
@@ -16348,7 +16347,10 @@ function is_admin_check($user)
 		$user->level == $LIS_PHYSICIAN 
 	)
 		return false;
-	return true;
+	return true;*/
+if($user->level==$LIS_ADMIN||$user->level==$LIS_SUPERADMIN||$user->level==$LIS_COUNTRYDIR)
+return true;
+return false;
 }    
 
 function is_super_admin_check($user)

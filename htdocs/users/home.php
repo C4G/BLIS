@@ -2,7 +2,6 @@
 include("redirect.php");
 include("includes/header.php");
 LangUtil::setPageId("home");
-
 $page_elems = new PageElems();
 $profile_tip = LangUtil::getPageTerm("TIPS_PWD");
 $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), $profile_tip);

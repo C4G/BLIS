@@ -11,7 +11,6 @@ LangUtil::setPageId("find_patient");
 
 $script_elems = new ScriptElems();
 //$script_elems->enableTableSorter();
-
 $saved_session = SessionUtil::save();
 $dynamic_fetch = 1;
 $search_settings = get_lab_config_settings_search();

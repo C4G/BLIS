@@ -105,6 +105,8 @@ Barcode Scan Search: <input type="text" id="barcode_search_field" name="barcode_
 <?php
 
     $reagents_list = Inventory::getAllReagents($lid);
+if(count($reagents_list)!=0)
+{
     foreach($reagents_list as $reagent) {
 ?>  <tbody>
 		<tr align='center'>
@@ -142,6 +144,7 @@ Barcode Scan Search: <input type="text" id="barcode_search_field" name="barcode_
                         
 		</tr>
 <?php 
+}
 	} 
 ?>
 	</tbody>

@@ -27,7 +27,7 @@ if($login_correct)
     $_SESSION['user_actualname'] = $user->actualName;
     $_SESSION['user_level'] = $user->level;
     $_SESSION['locale'] = $user->langId;
-
+    $_SESSION['lab_config_id'] = $user->labConfigId;
     if($user->level==17) {
      $combinedString = $_SESSION['doctorConfig'] = $user->rwoptions;
      $rwopts = '2,3,4,6,7';
@@ -43,6 +43,7 @@ if($login_correct)
     //if($user->isAdmin())
     if(is_admin($user))
     {
+//echo "1";
         $lab_id=get_lab_config_id_admin($user->userId);
         $_SESSION['lab_config_id'] =$lab_id;
         $_SESSION['db_name'] = "blis_".$lab_id;

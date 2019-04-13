@@ -27,6 +27,7 @@ $READONLYMODE = 16;
 $LIS_PHYSICIAN = 17;
 function is_allowed($fname,$rwopts)
 {
+return true;
 	$rw_option = array ();
 	$rw_option = explode ( ',', $rwopts );
 $opt_index="0";
@@ -44,10 +45,15 @@ else if($fname=="backupDataUI.php")
 $opt_index="7";
 else
 $opt_index="0";
+echo "index:".$opt_index;
 if($opt_index!="0")
 {
+echo "non zero";
 		if (in_array ( $opt_index, $rw_option ))
+{
+echo "in array";
 return true;
+}
 else
 return false;
 }
@@ -240,9 +246,12 @@ function get_random_password() {
 function is_admin($user) {
 	// Returns true for admin and superadmin level users
 	global $LIS_VERIFIER, $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_CLERK, $LIS_TECH_SHOWPNAME, $LIS_COUNTRYDIR, $LIS_PHYSICIAN;
-	if ($user->level == $LIS_TECH_RO || $user->level == $LIS_TECH_RW || $user->level == $LIS_CLERK || $user->level == $LIS_TECH_SHOWPNAME || $user->level == $LIS_VERIFIER || $user->level == $LIS_PHYSICIAN)
+/*	if ($user->level == $LIS_TECH_RO || $user->level == $LIS_TECH_RW || $user->level == $LIS_CLERK || $user->level == $LIS_TECH_SHOWPNAME || $user->level == $LIS_VERIFIER || $user->level == $LIS_PHYSICIAN)
 		return false;
-	return true;
+	return true;*/
+if($user->level==$LIS_ADMIN||$user->level==$LIS_SUPERADMIN||$user->level==$LIS_COUNTRYDIR)
+return true;
+return false;
 }
 function is_super_admin($user) {
 	// Returns true for superadmin level users only
