@@ -27,7 +27,6 @@ $READONLYMODE = 16;
 $LIS_PHYSICIAN = 17;
 function is_allowed($fname,$rwopts)
 {
-return true;
 	$rw_option = array ();
 	$rw_option = explode ( ',', $rwopts );
 $opt_index="0";
@@ -45,13 +44,13 @@ else if($fname=="backupDataUI.php")
 $opt_index="7";
 else
 $opt_index="0";
-echo "index:".$opt_index;
+
 if($opt_index!="0")
 {
-echo "non zero";
+
 		if (in_array ( $opt_index, $rw_option ))
 {
-echo "in array";
+
 return true;
 }
 else
