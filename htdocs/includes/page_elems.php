@@ -64,7 +64,120 @@ class PageElems
 		<font color='red'>*</font>
 		<?php
 	}
-	
+	//AS 05/11/2019
+//This function returns type privileges in tabular read only mode
+	public function getLabUserReadWriteOptionRO($user_level="", $user_rwoptions=""){
+		// if($user_level == 17) {
+		// 	$user_rwoptions= "2,4";
+		// }
+//echo "<tr>";
+		echo " 	<td> <div id='readOrWrite' name='readOrWrite' >";
+		if($user_level < 16 || $user_level == 17)
+			echo "Writeable Options ";
+		else
+			echo "Readable Options";
+		
+		echo "</div>".$this->getAsterisk()."</td>";
+		$userRWoptions = explode( ',', $user_rwoptions );
+		if($user_level < 16 || $user_level == 17)
+		{
+			
+			echo "<td><div id='readWrite_options' name='readWrite_options'>";
+		echo "<table>";
+echo "<tr>";
+echo "<th>Patient Registration</th>";
+echo "<th>Test Results</th>";
+echo "<th>Search</th>";
+echo "<th>Inventory</th>";
+echo "<th>Backup Data</th>";
+echo "</tr>";
+echo "<tr>";
+echo "<td id='readwriteOpt2'>";
+//		 			<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' value='2' ";
+			if(in_array("2", $userRWoptions))
+echo "Y";
+else
+echo "N";
+//				echo "checked";
+//			echo ">Patient Registration<br>
+	echo "</td>";				
+echo '<td id="readwriteOpt3">';
+//					<input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3' ";
+					if(in_array("3", $userRWoptions))
+echo "Y";
+else
+echo "N";
+//						echo " checked";
+echo "</td>";
+echo '<td id="readwriteOpt4">';
+//					echo ">Test Results<br>
+//						<input type='checkbox' name='readwriteOpt' id='readwriteOpt4' value='4' ";
+					if(in_array("4", $userRWoptions))
+echo "Y";
+else
+echo "N";
+//						echo " checked";
+echo "</td>";
+//					echo ">Search<br>
+//					<input type='checkbox' name='readwriteOpt' id='readwriteOpt6' value='6' ";
+echo '<td id="readwriteOpt6">';
+					if(in_array("6", $userRWoptions))
+echo "Y";
+else
+echo "N";
+echo "</td>";
+//						echo " checked";
+//					echo ">Inventory<br>
+//					<input type='checkbox' name='readwriteOpt' id='readwriteOpt7' value='7' ";
+echo '<td id="readwriteOpt7">';
+					if(in_array("7", $userRWoptions))
+echo "Y";
+else
+echo "N";
+echo "</td>";
+//						echo " checked";
+//					echo ">Backup Data <br>
+echo "</tr>";
+echo "</table>";
+echo "</div></td>";
+//				</div>
+//		 	</td>";
+		} else {
+		echo "<td><div id='readWrite_options' name='readWrite_options'>";
+		echo "<table>";
+echo "<tr>";
+echo "<th>";
+echo "Test - option";
+echo "</th>";
+echo "<th>Generate Bill - option</th>";
+echo "</tr>";
+echo "<tr>";
+echo "<td id='readwriteOpt51'>";
+//			<input type='checkbox' name='readwriteOpt' id='readwriteOpt51' value='51' ";
+			if(in_array("51", $userRWoptions))
+echo "Y";
+else
+echo "N";
+echo "</td>";
+echo "<td id='readwriteOpt52'>";
+//				echo " checked";
+//			echo ">Select Test - option<br>
+//			<input type='checkbox' name='readwriteOpt' id='readwriteOpt52' value='52' ";
+			if(in_array("52", $userRWoptions))
+echo "Y";
+else
+echo "N";
+//				echo " checked";
+//			echo ">Generate Bill - option<br>";
+echo "</td>";
+echo "</tr>";
+echo "</table>";
+echo "</div>";
+echo "</td>";
+}		
+//echo "</tr>";
+
+}
 	public function getAsteriskMessage()
 	{
 		# Indicator that * is for mandatory fields.

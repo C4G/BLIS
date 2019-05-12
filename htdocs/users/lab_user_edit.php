@@ -216,11 +216,12 @@ if($user == null)
 			</td>
 		</tr>
 <!--		<tr>-->
+<!--<tr id="rw">
 			<?php 
-			$page_elems->getLabUserReadWriteOption($user->level, $user->rwoptions);
+//			$page_elems->getLabUserReadWriteOptionRO($user->level, $user->rwoptions);
 
 			?>
-			
+//</tr>			-->
 			
 <!--		</tr>-->
 		<tr valign='top'>

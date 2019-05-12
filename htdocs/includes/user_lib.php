@@ -27,6 +27,7 @@ $READONLYMODE = 16;
 $LIS_PHYSICIAN = 17;
 function is_allowed($fname,$rwopts)
 {
+//echo "rw : ".$rwopts;
 	$rw_option = array ();
 	$rw_option = explode ( ',', $rwopts );
 $opt_index="0";

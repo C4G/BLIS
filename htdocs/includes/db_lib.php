@@ -10,6 +10,27 @@ if(session_id() == "")
 
 
 include("defaults.php");
+// List of known user roles (These could be fetched from DB and populated)
+$LIS_TECH_RW = 0;
+$LIS_TECH_RO = 1;
+$LIS_ADMIN = 2;
+$LIS_SUPERADMIN = 3;
+$LIS_COUNTRYDIR = 4;
+$LIS_CLERK = 5;
+$LIS_TECH_SHOWPNAME = 13;
+// New user levels for technicians
+// Regn, Results, Reports
+$LIS_001 = 6;
+$LIS_010 = 7;
+$LIS_011 = 8;
+$LIS_100 = 9;
+$LIS_101 = 10;
+$LIS_110 = 11;
+$LIS_111 = 12;
+
+$LIS_VERIFIER = 15;
+$READONLYMODE = 16;
+$LIS_PHYSICIAN = 17;
 require_once("db_mysql_lib.php");
 
 if(!isset($_SESSION['langdata_path']))
@@ -60,7 +81,8 @@ class UserType{
 class User
 {
 	public $userId;
-	public $username;
+	
+public $username;
 	public $password;
 	public $actualName;
 	public $email;
@@ -96,8 +118,14 @@ class User
 			
 		/*if( $user->labConfigId == 128 || $user->labConfigId == 129 || $user->labConfig == 131 ) */
 			$user->country = LabConfig::getUserCountry($user->labConfigId);
-		
-		$user->rwoptions = $record['rwoptions'];;
+	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_VERIFIER, $LIS_COUNTRYDIR, $LIS_CLERK, $READONLYMODE, $LIS_PHYSICIAN;
+	global $LIS_001, $LIS_010, $LIS_011, $LIS_100, $LIS_101, $LIS_110, $LIS_111, $LIS_TECH_SHOWPNAME;
+		if($user->level!=$LIS_PHYSICIAN&&$user->level!=$READONLYMODE&&$user->level!=$LIS_VERIFIER&&$user->level!=$LIS_TECH_SHOWPNAME&&$user->level!=$LIS_CLERK&&$user->level!=$LIS_COUNTRYDIR&&$user->level!=$LIS_SUPERADMIN&&$user->level!=$LIS_ADMIN&&$user->level!=$LIS_TECH_RO&&$user->level!=$LIS_TECH_RW)
+{
+		$user->rwoptions =get_user_by_level($user->level)->rwoption; 
+}
+else
+		$user->rwoptions=$record['rwoptions'];
 		
 		return $user;
 	}

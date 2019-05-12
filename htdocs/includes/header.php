@@ -12,7 +12,6 @@ if(session_id() == "")
 require_once("includes/db_lib.php");
 require_once("includes/user_lib.php");
 		$user = get_user_by_name($_SESSION['username']);
-
 if($_SESSION['user_level'] != $LIS_SUPERADMIN &&	$_SESSION['user_level'] != $LIS_COUNTRYDIR&&	$_SESSION['user_level'] != $LIS_ADMIN)
 {
 if(!is_allowed(basename($_SERVER['PHP_SELF']),$user->rwoptions))
