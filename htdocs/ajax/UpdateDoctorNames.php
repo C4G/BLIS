@@ -1,5 +1,5 @@
 <?php
-
+include("../includes/SessionCheck.php");
 include("../includes/db_mysql_lib.php");
 
 $id = $_REQUEST['id'];

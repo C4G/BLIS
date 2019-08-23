@@ -1,5 +1,5 @@
 <?php
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
 $user = get_user_by_id($_SESSION['user_id']);

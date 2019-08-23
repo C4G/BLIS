@@ -3,7 +3,7 @@
 # Shows summary/confirmation for worksheet configuration
 # Called via Ajax lab_config_home.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/page_elems.php");
 

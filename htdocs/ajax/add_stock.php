@@ -3,7 +3,7 @@
 # Sends a new specimen registration form
 # Called via Ajax from new_specimen.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/page_elems.php");
 include("../includes/script_elems.php");
 LangUtil::setPageId("stocks");

@@ -5,7 +5,7 @@
 #
 
 include("../includes/db_lib.php");
-
+include("../includes/SessionCheck.php");
 $test_type_id = $_REQUEST['t_type'];
 # Fetch all measures for this test type
 $test_type = TestType::getById($test_type_id);

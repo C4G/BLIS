@@ -3,7 +3,7 @@
 # Fetches form containing unreportes specimens
 # Called via Ajax from results_entry.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/page_elems.php");
 LangUtil::setPageId("results_entry");

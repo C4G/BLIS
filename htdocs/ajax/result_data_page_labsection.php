@@ -5,7 +5,6 @@
 #
 
 include("../includes/db_lib.php");
-include("../includes/user_lib.php");
 include("../includes/SessionCheck.php");
 LangUtil::setPageId("results_entry");
 

@@ -1,4 +1,5 @@
 <?php
+include("../includes/SessionCheck.php");
 //file_put_contents("dhims2.txt",$_REQUEST['blis2dataelement_text']);
 include("../includes/db_lib.php");
 $dhims2 = new DHIMS2();

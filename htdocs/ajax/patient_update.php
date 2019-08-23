@@ -3,7 +3,7 @@
 # Updates patient profile
 # Called via Ajax from patient_profile.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
 # Helper function 

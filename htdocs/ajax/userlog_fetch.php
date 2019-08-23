@@ -3,9 +3,9 @@
 # Fetches user activity log of a particular user over the given date range
 # Called via Ajax from reports_userlog.php
 #
+include("../includes/SessionCheck.php");
 
 include("../includes/db_lib.php");
-
 $saved_session = SessionUtil::save();
 LangUtil::setPageId("lab_config_home");
 

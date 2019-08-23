@@ -3,7 +3,7 @@
 # Returns HTML check boxes containing compatible test types
 # Called via Ajax from new_specimen.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
 LangUtil::setPageId("new_specimen");

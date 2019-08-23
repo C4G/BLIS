@@ -3,7 +3,7 @@
 # Main page for deleting a lab admin account
 # Called via Ajax from lab_configs.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
 $saved_session = SessionUtil::save();

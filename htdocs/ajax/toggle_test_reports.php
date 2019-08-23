@@ -5,6 +5,7 @@
  * Date: 9/12/2016
  * Time: 11:34 PM
  */
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
 $test_list_left = $_POST['test_list_left'];

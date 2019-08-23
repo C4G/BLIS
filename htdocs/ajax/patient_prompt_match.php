@@ -3,7 +3,7 @@
 # Returns a list of similar patient names
 # To aid/help during new patient registration
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 LangUtil::setPageId("new_patient");
 

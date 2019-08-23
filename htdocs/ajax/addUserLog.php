@@ -1,7 +1,7 @@
 <?php
 
 include("../includes/db_lib.php");
-
+include("../includes/SessionCheck.php");
 $patientId =  $_REQUEST['p_id'];
 $userId =  $_REQUEST['user_id'];
 $logType =  $_REQUEST['log_type'];

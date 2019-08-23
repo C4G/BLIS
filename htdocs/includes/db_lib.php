@@ -4467,6 +4467,7 @@ class Test
 				"WHERE test_id=$test_id";
 		}
 		query_blind($query_verify);
+
 	}
 	
 	public function getDateVerified()
@@ -6932,7 +6933,7 @@ function update_lab_user($updated_entry)
 		"lang_id='$updated_entry->langId', ".
 		"rwoptions='$updated_entry->rwoption' ".
 		"WHERE user_id=$updated_entry->userId";
-	query_blind($query_string);
+query_blind($query_string);
 
 	if($updated_entry->password != "")
 	{

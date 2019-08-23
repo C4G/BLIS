@@ -4,7 +4,7 @@
 # Updates goal TAT values for tests in a lab configuration
 # Called via Ajax from lab_config_home.php
 #
-
+include("../includes/SessionCheck.php");
 include("../users/accesslist.php");
 if( !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList)) ) {
 	displayForbiddenMessage();

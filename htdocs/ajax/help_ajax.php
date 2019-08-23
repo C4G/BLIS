@@ -1,4 +1,5 @@
 <?php 
+include("../includes/SessionCheck.php");
 include("redirect.php");
 include("includes/header.php"); 
 ?>

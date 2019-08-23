@@ -3,10 +3,10 @@
 # Searches for lab configurations by search term
 # Called via Ajax from lab_configs.php
 #
-
+include("../includes/SessionCheck.php");
 session_start();
 include("../includes/db_lib.php");
-include("../includes/user_lib.php");
+
 include("../includes/page_elems.php");
 
 $page_elems = new PageElems();

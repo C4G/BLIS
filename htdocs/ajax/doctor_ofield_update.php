@@ -1,4 +1,5 @@
 <?php
+include("../includes/SessionCheck.php");
 #
 # Updates options to use or hide non-mandatory fields for specimens and patients
 # Called via Ajax from lab_config_home.php

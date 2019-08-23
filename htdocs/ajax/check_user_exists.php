@@ -5,7 +5,7 @@
 #
 
 include("../includes/db_lib.php");
-
+include("../includes/SessionCheck.php");
 $saved_session = SessionUtil::save();
 
 $user_list=$_REQUEST['userlist'];

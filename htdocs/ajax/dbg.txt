@@ -1,1 +1,0 @@
-INSERT INTO user_config(user_id, level, parameter, value, created_by, created_on, modified_by, modified_on) VALUES ('511',13, 'rwoptions', '6,7', 53, curdate(), 53, curdate())

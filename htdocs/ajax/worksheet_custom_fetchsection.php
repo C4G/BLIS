@@ -3,7 +3,7 @@
 # Returns a list of test type for a perticular section with fields for columns widths
 # Called via Ajax from worksheet_custom_new.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/page_elems.php");
 LangUtil::setPageId("lab_config_home");

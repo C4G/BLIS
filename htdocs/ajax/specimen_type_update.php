@@ -3,7 +3,7 @@
 # Main page for updating specimen type info
 # Called via Ajax from specimen_type_edit.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../lang/lang_xml2php.php");
 

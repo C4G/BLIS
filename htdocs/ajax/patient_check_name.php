@@ -3,10 +3,8 @@
 # Checks if the given patient name (or simlar) already exists
 # Called via Ajax from find_patient.php
 #
-
-include("../includes/db_lib.php");
-include("../includes/user_lib.php");
 include("../includes/SessionCheck.php");
+include("../includes/db_lib.php");
 if(isset($_SESSION['country']))
 	$country = $_SESSION['country'];
 else

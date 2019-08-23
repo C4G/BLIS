@@ -4,7 +4,7 @@
 # Called via Ajax from reports.php
 # Used for '[MENU_PATIENT]' report
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 LangUtil::setPageId("reports");
 

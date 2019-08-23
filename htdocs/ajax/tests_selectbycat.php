@@ -3,7 +3,7 @@
 # Returns <option> tags for list of test types by category (section) and site
 # Called via Ajax from reports.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/page_elems.php");
 LangUtil::setPageId("general");

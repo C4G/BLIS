@@ -2,7 +2,7 @@
 #
 # Adds a new specimen to DB and redirects to specimen_added.php
 # Called via Ajax from new_specimen.php
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 $saved_session = SessionUtil::save();
 $session_num = $_REQUEST['session_num'];

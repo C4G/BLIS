@@ -5,7 +5,7 @@
  * Date: 9/15/2016
  * Time: 12:01 PM
  */
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/page_elems.php");
 

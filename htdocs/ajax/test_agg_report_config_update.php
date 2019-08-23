@@ -5,6 +5,7 @@
  * Date: 9/16/2016
  * Time: 12:51 AM
  */
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
 $lab_config_id = $_REQUEST['lab_config_id'];

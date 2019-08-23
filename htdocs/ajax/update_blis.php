@@ -3,7 +3,7 @@
 # Main file for updating to new version
 # Called from the update.php page
 #
-
+include("../includes/SessionCheck.php");
 function directoryCopy( $source, $destination) 
 { 
     $dir = opendir($source); 

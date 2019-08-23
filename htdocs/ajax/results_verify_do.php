@@ -3,7 +3,7 @@
 # Marks submitted results as verified, with corrections if any
 # Called via ajax from verify_results.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
 # Helper function

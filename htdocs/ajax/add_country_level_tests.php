@@ -1,7 +1,7 @@
 <?php
 
 include("../includes/db_lib.php");
-
+include("../includes/SessionCheck.php");
 $userId = $_SESSION['user_id'];
 $testName = $_REQUEST['testName'];
 $labIdTestId = $_REQUEST['labIdTestId'];

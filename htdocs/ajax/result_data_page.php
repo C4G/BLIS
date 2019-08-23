@@ -3,9 +3,8 @@
 # Returns list of patients matched with list of pending specimens
 # Called via Ajax form result_entry.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
-include("../includes/user_lib.php");
 LangUtil::setPageId("results_entry");
 
 $attrib_value = $_REQUEST['a'];

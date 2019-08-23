@@ -3,11 +3,10 @@
 # Adds a new lab user account to DB
 # Called via Ajax from lab_user_new.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/script_elems.php");
 include("../includes/page_elems.php");
-include("../includes/user_lib.php");
 $script_elems = new ScriptElems();
 $page_elems = new PageElems();
 

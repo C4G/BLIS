@@ -1,7 +1,7 @@
 <?php
 
 include("../includes/db_lib.php");
-
+include("../includes/SessionCheck.php");
 
 $equipment_id=$_REQUEST['equipment_id'];
 

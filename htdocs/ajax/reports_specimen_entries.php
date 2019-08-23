@@ -3,7 +3,7 @@
 # Returns a list of matched specimens for generating reports
 # Called via Ajax from report.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 LangUtil::setPageId("reports");
 

@@ -4,6 +4,7 @@
 #
 
 include("../includes/db_lib.php");
+include("../includes/SessionCheck.php");
 require_once("../includes/perms_check.php");
 
 # Enable to delete by entry

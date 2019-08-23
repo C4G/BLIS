@@ -3,7 +3,7 @@
 # Returns list of matched specimens
 # Called via Ajax from /search.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 LangUtil::setPageId("search");
 

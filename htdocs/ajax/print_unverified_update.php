@@ -1,5 +1,5 @@
 <?php
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
 $lab_config = $_REQUEST['lab_config_id'];

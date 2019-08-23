@@ -1,5 +1,5 @@
 <?php
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/stats_lib.php");
 

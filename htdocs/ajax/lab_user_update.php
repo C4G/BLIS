@@ -4,8 +4,8 @@
 # Called via Ajax from lab_user_edit.php
 #
 
-include("../includes/db_lib.php");
-include("../includes/user_lib.php");
+include_once("../includes/SessionCheck.php");
+include_once("../includes/db_lib.php");
 
 $saved_session = SessionUtil::save();
 
@@ -39,6 +39,6 @@ $user->langId = $lang_id;
 $user->rwoption = $rwoptions;
 
 update_lab_user($user);
-
+ECHO "RESET";
 SessionUtil::restore($saved_session);
 ?>

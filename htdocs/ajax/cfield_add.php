@@ -5,7 +5,7 @@
 #
 
 include("../includes/db_lib.php");
-
+include("../includes/SessionCheck.php");
 $lab_config_id = $_REQUEST['lid'];
 $tabletype = $_REQUEST['tabletype'];
 $field_name = $_REQUEST['fname'];

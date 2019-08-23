@@ -1,4 +1,5 @@
 <?php
+include("../includes/SessionCheck.php");
 #
 # Deletes a patient profile from DB
 # Called via Ajax from lab_user_new.php
@@ -6,7 +7,7 @@
 include("../includes/db_lib.php");
 include("../includes/script_elems.php");
 include("../includes/page_elems.php");
-include("../includes/user_lib.php");
+#include("../includes/user_lib.php");
 $specimen_id=$_REQUEST['specimen_id'];
 
 //$lab_config = LabConfig::getById($_SESSION['lab_config_id']);

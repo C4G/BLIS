@@ -3,10 +3,9 @@
 # Generates form for editing result interpretations
 # Called via Ajax from remarks_edit.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/page_elems.php");
-include("../includes/SessionCheck.php");
 $page_elems = new PageElems();
 
 $lab_config_id = $_REQUEST['lid'];

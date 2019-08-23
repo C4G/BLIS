@@ -3,7 +3,7 @@
 # Returns token input values for "autocomplete" type measure
 # Called via Ajax from results_entry.php
 #
-
+include("../includes/SessionCheck.php");
 include ("../includes/ajax_lib.php");
 include ("../includes/db_lib.php");
 

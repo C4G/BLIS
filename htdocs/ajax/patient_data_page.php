@@ -1,5 +1,6 @@
 
 <?php
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/script_elems.php");
 LangUtil::setPageId("find_patient");

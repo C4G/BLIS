@@ -3,6 +3,163 @@
 // (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
 // Contains functions for managing user roles, privileges and logging
 //
+//list of access rights
+$access_rights=array(
+"addUserLog.php"=>"~CD~SA~A~R~RP~",
+"add_country_level_measures.php"=>"~CD~SA~",
+"add_country_level_specimens.php"=>"~CD~SA~",
+"add_country_level_tests.php"=>"~CD~SA~",
+"add_country_level_test_categories.php"=>"~CD~SA~",
+"add_currency_rate.php"=>"~CD~SA~",
+"add_stock.php"=>"~CD~SA~A~",
+"batch_results_form_fetch.php"=>"~R~CD~SA~A~",
+"batch_results_form_row.php"=>"~R~CD~SA~A~",
+"billing_update.php"=>"~SA~CD~",
+"catalog_deletedata.php"=>"~A~CD~SA~",
+"cfield_add.php"=>"~CD~SA~A~",
+"cfield_update.php"=>"~CD~SA~A~",
+"check_user_exists.php"=>"~CD~SA~",
+"createconfigfile.php"=>"~CD~SA~",
+"daily_num_update.php"=>"~RG~CD~SA~A~",
+"daily_prevalance.php"=>"~CD~SA~A~RP~",
+"deleteDHIMS2Config.php"=>"~CD~SA~",
+"delete_currency_rate.php"=>"~CD~SA~",
+"delete_patient.php"=>"~RG~CD~SA~A~",
+"delete_specimen.php"=>"~CD~SA~RG~",
+"delete_test.php"=>"~CD~SA~RG~",
+"DHIMS2conf_add.php"=>"~CD~SA~",
+"doctor_ofield_update.php"=>"~CD~SA~",
+"equip_interface_update.php"=>"~SA~CD~",
+"fetchUserLog.php"=>"~R~CD~SA~A~RP~",
+"fetch_remarks.php"=>"~S~R~CD~SA~A~RG~",
+"gender_prevalance.php"=>"~CD~SA~A~",
+"general_prevalance.php"=>"~CD~SA~A~",
+"getDHIMS2Config.php"=>"~CD~SA~",
+"getEquipmentDetails.php"=>"~CD~SA~",
+"getEquipmentProps.php"=>"~CD~A~SA~",
+"getSpecimenBarcode.php"=>"~CD~SA~A~S~",
+"get_result_count.php"=>"~S~A~SA~CD~RP~",
+"get_user_type_options.php"=>"~CD~SA~A~",
+"grouped_count_reports_update.php"=>"~CD~SA~",
+"import_patient.php"=>"~S~R~RG~SA~A~CD~RP~",
+"infection_report_settings_update.php"=>"~A~SA~CD~RP~",
+"lab_admin_add.php"=>"~CD~SA~",
+"lab_admin_change.php"=>"~CD~SA~",
+"lab_admin_delete.php"=>"~CD~SA~",
+"lab_admin_update.php"=>"~CD~SA~",
+"lab_config_addCurrency.php"=>"~CD~SA~",
+"lab_config_delete.php"=>"~CD~SA~",
+"lab_config_miscupdate.php"=>"~CD~SA~",
+"lab_config_search.php"=>"~A~CD~SA~",
+"lab_config_tat_update.php"=>"~CD~A~SA~",
+"lab_user_add.php"=>"~CD~SA~A~",
+"lab_user_delete.php"=>"~CD~SA~",
+"lab_user_type_add.php"=>"~CD~SA~A~",
+"lab_user_type_delete.php"=>"~CD~SA~",
+"lab_user_type_update.php"=>"~CD~SA~A~",
+"lab_user_update.php"=>"~CD~SA~A~",
+"locations_bytests.php"=>"~CD~SA~A~RP~",
+"measure_autocomplete.php"=>"~R~S~CD~SA~A~",
+"monthly_prevalance.php"=>"~CD~SA~A~RP~",
+"ofield_update.php"=>"~CD~SA~",
+"patient_add.php"=>"~RG~SA~A~CD~",
+"patient_add_custom.php"=>"~RG~SA~A~CD~",
+"patient_check_id.php"=>"~RG~SA~A~CD~",
+"patient_check_name.php"=>"~RG~SA~A~CD~",
+"patient_check_surr_id.php"=>"~RG~SA~A~CD~",
+"patient_data_dynamic_expansion.php"=>"~RG~SA~A~CD~",
+"patient_data_page.php"=>"~RG~SA~A~CD~S~",
+"patient_info.php"=>"~RG~SA~A~CD~",
+"patient_prompt_match.php"=>"~RG~SA~A~CD~",
+"patient_update.php"=>"~S~SA~A~CD~",
+"preport_checkboxes.php"=>"~CD~SA~A~RP~",
+"print_unverified_update.php"=>"~CD~SA~",
+"process-field-ordering.php"=>"~CD~SA~A~",
+"remarks_form_fetch.php"=>"~CD~SA~A~",
+"reports_specimen_entries.php"=>"~CD~SA~A~RP~",
+"report_agg_update.php"=>"~CD~SA~A~RP~",
+"report_config_fetch.php"=>"~CD~SA~A~RP~",
+"report_config_summary.php"=>"~CD~SA~A~RP~",
+"report_config_update.php"=>"~CD~SA~A~RP~",
+"report_fields_order.php"=>"~CD~SA~A~RP~",
+"results_getunreported.php"=>"~CD~SA~A~R~",
+"results_markasreported.php"=>"~CD~SA~A~R~",
+"results_verify_do.php"=>"~CD~SA~A~R~",
+"result_add.php"=>"~CD~SA~A~S~R~",
+"result_data_count.php"=>"~CD~SA~A~R~",
+"result_data_count_labsection.php"=>"~CD~SA~A~R~",
+"result_data_count_new.php"=>"~CD~SA~A~R~",
+"result_data_page.php"=>"~CD~SA~A~R~",
+"result_data_page_labsection.php"=>"~CD~SA~A~R~",
+"result_data_page_new.php"=>"~CD~SA~A~R~",
+"result_entry_patient_dyn.php"=>"~CD~SA~A~R~",
+"result_entry_patient_lab_section.php"=>"~CD~SA~A~R~",
+"retrieve_deleted.php"=>"~CD~SA~A~",
+"search_config_update.php"=>"~CD~SA~",
+"search_p.php"=>"~CD~SA~A~RG~S~RP~",
+"search_p_dyn.php"=>"~CD~SA~A~S~RP~",
+"search_s.php"=>"~CD~SA~A~S~",
+"session_num_update.php"=>"~CD~SA~A~RG~",
+"site_config_add.php"=>"~CD~SA~",
+"site_config_update.php"=>"~CD~SA~",
+"specimenbox_add.php"=>"~CD~SA~A~RG~",
+"specimentopatient.php"=>"~CD~SA~A~R~",
+"specimen_add.php"=>"~CD~SA~A~RG~",
+"specimen_aggregate_reports_update.php"=>"~CD~A~SA~RP~",
+"specimen_check_id.php"=>"~CD~SA~A~RG~",
+"specimen_form_fetch.php"=>"~CD~SA~A~R~S~",
+"specimen_name_check.php"=>"~A~CD~SA~",
+"specimen_type_update.php"=>"~CD~SA~A~",
+"st_types_update.php"=>"~CD~SA~",
+"tat_table.php"=>"~CD~A~SA~RP~",
+"tat_ttype_daily.php"=>"~CD~A~SA~RP~",
+"tat_ttype_monthly.php"=>"~CD~A~SA~RP~",
+"tat_ttype_weekly.php"=>"~CD~A~SA~RP~",
+"tests_select.php"=>"~CD~A~SA~RP~",
+"tests_selectbycat.php"=>"~CD~A~SA~R~RP~",
+"test_agg_report_config_update.php"=>"~CD~SA~",
+"test_list_by_site.php"=>"~CD~SA~",
+"test_report_config_fetch.php"=>"~CD~SA~",
+"test_report_config_summary.php"=>"~CD~SA~",
+"test_type_name_check.php"=>"~A~CD~SA~",
+"test_type_options.php"=>"~CD~SA~A~RG~",
+"test_type_update.php"=>"~CD~SA~A~",
+"toggle_test_reports.php"=>"~CD~SA~",
+"UpdateDoctorNames.php"=>"~CD~SA~A~",
+"update_barcode_settings.php"=>"~CD~SA~",
+"update_blis.php"=>"~CD~A~SA~",
+"update_country_level_section.php"=>"~CD~SA~",
+"update_country_level_test.php"=>"~CD~SA~",
+"userlog_fetch.php"=>"~CD~A~SA~RP~",
+"users_select.php"=>"~CD~A~SA~RP~",
+"weekly_prevalance.php"=>"~CD~A~SA~RP~",
+"worksheet_config_fetch.php"=>"~CD~SA~",
+"worksheet_config_summary.php"=>"~CD~SA~",
+"worksheet_custom_fetchsection.php"=>"~CD~SA~",
+"catalog.php"=>"~A~CD~SA~",
+"country_catalog.php"=>"~CD~SA~",
+"cfield_edit.php"=>"~CD~A~SA~",
+"cfield_new.php"=>"~CD~A~SA~",
+"lab_configs.php"=>"~CD~A~SA~",
+"lab_config_home.php"=>"~CD~SA~",
+"lab_config_new.php"=>"~CD~SA~",
+"lab_config_status.php"=>"~CD~SA~",
+"data_backup2.php"=>"~A~",
+"update_database.php"=>"~CD~SA~",
+"remarks_edit.php"=>"~CD~A~SA~",
+"stock_edit.php"=>"~CD~A~SA~",
+"stock_management.php"=>"~CD~A~SA~",
+"reports.php"=>"~CD~A~SA~RP~",
+"reports_userlog.php"=>"~CD~A~SA~RP~",
+"update.php"=>"~CD~A~SA~",
+"lab_admins.php"=>"~CD~SA~",
+"lab_admin_edit.php"=>"~CD~SA~",
+"lab_admin_new.php"=>"~CD~SA~",
+"lab_user_edit.php"=>"~CD~A~SA~",
+"lab_user_new.php"=>"~CD~A~SA~",
+"lab_user_type_edit.php"=>"~CD~A~SA~",
+"lab_user_type_new.php"=>"~CD~A~SA~",
+"switchto_tech.php"=>"~CD~SA~");
 
 // List of known user roles (These could be fetched from DB and populated)
 $LIS_TECH_RW = 0;
@@ -27,25 +184,27 @@ $READONLYMODE = 16;
 $LIS_PHYSICIAN = 17;
 function is_allowed($fname,$rwopts)
 {
-//echo "rw : ".$rwopts;
+global $access_rights;
+$access_right_label=$access_rights[$fname];
 	$rw_option = array ();
-	$rw_option = explode ( ',', $rwopts );
+	$rw_option =explode ( ',', $rwopts );
 $opt_index="0";
-if($fname=="find_patient.php")
+if($fname=="find_patient.php" || strpos($access_right_label,"RG~")!==false)
 $opt_index="2";
-else if($fname=="reports.php")
+else if($fname=="reports.php"|| strpos($access_right_label,"RP~")!==false)
 $opt_index="5";
-else if($fname=="results_entry.php")
+else if($fname=="results_entry.php"  || strpos($access_right_label,"R~")!==false)
 $opt_index="3";
-else if($fname=="search.php")
+else if($fname=="search.php" || strpos($access_right_label,"S~")!==false)
 $opt_index="4";
 else if($fname=="view_stock.php")
 $opt_index="6";
 else if($fname=="backupDataUI.php")
 $opt_index="7";
+else if(strpos($access_right_label,"CD~")!==false||strpos($access_right_label,"SA~")!==false||strpos($access_right_label,"~A~")!==false)
+$opt_index=-1; //admin page
 else
 $opt_index="0";
-
 if($opt_index!="0")
 {
 

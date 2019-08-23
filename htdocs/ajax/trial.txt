@@ -1,8 +1,0 @@
-<script type="text/javascript" src="jquery.wysiwyg.js"></script>
-<script type="text/javascript">
-$(function() {
-    $('#wysiwyg').wysiwyg();
-});
-</script>
-
-<textarea id="wysiwyg"></textarea>

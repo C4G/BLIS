@@ -1,4 +1,5 @@
 <?php
+include("../includes/SessionCheck.php");
 #
 # Returns remarks (results interpretation) for supplied test type and measure values
 # Called via Ajax from results_entry.php

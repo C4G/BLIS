@@ -3,7 +3,7 @@
 # Main page for updating a lab admin account
 # Called via Ajax from lab_admin_edit.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
 $saved_session = SessionUtil::save();

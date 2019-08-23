@@ -3,10 +3,10 @@
 # updates the field ordering for patient registration
 # Called via Ajax from lab_config_home.php
 #
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/script_elems.php");
 include("../includes/page_elems.php");
-include("../includes/user_lib.php");
 include_once("../includes/field_order_update.php");
 
 print_r($_GET);

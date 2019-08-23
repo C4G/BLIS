@@ -1,4 +1,5 @@
 <?php
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 $sid = $_REQUEST['sid'];
 $sid_exists = check_specimen_id($sid);

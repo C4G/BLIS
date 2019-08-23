@@ -6,7 +6,7 @@
 include("../includes/db_lib.php");
 include("../includes/script_elems.php");
 include("../includes/page_elems.php");
-include("../includes/user_lib.php");
+include("../includes/SessionCheck.php");
 $item_id=$_REQUEST['item_id'];
 
 if(isset($_REQUEST['ret_cat'])){

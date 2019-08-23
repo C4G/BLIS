@@ -2,7 +2,7 @@
 #
 # Changes lab manager assigned to a lab configuration
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
 $lab_config_id = $_REQUEST['lid'];

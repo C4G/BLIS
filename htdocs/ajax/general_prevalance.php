@@ -3,7 +3,7 @@
 
 # Called via Ajax from reports_infection.php
 #
-
+include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/stats_lib.php");
 include("../includes/page_elems.php");

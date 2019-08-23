@@ -28,7 +28,7 @@ LangUtil::setPageId("login");
 
 $page_elems = new PageElems();
 //$login_tip = LangUtil::getPageTerm("TIPS_NEWPWD");
-$login_tip="If you have forgotten your password then please send an email to 'c4gbackup@gmail.com' with the subject 'Password'.<br> New password will be sent to you.";
+$login_tip="If you have forgotten your password then please contact your BLIS administrator.";
 $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), $login_tip);
 ?>
 <style type="text/css"> 
