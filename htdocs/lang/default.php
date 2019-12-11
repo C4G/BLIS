@@ -381,6 +381,7 @@ $LANG_ARRAY = array (
 		"TIPS_SUMMARY_1" => "Gives a summary of lab setup including the lab personnel accounts, test and specimen types.",
 		"TIPS_SUMMARY_2" => "-",
 		"TIPS_SUMMARY_3" => "-",
+		"MENU_KEY_MANAGEMENT" => "Key Management",
 		"MENU_BACKUP_REVERT" => "Revert To Backup", 
 		"TIPS_REVERT" => "In case of system failure, if we want to revert to a previously backedup copy of the data we can use this option. You can choose to backup current version before doing this. You may also choose to include to revert back the language settings.",
 		"BACKUP_LOCATION" => "Backup Version", 

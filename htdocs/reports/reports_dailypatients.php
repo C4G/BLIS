@@ -18,7 +18,11 @@ $script_elems->enableDragTable();
 
 $date_from = $_REQUEST['yf']."-".$_REQUEST['mf']."-".$_REQUEST['df'];
 $date_to = $_REQUEST['yt']."-".$_REQUEST['mt']."-".$_REQUEST['dt'];
-$lab_config_id = $_REQUEST['l'];
+//AS Fixing error of invalid lab config id
+	session_start();
+$user = get_user_by_name($_SESSION['username']);
+$lab_config_id = $user->labConfigId;
+//$lab_config_id = $_REQUEST['l'];
 $lab_section = $_REQUEST['labsec'];
 
 

@@ -188,35 +188,50 @@ global $access_rights;
 $access_right_label=$access_rights[$fname];
 	$rw_option = array ();
 	$rw_option =explode ( ',', $rwopts );
-$opt_index="0";
+$opt_index="";
 if($fname=="find_patient.php" || strpos($access_right_label,"RG~")!==false)
-$opt_index="2";
-else if($fname=="reports.php"|| strpos($access_right_label,"RP~")!==false)
-$opt_index="5";
-else if($fname=="results_entry.php"  || strpos($access_right_label,"R~")!==false)
-$opt_index="3";
-else if($fname=="search.php" || strpos($access_right_label,"S~")!==false)
-$opt_index="4";
-else if($fname=="view_stock.php")
-$opt_index="6";
-else if($fname=="backupDataUI.php")
-$opt_index="7";
-else if(strpos($access_right_label,"CD~")!==false||strpos($access_right_label,"SA~")!==false||strpos($access_right_label,"~A~")!==false)
+$opt_index=$opt_index."2,";
+if($fname=="reports.php"|| strpos($access_right_label,"RP~")!==false)
+$opt_index=$opt_index."5,";
+if($fname=="results_entry.php"  || strpos($access_right_label,"R~")!==false)
+$opt_index=$opt_index."3,";
+if($fname=="search.php" || strpos($access_right_label,"S~")!==false)
+$opt_index=$opt_index."4,";
+if($fname=="view_stock.php")
+$opt_index=$opt_index."6,";
+if($fname=="backupDataUI.php")
+$opt_index=$opt_index."7,";
+if($opt_index==""&&(strpos($access_right_label,"CD~")!==false||strpos($access_right_label,"SA~")!==false||strpos($access_right_label,"~A~")!==false))
 $opt_index=-1; //admin page
-else
+if($opt_index=="")
 $opt_index="0";
 if($opt_index!="0")
 {
-
-		if (in_array ( $opt_index, $rw_option ))
+		if (checkAccess($opt_index, $rw_option ))
 {
-
 return true;
 }
 else
+{
 return false;
 }
+}
 return true;
+}
+function checkAccess($opt_index,$rw_option)
+{
+$opt_index=explode(',',$opt_index);
+foreach($opt_index as $o)
+{
+if($opt_index!="")
+{
+if(in_array ( $o, $rw_option ))
+{
+return true;
+}
+}
+}
+return false;
 }
 function get_top_menu_options($user_role, $user_rwoption = "") {
 //echo $user_role;

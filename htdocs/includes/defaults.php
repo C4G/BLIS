@@ -6,7 +6,7 @@
 #
 
 # System version number displayed on page title and footer
-$VERSION = "3.51";
+$VERSION = "3.52";
 
 # Debug mode
 $DEBUG = false;

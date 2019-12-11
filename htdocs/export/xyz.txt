@@ -1,0 +1,2879 @@
+here
+in here
+-- MySQL dump 10.11
+1in here
+--
+1in here
+-- Host: localhost    Database: blis_127
+1in here
+-- ------------------------------------------------------
+1in here
+-- Server version	5.0.41-community-nt
+1in here
+
+1in here
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+1in here
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+1in here
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+1in here
+/*!40101 SET NAMES utf8 */;
+1in here
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+1in here
+/*!40103 SET TIME_ZONE='+00:00' */;
+1in here
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+1in here
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+1in here
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+1in here
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+1in here
+
+1in here
+--
+1in here
+-- Current Database: `blis_127`
+1in here
+--
+1in here
+
+1in here
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `blis_127` /*!40100 DEFAULT CHARACTER SET latin1 */;
+1in here
+
+1in here
+USE `blis_127`;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `bills`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `bills`;
+1in here
+CREATE TABLE `bills` (
+1in here
+  `id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `patient_id` int(11) unsigned NOT NULL,
+1in here
+  `paid_in_full` bit(1) NOT NULL default '\0',
+1in here
+  PRIMARY KEY  (`id`),
+1in here
+  UNIQUE KEY `id_UNIQUE` (`id`)
+1in here
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `bills`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `bills` WRITE;
+1in here
+/*!40000 ALTER TABLE `bills` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `bills` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `bills_test_association`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `bills_test_association`;
+1in here
+CREATE TABLE `bills_test_association` (
+1in here
+  `id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `bill_id` int(11) unsigned NOT NULL,
+1in here
+  `test_id` int(11) unsigned NOT NULL,
+1in here
+  `discount_type` int(4) unsigned NOT NULL default '1000',
+1in here
+  `discount_amount` decimal(10,2) unsigned NOT NULL default '0.00',
+1in here
+  PRIMARY KEY  (`id`),
+1in here
+  UNIQUE KEY `id_UNIQUE` (`id`)
+1in here
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `bills_test_association`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `bills_test_association` WRITE;
+1in here
+/*!40000 ALTER TABLE `bills_test_association` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `bills_test_association` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `comment`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `comment`;
+1in here
+CREATE TABLE `comment` (
+1in here
+  `id` int(10) unsigned NOT NULL auto_increment,
+1in here
+  `username` varchar(45) NOT NULL default '',
+1in here
+  `page` varchar(45) NOT NULL default '',
+1in here
+  `comment` varchar(150) NOT NULL default '',
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `comment`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `comment` WRITE;
+1in here
+/*!40000 ALTER TABLE `comment` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `comment` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `currency_conversion`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `currency_conversion`;
+1in here
+CREATE TABLE `currency_conversion` (
+1in here
+  `currencya` varchar(200) NOT NULL,
+1in here
+  `currencyb` varchar(200) NOT NULL,
+1in here
+  `exchangerate` float(5,2) default NULL,
+1in here
+  `updatedts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  `flag1` int(11) default NULL,
+1in here
+  `flag2` int(11) default NULL,
+1in here
+  `setting1` varchar(200) default NULL,
+1in here
+  `setting2` varchar(200) default NULL,
+1in here
+  PRIMARY KEY  (`currencya`,`currencyb`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `currency_conversion`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `currency_conversion` WRITE;
+1in here
+/*!40000 ALTER TABLE `currency_conversion` DISABLE KEYS */;
+1in here
+INSERT INTO `currency_conversion` VALUES ('USD','USD',1.00,'2013-09-19 05:16:47',1,NULL,NULL,NULL);
+1in here
+/*!40000 ALTER TABLE `currency_conversion` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `custom_field_type`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `custom_field_type`;
+1in here
+CREATE TABLE `custom_field_type` (
+1in here
+  `id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `field_type` varchar(100) default NULL,
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `custom_field_type`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `custom_field_type` WRITE;
+1in here
+/*!40000 ALTER TABLE `custom_field_type` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `custom_field_type` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `custom_field_type` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `delay_measures`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `delay_measures`;
+1in here
+CREATE TABLE `delay_measures` (
+1in here
+  `User_Id` varchar(50) NOT NULL default '',
+1in here
+  `IP_Address` varchar(16) NOT NULL default '',
+1in here
+  `Latency` int(11) NOT NULL default '0',
+1in here
+  `Recorded_At` datetime NOT NULL default '0000-00-00 00:00:00',
+1in here
+  `Page_Name` varchar(45) default NULL,
+1in here
+  `Request_URI` varchar(100) default NULL
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `delay_measures`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `delay_measures` WRITE;
+1in here
+/*!40000 ALTER TABLE `delay_measures` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `delay_measures` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `delay_measures` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `dhims2_api_config`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `dhims2_api_config`;
+1in here
+CREATE TABLE `dhims2_api_config` (
+1in here
+  `id` int(11) NOT NULL auto_increment,
+1in here
+  `username` varchar(50) collate latin1_general_ci NOT NULL,
+1in here
+  `password` varchar(50) collate latin1_general_ci NOT NULL,
+1in here
+  `orgunit` varchar(200) collate latin1_general_ci NOT NULL,
+1in here
+  `dataset` varchar(200) collate latin1_general_ci NOT NULL,
+1in here
+  `dataelement` text collate latin1_general_ci NOT NULL,
+1in here
+  `categorycombo` varchar(100) collate latin1_general_ci default NULL,
+1in here
+  `gender` varchar(5) collate latin1_general_ci default NULL,
+1in here
+  `period` varchar(10) collate latin1_general_ci default NULL,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `dhims2_api_config`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `dhims2_api_config` WRITE;
+1in here
+/*!40000 ALTER TABLE `dhims2_api_config` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `dhims2_api_config` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `dhims2_api_config` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `field_order`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `field_order`;
+1in here
+CREATE TABLE `field_order` (
+1in here
+  `id` int(11) NOT NULL auto_increment,
+1in here
+  `lab_config_id` int(11) unsigned default NULL,
+1in here
+  `form_id` int(11) default NULL,
+1in here
+  `field_order` varchar(2000) default NULL,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `field_order`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `field_order` WRITE;
+1in here
+/*!40000 ALTER TABLE `field_order` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `field_order` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `field_order` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `inv_reagent`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `inv_reagent`;
+1in here
+CREATE TABLE `inv_reagent` (
+1in here
+  `id` int(11) NOT NULL auto_increment,
+1in here
+  `name` varchar(100) collate latin1_general_ci NOT NULL,
+1in here
+  `unit` varchar(45) collate latin1_general_ci NOT NULL default 'units',
+1in here
+  `remarks` varchar(245) collate latin1_general_ci default NULL,
+1in here
+  `created_by` varchar(10) collate latin1_general_ci NOT NULL default '0',
+1in here
+  `assocation` varchar(10) collate latin1_general_ci default '0',
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `inv_reagent`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `inv_reagent` WRITE;
+1in here
+/*!40000 ALTER TABLE `inv_reagent` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `inv_reagent` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `inv_supply`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `inv_supply`;
+1in here
+CREATE TABLE `inv_supply` (
+1in here
+  `id` int(11) NOT NULL auto_increment,
+1in here
+  `reagent_id` int(11) NOT NULL,
+1in here
+  `lot` varchar(100) collate latin1_general_ci NOT NULL,
+1in here
+  `expiry_date` date default NULL,
+1in here
+  `manufacturer` varchar(100) collate latin1_general_ci default NULL,
+1in here
+  `supplier` varchar(100) collate latin1_general_ci default NULL,
+1in here
+  `quantity_ordered` int(11) NOT NULL default '0',
+1in here
+  `quantity_supplied` int(11) NOT NULL default '0',
+1in here
+  `cost_per_unit` decimal(10,0) default NULL,
+1in here
+  `user_id` int(11) NOT NULL default '0',
+1in here
+  `date_of_order` date default NULL,
+1in here
+  `date_of_supply` date default NULL,
+1in here
+  `date_of_reception` date default NULL,
+1in here
+  `remarks` varchar(250) collate latin1_general_ci default NULL,
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`),
+1in here
+  KEY `reagent_id` (`reagent_id`),
+1in here
+  KEY `reagent_id` (`reagent_id`),
+1in here
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `inv_supply`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `inv_supply` WRITE;
+1in here
+/*!40000 ALTER TABLE `inv_supply` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `inv_supply` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `inv_usage`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `inv_usage`;
+1in here
+CREATE TABLE `inv_usage` (
+1in here
+  `id` int(11) NOT NULL auto_increment,
+1in here
+  `reagent_id` int(11) NOT NULL,
+1in here
+  `lot` varchar(100) collate latin1_general_ci NOT NULL,
+1in here
+  `quantity_used` int(11) NOT NULL default '0',
+1in here
+  `date_of_use` date NOT NULL,
+1in here
+  `user_id` int(11) NOT NULL,
+1in here
+  `remarks` varchar(250) collate latin1_general_ci default NULL,
+1in here
+  `ts` timestamp NULL default CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`),
+1in here
+  KEY `reagent_id` (`reagent_id`),
+1in here
+  KEY `reagent_id2` (`reagent_id`),
+1in here
+  KEY `reagent_id2` (`reagent_id`),
+1in here
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `inv_usage`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `inv_usage` WRITE;
+1in here
+/*!40000 ALTER TABLE `inv_usage` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `inv_usage` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `lab_config`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `lab_config`;
+1in here
+CREATE TABLE `lab_config` (
+1in here
+  `lab_config_id` int(10) unsigned NOT NULL auto_increment,
+1in here
+  `name` char(45) NOT NULL default '',
+1in here
+  `location` char(45) NOT NULL default '',
+1in here
+  `admin_user_id` int(10) unsigned NOT NULL default '0',
+1in here
+  `db_name` char(45) NOT NULL default '',
+1in here
+  `id_mode` int(10) unsigned NOT NULL default '2',
+1in here
+  `p_addl` int(10) unsigned NOT NULL default '0',
+1in here
+  `s_addl` int(10) unsigned NOT NULL default '0',
+1in here
+  `daily_num` int(10) unsigned NOT NULL default '1',
+1in here
+  `pid` int(10) unsigned NOT NULL default '2',
+1in here
+  `pname` int(10) unsigned NOT NULL default '1',
+1in here
+  `sex` int(10) unsigned NOT NULL default '2',
+1in here
+  `age` int(10) unsigned NOT NULL default '1',
+1in here
+  `dob` int(10) unsigned NOT NULL default '1',
+1in here
+  `sid` int(10) unsigned NOT NULL default '2',
+1in here
+  `refout` int(10) unsigned NOT NULL default '1',
+1in here
+  `rdate` int(10) unsigned NOT NULL default '2',
+1in here
+  `comm` int(10) unsigned NOT NULL default '1',
+1in here
+  `dformat` varchar(45) NOT NULL default 'd-m-Y',
+1in here
+  `dnum_reset` int(10) unsigned NOT NULL default '1',
+1in here
+  `doctor` int(10) unsigned NOT NULL default '1',
+1in here
+  `ageLimit` int(11) default NULL,
+1in here
+  PRIMARY KEY  (`lab_config_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=227 DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `lab_config`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `lab_config` WRITE;
+1in here
+/*!40000 ALTER TABLE `lab_config` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `lab_config` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `lab_config` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `lab_config_access`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `lab_config_access`;
+1in here
+CREATE TABLE `lab_config_access` (
+1in here
+  `user_id` int(10) unsigned NOT NULL default '0',
+1in here
+  `lab_config_id` int(10) unsigned NOT NULL default '0',
+1in here
+  PRIMARY KEY  (`user_id`,`lab_config_id`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `lab_config_access`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `lab_config_access` WRITE;
+1in here
+/*!40000 ALTER TABLE `lab_config_access` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `lab_config_access` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `lab_config_access` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `lab_config_settings`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `lab_config_settings`;
+1in here
+CREATE TABLE `lab_config_settings` (
+1in here
+  `id` int(11) NOT NULL,
+1in here
+  `flag1` int(11) default NULL,
+1in here
+  `flag2` int(11) default NULL,
+1in here
+  `flag3` int(11) default NULL,
+1in here
+  `flag4` int(11) default NULL,
+1in here
+  `setting1` varchar(200) collate latin1_general_ci default NULL,
+1in here
+  `setting2` varchar(200) collate latin1_general_ci default NULL,
+1in here
+  `setting3` varchar(200) collate latin1_general_ci default NULL,
+1in here
+  `setting4` varchar(200) collate latin1_general_ci default NULL,
+1in here
+  `misc` varchar(500) collate latin1_general_ci default NULL,
+1in here
+  `remarks` varchar(500) collate latin1_general_ci default NULL,
+1in here
+  `ts` timestamp NULL default CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `lab_config_settings`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `lab_config_settings` WRITE;
+1in here
+/*!40000 ALTER TABLE `lab_config_settings` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `lab_config_settings` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `lab_config_settings` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `lab_config_specimen_type`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `lab_config_specimen_type`;
+1in here
+CREATE TABLE `lab_config_specimen_type` (
+1in here
+  `lab_config_id` int(10) unsigned NOT NULL default '0',
+1in here
+  `specimen_type_id` int(10) unsigned NOT NULL default '0'
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `lab_config_specimen_type`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `lab_config_specimen_type` WRITE;
+1in here
+/*!40000 ALTER TABLE `lab_config_specimen_type` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `lab_config_specimen_type` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `lab_config_specimen_type` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `lab_config_test_type`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `lab_config_test_type`;
+1in here
+CREATE TABLE `lab_config_test_type` (
+1in here
+  `lab_config_id` int(10) unsigned NOT NULL default '0',
+1in here
+  `test_type_id` int(10) unsigned NOT NULL default '0'
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `lab_config_test_type`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `lab_config_test_type` WRITE;
+1in here
+/*!40000 ALTER TABLE `lab_config_test_type` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `lab_config_test_type` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `lab_config_test_type` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `labtitle_custom_field`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `labtitle_custom_field`;
+1in here
+CREATE TABLE `labtitle_custom_field` (
+1in here
+  `id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `field_name` varchar(45) NOT NULL,
+1in here
+  `field_options` varchar(200) NOT NULL,
+1in here
+  `field_type_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`),
+1in here
+  KEY `field_type_id` (`field_type_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `labtitle_custom_field`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `labtitle_custom_field` WRITE;
+1in here
+/*!40000 ALTER TABLE `labtitle_custom_field` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `labtitle_custom_field` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `labtitle_custom_field` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `measure`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `measure`;
+1in here
+CREATE TABLE `measure` (
+1in here
+  `measure_id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `name` varchar(45) NOT NULL default '',
+1in here
+  `unit_id` int(10) unsigned default NULL,
+1in here
+  `range` varchar(500) default NULL,
+1in here
+  `description` varchar(500) default NULL,
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  `unit` varchar(30) default NULL,
+1in here
+  PRIMARY KEY  (`measure_id`),
+1in here
+  KEY `unit_id` (`unit_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=179 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `measure`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `measure` WRITE;
+1in here
+/*!40000 ALTER TABLE `measure` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `measure` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `measure` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `misc`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `misc`;
+1in here
+CREATE TABLE `misc` (
+1in here
+  `id` int(11) NOT NULL auto_increment,
+1in here
+  `r_id` int(11) NOT NULL default '0',
+1in here
+  `vr_id` varchar(45) collate latin1_general_ci NOT NULL default '0',
+1in here
+  `i1` int(11) NOT NULL default '0',
+1in here
+  `i2` int(11) NOT NULL default '0',
+1in here
+  `i3` int(11) NOT NULL default '0',
+1in here
+  `i4` int(11) NOT NULL default '0',
+1in here
+  `i5` int(11) NOT NULL default '0',
+1in here
+  `v1` varchar(500) collate latin1_general_ci NOT NULL default '0',
+1in here
+  `v2` varchar(500) collate latin1_general_ci NOT NULL default '0',
+1in here
+  `v3` varchar(500) collate latin1_general_ci NOT NULL default '0',
+1in here
+  `v4` varchar(500) collate latin1_general_ci NOT NULL default '0',
+1in here
+  `v5` varchar(500) collate latin1_general_ci NOT NULL default '0',
+1in here
+  `dt1` datetime default NULL,
+1in here
+  `dt2` datetime default NULL,
+1in here
+  `dt3` datetime default NULL,
+1in here
+  `d1` date default NULL,
+1in here
+  `d2` date default NULL,
+1in here
+  `d3` date default NULL,
+1in here
+  `ts` timestamp NULL default CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `misc`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `misc` WRITE;
+1in here
+/*!40000 ALTER TABLE `misc` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `misc` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `numeric_interpretation`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `numeric_interpretation`;
+1in here
+CREATE TABLE `numeric_interpretation` (
+1in here
+  `range_u` int(10) default NULL,
+1in here
+  `range_l` int(10) default NULL,
+1in here
+  `age_u` int(10) default NULL,
+1in here
+  `age_l` int(10) default NULL,
+1in here
+  `gender` varchar(40) default NULL,
+1in here
+  `description` varchar(40) default NULL,
+1in here
+  `measure_id` int(10) default NULL,
+1in here
+  `id` int(10) NOT NULL auto_increment,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `numeric_interpretation`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `numeric_interpretation` WRITE;
+1in here
+/*!40000 ALTER TABLE `numeric_interpretation` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `numeric_interpretation` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `numeric_interpretation` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `patient`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `patient`;
+1in here
+CREATE TABLE `patient` (
+1in here
+  `patient_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `addl_id` varchar(40) default NULL,
+1in here
+  `name` varchar(45) default NULL,
+1in here
+  `sex` char(1) NOT NULL default '',
+1in here
+  `age` decimal(10,0) default NULL,
+1in here
+  `dob` date default NULL,
+1in here
+  `created_by` int(11) unsigned default NULL,
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+1in here
+  `partial_dob` varchar(45) default NULL,
+1in here
+  `surr_id` varchar(45) default NULL,
+1in here
+  `hash_value` varchar(100) default NULL,
+1in here
+  PRIMARY KEY  (`patient_id`),
+1in here
+  KEY `created_by` (`created_by`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `patient`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `patient` WRITE;
+1in here
+/*!40000 ALTER TABLE `patient` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `patient` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `patient` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `patient_custom_data`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `patient_custom_data`;
+1in here
+CREATE TABLE `patient_custom_data` (
+1in here
+  `id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `field_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `patient_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `field_value` varchar(45) NOT NULL default '',
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`),
+1in here
+  KEY `field_id` (`field_id`),
+1in here
+  KEY `patient_id` (`patient_id`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `patient_custom_data`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `patient_custom_data` WRITE;
+1in here
+/*!40000 ALTER TABLE `patient_custom_data` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `patient_custom_data` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `patient_custom_field`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `patient_custom_field`;
+1in here
+CREATE TABLE `patient_custom_field` (
+1in here
+  `id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `field_name` varchar(45) NOT NULL default '',
+1in here
+  `field_options` varchar(65474) default NULL,
+1in here
+  `field_type_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`),
+1in here
+  KEY `field_type_id` (`field_type_id`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `patient_custom_field`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `patient_custom_field` WRITE;
+1in here
+/*!40000 ALTER TABLE `patient_custom_field` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `patient_custom_field` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `patient_daily`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `patient_daily`;
+1in here
+CREATE TABLE `patient_daily` (
+1in here
+  `datestring` varchar(45) NOT NULL,
+1in here
+  `count` int(10) unsigned NOT NULL
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `patient_daily`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `patient_daily` WRITE;
+1in here
+/*!40000 ALTER TABLE `patient_daily` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `patient_daily` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `patient_daily` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `patient_report_fields_order`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `patient_report_fields_order`;
+1in here
+CREATE TABLE `patient_report_fields_order` (
+1in here
+  `id` int(10) unsigned NOT NULL auto_increment,
+1in here
+  `p_fields` varchar(500) collate latin1_general_ci NOT NULL default '',
+1in here
+  `o_fields` varchar(500) collate latin1_general_ci NOT NULL default '',
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `patient_report_fields_order`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `patient_report_fields_order` WRITE;
+1in here
+/*!40000 ALTER TABLE `patient_report_fields_order` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `patient_report_fields_order` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `payments`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `payments`;
+1in here
+CREATE TABLE `payments` (
+1in here
+  `id` int(11) NOT NULL auto_increment,
+1in here
+  `amount` decimal(10,2) NOT NULL default '0.00',
+1in here
+  `bill_id` int(11) unsigned NOT NULL,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `payments`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `payments` WRITE;
+1in here
+/*!40000 ALTER TABLE `payments` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `payments` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `reference_range`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `reference_range`;
+1in here
+CREATE TABLE `reference_range` (
+1in here
+  `id` int(10) unsigned NOT NULL auto_increment,
+1in here
+  `measure_id` int(10) unsigned NOT NULL,
+1in here
+  `age_min` varchar(45) default NULL,
+1in here
+  `age_max` varchar(45) default NULL,
+1in here
+  `sex` varchar(10) default NULL,
+1in here
+  `range_lower` varchar(45) NOT NULL,
+1in here
+  `range_upper` varchar(45) NOT NULL,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=112 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `reference_range`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `reference_range` WRITE;
+1in here
+/*!40000 ALTER TABLE `reference_range` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `reference_range` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `reference_range` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `removal_record`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `removal_record`;
+1in here
+CREATE TABLE `removal_record` (
+1in here
+  `id` int(11) NOT NULL auto_increment,
+1in here
+  `r_id` int(11) NOT NULL default '0',
+1in here
+  `vr_id` varchar(45) collate latin1_general_ci NOT NULL default '0',
+1in here
+  `type` int(11) default NULL,
+1in here
+  `user_id` int(11) default '0',
+1in here
+  `remarks` varchar(500) collate latin1_general_ci default NULL,
+1in here
+  `status` int(11) NOT NULL default '1',
+1in here
+  `ts` timestamp NULL default CURRENT_TIMESTAMP,
+1in here
+  `category` varchar(20) collate latin1_general_ci default 'test',
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `removal_record`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `removal_record` WRITE;
+1in here
+/*!40000 ALTER TABLE `removal_record` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `removal_record` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `report_config`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `report_config`;
+1in here
+CREATE TABLE `report_config` (
+1in here
+  `report_id` int(10) unsigned NOT NULL auto_increment,
+1in here
+  `header` varchar(500) NOT NULL default '',
+1in here
+  `footer` varchar(500) NOT NULL default '-End-',
+1in here
+  `margins` varchar(45) NOT NULL default '2,0,10,0',
+1in here
+  `p_fields` varchar(45) NOT NULL default '1,1,1,1,1,1,1',
+1in here
+  `s_fields` varchar(45) NOT NULL default '1,1,1,1,1,1',
+1in here
+  `t_fields` varchar(45) NOT NULL default '1,0,1,1,1,0,1,1',
+1in here
+  `p_custom_fields` varchar(45) NOT NULL default '',
+1in here
+  `s_custom_fields` varchar(45) NOT NULL default '',
+1in here
+  `test_type_id` varchar(45) NOT NULL default '0',
+1in here
+  `title` varchar(500) NOT NULL default '',
+1in here
+  `landscape` int(10) unsigned NOT NULL default '0',
+1in here
+  `row_items` int(1) unsigned NOT NULL default '3',
+1in here
+  `show_border` int(1) unsigned NOT NULL default '1',
+1in here
+  `show_result_border` int(1) unsigned NOT NULL default '1',
+1in here
+  `result_border_horizontal` int(1) unsigned NOT NULL default '0',
+1in here
+  `result_border_vertical` int(1) unsigned NOT NULL default '0',
+1in here
+  PRIMARY KEY  (`report_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=78 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `report_config`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `report_config` WRITE;
+1in here
+/*!40000 ALTER TABLE `report_config` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `report_config` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `report_config` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `report_disease`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `report_disease`;
+1in here
+CREATE TABLE `report_disease` (
+1in here
+  `id` int(10) unsigned NOT NULL auto_increment,
+1in here
+  `group_by_age` int(10) unsigned NOT NULL,
+1in here
+  `group_by_gender` int(10) unsigned NOT NULL,
+1in here
+  `age_groups` varchar(500) default NULL,
+1in here
+  `measure_groups` varchar(500) default NULL,
+1in here
+  `measure_id` int(10) unsigned NOT NULL,
+1in here
+  `lab_config_id` int(10) unsigned NOT NULL,
+1in here
+  `test_type_id` int(10) unsigned NOT NULL,
+1in here
+  PRIMARY KEY  USING BTREE (`id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=1639 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `report_disease`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `report_disease` WRITE;
+1in here
+/*!40000 ALTER TABLE `report_disease` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `report_disease` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `report_disease` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `sites`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `sites`;
+1in here
+CREATE TABLE `sites` (
+1in here
+  `id` int(11) NOT NULL auto_increment,
+1in here
+  `name` varchar(255) default NULL,
+1in here
+  `lab_id` int(11) default NULL,
+1in here
+  `Region` varchar(40) default NULL,
+1in here
+  `District` varchar(40) default NULL,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `sites`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `sites` WRITE;
+1in here
+/*!40000 ALTER TABLE `sites` DISABLE KEYS */;
+1in here
+INSERT INTO `sites` VALUES (1,'Testlab1',127,NULL,NULL);
+1in here
+/*!40000 ALTER TABLE `sites` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `specimen`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `specimen`;
+1in here
+CREATE TABLE `specimen` (
+1in here
+  `specimen_id` int(10) unsigned NOT NULL default '0',
+1in here
+  `patient_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `specimen_type_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `user_id` int(11) unsigned default NULL,
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+1in here
+  `status_code_id` int(11) unsigned default NULL,
+1in here
+  `referred_to` int(11) unsigned default NULL,
+1in here
+  `comments` text,
+1in here
+  `aux_id` varchar(45) default NULL,
+1in here
+  `date_collected` date NOT NULL default '0000-00-00',
+1in here
+  `date_recvd` date default NULL,
+1in here
+  `session_num` varchar(45) default NULL,
+1in here
+  `time_collected` varchar(45) default NULL,
+1in here
+  `report_to` int(10) unsigned default NULL,
+1in here
+  `doctor` varchar(45) default NULL,
+1in here
+  `date_reported` datetime default NULL,
+1in here
+  `referred_to_name` varchar(70) default NULL,
+1in here
+  `daily_num` varchar(45) NOT NULL default '',
+1in here
+  `referred_from_name` varchar(20) default NULL,
+1in here
+  `site_id` int(11) default NULL,
+1in here
+  PRIMARY KEY  (`specimen_id`),
+1in here
+  KEY `patient_id` (`patient_id`),
+1in here
+  KEY `specimen_type_id` (`specimen_type_id`),
+1in here
+  KEY `user_id` (`user_id`),
+1in here
+  KEY `status_code_id` (`status_code_id`),
+1in here
+  KEY `referred_to` (`referred_to`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `specimen`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `specimen` WRITE;
+1in here
+/*!40000 ALTER TABLE `specimen` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `specimen` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `specimen` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `specimen` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `specimen_custom_data`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `specimen_custom_data`;
+1in here
+CREATE TABLE `specimen_custom_data` (
+1in here
+  `id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `field_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `specimen_id` int(10) unsigned NOT NULL default '0',
+1in here
+  `field_value` varchar(45) NOT NULL default '',
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`),
+1in here
+  KEY `field_id` (`field_id`),
+1in here
+  KEY `specimen_id` (`specimen_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `specimen_custom_data`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `specimen_custom_data` WRITE;
+1in here
+/*!40000 ALTER TABLE `specimen_custom_data` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `specimen_custom_data` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `specimen_custom_field`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `specimen_custom_field`;
+1in here
+CREATE TABLE `specimen_custom_field` (
+1in here
+  `id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `field_name` varchar(45) NOT NULL default '',
+1in here
+  `field_options` varchar(65474) default NULL,
+1in here
+  `field_type_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`),
+1in here
+  KEY `field_type_id` (`field_type_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `specimen_custom_field`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `specimen_custom_field` WRITE;
+1in here
+/*!40000 ALTER TABLE `specimen_custom_field` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `specimen_custom_field` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `specimen_session`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `specimen_session`;
+1in here
+CREATE TABLE `specimen_session` (
+1in here
+  `session_num` varchar(45) NOT NULL default '',
+1in here
+  `count` int(10) unsigned NOT NULL default '0',
+1in here
+  PRIMARY KEY  (`session_num`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `specimen_session`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `specimen_session` WRITE;
+1in here
+/*!40000 ALTER TABLE `specimen_session` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `specimen_session` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `specimen_session` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `specimen_test`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `specimen_test`;
+1in here
+CREATE TABLE `specimen_test` (
+1in here
+  `test_type_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `specimen_type_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  KEY `test_type_id` (`test_type_id`),
+1in here
+  KEY `specimen_type_id` (`specimen_type_id`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Relates tests to the specimens that are compatible with thos';
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `specimen_test`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `specimen_test` WRITE;
+1in here
+/*!40000 ALTER TABLE `specimen_test` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `specimen_test` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `specimen_test` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `specimen_type`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `specimen_type`;
+1in here
+CREATE TABLE `specimen_type` (
+1in here
+  `specimen_type_id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `name` varchar(45) NOT NULL default '',
+1in here
+  `description` varchar(100) default NULL,
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  `disabled` int(10) unsigned NOT NULL default '0',
+1in here
+  PRIMARY KEY  (`specimen_type_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `specimen_type`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `specimen_type` WRITE;
+1in here
+/*!40000 ALTER TABLE `specimen_type` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `specimen_type` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `specimen_type` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `stock_content`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `stock_content`;
+1in here
+CREATE TABLE `stock_content` (
+1in here
+  `name` varchar(40) default NULL,
+1in here
+  `current_quantity` int(11) default NULL,
+1in here
+  `date_of_use` date NOT NULL,
+1in here
+  `receiver` varchar(40) default NULL,
+1in here
+  `remarks` text,
+1in here
+  `lot_number` varchar(40) default NULL,
+1in here
+  `new_balance` int(11) default NULL,
+1in here
+  `user_name` varchar(40) default NULL
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `stock_content`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `stock_content` WRITE;
+1in here
+/*!40000 ALTER TABLE `stock_content` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `stock_content` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `stock_content` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `stock_details`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `stock_details`;
+1in here
+CREATE TABLE `stock_details` (
+1in here
+  `name` varchar(40) default NULL,
+1in here
+  `lot_number` varchar(40) default NULL,
+1in here
+  `expiry_date` varchar(40) default NULL,
+1in here
+  `manufacturer` varchar(40) default NULL,
+1in here
+  `quantity_ordered` int(11) default NULL,
+1in here
+  `supplier` varchar(40) default NULL,
+1in here
+  `date_of_reception` timestamp NOT NULL default CURRENT_TIMESTAMP,
+1in here
+  `current_quantity` int(11) default NULL,
+1in here
+  `date_of_supply` timestamp NOT NULL default '0000-00-00 00:00:00',
+1in here
+  `quantity_supplied` int(11) default NULL,
+1in here
+  `unit` varchar(10) default NULL,
+1in here
+  `entry_id` int(11) default NULL,
+1in here
+  `cost_per_unit` decimal(10,0) default '0',
+1in here
+  `quantity_used` int(10) default '0',
+1in here
+  `used` varchar(1000) default '',
+1in here
+  `user` varchar(1000) default '',
+1in here
+  `receiver` varchar(1000) default '',
+1in here
+  `remarks` varchar(1000) default '',
+1in here
+  UNIQUE KEY `entry_id` (`entry_id`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `stock_details`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `stock_details` WRITE;
+1in here
+/*!40000 ALTER TABLE `stock_details` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `stock_details` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `stock_details` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `test`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `test`;
+1in here
+CREATE TABLE `test` (
+1in here
+  `test_id` int(10) unsigned NOT NULL auto_increment,
+1in here
+  `test_type_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `result` varchar(5000) default NULL,
+1in here
+  `comments` varchar(200) default NULL,
+1in here
+  `user_id` int(11) unsigned default NULL,
+1in here
+  `verified_by` int(11) unsigned default NULL,
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+1in here
+  `specimen_id` int(11) unsigned default NULL,
+1in here
+  `date_verified` datetime default NULL,
+1in here
+  PRIMARY KEY  (`test_id`),
+1in here
+  KEY `test_type_id` (`test_type_id`),
+1in here
+  KEY `user_id` (`user_id`),
+1in here
+  KEY `specimen_id` (`specimen_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=11295 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `test`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `test` WRITE;
+1in here
+/*!40000 ALTER TABLE `test` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `test_agg_report_config`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `test_agg_report_config`;
+1in here
+CREATE TABLE `test_agg_report_config` (
+1in here
+  `id` int(11) NOT NULL auto_increment,
+1in here
+  `test_type_id` int(11) default NULL,
+1in here
+  `title` varchar(255) default NULL,
+1in here
+  `landscape` tinyint(1) default '1',
+1in here
+  `group_by_age` tinyint(1) default '1',
+1in here
+  `age_unit` int(11) default '1',
+1in here
+  `age_groups` varchar(255) default NULL,
+1in here
+  `report_type` int(11) default NULL,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `test_agg_report_config`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `test_agg_report_config` WRITE;
+1in here
+/*!40000 ALTER TABLE `test_agg_report_config` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test_agg_report_config` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test_agg_report_config` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `test_category`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `test_category`;
+1in here
+CREATE TABLE `test_category` (
+1in here
+  `test_category_id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `name` varchar(45) NOT NULL default '',
+1in here
+  `description` varchar(100) default NULL,
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`test_category_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `test_category`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `test_category` WRITE;
+1in here
+/*!40000 ALTER TABLE `test_category` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test_category` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test_category` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `test_type`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `test_type`;
+1in here
+CREATE TABLE `test_type` (
+1in here
+  `test_type_id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `name` varchar(45) NOT NULL default '',
+1in here
+  `description` varchar(100) default NULL,
+1in here
+  `test_category_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  `is_panel` int(10) unsigned default NULL,
+1in here
+  `disabled` int(10) unsigned NOT NULL default '0',
+1in here
+  `clinical_data` longtext,
+1in here
+  `hide_patient_name` int(1) default NULL,
+1in here
+  `prevalence_threshold` int(3) default '70',
+1in here
+  `target_tat` int(3) default '24',
+1in here
+  `is_reporting_enabled` tinyint(1) default '0',
+1in here
+  PRIMARY KEY  (`test_type_id`),
+1in here
+  KEY `test_category_id` (`test_category_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `test_type`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `test_type` WRITE;
+1in here
+/*!40000 ALTER TABLE `test_type` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test_type` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test_type` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `test_type_costs`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `test_type_costs`;
+1in here
+CREATE TABLE `test_type_costs` (
+1in here
+  `earliest_date_valid` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  `test_type_id` int(11) NOT NULL,
+1in here
+  `amount` decimal(10,2) NOT NULL default '0.00'
+1in here
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `test_type_costs`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `test_type_costs` WRITE;
+1in here
+/*!40000 ALTER TABLE `test_type_costs` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test_type_costs` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test_type_costs` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `test_type_measure`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `test_type_measure`;
+1in here
+CREATE TABLE `test_type_measure` (
+1in here
+  `test_type_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `measure_id` int(11) unsigned NOT NULL default '0',
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  KEY `test_type_id` (`test_type_id`),
+1in here
+  KEY `measure_id` (`measure_id`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `test_type_measure`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `test_type_measure` WRITE;
+1in here
+/*!40000 ALTER TABLE `test_type_measure` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test_type_measure` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `test_type_measure` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `unit`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `unit`;
+1in here
+CREATE TABLE `unit` (
+1in here
+  `unit_id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `unit` varchar(45) NOT NULL default '',
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`unit_id`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `unit`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `unit` WRITE;
+1in here
+/*!40000 ALTER TABLE `unit` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `unit` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `user`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `user`;
+1in here
+CREATE TABLE `user` (
+1in here
+  `user_id` int(11) unsigned NOT NULL auto_increment,
+1in here
+  `username` varchar(45) NOT NULL default '',
+1in here
+  `password` varchar(45) NOT NULL default '',
+1in here
+  `actualname` varchar(45) default NULL,
+1in here
+  `email` varchar(45) default NULL,
+1in here
+  `created_by` int(11) unsigned default NULL,
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+1in here
+  `lab_config_id` int(10) unsigned default NULL,
+1in here
+  `level` int(10) unsigned default NULL,
+1in here
+  `phone` varchar(45) default NULL,
+1in here
+  `lang_id` varchar(45) NOT NULL default 'default',
+1in here
+  PRIMARY KEY  (`user_id`),
+1in here
+  KEY `user_id_index` USING BTREE (`lab_config_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=247 DEFAULT CHARSET=latin1 COMMENT='Users are anybody that works in the lab.';
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `user`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `user` WRITE;
+1in here
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `user_feedback`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `user_feedback`;
+1in here
+CREATE TABLE `user_feedback` (
+1in here
+  `id` int(11) NOT NULL auto_increment,
+1in here
+  `user_id` int(11) default NULL,
+1in here
+  `rating` int(3) default NULL,
+1in here
+  `comments` varchar(500) default NULL,
+1in here
+  `ts` timestamp NULL default CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `user_feedback`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `user_feedback` WRITE;
+1in here
+/*!40000 ALTER TABLE `user_feedback` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `user_feedback` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `user_feedback` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `user_props`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `user_props`;
+1in here
+CREATE TABLE `user_props` (
+1in here
+  `User_Id` varchar(50) NOT NULL default '',
+1in here
+  `AppCodeName` varchar(25) NOT NULL default '',
+1in here
+  `AppName` varchar(25) NOT NULL default '',
+1in here
+  `AppVersion` varchar(25) NOT NULL default '',
+1in here
+  `CookieEnabled` tinyint(1) NOT NULL default '0',
+1in here
+  `Platform` varchar(20) NOT NULL default '',
+1in here
+  `UserAgent` varchar(200) NOT NULL default '',
+1in here
+  `SystemLanguage` varchar(15) NOT NULL default '',
+1in here
+  `UserLanguage` varchar(15) NOT NULL default '',
+1in here
+  `Language` varchar(15) NOT NULL default '',
+1in here
+  `ScreenAvailHeight` int(11) NOT NULL default '0',
+1in here
+  `ScreenAvailWidth` int(11) NOT NULL default '0',
+1in here
+  `ScreenColorDepth` int(11) NOT NULL default '0',
+1in here
+  `ScreenHeight` int(11) NOT NULL default '0',
+1in here
+  `ScreenWidth` int(11) NOT NULL default '0',
+1in here
+  `Recorded_At` datetime NOT NULL default '0000-00-00 00:00:00'
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `user_props`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `user_props` WRITE;
+1in here
+/*!40000 ALTER TABLE `user_props` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `user_props` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `user_props` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `user_rating`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `user_rating`;
+1in here
+CREATE TABLE `user_rating` (
+1in here
+  `user_id` int(10) unsigned NOT NULL,
+1in here
+  `rating` int(10) unsigned NOT NULL,
+1in here
+  `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
+1in here
+  PRIMARY KEY  (`user_id`,`ts`)
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `user_rating`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `user_rating` WRITE;
+1in here
+/*!40000 ALTER TABLE `user_rating` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `user_rating` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `user_rating` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `worksheet_custom`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `worksheet_custom`;
+1in here
+CREATE TABLE `worksheet_custom` (
+1in here
+  `id` int(10) unsigned NOT NULL auto_increment,
+1in here
+  `name` varchar(100) NOT NULL,
+1in here
+  `header` varchar(500) NOT NULL,
+1in here
+  `footer` varchar(500) NOT NULL,
+1in here
+  `title` varchar(500) NOT NULL,
+1in here
+  `p_fields` varchar(100) NOT NULL,
+1in here
+  `s_fields` varchar(100) NOT NULL,
+1in here
+  `t_fields` varchar(100) NOT NULL,
+1in here
+  `p_custom` varchar(100) NOT NULL,
+1in here
+  `s_custom` varchar(100) NOT NULL,
+1in here
+  `margins` varchar(50) NOT NULL,
+1in here
+  `id_fields` varchar(45) NOT NULL default '0,0,0',
+1in here
+  `landscape` int(10) unsigned NOT NULL default '0',
+1in here
+  PRIMARY KEY  (`id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `worksheet_custom`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `worksheet_custom` WRITE;
+1in here
+/*!40000 ALTER TABLE `worksheet_custom` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `worksheet_custom` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `worksheet_custom` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `worksheet_custom_test`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `worksheet_custom_test`;
+1in here
+CREATE TABLE `worksheet_custom_test` (
+1in here
+  `worksheet_id` int(10) unsigned NOT NULL,
+1in here
+  `test_type_id` int(10) unsigned NOT NULL,
+1in here
+  `measure_id` int(10) unsigned NOT NULL,
+1in here
+  `width` varchar(45) NOT NULL
+1in here
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `worksheet_custom_test`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `worksheet_custom_test` WRITE;
+1in here
+/*!40000 ALTER TABLE `worksheet_custom_test` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `worksheet_custom_test` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+
+1in here
+--
+1in here
+-- Table structure for table `worksheet_custom_userfield`
+1in here
+--
+1in here
+
+1in here
+DROP TABLE IF EXISTS `worksheet_custom_userfield`;
+1in here
+CREATE TABLE `worksheet_custom_userfield` (
+1in here
+  `worksheet_id` int(10) unsigned NOT NULL,
+1in here
+  `name` varchar(70) NOT NULL default '',
+1in here
+  `width` int(10) unsigned NOT NULL default '10',
+1in here
+  `field_id` int(10) unsigned NOT NULL auto_increment,
+1in here
+  KEY `Primary Key` (`field_id`)
+1in here
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+1in here
+
+1in here
+--
+1in here
+-- Dumping data for table `worksheet_custom_userfield`
+1in here
+--
+1in here
+
+1in here
+LOCK TABLES `worksheet_custom_userfield` WRITE;
+1in here
+/*!40000 ALTER TABLE `worksheet_custom_userfield` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `worksheet_custom_userfield` DISABLE KEYS */;
+1in here
+/*!40000 ALTER TABLE `worksheet_custom_userfield` ENABLE KEYS */;
+1in here
+UNLOCK TABLES;
+1in here
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+1in here
+
+1in here
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+1in here
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+1in here
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+1in here
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+1in here
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+1in here
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+1in here
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+1in here
+
+1in here
+-- Dump completed on 2019-11-27  0:54:33
+1in here
+1in here
