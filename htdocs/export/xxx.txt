@@ -1,0 +1,4 @@
+abcenc :1
+127
+ lid
+12345C: &"C:\blis\old\server\mysql\bin\mysql.exe" -h localhost -P 7188 -u root -pblis123  < C:\blis\old\htdocs\export/uploads/blis_backup_Testlab1---GT_20191231-1020_enc/blis_127/blis_127_backup.sql.dec

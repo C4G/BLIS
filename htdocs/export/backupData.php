@@ -15,7 +15,21 @@ $lab_config_id = $user->labConfigId;
 $backupType = $_REQUEST['backupTypeSelect'];
 $keyLocation = "../tmpPublicKey.pem";
 $LabName=$_POST['target'];
-$pubKey=file_get_contents("../ajax/LAB_".$_SESSION['lab_config_id']."_pubkey.blis");
+$ploc="../ajax/LAB_".$_SESSION['lab_config_id']."_pubkey.blis";
+if(KeyMgmt::read_enc_setting()==1)
+{
+if($LabName==="Current Lab")
+{
+if(!file_exists($ploc))
+{
+echo "Please go to Lab Configuration -> Manage Backup Keys and click the download public key button to be able to use the encryption functionality.";
+return;
+}
+else
+$pubKey=file_get_contents($ploc);
+}
+}
+
 
 if($LabName!=="Current Lab")
 {

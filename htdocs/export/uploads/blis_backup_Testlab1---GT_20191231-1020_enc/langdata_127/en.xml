@@ -1,0 +1,2678 @@
+<?xml version="1.0"?>
+<pages lang="default" descr="Default" version="0.8.4">
+	<page id="general" descr="General Terms">
+		<term>
+			<key>TIPS</key>
+			<value>Tips</value>
+		</term>
+		<term>
+			<key>USERNAME</key>
+			<value>Username</value>
+		</term>
+		<term>
+			<key>PWD</key>
+			<value>Password</value>
+		</term>
+		<term>
+			<key>DEFAULT_CURRENCY</key>
+			<value>Default Currency Name:</value>
+		</term>
+		<term>
+			<key>CURRENCY_DELIMITER</key>
+			<value>Currency Delimiter:</value>
+		</term>
+		<term>
+			<key>CURRENCY</key>
+			<value>Currency</value>
+		</term>
+		<term>
+			<key>ADD_USER_TYPE</key>
+			<value>Add New User Type</value>
+		</term>
+		<term>
+			<key>EXCHANGE_RATE</key>
+			<value>Exchange Rate</value>
+		</term>
+		<term>
+			<key>UPDATED_DATE</key>
+			<value>Updated Date</value>
+		</term>
+		<term>
+			<key>RELATED_TESTS_NOTFOUND</key>
+			<value>Related Tests Not Found</value>
+		</term>
+		<term>
+			<key>ACTIONS</key>
+			<value>Actions</value>
+		</term>
+		<term>
+			<key>ADD_CURRENCY_RATEY</key>
+			<value>Add new currency rate</value>
+		</term>
+		<term>
+			<key>ADD_CURRENCY</key>
+			<value>Add a new currency &gt;&gt;</value>
+		</term>
+		<term>
+			<key>NEW_CURRENCY</key>
+			<value>New Currency</value>
+		</term>
+		<term>
+			<key>PWD_TEMP</key>
+			<value>Temp Password</value>
+		</term>
+		<term>
+			<key>PWD_RESET</key>
+			<value>Reset Password</value>
+		</term>
+		<term>
+			<key>NAME</key>
+			<value>Name</value>
+		</term>
+		<term>
+			<key>PHONE</key>
+			<value>Phone No.</value>
+		</term>
+		<term>
+			<key>EMAIL</key>
+			<value>Email</value>
+		</term>
+		<term>
+			<key>CMD_LOGIN</key>
+			<value>Login</value>
+		</term>
+		<term>
+			<key>CMD_SEARCH</key>
+			<value>Search</value>
+		</term>
+		<term>
+			<key>CMD_SUBMIT</key>
+			<value>Submit</value>
+		</term>
+		<term>
+			<key>CMD_SUBMITTING</key>
+			<value>Submitting</value>
+		</term>
+		<term>
+			<key>CMD_UPDATE</key>
+			<value>Update</value>
+		</term>
+		<term>
+			<key>MSG_UPDATED</key>
+			<value>Updated</value>
+		</term>
+		<term>
+			<key>CMD_CANCEL</key>
+			<value>Cancel</value>
+		</term>
+		<term>
+			<key>CMD_SKIP</key>
+			<value>Skip</value>
+		</term>
+		<term>
+			<key>CMD_HIDE</key>
+			<value>Hide</value>
+		</term>
+		<term>
+			<key>CMD_SHOW</key>
+			<value>Show</value>
+		</term>
+		<term>
+			<key>REPORT_TYPE</key>
+			<value>Report Type</value>
+		</term>
+		<term>
+			<key>REPORT_TO</key>
+			<value>Report To</value>
+		</term>
+		<term>
+			<key>MSG_REQDFIELD</key>
+			<value>This field is required</value>
+		</term>
+		<term>
+			<key>REPORTED</key>
+			<value>Reported</value>
+		</term>
+		<term>
+			<key>REPORTED_NOT</key>
+			<value>Not Yet Reported</value>
+		</term>
+		<term>
+			<key>SKIPPED</key>
+			<value>Skipped</value>
+		</term>
+		<term>
+			<key>CMD_BACK</key>
+			<value>Back</value>
+		</term>
+		<term>
+			<key>CMD_GETREPORT</key>
+			<value>Get Report</value>
+		</term>
+		<term>
+			<key>CMD_GET_SPECIMEN_REPORT</key>
+			<value>Get Specimen Report</value>
+		</term>
+		<term>
+			<key>CMD_GET_TEST_REPORT</key>
+			<value>Get Test Report</value>
+		</term>
+		<term>
+			<key>MSG_SELECT_TTYPE</key>
+			<value>Select test type first</value>
+		</term>
+		<term>
+			<key>CMD_EDIT</key>
+			<value>Edit</value>
+		</term>
+		<term>
+			<key>CMD_EXPORTWORD</key>
+			<value>Export as Word Document</value>
+		</term>
+		<term>
+			<key>CMD_EXPORTTXT</key>
+			<value>Export as Text File</value>
+		</term>
+		<term>
+			<key>CMD_EXPORTPDF</key>
+			<value>Export as PDF</value>
+		</term>
+		<term>
+			<key>CMD_SELECT</key>
+			<value>Select</value>
+		</term>
+		<term>
+			<key>CMD_DELETE</key>
+			<value>Delete</value>
+		</term>
+		<term>
+			<key>CMD_ENTER</key>
+			<value>Enter</value>
+		</term>
+		<term>
+			<key>CMD_OK</key>
+			<value>OK</value>
+		</term>
+		<term>
+			<key>CMD_PRINT</key>
+			<value>Print</value>
+		</term>
+		<term>
+			<key>CMD_SEARCHING</key>
+			<value>Searching</value>
+		</term>
+		<term>
+			<key>CMD_FETCH</key>
+			<value>Fetch</value>
+		</term>
+		<term>
+			<key>CMD_FETCHING</key>
+			<value>Fetching</value>
+		</term>
+		<term>
+			<key>MSG_DELETED</key>
+			<value>Deleted</value>
+		</term>
+		<term>
+			<key>MSG_RESET</key>
+			<value>Reset</value>
+		</term>
+		<term>
+			<key>SELECT_ONE</key>
+			<value>Select one</value>
+		</term>
+		<term>
+			<key>CMD_CLOSEPAGE</key>
+			<value>Close This Page</value>
+		</term>
+		<term>
+			<key>CMD_CLOSEPREVIEW</key>
+			<value>Close Preview</value>
+		</term>
+		<term>
+			<key>FACILITY</key>
+			<value>Facility</value>
+		</term>
+		<term>
+			<key>LOCATION</key>
+			<value>Location</value>
+		</term>
+		<term>
+			<key>LAB_MGR</key>
+			<value>Lab Manager</value>
+		</term>
+		<term>
+			<key>LAB_DIR</key>
+			<value>Country Director</value>
+		</term>
+		<term>
+			<key>TYPE</key>
+			<value>Type</value>
+		</term>
+		<term>
+			<key>LAB_STATUS</key>
+			<value>Lab Status</value>
+		</term>
+		<term>
+			<key>SP_STATUS</key>
+			<value>Status</value>
+		</term>
+		<term>
+			<key>MANAGE</key>
+			<value>Manage</value>
+		</term>
+		<term>
+			<key>CMD_ADDNEWACCOUNT</key>
+			<value>Add New Account</value>
+		</term>
+		<term>
+			<key>CMD_THISTORY</key>
+			<value>Test History</value>
+		</term>
+		<term>
+			<key>DOCTOR</key>
+			<value>Physician</value>
+		</term>		
+		<term>
+			<key>PATIENT</key>
+			<value>Patient</value>
+		</term>
+		<term>
+			<key>PATIENTS</key>
+			<value>Patients</value>
+		</term>
+		<term>
+			<key>PATIENT_NAME</key>
+			<value>Patient Name</value>
+		</term>
+		<term>
+			<key>PATIENT_ID</key>
+			<value>Patient ID</value>
+		</term>
+		<term>
+			<key>PATIENT_BARCODE</key>
+			<value>Patient Barcode</value>
+		</term>
+		<term>
+			<key>PATIENT_SIGNATURE</key>
+			<value>Patient Signature</value>
+		</term>
+		<term>
+			<key>ADDL_ID</key>
+			<value>Additional ID</value>
+		</term>
+		<term>
+			<key>GENDER</key>
+			<value>Gender</value>
+		</term>
+		<term>
+			<key>MALE</key>
+			<value>Male</value>
+		</term>
+		<term>
+			<key>FEMALE</key>
+			<value>Female</value>
+		</term>
+		<term>
+			<key>PATIENT_DAILYNUM</key>
+			<value>Patient Number</value>
+		</term>		
+		<term>
+			<key>AGE</key>
+			<value>Age</value>
+		</term>
+		<term>
+			<key>OR</key>
+			<value>Or</value>
+		</term>
+		<term>
+			<key>DOB</key>
+			<value>Date of Birth</value>
+		</term>
+		<term>
+			<key>YEARS</key>
+			<value>Years</value>
+		</term>
+		<term>
+			<key>MONTHS</key>
+			<value>Months</value>
+		</term>
+		<term>
+			<key>WEEKS</key>
+			<value>Weeks</value>
+		</term>
+		<term>
+			<key>DAYS</key>
+			<value>Days</value>
+		</term>
+		<term>
+			<key>HOURS</key>
+			<value>Hours</value>
+		</term>
+		<term>
+			<key>MINUTES</key>
+			<value>Minutes</value>
+		</term>
+		<term>
+			<key>DROPDOWN</key>
+			<value>Drop-down Options</value>
+		</term>
+		<term>
+			<key>FREETEXT</key>
+			<value>Free-text</value>
+		</term>
+		<term>
+			<key>NUMERIC_FIELD</key>
+			<value>Numeric</value>
+		</term>
+		<term>
+			<key>MULTISELECT</key>
+			<value>Multi-select</value>
+		</term>
+		<term>
+			<key>ACCESSION_NUM</key>
+			<value>Accession No.</value>
+		</term>
+		<term>
+			<key>SPECIMEN</key>
+			<value>Specimen</value>
+		</term>
+		<term>
+			<key>IF_AVLBL</key>
+			<value>if available</value>
+		</term>
+		<term>
+			<key>SPECIMENS</key>
+			<value>Specimens</value>
+		</term>
+		<term>
+			<key>SPECIMEN_ID</key>
+			<value>Specimen ID</value>
+		</term>
+		<term>
+			<key>ADDL_ID_S</key>
+			<value>Additional ID</value>
+		</term>
+		<term>
+			<key>SPECIMEN_TYPE</key>
+			<value>Specimen Type</value>
+		</term>
+		<term>
+			<key>SPECIMEN_TYPES</key>
+			<value>Specimen Types</value>
+		</term>
+		<term>
+			<key>TEST</key>
+			<value>Test</value>
+		</term>
+		<term>
+			<key>TESTS</key>
+			<value>Tests</value>
+		</term>
+		<term>
+			<key>TEST_TYPE</key>
+			<value>Test Type</value>
+		</term>
+		<term>
+			<key>TEST_TYPES</key>
+			<value>Test Types</value>
+		</term>		
+		<term>
+			<key>CONTROL_TESTING_RESULTS</key>
+			<value>Control Results</value>
+		</term>
+		<term>
+			<key>DATE</key>
+			<value>Date</value>
+		</term>
+		<term>
+			<key>DATE_FORMAT</key>
+			<value>Date Format</value>
+		</term>
+		<term>
+			<key>R_DATE</key>
+			<value>Lab Receipt Date</value>
+		</term>
+		<term>
+			<key>C_DATE</key>
+			<value>Collection Date</value>
+		</term>
+		<term>
+			<key>C_TIME</key>
+			<value>Collection Time</value>
+		</term>
+		<term>
+			<key>E_DATE</key>
+			<value>Results Entry Date</value>
+		</term>
+		<term>
+			<key>RE_DATE</key>
+			<value>Date Reported</value>
+		</term>
+		<term>
+			<key>G_DATE</key>
+			<value>Date</value>
+		</term>
+		<term>
+			<key>CUMULATIVE</key>
+			<value>Cumulative</value>
+		</term>
+		<term>
+			<key>REGD_BY</key>
+			<value>Registered By</value>
+		</term>
+		<term>
+			<key>COMMENTS</key>
+			<value>Comments</value>
+		</term>
+		<term>
+			<key>TECHNICIAN</key>
+			<value>Technician</value>
+		</term>
+		<term>
+			<key>TECHNICIANS</key>
+			<value>Technicians</value>
+		</term>
+		<term>
+			<key>RESULTS</key>
+			<value>Results</value>
+		</term>
+		<term>
+			<key>RESULT_COMMENTS</key>
+			<value>Remarks</value>
+		</term>
+		<term>
+			<key>RANGE</key>
+			<value>Range</value>
+		</term>
+		<term>
+			<key>RANGE_OUTOF</key>
+			<value>Out of Range</value>
+		</term>
+		<term>
+			<key>DETAILS</key>
+			<value>Details</value>
+		</term>
+		<term>
+			<key>OPTIONAL</key>
+			<value>Optional</value>
+		</term>
+		<term>
+			<key>REF_OUT</key>
+			<value>Referred Out</value>
+		</term>
+		<term>
+			<key>PENDING_RESULTS</key>
+			<value>Results Pending</value>
+		</term>
+		<term>
+			<key>PENDING_VER</key>
+			<value>Verification Pending</value>
+		</term>
+		<term>
+			<key>DONE</key>
+			<value>Completed</value>
+		</term>
+		<term>
+			<key>REF_RETURNED</key>
+			<value>Referred out and Returned</value>
+		</term>
+		<term>
+			<key>MEASURES</key>
+			<value>Measures</value>
+		</term>
+		<term>
+			<key>VALUES</key>
+			<value>Values</value>
+		</term>
+		<term>
+			<key>OPTIONS</key>
+			<value>Options</value>
+		</term>
+		<term>
+			<key>UNIT</key>
+			<value>Unit</value>
+		</term>
+		<term>
+			<key>RANGE_NUMERIC</key>
+			<value>Numeric Range</value>
+		</term>
+		<term>
+			<key>RANGE_ALPHANUM</key>
+			<value>Alphanumeric Values</value>
+		</term>
+		<term>
+			<key>RANGE_AUTOCOMPLETE</key>
+			<value>Autocomplete</value>
+		</term>
+		<term>
+			<key>YES</key>
+			<value>Yes</value>
+		</term>
+		<term>
+			<key>NO</key>
+			<value>No</value>
+		</term>
+		<term>
+			<key>ERROR</key>
+			<value>Error</value>
+		</term>
+		<term>
+			<key>INVALID</key>
+			<value>Invalid</value>
+		</term>
+		<term>
+			<key>NOTKNOWN</key>
+			<value>Not Known</value>
+		</term>
+		<term>
+			<key>REGD_BY</key>
+			<value>Registered By</value>
+		</term>
+		<term>
+			<key>ENTERED_BY</key>
+			<value>Entered By</value>
+		</term>
+		<term>
+			<key>VERIFIED_BY</key>
+			<value>Verified By</value>
+		</term>
+		<term>
+			<key>ACTION</key>
+			<value>Action</value>
+		</term>
+		<term>
+			<key>RECORDS</key>
+			<value>Records</value>
+		</term>
+		<term>
+			<key>RECORDS_TEST</key>
+			<value>Test Records</value>
+		</term>
+		<term>
+			<key>RECORDS_SPECIMEN</key>
+			<value>Specimen Records</value>
+		</term>
+		<term>
+			<key>RECORDS_PATIENT</key>
+			<value>Patient Records</value>
+		</term>
+		<term>
+			<key>LAB_SECTION</key>
+			<value>Lab Section</value>
+		</term>
+		<term>
+			<key>CMD_VIEW</key>
+			<value>View</value>
+		</term>
+		<term>
+			<key>CMD_ADD</key>
+			<value>Add</value>
+		</term>
+		<term>
+			<key>PREVIEW</key>
+			<value>Preview</value>
+		</term>
+		<term>
+			<key>ALL</key>
+			<value>All</value>
+		</term>
+		<term>
+			<key>ALL_TESTS</key>
+			<value>All Tests</value>
+		</term>
+		<term>
+			<key>CMD_TRACK</key>
+			<value>Track Actions</value>
+		</term>
+		<term>
+			<key>MSG_NOTFOUND</key>
+			<value>Not Found</value>
+		</term>
+		<term>
+			<key>RELATED_TESTS_NOTFOUND</key>
+			<value>Related Tests Not Found</value>
+		</term>
+		<term>
+			<key>MSG_SIMILARNOTFOUND</key>
+			<value>No similar entries found</value>
+		</term>
+		<term>
+			<key>REF_TO</key>
+			<value>Referred To</value>
+		</term>
+		<term>
+			<key>CMD_REMOVE</key>
+			<value>Remove</value>
+		</term>
+		<term>
+			<key>CMD_VERIFY</key>
+			<value>Verify</value>
+		</term>
+		<term>
+			<key>ENTER_RESULTS</key>
+			<value>Enter Results</value>
+		</term>
+		<term>
+			<key>MSG_ADDED</key>
+			<value>Added</value>
+		</term>
+		<term>
+			<key>FROM_DATE</key>
+			<value>From</value>
+		</term>
+		<term>
+			<key>TO_DATE</key>
+			<value>To</value>
+		</term>
+		<term>
+			<key>DESCRIPTION</key>
+			<value>Description</value>
+		</term>
+		<term>
+			<key>PANEL_TEST</key>
+			<value>Panel Test</value>
+		</term>
+		<term>
+			<key>MSG_MANDATORYFIELD</key>
+			<value>Mandatory Field</value>
+		</term>
+		<term>
+			<key>SWITCH_TOTECH</key>
+			<value>Work as Technician</value>
+		</term>
+		<term>
+			<key>TIPS_SELECTSITE</key>
+			<value>Please select site location</value>
+		</term>
+		<term>
+			<key>TIPS_INCOMPLETEINFO</key>
+			<value>Incomplete information. Please enter and submit again.</value>
+		</term>
+		<term>
+			<key>TIPS_DATEINVALID</key>
+			<value>Error: Invalid date entered</value>
+		</term>
+		<term>
+			<key>ADDNEW</key>
+			<value>Add New</value>
+		</term>
+		<term>
+			<key>ADDANOTHER</key>
+			<value>Add Another</value>
+		</term>
+		<term>
+			<key>COMPATIBLE_SPECIMENS</key>
+			<value>Compatible Specimens</value>
+		</term>
+		<term>
+			<key>COMPATIBLE_TESTS</key>
+			<value>Compatible Tests</value>
+		</term>
+		<term>
+			<key>TIPS_ACC_CONFIRMDELETE</key>
+			<value>Are you sure you want to delete this account?</value>
+		</term>
+		<term>
+			<key>LAB_TECH</key>
+			<value>Lab Technician</value>
+		</term>
+		<term>
+			<key>LAB_RECEPTIONIST</key>
+			<value>Lab Receptionist</value>
+		</term>
+		<term>
+			<key>MSG_ACC_ADDED</key>
+			<value>Account Added</value>
+		</term>
+		<term>
+			<key>MSG_ACC_DELETED</key>
+			<value>Account Deleted</value>
+		</term>
+		<term>
+			<key>MSG_ACC_UPDATED</key>
+			<value>Account Updated</value>
+		</term>
+		<term>
+			<key>TAT</key>
+			<value>Turnaround Time</value>
+		</term>
+		<term>
+			<key>TAT_AVG</key>
+			<value>Average TAT</value>
+		</term>
+		<term>
+			<key>TAT_TARGET</key>
+			<value>Target TAT</value>
+		</term>
+		<term>
+			<key>TAT_ILE</key>
+			<value>90th percentile TAT</value>
+		</term>
+		<term>
+			<key>PREVALENCE_RATE</key>
+			<value>Prevalence Rate</value>
+		</term>
+		<term>
+			<key>LANGUAGE</key>
+			<value>Language</value>
+		</term>
+		<term>
+			<key>USER_FUNCTIONS</key>
+			<value>Functions</value>
+		</term>
+		<term>
+			<key>APPROX</key>
+			<value>approximate</value>
+		</term>
+		<term>
+			<key>LANDSCAPE</key>
+			<value>Landscape mode</value>
+		</term>
+		<term>
+			<key>TIPS_PATIENTID_EXISTS</key>
+			<value>Patient ID already exists. Please check and try again.</value>
+		</term>
+		<term>
+			<key>LAB_STAFF</key>
+			<value>Lab Staff</value>
+		</term>
+		<term>
+			<key>ALL_FACILITIES</key>
+			<value>All Facilities</value>
+		</term>
+		<term>
+			<key>ALL_SITES</key>
+			<value>All Sites</value>
+		</term>
+		<term>
+			<key>DISTRICT</key>
+			<value>District</value>
+		</term>
+		<term>
+			<key>REGION</key>
+			<value>Region</value>
+		</term>
+	</page>
+	<page id="header" descr="Page Header">
+		<term>
+			<key>TITLE</key>
+			<value/>
+		</term>
+		<term>
+			<key>LOGGEDINAS</key>
+			<value>Logged in as</value>
+		</term>
+		<term>
+			<key>EDITPROFILE</key>
+			<value>Edit Profile</value>
+		</term>
+		<term>
+			<key>LOGOUT</key>
+			<value>Logout</value>
+		</term>
+		<term>
+			<key>COMMENTS</key>
+			<value>Comments</value>
+		</term>
+		<term>
+			<key>SWITCH_TOMGR</key>
+			<value>Work as Manager</value>
+		</term>
+		<term>
+			<key>MENU_BACKUP</key>
+			<value>Backup Data</value>
+		</term>
+		<term>
+			<key>SWITCH_TOTECH</key>
+			<value>Work as Technician</value>
+		</term>
+		<term>
+			<key>SWITCH_TODIR</key>
+			<value>Work as Director</value>
+		</term>
+	</page>
+	<page id="footer" descr="Page Footer">
+		<term>
+			<key>TITLE</key>
+			<value/>
+		</term>
+		<term>
+			<key>FOOTER_MSG</key>
+			<value>A joint initiative of C4G @ Georgia Tech, the CDC and participating countries</value>
+		</term>
+		<term>
+			<key>SWITCHLANG</key>
+			<value>Commutez au Francais</value>
+		</term>
+	</page>
+	<page id="login" descr="Login Page">
+		<term>
+			<key>TITLE</key>
+			<value/>
+		</term>
+		<term>
+			<key>MSG_PLSLOGIN</key>
+			<value>Please log in first</value>
+		</term>
+		<term>
+			<key>MSG_TIMED_OUT</key>
+			<value>Session timed out due to inactivity</value>
+		</term>
+		<term>
+			<key>MSG_ERR_PWD</key>
+			<value>Incorrect username/password</value>
+		</term>
+		<term>
+			<key>MSG_CAPSLOCK</key>
+			<value>Caps Lock is On</value>
+		</term>
+		<term>
+			<key>MSG_NEWPWD</key>
+			<value>Request a New Password</value>
+		</term>
+		<term>
+			<key>TIPS_NEWPWD</key>
+			<value>If you forgot your password, click on the Request a New Password link and a new, temporary password will be sent to your email address.</value>
+		</term>
+	</page>
+	<page id="home" descr="Home Page">
+		<term>
+			<key>TITLE</key>
+			<value>Home</value>
+		</term>
+		<term>
+			<key>WELCOME</key>
+			<value>Welcome</value>
+		</term>
+		<term>
+			<key>TIPS_BLISINTRO</key>
+			<value>The Basic Laboratory Information System (BLIS) tracks patient specimens and laboratory results.</value>
+		</term>
+		<term>
+			<key>TIPS_PWD</key>
+			<value>You can update your profile and password by clicking on Edit Profile.</value>
+		</term>
+		
+	</page>	
+	<page id="regn" descr="Main Registration Page">
+		<term>
+			<key>TITLE</key>
+			<value>Registration</value>
+		</term>
+	</page>
+	<page id="find_patient" descr="Patient Lookup Page">
+		<term>
+			<key>TITLE</key>
+			<value>Patient Look-up</value>
+		</term>
+		<term>
+			<key>ADD_NEW_PATIENT</key>
+			<value>Add New Patient</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATION_1</key>
+			<value>This page allows us to register new patients or lookup existing patients based on name, patient ID or number.</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATION_2</key>
+			<value>Once a patient has been registered, we can use this page to view,edit the patients profile.</value>
+		</term>
+		<term>
+			<key>TIPS_PATIENT_LOOKUP</key>
+			<value>To register a new specimen, enter Patient by ID/Name or add a new Patient first.</value>
+		</term>
+		<term>
+			<key>MSG_NOMATCH</key>
+			<value>No match found</value>
+		</term>
+		<term>
+			<key>CMD_REGISTERSPECIMEN</key>
+			<value>Register Specimen</value>
+		</term>
+		<term>
+			<key>CMD_VIEWPROFILE</key>
+			<value>View Profile</value>
+		</term>
+		<term>
+			<key>CMD_DELPROFILE</key>
+			<value>Delete Profile</value>
+		</term>
+		<term>
+			<key>CMD_UPDPROFILE</key>
+			<value>Update Profile</value>
+		</term>
+	</page>
+	<page id="new_patient" descr="Patient Registration Page">
+		<term>
+			<key>TITLE</key>
+			<value>New Patient</value>
+		</term>
+		<term>
+			<key>MSG_BACKTOLOOKUP</key>
+			<value>Back to Patient Look-up</value>
+		</term>
+		<term>
+			<key>MSG_ADDNEWENTRY</key>
+			<value>Please add new entry</value>
+		</term>
+		<term>
+			<key>CMD_SELECTFORREGN</key>
+			<value>Select for Registration</value>
+		</term>
+		<term>
+			<key>SIMILAR_NAMES</key>
+			<value>Similar Names</value>
+		</term>
+		<term>
+			<key>MSG_PID_INVALID</key>
+			<value>Patient ID invalid/already exists</value>
+		</term>
+		<term>
+			<key>TIPS_REGN_NEW</key>
+			<value>Patient ID, Name and Gender are mandatory fields.</value>
+		</term>
+		<term>
+			<key>TIPS_REGN</key>
+			<value>You can move to the next field by pressing &lt;i&gt;Tab&lt;/i&gt; key or clicking on it using the mouse.</value>
+		</term>
+		<term>
+			<key>TIPS_DOB_AGE</key>
+			<value>Only one of &lt;i&gt;Age&lt;/i&gt; or &lt;i&gt;Date of Birth&lt;/i&gt; is required for entry.</value>
+		</term>
+	</page>
+	<page id="new_specimen" descr="Specimen Registration Page">
+		<term>
+			<key>TITLE</key>
+			<value>Specimen Registration</value>
+		</term>
+		<term>
+			<key>ADD_ANOTHER_SPECIMEN</key>
+			<value>Add Another Specimen</value>
+		</term>
+		<term>
+			<key>MSG_SELECT_STYPE</key>
+			<value>Select specimen type first</value>
+		</term>
+		<term>
+			<key>MSG_SURETO_REMOVE</key>
+			<value>Are you sure you want to remove this specimen form?</value>
+		</term>
+		<term>
+			<key>MSG_ADD_PATIENT</key>
+			<value>Please select or add a patient first.</value>
+		</term>
+		<term>
+			<key>MSG_STYPE_MISSING</key>
+			<value>Specimen type missing</value>
+		</term>
+		<term>
+			<key>MSG_NOTESTS_SELECTED</key>
+			<value>No tests selected</value>
+		</term>
+		<term>
+			<key>MSG_SID_MISSING</key>
+			<value>Specimen ID missing</value>
+		</term>
+		<term>
+			<key>MSG_SID_INVALID</key>
+			<value>Specimen ID invalid/already exists</value>
+		</term>
+		<term>
+			<key>MSG_RDATE_INVALID</key>
+			<value>Lab receipt date invalid</value>
+		</term>
+		<term>
+			<key>MSG_CDATE_INVALID</key>
+			<value>Collection date invalid</value>
+		</term>
+		<term>
+			<key>MSG_NOTESTMATCH</key>
+			<value>No compatible tests found</value>
+		</term>	
+		<term>
+			<key>TIPS_SURETOABORT</key>
+			<value>Are you sure you want to abort this registration?</value>
+		</term>	
+		<term>
+			<key>TIPS_REGISTRATION_SPECIMEN</key>
+			<value>Please select a specimen type to see the tests for that specimen.</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATION_SPECIMEN_1</key>
+			<value>To add more than one specimen click on Add Another Specimen option.</value>
+		</term>
+	</page>
+	<page id="specimen_added" descr="Specimen Confirmation Page">
+		<term>
+			<key>TITLE</key>
+			<value>Specimens Registered</value>
+		</term>
+		<term>
+			<key>MSG_NEXTSPECIMEN</key>
+			<value>Register Next Specimen</value>
+		</term>
+	</page>
+	<page id="results_entry" descr="Results Entry Page">
+		<term>
+			<key>TITLE</key>
+			<value>Results</value>
+		</term>
+		<term>
+			<key>MENU_SINGLESPECIMEN</key>
+			<value>Single Specimen Results</value>
+		</term>
+		<term>
+			<key>MENU_LABSECTION</key>
+			<value>Lab Section-wise Results</value>
+		</term>
+		<term>
+			<key>MENU_BATCHRESULTS</key>
+			<value>Batch Results</value>
+		</term>
+		<term>
+			<key>MENU_VERIFYRESULTS</key>
+			<value>Verify Results</value>
+		</term>
+		<term>
+			<key>RELATED_RESULTS</key>
+			<value>Related Test Results Entry</value>
+		</term>
+		<term>
+			<key>RELATED_RESULTS_EMPTY</key>
+			<value>No related tests for this specimen</value>
+		</term>
+		<term>
+			<key>CONTROL_TESTING_RESULTS</key>
+			<value>Control Results</value>
+		</term>
+		<term>
+			<key>MENU_REPORTRESULTS</key>
+			<value>Report Results</value>
+		</term>
+		<term>
+			<key>MENU_WORKSHEET</key>
+			<value>Worksheet</value>
+		</term>
+		<term>
+			<key>BLANK_WORKSHEET</key>
+			<value>Keep Blank</value>
+		</term>
+		<term>
+			<key>NUM_ROWS</key>
+			<value>Number of Rows</value>
+		</term>
+		<term>
+			<key>MSG_PENDINGNOTFOUND</key>
+			<value>No pending specimens found</value>
+		</term>
+		<term>
+			<key>MSG_ALREADYENTERED</key>
+			<value>Results Present</value>
+		</term>
+		<term>
+			<key>MSG_RESULTSUBMITTED</key>
+			<value>Results Submitted</value>
+		</term>
+		<term>
+			<key>MSG_RESULTMISSING</key>
+			<value>Result values missing</value>
+		</term>
+		<term>
+			<key>TIPS_VERIFYCONFIRM</key>
+			<value>Final results. Are you sure?</value>
+		</term>
+		<term>
+			<key>TIPS_VERIFYNOTFOUND</key>
+			<value>No unverified results found</value>
+		</term>
+		<term>
+			<key>TIPS_VERIFYDONE</key>
+			<value>Results marked as verified</value>
+		</term>
+		<term>
+			<key>TIPS_NOSPECIMENSTOTEST</key>
+			<value>No pending specimens to test</value>
+		</term>
+		<term>
+			<key>TIPS_NOUNREPORTEDFOUND</key>
+			<value>No unreported specimens found.</value>
+		</term>
+		<term>
+			<key>CMD_MARKASREPORTED</key>
+			<value>Mark as Reported</value>
+		</term>
+		<term>
+			<key>TIPS_MARKEDREPORTED</key>
+			<value>Selected specimens marked as Reported</value>
+		</term>
+		<term>
+			<key>MSG_RESULTSUBMITTEDALL</key>
+			<value>All results submitted for this patient</value>
+		</term>
+		<term>
+			<key>CUSTOM_WORKSHEET</key>
+			<value>Custom Worksheet</value>
+		</term>
+	</page>
+	<page id="search" descr="Search Page">
+		<term>
+			<key>TITLE</key>
+			<value>Search</value>
+		</term>
+		<term>
+			<key>TIPS_SEARCH_1</key>
+			<value>You can use this page to search for registered patients. Enter a partial name to generate a list of patients containing the string.</value>
+		</term>
+		<term>
+			<key>TIPS_SEARCH_2</key>
+			<value>Once you select the patient, you can view the patient's profile, look up the tests he has undergone and the results of those tests.</value>
+		</term>
+		<term>
+			<key>TIPS_SEARCH</key>
+			<value>Search for a Specimen by ID or Patients by ID/Name</value>
+		</term>
+	</page>
+	<page id="patient_profile" descr="Patient Profile Page">
+		<term>
+			<key>TITLE</key>
+			<value>Patient Profile</value>
+		</term>
+		<term>
+			<key>MSG_REGNEWSPECIMEN</key>
+			<value>Register New Specimen</value>
+		</term>
+		<term>
+			<key>MSG_UPDATEPROFILE</key>
+			<value>Update Profile</value>
+		</term>
+		<term>
+			<key>MSG_PRINTHISTORY</key>
+			<value>Print Patient Report</value>
+		</term>
+		<term>
+			<key>TIPS_AGEORDOB</key>
+			<value>Please enter either Age or Date of Birth</value>
+		</term>
+	</page>
+	<page id="specimen_info" descr="Specimen Info Page">
+		<term>
+			<key>TITLE</key>
+			<value>Specimen Info</value>
+		</term>
+		<term>
+			<key>REGDTESTS</key>
+			<value>Registered Tests</value>
+		</term>
+		<term>
+			<key>TIPS_NOTESTSREGD</key>
+			<value>No registered tests found for this specimen</value>
+		</term>
+		<term>
+			<key>TIPS_VERIFYDONE</key>
+			<value>Specimen results verified and updated</value>
+		</term>
+		<term>
+			<key>TIPS_ENTRYDONE</key>
+			<value>Specimen results entered</value>
+		</term>
+		<term>
+			<key>TITLE_VERIFY</key>
+			<value>Verify Specimen Results</value>
+		</term>
+		<term>
+			<key>TITLE_ENTRY</key>
+			<value>Specimen Results Entry</value>
+		</term>
+		<term>
+			<key>TIPS_VERIFY</key>
+			<value>Verify results for this specimen and make corrections if any</value>
+		</term>
+		<term>
+			<key>TIPS_ENTRY</key>
+			<value>Enter results for this specimen and make corrections to already existing results if any</value>
+		</term>		
+	</page>
+	<page id="lab_configs" descr="Lab Configurations List">
+		<term>
+			<key>TITLE</key>
+			<value>Lab Configurations</value>
+		</term>
+		<term>
+			<key>CMD_ADDNEWLAB</key>
+			<value>Add New Lab</value>
+		</term>
+		<term>
+			<key>CMD_VIEWALL</key>
+			<value>View All</value>
+		</term>
+		<term>
+			<key>NEW_LAB_CONFIGURATION</key>
+			<value>New Lab Configuration</value>
+		</term>
+		<term>
+			<key>MENU_SITEINFO</key>
+			<value>Site Information</value>
+		</term>
+		<term>
+			<key>MENU_FIELDS</key>
+			<value>Confirmation</value>
+		</term>
+		<term>
+			<key>TIPS_CUSTOM</key>
+			<value>Note: Custom fields can be added after the lab has been configured, using Manage lab configuration option.</value>
+		</term>
+		<term>
+			<key>TIPS_CONFIRMNEWLAB</key>
+			<value>Please review and confirm all settings and click on Add to create lab configuration.</value>
+		</term>
+		<term>
+			<key>TIPS_CREATINGLAB</key>
+			<value>Please wait while the system creates lab configuration. This may take a few minutes.</value>
+		</term>
+		<term>
+			<key>TIPS_MISSING_FACILITY</key>
+			<value>Error: Facility Name missing</value>
+		</term>
+		<term>
+			<key>TIPS_MISSING_LOCATION</key>
+			<value>Error: Facility Name missing</value>
+		</term>
+		<term>
+			<key>TIPS_MISSING_MGR</key>
+			<value>Error: Lab Manager not selected</value>
+		</term>
+		<term>
+			<key>TIPS_MISSING_STYPES</key>
+			<value>Error: No specimen types selected</value>
+		</term>
+		<term>
+			<key>TIPS_MISSING_TTYPES</key>
+			<value>Error: No test types selected</value>
+		</term>
+	</page>
+	<page id="lab_config_home" descr="Lab Configuration Page">
+		<term>
+			<key>TITLE</key>
+			<value>Lab Configuration</value>
+		</term>
+		<term>
+			<key>MENU_SUMMARY</key>
+			<value>Summary</value>
+		</term>
+		<term>
+			<key>TIPS_SUMMARY_1</key>
+			<value>Gives a summary of lab setup including the lab personnel accounts, test and specimen types.</value>
+		</term>
+		<term>
+			<key>TIPS_SUMMARY_2</key>
+			<value>-</value>
+		</term>
+		<term>
+			<key>TIPS_SUMMARY_3</key>
+			<value>-</value>
+		</term>
+		<term>
+			<key>MENU_BACKUP_REVERT</key>
+			<value>Revert To Backup</value>
+		</term>
+		<term>
+			<key>TIPS_REVERT</key>
+			<value>In case of system failure, if we want to revert to a previously backedup copy of the data we can use this option. You can choose to backup current version before doing this. You may also choose to include to revert back the language settings.</value>
+		</term>
+		<term>
+			<key>BACKUP_LOCATION</key>
+			<value>Backup Version</value>
+		</term>
+		<term>
+			<key>INCLUDE_LANGUAGE_SETTINGS</key>
+			<value>Include Language Settings</value>
+		</term>
+		<term>
+			<key>MENU_ST_TYPES</key>
+			<value>Specimen/Test Types</value>
+		</term>
+				<term>
+			<key>TIPS_SPECIMENTESTTYPES</key>
+			<value>Specimen / Test Types - This option allows us to configure the Specimens can be collected and Tests that are performed at the particular lab.</value>
+		</term>
+		<term>
+			<key>TIPS_TARGETTAT</key>
+			<value>Target TAT - This option list the turnaround time for each test type. We can modify the TAT using the Edit option and changing the value.</value>
+		</term>
+		<term>
+			<key>TIPS_RESULTINTERPRETATION</key>
+			<value>Result Interpretation - This option allows us to specify the interpretation for multiple ranges of values for each test type.</value>
+		</term>
+		<term>
+			<key>MENU_USERS</key>
+			<value>User Accounts</value>
+		</term>
+		<term>
+			<key>ADD_USER_TYPE</key>
+			<value>Add New User Type</value>
+		</term>
+		<term>
+			<key>TIPS_USERACCOUNTS_1</key>
+			<value>This page gives a summary of the various users given access to the system.</value>
+		</term>
+		<term>
+			<key>TIPS_USERACCOUNTS_2</key>
+			<value>It also allows for creation of new user accounts.</value>
+		</term>
+		<term>
+			<key>TIPS_USERACCOUNTS_3</key>
+			<value>It allows to edit account settings, delete accounts and monitor account activity.</value>
+		</term>
+		<term>
+			<key>MENU_CUSTOM</key>
+			<value>Registration Fields</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATIONFIELDS_1</key>
+			<value>This page allows for the configuration of the patient registration page. It allows for creating mandatory fields and hides certain fields if they are not desired to be filled.</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATIONFIELDS_2</key>
+			<value>It also allows for creation of certain custom fields for Patient registration and new Specimen addition which may be needed by certain labs only.</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATIONFIELDS_3</key>
+			<value>-</value>
+		</term>
+		<term>
+			<key>MENU_TAT</key>
+			<value>Target TAT</value>
+		</term>
+		<term>
+			<key>MENU_INFECTION</key>
+			<value>Infection Report</value>
+		</term>
+		<term>
+			<key>TIPS_INFECTIONREPORT</key>
+			<value>This is an editable page for setting the various parameters associaated with each individual test type.</value>
+		</term>
+		<term>
+			<key>MENU_GENERAL</key>
+			<value>General Settings</value>
+		</term>
+		<term>
+			<key>Reports</key>
+			<value>Reports</value>
+		</term>
+		<term>
+			<key>Tests</key>
+			<value>Tests</value>
+		</term>
+		<term>
+			<key>New Stock</key>
+			<value>New Stock</value>
+		</term>
+		<term>
+			<key>Edit Stock</key>
+			<value>Edit Stock</value>
+		</term>
+		<term>
+			<key>Inventory</key>
+			<value>Inventory</value>
+		</term>
+		<term>
+			<key>MENU_REPORTCONFIG</key>
+			<value>Daily Report Settings</value>
+		</term>
+		<term>
+			<key>TIPS_DAILYREPORTSETTINGS</key>
+			<value>This is an editable page for setting the layout of the Patient Report, Daily log of Specimens and Daily log of Patients.</value>
+		</term>
+		<term>
+			<key>MENU_WORKSHEETCONFIG</key>
+			<value>Worksheet</value>
+		</term>
+		<term>
+			<key>TIPS_WORKSHEETS</key>
+			<value>This is an editable page for creating custom worksheets.</value>
+		</term>
+		<term>
+			<key>MENU_MGR</key>
+			<value>Change Manager</value>
+		</term>
+		<term>
+			<key>MENU_DEL</key>
+			<value>Delete Configuration</value>
+		</term>
+		<term>
+			<key>MENU_EXPORTCONFIG</key>
+			<value>Export Configuration</value>
+		</term>
+		<term>
+			<key>RECENT_ACTIVITY</key>
+			<value>Recent Activity</value>
+		</term>
+		<term>
+			<key>SP_REGNS</key>
+			<value>Specimen Registrations</value>
+		</term>
+		<term>
+			<key>RE_ENTRIES</key>
+			<value>Result Entries</value>
+		</term>
+		<term>
+			<key>TIPS_RECENTACT</key>
+			<value>No recent user activity found</value>
+		</term>
+		<term>
+			<key>NEW_LAB_USER</key>
+			<value>New Lab User</value>
+		</term>
+		<term>
+			<key>EDIT_LAB_USER</key>
+			<value>New Lab User</value>
+		</term>
+		<term>
+			<key>TIPS_CUSTOMFIELD_NOTFOUND</key>
+			<value>No custom fields exist</value>
+		</term>
+		<term>
+			<key>CUSTOMFIELDS</key>
+			<value>Custom Fields</value>
+		</term>
+		<term>
+			<key>NEW_CUSTOMFIELD</key>
+			<value>New Custom Field</value>
+		</term>		
+		<term>
+			<key>EDIT_CUSTOMFIELD</key>
+			<value>Edit Custom Field</value>
+		</term>
+		<term>
+			<key>ASSIGN_TO</key>
+			<value>Assign To</value>
+		</term>
+		<term>
+			<key>TIPS_LABDELETE</key>
+			<value>Are you sure you want to delete this lab configuration? All data and technician accounts will be deleted permanently.</value>
+		</term>
+		<term>
+			<key>TIPS_SPECIMENSNOTSELECTED</key>
+			<value>Error: No specimen types selected</value>
+		</term>
+		<term>
+			<key>TIPS_TESTSNOTSELECTED</key>
+			<value>Error: No test types selected</value>
+		</term>
+		<term>
+			<key>TIPS_USERACC</key>
+			<value>Edit user account details or reset password by entering a new one.</value>
+		</term>
+		<term>
+			<key>GROUP_BYGENDER</key>
+			<value>Group By Gender</value>
+		</term>
+		<term>
+			<key>GROUP_BYAGE</key>
+			<value>Group By Age</value>
+		</term>
+		<term>
+			<key>RANGE_AGE</key>
+			<value>Age Range</value>
+		</term>
+		<term>
+			<key>RANGE_NOTREQD</key>
+			<value>No range configuration required.</value>
+		</term>
+		<term>
+			<key>MSG_PENDINGTAT</key>
+			<value>Default TAT for pending tests</value>
+		</term>		
+		<term>
+			<key>MODIFYLANG</key>
+			<value>Modify Language</value>
+		</term>
+		<term>
+			<key>MSG_LANGUPDATED</key>
+			<value>Language strings updated.</value>
+		</term>
+		<term>
+			<key>OTHER_FIELDS</key>
+			<value>Other Fields</value>
+		</term>
+		<term>
+			<key>MARGINS</key>
+			<value>Margins</value>
+		</term>
+		<term>
+			<key>COLUMN_WIDTH</key>
+			<value>Column Width</value>
+		</term>
+		<term>
+			<key>TOP</key>
+			<value>Top</value>
+		</term>
+		<term>
+			<key>BOTTOM</key>
+			<value>Bottom</value>
+		</term>
+		<term>
+			<key>LEFT</key>
+			<value>Left</value>
+		</term>
+		<term>
+			<key>RIGHT</key>
+			<value>Right</value>
+		</term>
+		<term>
+			<key>DAILY</key>
+			<value>Daily</value>
+		</term>
+		<term>
+			<key>WEEKLY</key>
+			<value>Weekly</value>
+		</term>
+		<term>
+			<key>MONTHLY</key>
+			<value>Monthly</value>
+		</term>
+		<term>
+			<key>YEARLY</key>
+			<value>Yearly</value>
+		</term>
+		<term>
+			<key>USE_PNAME_RESULTS</key>
+			<value>Display Name at Results Entry</value>
+		</term>		
+		<term>
+			<key>CUSTOM_WORKSHEETS</key>
+			<value>Custom Worksheets</value>
+		</term>
+		<term>
+			<key>NEW_CUSTOMWORKSHEET</key>
+			<value>Add Custom Worksheet</value>
+		</term>
+		<term>
+			<key>ADDED_CUSTOMWORKSHEET</key>
+			<value>Custom Worksheet Added</value>
+		</term>
+		<term>
+			<key>EDIT_CUSTOMWORKSHEET</key>
+			<value>Edit Custom Worksheet</value>
+		</term>
+		<term>
+			<key>UPDATED_CUSTOMWORKSHEET</key>
+			<value>Custom Worksheet Updated</value>
+		</term>
+		<term>
+			<key>BACK_TOCONFIG</key>
+			<value>Back to Configuration</value>
+		</term>
+		<term>
+			<key>BACKUP_CURRENT_VERSION</key>
+			<value>Backup current version before reverting?</value>
+		</term>
+		<term>
+			<key>TIPS_REVERTDONE</key>
+			<value>Backup reverted successfully. Please shutdown the system and restart to complete the reverting process.</value>
+		</term>		
+		<term>
+			<key>TIPS_SETUPNETWORK_3</key>
+			<value>You will now be able to access BLIS by clicking on BlisSetup.html and entering your username and password.</value>
+		</term>
+		<term>
+			<key>TIPS_SETUPNETWORK_4</key>
+			<value>In case of a computer restart or network failure click on Setup Network option again.</value>
+		</term>
+		<term>
+			<key>MENU_TOGGLE_TEST_REPORTS</key>
+			<value>Enable/Disable Test Reports</value>
+		</term>
+		<term>
+			<key>TIPS_TOGGLETESTREPORTS</key>
+			<value>Enable/Disable test report generation in this lab</value>
+		</term>
+		<term>
+			<key>MENU_TEST_REPORT_CONFIGURATION</key>
+			<value>Test Report Configuration</value>
+		</term>
+		<term>
+			<key>TIPS_TESTREPORTCONFIGURATION</key>
+			<value>Configure the different fields in a test report</value>
+		</term>
+		<term>
+			<key>MENU_TEST_TYPES</key>
+			<value>Test Type</value>
+		</term>
+		<term>
+			<key>COUNT_REPORT</key>
+			<value>Count Report</value>
+		</term>
+		<term>
+			<key>SITE_REPORT</key>
+			<value>Site Report</value>
+		</term>
+		<term>
+			<key>AGE_UNIT</key>
+			<value>Age Unit</value>
+		</term>
+		<term>
+			<key>SITES</key>
+			<value>Sites</value>
+		</term>
+		<term>
+			<key>TIPS_SITECONFIG</key>
+			<value>Add/Remove specimen collection sites to the laboratory records</value>
+		</term>
+		<term>
+			<key>MENU_SITECONFIG</key>
+			<value>Site Configuration</value>
+		</term>
+		<term>
+			<key>ADD_SITE</key>
+			<value>Enter New Site Name</value>
+		</term>
+		<term>
+			<key>SAMPLES_RECEIVED</key>
+			<value>Samples Received</value>
+		</term>
+		<term>
+			<key>ENABLE_SITE_ENTRY</key>
+			<value>Enable Site Entry for a Specimen</value>
+		</term>
+		<term>
+			<key>SELECT_SITE_FOR_REMOVAL</key>
+			<value>Select sites for removal</value>
+		</term>
+			<term>
+			<key>OUT_OF_RANGE</key>
+			<value>Out of Range</value>
+		</term>
+
+		<term>
+			<key>INTERPRETATION</key>
+			<value>Interpretation</value>
+		</term>
+
+		<term>
+			<key>MODIFY_SITE</key>
+			<value>Modiify site</value>
+		</term>
+		<term>
+			<key>PRINT_UNVERIFIED</key>
+			<value>Allow printing of unverified tests</value>
+		</term>
+		
+	</page>
+	<page id="lab_admins" descr="Lab Managers Page">
+		<term>
+			<key>TITLE</key>
+			<value>Lab Managers</value>
+		</term>
+		<term>
+			<key>LABS_ASSIGNED</key>
+			<value>Labs Assigned</value>
+		</term>
+		<term>
+			<key>TIPS_MANAGELAB</key>
+			<value>To edit technician accounts, use Manage option in Lab Configurations page.</value>
+		</term>
+		<term>
+			<key>TIPS_ACC_LABSEXIST</key>
+			<value>Lab Configurations exist under this admin account. Please delete or re-assign them before deleting this account.</value>
+		</term>
+		<term>
+			<key>ADD_NEW_ADMIN</key>
+			<value>Add New Manager</value>
+		</term>
+		<term>
+			<key>EDIT_ADMIN_ACC</key>
+			<value>Edit Lab Manager</value>
+		</term>
+	</page>
+	<page id="catalog" descr="Test Catalog Page">
+		<term>
+			<key>TITLE</key>
+			<value>Test Catalog</value>
+		</term>
+		<term>
+			<key>MENU_REMOVEDATA</key>
+			<value>Delete Catalog Data</value>
+		</term>
+		<term>
+			<key>TIPS_CATALOG</key>
+			<value>You can add, remove or modify specimen types, test types and valid ranges on this page.</value>
+		</term>
+		<term>
+			<key>TIPS_TESTSNOTFOUND</key>
+			<value>No Test Types found in Catalog</value>
+		</term>
+		<term>
+			<key>TIPS_SPECIMENSNOTFOUND</key>
+			<value>No Specimen Types found in Catalog</value>
+		</term>
+		<term>
+			<key>TIPS_REMOVEDATA</key>
+			<value>Sure to remove catalog data? All specimen/test types will be deleted and would have to be entered again.</value>
+		</term>
+		<term>
+			<key>NEW_TEST_TYPE</key>
+			<value>New Test Type</value>
+		</term>
+		<term>
+			<key>NEW_SPECIMEN_TYPE</key>
+			<value>New Specimen Type</value>
+		</term>
+		<term>
+			<key>EDIT_TEST_TYPE</key>
+			<value>Edit Test Type</value>
+		</term>
+		<term>
+			<key>EDIT_SPECIMEN_TYPE</key>
+			<value>Edit Specimen Type</value>
+		</term>
+		<term>
+			<key>NEW_LAB_SECTION</key>
+			<value>New Lab Section</value>
+		</term>
+		<term>
+			<key>TIPS_MISSING_TESTNAME</key>
+			<value>Error: Test name missing</value>
+		</term>
+		<term>
+			<key>TIPS_MISSING_SPECIMENNAME</key>
+			<value>Error: Specimen name missing</value>
+		</term>
+		<term>
+			<key>TIPS_MISSING_CATNAME</key>
+			<value>Error: Lab Section missing</value>
+		</term>
+		<term>
+			<key>TIPS_MISSING_SELECTEDSPECIMEN</key>
+			<value>Error: No compatible specimens selected </value>
+		</term>
+		<term>
+			<key>TIPS_MISSING_SELECTEDTESTS</key>
+			<value>Error: No compatible tests selected </value>
+		</term>
+		<term>
+			<key>TIPS_MISSING_SELECTEDMEASURES</key>
+			<value>Error: No measures selected for this test type</value>
+		</term>
+		<term>
+			<key>TEST_TYPE_ADDED</key>
+			<value>Test Type Added</value>
+		</term>
+		<term>
+			<key>SPECIMEN_TYPE_ADDED</key>
+			<value>Specimen Type Added</value>
+		</term>
+		<term>
+			<key>TEST_TYPE_UPDATED</key>
+			<value>Test Type Updated</value>
+		</term>
+		<term>
+			<key>SPECIMEN_TYPE_UPDATED</key>
+			<value>Specimen Type Updated</value>
+		</term>
+		<term>
+			<key>CMD_BACK_TOCATALOG</key>
+			<value>Back to Catalog</value>
+		</term>
+		<term>
+			<key>TIPS_MEASURES</key>
+			<value>Only numbers and alphabets should be used while adding measures.For the range option please specify the lower and the upper bound.</value>
+		</term>	
+		<term>
+			<key>TIPS_TC_TESTTYPE_1</key>
+			<value>Gives a complete listing of the available test types.</value>
+		</term>
+		<term>
+			<key>TIPS_TC_TESTTYPE_2</key>
+			<value>Use this page to edit existing test types.</value>
+		</term>
+		<term>
+			<key>TIPS_TC_TESTTYPE_3</key>
+			<value>You can also add new Test types using the 'Add New' option located near the top of the Page.</value>
+		</term>
+		<term>
+			<key>TIPS_TC_SPECIMENTYPE_1</key>
+			<value>Gives a complete listing of the available specimen types.</value>
+		</term>
+		<term>
+			<key>TIPS_TC_SPECIMENTYPE_2</key>
+			<value>We can use this page to edit existing specimen types. Tests compatible with a particular specimen type can added/deleted by checking the appropriate boxes located here.</value>
+		</term>
+		<term>
+			<key>TIPS_TC_SPECIMENTYPE_3</key>
+			<value>You can also add new Specimen types using the 'Add New' option located near the top of the Page.</value>
+		</term>
+	</page>
+	<page id="reports" descr="Main Reports Page">
+		<term>
+			<key>AGE_UNIT</key>
+			<value>Unit of Age</value>
+		</term>
+		<term>
+			<key>GROUP_BYGENDER</key>
+			<value>Group By Gender</value>
+		</term>
+		<term>
+			<key>GROUP_BYAGE</key>
+			<value>Group By Age</value>
+		</term>
+		<term>
+			<key>TITLE</key>
+			<value>Reports</value>
+		</term>
+		<term>
+			<key>MENU_DAILY</key>
+			<value>Daily Reports</value>
+		</term>
+		<term>
+			<key>MENU_PATIENT</key>
+			<value>Patient Report</value>
+		</term>
+		<term>
+			<key>MENU_SPECIMEN</key>
+			<value>Individual Specimen</value>
+		</term>
+		<term>
+			<key>MENU_PHISTORY</key>
+			<value>Patient History</value>
+		</term>
+		<term>
+			<key>MENU_TESTRECORDS</key>
+			<value>Test Records</value>
+		</term>
+		<term>
+			<key>MENU_PENDINGTESTS</key>
+			<value>Pending Tests</value>
+		</term>
+		<term>
+			<key>MENU_DAILYLOGS</key>
+			<value>Daily Log</value>
+		</term>
+		<term>
+			<key>MENU_AGGREPORTS</key>
+			<value>Aggregate Reports</value>
+		</term>
+		<term>
+			<key>MENU_TEST_SPECIMEN_AGGREGATE_REPORT_CONFIG</key>
+			<value>Test/Specimen Aggregate Configuration</value>
+		</term>
+		<term>
+			<key>MENU_SPECIMEN_AGGREGATE_REPORT_FORM</key>
+			<value>Specimen Aggregate Report</value>
+		</term>
+		<term>
+			<key>MENU_TEST_AGGREGATE_REPORT_FORM</key>
+			<value>Test Aggregate Report</value>
+		</term>
+		<term>
+			<key>MENU_INFECTIONSUMMARY</key>
+			<value>Prevalence Rate</value>
+		</term>
+		<term>
+			<key>MENU_COUNTS</key>
+			<value>Counts</value>
+		</term>
+		<term>
+			<key>MENU_CONTROLREPORT</key>
+			<value>Control Report</value>
+		</term>
+		<term>
+			<key>MENU_TAT</key>
+			<value>Turnaround Time</value>
+		</term>
+		<term>
+			<key>MENU_INFECTIONREPORT</key>
+			<value>Infection Report</value>
+		</term>
+		<term>
+			<key>COUNT_TYPE</key>
+			<value>Count Type</value>
+		</term>
+		<term>
+			<key>COUNT_TEST</key>
+			<value>Test Count</value>
+		</term>
+		<term>
+			<key>COUNT_SPECIMEN</key>
+			<value>Specimen Count</value>
+		</term>
+		<term>
+			<key>TIPS_PHISTORY</key>
+			<value>Select Site and Patient ID to print Patient Test History.</value>
+		</term>
+		<term>
+			<key>TIPS_SPECIMEN</key>
+			<value>Select Specimen to view Report of all tests done on it</value>
+		</term>
+		<term>
+			<key>TIPS_TESTRECORDS</key>
+			<value>Select Site, Test Type, Date Interval and Fields to print Test Records.</value>
+		</term>
+		<term>
+			<key>TIPS_PENDINGTESTS</key>
+			<value>Select Site and Test Type to view tests pending at the site.</value>
+		</term>
+		<term>
+			<key>TIPS_DAILYLOGS</key>
+			<value>Print all records handled on a given day.</value>
+		</term>
+		<term>
+			<key>TIPS_INFECTIONSUMMARY</key>
+			<value>Select facility and date range to view infection graph and prevalence rates.</value>
+		</term>
+		<term>
+			<key>TIPS_COUNTS</key>
+			<value>Select Site and Date Interval to view number of Specimens or Tests Handled over the specified duration.</value>
+		</term>
+		<term>
+			<key>TIPS_TAT</key>
+			<value>Select Site and Date Interval to view average test-wise Turn around Times over the specified duration.</value>
+		</term>
+		<term>
+			<key>TIPS_INFECTIONREPORT</key>
+			<value>Select tests to generate age and gender-wise Infection Report.</value>
+		</term>	
+		<term>
+			<key>TIPS_GETACCESSIONREPORT</key>
+			<value>Get Entire Accession Report</value>
+		</term>	
+		<term>
+			<key>RANGE_NORMAL</key>
+			<value>Normal Range</value>
+		</term>	
+		<term>
+			<key>REPORT_SAMPLE</key>
+			<value>Complete Sample Report</value>
+		</term>
+		<term>
+			<key>TIPS_RECNOTFOUND</key>
+			<value>No records found</value>
+		</term>
+		<term>
+			<key>TOTAL</key>
+			<value>Total</value>
+		</term>
+		<term>
+			<key>TOTAL_TESTS</key>
+			<value>Total Tests</value>
+		</term>
+		<term>
+			<key>TOTAL_PATIENTS</key>
+			<value>Total Patients</value>
+		</term>
+		<term>
+			<key>TOTAL_SPECIMENS</key>
+			<value>Total Specimens</value>
+		</term>
+		<term>
+			<key>TESTED_N</key>
+			<value>Tested Negative</value>
+		</term>
+		<term>
+			<key>TESTED_P</key>
+			<value>Tested Positive</value>
+		</term>
+		<term>
+			<key>TOTAL_MF</key>
+			<value>M/F Total</value>
+		</term>
+		<term>
+			<key>RANGE_AGE</key>
+			<value>Age Ranges</value>
+		</term>
+		<term>
+			<key>MSG_BACKTOREPORTS</key>
+			<value>Back To Reports</value>
+		</term>
+		<term>
+			<key>TIPS_NONEWTESTS</key>
+			<value>No new tests registered on this date.</value>
+		</term>
+		<term>
+			<key>TIPS_NONEWPATIENTS</key>
+			<value>No new patients registered on this date.</value>
+		</term>
+		<term>
+			<key>MSG_SHOWTABLE</key>
+			<value>Show Table</value>
+		</term>
+		<term>
+			<key>MSG_HIDETABLE</key>
+			<value>Hide Table</value>
+		</term>
+		<term>
+			<key>MSG_SHOWGRAPH</key>
+			<value>Show Graph</value>
+		</term>
+		<term>
+			<key>MSG_HIDEGRAPH</key>
+			<value>Hide Graph</value>
+		</term>
+		<term>
+			<key>TIPS_NODISCRETE</key>
+			<value>Error: No alphanumeric value tests found</value>
+		</term>
+		<term>
+			<key>PROGRESSION_M</key>
+			<value>Monthly</value>
+		</term>
+		<term>
+			<key>PROGRESSION_W</key>
+			<value>Weekly</value>
+		</term>
+		<term>
+			<key>PROGRESSION_D</key>
+			<value>Daily</value>
+		</term>
+		<term>
+			<key>REPORT_PERIOD</key>
+			<value>Reporting Period</value>
+		</term>
+		<term>
+			<key>TIPS_NOTATTESTS</key>
+			<value>No test entries found for the given date range.</value>
+		</term>
+		<term>
+			<key>TIPS_TATEXCEED</key>
+			<value>No specimens exceeded target TAT.</value>
+		</term>
+		<term>
+			<key>TIPS_TATEXCEEDNUM</key>
+			<value>Specimens exceeded target TAT.</value>
+		</term>
+		<term>
+			<key>TIPS_TATNOPENDING</key>
+			<value>No specimens pending in the supplied date interval.</value>
+		</term>
+		<term>
+			<key>TIPS_TATPENDING</key>
+			<value>Specimens pending in the supplied date interval.</value>
+		</term>
+		<term>
+			<key>TIPS_CONFIGINFECTION</key>
+			<value>ERROR: Infection Report not configured for this facility. Please contact lab manager.</value>
+		</term>
+		<term>
+			<key>TIPS_NOMATCHSPECIMENS</key>
+			<value>No matching specimens found</value>
+		</term>
+		<term>
+			<key>TIPS_MULTPATIENTS</key>
+			<value>Selected specimens belong to different patients. Please try again.</value>
+		</term>
+		<term>
+			<key>MSG_INCLUDEPENDING</key>
+			<value>Include Pending Tests</value>
+		</term>
+		<term>
+			<key>TIPS_TABLESORT</key>
+			<value>Click on column heading to sort the table by that field.</value>
+		</term>
+		<term>
+			<key>MSG_ALLTESTSCOMPLETED</key>
+			<value>All tests completed</value>
+		</term>
+		<term>
+			<key>MENU_TESTWISE_REPORTS</key>
+			<value>Test Specific Reports</value>
+		</term>
+		<term>
+			<key>SITE</key>
+			<value>Site</value>
+		</term>
+		<term>
+			<key>ALL_SITES</key>
+			<value>All Sites</value>
+		</term>
+		<term>
+			<key>MENU_TEST_TYPES</key>
+			<value>Test Type</value>
+		</term>
+		<term>
+			<key>COUNT_REPORT</key>
+			<value>Count Report</value>
+		</term>
+		<term>
+			<key>SITE_REPORT</key>
+			<value>Site Report</value>
+		</term>
+		<term>
+			<key>TOTAL_SAMPLES</key>
+			<value>Total number of samples</value>
+		</term>
+		<term>
+			<key>SAMPLES_RECEIVED</key>
+			<value>Samples Received</value>
+		</term>
+		<term>
+			<key>OUT_OF_RANGE</key>
+			<value>Out of Range</value>
+		</term>
+
+		<term>
+			<key>INTERPRETATION</key>
+			<value>Interpretation</value>
+		</term>
+	</page>
+	<page id="edit_profile" descr="Edit Profile Page">
+		<term>
+			<key>LINK_CHANGEPWD</key>
+			<value>Change Password</value>
+		</term>
+		<term>
+			<key>TIPS_CASEPWD</key>
+			<value>Please note that passwords are case-sensitive.</value>
+		</term>
+		<term>
+			<key>MSG_NOFIELDUPDATE</key>
+			<value>No profile fields to update</value>
+		</term>
+		<term>
+			<key>CURRPWD</key>
+			<value>Current Password</value>
+		</term>
+		<term>
+			<key>NEWPWD</key>
+			<value>New Password</value>
+		</term>
+		<term>
+			<key>REENTERPWD</key>
+			<value>Re-enter Password</value>
+		</term>
+		<term>
+			<key>MSG_REQDFIELD</key>
+			<value>Required field</value>
+		</term>
+		<term>
+			<key>MSG_PWDNOMATCH</key>
+			<value>Passwords do not match</value>
+		</term>
+		<term>
+			<key>MSG_PWDMINLENGTH</key>
+			<value>Min password length is 3</value>
+		</term>
+		<term>
+			<key>MSG_PROFILEUPDATED</key>
+			<value>Profile Updated</value>
+		</term>
+		<term>
+			<key>MSG_PWDUPDATEERROR</key>
+			<value>Error while updating Password</value>
+		</term>
+		<term>
+			<key>MSG_PWDMATCHERROR</key>
+			<value>Error: Old password did not match</value>
+		</term>
+		<term>
+			<key>MSG_PWDUPDATED</key>
+			<value>Password updated</value>
+		</term>
+	</page>
+	<page id="help" descr="Main Help Page">
+		<term>
+			<key>TITLE</key>
+			<value>Help</value>
+		</term>
+	</page>
+	<page id="stocks" descr="Stock Related Terms">
+		<term>
+			<key>Reagent</key>
+			<value>Item</value>
+		</term>
+		<term>
+			<key>Lot_Number</key>
+			<value>Lot Number</value>
+		</term>
+		<term>
+			<key>Expiry_Date</key>
+			<value>Expiry Date</value>
+		</term>
+		<term>
+			<key>Manufacturer</key>
+			<value>Manufacturer</value>
+		</term>
+		<term>
+			<key>Supplier</key>
+			<value>Supplier</value>
+		</term>
+		<term>
+			<key>Quantity_Supplied</key>
+			<value>Quantity Supplied</value>
+		</term>
+		<term>
+			<key>Units</key>
+			<value>Units</value>
+		</term>
+		<term>
+			<key>Cost_per_Unit</key>
+			<value>Cost per unit</value>
+		</term>
+		<term>
+			<key>Date_received</key>
+			<value>Date received</value>
+		</term>
+		<term>
+			<key>Quantity</key>
+			<value>Quantity</value>
+		</term>
+		<term>
+			<key>Edit</key>
+			<value>Edit</value>
+		</term>
+		<term>
+			<key>Inventory</key>
+			<value>Inventory</value>
+		</term>
+		<term>
+			<key>Current_Inventory</key>
+			<value>Current Inventory</value>
+		</term>
+		<term>
+			<key>Quantity_Signed_Out</key>
+			<value>Quantity Signed Out</value>
+		</term>
+		<term>
+			<key>Receiver</key>
+			<value>Receiver</value>
+		</term>
+		<term>
+			<key>Remarks</key>
+			<value>Remarks</value>
+		</term>
+		<term>
+			<key>View_Current_Inventory</key>
+			<value>View Current Inventory</value>
+		</term>
+		<term>
+			<key>Current_Stock</key>
+			<value>Current Stock</value>
+		</term>
+		<term>
+			<key>Add_Stock</key>
+			<value>Add Stock</value>
+		</term>
+		<term>
+			<key>Edit_Stock</key>
+			<value>Edit Stock</value>
+		</term>
+		<term>
+			<key>Total_Quantity</key>
+			<value>Total Quantity</value>
+		</term>
+		<term>
+			<key>Quantity_In_Stock</key>
+			<value>Quantity In Stock</value>
+		</term>
+		<term>
+			<key>TIPS_ADD</key>
+			<value>Add the details of the stock in the given form. To add more that one stock items you can select Add Another.</value>
+		</term>
+		<term>
+			<key>TIPS_UPDATE</key>
+			<value>Enter the quantity of the stock being checked out. The table below gives account of the current inventory.</value>
+		</term>
+	</page>
+	<page id="lang_modify" descr="Language Modification Page">
+		<term>
+			<key>TITLE</key>
+			<value>Modify Language</value>
+		</term>
+		<term>
+			<key>CATEGORY</key>
+			<value>Category</value>
+		</term>
+		<term>
+			<key>TIPS_MODIFYLANG_1</key>
+			<value>This page allows to toggle between languages. It also allows you to change the content being displayed.</value>
+		</term>
+		<term>
+			<key>TIPS_MODIFYLANG_2</key>
+			<value>You can also choose to change the language for a few pages using this option. The pages are listed as a drop-down menu.</value>
+		</term>
+	</page>
+	<page id="blis_help_page" descr="Help Page">
+		<term>
+			<key>TITLE</key>
+			<value>Help page</value>
+		</term>
+		<term>
+			<key>MENU_LABCONFIG</key>
+			<value>Lab Configuration</value>
+		</term>
+		<term>
+			<key>MENU_SUMMARY</key>
+			<value>Summary</value>
+		</term>
+		<term>
+			<key>TIPS_SUMMARY_1</key>
+			<value>Gives a summary of lab setup including the lab personnel accounts, test and specimen types.</value>
+		</term>
+		<term>
+			<key>TIPS_SUMMARY_2</key>
+			<value>-</value>
+		</term>
+		<term>
+			<key>TIPS_SUMMARY_3</key>
+			<value>-</value>
+		</term>
+		<term>
+			<key>MENU_TESTS</key>
+			<value>Tests</value>
+		</term>
+		<term>
+			<key>TIPS_SPECIMENTESTTYPES</key>
+			<value>Specimen / Test Types - This option allows us to configure the Specimens can be collected and Tests that are performed at the particular lab.</value>
+		</term>
+		<term>
+			<key>TIPS_TARGETTAT</key>
+			<value>Target TAT - This option list the turnaround time for each test type. We can modify the TAT using the Edit option and changing the value.</value>
+		</term>
+		<term>
+			<key>TIPS_RESULTINTERPRETATION</key>
+			<value>Result Interpretation - This option allows us to specify the interpretation for multiple ranges of values for each test type.</value>
+		</term>
+		<term>
+			<key>MENU_L_REPORTS</key>
+			<value>Reports</value>
+		</term>
+		<term>
+			<key>MENU_R_INFECTIONREPORT</key>
+			<value>Infection Report</value>
+		</term>
+		<term>
+			<key>TIPS_INFECTIONREPORT</key>
+			<value>Infection Report: This option generates an aggregate infection report for a particular period for one or all Lab sections. It also provides an option to create a Word document of the generated report.</value>
+		</term>
+		<term>
+			<key>MENU_R_DRS</key>
+			<value>Daily Report Settings</value>
+		</term>
+		<term>
+			<key>TIPS_DAILYREPORTSETTINGS</key>
+			<value>This is an editable page for setting the layout of the Patient Report, Daily log of Specimens and Daily log of Patients.</value>
+		</term>
+		<term>
+			<key>MENU_R_WORKSHEETS</key>
+			<value>Worksheets</value>
+		</term>
+		<term>
+			<key>TIPS_WORKSHEETS</key>
+			<value>This is an editable page for creating custom worksheets.</value>
+		</term>
+		<term>
+			<key>MENU_USERACCOUNTS</key>
+			<value>User Accounts</value>
+		</term>
+		<term>
+			<key>TIPS_USERACCOUNTS_1</key>
+			<value>This page gives a summary of the various users given access to the system.</value>
+		</term>
+		<term>
+			<key>TIPS_USERACCOUNTS_2</key>
+			<value>It also allows for creation of new user accounts.</value>
+		</term>
+		<term>
+			<key>TIPS_USERACCOUNTS_3</key>
+			<value>It allows to edit account settings, delete accounts and monitor account activity.</value>
+		</term>
+		<term>
+			<key>MENU_REGISTRATIONFIELDS</key>
+			<value>Registration Fields</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATIONFIELDS_1</key>
+			<value>This page allows for the configuration of the patient registration page. It allows for creating mandatory fields and hides certain fields if they are not desired to be filled.</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATIONFIELDS_2</key>
+			<value>It also allows for creation of certain custom fields for Patient registration and new Specimen addition which may be needed by certain labs only.</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATIONFIELDS_3</key>
+			<value>-</value>
+		</term>
+		<term>
+			<key>MENU_MODIFYLANG</key>
+			<value>Modify Language</value>
+		</term>
+		<term>
+			<key>TIPS_MODIFYLANG_1</key>
+			<value>This page allows to toggle between languages.</value>
+		</term>
+		<term>
+			<key>TIPS_MODIFYLANG_2</key>
+			<value>You can also choose to change the language for a few pages using this option. The pages are listed as a drop-down menu.</value>
+		</term>
+		<term>
+			<key>MENU_SETUPNETWORK</key>
+			<value>Setup Network</value>
+		</term>
+		<term>
+			<key>TIPS_SETUPNETWORK_1</key>
+			<value>Login as Admin.</value>
+		</term>
+		<term>
+			<key>TIPS_SETUPNETWORK_2</key>
+			<value>Click on the Setup Network option in the Lab Configuration tab.</value>
+		</term>
+		<term>
+			<key>TIPS_SETUPNETWORK_3</key>
+			<value>You will now be able to access BLIS by clicking on BlisSetup.html and entering your username and password.</value>
+		</term>
+		<term>
+			<key>TIPS_SETUPNETWORK_4</key>
+			<value>In case of a computer restart or network failure repeat above steps again.</value>
+		</term>
+		<term>
+			<key>MENU_EXPORTCONFIG</key>
+			<value>Export Configuration</value>
+		</term>
+		<term>
+			<key>TIPS_EXPORTCONFIG</key>
+			<value>This option gives the configuration summary for the entire system as a Microsoft Word document.</value>
+		</term>
+		<term>
+			<key>MENU_BACKUP</key>
+			<value>Backup Data</value>
+		</term>
+		<term>
+			<key>TIPS_BACKUP</key>
+			<value>This option allows to take a backup of the entire system to prevent loss of data.</value>
+		</term>
+		<term>
+			<key>MENU_REVERT</key>
+			<value>Revert to Backup</value>
+		</term>
+		<term>
+			<key>TIPS_REVERT</key>
+			<value>In case of system failure, if we want to revert to a previously backedup copy of the data we can use this option.</value>
+		</term>
+		<term>
+			<key>MENU_TESTCATALOG</key>
+			<value>Test Catalog</value>
+		</term>
+		<term>
+			<key>MENU_TC_TESTTYPE</key>
+			<value>Test Type</value>
+		</term>
+		<term>
+			<key>TIPS_TC_TESTTYPE_1</key>
+			<value>Gives a complete listing of the available test types.</value>
+		</term>
+		<term>
+			<key>TIPS_TC_TESTTYPE_2</key>
+			<value>We can use this page to edit existing present test types.</value>
+		</term>
+		<term>
+			<key>TIPS_TC_TESTTYPE_3</key>
+			<value>New test types can also be added using the Add New option located near the top of the Page.</value>
+		</term>
+		<term>
+			<key>MENU_TC_SPECIMENTYPE</key>
+			<value>Specimen Type</value>
+		</term>
+		<term>
+			<key>TIPS_TC_SPECIMENTYPE_1</key>
+			<value>Gives a complete listing of the available specimen types.</value>
+		</term>
+		<term>
+			<key>TIPS_TC_SPECIMENTYPE_2</key>
+			<value>We can use this page to edit existing specimen types. Tests compatible with a particular specimen type can added/deleted by checking the appropriate boxes located here.</value>
+		</term>
+		<term>
+			<key>TIPS_TC_SPECIMENTYPE_3</key>
+			<value>New specimen types can also be added using the Add New option located near the top of the Page.</value>
+		</term>
+		<term>
+			<key>MENU_BACKUPDATA</key>
+			<value>Backup Data</value>
+		</term>
+		<term>
+			<key>TIPS_BACKUPDATA</key>
+			<value>This option takes a backup of the system and stores it on the local drive. This option is only available to the Admin.</value>
+		</term>
+		<term>
+			<key>MENU_REGISTRATION</key>
+			<value>Registration</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATION_1</key>
+			<value>This page allows us to register new patients or lookup existing patients based on name, patient ID or number.</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATION_2</key>
+			<value>Once a patient has been registered, we can use this page to view,edit the patients profile.</value>
+		</term>
+		<term>
+			<key>TIPS_REGISTRATION_3</key>
+			<value>We can also register a specimen the patient has provided for a particular test.</value>
+		</term>
+		<term>
+			<key>MENU_RESULTS</key>
+			<value>Results</value>
+		</term>
+		<term>
+			<key>MENU_R_SINGLESPECIMENRESULTS</key>
+			<value>Single Specimen Results</value>
+		</term>
+		<term>
+			<key>TIPS_R_SINGLESPECIMENRESULTS</key>
+			<value>This option allows us to add results for a particular patient based on the specimens he had provided.</value>
+		</term>
+		<term>
+			<key>MENU_R_BATCHRESULTS</key>
+			<value>Batch Results</value>
+		</term>
+		<term>
+			<key>TIPS_R_BATCHRESULTS</key>
+			<value>This option allows us to add results for a particular Test Type.</value>
+		</term>
+		<term>
+			<key>MENU_R_VERIFYRESULTS</key>
+			<value>Verify Results</value>
+		</term>
+		<term>
+			<key>TIPS_R_VERIFYRESULTS</key>
+			<value>This option allows us to verify the result based on the test type. It shows the list of results for all patients whose results have not been verified. You can modify the results and enter remarks before verifying the results.</value>
+		</term>
+		<term>
+			<key>MENU_R_WORKSHEET</key>
+			<value>Worksheet</value>
+		</term>
+		<term>
+			<key>TIPS_R_WORKSHEET_1</key>
+			<value>This option generates a worksheet based on the Lab Section and Test Type. You can also use a custom worksheet which can be created by Admins using Lab Configuration &gt; Tests &gt; Reports &gt; Worksheet.</value>
+		</term>
+		<term>
+			<key>TIPS_R_WORKSHEET_2</key>
+			<value>You can create a blank worksheet by choosing the Keep Blank option and specifying the number of rows you need.</value>
+		</term>
+		<term>
+			<key>MENU_SEARCH</key>
+			<value>Search</value>
+		</term>
+		<term>
+			<key>TIPS_SEARCH_1</key>
+			<value>You can use this page to search for registered patients. Enter a partial name to generate a list of patients containing the string.</value>
+		</term>
+		<term>
+			<key>TIPS_SEARCH_2</key>
+			<value>Once you select the patient, you can view the patient's profile, look up the tests he has undergone and the results of those tests.</value>
+		</term>
+		<term>
+			<key>TIPS_SEARCH_3</key>
+			<value>-</value>
+		</term>
+		<term>
+			<key>MENU_INVENTORY</key>
+			<value>Inventory</value>
+		</term>
+		<term>
+			<key>TIPS_INVENTORY_1</key>
+			<value>This page displays the current item quantities in stock.</value>
+		</term>
+		<term>
+			<key>TIPS_INVENTORY_2</key>
+			<value>You can update stock as you acquire new items by adding the item name,quantity received, receiver name and remarks.</value>
+		</term>
+		<term>
+			<key>TIPS_INVENTORY_3</key>
+			<value>-</value>
+		</term>
+		<term>
+			<key>MENU_REPORTS</key>
+			<value>Reports</value>
+		</term>
+		<term>
+			<key>MENU_DAILYREPORTS</key>
+			<value>Daily Reports</value>
+		</term>
+		<term>
+			<key>TIPS_PATIENTREPORT</key>
+			<value>Patient Report: This option allows us to generate the report for a particular patient based on either, the patient name, patient number or patient id.</value>
+		</term>
+		<term>
+			<key>TIPS_DAILYLOG</key>
+			<value>Daily Log: This option generates a daily of either patient or test records from a particular start date to end date. You can customize the kind of report you want by choosing one option from the Section (e.g. Serology, Hematology) and/or Test type (e.g. ALT/SGPT, HGB) dropdown menus.</value>
+		</term>
+		<term>
+			<key>MENU_AGGREGATEREPORTS</key>
+			<value>Aggregate Reports</value>
+		</term>
+		<term>
+			<key>TIPS_PREVALENCERATE</key>
+			<value>Prevalence Rate: This report gives the prevalence of a particular infection type based on the number of tests done and the results. You can enter the specified period for which you want to check the prevalence rate of a particular infection. You can also views the Trends of the infection for the defined period, as a graph, by clicking the Trends option when the report is displayed.</value>
+		</term>
+		<term>
+			<key>TIPS_COUNTS</key>
+			<value>Counts: This option generates a report for a particular period of time based on the count of tests, specimen or doctor statistics.</value>
+		</term>
+		<term>
+			<key>TIPS_TURNAROUNDTIME</key>
+			<value>Turnaround Time: This option generates the turnaround time for all or chosen test for a particular period of time. It also generates a graph of the statistics. You can choose to include both pending and completed tests or just the completed tests.</value>
+		</term>
+		<term>
+			<key>TIPS_INFECTIONREPORT</key>
+			<value>Infection Report: This option generates an aggregate infection report for a particular period for one or all Lab sections. It also provides an option to create a Word document of the generated report.</value>
+		</term>
+		<term>
+			<key>TIPS_INVENTORY</key>
+			<value>Inventory: This option generates a listing of the current inventory.</value>
+		</term>
+	</page>
+	<page id="search_condition" descr="Search Conditions">
+		<term>
+			<key>SEARCH_BEGIN_WITH</key>
+			<value>Starts with</value>
+		</term>
+		<term>
+			<key>SEARCH_END_WITH</key>
+			<value>End with</value>
+		</term>
+		<term>
+			<key>SEARCH_CONTAINS</key>
+			<value>Contains</value>
+		</term>
+ </page>
+</pages>

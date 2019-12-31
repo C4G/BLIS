@@ -1,7 +1,16 @@
 <?php
 session_start();
+
+if($_GET["role"]==="dir")
+{
+$f_pvt="LAB_dir.blis";
+$f_pub="LAB_dir_pubkey.blis";
+}
+else
+{
 $f_pvt="LAB_".$_SESSION['lab_config_id'].".blis";
 $f_pub="LAB_".$_SESSION['lab_config_id']."_pubkey.blis";
+}
 if(!(file_exists($f_pvt)&&file_exists($f_pub)))
 {
 // Configuration for 4096 RSA key Pair with Digest Algo 512   
@@ -30,14 +39,15 @@ fwrite($fp,$privkey);
 fclose($fp);
 }
     header('Content-Type: application/force-download');
-    header("Content-Disposition: attachment; filename=\"" . basename("LAB_".$_SESSION['lab_config_id']."_pubkey.blis") . "\";");
+    header("Content-Disposition: attachment; filename=\"" . basename($f_pub) . "\";");
     header('Content-Transfer-Encoding: binary');
     header('Expires: 0');
    header('Cache-Control: must-revalidate');
     header('Pragma: public');
-    header('Content-Length: ' . filesize("LAB_".$_SESSION['lab_config_id']."_pubkey.blis"));
+    header('Content-Length: ' . filesize(
+$f_pub));
    ob_clean();
     flush();
-    readfile("LAB_".$_SESSION['lab_config_id']."_pubkey.blis");
+    readfile($f_pub);
     exit;
 ?>
