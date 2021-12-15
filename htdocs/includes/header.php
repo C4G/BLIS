@@ -215,7 +215,7 @@ if(strpos($_SERVER['PHP_SELF'], 'login.php') === false)
 			}
 			if(strpos($key, LangUtil::$pageTerms['MENU_BACKUP']) !== false)
 			{
-				echo " target='_blank' ";
+//				echo " target='_blank' ";
 			}
 			if(strpos($_SERVER['PHP_SELF'], "_home.php") !== false && strpos($value, "lab_configs.php") !== false)
 			{

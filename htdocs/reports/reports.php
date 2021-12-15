@@ -2251,7 +2251,7 @@ alert(dd_to);
                     <form name="doctors_stats_form" id="doctors_stats_form" action="doctor_stats.php" method='post'>
                         <table cellpadding="4px">
                             <?php
-                            $site_list = get_site_list($_SESSION['user_id']);
+                            $site_list = get_site_list_with_labid($_SESSION['user_id']);
                             if(count($site_list) == 1)
                             {
                                 foreach($site_list as $key=>$value)
@@ -3328,10 +3328,12 @@ alert(dd_to);
                         <table cellpadding='4px'>
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
+                            $t = $_SESSION['user_id'];
                             if(count($site_list) == 1)
                             {
-                                foreach($site_list as $key=>$value)
+                                foreach($site_list as $key=>$value){
                                     echo "<input type='hidden' name='location' id='location8' value='$key'></input>";
+                                }
                             }
                             else
                             {

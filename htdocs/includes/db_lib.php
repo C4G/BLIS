@@ -445,7 +445,118 @@ class FieldOrdering
 
 
 
+class KeyMgmt
+{
+public $ID;
+public $LabName;
+	public $PubKey;
+public $AddedBy;
+public $ModOn;
+public static function read_enc_setting()
+{
+		$saved_db = DbUtil::switchToGlobal();
+		$query_config = "SELECT max(enc_enabled) as enc_enabled from encryption_setting";
+		$record = query_associative_one($query_config);
+		DbUtil::switchRestore($saved_db);
+return $record['enc_enabled'];
+}
+public static function write_enc_setting($val)
+{
+		$saved_db = DbUtil::switchToGlobal();
+		$query_config = "update encryption_setting set enc_enabled=".$val;
+query_blind($query_config);
+		DbUtil::switchRestore($saved_db);
+}
+	public static function getObject($record)
+	{
+		if($record == null)
+			return null;
+$keyMgmt=new KeyMgmt();
+		if(isset($record['id']))
+{
+$keyMgmt->ID=$record['id'];
+$keyMgmt->LabName=$record['lab_name'];
+$keyMgmt->PubKey=$record['pub_key'];
+$keyMgmt->AddedBy=$record['added_by'];
+$keyMgmt->ModOn=$record['last_modified'];
+return $keyMgmt;
+}
+return null;
+}
 
+	public static function getByLabName($labName) {
+		$saved_db = DbUtil::switchToGlobal();
+		$query_config = "SELECT * FROM keymgmt WHERE lab_name ='$labName' LIMIT 1";
+
+		$record = query_associative_one($query_config);
+		DbUtil::switchRestore($saved_db);
+		return KeyMgmt::getObject($record);
+	}
+
+	public static function getById($keyID) {
+		$saved_db = DbUtil::switchToGlobal();
+		$query_config = "SELECT * FROM keymgmt WHERE id =$keyID  LIMIT 1";
+		$record = query_associative_one($query_config);
+		DbUtil::switchRestore($saved_db);
+		return KeyMgmt::getObject($record);
+	}
+function getAllKeys()
+{
+	$saved_db = DbUtil::switchToGlobal();
+		$query_configs = "SELECT id,'' as pub_key,lab_name,added_by,last_modified FROM keymgmt ORDER BY lab_name";
+	$resultset = query_associative_all($query_configs, $row_count);
+	$retval = array();
+	if($resultset == null)
+	{
+		DbUtil::switchRestore($saved_db);
+		return $retval;
+	}
+	foreach($resultset as $record)
+	{
+$r=KeyMgmt::getObject($record);
+$r->AddedBy=User::getByUserId($r->AddedBy)->username;
+		$retval[] = $r;
+	}
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+}
+function add_key_mgmt($keyMgmt)
+{
+	$saved_db = DbUtil::switchToGlobal();
+	$query_check = "SELECT count(*) as cnt from keymgmt where lab_name='".$keyMgmt->LabName."'";
+	$record = query_associative_one($query_check);
+if($record['cnt']!=0)
+{
+return "Key For This Lab Already Exists";
+}
+$query="insert into keymgmt(lab_name,pub_key,added_by,last_modified) values('";
+$query=$query.$keyMgmt->LabName."','".$keyMgmt->PubKey."',".$keyMgmt->AddedBy.",now())";
+		query_insert_one($query);
+	DbUtil::switchRestore($saved_db);
+	return "Key added successfully";
+}
+function update_key_mgmt($keyMgmt)
+{
+	$saved_db = DbUtil::switchToGlobal();
+	$query_check = "SELECT count(*) as cnt from keymgmt where id=".$keyMgmt->ID;
+	$record = query_associative_one($query_check);
+if($record['cnt']<1)
+return "This Lab Does Not Exists.";
+$query="update keymgmt set lab_name='";
+$query=$query.$keyMgmt->LabName."',pub_key='".$keyMgmt->PubKey."',added_by=".$keyMgmt->AddedBy.",last_modified=now() where id=".$keyMgmt->ID;
+		query_blind($query);
+	DbUtil::switchRestore($saved_db);
+	return "Key updated successfully";
+}
+function delete_key_mgmt($keyID)
+{
+	$saved_db = DbUtil::switchToGlobal();
+$query="delete from keymgmt where id=".$keyID;
+		query_blind($query);
+	DbUtil::switchRestore($saved_db);
+	return "Key deleted successfully";
+}
+}
 class LabConfig
 {
 	public $id;
@@ -1229,6 +1340,19 @@ $lc->name=$record['name'];
 		DbUtil::switchRestore($saved_db);
 		return $ageLimit;
 	}
+
+    public function getAllReportConfigs()
+	{
+		# Returns report config parameters of all reportIds for this lab
+		return ReportConfig::getAllRows($this->id);
+	}
+
+	public function getAnyWorksheetConfig()
+	{
+		# if there is any row with non zero test_type_id returns it
+		# otherwise return any row present
+		return ReportConfig::getOneWorksheetRow($this->id);
+	}
 	
 	public function getReportConfig($report_id)
 	{
@@ -1403,8 +1527,8 @@ class Sites
             $query = "SELECT * FROM sites ".
                 "WHERE lab_id=".$id;
             $result = query_associative_all($query, null);
-            if ($result == NULL)        
-   {
+			if ($result == NULL)        
+   			{
                 $lab_config = LabConfig::getById($id);
                 $lab_name = mysql_real_escape_string($lab_config->name, $con);
                 $query = "INSERT INTO sites ".
@@ -1419,23 +1543,20 @@ class Sites
 
             $resultset = array();
             foreach ($result as $record)
-{
-//echo "id:".$record["id"]."name:".$record["name"];
+			{
+				//echo "id:".$record["id"]."name:".$record["name"];
                 $resultset[] =self::getObject($record);
-//$record["name"]; //
-}
+				//$record["name"]; //
+			}
 
             DbUtil::switchRestore($saved_db);
-//echo "rsult:".implode("|",$resultset);
+			//echo "rsult:".implode("|",$resultset);
             return $resultset;
         }
         else
         {
             return null;
         }
-
-
-
     }
 
     public static function addSite($lab_config_id, $site_name)
@@ -1592,6 +1713,8 @@ class ReportConfig
 	public $usePatientName;
 	public $useTest;
 	public $usePatientRegistrationDate;
+	public $useViewPatientReport;
+	public $useEnterResults;
 	
 	public $useSpecimenId;
 	public $useSpecimenAddlId;
@@ -1758,10 +1881,19 @@ class ReportConfig
 			$report_config->useRequesterName = $patient_field_list[11];
 		
 		if(!isset($patient_field_list[12]))
-		{	
 			$report_config->useReferredToHospital = 0;
-		}else
+		else
 			$report_config->useReferredToHospital = $patient_field_list[12];
+		if(!isset($patient_field_list[13]))
+			$report_config->useViewPatientReport = 0;
+		else
+			$report_config->useViewPatientReport = $patient_field_list[13];
+		if(!isset($patient_field_list[14]))
+			$report_config->useEnterResults = 0;
+		else
+			$report_config->useEnterResults = $patient_field_list[14];
+		
+
 		
 		
 		# Specimen main fields
@@ -1849,7 +1981,35 @@ class ReportConfig
 		# Return data object
 		return $report_config;		
 	}
+
+	# return a row from report_config with test_type_id!=0
+	# if such a row is not present then return any available row
+	public static function getOneWorksheetRow($lab_config_id)
+	{
+		global $con;
+		$lab_config_id = mysql_real_escape_string($lab_config_id);
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		$query_string = "SELECT * FROM report_config WHERE test_type_id!=0 LIMIT 1";
+		$record = query_associative_one($query_string);
+		if($record == NULL) {
+			$query_string = "SELECT * FROM report_config LIMIT 1";
+			$record = query_associative_one($query_string);
+		}
+		$retval = ReportConfig::getObject($record, $lab_config_id);
+		DbUtil::switchRestore($saved_db);
+		return $retval;	
+	}
 	
+    public static function getAllRows($lab_config_id)
+	{
+		global $con;
+		$lab_config_id = mysql_real_escape_string($lab_config_id);
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
+		$query_string = "SELECT * FROM report_config";
+		$record = query_associative_all($query_string, $row_count);
+		return $record;	
+	}
+
 	public static function getById($lab_config_id, $report_id)
 	{
 		global $con;
@@ -1867,6 +2027,9 @@ class ReportConfig
 	{
 		global $con;
 		$lab_config_id = mysql_real_escape_string($lab_config_id);
+		
+		$reflFunc = new ReflectionFunction('mysql_real_escape_string');
+		
 		$test_type_id = mysql_real_escape_string($test_type_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM report_config WHERE test_type_id=$test_type_id LIMIT 1";
@@ -1874,6 +2037,22 @@ class ReportConfig
 		$retval = ReportConfig::getObject($record, $lab_config_id);
 		DbUtil::switchRestore($saved_db);
 		return $retval;		
+	}
+
+	public static function updatePfieldsToDb(
+		$report_config,
+		$patient_main_field_map
+	)
+	{
+		$pfield_csv = implode(",", $patient_main_field_map);
+
+		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+
+		# add an if condition for db not having any row
+		$query_string="UPDATE report_config SET p_fields='$pfield_csv' WHERE test_type_id>0";
+		query_update($query_string);
+		DbUtil::switchRestore($saved_db);
+
 	}
 	
 	public static function updateToDb(
@@ -2782,6 +2961,14 @@ class Patient
 			return " - ";
 		else
 			return $this->addlId;
+	}
+
+	public function getRegDate()
+	{
+		if($this->regDate == "")
+		    return " - ";
+		else
+			return $this->regDate;
 	}
 	
 	public function getAssociatedTests() {
@@ -5307,6 +5494,7 @@ class CustomWorksheet
 		DbUtil::switchRestore($saved_db);
 		return $worksheet_id;
 	}
+	
 	
 	public static function updateToDb($worksheet, $lab_config)
 	{
@@ -9628,6 +9816,37 @@ function get_site_info($site_id)
     return $retval;
 }
 
+function get_site_list_with_labid($user_id) {
+	global $con;
+	$user_id = mysql_real_escape_string($user_id, $con);
+	$saved_db = DbUtil::switchToGlobal();
+	$user = get_user_by_id($user_id);
+	$retval = array();
+
+	if(is_admin_check($user))
+	{
+		# Admin level user
+		# Return all owned/accessible lab configurations
+		# If superadmin, return all lab configurations
+		if(is_super_admin($user))
+			$lab_config_list = get_lab_configs();
+		else
+			$lab_config_list = get_lab_configs($user_id);
+		foreach($lab_config_list as $lab_config)
+		{
+			$retval[$lab_config->id] = $lab_config->getSiteName();
+		}
+	}
+	else
+	{
+		# Technician user -> Return local lab configuration
+		$lab_config = get_lab_config_by_id($user->labConfigId);
+		$retval[$user->labConfigId] = $lab_config->getSiteName();
+	}
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+}
+
 function get_site_list($user_id)
 {
 	# Returns a list of accessible site names and ids for a given user (admin or technician)
@@ -9644,21 +9863,42 @@ function get_site_list($user_id)
 		if(is_super_admin($user))
 			$lab_config_list = get_lab_configs();
 		else
-{
-/*//echo "user:".$user_id;
-$retval=Sites::getByLabConfigId(get_lab_config_id($user_id));
-}*/
+		{
+		/*//echo "user:".$user_id;
+		$retval=Sites::getByLabConfigId(get_lab_config_id($user_id));
+		}*/
+			$lab_config_list = get_lab_configs($user_id);
+			foreach($lab_config_list as $lab_config) {
+				$sites=Sites::getByLabConfigId($lab_config->id);
+				foreach($sites as $site) {
+					$retval[$site->id]=$site->name;
+				}
+			}
+		}
+	}
+	else
+	{
+		# Technician user -> Return local lab configuration
+		$lab_config = get_lab_config_by_id($user->labConfigId);
+		$retval[$user->labConfigId] = $lab_config->getSiteName();
+	}
+	DbUtil::switchRestore($saved_db);
+	return $retval;
+
+	if(is_admin_check($user))
+	{
+		# Admin level user
+		# Return all owned/accessible lab configurations
+		# If superadmin, return all lab configurations
+		if(is_super_admin($user))
+			$lab_config_list = get_lab_configs();
+		else
 			$lab_config_list = get_lab_configs($user_id);
 		foreach($lab_config_list as $lab_config)
 		{
-$sites=Sites::getByLabConfigId($lab_config->id);
-foreach($sites as $site)
-{
-			$retval[$site->id]=$site->name;
+			$retval[$lab_config->id] = $lab_config->getSiteName();
 		}
 	}
-}
-}
 	else
 	{
 		# Technician user -> Return local lab configuration
@@ -11129,10 +11369,13 @@ function get_compatible_test_types($lab_config_id, $specimen_type_id)
 		"ORDER BY tt.name";
 
 	$resultset = query_associative_all($query_string, $row_count);
+	
 	$retval = array();
-	foreach($resultset as $record)
-	{
-		$retval[] = TestType::getObject($record);
+	if($resultset != null) {
+		foreach($resultset as $record)
+		{
+			$retval[] = TestType::getObject($record);
+		}
 	}
 	DbUtil::switchRestore($saved_db);
 	return $retval;
@@ -11621,7 +11864,8 @@ function get_backup_folders($lab_config_id)
 		{
 			if(strpos($file, "blis_backup_") !== false)
 			{
-				if(is_file($file))
+                $file_parts = pathinfo($file);
+				if(is_file($file)||$file_parts['extension']=="zip")
 				{
 					# Not a folder
 					continue;

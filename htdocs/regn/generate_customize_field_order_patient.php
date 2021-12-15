@@ -103,6 +103,8 @@ class CustomFieldOrderGeneration_Patient{
 				echo LangUtil::$generalTerms['MALE'];
 				echo "<INPUT TYPE=RADIO NAME='sex' VALUE='F'>";
 				echo LangUtil::$generalTerms['FEMALE'];
+				echo "<INPUT TYPE=RADIO NAME='sex' VALUE='O'>";
+				echo LangUtil::$generalTerms['OTHER'];
 			echo "<br>
 			</td>
 		</tr>";
