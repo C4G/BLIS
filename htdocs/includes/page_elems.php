@@ -515,6 +515,7 @@ echo "</td>";
 	{
 		# Returns accessible sites for drop down <select> boxes
 		$site_list = get_site_list($_SESSION['user_id']);
+		echo "debug 1 ". $_SESSION['user_id'];
 		foreach($site_list as $key => $value)
 		{
 			echo "<option value='$key'>$value</option>";
@@ -8145,6 +8146,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		# Creates html fields for report configuration form
 		?>
 		<?php #echo $report_config->name."<br>"; ?>
+		<form name='report_config_submit_form' id='report_config_submit_form' action='ajax/report_config_update.php' method='post'>
 		<input type='hidden' name='location' value='<?php echo $report_config->labConfigId; ?>'></input>
 		<input type='hidden' name='report_id' value='<?php echo $report_config->reportId; ?>'></input>
 		<input type='hidden' name='t_type' value=<?php
@@ -8412,6 +8414,17 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						?>>
 					</input>
 					<?php echo "Registration Date"; ?>
+				</td>
+				<td></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+					<input type='checkbox' name='p_field_13' <?php
+						if($report_config->useViewPatientReport == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo LangUtil::$generalTerms['VIEW_REPORT']; ?>
 				</td>
 				<td></td>
 			</tr>
@@ -8818,6 +8831,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			</tr>
 			
 		</table>
+		</form>
 		<?php		
 	}
 	
@@ -10816,6 +10830,127 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				echo "<option id='$test->testTypeId' value='$test->testTypeId'>".$test->name."</option>";
 	}
 	
+	public function getBatchResultsFieldsForm()
+	{
+		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);	
+		$report_config = $lab_config->getAnyWorksheetConfig();
+
+	?>
+		<table cellspacing='6px' class='smaller_font'>
+		<tr valign='top'>
+				<td><b><?php echo LangUtil::$generalTerms['PATIENTS']?></b></td>
+				<td></td>
+			</tr>
+			<?php # Patient main fields ?>
+			<tr valign='top'>
+				<td>
+					<input type='checkbox' name='p_field_0' <?php
+						if($report_config->usePatientId == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo LangUtil::$generalTerms['PATIENT_ID']; ?>
+				</td>
+				<td></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+					<input type='checkbox' name='p_field_1' <?php
+						if($report_config->useDailyNum == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?>
+				</td>
+				<td></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+					<input type='checkbox' name='p_field_2' <?php
+						if($report_config->usePatientAddlId == 1)
+							echo " checked ";
+						?>>
+					</input><?php echo LangUtil::$generalTerms['ADDL_ID']; ?>
+				</td>
+				<td></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+					<input type='checkbox' name='p_field_3' <?php
+						if($report_config->useGender == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo LangUtil::$generalTerms['GENDER']; ?>
+				</td>
+				<td></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+					<input type='checkbox' name='p_field_4' <?php
+						if($report_config->useAge == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo LangUtil::$generalTerms['AGE']; ?>
+				</td>
+				<td></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+				<input type='checkbox' name='p_field_5' <?php
+						if($report_config->useDob == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo LangUtil::$generalTerms['DOB']; ?>
+				</td>
+				<td></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+					<input type='checkbox' name='p_field_6' <?php
+						if($report_config->usePatientName == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo LangUtil::$generalTerms['NAME']; ?>
+				</td>
+				<td></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+					<input type='checkbox' name='p_field_8' <?php
+						if($report_config->usePatientRegistrationDate == 1)
+							echo " checked ";
+						?>>
+					</input>
+					<?php echo "Registration Date"; ?>
+				</td>
+				<td></td>
+			</tr>
+			<tr valign='top'>
+				<td>
+					<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' id='batch_results_fields_submit' onclick='javascript:submit_batch_results_fields_form();'>
+					</input><small>
+					<a href='lab_config_home.php?id=<?php echo $lab_config->id; ?>'>
+						<?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?>
+					</a>
+					</small>
+				</td>
+
+				<td>&nbsp;&nbsp;&nbsp;
+				<span id='batch_results_fields_submit_progress' style='display:none;'>
+					<?php $this->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
+				</span>
+				</td> <td></td>
+			</tr>
+
+		</table>
+
+	<?php	
+	}
+
 	public 	function  getPatientFieldsOrderForm()
 	{
 		global $SYSTEM_PATIENT_FIELDS;

@@ -403,6 +403,7 @@ $LANG_ARRAY = array (
 		"TIPS_INFECTIONREPORT" => "Ceci est une page modifiable pour le réglage des différents paramètres associaated chaque type d'épreuve individuelle.", 
 		"MENU_GENERAL" => "General settings", 
 		"Reports" => "Rapports", 
+		"Results" => "Results",
 		"Tests" => "Tests", 
 		"New Stock" => "New Stock", 
 		"Edit Stock" => "Modifier Stock", 

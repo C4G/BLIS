@@ -5,6 +5,7 @@
 #
 include("redirect.php");
 include("includes/new_image.php");
+include("includes/db_lib.php");
 include("includes/header.php");
 include("includes/random.php");
 include("includes/stats_lib.php");
@@ -102,6 +103,13 @@ $script_elems->enableJQueryForm();
 	<div id='DRS_rc' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
 			<li><?php echo LangUtil::$pageTerms['TIPS_DAILYREPORTSETTINGS']; ?></li>
+		</ul>
+	</div>
+
+	<div id='BRC' class='right_pane' style='display:none;margin-left:10px;'>
+	<ul>
+			<!-- Change this to use echo LangUtil::$pageTerms['TIPS_BATCHRESULTSCONFIGSETTINGS']-->
+			<li><?php echo LangUtil::$pageTerms['TIPS_BATCHRESULTSCONFIGSETTINGS']; ?></li>
 		</ul>
 	</div>
 	
@@ -223,7 +231,11 @@ $script_elems->enableJQueryForm();
 	</ul><br>
 			<i><?php echo LangUtil::$pageTerms['TIPS_SETUPNETWORK_4']; ?></i>
 	</div>
-	
+	<div id='Keymgmt' class='right_pane' style='display:none;margin-left:10px;'>
+	<ul>
+		<li><?php echo LangUtil::$pageTerms['TIPS_KEY_MANAGEMENT']; ?></li>
+	</ul>
+	</div>	
 	<div id='Revert' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
 		<li><?php echo LangUtil::$pageTerms['TIPS_REVERT']; ?></li>
@@ -310,6 +322,43 @@ $field_odering_specimen = field_order_update::install_first_order($lab_config, 2
 <?php $page_elems->getCompatibilityJsArray("st_map", $lab_config_id); ?>
 
 $(document).ready(function(){
+var form = document.getElementById('form_key');
+var fileSelect = document.getElementById('pub_key');
+var lab_name=document.getElementById('lab_name');
+form.onsubmit = function(event) {
+  event.preventDefault();
+var files = fileSelect.files;
+var formData = new FormData();
+ for (var i = 0; i < files.length; i++) {
+   var file = files[i];
+    var allowedExtensions = /(\.blis|\.BLIS)$/i;
+    if(!allowedExtensions.exec(file.name)){
+alert("Invalid key, please upload the key provided by BLIS Software.");
+return;
+}
+  formData.append('keys', file, file.name);
+formData.append("lab_name", lab_name.value);    
+}
+var xhr = new XMLHttpRequest();
+xhr.open('POST', '../ajax/add_keys.php', true);
+xhr.onload = function () {
+  if (xhr.status === 200) {
+var r=xhr.response;
+if(r==="FAIL")
+{
+alert("Error uploading key, try again!");
+return;
+}
+alert(r);
+hideForm();
+load_key_table();
+  } else {
+    alert('An error occurred!');
+return;
+  }
+};
+xhr.send(formData);
+}
         $("#inventory_div").load("view_stocks.php");;
 	$("input[name='rage']").change(function() {
 		toggle_agegrouplist();
@@ -558,7 +607,15 @@ $(document).ready(function(){
 		right_load(4, 'fields_div');
 		<?php
 	}
-	
+	else if(isset($_REQUEST['brfupdate']))
+	{
+		# Show batch results fields updated message
+		?>
+		$('#batch_results_fields_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('batch_results_fields_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+		$('#batch_results_fields_msg').show();
+		right_load(54, 'batch_results_div');
+		<?php
+	}
 	else if(isset($_REQUEST['odfupdate']))
 	{
 	# Show other fields updated message
@@ -808,6 +865,17 @@ $('#report_setup').hide();
 
 }
 
+//some more changes starting point
+function results_setup()
+{
+if(document.getElementById('results_setup').style.display =='none')
+$('#results_setup').show();
+else
+$('#results_setup').hide();
+
+}
+//some more changes ending point
+
 function api_setup()
 {
 if(document.getElementById('api_setup').style.display =='none')
@@ -851,9 +919,117 @@ function blis_update()
         
     $('#update_button').show();
 }
+function load_key_table()
+{
+//alert("ok");
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: "ajax/get_keys.php", 
+//      data: data,
+      success: function(data) {
+col=["LabName","AddedBy","ModOn"];
+col_disp=["<?php echo LangUtil::$pageTerms['key_alias']; ?>","Modified By","Modified On","",""];
+            // CREATE A TABLE.
+            var table = document.createElement('table');
+            table.setAttribute('id', 'publicKeyTable');     // SET TABLE ID.
+table.setAttribute('style','width: 100%;font: 17px Calibri;border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;');
 
+            var tr = table.insertRow(-1);               // CREATE A ROW (FOR HEADER).
+
+            for (var h = 0; h < col_disp.length; h++) {
+                // ADD TABLE HEADER.
+                var th = document.createElement('th');
+                th.innerHTML = col_disp[h].replace('_', ' ');
+th.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;");
+                tr.appendChild(th);
+            }
+
+            // ADD ROWS USING JSON DATA.
+            for (var i = 0; i < data.length; i++) {
+
+                tr = table.insertRow(-1);           // CREATE A NEW ROW.
+
+                for (var j = 0; j < col.length; j++) {
+                    var tabCell = tr.insertCell(-1);
+                    tabCell.innerHTML = data[i][col[j]];	
+  tabCell.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;");
+}
+var tabCell = tr.insertCell(-1);
+//                    tabCell.innerHTML = "<a onclick='edit_key("+data[i]['ID']+")'>Edit</a>";
+//  tabCell.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;font: 15px Calibri;cursor: pointer;border: none;color: #FFF;");
+//tabCell = tr.insertCell(-1);
+                    tabCell.innerHTML = "<a onclick='delete_key("+data[i]['ID']+")'>Delete</a>";
+  tabCell.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;font: 15px Calibri;cursor: pointer;border: none;color: #FFF;");
+}                
+            var div = document.getElementById('container');
+            div.innerHTML = '';
+            div.appendChild(table);    // ADD THE TABLE TO THE WEB PAGE.
+
+}
+});
+}
+function add_key()
+{
+showForm();
+}
+function hideForm()
+{
+$('#container1').hide();
+$('#container').show();
+}
+function showForm()
+{
+$('#container').hide();
+$('#container1').show();
+}
+function toggle_encryption()
+{
+var l=$('#btn_enc').val();
+var val=0;
+if(l==="<?php echo LangUtil::$pageTerms['enable_encrypted_backup']; ?>")
+{
+l="<?php echo LangUtil::$pageTerms['disable_encrypted_backup']; ?>";
+val=1;
+}
+else
+{
+l="<?php echo LangUtil::$pageTerms['enable_encrypted_backup']; ?>";
+val=0;
+}
+$('#btn_enc').val(l);
+$.get('../ajax/update_enc_setting.php?val='+val);
+}
+function download_key()
+{
+window.location.href="../ajax/download_key.php";
+}
+function edit_key(id)
+{
+alert("edit "+id);
+}
+function delete_key(id)
+{
+    $.ajax({
+      type: "GET",
+//      dataType: "json",
+      url: "../ajax/delete_keys.php?id="+id, 
+//      data: data,
+      success: function(data) {
+alert(data);
+load_key_table();
+},
+error:function(e)
+{
+alert("error");
+alert(JSON.stringify(e));
+}
+});
+}
 function right_load(option_num, div_id)
 {
+if(option_num===131)
+load_key_table();
 	$('#name9').attr("value", "<?php echo $lab_config->name; ?>");
 	$('#loc9').attr("value", "<?php echo $lab_config->location; ?>");
 	$('#misc_errormsg').hide();
@@ -1784,6 +1960,17 @@ function submit_toggle_test_reports_form()
 	});
 }
 
+function submit_batch_results_fields_form()
+{
+	$('#batch_results_fields_submit_progress').show();
+	$('#batch_results_form').ajaxSubmit({
+		success: function() {
+			$('#batch_results_fields_submit_progress').hide();
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&brfupdate=1";
+		}
+	});
+}
+
 function submit_ordered_fields_form()
 { 
 	$('#ordered_fields_submit_progress').show();
@@ -2250,6 +2437,16 @@ function AddnewDHIMS2Config()
 					<br><br>
 				</div>
 
+				<!--
+				change this to use echo LangUtil::$pageTerms['Results]
+				-->
+				<a id='option54' class='menu_option' href="javascript:right_load(54, 'batch_results_div');"><?php echo LangUtil::$pageTerms['Results']; ?></a>
+                <br><br>
+
+				<!--
+				temp changes ending point
+				-->
+
 				<a id="sites" class="menu_option"
 					href="javascript:right_load(54, 'site_config_div');">
 					<?php echo LangUtil::$pageTerms['SITES']; ?>
@@ -2284,6 +2481,7 @@ function AddnewDHIMS2Config()
 					if($SERVER != $ON_ARC) {
 						?>
 						<a id='option13' class='menu_option' href="javascript:right_load(13, 'backup_revert_div');"><?php echo LangUtil::$pageTerms['MENU_BACKUP_REVERT']; ?></a><br><br></li>
+						<a id='option131' class='menu_option' href="javascript:right_load(131, 'key_management_div');"><?php echo LangUtil::$pageTerms['MENU_KEY_MANAGEMENT']; ?></a><br><br></li>
 						<?php if(is_super_admin($user) || is_country_dir($user)) { ?>
 								<a id='option18' class='menu_option' href="javascript:right_load(18, 'update_database_div');"><?php echo 'Update Data'; ?></a><br><br></li>
                                                                 <a id='option34' class='menu_option' href="javascript:right_load(34, 'import_config_div');"><?php echo 'Import Configuration' ?></a><br><br></li>
@@ -4099,7 +4297,7 @@ function AddnewDHIMS2Config()
 							?>
 							<option value='4'><?php echo $LANG_ARRAY['reports']['MENU_DAILYLOGS']."-".LangUtil::$generalTerms['SPECIMENS']; ?></option>
 							<option value='6'><?php echo $LANG_ARRAY['reports']['MENU_DAILYLOGS']."-".LangUtil::$generalTerms['PATIENTS']; ?></option>
-							<!--<option value='77'><?php echo $LANG_ARRAY['reports']['MENU_DAILYLOGS']."-".LangUtil::$generalTerms['PATIENT_BARCODE']; ?></option>-->
+							<!-- <option value='77'><?php echo $LANG_ARRAY['reports']['MENU_DAILYLOGS']."-".LangUtil::$generalTerms['PATIENT_BARCODE']; ?></option> -->
 						</select>
 						&nbsp;&nbsp;
 						<input type='button' id='report_config_button' value="<?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?>" onclick="javascript:fetch_report_config();"></input>
@@ -4111,6 +4309,7 @@ function AddnewDHIMS2Config()
 						<div id='report_config_content'>
 						</div>
 					</form>	
+
 				</div>
 
 				<!-- Form for enabling/disabling test reports -->
@@ -4176,6 +4375,23 @@ function AddnewDHIMS2Config()
 					</div>
 				</div>
 
+				<!-- Form for setting batch results fields-->
+				<div class='right_pane' id='batch_results_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;"><a rel='facebox' href='#BRC'>Page Help</a></p>
+					<!-- configure the echo below to something like this LangUtil::$pageTerms['MENU_BATCHRESULTSFIELDS'] -->
+					<b><?php echo LangUtil::$pageTerms['MENU_BATCHRESULTSFIELDS']; ?></b> 
+					<br><br>
+					<div id='batch_results_fields_msg' class='clean-orange' style='display:none;width:350px;'>
+					</div>
+					<br>
+                    <div class='pretty_box' style='width:300px;'>
+					<form id='batch_results_form' name='batch_results_form' action='ajax/batch_results_config_update.php' method='post'>
+						<?php $page_elems->getBatchResultsFieldsForm() ?>
+						
+					</form>
+                    </div>
+				</div>
+
 				<!-- Form for setting patients fields order -->
 				<div class='right_pane' id='patient_fields_config_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#PFO'>Page Help</a></p>
@@ -4191,7 +4407,47 @@ function AddnewDHIMS2Config()
                     </div>
 				</div>
 
-
+				<div class='right_pane' id='key_management_div' style='display:none;margin-left:10px;'>
+					<p style="text-align: right;"><a rel='facebox' href='#Keymgmt'>Page Help</a></p>
+<table border="0">
+<tr>
+<td><input id="btn_enc" style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="toggle_encryption()" value="<?php echo KeyMgmt::read_enc_setting()==0?LangUtil::$pageTerms['enable_encrypted_backup']:LangUtil::$pageTerms['disable_encrypted_backup']; ?>"/></td>
+<td><input style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="download_key()" value="<?php echo LangUtil::$pageTerms['download_key']; ?>"/></td>
+</tr>
+</table>
+<br/><br/>
+<input id="addbtn" style="font: 17px Calibri;cursor: pointer;" type="button" onclick="add_key()" value="<?php echo LangUtil::$pageTerms['add_key']; ?>"/>
+<br/>
+    <div id="container" style="width:700px;">
+    </div>
+    <div id="container1" style="width:700px;display:none">
+<form id="form_key" action="../ajax/add_keys.php" method="post" enctype="multipart/form-data">
+<h3><?php echo LangUtil::$pageTerms['add_header']; ?></h3>
+<table border="0">
+<tr>
+<td>
+<?php echo LangUtil::$pageTerms['key_alias'].":"; ?>
+</td>
+<td><input id="lab_name" name="lab_name" type="text"/></td>
+</tr>
+<tr>
+<td>
+<?php echo LangUtil::$pageTerms['public_key_label'].":"; ?>
+</td>
+<td>
+<input type="file" name="pub_key" id="pub_key"/>
+</td>
+</tr>
+<tr>
+<td>
+<input type="submit" value="<?php echo LangUtil::$pageTerms['add_button']; ?>"/>
+</td>
+<td><input type="button" value="<?php echo LangUtil::$pageTerms['cancel_button']; ?>" onclick="hideForm()"/</td>
+</tr>
+</table>
+</form>
+    </div>
+</div>
 				<div class='right_pane' id='backup_revert_div' style='display:none;margin-left:10px;'>
 					<p style="text-align: right;"><a rel='facebox' href='#Revert'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_REVERT']; ?></b>

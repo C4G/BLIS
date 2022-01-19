@@ -314,9 +314,17 @@
 			<value>Female</value>
 		</term>
 		<term>
+			<key>OTHER</key>
+			<value>Other</value>
+		</term>
+		<term>
 			<key>PATIENT_DAILYNUM</key>
 			<value>Patient Number</value>
 		</term>		
+		<term>
+			<key>VIEW_REPORT</key>
+			<value>View Report</value>
+		</term>	
 		<term>
 			<key>AGE</key>
 			<value>Age</value>
@@ -1385,6 +1393,10 @@
 			<value>Target TAT</value>
 		</term>
 		<term>
+			<key>MENU_BATCHRESULTSFIELDS</key>
+			<value>Batch Results Fields</value>
+		</term>
+		<term>
 			<key>MENU_INFECTION</key>
 			<value>Infection Report</value>
 		</term>
@@ -1399,6 +1411,10 @@
 		<term>
 			<key>Reports</key>
 			<value>Reports</value>
+		</term>
+		<term>
+			<key>Results</key>
+			<value>Resuts</value>
 		</term>
 		<term>
 			<key>Tests</key>
@@ -1419,6 +1435,10 @@
 		<term>
 			<key>MENU_REPORTCONFIG</key>
 			<value>Daily Report Settings</value>
+		</term>
+		<term>
+			<key>TIPS_BATCHRESULTSCONFIGSETTINGS</key>
+			<value>This is an editable page for setting various parameters that should be shown in the batch results page</value>
 		</term>
 		<term>
 			<key>TIPS_DAILYREPORTSETTINGS</key>
@@ -2387,6 +2407,10 @@
 		<term>
 			<key>MENU_R_DRS</key>
 			<value>Daily Report Settings</value>
+		</term>
+		<term>
+			<key>TIPS_BATCHRESULTSCONFIGSETTINGS</key>
+			<value>This is an editable page for setting various parameters that should be shown in the batch results page</value>
 		</term>
 		<term>
 			<key>TIPS_DAILYREPORTSETTINGS</key>

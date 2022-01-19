@@ -18,7 +18,11 @@ $script_elems->enableDragTable();
 
 $date_from = $_REQUEST['yf']."-".$_REQUEST['mf']."-".$_REQUEST['df'];
 $date_to = $_REQUEST['yt']."-".$_REQUEST['mt']."-".$_REQUEST['dt'];
-$lab_config_id = $_REQUEST['l'];
+//AS Fixing error of invalid lab config id
+	session_start();
+$user = get_user_by_name($_SESSION['username']);
+$lab_config_id = $user->labConfigId;
+//$lab_config_id = $_REQUEST['l'];
 $lab_section = $_REQUEST['labsec'];
 
 
@@ -193,6 +197,12 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 			<th><?php echo LangUtil::$generalTerms['TESTS']; ?></th>
 		<?php
 		}
+		if($report_config->useViewPatientReport == 1)
+		{
+		?>
+			<th><?php echo "View Report"; ?></th>
+		<?php
+		}
 		
 		# Patient Custom fields here
 		$custom_field_list = $lab_config->getPatientCustomFields();
@@ -301,6 +311,17 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 		?>
 			<td class='rstyle'><?php echo $patient->getAssociatedTests(); ?></td>
 		<?php
+		}
+		if($report_config->useViewPatientReport == 1)
+		{
+		?>
+			<td class='rstyle'>
+				<a href='reports_testhistory.php?location=<?php echo $lab_config_id; ?>&patient_id=<?php echo $patient->patientId; ?>' 
+				title="Click to Generate Test History Report for this Patient" target="_blank">
+				<?php echo LangUtil::$generalTerms['VIEW_REPORT']; ?></a>
+			</td>
+		<?php
+			
 		}
 		
 		# Patient Custom fields here
