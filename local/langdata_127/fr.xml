@@ -314,6 +314,10 @@
 			<value>Femelle</value>
 		</term>
 		<term>
+			<key>OTHER</key>
+			<value>Other</value>
+		</term>
+		<term>
 			<key>PATIENT_DAILYNUM</key>
 			<value>Patient Number</value>
 		</term>		
@@ -1316,6 +1320,10 @@
 			<value>Retour � la sauvegarde</value>
 		</term>
 		<term>
+			<key>MENU_KEY_MANAGEMENT</key>
+			<value>gérer les clés de sauvegarde</value>
+		</term>
+		<term>
 			<key>TIPS_REVERT</key>
 			<value>En cas de d�faillance du syst�me, si nous voulons revenir � une copie pr�c�demment sauvegard� des donn�es, nous pouvons utiliser cette option. Vous pouvez choisir la version actuelle de sauvegarde avant de faire cela. Vous pouvez �galement choisir d\'inclure de revenir les param�tres de langue.</value>
 		</term>
@@ -1398,6 +1406,10 @@
 		<term>
 			<key>Reports</key>
 			<value>Rapports</value>
+		</term>
+		<term>
+			<key>Results</key>
+			<value>Results</value>
 		</term>
 		<term>
 			<key>Tests</key>
