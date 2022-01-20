@@ -2803,6 +2803,14 @@ echo "<option value='$lc->id'>$lc->name</option>";
 						>
 						<?php echo LangUtil::$generalTerms['FEMALE']; ?>
 						</option>
+						<option value='O'
+						<?php
+						if($patient->sex == 'O')
+							echo " selected ";
+						?>
+						>
+						<?php echo LangUtil::$generalTerms['OTHER']; ?>
+						</option>
 						</select>
 				</tr>
 				<tr>

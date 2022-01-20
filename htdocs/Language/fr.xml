@@ -314,6 +314,10 @@
 			<value>Femelle</value>
 		</term>
 		<term>
+			<key>OTHER</key>
+			<value>Other</value>
+		</term>
+		<term>
 			<key>PATIENT_DAILYNUM</key>
 			<value>Patient Number</value>
 		</term>		
@@ -1318,6 +1322,10 @@
 		<term>
 			<key>MENU_BACKUP_REVERT</key>
 			<value>Retour � la sauvegarde</value>
+		</term>
+		<term>
+			<key>MENU_KEY_MANAGEMENT</key>
+			<value>gérer les clés de sauvegarde</value>
 		</term>
 		<term>
 			<key>TIPS_REVERT</key>
