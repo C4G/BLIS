@@ -51,7 +51,7 @@
 		</term>
 		<term>
 			<key>ADD_CURRENCY</key>
-			<value>Add a new currency >></value>
+			<value>Add a new currency &gt;&gt;</value>
 		</term>
 		<term>
 			<key>NEW_CURRENCY</key>
@@ -314,8 +314,16 @@
 			<value>Female</value>
 		</term>
 		<term>
+			<key>OTHER</key>
+			<value>Other</value>
+		</term>
+		<term>
 			<key>PATIENT_DAILYNUM</key>
 			<value>Patient Number</value>
+		</term>	
+		<term>
+			<key>VIEW_REPORT</key>
+			<value>View Report</value>
 		</term>		
 		<term>
 			<key>AGE</key>
@@ -348,6 +356,10 @@
 		<term>
 			<key>HOURS</key>
 			<value>Hours</value>
+		</term>
+		<term>
+			<key>MINUTES</key>
+			<value>Minutes</value>
 		</term>
 		<term>
 			<key>DROPDOWN</key>
@@ -789,8 +801,6 @@
 			<key>REGION</key>
 			<value>Region</value>
 		</term>
-
-
 	</page>
 	<page id="header" descr="Page Header">
 		<term>
@@ -1383,6 +1393,10 @@
 			<value>Target TAT</value>
 		</term>
 		<term>
+			<key>MENU_BATCHRESULTSFIELDS</key>
+			<value>Batch Results Fields</value>
+		</term>
+		<term>
 			<key>MENU_INFECTION</key>
 			<value>Infection Report</value>
 		</term>
@@ -1397,6 +1411,10 @@
 		<term>
 			<key>Reports</key>
 			<value>Reports</value>
+		</term>
+		<term>
+			<key>Results</key>
+			<value>Resuts</value>
 		</term>
 		<term>
 			<key>Tests</key>
@@ -1417,6 +1435,10 @@
 		<term>
 			<key>MENU_REPORTCONFIG</key>
 			<value>Daily Report Settings</value>
+		</term>
+		<term>
+			<key>TIPS_BATCHRESULTSCONFIGSETTINGS</key>
+			<value>This is an editable page for setting various parameters that should be shown in the batch results page</value>
 		</term>
 		<term>
 			<key>TIPS_DAILYREPORTSETTINGS</key>
@@ -1678,8 +1700,7 @@
 			<key>SELECT_SITE_FOR_REMOVAL</key>
 			<value>Select sites for removal</value>
 		</term>
-
-		<term>
+			<term>
 			<key>OUT_OF_RANGE</key>
 			<value>Out of Range</value>
 		</term>
@@ -1693,7 +1714,11 @@
 			<key>MODIFY_SITE</key>
 			<value>Modiify site</value>
 		</term>
-
+		<term>
+			<key>PRINT_UNVERIFIED</key>
+			<value>Allow printing of unverified tests</value>
+		</term>
+		
 	</page>
 	<page id="lab_admins" descr="Lab Managers Page">
 		<term>
@@ -2149,13 +2174,6 @@
 			<key>INTERPRETATION</key>
 			<value>Interpretation</value>
 		</term>
-
-		<term>
-			<key>MODIFY_SITE</key>
-			<value>Modiify site</value>
-		</term>
-
-
 	</page>
 	<page id="edit_profile" descr="Edit Profile Page">
 		<term>
@@ -2389,6 +2407,10 @@
 		<term>
 			<key>MENU_R_DRS</key>
 			<value>Daily Report Settings</value>
+		</term>
+		<term>
+			<key>TIPS_BATCHRESULTSCONFIGSETTINGS</key>
+			<value>This is an editable page for setting various parameters that should be shown in the batch results page</value>
 		</term>
 		<term>
 			<key>TIPS_DAILYREPORTSETTINGS</key>

@@ -53,7 +53,6 @@ function toggle_stat_graph()
 
 function view_prevalance1()
 {
-
 	var tat_type = $('#tattype').attr("value");
 	if(tat_type == 'm')
 		view_testwise_monthly();
@@ -67,7 +66,6 @@ function view_prevalance1()
 
 function view_prevalance()
 {
-
 var tat_type = $('#tattype').attr("value");
 var date_from = $('#yf').attr("value")+"-"+$('#mf').attr("value")+"-"+$('#df').attr("value");
 var date_to = $('#yt').attr("value")+"-"+$('#mt').attr("value")+"-"+$('#dt').attr("value");
@@ -166,13 +164,10 @@ function view_testwise_monthly()
 function view_testwise_weekly()
 {
 	var date_from = $('#yf').attr("value")+"-"+$('#mf').attr("value")+"-"+$('#df').attr("value");
-	
-	var date_to = $('#yt').attr("value")+"-"+$('#mt').attr("value")+"-"+$('#dt').attr("value");
-	
-	if(checkDate($('#yf').attr("value"), $('#mf').attr("value"), $('#df').attr("value")) == false)
+		var date_to = $('#yt').attr("value")+"-"+$('#mt').attr("value")+"-"+$('#dt').attr("value");
+		if(checkDate($('#yf').attr("value"), $('#mf').attr("value"), $('#df').attr("value")) == false)
 	{
-	
-		alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
+			alert("<?php echo LangUtil::$generalTerms['TIPS_DATEINVALID']; ?>");
 		return;
 	}
 	if(checkDate($('#yt').attr("value"), $('#mt').attr("value"), $('#dt').attr("value")) == false)
@@ -249,6 +244,13 @@ function view_testwise_daily()
 <br><br>
 <?php
 $lab_config_id = array($_REQUEST['location']);
+	session_start();
+if(count($lab_config_id)==1)
+{
+//AS Fixing error of invalid lab config id
+$user = get_user_by_name($_SESSION['username']);
+$lab_config_id[0] = $user->labConfigId;
+}
 $summary_type = $_REQUEST['summary_type'];
 $date_from = $_REQUEST['yyyy_from']."-".$_REQUEST['mm_from']."-".$_REQUEST['dd_from'];
 $date_to = $_REQUEST['yyyy_to']."-".$_REQUEST['mm_to']."-".$_REQUEST['dd_to'];
@@ -298,7 +300,6 @@ else
 function processWeeklyTrends( $lab_config_id, $test_type_id, $date_from, $date_to, $test_name = null) {
 	global $namesArray;
 	global $stat_list;
-	
 	$lab_config = LabConfig::getById($lab_config_id[0]);
 	$test_type_list = get_discrete_value_test_types($lab_config);
 			

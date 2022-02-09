@@ -14,6 +14,7 @@ class LangUtil
 	{
 		global $LANG_ARRAY;
 		self::$generalTerms = $LANG_ARRAY[self::$generalPageId];
+
 	}
 	
 	public static function setPageId($page_id)
@@ -36,6 +37,7 @@ class LangUtil
 	
 	public static function getPageTitle($page_id)
 	{
+
 		global $LANG_ARRAY;
 		$retval = $LANG_ARRAY[$page_id]["TITLE"];
 		if($retval == null)
@@ -73,6 +75,7 @@ class LangUtil
 		{
 			$retval = "[ERROR]";
 		}
+
 		return $retval;
 	}
 	

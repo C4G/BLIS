@@ -1,19 +1,56 @@
 <?php
-
 include("redirect.php");
 include("../includes/db_lib.php");
 putUILog('backup_data', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
-
+session_start();
 if($SERVER == $ON_ARC)
 {
 	# System on arc2 server: Do not allow backup option
 	echo "Sorry, data backup option is not available in online version.";
 }
-
-$lab_config_id = $_REQUEST['labConfigId'];
+//AS changed lab config fix.
+$user = get_user_by_name($_SESSION['username']);
+$lab_config_id = $user->labConfigId;
+//$lab_config_id = $_REQUEST['labConfigId'];
 $backupType = $_REQUEST['backupTypeSelect'];
 $keyLocation = "../tmpPublicKey.pem";
+$LabName=$_POST['target'];
+$ploc="../ajax/LAB_".$_SESSION['lab_config_id']."_pubkey.blis";
+if(KeyMgmt::read_enc_setting()==1)
+{
+if($LabName==="Current Lab")
+{
+if(!file_exists($ploc))
+{
+echo "Please go to Lab Configuration -> Manage Backup Keys and click the download public key button to be able to use the encryption functionality.";
+return;
+}
+else
+$pubKey=file_get_contents($ploc);
+}
+}
 
+
+if($LabName!=="Current Lab")
+{
+if(count($_FILES)==1) 
+{
+$keyMgmt=KeyMgmt::getByLabName($LabName);
+$pubKey=$keyMgmt->PubKey;
+}
+else
+{
+$target_loc="../key.blis";
+	if ( move_uploaded_file($_FILES["pkey"]["tmp_name"], $target_loc) ) {
+	$pubKey = file_get_contents($target_loc);
+$keyMgmt=new KeyMgmt();
+$keyMgmt->LabName=$LabName;
+$keyMgmt->PubKey=$pubKey;
+$keyMgmt->AddedBy=$_SESSION['user_id'];
+KeyMgmt::add_key_mgmt($keyMgmt);
+}
+}
+}
 if($_REQUEST['keyType'] == "uploaded") {
 	if ( move_uploaded_file($_FILES["publicKey"]["tmp_name"], $keyLocation) ) {
 		echo "succeeded!";
@@ -88,7 +125,7 @@ else if( $backupType == "anonymized" ) {
 	$queryUpdate = "UPDATE patient ".
 				   "SET name = hash_value";
 	query_blind($queryUpdate);
-	$backupLabDbTempFileName= "blis_".$lab_config_id."_temp_backup.sql";
+	$backupLabDbTempFileName= "blis_".$lab_config_id."_temp_backup";
 	$count=0;
 	$command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbTempName > $backupLabDbTempFileName";
 	system($command);
@@ -121,6 +158,8 @@ else {
 $file_list1[] = $backupLabDbFileNameEnc;
 
 $dbname = "blis_revamp";
+$server_public_key = openssl_pkey_get_public($pubKey);
+encryptFile($backupLabDbFileName,$server_public_key);
 $backupDbFileName = "blis_revamp_backup.sql";
 $command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbname > $backupDbFileName";
 system($command);
@@ -141,6 +180,7 @@ if($backupType == "encrypted") {
 else {
 	$backupDbFileNameEnc = $backupDbFileName;
 }
+encryptFile($backupDbFileNameEnc,$server_public_key);
 $file_list2[] = $backupDbFileNameEnc;
 
 $dir_name3 = "../../local/langdata_".$lab_config_id;
@@ -156,6 +196,8 @@ if ($handle = opendir($dir_name3))
 
 $lab_config = LabConfig::getById($lab_config_id);
 $site_name = str_replace(" ", "-", $lab_config->getSiteName());
+if($LabName!=="Current Lab")
+$site_name=$LabName;
 $destination = "../../blis_backup_".$site_name."_".date("Ymd-Hi")."/";
 $toScreenDestination = "blis_backup_".$site_name."_".date("Ymd-Hi");
 @mkdir($destination);
@@ -175,6 +217,13 @@ foreach($file_list1 as $file)
 	{
 		echo "Error: $file -> $destination.$file <br>";
 	};
+if(KeyMgmt::read_enc_setting()==1)
+{
+	if(!copy($file.".key", $target_file_name.".key"))
+	{
+		echo "Error: $file -> $destination.$file <br>";
+	};
+}
 }
 unlink($backupLabDbFileNameEnc);
 
@@ -185,6 +234,13 @@ foreach($file_list2 as $file)
 	{
 		echo "Error: $file -> $destination.$file <br>";
 	};
+if(KeyMgmt::read_enc_setting()==1)
+{
+	if(!copy($file.".key", $destination."blis_revamp/".$file_name_parts[count($file_name_parts)-1].".key"))
+	{
+		echo "Error: $file -> $destination.$file <br>";
+	};
+}
 }
 unlink($backupDbFileNameEnc);
 
@@ -204,6 +260,7 @@ $log_file2 = "../../local/log_".$lab_config_id."_updates.sql";
 $log_file3 = "../../local/log_".$lab_config_id."_revamp_updates.sql";
 
 if( file_exists($log_file1) ) {
+encryptFile($log_file1,$server_public_key);
 	$copyDestination = $destination."log_".$lab_config_id.".txt";
 	if($backupType == "encrypted") { 
 		$fileHandle = fopen($log_file1, "r");
@@ -226,6 +283,7 @@ if( file_exists($log_file1) ) {
 }
 
 if( file_exists($log_file2) ) {
+encryptFile($log_file2,$server_public_key);
 	$copyDestination = $destination."log_".$lab_config_id."_updates.sql";
 	if($backupType == "encrypted") { 
 		$fileHandle = fopen($log_file2, "r");
@@ -247,6 +305,7 @@ if( file_exists($log_file2) ) {
 	//unlink($logFile);
 }
 if( file_exists($log_file3) ) {
+encryptFile($log_file3,$server_public_key);
 	$copyDestination = $destination."log_".$lab_config_id."_revamp_updates.sql";
 	if($backupType == "encrypted") { 
 		$fileHandle = fopen($log_file3, "r");
@@ -285,6 +344,7 @@ $i = 0;
 foreach($uilog_files as $log_file3)
 {
 if( file_exists($log_file3) ) {
+encryptFile($log_file3,$server_public_key);
         $vers = $versions[$i];
 	$copyDestination = $destination."UILog_".$vers.".csv";
 	if($backupType == "encrypted") { 
@@ -308,7 +368,108 @@ if( file_exists($log_file3) ) {
 }
 $i++;
 }
+//$rootPath=getcwd()+'/../../'.$toScreenDestination;
+$zipFile=$toScreenDestination.".zip";
+if(KeyMgmt::read_enc_setting()==1)
+$zipFile=$toScreenDestination."_enc.zip";
+$zipFileLoc=realpath("../../")."\\".$zipFile;
+
+//echo $zipFileLoc;
+createZipFile($zipFile,realpath($destination));
+copy($zipFile,$zipFileLoc);
+//removeDirectory(realpath($destination));
+
 # All okay
-$str = "Backup folder created as ".$toScreenDestination." under main BLIS directory.<br>Please copy this folder to your disk as backup";
+$str = "Download the below zip of the backup and save it to your disk. <br/><a href='/export/".$zipFile."'/>Download Zip</a>";
 echo $str;
+function hasFile()
+{
+echo count($_FILES);
+foreach ($_FILES['pkey']['tmp_name'] as $tmp_name) {
+    if (is_uploaded_file($tmp_name)) {
+return 1;
+    } else {
+return 0;
+    }
+}
+}
+function encryptFile($fname,$pub)
+{
+if(KeyMgmt::read_enc_setting()==0)
+{
+return;
+}
+$data=file_get_contents($fname);
+$sealed = '';
+openssl_seal($data, $sealed, $ekeys, array($pub));
+$env_key = $ekeys[0];
+file_put_contents($fname.".key",base64_encode($env_key));
+$f=fopen($fname,"w");
+fwrite($f,$sealed);
+fclose($f);
+//file_put_contents($fname,base64_encode($sealed));
+}
+function encryptFile1($fname,$pubKey)
+{
+	$fileHandle = fopen($fname, "r");
+	$fnameEnc = $fname.".enc";
+	$fileWriteHandle = fopen($fnameEnc, "w");
+ini_set('auto_detect_line_endings',true);
+	while(!feof($fileHandle)) {
+		$line = fgets($fileHandle);
+		$return = openssl_public_encrypt($line, $encLine, $pubKey,OPENSSL_PKCS1_PADDING);
+if($return)
+		fwrite($fileWriteHandle, base64_encode($encLine)."\r\n");
+else
+		fwrite($fileWriteHandle, "~".$line."\r\n");
+	}
+	fclose($fileWriteHandle);
+	fclose($fileHandle);
+$temp=file_get_contents($fnameEnc);
+file_put_contents($fname,$temp);
+	unlink($fnameEnc);
+}
+function createZipFile($zipFile,$rootPath)
+{
+        $zip = new ZipArchive();
+        $zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        // Create recursive directory iterator
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($rootPath),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($files as $name => $file)
+        {
+            // Skip directories (they would be added automatically)
+            if (!$file->isDir())
+            {
+                // Get real and relative path for current file
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($rootPath) + 1);
+
+                //echo $zipFile + "\n" + $filePath;
+		// Add current file to archive
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+
+        // Zip archive will be created only after closing object
+        $zip->close();
+}
+function removeDirectory($dir)
+{
+$it = new RecursiveDirectoryIterator($dir);//, RecursiveDirectoryIterator::SKIP_DOTS);
+$files = new RecursiveIteratorIterator($it,
+             RecursiveIteratorIterator::CHILD_FIRST);
+foreach($files as $file) {
+    if ($file->isDir()){
+        rmdir($file->getRealPath());
+    } else {
+        unlink($file->getRealPath());
+    }
+}
+rmdir($dir);
+}
+
 ?>
