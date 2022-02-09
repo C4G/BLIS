@@ -314,6 +314,10 @@
 			<value>Femelle</value>
 		</term>
 		<term>
+			<key>OTHER</key>
+			<value>Other</value>
+		</term>
+		<term>
 			<key>PATIENT_DAILYNUM</key>
 			<value>Patient Number</value>
 		</term>		
@@ -348,6 +352,10 @@
 		<term>
 			<key>HOURS</key>
 			<value>Heures</value>
+		</term>
+		<term>
+			<key>MINUTES</key>
+			<value>Minutes</value>
 		</term>
 		<term>
 			<key>DROPDOWN</key>
@@ -1316,6 +1324,10 @@
 			<value>Retour � la sauvegarde</value>
 		</term>
 		<term>
+			<key>MENU_KEY_MANAGEMENT</key>
+			<value>gérer les clés de sauvegarde</value>
+		</term>
+		<term>
 			<key>TIPS_REVERT</key>
 			<value>En cas de d�faillance du syst�me, si nous voulons revenir � une copie pr�c�demment sauvegard� des donn�es, nous pouvons utiliser cette option. Vous pouvez choisir la version actuelle de sauvegarde avant de faire cela. Vous pouvez �galement choisir d\'inclure de revenir les param�tres de langue.</value>
 		</term>
@@ -1398,6 +1410,10 @@
 		<term>
 			<key>Reports</key>
 			<value>Rapports</value>
+		</term>
+		<term>
+			<key>Results</key>
+			<value>Results</value>
 		</term>
 		<term>
 			<key>Tests</key>
@@ -1691,6 +1707,10 @@
 		<term>
 			<key>MODIFY_SITE</key>
 			<value>Modifier les sites</value>
+		</term>
+		<term>
+			<key>PRINT_UNVERIFIED</key>
+			<value>Autoriser l'impression de tests non vérifiés</value>
 		</term>
 	</page>
 	<page id="lab_admins" descr="Lab Managers Page">
@@ -2152,7 +2172,10 @@
 			<key>MODIFY_SITE</key>
 			<value>Modifier les sites</value>
 		</term>
-
+		<term>
+			<key>PRINT_UNVERIFIED</key>
+			<value>Autoriser l'impression de tests non vérifiés</value>
+		</term>
 	</page>
 	<page id="edit_profile" descr="Edit Profile Page">
 		<term>

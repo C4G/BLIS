@@ -197,6 +197,9 @@ if(strpos($_SERVER['PHP_SELF'], 'login.php') === false)
 	<div id="menus">
 	<ul id='globalnav'>
 <?php
+	// echo "hi <br>";
+	// echo $top_menu_options;
+	// echo "<br>";
 	if(isset($top_menu_options))
 	{
 		foreach($top_menu_options as $key => $value)

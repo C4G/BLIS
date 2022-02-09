@@ -2007,6 +2007,11 @@ class ReportConfig
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM report_config";
 		$record = query_associative_all($query_string, $row_count);
+		// $retval = array();
+		// foreach ($record as $value) {
+		// 	$retval[] = ReportConfig::getObject($$value, $lab_config_id);
+		// }
+		// DbUtil::switchRestore($saved_db);
 		return $record;	
 	}
 
@@ -9885,6 +9890,41 @@ function get_site_list($user_id)
 	DbUtil::switchRestore($saved_db);
 	return $retval;
 
+
+
+	// if(is_admin_check($user))
+	// {
+	// 	# Admin level user
+	// 	# Return all owned/accessible lab configurations
+	// 	# If superadmin, return all lab configurations
+	// 	if(is_super_admin($user))
+	// 		$lab_config_list = get_lab_configs();
+	// 	else
+	// 	{
+	// 		echo "yes admin";
+	// 	/*//echo "user:".$user_id;
+	// 	$retval=Sites::getByLabConfigId(get_lab_config_id($user_id));
+	// 	}*/
+	// 		$lab_config_list = get_lab_configs($user_id);
+	// 		foreach($lab_config_list as $lab_config) {
+	// 			echo "lab ".$lab_config->id."<br>";
+	// 			$sites=Sites::getByLabConfigId($lab_config->id);
+	// 			foreach($sites as $site) {
+	// 				echo "site ".$site->id." ".$site->name."<br>";
+	// 				$retval[$site->id]=$site->name;
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// else
+	// {
+	// 	# Technician user -> Return local lab configuration
+	// 	$lab_config = get_lab_config_by_id($user->labConfigId);
+	// 	$retval[$user->labConfigId] = $lab_config->getSiteName();
+	// }
+	// DbUtil::switchRestore($saved_db);
+	// return $retval;
+
 	if(is_admin_check($user))
 	{
 		# Admin level user
@@ -11858,12 +11898,17 @@ function get_backup_folders($lab_config_id)
 	# Returns a list of all backup folders available on main dir
 	$retval = array();
 	$start_dir = "../../";
+	// echo "hi ";
+	// echo $start_dir;
+	// echo " hi";
 	if($handle = opendir($start_dir)) 
 	{
 		while (false !== ($file = readdir($handle))) 
 		{
+			// echo "debugging ", $file, " -> ", "<br>";
 			if(strpos($file, "blis_backup_") !== false)
 			{
+				// echo "debugging ", $file, " -> ", $lab_config_id;
                 $file_parts = pathinfo($file);
 				if(is_file($file)||$file_parts['extension']=="zip")
 				{

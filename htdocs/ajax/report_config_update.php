@@ -101,7 +101,7 @@ $margin_right = trim($_REQUEST['margin_right']);
 $margin_csv = $margin_top.",".$margin_bottom.",".$margin_left.",".$margin_right;
 
 # Patient main fields
-$patient_main_field_count = 13;
+$patient_main_field_count = 14;
 $patient_main_field_map = array();
 for($i = 0; $i < $patient_main_field_count; $i++)
 {

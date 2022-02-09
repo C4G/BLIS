@@ -40,7 +40,7 @@ else
 if($_SESSION['locale'] != "fr")
 {
 ?>
-	Please email any comments or suggestions to Santosh Vempala (vempala@cc.gatech.edu) or Sai Teja(dsaiteja@gatech.edu)
+	Please email any comments or suggestions to Santosh Vempala (vempala@cc.gatech.edu)
 <?php
 }
 else

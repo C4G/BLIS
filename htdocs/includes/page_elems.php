@@ -8152,6 +8152,19 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	public function getReportConfigForm($report_config, $worksheet_config=false, $test_type_id = 0)
 	{
 		# Creates html fields for report configuration form
+		// $lab_config = LabConfig::getById($_SESSION['lab_config_id']);
+		// echo $report_config->usePatientId, "hello";
+		// echo "<br>";
+		// $temp = $lab_config->getAllReportConfigs();
+		// echo $report_config->reportId, "->", $report_config->testTypeId, "->",$report_config->usePatientId, "->", $report_config->headerText, "->",$report_config->useDailyNum;
+		// echo "<br>";
+		// echo "hihello";
+		// echo "<br>";
+		// foreach ($temp as $value)
+		// {
+		// 	echo $value['report_id'], "->", $value['test_type_id'], "->",$value['p_fields'], "->", $value['header'];
+		// 	echo "<br>";
+		// }
 		?>
 		<?php #echo $report_config->name."<br>"; ?>
 		<form name='report_config_submit_form' id='report_config_submit_form' action='ajax/report_config_update.php' method='post'>
@@ -10838,11 +10851,24 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				echo "<option id='$test->testTypeId' value='$test->testTypeId'>".$test->name."</option>";
 	}
 	
+	//starting point of changes
 	public function getBatchResultsFieldsForm()
 	{
 		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);	
 		$report_config = $lab_config->getAnyWorksheetConfig();
-
+		// echo $report_config->usePatientId, "hello";
+		// echo "<br>";
+		// $temp = $lab_config->getAllReportConfigs();
+		// echo $report_config->reportId, "->", $report_config->testTypeId, "->",$report_config->usePatientId, "->", $report_config->headerText, "->",$report_config->useDailyNum;
+		// echo "<br>";
+		// echo "hihello";
+		// echo "<br>";
+		// foreach ($temp as $value)
+		// {
+		// 	echo $value['report_id'], "->", $value['test_type_id'], "->",$value['p_fields'], "->", $value['header'];
+		// 	echo "<br>";
+		// }
+		// if()
 	?>
 		<table cellspacing='6px' class='smaller_font'>
 		<tr valign='top'>
@@ -10958,6 +10984,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 
 	<?php	
 	}
+	// ending point of changes
 
 	public 	function  getPatientFieldsOrderForm()
 	{

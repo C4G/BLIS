@@ -1482,6 +1482,8 @@ alert(dd_to);
             var search_attrib = $('#p_attrib').attr("value");
             var condition_attrib = $('#h_attrib').attr("value");
             var pid = $('#patient_id8').attr("value");
+            // alert(location);
+            // alert("hello");
             if(pid == "")
             {
                 alert("<?php echo LangUtil::$generalTerms['TIPS_INCOMPLETEINFO']; ?>");
@@ -3329,9 +3331,11 @@ alert(dd_to);
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
                             $t = $_SESSION['user_id'];
+                            // echo "temp";
                             if(count($site_list) == 1)
                             {
                                 foreach($site_list as $key=>$value){
+                                    // echo "key = '$key', value = '$value";
                                     echo "<input type='hidden' name='location' id='location8' value='$key'></input>";
                                 }
                             }

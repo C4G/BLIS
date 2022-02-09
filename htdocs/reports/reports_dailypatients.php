@@ -200,6 +200,7 @@ if( (count($patient_list) == 0 || $patient_list == null) && (count($patient_list
 		if($report_config->useViewPatientReport == 1)
 		{
 		?>
+			<!-- change the following to language norms -->
 			<th><?php echo "View Report"; ?></th>
 		<?php
 		}

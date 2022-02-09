@@ -168,7 +168,8 @@ function stopUpload(success){
 </script>
   <div id='importt_help'>
 <?php
-	$tips_string = "Click on browse and select the backup file to import. <br>Backup file name should be <i>blis_{lab ID}_backup.sql</i>";
+//	$tips_string = "Click on browse and select the backup file to import. <br>Backup file name should be <i>blis_{lab ID}_backup.sql</i>";
+	$tips_string = "Click on browse and select the backup file to import.";
 	$page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
         //echo "<b>Tips</b><br>".$tips_string;
 ?>
@@ -183,13 +184,13 @@ echo "<br>";
 ?>
 <div class='left_al' id="boxx"> 
     
-<form id='SQLimportForm' name='SQLimportForm' action='import_data_director.php' method='post' enctype="multipart/form-data" target="upload_target" >
-Select update file
+<form id='SQLimportForm' name='SQLimportForm' action='export/import_data_director1.php' method='post' enctype="multipart/form-data" target="upload_target">
+Select backup zip file
 <input type="file" id="sqlFile" name="sqlFile" size="40" /></td>
 <br>
-Please copy and paste langdata folder path present in backup folder 
+<!--Please copy and paste langdata folder path present in backup folder 
 <input type="text" name="lang_data_folder_path" id="lang_data_folder_path" value=" ">
-<br>
+<br>-->
 <input type="button" id="import" value="Import" onclick="javascript:confirmationMsg();">
 </form>
 <br>
