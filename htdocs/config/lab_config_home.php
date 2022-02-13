@@ -2447,8 +2447,8 @@ function AddnewDHIMS2Config()
 				temp changes ending point
 				-->
 
-				<a id="sites" class="menu_option"
-					href="javascript:right_load(54, 'site_config_div');">
+				<a id="option55" class="menu_option"
+					href="javascript:right_load(55, 'site_config_div');">
 					<?php echo LangUtil::$pageTerms['SITES']; ?>
 				</a>
                 <br><br>
