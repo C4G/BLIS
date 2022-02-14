@@ -49,7 +49,7 @@ if($CLEAN_DELETE === false)
 $saved_db = DbUtil::switchToGlobal();
 
 $query_string = "SELECT * FROM test_type";
-$resultset = query_associative_all($query_string, $row_count);
+$resultset = query_associative_all($query_string);
 $test_list = array();
 foreach($resultset as $record)
 {
@@ -75,7 +75,7 @@ foreach($test_list as $test)
 }
 
 $query_string = "SELECT * FROM measure";
-$resultset = query_associative_all($query_string, $row_count);
+$resultset = query_associative_all($query_string);
 $measure_list = array();
 foreach($resultset as $record)
 {
@@ -95,7 +95,7 @@ foreach($measure_list as $measure)
 }
 
 $query_string = "SELECT * FROM specimen_type";
-$resultset = query_associative_all($query_string, $row_count);
+$resultset = query_associative_all($query_string);
 $specimen_list = array();
 foreach($resultset as $record)
 {

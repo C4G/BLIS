@@ -267,7 +267,7 @@ class LabConfig
 		$query_string = 
 			"SELECT u.* FROM user u ".
 			"WHERE lab_config_id=$lab_config_id ORDER BY u.username";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		if($resultset != null)
 		{
 			foreach($resultset as $record)
@@ -476,7 +476,7 @@ class LabConfig
 		$query_string = 
 			"SELECT test_type_id FROM lab_config_test_type ".
 			"WHERE lab_config_id=$this->id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		foreach($resultset as $record)
 		{
@@ -494,7 +494,7 @@ class LabConfig
 			"SELECT tt.* FROM test_type tt, lab_config_test_type lctt ".
 			"WHERE lctt.lab_config_id=$this->id ".
 			"AND lctt.test_type_id=tt.test_type_id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		foreach($resultset as $record)
 		{
@@ -730,7 +730,7 @@ class LabConfig
 			$target_table = "labtitle_custom_field";
 		$query_string = 
 			"SELECT * FROM $target_table ORDER BY id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		foreach($resultset as $record)
 		{
@@ -803,7 +803,7 @@ class LabConfig
 		$saved_db = DbUtil::switchToLabConfig($this->id);
 		$query_string = 
 			"SELECT * FROM worksheet_custom";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		if($resultset != null && count($resultset) != 0)
 		{
@@ -1219,7 +1219,7 @@ class TestType
 			"SELECT * FROM test_type ".
 			"WHERE test_category_id=$cat_code AND disabled=0";
 		$saved_db = DbUtil::switchToLabConfigRevamp();
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		foreach($resultset as $record)
 		{
 			$retval[] = TestType::getObject($record);
@@ -1249,7 +1249,7 @@ class TestType
 			"SELECT measure_id FROM test_type_measure ".
 			"WHERE test_type_id=$this->testTypeId ";
                         //"ORDER BY ts";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		if($resultset) {
 			foreach($resultset as $record)
@@ -1269,7 +1269,7 @@ class TestType
 		$query_string = 
 			"SELECT measure_id FROM test_type_measure ".
 			"WHERE test_type_id=$this->testTypeId ";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		foreach($resultset as $record)
 		{
@@ -1537,7 +1537,7 @@ class Measure
              $query_string =
 			"SELECT * FROM measure ";
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$recordset = query_associative_all($query_string, $row_count);
+		$recordset = query_associative_all($query_string);
                 DbUtil::switchRestore($saved_db);
                 foreach( $recordset as $record ) 
                 {
@@ -1752,7 +1752,7 @@ class Measure
 	{
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 		$query_string = "SELECT * FROM numeric_interpretation WHERE measure_id=$this->measureId";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		if($resultset!=NULL)
 			{
@@ -1795,7 +1795,7 @@ class Measure
 		$lab_config_id = mysql_real_escape_string($lab_config_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM reference_range WHERE measure_id=$this->measureId ORDER BY sex DESC";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		if ($resultset!=NULL)
 		{
@@ -1922,7 +1922,7 @@ class Patient
 							"WHERE t.result <> '' ".
 							"AND t.specimen_id=sp.specimen_id ".
 							"AND sp.patient_id=$this->patientId";
-			$recordset = query_associative_all($query_string, $row_count);
+			$recordset = query_associative_all($query_string);
 			foreach( $recordset as $record ) {
 				$testName = get_test_name_by_id($record['test_type_id']);
 				$result .= $testName."<br>";
@@ -2039,7 +2039,7 @@ class Patient
 		$query_string = 
 			"SELECT * FROM patient ".
 			"WHERE ts LIKE '%$date%' ORDER BY patient_id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		foreach($resultset as $record)
 			$retval[] = Patient::getObject($record);
@@ -2054,7 +2054,7 @@ class Patient
 			"WHERE UNIX_TIMESTAMP(ts) >= UNIX_TIMESTAMP('$date_from 00:00:00') ".
 			"AND UNIX_TIMESTAMP(ts) <= UNIX_TIMESTAMP('$date_to 23:59:59') ".
 			"ORDER BY patient_id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		foreach($resultset as $record)
 			$retval[] = Patient::getObject($record);
@@ -2066,7 +2066,7 @@ class Patient
 	$query_string =
 			"SELECT DISTINCT patient_id FROM specimen ".
 			"WHERE date_collected BETWEEN '$date_from' AND '$date_to'";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		$record_p=array();
 			foreach($resultset as $record)
@@ -2088,7 +2088,7 @@ class Patient
 				"WHERE date_collected BETWEEN '$date_from' AND '$date_to' ".
 				"AND result!='$emp' ".
 				"AND specimen.specimen_id=test.specimen_id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		$record_p=array();
 		$count = 0;
@@ -2113,7 +2113,7 @@ class Patient
 			"WHERE date_collected BETWEEN '$date_from' AND '$date_to' ".
 			"AND result='$emp' ".
 			"AND specimen.specimen_id=test.specimen_id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		$record_p=array();
 		foreach($resultset as $record) {
@@ -2415,7 +2415,7 @@ class Specimen
 				"WHERE t.specimen_id=sp.specimen_id ".
 				"AND t.result = '' ".
 				") IS NULL";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		if($resultset == null)
 			return $retval;
@@ -2457,7 +2457,7 @@ class Specimen
 	public function getTestNames()
 	{
 		$query_string = "SELECT test_type_id FROM test WHERE specimen_id=$this->specimenId";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = "";
 		$count = 0;
 		foreach($resultset as $record)
@@ -3325,7 +3325,7 @@ class Test
 			"AND ts LIKE '%$date%' ";
 			//"AND result<>''";
 		$retval = array();
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		foreach($resultset as $record)
 			$retval[] = Test::getObject($record);
 		return $retval;
@@ -3844,7 +3844,7 @@ class Report
 		# Returns all report types stored in DB
 		$saved_db = DbUtil::switchToGlobal();
 		$query_string = "SELECT * FROM report";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		foreach($resultset as $record)
 		{
@@ -4046,7 +4046,7 @@ class CustomWorksheet
 	
 		$query_string =
 			"SELECT test_type_id, measure_id, width FROM worksheet_custom_test WHERE worksheet_id=$worksheet->id ORDER BY test_type_id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		# Populate testTypes list
 		$worksheet->testTypes = array();
 		foreach($resultset as $record)
@@ -4071,7 +4071,7 @@ class CustomWorksheet
 		# Populate list of user-defined fields
 		$query_string = 
 			"SELECT name,width,field_id FROM worksheet_custom_userfield WHERE worksheet_id=$worksheet->id ORDER BY name";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$worksheet->userFields = array();
 		foreach($resultset as $record)
 		{
@@ -4295,7 +4295,7 @@ class ReferenceRange
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM reference_range WHERE measure_id=$measure_id";
 		$retval = null;
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		if($resultset == null || count($resultset) == 0)
 			return $retval;
 		foreach($resultset as $record)
@@ -4601,7 +4601,7 @@ class UserStats
                         " ) ";
 	
 	$retval = array();
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
         //print_r($resultset);
 	foreach($resultset as $record)
 	{
@@ -4714,7 +4714,7 @@ class UserStats
 				"WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
 				"AND created_by = $user_id";
 	
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
 	{
@@ -4742,7 +4742,7 @@ class UserStats
 				"WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
 				"AND user_id = $user_id";
 	
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$test_list = array();
 	if(count($resultset) > 0)
 	{
@@ -4770,7 +4770,7 @@ class UserStats
 				"WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
 				"AND user_id = $user_id";
 	
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$test_list = array();
 	if(count($resultset) > 0)
 	{
@@ -4798,7 +4798,7 @@ class UserStats
 				"WHERE ts BETWEEN '$date_from_ts' AND '$date_to_ts' ".
 				"AND user_id = $user_id";
 	
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$test_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5033,7 +5033,7 @@ function get_admin_users()
 			"ORDER BY u.username";
 	}
 	$retval = array();
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		$retval[] = User::getObject($record);
@@ -5084,7 +5084,7 @@ function get_admin_user_list($user_id)
 		# Only admin level user: Return single option
 		$query_string = "SELECT * FROM user WHERE user_id=$user_id";
 	}
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		$retval[$record['user_id']] = $record['username'];
@@ -5197,7 +5197,7 @@ function search_patients_by_id($q)
 		"SELECT * FROM patient ".
 		"WHERE surr_id='$q'".
 		"ORDER BY ts DESC";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5219,7 +5219,7 @@ function search_patients_by_id_dyn($q, $cap, $counter)
 	$query_string = 
 		"SELECT * FROM patient ".
 		"WHERE surr_id='$q' ORDER BY ts DESC LIMIT $offset,$cap";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5254,7 +5254,7 @@ function search_patients_by_name($q)
 	$query_string = 
 		"SELECT * FROM patient ".
 		"WHERE name LIKE '$q%' ORDER BY name ASC";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5276,7 +5276,7 @@ function search_patients_by_name_dyn($q, $cap, $counter)
 	$query_string = 
 		"SELECT * FROM patient ".
 		"WHERE name LIKE '$q%' ORDER BY name ASC LIMIT $offset,$cap";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5311,7 +5311,7 @@ function search_patients_by_addlid($q)
 	$query_string = 
 		"SELECT * FROM patient ".
 		"WHERE addl_id LIKE '%$q%'";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5333,7 +5333,7 @@ function search_patients_by_addlid_dyn($q, $cap, $counter)
 	$query_string = 
 		"SELECT * FROM patient ".
 		"WHERE addl_id LIKE '%$q%' ORDER BY addl_id ASC LIMIT $offset,$cap";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5365,7 +5365,7 @@ function search_patients_by_dailynum($q)
 	$q = mysql_real_escape_string($q, $con);
 	# Searches for patients with similar daily number
 	$query_string = "SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' ORDER BY date_collected DESC LIMIT 20";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5386,7 +5386,7 @@ function search_patients_by_dailynum_dyn($q, $cap, $counter)
 	$q = mysql_real_escape_string($q, $con);
 	$query_string = 
 		"SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' ORDER BY date_collected DESC LIMIT $offset,$cap";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
         $patient_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5420,7 +5420,7 @@ function search_specimens_by_id($q)
 	$query_string = 
 		"SELECT * FROM specimen ".
 		"WHERE specimen_id LIKE '%$q%'";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$specimen_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5442,7 +5442,7 @@ function search_specimens_by_addlid($q)
 	$query_string = 
 		"SELECT * FROM specimen ".
 		"WHERE aux_id LIKE '%$q%'";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$specimen_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5463,7 +5463,7 @@ function search_specimens_by_patient_id($patient_id)
 		"SELECT sp.* FROM specimen sp, patient p ".
 		"WHERE sp.patient_id=p.patient_id ".
 		"AND p.patient_id = '".$patient_id."'";// OR p.patient_id LIKE '%".$patient_id."%'";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$specimen_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5484,7 +5484,7 @@ function search_specimens_by_patient_name($patient_name)
 		"SELECT sp.* FROM specimen sp, patient p ".
 		"WHERE sp.patient_id=p.patient_id ".
 		"AND p.name LIKE '%$patient_name%' ";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$specimen_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5504,7 +5504,7 @@ function search_specimens_by_session($q)
 	$query_string =
 		"SELECT * FROM specimen ".
 		"WHERE session_num LIKE '%$q%'";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$specimen_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5524,7 +5524,7 @@ function search_specimens_by_session_exact($q)
 	$query_string =
 		"SELECT * FROM specimen ".
 		"WHERE session_num='$q'";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$specimen_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5544,7 +5544,7 @@ function search_specimens_by_dailynum($q)
 	$query_string =
 		"SELECT * FROM specimen ".
 		"WHERE daily_num LIKE '%-$q' ORDER BY daily_num DESC LIMIT 5";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$specimen_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5566,7 +5566,7 @@ function get_patients_by_name_or_id($search_term)
 		"SELECT * FROM patient ".
 		"WHERE patient_id LIKE '%$search_term%' ".
 		"OR name LIKE '%$search_term%'";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
 	{
@@ -5645,7 +5645,7 @@ function get_pending_tests_by_type($test_type_id)
 	$query_string =
 		"SELECT * FROM test WHERE test_type_id=$test_type_id ".
 		"AND result=''";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -5667,7 +5667,7 @@ function get_pending_tests_by_type_date($test_type_id, $date_from,$date_to)
 		"AND ts <='$date_to_array[0]-$date_to_array[1]-$date_to_array[2] 23:59:59'".
 		"AND result=''";
 		
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -5682,7 +5682,7 @@ function get_tests_by_specimen_id($specimen_id)
 	$specimen_id = mysql_real_escape_string($specimen_id, $con);
 	# Returns list of tests scheduled for this given specimen
 	$query_string = "SELECT * FROM test WHERE specimen_id=$specimen_id";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -5740,7 +5740,7 @@ function get_completed_tests_by_type($test_type_id, $date_from="", $date_to="")
 				"AND s.date_collected between '$date_from' AND '$date_to' ORDER BY s.date_collected";
 		}
 	}
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	# Entries for {ts, specimen_id, date_collected} are returned
 	return $resultset;
 }
@@ -5794,7 +5794,7 @@ function get_pendingtat_tests_by_type($test_type_id, $date_from="", $date_to="")
 				"AND s.date_collected between '$date_from' AND '$date_to' ORDER BY s.date_collected";
 		}
 	}
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	# Entries for {ts, specimen_id, date_collected} are returned
 	return $resultset;
 }
@@ -5806,7 +5806,7 @@ function get_specimens_by_patient_id($patient_id)
 	# Returns list of specimens registered for the given patient
 	$query_string = 
 		"SELECT * FROM specimen WHERE patient_id=$patient_id ORDER BY date_collected DESC";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -5983,7 +5983,7 @@ function get_specimens_by_session($session_num)
 	$query_string = 
 		"SELECT * FROM specimen ".
 		"WHERE session_num='$session_num'";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 		$retval[] = Specimen::getObject($record);
@@ -6189,7 +6189,7 @@ function get_reagent_name()
 $retval= array();
 $saved_db = DbUtil::switchToLabConfigRevamp();
 $query_string = "SELECT distinct(name) FROM stock_details ";
-$resultset = query_associative_all($query_string, $row_count);
+$resultset = query_associative_all($query_string);
 		//print $resultset[0];
 		if($resultset!=null)
 		{
@@ -6259,7 +6259,7 @@ function add_new_stock($name,$lot_number,$expiry_date,$manufacture,$supplier,$qu
 		if($name[$i]!="")
 		{
 			$query_string="SELECT current_quantity FROM stock_details WHERE name='$name[$i]'";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			$current_quantity=$quantity_supplied[$i];
 			if($resultset!=null) {
 				foreach($resultset as $record )
@@ -6273,7 +6273,7 @@ function add_new_stock($name,$lot_number,$expiry_date,$manufacture,$supplier,$qu
 			
 			# If same lot number then no need to add another entry into stock_details table
 			$query_string="SELECT quantity_ordered, quantity_supplied, unit FROM stock_details WHERE name='$name[$i]' AND lot_number='$lot_number[$i]' AND manufacturer='$manufacture[$i]' AND supplier='$supplier[$i]' AND cost_per_unit=$cost_per_unit[$i] LIMIT 1";
-			$resultset = query_associative_all($query_string,$row_count);
+			$resultset = query_associative_all($query_string);
 			$current_ts = date("Y-m-d H:i:s" , $ts[$i]);
 			if($resultset==null) {
 				$query_string = 
@@ -6304,7 +6304,7 @@ function get_stock_count()
 {
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string = "SELECT name,current_quantity ,unit FROM stock_details GROUP BY name ";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	if($resultset!=null){
 		foreach($resultset as $record){
@@ -6322,7 +6322,7 @@ function get_stock_out_details()
 $saved_db = DbUtil::switchToLabConfigRevamp();
 $query_string = 
 		"SELECT name,current_quantity,new_balance,date_of_use,lot_number,user_name FROM stock_content";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		if($resultset!=null){
 		foreach($resultset as $record)
@@ -6354,7 +6354,7 @@ function get_current_inventory_byName($date_to,$date_from, $name)
 	$name = mysql_real_escape_string($name, $con);
 	$query_string = 
 		"SELECT name,new_balance,date_of_use, lot_number FROM stock_content WHERE date_of_use<='$date_to' AND date_of_use >= '$date_from' AND name='$name' ";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 	$retval = array();
 	if($resultset!=null){
 		foreach($resultset as $record) {
@@ -6374,7 +6374,7 @@ function get_current_inventory($date_to,$date_from) {
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string = 
 		"SELECT name,new_balance,date_of_use, lot_number FROM stock_content WHERE date_of_use<='$date_to' AND date_of_use >= '$date_from' ";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		if($resultset!=null){
 		foreach($resultset as $record)
@@ -6398,7 +6398,7 @@ function get_stocks()
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string = 
 		"SELECT name,lot_number, manufacturer,current_quantity,expiry_date,supplier,unit,entry_id ,cost_per_unit, date_of_reception FROM stock_details ORDER BY name ASC, manufacturer ASC, lot_number ASC, date_of_reception DESC";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	if($resultset!=null){
 		foreach($resultset as $record) {
@@ -6424,7 +6424,7 @@ function get_entry_ids()
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string = 
 		"SELECT entry_id  FROM stock_details ORDER BY entry_id ";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	if($resultset!=null){
 		foreach($resultset as $record) {
@@ -6657,7 +6657,7 @@ function get_lab_configs_imported()
     $saved_db = DbUtil::switchToGlobal();
     $query_configs = "SELECT distinct lab_config_id from import_log";
     $retval = array();
-	$resultset = query_associative_all($query_configs, $row_count);
+	$resultset = query_associative_all($query_configs);
 	if($resultset == null)
 	{
 		DbUtil::switchRestore($saved_db);
@@ -6716,7 +6716,7 @@ function get_lab_configs($admin_user_id = "")
 			") ORDER BY name";
 	}
 	$retval = array();
-	$resultset = query_associative_all($query_configs, $row_count);
+	$resultset = query_associative_all($query_configs);
 	if($resultset == null)
 	{
 		DbUtil::switchRestore($saved_db);
@@ -6878,7 +6878,7 @@ function get_test_types_by_site($lab_config_id="")
 			"WHERE tt.test_type_id=lctt.test_type_id ".
 			"AND lctt.lab_config_id=$lab_config_id ORDER BY tt.name";
 		*/
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	if($resultset) {
 		foreach($resultset as $record)
 			$retval[] = TestType::getObject($record);
@@ -6900,7 +6900,7 @@ function get_test_types_by_site_category($lab_config_id, $cat_code)
 		"SELECT tt.* FROM test_type tt, lab_config_test_type lctt ".
 		"WHERE tt.test_type_id=lctt.test_type_id ".
 		"AND lctt.lab_config_id=$lab_config_id ORDER BY tt.name";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		$test_type_entry = TestType::getObject($record);
@@ -6927,7 +6927,7 @@ function get_test_types_by_site_map($lab_config_id)
 		"WHERE tt.test_type_id=lctt.test_type_id ".
 		"AND lctt.lab_config_id=$lab_config_id ".
 		"ORDER BY tt.name";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		if($CATALOG_TRANSLATION === true)
@@ -6949,7 +6949,7 @@ function get_users_by_site_map($lab_config_id)
 	$query_string = 
 		"SELECT u.* FROM user u ".
 		"WHERE lab_config_id=$lab_config_id ORDER BY u.username";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	if($resultset != null)
 	{
 		foreach($resultset as $record)
@@ -6975,7 +6975,7 @@ function get_tech_users_by_site_map($lab_config_id)
 	$query_string = 
 		"SELECT u.* FROM user u ".
 		"WHERE lab_config_id = $lab_config_id ORDER BY u.username";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	if($resultset != null)
 	{
 		foreach($resultset as $record)
@@ -7008,7 +7008,7 @@ function get_specimen_types_by_site($lab_config_id="")
 			"AND lcst.lab_config_id=$lab_config_id ORDER BY st.name";
 		*/
 		$query_string = "SELECT * FROM specimen_type WHERE disabled=0 ORDER BY NAME";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	if($resultset) {
 		foreach($resultset as $record)
 			$retval[] = SpecimenType::getObject($record);
@@ -7290,7 +7290,7 @@ function get_specimen_types_catalog($lab_config_id=null, $reff=null)
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_stypes =
 		"SELECT specimen_type_id, name FROM specimen_type WHERE disabled=0 ORDER BY name";
-	$resultset = query_associative_all($query_stypes, $row_count);
+	$resultset = query_associative_all($query_stypes);
 	$retval = array();
 	if($resultset) {
 		foreach($resultset as $record)
@@ -7323,7 +7323,7 @@ function get_test_types_catalog($lab_config_id=null, $reff=null)
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_ttypes =
 		"SELECT test_type_id, name FROM test_type WHERE disabled=0 ORDER BY name";
-	$resultset = query_associative_all($query_ttypes, $row_count);
+	$resultset = query_associative_all($query_ttypes);
 	$retval = array();
 	if($resultset) {
 		foreach($resultset as $record)
@@ -7360,7 +7360,7 @@ function get_search_fields($lab_config_id=null)
 function getDoctorNames()
 {
 	$query_string = "SELECT doctor FROM specimen WHERE date_collected >'2010-08-11'";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -7377,7 +7377,7 @@ function get_test_categories_data($lab_config_id) {
 	
         $saved_db = DbUtil::switchToLabConfig($lab_config_id);		
         $query_string = "SELECT test_category_id, name FROM test_category";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
         $i = 0;
         
@@ -7397,7 +7397,7 @@ function get_test_ids_by_category($cat, $lab_config_id) {
 	
         $saved_db = DbUtil::switchToLabConfig($lab_config_id);		
         $query_string = "SELECT test_type_id FROM test_type WHERE test_category_id = $cat";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -7414,7 +7414,7 @@ function get_test_categories($lab_config_id=null) {
 	global $CATALOG_TRANSLATION;
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
 	$query_string = "SELECT test_category_id, name FROM test_category";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -7465,7 +7465,7 @@ function get_test_types_wcat_catalog()
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_ttypes =
 		"SELECT test_type_id, name FROM test_type";
-	$resultset = query_associative_all($query_ttypes, $row_count);
+	$resultset = query_associative_all($query_ttypes);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -7483,7 +7483,7 @@ function getMeasuresByLab($labConfigId) {
 	$labConfigId = mysql_real_escape_string($labConfigId, $con);
 	$saved_db = DbUtil::switchToLabConfig($labConfigId);
 	$query_string = "SELECT * FROM measure ORDER BY name";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 		$retval[] = Measure::getObject($record);
@@ -7498,7 +7498,7 @@ function get_measures_catalog()
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_measures =
 		"SELECT measure_id, name FROM measure ORDER BY name";
-	$resultset = query_associative_all($query_measures, $row_count);
+	$resultset = query_associative_all($query_measures);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -7682,7 +7682,7 @@ function search_measures_catalog($measure_name)
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string =
 		"SELECT measure_id, name FROM measure WHERE name LIKE '$measure_name%'";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -7705,7 +7705,7 @@ function search_test_types_catalog($test_name)
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string = 
 		"SELECT * FROM test_type WHERE name LIKE '$test_name%' AND disabled=0";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -7728,7 +7728,7 @@ function search_specimen_types_catalog($specimen_name)
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string = 
 		"SELECT * FROM specimen_type WHERE disabled=0 AND name LIKE '$specimen_name%'";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -7772,7 +7772,7 @@ function getDoctorList()
 {
 	$query_string =
 		"SELECT DISTINCT doctor FROM specimen WHERE doctor!=' ' AND ts >'2010-11-11' ORDER BY ts desc  ";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 	$retval = array();
 	if($resultset == null)
 		return $retval;
@@ -8031,7 +8031,7 @@ function delete_test_type_measure($test_type_id, $measure_id)
 	$query_string =
 		"SELECT * FROM test_type_measure ".
 		"measure_id=$measure_id";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	if($resultset == null || count($resultset) == 0)
 	{
 		$query_delete = "DELETE FROM measure WHERE measure_id=$measure_id";
@@ -8149,7 +8149,7 @@ function get_compatible_tests($specimen_type_id)
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string = 
 		"SELECT test_type_id FROM specimen_test WHERE specimen_type_id=$specimen_type_id";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	if($resultset == null)
 		return $retval;
@@ -8169,7 +8169,7 @@ function get_compatible_specimens($test_type_id)
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string = 
 		"SELECT specimen_type_id FROM specimen_test WHERE test_type_id=$test_type_id";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	if($resultset == null)
 		return $retval;
@@ -8197,7 +8197,7 @@ function get_compatible_test_types($lab_config_id, $specimen_type_id)
 		"AND tt.disabled=0 ".
 		"ORDER BY tt.name";
 
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -8228,7 +8228,7 @@ function get_lab_config_specimen_types($lab_config_id, $to_global=false)
 	$query_string = 
 		"SELECT specimen_type_id FROM lab_config_specimen_type ".
 		"WHERE lab_config_id=$lab_config_id";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -8327,7 +8327,7 @@ function get_custom_fields()
 	# Returns a list of all patient custom fields
 	$query_string =
 		"SELECT DISTINCT doctor FROM specimen WHERE doctor!=''";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -8342,7 +8342,7 @@ function get_custom_fields_specimen()
 	# Returns a list of all specimen custom fields
 	$query_string =
 		"SELECT * FROM specimen_custom_field";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -8357,7 +8357,7 @@ function get_custom_fields_patient()
 	# Returns a list of all patient custom fields
 	$query_string =
 		"SELECT * FROM patient_custom_field";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -8470,7 +8470,7 @@ function get_custom_data_specimen($specimen_id)
 	$query_string = 
 		"SELECT * FROM specimen_custom_data ".
 		"WHERE specimen_id=$specimen_id";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -8502,7 +8502,7 @@ function get_custom_data_patient($patient_id)
 	$query_string = 
 		"SELECT * FROM patient_custom_data ".
 		"WHERE patient_id=$patient_id";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -8534,7 +8534,7 @@ function get_lab_config_specimen_custom_fields($lab_config_id)
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_string = 
 		"SELECT * FROM specimen_custom_field";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -8552,7 +8552,7 @@ function get_lab_config_patient_custom_fields($lab_config_id)
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_string = 
 		"SELECT * FROM patient_custom_field";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -8570,7 +8570,7 @@ function get_lab_config_labtitle_custom_fields($lab_config_id)
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_string = 
 		"SELECT * FROM labtitle_custom_field";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	if($resultset) {
 		foreach($resultset as $record)
@@ -8755,7 +8755,7 @@ class TestTypeMapping {
 			"SELECT * FROM test_mapping ".
 			"WHERE test_category_id=$catCode";
 		$saved_db = DbUtil::switchToGlobal();
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		foreach($resultset as $record)
 			$retval[] = TestTypeMapping::getObject($record);
 		DbUtil::switchRestore($saved_db);
@@ -8778,7 +8778,7 @@ class TestTypeMapping {
 		$query_string = 
 			"SELECT measure_id FROM global_measures ".
 			"WHERE test_id=$this->testId";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		foreach($resultset as $record)
 		{
@@ -8796,7 +8796,7 @@ class TestTypeMapping {
 		$query_string = 
 			"SELECT measure_id FROM global_measures ".
 			"WHERE test_id=$this->testId";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		foreach($resultset as $record) {
 			$retval[] = $record['measure_id'];
@@ -9066,7 +9066,7 @@ class GlobalMeasure
 	{
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 		$query_string = "SELECT * FROM numeric_interpretation WHERE measure_id=$this->measureId";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		if($resultset!=NULL)
 			{
@@ -9108,7 +9108,7 @@ class GlobalMeasure
 		# Fetches reference ranges from database for this measure
 		$saved_db = DbUtil::switchToGlobal();
 		$query_string = "SELECT * FROM reference_range_global WHERE measure_id=$this->measureId AND user_id=$user_id ORDER BY sex DESC";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		if ($resultset!=NULL)
 		{
@@ -9225,7 +9225,7 @@ class ReferenceRangeGlobal
 		$saved_db = DbUtil::switchToGlobal();
 		$query_string = "SELECT * FROM reference_range_global WHERE measure_id=$measure_id AND user_id=$user_id";
 		$retval = null;
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		if($resultset == null || count($resultset) == 0)
 			return $retval;
 		foreach($resultset as $record)
@@ -9449,7 +9449,7 @@ class GlobalPatient
 							"WHERE t.result <> '' ".
 							"AND t.specimen_id=sp.specimen_id ".
 							"AND sp.patient_id=$this->patientId";
-			$recordset = query_associative_all($query_string, $row_count);
+			$recordset = query_associative_all($query_string);
 			foreach( $recordset as $record ) {
 				$testName = get_test_name_by_id($record['test_type_id']);
 				$result .= $testName."<br>";
@@ -9564,7 +9564,7 @@ class GlobalPatient
 		$query_string = 
 			"SELECT * FROM patient ".
 			"WHERE ts LIKE '%$date%' ORDER BY patient_id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		foreach($resultset as $record)
 			$retval[] = Patient::getObject($record);
@@ -9579,7 +9579,7 @@ class GlobalPatient
 			"WHERE UNIX_TIMESTAMP(ts) >= UNIX_TIMESTAMP('$date_from 00:00:00') ".
 			"AND UNIX_TIMESTAMP(ts) <= UNIX_TIMESTAMP('$date_to 23:59:59') ".
 			"ORDER BY patient_id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		foreach($resultset as $record)
 			$retval[] = Patient::getObject($record);
@@ -9591,7 +9591,7 @@ class GlobalPatient
 	$query_string =
 			"SELECT DISTINCT patient_id FROM specimen ".
 			"WHERE date_collected BETWEEN '$date_from' AND '$date_to'";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		$record_p=array();
 			foreach($resultset as $record)
@@ -9613,7 +9613,7 @@ class GlobalPatient
 				"WHERE date_collected BETWEEN '$date_from' AND '$date_to' ".
 				"AND result!='$emp' ".
 				"AND specimen.specimen_id=test.specimen_id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		$record_p=array();
 		$count = 0;
@@ -9638,7 +9638,7 @@ class GlobalPatient
 			"WHERE date_collected BETWEEN '$date_from' AND '$date_to' ".
 			"AND result='$emp' ".
 			"AND specimen.specimen_id=test.specimen_id";
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$retval = array();
 		$record_p=array();
 		foreach($resultset as $record) {
@@ -9855,7 +9855,7 @@ function getTestTypesCountryLevel() {
 	$user_id = $_SESSION['user_id'];
 	$retval = array();
 	$query = "SELECT * FROM test_mapping where user_id =".$user_id;
-	$resultset = query_associative_all($query, $count);
+	$resultset = query_associative_all($query);
 	foreach($resultset as $record) {
 		$retval[] = TestTypeMapping::getObject($record);
 	}
@@ -9928,7 +9928,7 @@ function getLabMeasureIdFromGlobalMeasureId($labConfigId, $globalTestType, $curr
 	$query_string =
 		"SELECT * from test_type_measure ".
 		"WHERE test_type_id=$testTypeId";
-	$resultset = query_associative_all($query_string, $count);
+	$resultset = query_associative_all($query_string);
 	$measureCount = 0;
 	foreach($resultset as $record) {
 		if($measureCount == $currentMeasureCount) {
@@ -10010,7 +10010,7 @@ function autoImportPatientEntry($importPatient, $patientName) {
 		$querySelect = 
 			"SELECT * FROM specimen ".
 			"WHERE patient_id=$importPatientId";
-		$resultset = query_associative_all($querySelect, $rowCount);
+		$resultset = query_associative_all($querySelect);
 	
 		if($resultset) {
 			foreach($resultset as $record)
@@ -10021,7 +10021,7 @@ function autoImportPatientEntry($importPatient, $patientName) {
 				$querySelect = 
 					"SELECT * FROM test ".
 					"WHERE specimen_id=$specimenRecord->specimenId";
-				$resultset = query_associative_all($querySelect, $rowCount);
+				$resultset = query_associative_all($querySelect);
 				foreach($resultset as $record)
 					$testRecords[] = Test::getObject($record);
 			}
@@ -10032,7 +10032,7 @@ function autoImportPatientEntry($importPatient, $patientName) {
 		$saved_db = DbUtil::switchToGlobal();
 		$querySelect = 
 			"SELECT * FROM specimen_mapping";
-		$resultset = query_associative_all($querySelect, $rowCount);
+		$resultset = query_associative_all($querySelect);
 		if($resultset) {
 			$specimenIds = array();
 			foreach($resultset as $record) {
@@ -10054,7 +10054,7 @@ function autoImportPatientEntry($importPatient, $patientName) {
 		/* Build a mapping of Tests from the Global Table & make appropriate substitutions */
 		$querySelect = 
 			"SELECT * FROM test_mapping";
-		$resultset = query_associative_all($querySelect, $rowCount);
+		$resultset = query_associative_all($querySelect);
 		if($resultset) {
 			$testIds = array();
 			foreach($resultset as $record) {
@@ -10080,7 +10080,7 @@ function autoImportPatientEntry($importPatient, $patientName) {
 				$querySelect = 
 					"SELECT * FROM test ".
 					"WHERE specimen_id=$specimenRecord->specimenId";
-				$resultset = query_associative_all($querySelect, $rowcount);
+				$resultset = query_associative_all($querySelect);
 				DbUtil::switchRestore($saved_db);
 				$specimenRecord->specimenId = get_max_specimen_id() + 1;
 				$specimenRecord->patientId = $currentLabPatient->patientId;
@@ -10276,7 +10276,7 @@ function updateGroupedReportsConfig($byAge, $byGender, $ageGroups, $bySection, $
 			"WHERE test_type_id=$test_type_id ".
 			"AND ts > FROM_UNIXTIME($date) ";
 		$retval = array();
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		foreach($resultset as $record)
 			$retval[] = Test::getObject($record);
 		return $retval;
@@ -10305,7 +10305,7 @@ function updateGroupedReportsConfig($byAge, $byGender, $ageGroups, $bySection, $
 			"Where ts > From_UNIXTIME($date) ";
 			//"AND result<>''";
 		$retval = array();
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
                 
 		foreach($resultset as $record)
 			$retval[] = $record['test_id'];
@@ -10452,7 +10452,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $query_string =
 			"SELECT * FROM test_category ";
-    $recordset = query_associative_all($query_string, $row_count);
+    $recordset = query_associative_all($query_string);
     DbUtil::switchRestore($saved_db);
     
     $saved_db = DbUtil::switchToLabConfig($to_id);
@@ -10472,7 +10472,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $query_string =
 			"SELECT * FROM measure ";
-    $recordset = query_associative_all($query_string, $row_count);
+    $recordset = query_associative_all($query_string);
     DbUtil::switchRestore($saved_db);
     
     $saved_db = DbUtil::switchToLabConfig($to_id);
@@ -10511,7 +10511,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $query_string =
 			"SELECT * FROM specimen_type ";
-    $recordset = query_associative_all($query_string, $row_count);
+    $recordset = query_associative_all($query_string);
     DbUtil::switchRestore($saved_db);
     
     $saved_db = DbUtil::switchToLabConfig($to_id);
@@ -10531,7 +10531,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $query_string =
 			"SELECT * FROM reference_range ";
-    $recordset = query_associative_all($query_string, $row_count);
+    $recordset = query_associative_all($query_string);
     DbUtil::switchRestore($saved_db);
     
     $saved_db = DbUtil::switchToLabConfig($to_id);
@@ -10555,7 +10555,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $query_string =
 			"SELECT * FROM test_type ";
-    $recordset = query_associative_all($query_string, $row_count);
+    $recordset = query_associative_all($query_string);
     DbUtil::switchRestore($saved_db);
     
     $saved_db = DbUtil::switchToLabConfig($to_id);
@@ -10582,7 +10582,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $query_string =
 			"SELECT * FROM test_type_measure ";
-    $recordset = query_associative_all($query_string, $row_count);
+    $recordset = query_associative_all($query_string);
     DbUtil::switchRestore($saved_db);
     
     $saved_db = DbUtil::switchToLabConfig($to_id);
@@ -10601,7 +10601,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $query_string =
 			"SELECT * FROM unit ";
-    $recordset = query_associative_all($query_string, $row_count);
+    $recordset = query_associative_all($query_string);
     DbUtil::switchRestore($saved_db);
     
     $saved_db = DbUtil::switchToLabConfig($to_id);
@@ -10620,7 +10620,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $query_string =
 			"SELECT * FROM custom_field_type ";
-    $recordset = query_associative_all($query_string, $row_count);
+    $recordset = query_associative_all($query_string);
     DbUtil::switchRestore($saved_db);
     
     $saved_db = DbUtil::switchToLabConfig($to_id);
@@ -10639,7 +10639,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $query_string =
 			"SELECT * FROM labtitle_custom_field ";
-    $recordset = query_associative_all($query_string, $row_count);
+    $recordset = query_associative_all($query_string);
     DbUtil::switchRestore($saved_db);
     
     $saved_db = DbUtil::switchToLabConfig($to_id);
@@ -10660,7 +10660,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $query_string =
 			"SELECT * FROM patient_custom_field; ";
-    $recordset = query_associative_all($query_string, $row_count);
+    $recordset = query_associative_all($query_string);
     DbUtil::switchRestore($saved_db);
     
     $saved_db = DbUtil::switchToLabConfig($to_id);
@@ -10681,7 +10681,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     $saved_db = DbUtil::switchToLabConfig($from_id);
     $query_string =
 			"SELECT * FROM specimen_custom_field; ";
-    $recordset = query_associative_all($query_string, $row_count);
+    $recordset = query_associative_all($query_string);
     DbUtil::switchRestore($saved_db);
     
     $saved_db = DbUtil::switchToLabConfig($to_id);
@@ -10791,7 +10791,7 @@ function get_removed_specimens($lid)
             $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
             
             $query_string = "SELECT * from removal_record WHERE type = 1 AND status = 1";
-            $recordset = query_associative_all($query_string, $row_count);
+            $recordset = query_associative_all($query_string);
             
             DbUtil::switchRestore($saved_db);
             
@@ -10940,7 +10940,7 @@ function get_all_tests_for_patient_and_date_range($patient_id, $small_date, $lar
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
     
     $query_string = "SELECT DISTINCT test_id, ts FROM test WHERE specimen_id IN (SELECT specimen_id FROM specimen WHERE patient_id=$patient_id) AND ts<='$large_date' AND ts>='$small_date'";
-    $result = query_associative_all($query_string, $_count);
+    $result = query_associative_all($query_string);
     
     DbUtil::switchRestore($saved_db);
     
@@ -11502,7 +11502,7 @@ class Inventory
             $quantity = $recordset2['quantity_supplied'];
             
             $query_string = "SELECT * from inv_usage where reagent_id = $r_id AND lot = '$lot'";
-            $recordset = query_associative_all($query_string, $row_count);
+            $recordset = query_associative_all($query_string);
             foreach($recordset as $rec)
                 $quantity = $quantity - $rec['quantity_used']; 
             
@@ -11551,7 +11551,7 @@ class Inventory
             $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
             
             $query_string = "SELECT * from inv_reagent";
-            $recordset = query_associative_all($query_string, $row_count);
+            $recordset = query_associative_all($query_string);
             
             DbUtil::switchRestore($saved_db);
             
@@ -11565,7 +11565,7 @@ class Inventory
             $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
             
             $query_string = "SELECT * from inv_supply WHERE reagent_id = $r_id";
-            $recordset = query_associative_all($query_string, $row_count);
+            $recordset = query_associative_all($query_string);
             
             DbUtil::switchRestore($saved_db);
             
@@ -11622,7 +11622,7 @@ class Inventory
                     $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
 
                     $query_string = "SELECT * from inv_supply WHERE user_id = $user";
-                    $recordset = query_associative_all($query_string, $row_count);
+                    $recordset = query_associative_all($query_string);
 
                     DbUtil::switchRestore($saved_db);
 
@@ -11636,7 +11636,7 @@ class Inventory
                     $saved_db = DbUtil::switchToLabConfig($lab_config_id);     
 
                     $query_string = "SELECT * from inv_usage WHERE user_id = $user";
-                    $recordset = query_associative_all($query_string, $row_count);
+                    $recordset = query_associative_all($query_string);
 
                     DbUtil::switchRestore($saved_db);
 

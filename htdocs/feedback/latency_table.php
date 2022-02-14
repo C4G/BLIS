@@ -35,7 +35,7 @@
 			$query_string = 
 				"select User_Id, IP_Address, Page_Name, Recorded_At, Latency ".
 				"from Delay_Measures order by Recorded_At desc LIMIT 100";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			foreach($resultset as $row)
 			{
 				echo "<tr>";

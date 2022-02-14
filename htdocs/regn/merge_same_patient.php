@@ -27,7 +27,7 @@ function mergedata()
 	$lab_config = $_SESSION['lab_config_id'];	
 	$saved_db = DbUtil::switchToLabConfig($importLabConfigId); 
 	$querySelect = "SELECT patient_id,name,surr_id,addl_id FROM patient order by surr_id asc";
-	$resultset = query_associative_all($querySelect, $rowCount);
+	$resultset = query_associative_all($querySelect);
 	$rowCount=0;
 	foreach($resultset as $record)
 	{		
@@ -39,7 +39,7 @@ function mergedata()
 		$querySelect = "SELECT patient_id,name,surr_id,addl_id FROM patient where 
 		surr_id='".$record['surr_id']."' and 
 		patient_id <> ".$record['patient_id'];		
-		$Dupresult = query_associative_all($querySelect, $rowCount);
+		$Dupresult = query_associative_all($querySelect);
 		foreach($Dupresult as $Duprecord)
 		{
 			$rowCount+=1;

@@ -68,14 +68,13 @@ function query_alter($query)
         }
 }
 
-function query_associative_all( $query, $row_count ) 
+function query_associative_all($query) 
 {
     global $con;
 	if( !($result = mysql_query( $query, $con ) ) ) 
 	{
         return null;
     }
-	$row_count = mysql_num_rows( $result );
     $retval = array();
     while ( $row = mysql_fetch_assoc($result) ){ $retval[] = $row; }
     $LOG_QUERIES = true;

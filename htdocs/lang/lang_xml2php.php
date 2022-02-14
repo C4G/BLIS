@@ -75,7 +75,7 @@ EOF;
 	$handle = fopen("../../langdata/".$lang_id."_catalog.xml", "w");
 	fwrite($handle, $string_data);
 	$query_string = "SELECT * FROM test_category";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		$key = $record['test_category_id'];
@@ -101,7 +101,7 @@ EOF;
 EOF;
 	fwrite($handle, $string_data);
 	$query_string = "SELECT * FROM test_type WHERE disabled=0";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		$key = $record['test_type_id'];
@@ -127,7 +127,7 @@ EOF;
 EOF;
 	fwrite($handle, $string_data);
 	$query_string = "SELECT * FROM measure";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		$key = $record['measure_id'];
@@ -153,7 +153,7 @@ EOF;
 EOF;
 	fwrite($handle, $string_data);
 	$query_string = "SELECT * FROM specimen_type WHERE disabled=0";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		$key = $record['specimen_type_id'];
@@ -331,7 +331,7 @@ EOF;
 	fwrite($handle, $string_data);
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
 	$query_string = "SELECT * FROM measure";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		$curr_measure = Measure::getObject($record);

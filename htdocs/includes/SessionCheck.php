@@ -5,10 +5,7 @@ if(basename($_SERVER['PHP_SELF'])!=="login.php")
 {
 if(!isset($_SESSION['user_id']))
 {
-$fp = fopen('dbg.txt', 'a');
-fwrite($fp, "out");
-fclose($fp);
-	header("Location: /login.php");
+header("Location: /login.php");
 die();
 }
 if($_SESSION['user_level'] != $LIS_SUPERADMIN &&	$_SESSION['user_level'] != $LIS_COUNTRYDIR&&	$_SESSION['user_level'] != $LIS_ADMIN)

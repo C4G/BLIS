@@ -205,7 +205,7 @@ else {
 	$query_string = 
 		"SELECT test_category_id from test_category_mapping ".
 		"WHERE user_id=$userId";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$selected_test_ids = array();
 	foreach($resultset as $record) {
 		$cat_code = $record['test_category_id'];

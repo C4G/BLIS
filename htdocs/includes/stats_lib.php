@@ -652,7 +652,7 @@ function get_discrete_value_test_types($lab_config)
 			"SELECT test_type_id FROM lab_config_test_type ".
 			"WHERE lab_config_id=$lab_config->id ".
 		" ) AND disabled=0";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		$test_type_id = $record['test_type_id'];
@@ -1119,7 +1119,7 @@ class StatsLib
 		$userId = $_SESSION['user_id'];
 		$saved_db = DbUtil::switchToGlobal();
 		$query = "SELECT * FROM test_mapping WHERE user_id = $userId";
-		$resultset = query_associative_all($query, $row_count);
+		$resultset = query_associative_all($query);
 		foreach($resultset as $record) {
 				$labIdTestIds = explode(';',$record['lab_id_test_id']);
 				foreach($labIdTestIds as $labIdTestId) {
@@ -1176,7 +1176,7 @@ class StatsLib
 					"WHERE (date_collected BETWEEN '$date_from' AND '$date_to' ) ".
 					"GROUP BY doctor";
 				//echo($query_string);
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	
 			if(count($resultset) == 0 || $resultset == null)
 		{
@@ -1284,7 +1284,7 @@ class StatsLib
 			$userId = $_SESSION['user_id'];
 			$saved_db = DbUtil::switchToGlobal();
 			$query = "SELECT * FROM test_mapping WHERE user_id = $userId";
-			$resultset = query_associative_all($query, $row_count);
+			$resultset = query_associative_all($query);
 			foreach($resultset as $record) {
 					$labIdTestIds = explode(';',$record['lab_id_test_id']);
 					foreach($labIdTestIds as $labIdTestId) {
@@ -1360,7 +1360,7 @@ class StatsLib
 			$userId = $_SESSION['user_id'];
 			$saved_db = DbUtil::switchToGlobal();
 			$query = "SELECT * FROM test_mapping WHERE user_id = $userId";
-			$resultset = query_associative_all($query, $row_count);
+			$resultset = query_associative_all($query);
 			foreach($resultset as $record) {
 					$labIdTestIds = explode(';',$record['lab_id_test_id']);
 					foreach($labIdTestIds as $labIdTestId) {
@@ -1600,7 +1600,7 @@ public static function getDiscreteInfectionStatsG($lab_config,$test_type_id, $da
 				"AND t.result!=''".
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected), week(s.date_collected)";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			$query_string1=   
 				"SELECT year(s.date_collected), s.date_collected AS week ,COUNT(*) AS count_val  FROM test t,specimen s ".
 				"WHERE t.test_type_id=$test_type_id ".
@@ -1609,7 +1609,7 @@ public static function getDiscreteInfectionStatsG($lab_config,$test_type_id, $da
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected), week(s.date_collected)";
 			
-				$resultset1= query_associative_all($query_string1, $row_count1);
+				$resultset1= query_associative_all($query_string1);
 				}
 		else if($type=='d') {
 			$query_string =   
@@ -1619,7 +1619,7 @@ public static function getDiscreteInfectionStatsG($lab_config,$test_type_id, $da
 				"AND t.result!=''".
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY s.date_collected";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			$query_string1=   
 				"SELECT s.date_collected AS week ,COUNT(*) AS count_val  FROM test t,specimen s ".
 				"WHERE t.test_type_id=$test_type_id ".
@@ -1628,7 +1628,7 @@ public static function getDiscreteInfectionStatsG($lab_config,$test_type_id, $da
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY s.date_collected";
 			
-			$resultset1= query_associative_all($query_string1, $row_count1);
+			$resultset1= query_associative_all($query_string1);
 		}
 		else {
 			$query_string =   
@@ -1638,7 +1638,7 @@ public static function getDiscreteInfectionStatsG($lab_config,$test_type_id, $da
 				"AND t.result!=''".
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected), month(s.date_collected)";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			$query_string1=   
 				"SELECT year(s.date_collected), s.date_collected AS week ,COUNT(*) AS count_val  FROM test t,specimen s ".
 				"WHERE t.test_type_id=$test_type_id ".
@@ -1647,7 +1647,7 @@ public static function getDiscreteInfectionStatsG($lab_config,$test_type_id, $da
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected),month(s.date_collected)";
 			
-				$resultset1= query_associative_all($query_string1, $row_count1);
+				$resultset1= query_associative_all($query_string1);
 				
 				}
 	
@@ -1701,7 +1701,7 @@ $retval = array();
 				"AND t.result!=''".
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected), week(s.date_collected)";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			$query_string1=   
 				"SELECT year(s.date_collected), s.date_collected AS week ,COUNT(*) AS count_val  FROM test t, patient p,specimen s ".
 				"WHERE t.test_type_id=$test_type_id ".
@@ -1712,7 +1712,7 @@ $retval = array();
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected), week(s.date_collected)";
 			
-				$resultset1= query_associative_all($query_string1, $row_count1);
+				$resultset1= query_associative_all($query_string1);
 				}
 				else if($type=='d')
 				{
@@ -1725,7 +1725,7 @@ $retval = array();
 				"AND t.result!=''".
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY s.date_collected";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			$query_string1=   
 				"SELECT s.date_collected AS week ,COUNT(*) AS count_val  FROM test t, patient p,specimen s ".
 				"WHERE t.test_type_id=$test_type_id ".
@@ -1736,7 +1736,7 @@ $retval = array();
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY s.date_collected";
 			
-				$resultset1= query_associative_all($query_string1, $row_count1);
+				$resultset1= query_associative_all($query_string1);
 				}
 				else
 				{
@@ -1749,7 +1749,7 @@ $retval = array();
 				"AND p.sex= '$gender' ".
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected), month(s.date_collected)";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			$query_string1=   
 				"SELECT year(s.date_collected), s.date_collected AS week ,COUNT(*) AS count_val  FROM test t, patient p,specimen s ".
 				"WHERE t.test_type_id=$test_type_id ".
@@ -1760,7 +1760,7 @@ $retval = array();
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected),month(s.date_collected)";
 			
-				$resultset1= query_associative_all($query_string1, $row_count1);
+				$resultset1= query_associative_all($query_string1);
 				
 				}
 	
@@ -1928,7 +1928,7 @@ $query_string =
 				"AND t.result!=''".
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected), week(s.date_collected)";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			$query_string1=   
 				"SELECT year(s.date_collected), s.date_collected AS week ,COUNT(*) AS count_val  FROM test t, patient p,specimen s ".
 				"WHERE t.test_type_id=$test_type_id ".
@@ -1939,7 +1939,7 @@ $query_string =
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected), week(s.date_collected)";
 			
-				$resultset1= query_associative_all($query_string1, $row_count1);
+				$resultset1= query_associative_all($query_string1);
 				}
 				else if($type=='d')
 				{
@@ -1952,7 +1952,7 @@ $query_string =
 				"AND t.result!=''".
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY s.date_collected";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			$query_string1=   
 				"SELECT s.date_collected AS week ,COUNT(*) AS count_val  FROM test t, patient p,specimen s ".
 				"WHERE t.test_type_id=$test_type_id ".
@@ -1963,7 +1963,7 @@ $query_string =
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY s.date_collected";
 			
-				$resultset1= query_associative_all($query_string1, $row_count1);
+				$resultset1= query_associative_all($query_string1);
 				}
 				else
 				{
@@ -1976,7 +1976,7 @@ $query_string =
 				"AND p.sex= '$gender' ".
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected), month(s.date_collected)";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			$query_string1=   
 				"SELECT year(s.date_collected), s.date_collected AS week ,COUNT(*) AS count_val  FROM test t, patient p,specimen s ".
 				"WHERE t.test_type_id=$test_type_id ".
@@ -1987,7 +1987,7 @@ $query_string =
 				"AND (s.date_collected BETWEEN '$date_from' AND '$date_to') ".
 				 "GROUP BY year(s.date_collected),month(s.date_collected)";
 			
-				$resultset1= query_associative_all($query_string1, $row_count1);
+				$resultset1= query_associative_all($query_string1);
 				
 				}
 	
@@ -2221,7 +2221,7 @@ $query_string =
 				"AND t.specimen_id=s.specimen_id ".
 				"AND ( s.date_collected BETWEEN '$date_from' AND '$date_to' ) ".
 				"AND t.result <> ''";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			foreach($resultset as $record)
 			{
 				$result_string = substr($record['result'], 0, -1);
@@ -2259,7 +2259,7 @@ $query_string =
 			"AND t.result <> '' ".
 			"AND (sp.date_collected BETWEEN '$date_from' AND '$date_to')";
 		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		DbUtil::switchRestore($saved_db);
 		return $resultset[0]['val'];
 	}
@@ -2282,7 +2282,7 @@ $query_string =
 if($add_site_condition==true)
 $query_string=$query_string." and sp.site_id in (".$site_list.")";
 		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
-		$resultset = query_associative_all($query_string, $row_count);
+		$resultset = query_associative_all($query_string);
 		$measure_list = $test_type->getMeasureIds();
 		if(count($resultset) == 0 || $resultset == null) {
 			DbUtil::switchRestore($saved_db);

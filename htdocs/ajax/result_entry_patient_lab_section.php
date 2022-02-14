@@ -196,7 +196,7 @@ else
     //$saved_db = DbUtil::switchToLabConfig(127);
     //$retval = array();
 
-$resultset = query_associative_all($query_string, $row_count);
+$resultset = query_associative_all($query_string);
 //echo $query_string;
 //DbUtil::switchRestore($saved_db);
 //echo "Length ".count($resultset);

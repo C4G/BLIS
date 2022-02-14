@@ -7,7 +7,7 @@ $logType = $_REQUEST['log_type'];
 
 $saved_db = DbUtil::switchToGlobal();
 $query_configs = "SELECT created_by, creation_date from user_log where patient_id =  ".$patientId." and log_type = '".$logType."'";
-$resultset = query_associative_all($query_configs,0);
+$resultset = query_associative_all($query_configs);
 DbUtil::switchRestore($saved_db);
 
 

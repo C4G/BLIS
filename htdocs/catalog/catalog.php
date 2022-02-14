@@ -127,7 +127,7 @@ if(is_super_admin($user) || is_country_dir($user))
 		<div id='tdel_msg' class='clean-orange' style='display:none;'>
 			<?php echo LangUtil::$generalTerms['MSG_DELETED']; ?>&nbsp;&nbsp;<a href="javascript:toggle('tdel_msg');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>
 		</div>
-		<?php $page_elems->getTestTypeTable($lab_config_id); ?>
+		<?php $page_elems->getTestTypeTable($_SESSION['lab_config_id']); ?>
 	</div>
 	<div id='specimen_types_div' class='content_div'>
 		<p style="text-align: right;"><a rel='facebox' href='#SpecimenType_tc'>Page Help</a></p>
@@ -137,7 +137,7 @@ if(is_super_admin($user) || is_country_dir($user))
 		<div id='sdel_msg' class='clean-orange' style='display:none;'>
 			<?php echo LangUtil::$generalTerms['MSG_DELETED']; ?>&nbsp;&nbsp;<a href="javascript:toggle('sdel_msg');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>
 		</div>
-		<?php $page_elems->getSpecimenTypeTable($lab_config_id); ?>
+		<?php $page_elems->getSpecimenTypeTable($_SESSION['lab_config_id']); ?>
 	</div>
 	
 	<div id='TestType_tc' class='right_pane' style='display:none;margin-left:10px;'>

@@ -20,7 +20,7 @@ function get_records_to_print($lab_config, $test_type_id, $date_from, $date_to)
 			"SELECT specimen_id FROM specimen ".
 			"WHERE date_collected BETWEEN '$date_from' AND '$date_to' ".
 		")";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		$test = Test::getObject($record);

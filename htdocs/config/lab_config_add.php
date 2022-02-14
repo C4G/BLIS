@@ -58,7 +58,7 @@ $lab_config->specimenList = $selected_specimen_list;
 $lab_config->idMode = $_REQUEST['id_mode'];
 $saved_db = DbUtil::switchToGlobal();
 $query = "SELECT country from lab_config";
-$records = query_associative_all($query, $row_count);
+$records = query_associative_all($query);
 foreach($records as $record) {
 	if ( strcmp($record['country'], $country) == 0 ) 
 		$count++;
@@ -67,7 +67,7 @@ $count++;
 DbUtil::switchRestore($saved_db);
 /*
 $query_string = "show databases";
-$records = query_associative_all($query_string, $row_count);
+$records = query_associative_all($query_string);
 $count = 0;
 foreach($records as $record) {
 	if( strpos($record['database'], $country) != FALSE ) {
@@ -199,8 +199,8 @@ foreach($selected_test_list as $test_type_id)
 ###################
 
 # Create new langdata folder for this lab
-chmod($LOCAL_PATH."langdata_revamp", 777);
-chmod($LOCAL_PATH."langdata_".$lab_config_id, 777);
+chmod($LOCAL_PATH."langdata_revamp", 0755);
+chmod($LOCAL_PATH."langdata_".$lab_config_id, 0755);
 mkdir($LOCAL_PATH."langdata_".$lab_config_id);
 # Copy contents from langdata_revamp into this new folder
 //copy($LOCAL_PATH."langdata_revamp", $LOCAL_PATH."langdata_".$lab_config_id);

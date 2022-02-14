@@ -36,7 +36,7 @@
 			$query_string = 
 				"select User_Id, AppCodeName, AppName, AppVersion, Recorded_At, Platform ".
 				"from User_Props order by Recorded_At desc limit 100";
-			$resultset = query_associative_all($query_string, $row_count);
+			$resultset = query_associative_all($query_string);
 			foreach($resultset as $row)
 			{
 				echo "<tr>";

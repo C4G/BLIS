@@ -11,7 +11,7 @@ $q = $_REQUEST['q'];
 $query_string = 
 	"SELECT * FROM inv_reagent ".
 	"WHERE name LIKE '$q%' ";
-$resultset = query_associative_all($query_string, $row_count);
+$resultset = query_associative_all($query_string);
 if(count($resultset) == 0 || $resultset == null)
 	return;
 $reagent_list = array();

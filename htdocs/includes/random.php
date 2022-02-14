@@ -454,7 +454,7 @@ function add_results_sequential($user_list=array())
 	$specimens_to_handle = floor($num_specimens2 * (1-$F_PENDING));
 	$specimen_target_list = array();
 	$query_string = "SELECT * FROM specimen ORDER BY date_collected LIMIT ".$specimens_to_handle;
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
 	{
 		$specimen_entry = Specimen::getObject($record);

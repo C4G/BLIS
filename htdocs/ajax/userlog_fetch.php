@@ -19,7 +19,7 @@ function get_activity_specimen($lab_config_id, $user_id, $date_from, $date_to)
 		"WHERE user_id=$user_id ".
 		"AND (date_collected BETWEEN '$date_from' AND '$date_to') ".
 		"ORDER BY date_collected DESC";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
@@ -36,7 +36,7 @@ function get_activity_test($lab_config_id, $user_id, $date_from, $date_to)
 		"WHERE user_id=$user_id ".
 		"AND (ts BETWEEN '$date_from' AND '$date_to' ) ".
 		"AND result <> '' ORDER BY ts DESC";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{
