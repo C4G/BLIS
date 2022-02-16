@@ -89,6 +89,18 @@ if(count($pending_tests) == 0 || $pending_tests == null)
 				<th><?php echo LangUtil::$generalTerms['DOB']; ?></th>
 			<?php 
 		}
+		if($worksheet_config->usePatientAddlId == 1)
+		{
+			?>
+				<th><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></th>
+			<?php 
+		}
+		if($worksheet_config->usePatientRegistrationDate == 1)
+		{
+			?>
+				<th><?php echo "Registration Date"; ?></th>
+			<?php 
+		}
 		?>
 						
 		<?php 
@@ -202,6 +214,18 @@ if(count($pending_tests) == 0 || $pending_tests == null)
 		{
 			echo "<td>";
 			echo $patient->getDob();
+			echo "</td>";
+		}
+		if($worksheet_config->usePatientAddlId == 1)
+		{
+			echo "<td>";
+			echo $patient->getAddlId();
+			echo "</td>";
+		}
+		if($worksheet_config->usePatientRegistrationDate == 1)
+		{
+			echo "<td>";
+			echo $patient->getRegDate();
 			echo "</td>";
 		}
 		# Patient Custom fields here

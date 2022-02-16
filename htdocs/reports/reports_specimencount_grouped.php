@@ -55,7 +55,11 @@ function print_content(div_id)
 <b><?php echo "Specimen Count Report"; ?></b>
 <br><br>
 <?php
-$lab_config_id = $_REQUEST['location'];
+//AS Fixing error of invalid lab config id
+	session_start();
+$user = get_user_by_name($_SESSION['username']);
+$lab_config_id = $user->labConfigId;
+//$lab_config_id = $_REQUEST['location'];
 $lab_config = LabConfig::getById($lab_config_id);
 if($lab_config == null)
 {

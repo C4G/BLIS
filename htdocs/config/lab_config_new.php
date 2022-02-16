@@ -176,6 +176,7 @@ function remove_option2(st)
 function checkandadd()
 {
 	//Validate
+	alert("hi");
 	var name = $('#facility').attr("value");
 	if(name == "")
 	{

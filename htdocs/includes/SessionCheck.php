@@ -5,6 +5,9 @@ if(basename($_SERVER['PHP_SELF'])!=="login.php")
 {
 if(!isset($_SESSION['user_id']))
 {
+$fp = fopen('dbg.txt', 'a');
+fwrite($fp, "out");
+fclose($fp);
 	header("Location: /login.php");
 die();
 }

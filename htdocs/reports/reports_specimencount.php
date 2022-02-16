@@ -44,7 +44,11 @@ function toggle_stat_table()
  | <a href='reports.php'>&laquo; <?php echo LangUtil::$pageTerms['MSG_BACKTOREPORTS']; ?></a>
 <br><br>
 <?php
-$lab_config_id = $_REQUEST['location'];
+//AS Fixing error of invalid lab config id
+	session_start();
+$user = get_user_by_name($_SESSION['username']);
+$lab_config_id = $user->labConfigId;
+//$lab_config_id = $_REQUEST['location'];
 $date_from = $_REQUEST['yyyy_from']."-".$_REQUEST['mm_from']."-".$_REQUEST['dd_from'];
 $date_to = $_REQUEST['yyyy_to']."-".$_REQUEST['mm_to']."-".$_REQUEST['dd_to'];
 $uiinfo = "from=".$date_from."&to=".$date_to;

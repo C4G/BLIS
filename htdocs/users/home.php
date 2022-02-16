@@ -62,7 +62,8 @@ $(document).ready(function(){
 			}
 			else 
              {
-                             $('#update_div').hide();
+                            // $('#update_div').show();
+                            $('#update_div').hide();
 			}
 		}
 	});

@@ -2,6 +2,7 @@
 $LANG_ARRAY = array ( 
 		"general" => array ( 
 		"TIPS" => "Tips", 
+"backup_tip"=>"Select the receiver who should be able to revert this backup. 'Current Lab' will create backups that can be reverted on this lab for current instance of BLIS. If the receiver you have selected does not exist in the system, you will be prompted to upload their public key. The public key can be obtained by contacting the receiver. Public Key is a .blis file and can be obtained by lab managers under the lab configuration -> Manage Backup Keys -> Download Public Key option.",
 		"USERNAME" => "Username", 
 		"PWD" => "Password", 
 		"PWD_TEMP" => "Temp Password", 
@@ -381,6 +382,17 @@ $LANG_ARRAY = array (
 		"TIPS_SUMMARY_1" => "Gives a summary of lab setup including the lab personnel accounts, test and specimen types.",
 		"TIPS_SUMMARY_2" => "-",
 		"TIPS_SUMMARY_3" => "-",
+"enable_encrypted_backup"=>"Enable Encrypted Backups",
+"disable_encrypted_backup"=>"Disable Encrypted Backups",
+		"MENU_KEY_MANAGEMENT" => "Manage Backup Keys",
+		"TIPS_KEY_MANAGEMENT" => "Use this page to generate key pair to encrypt the Backups and to add public keys from other labs.",
+"key_alias"=>"Key Alias",
+"download_key"=>"Download Public Key",
+"add_button"=>"Add",
+"cancel_button"=>"Cancel",
+"public_key_label"=>"Public Key",
+"add_key"=>"Add Key Alias",
+"add_header"=>"Add a new Key Alias",
 		"MENU_BACKUP_REVERT" => "Revert To Backup", 
 		"TIPS_REVERT" => "In case of system failure, if we want to revert to a previously backedup copy of the data we can use this option. You can choose to backup current version before doing this. You may also choose to include to revert back the language settings.",
 		"BACKUP_LOCATION" => "Backup Version", 
@@ -480,8 +492,9 @@ $LANG_ARRAY = array (
         "SAMPLES_RECIVED" => "Samples Received",
         "ENABLE_SITE_ENTRY" => "Enable Site Entry for a Specimen",
         "SELECT_SITE_FOR_REMOVAL" => "Select sites for removal",
-        "MODIFY_SITE" => "Modify sites",
-        "PRINT_UNVERIFIED" => "Allow printing of unverified tests"
+        "OUT_OF_RANGE" => "Out of range",
+        "INTERPRETATION" => "Interpretation",
+        "MODIFY_SITE" => "Modify sites"
 
 	) ,
 	"lab_admins" => array ( 

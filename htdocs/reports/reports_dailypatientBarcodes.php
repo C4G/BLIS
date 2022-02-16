@@ -24,7 +24,11 @@ $bar_height = $_REQUEST['ht']; //40;
 $font_size = $_REQUEST['fs']; //11;
 $date_from = $_REQUEST['yf']."-".$_REQUEST['mf']."-".$_REQUEST['df'];
 $date_to = $_REQUEST['yt']."-".$_REQUEST['mt']."-".$_REQUEST['dt'];
-$lab_config_id = $_REQUEST['l'];
+//AS Fixing error of invalid lab config id
+	session_start();
+$user = get_user_by_name($_SESSION['username']);
+$lab_config_id = $user->labConfigId;
+//$lab_config_id = $_REQUEST['l'];
 
 $uiinfo = "from=".$date_from."&to=".$date_to;
 putUILog('daily_log_patients_barcodes', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
