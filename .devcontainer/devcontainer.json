@@ -1,0 +1,16 @@
+{
+    "dockerComposeFile": "docker-compose.yml",
+    "extensions": [
+        "eamodio.gitlens",
+    ],
+    "portsAttributes": {
+        "80": {
+            "label": "apache2",
+            "onAutoForward": "notify"
+        }
+    },
+    "postCreateCommand": "/workspace/.devcontainer/post-create-command.sh",
+    "postStartCommand": "/workspace/.devcontainer/post-start-command.sh",
+    "service": "app",
+    "workspaceFolder": "/workspace"
+}
