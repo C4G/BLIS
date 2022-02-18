@@ -2,7 +2,8 @@
 #
 # Contains commonly used functions for performing backup or reverting to a backup
 #
-include("../includes/db_lib.php");
+require_once("../includes/db_lib.php");
+require_once("../includes/platform_lib.php");
 
 class BackupLib
 {
@@ -24,18 +25,17 @@ class BackupLib
 		$DB_USER = root;
 		$DB_PASS = blis123;
 		
-		$mainBlisDir = substr($currentDir,$length,strpos($currentDir,"htdocs"));
-		$mysqldumpPath = "\"".$mainBlisDir."server\mysql\bin\mysqldump.exe\"";
+		$mysqldumpPath = mySqlDumpPath();
 		$dbname = "blis_".$lab_config_id;
 		$backupLabDbFileName= "blis_".$lab_config_id."_backup.sql";
 		$count=0;
-		$command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbname > $backupLabDbFileName";
+		$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupLabDbFileName";
 		system($command,$return);
 		$file_list1[] = $backupLabDbFileName;
 		
 		$dbname = "blis_revamp";
 		$backupDbFileName = "blis_revamp_backup.sql";
-		$command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbname > $backupDbFileName";
+		$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupDbFileName";
 		system($command,$return);
 		$file_list2[] = $backupDbFileName;
 		
@@ -57,7 +57,7 @@ class BackupLib
 		@mkdir($destination."blis_revamp/");
 		@mkdir($destination."blis_".$lab_config_id."/");
 		@mkdir($destination."langdata_".$lab_config_id."/");
-		chmod($destination, 777);
+		chmod($destination, 0755);
 		
 		foreach($file_list1 as $file) {
 			$file_name_parts = explode("/", $file);

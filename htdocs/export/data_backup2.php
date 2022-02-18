@@ -20,13 +20,13 @@ $mysqldumpPath = "\"".$mainBlisDir."server\mysql\bin\mysqldump.exe\"";
 $dbname = "blis_".$lab_config_id;
 $backupLabDbFileName= "blis_".$lab_config_id."_backup.sql";
 $count=0;
-$command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbname > $backupLabDbFileName";
+$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupLabDbFileName";
 system($command);
 $file_list1[] = $backupLabDbFileName;
 
 $dbname = "blis_revamp";
 $backupDbFileName = "blis_revamp_backup.sql";
-$command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbname > $backupDbFileName";
+$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupDbFileName";
 system($command);
 $file_list2[] = $backupDbFileName;
 
@@ -48,7 +48,7 @@ $destination = "../../blis_backup_".$site_name."_".date("Ymd-Hi")."/";
 @mkdir($destination."blis_revamp/");
 @mkdir($destination."blis_".$lab_config_id."/");
 @mkdir($destination."langdata_".$lab_config_id."/");
-chmod($destination, 777);
+chmod($destination, 0755);
 
 foreach($file_list1 as $file)
 {

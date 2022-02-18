@@ -14,14 +14,14 @@ $mainBlisDir = substr($currentDir,$length,strpos($currentDir,"htdocs"));
 $mysqldumpPath = "\"".$mainBlisDir."server\mysql\bin\mysqldump.exe\"";
 $dbName = "blis_".$country;
 $backupDbFileName= "blis_".$country."_backup.sql";
-$command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbName > $backupDbFileName";
+$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbName > $backupDbFileName";
 system($command,$return);
 $file_list1[] = $backupDbFileName;
 
 $destination = "../../blis_backup_".$country."_".date("Ymd-Hi")."/";
 $toScreenDestination = "blis_backup_".$country."_".date("Ymd-Hi");
 @mkdir($destination);
-chmod($destination, 777);
+chmod($destination, 0755);
 
 foreach($file_list1 as $file) {
 	$file_name_parts = explode("/", $file);

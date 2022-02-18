@@ -1,6 +1,9 @@
 <?php
-include("redirect.php");
-include("../includes/db_lib.php");
+require_once("redirect.php");
+require_once("../includes/db_lib.php");
+require_once("../includes/platform_lib.php");
+
+
 putUILog('backup_data', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 session_start();
 if($SERVER == $ON_ARC)
@@ -68,13 +71,11 @@ $file_list2 = array();
 $file_list3 = array();
 $file_list4 = array();
 
-$currentDir = getcwd();
-$mainBlisDir = substr($currentDir,$length,strpos($currentDir,"htdocs"));
-$mysqldumpPath = "\"".$mainBlisDir."server\mysql\bin\mysqldump.exe\"";
+$mysqldumpPath = PlatformLib::mySqlDumpPath();
 $dbname = "blis_".$lab_config_id;
 $backupLabDbFileName= "blis_".$lab_config_id."_backup.sql";
 $count=0;
-$command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbname > $backupLabDbFileName";
+$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupLabDbFileName";
 system($command);
 if( $backupType == "encrypted" ) {
 /* Encrypt the sql with the public key */
@@ -114,7 +115,7 @@ else if( $backupType == "anonymized" ) {
 	$blisLabBackupTempFilePath = "\"".$mainBlisDir."\htdocs\export\blis_".$lab_config_id."_temp_backup.sql\"";
 	$mysqlExePath = "\"".$mainBlisDir."server\mysql\bin\mysql.exe\"";
 	$dbTempName = "blis_".$lab_config_id."_temp";
-	$command = $mysqlExePath." -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbTempName < $blisLabBackupTempFilePath";
+	$command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbTempName < $blisLabBackupTempFilePath";
 	$command = "C: &".$command; //the C: is a useless command to prevent the original command from failing because of having more than 2 double quotes
 	system($command, $return);
 	
@@ -127,7 +128,7 @@ else if( $backupType == "anonymized" ) {
 	query_blind($queryUpdate);
 	$backupLabDbTempFileName= "blis_".$lab_config_id."_temp_backup";
 	$count=0;
-	$command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbTempName > $backupLabDbTempFileName";
+	$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbTempName > $backupLabDbTempFileName";
 	system($command);
 	DbUtil::switchRestore($saved_db);
 	$query = "DROP DATABASE ".$dbname."_temp";
@@ -161,7 +162,7 @@ $dbname = "blis_revamp";
 $server_public_key = openssl_pkey_get_public($pubKey);
 encryptFile($backupLabDbFileName,$server_public_key);
 $backupDbFileName = "blis_revamp_backup.sql";
-$command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbname > $backupDbFileName";
+$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupDbFileName";
 system($command);
 if($backupType == "encrypted") { 
 	$fileHandle = fopen($backupDbFileName, "r");
@@ -200,16 +201,14 @@ if($LabName!=="Current Lab")
 $site_name=$LabName;
 $destination = "../../blis_backup_".$site_name."_".date("Ymd-Hi")."/";
 $toScreenDestination = "blis_backup_".$site_name."_".date("Ymd-Hi");
-@mkdir($destination);
-@mkdir($destination."blis_revamp/");
-@mkdir($destination."blis_".$lab_config_id."/");
-@mkdir($destination."langdata_".$lab_config_id."/");
-chmod($destination, 777);
+mkdir($destination, 0755);
+mkdir($destination."blis_revamp/",0755);
+mkdir($destination."blis_".$lab_config_id."/",0755);
+mkdir($destination."langdata_".$lab_config_id."/",0755);
 
 foreach($file_list1 as $file)
 {
 	$file_name_parts = explode("/", $file);
-	echo $file_parts[count($file_name_parts)-1];
 	$target_file_name = $destination."blis_".$lab_config_id."/".$file_name_parts[count($file_name_parts)-1];
 	$ourFileHandle = fopen($target_file_name, 'w') or die("can't open file");
 	fclose($ourFileHandle);
@@ -372,7 +371,7 @@ $i++;
 $zipFile=$toScreenDestination.".zip";
 if(KeyMgmt::read_enc_setting()==1)
 $zipFile=$toScreenDestination."_enc.zip";
-$zipFileLoc=realpath("../../")."\\".$zipFile;
+$zipFileLoc=realpath("../../")."/".$zipFile;
 
 //echo $zipFileLoc;
 createZipFile($zipFile,realpath($destination));

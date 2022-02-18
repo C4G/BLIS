@@ -4,6 +4,8 @@
 # Include in db_mysql_lib.php
 #
 
+require_once("../includes/platform_lib.php");
+
 if(session_id() == "")
 	session_start();
 	
@@ -20,7 +22,16 @@ if($SERVER == $ON_ARC)
 	$LOCAL_PATH = "../local/";
 }
 
-$DB_HOST = "localhost";
+$DB_HOST = "127.0.0.1";
+
+// If not running on Windows, use the MySQL default port.
+$DB_PORT = 3306;
+if (PlatformLib::runningOnWindows()) {
+	// If running on Windows, assume we're running the traditional version of BLIS.
+	// The default port for the Server2Go MySQL server is 7188.
+	$DB_PORT = 7188;
+}
+
 $DB_USER = "root";
 // $d = dirname(__FILE__);
 // $name= strrpos($d,"htdocs");

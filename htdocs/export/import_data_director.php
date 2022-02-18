@@ -18,7 +18,7 @@ $lid = $file_name_parts[1];
     $blisLabBackupFilePath = "\"".$mainBlisDir."\htdocs\export\blis_129_temp_backup.sql\"";
     $mysqlExePath = "\"".$mainBlisDir."server\mysql\bin\mysql.exe\"";
     //$backupLabDbFileName = "\"".$mainBlisDir."backups\\"."testsql.sql\"";
-    $command = $mysqlExePath." -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS  < $fileName";
+    $command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS  < $fileName";
     $command = "C: &".$command; //the C: is a useless command to prevent the original command from failing because of having more than 2 double quotes
     echo $command;
     system($command, $return);

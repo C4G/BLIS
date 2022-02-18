@@ -53,7 +53,7 @@ $lid = $file_name_parts[1];
 
 $fileName=$extractPath."/".$sqlFile;
 
-    $command = $mysqlExePath." -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS  < ".$fileName;
+    $command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS  < ".$fileName;
 
     $command = "C: &".$command; //the C: is a useless command to prevent the original command from failing because of having more than 2 double quotes
 $pvt="../ajax/LAB_dir.blis";
@@ -62,7 +62,7 @@ if($is_encrypted)
 if(file_exists($pvt))
 {
 decryptFile($fileName,$pvt);
-    $command = $mysqlExePath." -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS  < ".$fileName.".dec";
+    $command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS  < ".$fileName.".dec";
     $command = "C: &".$command; //the C: is a useless command to prevent the original command from failing because of having more than 2 double quotes
 }
 else
