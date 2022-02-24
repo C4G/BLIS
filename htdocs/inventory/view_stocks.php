@@ -29,7 +29,7 @@ $script_elems->enableFlotBasic();
 $script_elems->enableFlipV();
 $script_elems->enableTableSorter();
    
-    $lid = $_SESSION['$lab_config_id'];
+    $lid = $_SESSION['lab_config_id'];
 ?>
 
 <script type='text/javascript'>

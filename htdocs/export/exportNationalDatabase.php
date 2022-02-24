@@ -3,15 +3,14 @@
 include("redirect.php");
 include("../includes/db_lib.php");
 //include("../includes/db_constants.php");
+require_once("../includes/platform_lib.php");
 
 global $DB_HOST,$DB_USER,$DB_PASS;
 
 $user = get_user_by_id($_SESSION['user_id']);
 $country = strtolower($user->country);
 	
-$currentDir = getcwd();		
-$mainBlisDir = substr($currentDir,$length,strpos($currentDir,"htdocs"));
-$mysqldumpPath = "\"".$mainBlisDir."server\mysql\bin\mysqldump.exe\"";
+$mysqldumpPath = '"'.PlatformLib::mySqlDumpPath().'"';
 $dbName = "blis_".$country;
 $backupDbFileName= "blis_".$country."_backup.sql";
 $command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbName > $backupDbFileName";

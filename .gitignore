@@ -23,8 +23,8 @@
 # Logs and databases #
 ######################
 *.log
-
 *.sqlite
+/log/*
 
 # OS generated files #
 ######################
@@ -77,3 +77,14 @@ server/
 /htdocs/regn/new_patient_updated.php
 *~
 *nbproject/
+
+# BLIS Backup directories - don't need to be in source control
+/blis_backup_*
+
+# RSA Keypairs
+/**/*.blis
+/**/*.sql.key
+
+# Tooling
+## php-cs-fixer cache
+/.php_cs.cache

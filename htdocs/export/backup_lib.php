@@ -25,7 +25,7 @@ class BackupLib
 		$DB_USER = root;
 		$DB_PASS = blis123;
 		
-		$mysqldumpPath = mySqlDumpPath();
+		$mysqldumpPath = '"'.PlatformLib::mySqlDumpPath().'"';
 		$dbname = "blis_".$lab_config_id;
 		$backupLabDbFileName= "blis_".$lab_config_id."_backup.sql";
 		$count=0;

@@ -1,5 +1,6 @@
 <?php
 
+require_once("../includes/platform_lib.php");
 include("../includes/db_lib.php");
 if($SERVER == $ON_ARC)
 {
@@ -14,9 +15,7 @@ $file_list2 = array();
 $file_list3 = array();
 $file_list4 = array();
 
-$currentDir = getcwd();
-$mainBlisDir = substr($currentDir,$length,strpos($currentDir,"htdocs"));
-$mysqldumpPath = "\"".$mainBlisDir."server\mysql\bin\mysqldump.exe\"";
+$mysqldumpPath = '"'.PlatformLib::mySqlDumpPath().'"';
 $dbname = "blis_".$lab_config_id;
 $backupLabDbFileName= "blis_".$lab_config_id."_backup.sql";
 $count=0;

@@ -9,8 +9,8 @@
             "onAutoForward": "notify"
         }
     },
-    "postCreateCommand": "/workspace/.devcontainer/post-create-command.sh",
-    "postStartCommand": "/workspace/.devcontainer/post-start-command.sh",
+    "forwardPorts": [80],
+    "postAttachCommand": "sudo service apache2 start",
     "service": "app",
     "workspaceFolder": "/workspace"
 }

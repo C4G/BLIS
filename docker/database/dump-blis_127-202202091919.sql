@@ -19,6 +19,9 @@
 -- Not dumping tablespaces as no INFORMATION_SCHEMA.FILES table on this server
 --
 
+CREATE DATABASE IF NOT EXISTS blis_127;
+USE blis_127;
+
 --
 -- Table structure for table `bills`
 --
