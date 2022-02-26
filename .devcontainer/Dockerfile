@@ -33,6 +33,7 @@ RUN curl -L https://github.com/DarthSim/overmind/releases/download/v2.2.2/overmi
 RUN add-apt-repository ppa:ondrej/php && apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         php5.6 \
+        php5.6-bcmath \
         php5.6-curl \
         php5.6-gd \
         php5.6-mysql \
