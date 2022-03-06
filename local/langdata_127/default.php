@@ -494,12 +494,14 @@ $LANG_ARRAY = array (
         "TIPS_SITECONFIG" => "Add/Remove specimen collection sites to the laboratory records",
         "MENU_SITECONFIG" => "Site Configuration",
         "ADD_SITE" => "Enter New Site Name",
+		"ADD_ONLINE_SERVER" => "Enter IP address of BLIS server: ",
+		"CONNECT_BUTTON" => "Connect",
         "SAMPLES_RECIVED" => "Samples Received",
         "ENABLE_SITE_ENTRY" => "Enable Site Entry for a Specimen",
         "SELECT_SITE_FOR_REMOVAL" => "Select sites for removal",
         "OUT_OF_RANGE" => "Out of range",
         "INTERPRETATION" => "Interpretation",
-        "MODIFY_SITE" => "Modify sites"
+        "MODIFY_SITE" => "Modify sites",
 
 	) ,
 	"lab_admins" => array ( 

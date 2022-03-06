@@ -408,6 +408,12 @@ xhr.send(formData);
 		language_div_load();
 		<?php
 	}
+	else if (isset($_REQUEST['setup_server']))
+	{
+		?>
+			right_load(33, 'server_setup_div');
+		<?
+	}
 	else
 	{
 		$locale = $_SESSION['locale'];
@@ -1111,6 +1117,16 @@ function submit_goal_tat()
 }
 
 function submit_site_add()
+{
+	$('#site_config_add_form').ajaxSubmit({
+		success: function() {
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&siteupdate=1";
+		}
+	})
+}
+
+
+function submit_server_connect()
 {
 	$('#site_config_add_form').ajaxSubmit({
 		success: function() {
@@ -2467,7 +2483,9 @@ function AddnewDHIMS2Config()
 				<br><br>			
 				<a id='option19' class='menu_option' href="javascript:language_div_load();"><?php echo LangUtil::getPageTerm("MODIFYLANG"); ?></a>
 				<br><br>
-				<a id='option14' class='menu_option' href="javascript:export_html();"><?php echo "Setup Network" ?></a>
+				<a id='option14' class='menu_option' href="javascript:export_html();"><?php echo "Setup Local Network" ?></a>
+				<br><br>
+				<a id='option33' class='menu_option' href="javascript:right_load(33, 'server_setup_div');">BLIS Online</a>
 				<br><br>
 				<a id='api' class='menu_option' href="javascript:api_setup();"><?php echo "External Interface" ?> </a>
                 <br><br></li>
@@ -4073,8 +4091,29 @@ function AddnewDHIMS2Config()
 				
 				<div class='right_pane' id='network_setup_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#SetupNet'>Page Help</a></p>
-				Setup can be accessed from BlisSetup.html in the main folder.
+				<p>Setup for a local network for your hospital or laboratory can be accessed from BlisSetup.html in the main folder.</p>
 				</div>
+
+				<div class='right_pane' id='server_setup_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;"><a rel='facebox' href='#SetupServer'>Page Help</a></p>
+
+				<form id="blis_online_config_form"
+							  name="blis_online_config_form"
+							  action="../ajax/online_config_connect.php"
+							  method="post">
+							<input type="hidden" id="lab_config_id"
+								   name="lab_config_id"
+								   value="<?php echo $lab_config_id; ?>">
+							<?php echo LangUtil::$pageTerms['ADD_ONLINE_SERVER']; ?>
+                            <input type="text" id="server_ip" name="server_ip">
+							<br><br>
+							<input type="button"
+								   value="<?php echo LangUtil::$pageTerms['CONNECT_BUTTON']; ?>"
+								   onclick="submit_server_connect();">
+						</form>
+				
+				</div>
+
 				<div class='right_pane' id='target_tat_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#Tests_config'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_TAT']; ?></b>
