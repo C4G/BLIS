@@ -1128,9 +1128,9 @@ function submit_site_add()
 
 function submit_server_connect()
 {
-	$('#site_config_add_form').ajaxSubmit({
+	$('#blis_online_config_form').ajaxSubmit({
 		success: function() {
-			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&siteupdate=1";
+			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
 		}
 	})
 }
@@ -4096,10 +4096,9 @@ function AddnewDHIMS2Config()
 
 				<div class='right_pane' id='server_setup_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#SetupServer'>Page Help</a></p>
-
 				<form id="blis_online_config_form"
 							  name="blis_online_config_form"
-							  action="../ajax/online_config_connect.php"
+							  action="../ajax/blis_online_connect.php"
 							  method="post">
 							<input type="hidden" id="lab_config_id"
 								   name="lab_config_id"
@@ -4111,7 +4110,6 @@ function AddnewDHIMS2Config()
 								   value="<?php echo LangUtil::$pageTerms['CONNECT_BUTTON']; ?>"
 								   onclick="submit_server_connect();">
 						</form>
-				
 				</div>
 
 				<div class='right_pane' id='target_tat_div' style='display:none;margin-left:10px;'>
