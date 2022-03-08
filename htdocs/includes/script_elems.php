@@ -338,9 +338,9 @@ class ScriptElems
 		if($this->enabledMultiSelect === false)
 		{
 		?>
-			<script src="js/jquery.multiSelect/jquery.bgiframe.min.js" type="text/javascript"></script> 
-			<script src="js/jquery.multiSelect/jquery.multiSelect.js" type="text/javascript"></script> 
- 			<link href="js/jquery.multiSelect/jquery.multiSelect.css" rel="stylesheet" type="text/css" /> 
+			<script src="js/jquery.multiselect/jquery.bgiframe.min.js" type="text/javascript"></script> 
+			<script src="js/jquery.multiselect/jquery.multiSelect.js" type="text/javascript"></script> 
+ 			<link href="js/jquery.multiselect/jquery.multiSelect.css" rel="stylesheet" type="text/css" /> 
 		<?php
 		}
 		$this->enabledMultiSelect = true;
