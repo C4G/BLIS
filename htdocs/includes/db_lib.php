@@ -414,7 +414,7 @@ class FieldOrdering
 		query_blind($query_delete);
 		DbUtil::switchRestore($saved_db);
 	}
-	
+
 	public static function add_fieldOrdering($fieldOrder, $importOn = false)
 	{
 		# Adds a new patient/ specimen field order to DB 
