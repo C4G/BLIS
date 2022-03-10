@@ -1693,8 +1693,8 @@
 			<value>Enter IP address of BLIS server: </value>
 		</term>
 		<term>
-			<key>CONNECT_BUTTON</KEY>
-			<value>Connect</value>
+			<key>SAVE_BUTTON</KEY>
+			<value>Save</value>
 		</term>
 		<term>
 			<key>SAMPLES_RECEIVED</key>

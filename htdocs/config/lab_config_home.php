@@ -1130,7 +1130,8 @@ function submit_save_server_ip()
 {
 	$('#blis_online_config_form').ajaxSubmit({
 		success: function() {
-			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
+			window.location=reload_url;
+			// window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
 		}
 	})
 }
@@ -4095,6 +4096,7 @@ function AddnewDHIMS2Config()
 
 				<div class='right_pane' id='server_setup_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#SetupServer'>Page Help</a></p>
+				
 				<form id="blis_online_config_form"
 							  name="blis_online_config_form"
 							  action="../ajax/lab_config_save_ip.php"
@@ -4105,10 +4107,10 @@ function AddnewDHIMS2Config()
 							<?php echo LangUtil::$pageTerms['ADD_ONLINE_SERVER']; ?>
                             <input type="text" id="server_ip" 
 							       name="server_ip"
-								   value="<?php echo $lab_config->server_ip; ?>">
+								   value="">
 							<br><br>
 							<input type="button"
-								   value="<?php echo LangUtil::$pageTerms['CONNECT_BUTTON']; ?>"
+								   value="<?php echo LangUtil::$pageTerms['SAVE_BUTTON']; ?>"
 								   onclick="submit_save_server_ip();">
 						</form>
 				</div>
