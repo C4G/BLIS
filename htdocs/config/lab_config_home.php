@@ -4096,7 +4096,6 @@ function AddnewDHIMS2Config()
 
 				<div class='right_pane' id='server_setup_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#SetupServer'>Page Help</a></p>
-				
 				<form id="blis_online_config_form"
 							  name="blis_online_config_form"
 							  action="../ajax/lab_config_save_ip.php"
@@ -4107,7 +4106,9 @@ function AddnewDHIMS2Config()
 							<?php echo LangUtil::$pageTerms['ADD_ONLINE_SERVER']; ?>
                             <input type="text" id="server_ip" 
 							       name="server_ip"
-								   value="">
+								   value='<?php $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
+									   	$result = query_associative_one($query);
+										echo reset($result); ?>'>
 							<br><br>
 							<input type="button"
 								   value="<?php echo LangUtil::$pageTerms['SAVE_BUTTON']; ?>"

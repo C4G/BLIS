@@ -585,6 +585,7 @@ class LabConfig
 	public $ageLimit;
 	public $country;
     public $site_choice_enabled;
+	public $server_ip;
 	
 	public static $ID_AUTOINCR = 1;
 	public static $ID_MANUAL = 2;
@@ -609,6 +610,7 @@ class LabConfig
 		$lab_config->location = $record['location'];
 		$lab_config->adminUserId = $record['admin_user_id'];
 		$lab_config->dbName = $record['db_name'];
+		$lab_config->server_ip = $record['server_ip'];
 		if(isset($record['id_mode']))
 			$lab_config->idMode = $record['id_mode'];
 		else

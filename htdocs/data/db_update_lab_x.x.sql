@@ -1,0 +1,1 @@
+ALTER TABLE `lab_config` ADD 'server_ip' CHAR(45) NULL; 
