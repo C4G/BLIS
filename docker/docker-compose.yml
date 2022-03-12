@@ -1,10 +1,13 @@
 version: '3'
 
+#####
+# This file is an example docker-compose file for deploying BLIS to a cloud provider
+#
+
 services:
   app:
-    build:
-      dockerfile: "./Dockerfile"
-      context: "."
+    # This image is automatically built and pushed from the GitHub action in .github/workflows/ folder
+    image: "ghcr.io/c4g-spr22-blis/blis:latest"
     environment:
       DB_HOST: 'db'
       DB_PORT: '3306'
@@ -21,7 +24,7 @@ services:
     volumes:
       - blis-data:/var/lib/mysql
       - type: bind
-        source: ./docker/database
+        source: ./database
         target: /docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: blis123
