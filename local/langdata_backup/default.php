@@ -496,6 +496,7 @@ $LANG_ARRAY = array (
         "ADD_SITE" => "Enter New Site Name",
 		"ADD_ONLINE_SERVER" => "Enter IP address of BLIS server: ",
 		"SAVE_BUTTON" => "Save",
+		"BACKUP_BUTTON" => "Backup Now",
         "SAMPLES_RECIVED" => "Samples Received",
         "ENABLE_SITE_ENTRY" => "Enable Site Entry for a Specimen",
         "SELECT_SITE_FOR_REMOVAL" => "Select sites for removal",

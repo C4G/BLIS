@@ -1688,6 +1688,18 @@
 			<key>ADD_SITE</key>
 			<value>Enter New Site Name</value>
 		</term>
+				<term> 
+			<key>ADD_ONLINE_SERVER</key>
+			<value>Enter IP address of BLIS server: </value>
+		</term>
+		<term>
+			<key>SAVE_BUTTON</KEY>
+			<value>Save</value>
+		</term>
+		<term>
+			<key>BACKUP_BUTTON</KEY>
+			<value>Backup Now</value>
+		</term>
 		<term>
 			<key>SAMPLES_RECEIVED</key>
 			<value>Samples Received</value>

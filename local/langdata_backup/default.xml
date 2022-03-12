@@ -1697,6 +1697,10 @@
 			<value>Save</value>
 		</term>
 		<term>
+			<key>BACKUP_BUTTON</KEY>
+			<value>Backup Now</value>
+		</term>
+		<term>
 			<key>SAMPLES_RECEIVED</key>
 			<value>Samples Received</value>
 		</term>

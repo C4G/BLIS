@@ -1131,7 +1131,15 @@ function submit_save_server_ip()
 	$('#blis_online_config_form').ajaxSubmit({
 		success: function() {
 			window.location=reload_url;
-			// window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
+		}
+	})
+}
+
+function submit_server_backup()
+{
+	$('#blis_online_config_form').ajaxSubmit({
+		success: function() {
+			window.location=reload_url;
 		}
 	})
 }
@@ -4097,23 +4105,39 @@ function AddnewDHIMS2Config()
 				<div class='right_pane' id='server_setup_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#SetupServer'>Page Help</a></p>
 				<form id="blis_online_config_form"
-							  name="blis_online_config_form"
-							  action="../ajax/lab_config_save_ip.php"
-							  method="post">
-							<input type="hidden" id="lab_config_id"
-								   name="lab_config_id"
-								   value="<?php echo $lab_config_id; ?>">
-							<?php echo LangUtil::$pageTerms['ADD_ONLINE_SERVER']; ?>
-                            <input type="text" id="server_ip" 
-							       name="server_ip"
-								   value='<?php $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
-									   	$result = query_associative_one($query);
-										echo reset($result); ?>'>
-							<br><br>
-							<input type="button"
-								   value="<?php echo LangUtil::$pageTerms['SAVE_BUTTON']; ?>"
-								   onclick="submit_save_server_ip();">
-						</form>
+					name="blis_online_config_form"
+					action="../ajax/lab_config_save_ip.php"
+					method="post">
+					<input type="hidden" id="lab_config_id"
+						name="lab_config_id"
+						value="<?php echo $lab_config_id; ?>">
+					<?php echo LangUtil::$pageTerms['ADD_ONLINE_SERVER']; ?>
+                    <input type="text" id="server_ip" 
+						name="server_ip"
+						value='<?php $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
+								$result = query_associative_one($query);
+								echo reset($result); ?>'>
+					<br><br>
+					<input type="button"
+							value="<?php echo LangUtil::$pageTerms['SAVE_BUTTON']; ?>"
+							onclick="submit_save_server_ip();">
+				</form>
+				<form id="blis_online_backup_form"
+					name="blis_online_backup_form"
+					action="../ajax/backup_to_server.php"
+					method="post">
+					<input type="hidden" id="lab_config_id"
+						name="lab_config_id"
+						value="<?php echo $lab_config_id; ?>">
+					<input type="hidden" id="server_ip"
+						name="server_ip"
+						value='<?php $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
+								$result = query_associative_one($query);
+								echo reset($result); ?>'>
+					<input type="button"
+						value="<?php echo LangUtil::$pageTerms['BACKUP_BUTTON']; ?>"
+						onclick="submit_server_backup();">
+					</form>
 				</div>
 
 				<div class='right_pane' id='target_tat_div' style='display:none;margin-left:10px;'>
