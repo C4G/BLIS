@@ -20,10 +20,10 @@ if (!(file_exists($f_pvt)&&file_exists($f_pub))) {
     );
 
     if (PlatformLib::runningOnWindows()) {
-        $openssl_conf_location = __DIR__.'/../../server/php/extras/openssl/openssl.cnf';
+        $openssl_conf_location = dirname(__FILE__).'/../../server/php/extras/openssl/openssl.cnf';
         $config["config"] = $openssl_conf_location;
     }
- 
+
     // Create the keypair
     $res=openssl_pkey_new($config);
     // Get private key

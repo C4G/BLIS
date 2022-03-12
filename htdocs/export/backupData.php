@@ -32,7 +32,7 @@ if ($LabName!=="Current Lab") {
         $keyMgmt=KeyMgmt::getByLabName($LabName);
         $pubKey=$keyMgmt->PubKey;
     } else {
-        $target_loc= __DIR__."/../key.blis";
+        $target_loc= dirname(__FILE__)."/../key.blis";
         if (move_uploaded_file($_FILES["pkey"]["tmp_name"], $target_loc)) {
             $pubKey = file_get_contents($target_loc);
             $keyMgmt=new KeyMgmt();
@@ -100,14 +100,14 @@ if ($backupType == "encrypted") {
     }
     fclose($fileWriteHandle);
     fclose($fileHandle);
-    
+
     $blisLabBackupTempFilePath = "\"".$mainBlisDir."\htdocs\export\blis_".$lab_config_id."_temp_backup.sql\"";
     $mysqlExePath = "\"".$mainBlisDir."server\mysql\bin\mysql.exe\"";
     $dbTempName = "blis_".$lab_config_id."_temp";
     $command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbTempName < $blisLabBackupTempFilePath";
     $command = "C: &".$command; //the C: is a useless command to prevent the original command from failing because of having more than 2 double quotes
     system($command, $return);
-    
+
     unlink($backupLabDbTempFileName);
     $saved_db= db_get_current();
     $switchDatabaseName = "blis_".$lab_config_id."_temp";

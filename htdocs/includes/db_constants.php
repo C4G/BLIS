@@ -4,11 +4,11 @@
 # Include in db_mysql_lib.php
 #
 
-require_once(__DIR__."/platform_lib.php");
+require_once(dirname(__FILE__)."/platform_lib.php");
 
 if(session_id() == "")
 	session_start();
-	
+
 # Flag for toggling between local machine, portable version and arc server
 $ON_DEV = 1;
 $ON_ARC = 2;
@@ -59,17 +59,17 @@ if (!$DB_USER) {
 // {
 // $GLOBAL_DB = $file;
 
-// }	
-	// $count++;	
+// }
+	// $count++;
 // }
 // closedir($dir1);
 
 $GLOBAL_DB_NAME="blis_revamp";
 
-$DB_NAME = $GLOBAL_DB_NAME;	
+$DB_NAME = $GLOBAL_DB_NAME;
 $DB_PASS = "";
 
-if(getenv("DB_PASS")) 
+if(getenv("DB_PASS"))
 {
 	$DB_PASS = getenv("DB_PASS");
 }
