@@ -2,6 +2,14 @@
 <pages lang="default" descr="Default" version="0.8.4">
 	<page id="general" descr="General Terms">
 		<term>
+			<key>BACKUP_LOCAL</key>
+			<value>Download local .ZIP backup</value>
+		</term>
+		<term>
+			<key>BACKUP_ONLINE</key>
+			<value>Send data backup to server</value>
+		</term>
+		<term>
 			<key>TIPS</key>
 			<value>Tips</value>
 		</term>
@@ -2517,8 +2525,12 @@
 			<value>This option gives the configuration summary for the entire system as a Microsoft Word document.</value>
 		</term>
 		<term>
-			<key>MENU_BACKUP</key>
-			<value>Backup Data</value>
+			<key>BACKUP_LOCAL</key>
+			<value>Download local .ZIP backup</value>
+		</term>
+		<term>
+			<key>BACKUP_ONLINE</key>
+			<value>Send data backup to server</value>
 		</term>
 		<term>
 			<key>TIPS_BACKUP</key>

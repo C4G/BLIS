@@ -116,7 +116,10 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 	</tr>
 	<tr>
 		<td></td>
-		<td><input style='font-family:Tahoma' type='submit' value='<?php echo LangUtil::$pageTerms['MENU_BACKUP']; ?>'></td>
+		<td>
+			<input type='submit' name='backup_local' id='backup_loal' value='<?php echo LangUtil::$generalTerms['BACKUP_LOCAL']; ?>'>
+			<input type='submit' name='backup_online' id='backup_online' value='<?php echo LangUtil::$generalTerms['BACKUP_ONLINE']; ?>'>
+		</td>
 	</tr>
 	<tr id='exporting' style='display:none;'>
 		<td></td>
