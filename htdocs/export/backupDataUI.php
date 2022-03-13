@@ -32,38 +32,6 @@ document.getElementById("pkey").disabled=false;
 			$('#keyInputTR').hide();
 	}
 	
-/*	function formSubmit() {
-		var backupTypeSelectValue = $("input:radio[name=backupTypeSelect]:checked").val();
-		if( backupTypeSelectValue == "encrypted" ) {
-			var typeOfKey = $("input:radio[name=keyType]:checked").val();
-			if( !typeOfKey ) {
-				alert("Please choose a key type");
-				return;
-			}
-			if ( typeOfKey == "uploaded") {
-				var fileValue = $('#publicKey').val();
-				if( !fileValue ) {
-					alert("Please select a key or use default");
-					return;
-				}
-			}
-		}
-		$('#databaseBackupType').submit();
-		$('#databaseBackUpType').ajaxSubmit({
-			success: function(param) {
-				$('#exporting').hide();
-				if ( param != false ) {
-					$('#exportSuccess').html(param);
-					$('#exportSuccess').show();
-				} else {
-					alert(param);
-					$('#exportDatabaseFailure').show();
-				}
-			}
-		});
-		
-	}*/
-	
 </script>
 <?php
 $page_elems = new PageElems();
@@ -74,7 +42,7 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 	<input type='hidden' value='<?php echo $labConfigId; ?>' id='labConfigId' name='labConfigId' />
 	<table>
 <tr>
-<td>Choose who is this Backup For</td>
+	<td>Choose who is this Backup For</td>
 <td>
 <input value="Current Lab" onBlur="findFile()" onInput="findFile()" name='target'  class ='target_auto' id='target_input' placeholder='Enter Receiver&apos;s name' list='targets' size='30' required></input>
 <datalist id='targets'>
@@ -106,8 +74,13 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 	<tr style="display:none;" name="keyInputTR" id="keyInputTR">
 		<td></td>
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;<input type='radio' name='keyType' id='keyType' value='uploaded'><small>Upload Public Key for Encryption: </small>
-			<input type="file" name="publicKey" id="publicKey"/><br>
-			&nbsp;&nbsp;&nbsp;&nbsp;<small><input type='radio' name='keyType' id='keyType' value='default'> or use Default Public Key</small>
+			<input type="file" name="publicKey" id="publicKey"/>
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<small>
+				<?php echo "or use Default Public Key"; ?>
+				<input type='radio' name='keyType' id='keyType' value='default'> 
+			</small>
 		</td>
 	</tr>
 	<tr>
@@ -117,8 +90,8 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 	<tr>
 		<td></td>
 		<td>
-			<input type='submit' name='backup_local' id='backup_loal' value='<?php echo LangUtil::$generalTerms['BACKUP_LOCAL']; ?>'>
-			<input type='submit' name='backup_online' id='backup_online' value='<?php echo LangUtil::$generalTerms['BACKUP_ONLINE']; ?>'>
+			<input type='submit' name='local_or_server' id='local_or_server' value='<?php echo LangUtil::$generalTerms['BACKUP_LOCAL']; ?>'>
+			<input type='submit' name='local_or_server' id='local_or_server' value='<?php echo LangUtil::$generalTerms['BACKUP_ONLINE']; ?>'>
 		</td>
 	</tr>
 	<tr id='exporting' style='display:none;'>
