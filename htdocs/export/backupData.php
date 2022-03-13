@@ -137,10 +137,10 @@ function handle_local_or_server($lab_config_id)
 	    $result = query_associative_one($query);
         $server_ip = reset($result); 
         
-        send_backup_to_server($zipFileLoc, $server_ip);
+        $response = send_backup_to_server($zipFileLoc, $server_ip);
+        echo $response;
     }
 }
-
 
 function get_pubKey($LabName, $ploc)
 {
@@ -298,10 +298,9 @@ function generate_backupDbFileNameEnc($dbname, $backupDbFileName, $backupType)
     return $backupDbFileNameEnc;
 }
 
-
 function send_backup_to_server($zipped, $server_ip)
 {
-    $endpoint = 'https://'.$server_ip.'/export/import_data_director.php';
+    $endpoint = 'http://'.$server_ip.'/export/import_data_director.php';
     $curlfile = curl_file_create( $zipped, 'application/zip');
 
     $curl = curl_init();
@@ -373,7 +372,6 @@ function create_backup_files($lab_config_id, $destination, $file_list1, $file_li
         };
     }
 }
-
 
 function create_log_backup_files($server_public_key, $lab_config_id, $destination, $backupType) 
 {
@@ -517,22 +515,7 @@ function createZipFile($zipFile, $rootPath)
     $zip->close();
 }
 
-function move_zip_to_destination($toScreenDestination, $destination)
-{
-    $zipFile=$toScreenDestination.".zip";
-    if (KeyMgmt::read_enc_setting()==1) {
-        $zipFile=$toScreenDestination."_enc.zip";
-    }
-    $zipFileLoc=realpath("../../")."/".$zipFile;
-
-    //echo $zipFileLoc;
-    createZipFile($zipFile, realpath($destination));
-    copy($zipFile, $zipFileLoc);
-    //removeDirectory(realpath($destination));
-    return $zipFile;
-}
-
-// fx from old 
+// fx from old -- not used? 
 function hasFile()
 {
     echo count($_FILES);
