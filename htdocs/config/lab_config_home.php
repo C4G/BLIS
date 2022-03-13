@@ -4122,6 +4122,7 @@ function AddnewDHIMS2Config()
 							value="<?php echo LangUtil::$pageTerms['SAVE_BUTTON']; ?>"
 							onclick="submit_save_server_ip();">
 				</form>
+				</div>
 
 
 				<div class='right_pane' id='target_tat_div' style='display:none;margin-left:10px;'>
