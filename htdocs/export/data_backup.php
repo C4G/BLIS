@@ -1,11 +1,7 @@
 <?php
-#
-# Creates data backup
-#
 
-include("redirect.php");
-include("includes/db_lib.php");
-
+require_once("../includes/platform_lib.php");
+include("../includes/db_lib.php");
 if($SERVER == $ON_ARC)
 {
 	# System on arc2 server: Do not allow backup option
@@ -13,192 +9,105 @@ if($SERVER == $ON_ARC)
 	return;
 }
 
-/* creates a compressed zip file */
-function create_zip($files1 = array(), $files2 = array(), $files3 = array(), $destination = '',$overwrite = false, $lab_config_id) 
-{
-	//if the zip file already exists and overwrite is false, return false
-	if(file_exists($destination) && !$overwrite) { return false; }
-	//vars
-	$valid_files1 = array();
-	$valid_files2 = array();
-	//if files were passed in...
-	if(is_array($files1)) 
-	{
-		//cycle through each file
-		foreach($files1 as $file) 
-		{
-			//make sure the file exists
-			if(file_exists($file)) 
-			{
-				$valid_files1[] = $file;
-			}
-		}
-	}
-	if(is_array($files2)) 
-	{
-		//cycle through each file
-		foreach($files2 as $file) 
-		{
-			//make sure the file exists
-			if(file_exists($file)) 
-			{
-				$valid_files2[] = $file;
-			}
-		}
-	}
-	if(is_array($files3)) 
-	{
-		//cycle through each file
-		foreach($files3 as $file) 
-		{
-			//make sure the file exists
-			if(file_exists($file)) 
-			{
-				$valid_files3[] = $file;
-			}
-		}
-	}
-	//create the archive
-	$zip = new ZipArchive();
-	//if($zip->open($destination, $overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true) 
-	if($zip->open($destination, ZIPARCHIVE::OVERWRITE) !== true) 
-	{
-		return false;
-	}
-	//if we have good files...
-	if(count($valid_files1)) 
-	{
-		//add the files
-		foreach($valid_files1 as $file) 
-		{
-			$file_parts = explode("/", $file);
-			$zip->addFile($file, "blis_".$lab_config_id."/".$file_parts[4]);
-		}
-	}
-	if(count($valid_files2)) 
-	{
-		//add the files
-		foreach($valid_files2 as $file) 
-		{
-			$file_parts = explode("/", $file);
-			$zip->addFile($file, "blis_revamp/".$file_parts[4]);
-		}
-	}
-	if(count($valid_files3)) 
-	{
-		//add the files
-		foreach($valid_files3 as $file) 
-		{
-			$file_parts = explode("/", $file);
-			$zip->addFile($file, "langdata/".$file_parts[2]);
-		}	
-	}
-	$timestamp = date("Y-m-d H:i");
-	$lab_config = LabConfig::getById($lab_config_id);
-	$site_name = $lab_config->getSiteName();
-	$readme_content = "";
-	if($_SESSION['locale'] != "fr")
-	{
-	$readme_content = <<<EOF
-BLIS Data Backup
-================
-Facility: $site_name .
-Backup date and time: $timestamp .
-To restore data, copy and overwrite folders named "blis_revamp" and "blis_$lab_config_id" in "dbdir" directory.
-To restore language translation values, copy and overwrite folder named "langdata" in "htdocs" directory.
--
-EOF;
-	}
-	else
-	{
-	$readme_content = <<<EOF
-BLIS Data Backup
-================
-Facilité: $site_name .
-Date de sauvegarde et de temps: $timestamp .
-Pour restaurer les données, de copier et écraser les dossiers nommés "blis_revamp" et "blis_$lab_config_id" dans "dbdir" dossier".
-Pour restaurer les valeurs de la traduction, copier le répertoire et remplacer le nom "langdata" dans "htdocs" dossier.
--
-EOF;
-	}
-	$zip->addFromString('readme.txt', $readme_content);
-	//debug
-	echo 'The zip archive contains ',$zip->numFiles,' files with a status of ',$zip->getStatusString();
-	//close the zip -- done!
-	$zip->close();
-	//check to make sure the file exists
-	return file_exists($destination);
-}
-
-function create_backup($lab_config_id)
-{
-	$lab_config = LabConfig::getById($lab_config_id);
-	$site_name = $lab_config->name;
-	$site_name = str_replace(" ", "-", $site_name);
-	$timestamp = date("Ymd-hi");
-	$file_list1 = array(); # dbdir/blis_xxx
-	$file_list2 = array(); # dbdir/blis_revamp
-	$file_list3 = array(); # htdocs/langdata
-	$dir_name = "../../dbdir/blis_".$lab_config_id;
-	$count=0;
-	if ($handle = opendir($dir_name))
-	{
-		while (false !== ($file = readdir($handle))) 
-		{
-			if($file === "." || $file == "..")
-				continue;
-			$file_list1[] = $dir_name."/$file";
-			$count++;
-			print $dir_name."/$file";
-		}
-		print "\n number of files";
-		print $count;
-		$dir_name = "../../dbdir/blis_revamp";
-		if ($handle = opendir($dir_name))
-		{
-			while (false !== ($file = readdir($handle))) 
-			{
-				if($file === "." || $file == "..")
-					continue;
-				$file_list2[] = $dir_name."/$file";
-			}
-			$dir_name = "../../locale/langdata";
-			if ($handle = opendir($dir_name))
-			{
-				while (false !== ($file = readdir($handle))) 
-				{
-					if($file === "." || $file == "..")
-						continue;
-					$file_list3[] = $dir_name."/$file";
-				}
-				$zip_file_name = $site_name."_".$timestamp.".zip";
-				$result = create_zip($file_list1, $file_list2, $file_list3, $zip_file_name, true, $lab_config_id);
-			}
-		}
-	}
-	
-	# Send file stream to user for download
-	$file = $zip_file_name;
-	header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename='.basename($file));
-    header('Content-Transfer-Encoding: binary');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($file));
-    ob_clean();
-    flush();
-    readfile($file);
-	unlink($file);
-}
-
-
-#
-# Execution begins here
-#
-
 $lab_config_id = $_REQUEST['id'];
-create_backup($lab_config_id);
-echo "hiral";
+$file_list1 = array();
+$file_list2 = array();
+$file_list3 = array();
+$file_list4 = array();
+
+$mysqldumpPath = '"'.PlatformLib::mySqlDumpPath().'"';
+$dbname = "blis_".$lab_config_id;
+$backupLabDbFileName= "blis_".$lab_config_id."_backup.sql";
+$count=0;
+$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupLabDbFileName";
+system($command);
+$file_list1[] = $backupLabDbFileName;
+
+$dbname = "blis_revamp";
+$backupDbFileName = "blis_revamp_backup.sql";
+$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupDbFileName";
+system($command);
+$file_list2[] = $backupDbFileName;
+
+$dir_name3 = "../../local/langdata_".$lab_config_id;
+if ($handle = opendir($dir_name3))
+{
+	while (false !== ($file = readdir($handle))) 
+	{
+		if($file === "." || $file == "..")
+			continue;
+		$file_list3[] = $dir_name3."/$file";
+	}
+}
+
+$lab_config = LabConfig::getById($lab_config_id);
+$site_name = str_replace(" ", "-", $lab_config->getSiteName());
+$destination = "../../blis_backup_".$site_name."_".date("Ymd-Hi")."/";
+@mkdir($destination);
+@mkdir($destination."blis_revamp/");
+@mkdir($destination."blis_".$lab_config_id."/");
+@mkdir($destination."langdata_".$lab_config_id."/");
+chmod($destination, 0755);
+
+foreach($file_list1 as $file)
+{
+	$file_name_parts = explode("/", $file);
+	echo $file_parts[count($file_name_parts)-1];
+	$target_file_name = $destination."blis_".$lab_config_id."/".$file_name_parts[count($file_name_parts)-1];
+	$ourFileHandle = fopen($target_file_name, 'w') or die("can't open file");
+	fclose($ourFileHandle);
+	if(!copy($file, $target_file_name))
+	{
+		echo "Error: $file -> $destination.$file <br>";
+	};
+}
+unlink($backupLabDbFileName);
+
+foreach($file_list2 as $file)
+{
+	$file_name_parts = explode("/", $file);
+	if(!copy($file, $destination."blis_revamp/".$file_name_parts[count($file_name_parts)-1]))
+	{
+		echo "Error: $file -> $destination.$file <br>";
+	};
+}
+unlink($backupDbFileName);
+
+foreach($file_list3 as $file)
+{
+	$file_name_parts = explode("/", $file);
+	if(!copy($file, $destination."langdata_".$lab_config_id."/".$file_name_parts[count($file_name_parts)-1]))
+	{
+		echo "Error: $file -> $destination.$file <br>";
+	};
+}
+
+# Backup log file if exists
+
+$log_file1 = "../../local/log_".$lab_config_id.".txt";
+$log_file2 = "../../local/log_".$lab_config_id."_updates.sql";
+$log_file3 = "../../local/log_".$lab_config_id."_revamp_updates.sql";
+
+if( file_exists($log_file1) ) {
+	copy($log_file1, $destination."log_".$lab_config_id.".txt");
+	unlink($log_file1);
+}
+if( file_exists($log_file2) ) {
+	copy($log_file2, $destination."log_".$lab_config_id."_updates.sql");
+	unlink($log_file2);
+}
+if( file_exists($log_file3) ) {
+	copy($log_file3, $destination."log_".$lab_config_id."_revamp_updates.sql");
+	unlink($log_file3);
+}
+
+
+
+# All okay
 ?>
+
+Backup folder created: <b><?php echo $destination; ?></b> under "blis_portable" directory.
+<br><br>
+Please copy this folder to your disk as backup.
+<br>
+--

@@ -184,7 +184,7 @@ echo "<br>";
 ?>
 <div class='left_al' id="boxx"> 
     
-<form id='SQLimportForm' name='SQLimportForm' action='export/import_data_director1.php' method='post' enctype="multipart/form-data" target="upload_target">
+<form id='SQLimportForm' name='SQLimportForm' action='export/import_data_director.php' method='post' enctype="multipart/form-data" target="upload_target">
 Select backup zip file
 <input type="file" id="sqlFile" name="sqlFile" size="40" /></td>
 <br>
