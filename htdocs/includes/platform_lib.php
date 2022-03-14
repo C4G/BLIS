@@ -25,5 +25,34 @@ class PlatformLib {
 		}
 
 	}
+
+	public static function mySqlClientPath() {
+		$currentDir = dirname(realpath(__FILE__));
+		if(self::runningOnWindows()) {
+			// If running on Windows, assume that we're running the portable/traditional
+			// version of BLIS, and use the bundled mysql.
+			return "../../server/mysql/bin/mysql.exe";
+		} else {
+			// Otherwise, assume that mysql is in the system PATH.
+			// This should work on Linux!
+			return "mysql";
+		}
+	}
+
+	public static function copyDirectory($source, $dest) {
+		$command = "";
+		if(self::runningOnWindows()) {
+			// The 'C: &' is an apparently useless convention that prevents Windows from failing
+			// to execute a command with too many double-quotes.
+			$command = "C: & xcopy /s /y \"$source\" \"$dest\"";
+		} else {
+			$command = "cp -r \"$source\" \"$dest\"";
+		}
+
+		$result = 1;
+		system($command, $result);
+
+		return $result === 0;
+	}
 }
 ?>
