@@ -7428,12 +7428,8 @@ function get_admin_user_list($user_id)
 	$user = get_user_by_id($user_id);
 	$retval = array();
 
-    # Super-admin level user: Return all admin accounts
-    #$query_string =
-    #	"SELECT * FROM user ".
-    #	"WHERE level=$LIS_ADMIN";
     $query_string = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions
-    FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.username='$LIS_ADMIN'";
+    FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.level='$LIS_ADMIN'";
 
 	$resultset = query_associative_all($query_string);
 	foreach($resultset as $record)
@@ -8300,8 +8296,6 @@ function update_patient($modified_record)
 {
 	# Updates an existing patient record
 	# Called from ajax/patient_update.php
-	$myFile = "../../local/myFile.txt";
-$fh = fopen($myFile, 'a') or die("can't open file");
 $pid = $modified_record->patientId;
 	$current_record = get_patient_by_id($pid);
 	if($modified_record->name == "")
@@ -8343,8 +8337,6 @@ $pid = $modified_record->patientId;
 	else if($modified_record->dob != "")
 		$query_string .= "age=$modified_record->age, partial_dob='', dob='$modified_record->dob' ";
 	$query_string .= "WHERE patient_id=$pid";
-	fwrite($fh, $query_string);
-fclose($fh);
 	query_blind($query_string);
 	# Addition of custom fields: done from calling function/page
 	return true;
@@ -9845,79 +9837,17 @@ function get_site_list($user_id)
 		# Admin level user
 		# Return all owned/accessible lab configurations
 		# If superadmin, return all lab configurations
-		if(is_super_admin($user))
+		if(is_super_admin($user)) {
 			$lab_config_list = get_lab_configs();
-		else
-		{
-		/*//echo "user:".$user_id;
-		$retval=Sites::getByLabConfigId(get_lab_config_id($user_id));
-		}*/
+        } else {
 			$lab_config_list = get_lab_configs($user_id);
-			foreach($lab_config_list as $lab_config) {
-				$sites=Sites::getByLabConfigId($lab_config->id);
-				foreach($sites as $site) {
-					$retval[$site->id]=$site->name;
-				}
-			}
 		}
-	}
-	else
-	{
-		# Technician user -> Return local lab configuration
-		$lab_config = get_lab_config_by_id($user->labConfigId);
-		$retval[$user->labConfigId] = $lab_config->getSiteName();
-	}
-	DbUtil::switchRestore($saved_db);
-	return $retval;
-
-
-
-	// if(is_admin_check($user))
-	// {
-	// 	# Admin level user
-	// 	# Return all owned/accessible lab configurations
-	// 	# If superadmin, return all lab configurations
-	// 	if(is_super_admin($user))
-	// 		$lab_config_list = get_lab_configs();
-	// 	else
-	// 	{
-	// 		echo "yes admin";
-	// 	/*//echo "user:".$user_id;
-	// 	$retval=Sites::getByLabConfigId(get_lab_config_id($user_id));
-	// 	}*/
-	// 		$lab_config_list = get_lab_configs($user_id);
-	// 		foreach($lab_config_list as $lab_config) {
-	// 			echo "lab ".$lab_config->id."<br>";
-	// 			$sites=Sites::getByLabConfigId($lab_config->id);
-	// 			foreach($sites as $site) {
-	// 				echo "site ".$site->id." ".$site->name."<br>";
-	// 				$retval[$site->id]=$site->name;
-	// 			}
-	// 		}
-	// 	}
-	// }
-	// else
-	// {
-	// 	# Technician user -> Return local lab configuration
-	// 	$lab_config = get_lab_config_by_id($user->labConfigId);
-	// 	$retval[$user->labConfigId] = $lab_config->getSiteName();
-	// }
-	// DbUtil::switchRestore($saved_db);
-	// return $retval;
-
-	if(is_admin_check($user))
-	{
-		# Admin level user
-		# Return all owned/accessible lab configurations
-		# If superadmin, return all lab configurations
-		if(is_super_admin($user))
-			$lab_config_list = get_lab_configs();
-		else
-			$lab_config_list = get_lab_configs($user_id);
-		foreach($lab_config_list as $lab_config)
-		{
-			$retval[$lab_config->id] = $lab_config->getSiteName();
-		}
+        foreach($lab_config_list as $lab_config) {
+            $sites=Sites::getByLabConfigId($lab_config->id);
+            foreach($sites as $site) {
+                $retval[''.($site->id)]=$site->name;
+            }
+        }
 	}
 	else
 	{
@@ -14794,17 +14724,16 @@ function update_lab_config_settings_barcode($type, $width, $height, $textsize, $
 ## Search Settings ##
 
 
-function insert_lab_config_settings_search($num)
+function insert_lab_config_settings_search($num, $lab_config_id)
 {
     $id = 2; // ID for search settings
 
-    $lab_config_id = $_SESSION['lab_config_id'];
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
 
     $query_string = "SELECT count(*) as val from lab_config_settings WHERE id = $id";
     $recordset = query_associative_one($query_string);
 
-    if($recordset[val] != 0)
+    if($recordset['val'] != 0)
         return 0;
     $remarks = "Search Settings";
     $query_string = "INSERT INTO lab_config_settings (id, flag1, remarks) ".
@@ -14816,11 +14745,10 @@ function insert_lab_config_settings_search($num)
     return 1;
 }
 
-function get_lab_config_settings_search()
+function get_lab_config_settings_search($lab_config_id)
 {
-    insert_lab_config_settings_search(20);
+    insert_lab_config_settings_search(20, $lab_config_id);
     $id = 2; // ID for search settings
-    $lab_config_id = $_SESSION['lab_config_id'];
 
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
 
@@ -14839,11 +14767,10 @@ function get_lab_config_settings_search()
     return $retval;
 }
 
-function update_lab_config_settings_search($num)
+function update_lab_config_settings_search($num, $lab_config_id)
 {
-    insert_lab_config_settings_search(20);
+    insert_lab_config_settings_search(20, $lab_config_id);
     $id = 2; // ID for search settings
-    $lab_config_id = $_SESSION['lab_config_id'];
 
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
 

@@ -26,7 +26,7 @@ $lab_config = get_lab_config_by_id($_SESSION['lab_config_id']);
 $session_num = get_session_number();
 $uiinfo = "qr=".$_REQUEST['n'];
 putUILog('new_patient', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
-$field_odering = field_order_update::install_first_order($lab_config, 1);
+$field_odering = field_order_update::install_first_order($lab_config, 1, $_SESSION['lab_config_id']);
 ?>
 <script type='text/javascript'>
 $(document).ready(function(){

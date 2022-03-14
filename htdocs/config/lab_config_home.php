@@ -10,6 +10,8 @@ include("includes/header.php");
 include("includes/random.php");
 include("includes/stats_lib.php");
 
+require_once(dirname(__FILE__).'/../includes/composer.php');
+
 include_once("includes/field_order_update.php");
 
 LangUtil::setPageId("lab_config_home");
@@ -260,7 +262,7 @@ $script_elems->enableJQueryForm();
 
 $lab_config_id = $_REQUEST['id'];
 $user = get_user_by_id($_SESSION['user_id']);
-if (!((is_country_dir($user)) || (is_super_admin($user)))) {
+if (!(is_country_dir($user) || is_super_admin($user))) {
     $saved_db = DbUtil::switchToGlobal();
     $query = "SELECT lab_config_id FROM lab_config WHERE admin_user_id = ".$_SESSION['user_id'].
     " OR lab_config_id IN ( ".
@@ -295,8 +297,8 @@ if ($lab_config == null) {
     return;
 }
 
-$field_odering_patients = field_order_update::install_first_order($lab_config, 1);
-$field_odering_specimen = field_order_update::install_first_order($lab_config, 2);
+$field_odering_patients = field_order_update::install_first_order($lab_config, 1, $lab_config_id);
+$field_odering_specimen = field_order_update::install_first_order($lab_config, 2, $lab_config_id);
 ?>
 <style type='text/css'>
 
@@ -3069,7 +3071,9 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></td>
 								<td>
 									<input type='checkbox' name='use_s_addl' id='use_s_addl'<?php
-
+                                    if ($lab_config->specimenAddl != 0) {
+                                        echo " checked ";
+                                    }
                                     ?>>
 
 									</input>
@@ -4389,7 +4393,7 @@ function AddnewDHIMS2Config()
 					<br>
                     <div class='pretty_box' style='width:300px;'>
 					<form id='batch_results_form' name='batch_results_form' action='ajax/batch_results_config_update.php' method='post'>
-						<?php $page_elems->getBatchResultsFieldsForm() ?>
+						<?php $page_elems->getBatchResultsFieldsForm($lab_config_id) ?>
 
 					</form>
                     </div>

@@ -19,9 +19,9 @@ class PageElems
 			"<div class='sidetip'>".
 			"<b>".$heading."</b><br><br>".$contents.
 			"</div>";
-		echo $html_code;		
+		echo $html_code;
 	}
-	
+
 	public function getSideTipBatchResults($heading, $contents)
 	{
 		$html_code =
@@ -30,13 +30,13 @@ class PageElems
 		"</div>";
 		echo $html_code;
 	}
-	
+
 	public function getProgressSpinner($message)
 	{
 		?>
 		<img src='includes/img/small_spinner.gif'></img><?php echo "<small> ".$message."</small>";
 	}
-	
+
 	public function getProgressSpinnerBig($message)
 	{
 		?>
@@ -50,14 +50,14 @@ class PageElems
 		</div>
 		<?php
 	}
-	
+
 	public function getSmallArrow()
 	{
 		?>
 		&nbsp;<img src='includes/img/small_arrow.gif'></img>
 		<?php
 	}
-	
+
 	public function getAsterisk()
 	{
 		?>
@@ -76,12 +76,12 @@ class PageElems
 			echo "Writeable Options ";
 		else
 			echo "Readable Options";
-		
+
 		echo "</div>".$this->getAsterisk()."</td>";
 		$userRWoptions = explode( ',', $user_rwoptions );
 		if($user_level < 16 || $user_level == 17)
 		{
-			
+
 			echo "<td><div id='readWrite_options' name='readWrite_options'>";
 		echo "<table>";
 echo "<tr>";
@@ -100,7 +100,7 @@ else
 echo "N";
 //				echo "checked";
 //			echo ">Patient Registration<br>
-	echo "</td>";				
+	echo "</td>";
 echo '<td id="readwriteOpt3">';
 //					<input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3' ";
 					if(in_array("3", $userRWoptions))
@@ -174,7 +174,7 @@ echo "</tr>";
 echo "</table>";
 echo "</div>";
 echo "</td>";
-}		
+}
 //echo "</tr>";
 
 }
@@ -188,7 +188,7 @@ echo "</td>";
 		</small>
 		<?php
 	}
-	
+
 	public function getDatePicker($name_list, $id_list, $value_list, $show_format=true, $lab_config=null)
 	{
 		# Returns a date picker element based on passed parameters
@@ -229,7 +229,7 @@ echo "</td>";
 				$order_list[2] = 2;
 				$date_format_js = "yyyy-mm-dd";
 				$start_date = "1950-01-01";
-				break;			
+				break;
 		}
 		$date_format_js_parts = explode("-", $date_format_js);
 		$picker_id = rand();
@@ -299,9 +299,9 @@ echo "</td>";
 					}
 				);
 		});
-		
+
 		</SCRIPT>
-				
+
 		<style type='text/css'>
 		a.dp-choose-date {
 			float: left;
@@ -326,13 +326,13 @@ echo "</td>";
 			float: right;
 		}
 		</style>
-		
+
 		<input type='text' name='<?php echo $name_list[$order_list[0]]; ?>' id='<?php echo $id_list[$order_list[0]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[0]]; ?>" size='2'  maxlength='2' />-
 		<input type='text' name='<?php echo $name_list[$order_list[1]]; ?>' id='<?php echo $id_list[$order_list[1]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[1]]; ?>" size='2'  maxlength='2' />-
 		<input type='text' name='<?php echo $name_list[$order_list[2]]; ?>' id='<?php echo $id_list[$order_list[2]]; ?>' onkeypress="return isNumberKey(event)" value="<?php echo $value_list[$order_list[2]]; ?>" size='4'  maxlength='4' />
-		
+
 		<INPUT name="<?php echo $picker_id; ?>" id="<?php echo $picker_id; ?>" class="date-pick dp-applied" style='display:none'/>
-		
+
 		<?php
 		if($show_format == true)
 		{
@@ -347,10 +347,10 @@ echo "</td>";
 		<?php
 		}
 		?>
-		
+
 	<?php
 	}
-	
+
 	public function getDatePickerPlain($name_list, $id_list, $value_list, $show_format=true, $lab_config=null)
 	{
 		# Date field without the Jquery based picker object
@@ -390,7 +390,7 @@ echo "</td>";
 				$order_list[2] = 2;
 				$date_format_js = "yyyy-mm-dd";
 				$start_date = "1950-01-01";
-				break;			
+				break;
 		}
 		$date_format_js_parts = explode("-", $date_format_js);
 		?>
@@ -421,13 +421,13 @@ echo "</td>";
 		<?php
 		}
 	}
-	
+
 	public function getResultFormForTest($test_type)
 	{
 		# Creates HTML form elements for a given test type
 		return true;
 	}
-	
+
 	public function getResultsForm($specimen_id)
 	{
 		# Creates HTML form for all tests pending for a specimen
@@ -474,7 +474,7 @@ echo "</td>";
 		if (is_array($site_records)) {
 		foreach ($site_records as $site){
 			if ($lab_config->name == $site->name)
-			    {   
+			    {
 			        echo "<br/>";
 			         echo "$site->name";
 			          echo "<br/>";
@@ -510,12 +510,11 @@ echo "</td>";
 			echo "<option value='$site->id'>$site->name</option>";
 		}
 	}
-	
+
 	public function getSiteOptions()
 	{
 		# Returns accessible sites for drop down <select> boxes
-		$site_list = get_site_list($_SESSION['user_id']);
-		echo "debug 1 ". $_SESSION['user_id'];
+		$site_list = get_site_list_with_labid($_SESSION['user_id']);
 		foreach($site_list as $key => $value)
 		{
 			echo "<option value='$key'>$value</option>";
@@ -555,7 +554,7 @@ echo "</td>";
 		    if(empty($strings[$site->region]) && $site->region!="")    {
 		        $string[$site->region] = array();
 		    }
-		    
+
 
 
                 if( $site->region!="")    {
@@ -565,14 +564,14 @@ echo "</td>";
                 if( $site->district!="" )    {
                     $string[$site->district][] = $site->id;
                 }
-		        
+
 		    }
 			}
 		}
 
 		$districts = array_values($districts);
 		$regions = array_values($regions);
-       
+
         if (count($districts) != 0){
              echo"<br/>Districts";
         }
@@ -645,13 +644,13 @@ echo "</td>";
 
 	public function getSiteOptionsCheckBoxesCountryDir($checkBoxName)
 	{
-		//$site_list = get_site_list($_SESSION['user_id']); 
+		//$site_list = get_site_list($_SESSION['user_id']);
                 $admin_user_id = $_SESSION['user_id'];
 				#$lab_config_list = get_lab_configs($admin_user_id);
 				$lab_config_list_imported = get_lab_configs_imported();
 				$config_list = $lab_config_list_imported;
 				#$config_list = array_merge($lab_config_list, $lab_config_list_imported);
-                
+
 
 		foreach($config_list as $lab_config) {
 			//$strippedLabName = substr($lab_config->name,0,strpos($lab_config->name,'-')-1);
@@ -667,7 +666,7 @@ echo "</td>";
 			echo "<option value='$key'>$value</option>";
 		}
 	}
-	
+
 	public function getLabUserReadWriteOption($user_level="", $user_rwoptions=""){
 		// if($user_level == 17) {
 		// 	$user_rwoptions= "2,4";
@@ -678,18 +677,18 @@ echo "</td>";
 			echo "Writeable Options ";
 		else
 			echo "Readable Options";
-		
+
 		echo "</div>".$this->getAsterisk()."</td>";
 		$userRWoptions = explode( ',', $user_rwoptions );
 		if($user_level < 16 || $user_level == 17)
 		{
-			
+
 			echo "<td><div id='readWrite_options' name='readWrite_options'>
 		 			<input type='checkbox' name='readwriteOpt' id='readwriteOpt2' value='2' ";
 			if(in_array("2", $userRWoptions))
 				echo "checked";
 			echo ">Patient Registration<br>
-					
+
 					<input type='checkbox' name='readwriteOpt' id='readwriteOpt3' value='3' ";
 					if(in_array("3", $userRWoptions))
 						echo " checked";
@@ -719,10 +718,10 @@ echo "</td>";
 				echo " checked";
 			echo ">Generate Bill - option<br>";
 
-		}		
+		}
 
 	}
-	
+
 	public function getLabUserTypeOptions($selected_value="")
 	{
 		# Returns accessible sites for drop down <select> boxes
@@ -732,9 +731,9 @@ echo "</td>";
 		$saved_db = DbUtil::switchToGlobal();
 		$query = "SELECT * FROM user_type where defaultdisplay = 1";
 		$resultset = query_associative_all($query, $count);
-		
+
 		if( count($resultset) > 0 ) { ?>
-			<?php 
+			<?php
 				foreach($resultset as $record) {
 					echo "<option value='".$record['level']."'";
 					if($selected_value == $record['level'])
@@ -753,13 +752,13 @@ echo "</td>";
 		// $LIS_SUPERADMIN = 4;
 		// $LIS_COUNTRYDIR = 5;
 		// $LIS_CLERK = 6;
-		
+
 		// $LIS_VERIFIER = 15;
 		// $LIS_TECH_SHOWPNAME = 13;
 
-		// $LIS_DOCTOR = 16;		
+		// $LIS_DOCTOR = 16;
 		// $LIS_PHYSICIAN = 17;
-		
+
 		// echo "<option value='$LIS_TECH_RW'";
 		// if($selected_value == $LIS_TECH_RW)
 		// 	echo " selected ";
@@ -774,41 +773,41 @@ echo "</td>";
 		// if($selected_value == $LIS_CLERK)
 		// 	echo " selected ";
 		// echo ">".LangUtil::$generalTerms['LAB_RECEPTIONIST']."</option>";
-		
+
 		// echo "<option value='$LIS_VERIFIER'";
 		// if($selected_value == $LIS_VERIFIER)
 		// 	echo " selected ";
 		// echo ">Verifier</option>";
-		
+
 		// echo "<option value='$LIS_DOCTOR'";
 		// if($selected_value == $LIS_DOCTOR)
 		// 	echo " selected ";
 		// echo ">Requester</option>";
-		
+
 		// echo "<option value='$LIS_READONLY'";
 		// if($selected_value == $LIS_READONLY)
 		// 	echo " selected ";
 		// echo ">Read-Only Mode</option>";
-		
+
 		// echo "<option value='$LIS_PHYSICIAN'";
 		// if($selected_value == $LIS_PHYSICIAN)
 		// 	echo " selected ";
 		// echo ">Doctor</option>";
-		
-	}	
-		
+
+	}
+
 	public function getSpecimenTypesSelect($lab_config_id)
 	{
-		
+
 		# Returns specimen types used at a site for drop down <select> boxes
 		$specimen_type_list = get_specimen_types_by_site($lab_config_id);
-		
+
 		foreach($specimen_type_list as $specimen_type)
 		{
 			echo "<option value='$specimen_type->specimenTypeId'>".$specimen_type->getName()."</option>";
 		}
 	}
-	
+
 	public function getTestTypesSelect($lab_config_id)
 	{
 		# Returns test types used at a site for drop down <select> boxes
@@ -818,20 +817,20 @@ echo "</td>";
 			echo "<option value='$test_type->testTypeId'>".$test_type->getName()."</option>";
 		}
 	}
-	
+
 	public function getTestTypesCountryLevel() {
 		# Returns test types available for aggregation
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 		$user_id = $_SESSION['user_id'];
 		$query = "SELECT * FROM test_mapping where user_id =".$user_id;
 		$resultset = query_associative_all($query, $count);
-		
+
 		if( count($resultset) > 0 ) { ?>
 			<table class='hor-minimalist-b'>
 			<tbody>
 			<th>#</th>
-			<?php 
-				echo "<th>".LangUtil::$generalTerms['NAME']."</th><th></th>"; 
+			<?php
+				echo "<th>".LangUtil::$generalTerms['NAME']."</th><th></th>";
 				foreach($resultset as $record) {
 					$testName = $record['test_name'];
 					echo "<tr><td>".$record['test_id']."</td>";
@@ -848,14 +847,14 @@ echo "</td>";
 		}
 		DbUtil::switchRestore($saved_db);
 	}
-	
+
 	public function getSpecimenTypesCountryLevel() {
 		# Returns specimen types available for aggregation
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 		$user_id = $_SESSION['user_id'];
 		$query = "SELECT * FROM specimen_mapping where user_id =".$user_id;
 		$resultset = query_associative_all($query, $count);
-		
+
 		if( count($resultset) > 0 ) { ?>
 			<table class='hor-minimalist-b'>
 			<tbody>
@@ -873,20 +872,20 @@ echo "</td>";
 		}
 		DbUtil::switchRestore($saved_db);
 	}
-	
+
 	public function getTestCategoryTypesCountryLevel() {
 		# Returns test category types available for aggregation
 		$saved_db = DbUtil::switchToGlobal();
 		$user_id = $_SESSION['user_id'];
 		$query = "SELECT * FROM test_category_mapping where user_id =".$user_id;
 		$resultset = query_associative_all($query, $count);
-		
+
 		if( count($resultset) > 0 ) { ?>
 			<table class='hor-minimalist-b'>
 			<tbody>
 			<th>#</th>
-			<?php 
-				echo "<th>".LangUtil::$generalTerms['NAME']."</th><th></th>"; 
+			<?php
+				echo "<th>".LangUtil::$generalTerms['NAME']."</th><th></th>";
 				foreach($resultset as $record) {
 					echo "<tr><td>".$record['test_category_id']."</td>";
 					echo "<td>".$record['test_category_name']."</td>";
@@ -903,7 +902,7 @@ echo "</td>";
 		}
 		DbUtil::switchRestore($saved_db);
 	}
-	
+
 	public function getTestTypesCountrySelect()
 	{
 		/*
@@ -935,12 +934,12 @@ echo "</td>";
 		foreach($resultset as $record) {
 				//$key = $record['lab_id_test_id'];
                                 $key = $record['test_id'];
-				$value = $record['test_name']; 
+				$value = $record['test_name'];
 				echo "<option value='$key'>$value</option>";
 		}
 		DbUtil::switchRestore($saved_db);
 	}
-	
+
 	public function getTestNamesSelector() {
 		#Return table which includes dropdowns of test types configured in all labs in the country
 		echo "<table>";
@@ -968,16 +967,16 @@ echo "</td>";
 		</td>
 		</tr>
 		<tr>
-		<td></td>		
+		<td></td>
 		<td><input type="button" id="submit" type="submit" onclick="submitTestNames();" value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>" size="20" />
 		<?
 	}
-        
+
         public function getTestNamesSelectorForEdit($mapping) {
 		#Return table which includes dropdowns of test types configured in all labs in the country
 		print_r($mapping);
                 ?>
-                  
+
                 <table class='hor-minimalist-a'>
                 <tr>
                 <td><b>Country Test Name:</b></td>
@@ -1005,13 +1004,13 @@ echo "</td>";
 		//echo "<tr><td></td><td></td>";
 		echo "</tr>";
 		 ?>
-		
+
 		<tr>
-		<td></td>		
+		<td></td>
 		<td><input type="button" id="submit" type="submit" onclick="submitTestNames();" value="<?php echo LangUtil::$generalTerms['CMD_UPDATE']; ?>" size="20" />
 		<?
 	}
-	
+
 	public function getSpecimenTypesCountrySelect()
 	{
 		$userId = $_SESSION['user_id'];
@@ -1025,7 +1024,7 @@ echo "</td>";
 		}
 		DbUtil::switchRestore($saved_db);
 	}
-	
+
 	public function getTestCategoryNamesSelector() {
 		#Return table which includes dropdowns of test categories configured in all labs in the country
 		echo "<table>";
@@ -1052,11 +1051,11 @@ echo "</td>";
 		</td>
 		</tr>
 		<tr>
-		<td></td>		
+		<td></td>
 		<td><input type="button" id="submit" type="submit" onclick="submitTestCategoryNames();" value="<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>" size="20" />
 		<?
 	}
-	
+
 	public function getTestCategoryTypesCountrySelect() {
 		$userId = $_SESSION['user_id'];
 		$saved_db = DbUtil::switchToGlobal();
@@ -1069,7 +1068,7 @@ echo "</td>";
 		}
 		DbUtil::switchRestore($saved_db);
 	}
-	
+
 	public function getMeasuresSelector() {
 		#Return table which includes dropdowns of measures configured in all labs in the country
 		echo "<table>";
@@ -1101,13 +1100,13 @@ echo "</td>";
 		</td>
 	<?php
 	}
-	
+
 	public function getMeasuresCountryLevel() {
 		$userId = $_SESSION['user_id'];
 		$saved_db = DbUtil::switchToGlobal();
 		$query = "SELECT * FROM measure_mapping WHERE user_id = $userId";
 		$resultset = query_associative_all($query, $row_count);
-		
+
 		if( count($resultset) > 0 ) { ?>
 			<table class='hor-minimalist-b'>
 			<tbody>
@@ -1129,7 +1128,7 @@ echo "</td>";
 		}
 		DbUtil::switchRestore($saved_db);
 	}
-	
+
         public function getMasterCatalog() {
 		#Return table which includes dropdowns of measures configured in all labs in the country
 		echo "<table class='hor-minimalist-b tablesorter' id='testTypeTable'>";
@@ -1166,7 +1165,7 @@ echo "</td>";
 		//echo "<tr><td></td><td></td></tr>";
 		//echo "<tr>";
 		//echo "<td>Country Specimen Name:</td>"; ?>
-		
+
 	<?php
 	}
 
@@ -1200,7 +1199,7 @@ echo "</td>";
 		</td>
 	<?php
 	}
-	
+
 	public function getDiscreteTestTypesSelect($lab_config_id)
 	{
 		# Returns test types used at a site for drop down <select> boxes
@@ -1217,7 +1216,7 @@ echo "</td>";
 			echo "<option value='$test_type->testTypeId'>".$test_type->getName()."</option>";
 		}
 	}
-		
+
 	public function getTestTypesByCategorySelect($lab_config_id, $cat_code)
 	{
 		# Returns test types used at a site for a particular category (lab section)
@@ -1240,7 +1239,7 @@ echo "</td>";
 			echo "<option value='$test_type->testTypeId'>".$test_type->getName()."</option>";
 		}
 	}
-	
+
 	public function getTestTypeCatalogOptions($elem_name, $elem_id)
 	{
 		# Returns a set of check boxes buttons for all tests available in catalog
@@ -1255,7 +1254,7 @@ echo "</td>";
 			echo "<input type='checkbox' name='".$elem_name."[]' id='$elem_id' value='$key'>$value</input>";
 		}
 	}
-	
+
 	public function getTestCategorySelect($lab_config_id=null)
 	{
 		# Returns a set of drop down options for test categories in catalog
@@ -1268,7 +1267,7 @@ echo "</td>";
 		else
 			return 0;
 	}
-	
+
 	public function getTestCategoryCountrySelect($lab_config_id=null)
 	{
 		#Returns a set of drop down options for test categories in catalog of all labs in a country
@@ -1298,14 +1297,14 @@ echo "<option value='$lc->id'>$lc->name</option>";
 }
 	}
 //AS 09/04/2018 END
-	
+
 	public function getLangSelect()
 	{
 		echo "<option value='default'>Default</option>";
 		echo "<option value='en'>English</option>";
-		echo "<option value='fr'>Francais</option>";		
+		echo "<option value='fr'>Francais</option>";
 	}
-	
+
 	public function getSpecimenTypeCatalogOptions($elem_name, $elem_id)
 	{
 		# Returns a set of check boxes buttons for all tests available in catalog
@@ -1320,7 +1319,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			echo "<input type='checkbox' name='".$elem_name."[]' id='$elem_id' value='$key'>$value</input>";
 		}
 	}
-	
+
         public function getTestListToImport($elem_name, $elem_id)
 	{
 		# Returns a set of check boxes buttons for all tests available in catalog
@@ -1335,7 +1334,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			echo "<input type='checkbox' name='".$elem_name."[]' id='$elem_id' value='$key'>$value</input>";
 		}
 	}
-	
+
 
 	public function getTestTypeInfo($test_name, $show_db_name=false)
 	{
@@ -1416,7 +1415,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					?>
 					</td>
 				</tr>
-		
+
 				<tr valign='top'>
 					<td>Hide Patient Name in Report</td>
 					<td><?php
@@ -1433,7 +1432,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<td>Prevalence Threshold</td>
 					<td><?php echo $test_type->prevalenceThreshold; ?></td>
 				</tr>
-				
+
 				<tr valign='top'>
 					<td>Target TAT</td>
 					<td><?php echo $test_type->targetTat; ?></td>
@@ -1443,13 +1442,13 @@ echo "<option value='$lc->id'>$lc->name</option>";
                                         <td>Cost To Patient</td>
                                         <td><?php print(format_number_to_money(get_latest_cost_of_test_type($test_type->testTypeId))); ?></td>
                                 </tr>
-			
+
 			</tbody>
 		</table>
 		<?php
 
 	}
-	
+
 	public function getTestTypeInfoAggregateDir($testTypeMapping, $show_db_name=false)
 	{
 		# Returns HTML for displaying test type information
@@ -1460,12 +1459,12 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				<tr>
 					<td><?php echo LangUtil::$generalTerms['NAME']; ?></td>
 					<td><?php echo $test_type->name; ?></td>
-				</tr>				
+				</tr>
 			</tbody>
 		</table>
 		<?php
 	}
-        
+
         public function getTestTypeInfoAggregate($testTypeMapping, $show_db_name=false)
 	{
 		# Returns HTML for displaying test type information
@@ -1477,7 +1476,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<td><?php echo LangUtil::$generalTerms['NAME']; ?></td>
 					<td><?php echo $test_type->name; ?></td>
 				</tr>
-				
+
 				<tr>
 					<td><?php echo LangUtil::$generalTerms['LAB_SECTION']; ?></td>
 					<td><?php echo getTestCategoryAggNameById($test_type->testCategoryId); ?></td>
@@ -1492,7 +1491,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 						foreach($measure_id_list as $measure_id)
 						{
 							$measure = getAggregateMeasureById($measure_id);
-							if($measure==NULL && count($meausre_id_list)==1 ) {	
+							if($measure==NULL && count($meausre_id_list)==1 ) {
 									echo "No Measures Found!";
 									break;
 							}
@@ -1502,12 +1501,12 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					?>
 					</td>
 				</tr>
-			
+
 			</tbody>
 		</table>
 		<?php
 	}
-	
+
 	public function getSpecimenTypeInfo($specimen_name, $show_db_name=false)
 	{
 		# Returns HTML for displaying specimen type information
@@ -1579,18 +1578,18 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-	
+
 	public function getTestTypeTable($lab_config_id)
 	{
 		# Returns HTML table listing all test types in catalog
 		?>
-		
+
 		<script type='text/javascript'>
 			$(document).ready(function(){
 				$('#testTypeTable').tablesorter();
 			});
 		</script>
-		
+
 		<?php
 		$ttype_list = get_test_types_catalog($lab_config_id);
 		if(count($ttype_list) == 0)
@@ -1650,7 +1649,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-	
+
 	public function getSpecimenTypeTable($lab_config_id)
 	{
 		# Returns HTML table listing all specimen types in catalog
@@ -1698,7 +1697,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-	
+
 	public function getOperatorForm($num_entries)
 	{
 		# Returns HTML form code for adding technicians
@@ -1739,7 +1738,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			"<input type='text' name='fullname[]' />&nbsp;&nbsp;&nbsp;";
 		for($count = 1; $count <= $num_entries; $count++)
 		{
-			$radio_row = 	
+			$radio_row =
 				"<input type='radio' name='access_priv_".($count-1)."' id='access_priv_".($count-1)."' value='".$LIS_TECH_RW."' checked /> ".LangUtil::$generalTerms['TECHNICIAN'].
 				"&nbsp;&nbsp;&nbsp;<input type='radio' name='access_priv_".($count-1)."' id='access_priv_".($count-1)."' value='".$LIS_CLERK."' /> ".LangUtil::$generalTerms['LAB_RECEPTIONIST']."<br>";
 			$html_code .= $entry_row.$radio_row;
@@ -1759,12 +1758,12 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			"</script>";
 		echo $html_code;
 	}
-	
+
 	public function getOperatorExistingForm($lab_config_id)
 	{
 		# Returns HTML table listing existing technician account,
 		# with options to change access or delete account
-		
+
 		global $LIS_TECH_RO, $LIS_TECH_RW;
 		?>
 		<table cellspacing='4px'>
@@ -1814,13 +1813,13 @@ echo "<option value='$lc->id'>$lc->name</option>";
 	}
 	public function getTokenLis($count,$id, $name, $json_url, $hint_text, $json_prepopulate="", $class_name="")
 	{
-	
-	
-	
+
+
+
 		# Returns a tokenized list as form input element (using jquery.tokeninput plugin)
 		$test=explode("_",$id);
 		$test_id=$test[1];
-		
+
 		?>
 		<script type="text/javascript">
 		$(document).ready(function() {
@@ -1889,21 +1888,21 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				{
 					echo ", prePopulate: $json_prepopulate";
 				}
-				
+
 				?>
-			});			
-			
+			});
+
 		});
 		</script>
-		
+
 		<input type="text" id="<?php echo $id; ?>" class='uniform_width  <?php
 		if(trim($class_name) != "")
 			echo " ".$class_name." ";
 		?>' name="<?php echo $name; ?>" <?php if($count!=-1){?> onchange="javascript:update_remarks(<?php echo $test_id ; ?>,<?php echo $count; ?>, 1, B)"  <?php }?>/>
 		<?php
-		
+
 	}
-	
+
 	public function getLabConfigTable($lab_config_list)
 	{
 		# Returns HTML table of site/locations
@@ -1962,7 +1961,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					</td>
                                         <td>
  						<a href='exportLabConfiguration.php?id=<?php echo $lab_config->id; ?>' title='Click to Export Lab Configuration'><?php echo "Export Lab Configuration"; ?></a>
-                                           
+
                                         </td>
 					<!--<td>
 						<a rel='facebox' href='lab_config_status.php?id=<?php echo $lab_config->id; ?>' title='Click to view pending tests at the lab'><?php echo LangUtil::$generalTerms['LAB_STATUS']; ?></a>
@@ -1992,7 +1991,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-	
+
         public function getLabConfigTableImported($lab_config_list)
 	{
 		# Returns HTML table of site/locations
@@ -2023,7 +2022,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					</th>
                                         <th>
                                         </th>
-					
+
 				</tr>
 			</thead>
 			<tbody>
@@ -2039,7 +2038,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<!--<td>
 						<a href='lab_config_home.php?id=<?php echo $lab_config->id; ?>' title='Click to Manage Lab Configuration'><?php echo $lab_config->name; ?></a>
 					</td>-->
-                                        
+
 					<td>
 						<?php echo $lab_config->name; ?>
 					</td>
@@ -2055,7 +2054,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<td>
 						<a rel='facebox' href='lab_config_status.php?id=<?php echo $lab_config->id; ?>' title='Click to view pending tests at the lab'><?php echo LangUtil::$generalTerms['LAB_STATUS']; ?></a>
 					</td>
-                                        
+
 					<!--<td>
 						<a href='lab_config_home.php?id=<?php echo $lab_config->id; ?>' title='Click to Manage Lab Configuration'><?php echo LangUtil::$generalTerms['MANAGE']; ?></a>
 					</td>
@@ -2064,8 +2063,8 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					</td>-->
 					<!--
 					<td>
-						<a 
-							href="javascript:delete_lab_config('<?php #echo $lab_config->getSiteName(); ?>', <?php #echo $lab_config->id; ?>);" 
+						<a
+							href="javascript:delete_lab_config('<?php #echo $lab_config->getSiteName(); ?>', <?php #echo $lab_config->id; ?>);"
 							title='Click to Delete Lab Configuration'
 						>
 							Delete
@@ -2081,7 +2080,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-        
+
 	public function getLabAdminTable($lab_admin_list)
 	{
 		# Returns HTML table of lab admin accounts
@@ -2181,7 +2180,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-	
+
 	public function getLabUsersTable($user_list, $lab_config_id, $to_export=false)
 	{
 		# Returns HTML table of lab users
@@ -2229,9 +2228,9 @@ echo "<option value='$lc->id'>$lc->name</option>";
 							<?php echo $user->username; ?>
 						</td>
 						<td>
-							<?php $l_name = get_level_name($user->level); 
-							if ($l_name == null) 
-								$l_name = get_level_name_db($user->level); 
+							<?php $l_name = get_level_name($user->level);
+							if ($l_name == null)
+								$l_name = get_level_name_db($user->level);
 							echo $l_name;
 							?>
 						</td>
@@ -2312,19 +2311,19 @@ echo "<option value='$lc->id'>$lc->name</option>";
 							<?php echo $user->level; ?>.
 						</td>
 						<td>
-							<?php $val = get_level_name($user->level); 
-								if ($val == null) 
-									echo  $user->name; 
-								else 
-									echo $val; 
+							<?php $val = get_level_name($user->level);
+								if ($val == null)
+									echo  $user->name;
+								else
+									echo $val;
 							?>
 						</td>
 						<td>
-							<?php 
+							<?php
 								if($user->defaultdisplay)
 									echo "Yes";
 								else
-									echo "No"; 
+									echo "No";
 							?>
 						</td>
 						<?php
@@ -2332,7 +2331,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 						{
 						?>
 						<td>
-							<a href="lab_user_type_edit.php?type=<?php echo $user->level; ?>&backurl=lab_config_home.php?id=<?php echo $lab_config_id; ?>"> 
+							<a href="lab_user_type_edit.php?type=<?php echo $user->level; ?>&backurl=lab_config_home.php?id=<?php echo $lab_config_id; ?>">
 							<!-- <a href="lab_user_edit.php?id=<?php echo "521"; ?>&backurl=lab_config_home.php?id=<?php echo $lab_config_id; ?>"> -->
 							<?php echo LangUtil::$generalTerms['CMD_EDIT']; ?>
 							</a>
@@ -2359,7 +2358,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-	
+
 	public function listOwnedLabs($admin_user_id)
 	{
 		# Returns list of lab configurations / sites owned by the admin user
@@ -2379,7 +2378,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		}
 		return $retval;
 	}
-	
+
 	public function getLabConfigInfo($lab_config_id)
 	{
 		# Returns HTML displaying lab configuration info
@@ -2457,7 +2456,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-	
+
 	public function getReportConfigInfo($report)
 	{
 		# Displays HTML for showing report configuration info
@@ -2525,7 +2524,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-	
+
 	public function getLabConfigStatus_backup($lab_config_id)
 	{
 		$lab_config = get_lab_config_by_id($lab_config_id);
@@ -2560,7 +2559,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<td>Pending Specimens -</td>
 					<td><?php echo get_lab_config_num_specimens_pending($lab_config_id); ?></td>
 				</tr>
-				
+
 				<?php
 				$specimen_list = get_specimen_types_by_site($lab_config_id);
 				foreach($specimen_list as $specimen_type)
@@ -2573,12 +2572,12 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<?php
 				}
 				?>
-				
+
 				<tr>
 					<td>Pending Tests -</td>
 					<td><?php echo get_lab_config_num_tests_pending($lab_config_id); ?></td>
 				</tr>
-				
+
 				<?php
 				$test_list = get_test_types_by_site_map($lab_config_id);
 				foreach($test_list as $test_type_id=>$test_name)
@@ -2595,7 +2594,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-	
+
 	public function getLabConfigStatus($lab_config_id)
 	{
 		$lab_config = get_lab_config_by_id($lab_config_id);
@@ -2624,7 +2623,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<td><?php echo LangUtil::$generalTerms['PENDING_RESULTS']; ?></td>
 					<td><?php echo get_lab_config_num_tests_pending($lab_config_id); ?></td>
 				</tr>
-				
+
 				<?php
 				$test_list = get_test_types_by_site_map($lab_config_id);
 				foreach($test_list as $test_type_id=>$test_name)
@@ -2641,7 +2640,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-	
+
 	public function getPatientInfo($pid, $width="")
 	{
 		# Returns HTML table displaying patient info
@@ -2715,17 +2714,17 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				# Custom fields here
 				$custom_data_list = get_custom_data_patient($patient->patientId);
 				foreach($custom_data_list as $custom_data)
-				{	
-					
+				{
+
 						$field_name = get_custom_field_name_patient($custom_data->fieldId);
 						if(stripos($field_name,"^^")!= NULL || $field_name!= "" )
-					{	
+					{
 						$field_value = $custom_data->fieldValue;
-					
+
 					?>
 					<tr>
 						<td><u><?php
-						
+
 						echo $field_name; ?></u></td>
 						<td>
 							<?php
@@ -2739,10 +2738,10 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				?>
 			</tbody>
 		</table>
-		
+
 		<?php
 	}
-	
+
 	public function getPatientUpdateForm($pid)
 	{
 		$patient = get_patient_by_id($pid);
@@ -2765,7 +2764,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 						<input type='text' name='surr_id' id='surr_id' value='<?php if($patient->surrogateId != undefined) { echo $patient->surrogateId; }?>' class='uniform_width'></input>
 					</td>
 				</tr>
-				
+
 				<tr <?php
 				if($lab_config->patientAddl == 0)
 				{
@@ -2925,7 +2924,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</form>
 	<?php
 	}
-	
+
 	public function getSelectSpecimenInfoRow($specimen, $rem_specs, $admin)
 	{
 		# Returns HTML table row containing specimen info
@@ -2933,7 +2932,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 
 		?>
 		<form name="f1" id="f1">
-		
+
 		<tr valign='top'>
 			<?php
 			if($_SESSION['s_addl'] != 0)
@@ -2975,7 +2974,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			<?php
 			$sid=$specimen->specimenId;
 			$pid=$specimen->patientId;
-			
+
 			?>
 			<td><input id="liked" type="checkbox" name="liked" value=<?php echo $specimen->specimenId; ?>> </td>
 		</tr>
@@ -2988,7 +2987,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		# Called by getPatientHistory() function
                 $specimenBarcode = specimenBarcodeCheck();
 		?>
-                        
+
 		<tr valign='top'>
 			<?php
 			if($_SESSION['s_addl'] != 0)
@@ -3007,13 +3006,13 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				<?php echo DateLib::mysqlToString($specimen->dateRecvd); ?>
 			</td>
 			<td>
-				<?php 
+				<?php
 				$removed = false;
-				
+
 				//print_r($rem_specs);
 				if($admin == 1)
                                      {
-                                     	
+
                                         if(in_array($specimen->specimenId, $rem_specs))
                                         {
                                             echo "Removed";
@@ -3036,11 +3035,11 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			<?php
 			$sid=$specimen->specimenId;
 			$pid=$specimen->patientId;
-			
+
 			?>
 			<td>
 			<a href="javascript:get_report(<?php echo $pid;?>,<?php echo $sid;?> )">Report</a> </td>
-			<td><!-- <a href="javascript:update_specimen(<?php echo $sid;?>)"> Update</a> &nbsp;/&nbsp; --> 
+			<td><!-- <a href="javascript:update_specimen(<?php echo $sid;?>)"> Update</a> &nbsp;/&nbsp; -->
 			<?php if($removed == false){?>
 			<a href="javascript:delete_specimen(<?php echo $sid;?>)"> Delete</a>
 			<?php } else {
@@ -3048,7 +3047,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 						?>
 						<a href="javascript:retrieve_deleted(<?php echo $sid;?>,'specimen')"> Retrieve</a>
 					<?php } else {
-			   echo "Request Admin to undo delete"; 
+			   echo "Request Admin to undo delete";
 			   }
 			}?>
 			</td>
@@ -3057,14 +3056,14 @@ echo "<option value='$lc->id'>$lc->name</option>";
                             {
                             ?>
                                 <td><a href="javascript:print_specimen_barcode(<?php echo $pid;?>,<?php echo $sid;?> )">Print Barcode</a> </td>
-                            <? 
+                            <?
                             }
-                                
+
                         ?>
 		</tr>
 		<?php
 	}
-	
+
 	public function getSpecimenExceededInfoRow($specimen, $count)
 	{
 		# Returns HTML table row containing specimen info
@@ -3092,7 +3091,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</tr>
 		<?php
 	}
-	
+
 	public function getPatientHistory($pid)
 	{
 		# Returns HTML table displaying patient test history
@@ -3123,7 +3122,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		$(document).ready(function(){
 			$('#test_history_table').tablesorter();
 		});
-		
+
 		function get_report(pid,sid)
 		{
 			var url_string = "report_onetesthistory.php?ppid="+pid+"&spid="+sid;
@@ -3145,15 +3144,15 @@ echo "<option value='$lc->id'>$lc->name</option>";
 						} else {
 							$("#target_div_id_del").html("Specimen cannot be deleted");
 						}
-						
+
 					}
-				}); 
-							
-			}	
+				});
+
+			}
 		}
 
 		function update_specimen(sid){
-			
+
 		}
 
 		function ConfirmDelete()
@@ -3164,7 +3163,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		  else
 		    return false;
 		}
-		
+
 		</script>
 		<table class='tablesorter' id='test_history_table'>
 			<thead>
@@ -3189,9 +3188,9 @@ echo "<option value='$lc->id'>$lc->name</option>";
                             {
                             ?>
                                  <th></th>
-                            <? 
+                            <?
                             }
-                                
+
                         ?>
 				</tr>
 			</thead>
@@ -3199,7 +3198,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			<?php
 			foreach($specimen_list as $specimen)
 			{
-				
+
                             if($admin == 0)
                             {
                                 if(in_array($specimen->specimenId, $rem_specs))
@@ -3214,7 +3213,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		<?php
 		# TODO: Add paging to this table
 	}
-	
+
 	public function getSelectPatientHistory($pid, $labsection)
 	{
 		# Returns HTML table displaying patient test history
@@ -3244,8 +3243,8 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		$(document).ready(function(){
 			$('#test_history_table').tablesorter();
 		});
-		
-		
+
+
 		</script>
 		<table class='tablesorter' id='test_history_table'>
 			<thead>
@@ -3283,15 +3282,15 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		<?php
 		# TODO: Add paging to this table
 	}
-	
-	
+
+
 		public function getPatientSelectReport($patient_id)
 	{
 	?><!--'reports_testhistory.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>'-->
 				<a href='javascript:get_select_tests(<?php echo $patient_id;?>);' title='Click to Generate Test History Report for this Patient'>
 					<?php echo LangUtil::$pageTerms['MSG_PRINTHISTORY']; ?>
 				</a>
-	<?php		
+	<?php
 	}
 
         public function getDeleteOptions($patient_id)
@@ -3300,7 +3299,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				<a href='javascript:get_select_tests_del(<?php echo $patient_id;?>);' title='Click here to Delete the selected Tests'>
 					<?php echo "Remove Selected Specimens"; ?>
 				</a>
-	<?php		
+	<?php
 	}
 
         public function getUnDeleteOptions($patient_id)
@@ -3309,9 +3308,9 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				<a href='javascript:get_select_tests_undel(<?php echo $patient_id;?>);' title='Click here to Retrieve deleted Tests'>
 					<?php echo "Retrieve Deleted Specimens"; ?>
 				</a>
-	<?php		
+	<?php
 	}
-	
+
 	public function getPostSpecimenEntryTaskList($patient_id)
 	{
 		?>
@@ -3330,7 +3329,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		$patient = get_patient_by_id($patient_id);
 		$patient_num =$patient->getDailyNum();
 		$pieces = explode("-", $patient_num);
-				
+
 		# Lists patient-profile related tasks in a tips box
             $patientBarcodes = patientBarcodeCheck();
 		global $LIS_TECH_RO, $DISABLE_UPDATE_PATIENT_PROFILE;
@@ -3351,7 +3350,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<a href='javascript:toggle_profile_divs();' title='Click to Update Patient Profile'>
 						<?php echo LangUtil::$pageTerms['MSG_UPDATEPROFILE']; ?>
 					</a>
-					
+
 				</p>
 				<?php
 			}
@@ -3369,7 +3368,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<a href='javascript:print_patient_barcode();' title='Click to Print Patient Barcode'>
 						<?php echo "Print Patient Barcode" ?>
 					</a>
-					
+
 				</p>
 				<?php
 			}
@@ -3388,13 +3387,13 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		<?php
 		}
 	}
-	
+
 	public function getSpecimenInfo($sid)
 	{
 		# Returns HTML table displaying specimen info
 		$specimen = get_specimen_by_id($sid);
-		
-		
+
+
 		//print_r($rem_specs);
 		if($specimen == null)
 		{
@@ -3405,7 +3404,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			<?php
 			return;
 		}
-		
+
 		$rem_recs = get_removed_specimens($_SESSION['lab_config_id'], "specimen");
 		$rem_specs = array();
 		$rem_remarks = array();
@@ -3414,11 +3413,11 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			$rem_specs[] = $rem_rec['r_id'];
 			$rem_remarks[] = $rem_rec['remarks'];
 		}
-		
-		
-		
+
+
+
 		?>
-		
+
 		<script type="text/javascript">
 		function retrieve_deleted(sid, category){
 			var params = "item_id="+sid+"&ret_cat="+category;
@@ -3432,10 +3431,10 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					} else {
 						$("#target_div_id_del").html("Specimen cannot be Retrieved");
 					}
-					
+
 				}
-			}); 
-			
+			});
+
 		}
 
 		</script>
@@ -3564,7 +3563,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				{
 					if(strlen(trim($specimen->referredToName)) > 0){
 					?>
-					
+
 					<tr>
 						<td><u><?php echo LangUtil::$generalTerms['REF_TO']; ?></u></td>
 						<td>
@@ -3580,7 +3579,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 						?>
 						</td>
 					</tr>
-					<?php } 
+					<?php }
 					if(strlen(trim($specimen->referredFromName)) > 0){
 					?>
 					<tr>
@@ -3611,7 +3610,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 						echo "Specimen Removed. Contact lab admin";
 					} else if(in_array($specimen->specimenId, $rem_specs) && is_admin(get_user_by_id($_SESSION['user_id']))==1){
 					?> <a href='javascript:retrieve_deleted(<?php echo $specimen->specimenId;?>, "specimen")' title='Click to retrieve deleted Specimen'>Retrieve Specimen</a>
-					<?php 
+					<?php
 					} else {
 					echo $specimen->getStatus();
 					$result1="Completed";
@@ -3620,15 +3619,15 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<?php if(strcmp($result,$result1)==0 || $_SESSION['user_level'] == 17){ ?> style='display:none;' <?php }?>
 					title='Click to Enter result values for this Specimen'><?php echo LangUtil::$generalTerms['ENTER_RESULTS']; ?></a>
 					<?php }
-					?>					
+					?>
 					</td>
-				</tr>				
+				</tr>
 			</tbody>
 		</table>
 		<?php
 	}
-	
-	
+
+
 	public function getSpecimenTaskList($specimen_id)
 	{
 		# Lists patient-profile related tasks in a tips box
@@ -3655,16 +3654,16 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			<p><a href='reports_specimenlog.php?location=<?php echo $_SESSION['lab_config_id']; ?>&specimen_id=<?php echo $specimen_id; ?>' title='Click to View a Log of Actions Performed on this Specimen' target='_blank'><?php echo LangUtil::$generalTerms['CMD_TRACK']; ?></a></p>
 			<?php
 			if($_SESSION['user_level'] != $LIS_CLERK && $deleted == false)
-			{			
+			{
 				$user = get_user_by_id($_SESSION['user_level']);
 				if
 				( $specimen->statusCodeId == Specimen::$STATUS_TOVERIFY || $specimen->statusCodeId == Specimen::$STATUS_DONE )
 				{
-					
+
 					?>
 					<p><a href='specimen_verify.php?sid=<?php echo $specimen_id; ?>' title='Click to Verify or Update result values for this Specimen'><?php echo LangUtil::$generalTerms['CMD_VERIFY']; ?></a></p>
 					<?php
-					
+
 				}
 				else
 				{
@@ -3678,11 +3677,11 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</div>
 		<?php
 	}
-	
+
 	public function getSpecimenTestsTable($sid)
 	{
 		# Displays list of all tests registered for a specimen w/ status/results
-		
+
 		$test_list = get_tests_by_specimen_id($sid);
 		if(count($test_list) == 0)
 		{
@@ -3692,7 +3691,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			<?php
 			return;
 		}
-		
+
 		?>
 		<script type='text/javascript'>
 		$(document).ready(function(){
@@ -3713,12 +3712,12 @@ echo "<option value='$lc->id'>$lc->name</option>";
 						} else {
 							$("#target_div_id_del").html("Test cannot be deleted");
 						}
-						
+
 					}
-				}); 
+				});
 			}
-		}				
-		
+		}
+
 
 		function ConfirmDelete()
 		{
@@ -3728,7 +3727,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		  else
 		    return false;
 		}
-		
+
 		</script>
 		<table class='tablesorter' id='specimen_tests_table'>
 			<thead>
@@ -3739,7 +3738,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<th><?php echo LangUtil::$generalTerms['ENTERED_BY']; ?></th>
 					<th><?php echo LangUtil::$generalTerms['VERIFIED_BY']; ?></th>
 					<th><?php echo LangUtil::$generalTerms['ACTIONS']; ?></th>
-					
+
 				</tr>
 			</thead>
 			<tbody>
@@ -3754,7 +3753,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		</table>
 		<?php
 	}
-	
+
 	public function getTestInfoRow($test)
 	{
 		# Returns HTML table row containing specimen info
@@ -3782,35 +3781,35 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				<?php echo $test->getVerifiedBy(); ?>
 			</td>
 			<td>
-			
+
 			<?php
 					if(check_removal_record($_SESSION['lab_config_id'], $test->testId) && is_admin(get_user_by_id($_SESSION['user_id']))!=1){
 						echo "Test removed. Contact Lab admin";
 					} else if(check_removal_record($_SESSION['lab_config_id'], $test->testId) && is_admin(get_user_by_id($_SESSION['user_id']))==1){
 					?> <a href='javascript:retrieve_deleted(<?php echo $test->testId;?>, "test")' title='Click to retrieve deleted Test'>Retrieve Test</a>
-					<?php 
+					<?php
 					} else {
 					?>
 						<a href="javascript:delete_test(<?php echo  $test->testId ;?>)">Delete</a>
 					<?php }
 					?>
-					
-					
-				
+
+
+
 			</td>
 			<?php
 			$specimen_object=Specimen::getById($test->specimenId);
 			$pid=$specimen_object->patientId;
 			$sid=$test->specimenId;
-				
+
 			?>
 			<!--<td><a href="javascript:get_report(<?php echo $pid;?>,<?php echo $sid;?> )">Report</a> </td>-->
-			
+
 		</tr>
 		<?php
 	}
-	
-	
+
+
 	public function getTatStatsTable($lab_config, $date_from, $date_to)
 	{
 		# Returns HTML table showing Turnaround time values
@@ -3905,7 +3904,7 @@ foreach($retval as $value)
 </tbody>
 </table>
 <?php
-}	
+}
 
 public function getInventory($retval) {
 ?>
@@ -3982,10 +3981,10 @@ public function getTestsDoneStatsTable($stat_list)
 			<?php
 		}
 		?>
-		
+
 		<tr>
 			<td><?php
-			echo LangUtil::$pageTerms['TOTAL_TESTS']; 
+			echo LangUtil::$pageTerms['TOTAL_TESTS'];
 			?></td>
 			<td><?php echo $total_tests_done_count; ?></td>
 			<td><?php echo $total_tests_pending_count; ?></td>
@@ -3996,7 +3995,7 @@ public function getTestsDoneStatsTable($stat_list)
 	}
 	public function getDoctorStatsTable($stat_list, $dateFrom = null, $dateTo = null, $location = null)
 	{
-	
+
 		# Returns HTML table showing number of specimens handled
 		# Called from reports_specimencount.php
 		?>
@@ -4028,7 +4027,7 @@ public function getTestsDoneStatsTable($stat_list)
 			$total_patients=$value[0];
 			$total_specimens=$value[1];
 			$total_tests=$value[2];
-			
+
 			///grand totals
 			$grand_total_patients += $total_patients;
 			$grand_total_specimens += $total_specimens;
@@ -4065,14 +4064,14 @@ public function getTestsDoneStatsTable($stat_list)
             <th>Grand Totals</th>
 				<th><?php echo $grand_total_patients; ?></th>
 				<th><?php echo $grand_total_specimens ?></th>
-				<th><?php echo $grand_total_tests; ?></th>				
+				<th><?php echo $grand_total_tests; ?></th>
 				<th></th>
 			</tr>
         </tfoot>
 		</table>
 		<?php
 	}
-	
+
 	public function getSpecimenCountStatsTable($stat_list)
 	{
 		# Returns HTML table showing number of specimens handled
@@ -4108,7 +4107,7 @@ public function getTestsDoneStatsTable($stat_list)
 		</table>
 		<?php
 	}
-	
+
 	public function getInfectionStatsTable($stat_list, $lab_config_id=null)
 	{
 		# Returns HTML table showing infection rate summary
@@ -4196,7 +4195,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 		<?php
 		foreach($stat_list as $key=>$value)
 		{
-			$test_type_name = $key;	
+			$test_type_name = $key;
 			$count_all = $value[0];
 			$count_negative = $value[1];
 			$threshold = $value[2];
@@ -4240,7 +4239,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 		</table>
 		<?php
 	}
-	
+
 	public function getAllSpecimenList()
 	{
 		# Returns HTML listing all specimen types available in catalog
@@ -4269,7 +4268,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 		</table>
 		<?php
 	}
-	
+
 	public function getAllTestList()
 	{
 		# Returns HTML listing all test types available in catalog
@@ -4298,7 +4297,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 		</table>
 		<?php
 	}
-	
+
 	public function getAllMeasureList()
 	{
 		# Returns HTML listing all measures available in catalog
@@ -4327,7 +4326,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 		</table>
 		<?php
 	}
-	
+
 	function getCustomFormField($custom_field, $field_value="")
 	{
 		# Returns HTML form element for this custom field
@@ -4399,7 +4398,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 			echo "<div id='$error_elem_id' class='clean-error uniform_width' style='display:none;'>".LangUtil::$generalTerms['RANGE_OUTOF']."</div>";
 		}
 	}
-	
+
 	function getExistingSpecimenCustomFields($lab_config_id)
 	{
 		$field_list = get_lab_config_specimen_custom_fields($lab_config_id);
@@ -4415,7 +4414,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 				echo ", ";
 		}
 	}
-	
+
 	function getExistingPatientCustomFields($lab_config_id)
 	{
 		$field_list = get_lab_config_patient_custom_fields($lab_config_id);
@@ -4431,7 +4430,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 				echo ", ";
 		}
 	}
-	
+
 	function getExistingLabTitleCustomFields($lab_config_id)
 	{
 		$field_list = get_lab_config_labtitle_custom_fields($lab_config_id);
@@ -4447,7 +4446,7 @@ public function getInfectionStatsTableAggregate($stat_list, $date_from, $date_to
 				echo ", ";
 		}
 	}
-	
+
 	function getStockForm($count)
 	{
 	$name_request="txtRow".$count."1";
@@ -4528,17 +4527,17 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		Date of Entry
 	</label></td><td>
 	<span id='<?php echo $curr_form_id; ?>_date_l'>
-	
+
 		<?php echo $this->getDatePicker($name_list, $id_list, $value_list); ?>
 		</span>
 	</td></tr>
-			
+
 			</table>
 			</div>
 			<?php
-	
+
 	}
-	
+
 	// field order customizations for specimen
 	function generate_patient_Number($dnum){
 		print "<tr valign='top'";
@@ -4554,13 +4553,13 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		    echo $dnum;
 		echo "' size='20' class='uniform_width'> </input>	</td></tr>";
 	}
-	
+
 	function generate_specimen_type($stype_id, $testbox_id){
 		echo "<tr valign='top'><td><label for='stype'>".LangUtil::$generalTerms['SPECIMEN_TYPE'];
 		$this->getAsterisk();
 		echo "</label></td><td></td><td>";
-		
-		
+
+
 		echo "<select name='stype'
 						id='".$stype_id."'
 						onchange=\"javascript:get_testbox('".$testbox_id."', '".$stype_id."');\"
@@ -4570,40 +4569,40 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						";
 		echo $this->getSpecimenTypesSelect($_SESSION['lab_config_id']);
 		echo "</select>";
-		
+
 		echo "</td></tr>";
-		
-		
-		
+
+
+
 	}
-	
+
 	function generate_test($testbox_id){
 		echo "<tr valign='top'><td><label for='tests'>".
 		      LangUtil::$generalTerms['TESTS'];
-			 $this->getAsterisk(); 
+			 $this->getAsterisk();
 		echo "</label></td><td></td><td><span id='".$testbox_id."' class='uniform_width'>-".
 		      LangUtil::$pageTerms['MSG_SELECT_STYPE'].
 		      "-</span></td></tr>";
 	}
-	
+
 	function generate_specimen_addId($lab_config){
 		echo "<tr valign='top' ";
 		if($lab_config->specimenAddl == 0)
 			echo " style='display:none;' ";
 		echo ">	<td> <label for='addlid'>".LangUtil::$generalTerms['SPECIMEN_ID'];
-		if($_SESSION['s_addl'] == 2) 
-		 $this->getAsterisk(); 
+		if($_SESSION['s_addl'] == 2)
+		 $this->getAsterisk();
 		echo " </label>	</td> <td>   </td>	<td><input type=\"text\" name=\"addl_id\" id=\"addl_id\" value=\"\" size=\"20\" class='uniform_width'> </input>
 				</td>
 			</tr>";
 	}
-	
+
 	function generate_reciept_date($lab_config, $form_id){
 		echo "<tr valign='top' ";
 		if($_SESSION['rdate'] == 0)
 				echo " style='display:none;' ";
 		echo ">	<td><label>".LangUtil::$generalTerms['R_DATE'];
-		if($_SESSION['rdate'] == 2) 
+		if($_SESSION['rdate'] == 2)
 			$this->getAsterisk();
 		echo "</label>	</td>	<td>  </td>	<td>";
 			$today = date("Y-m-d");
@@ -4616,15 +4615,15 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</td>
 			</tr>";
 	}
-	
-	
+
+
 	function generate_comments(){
 		echo "<tr valign='top'";
 		if($_SESSION['comm'] == 0)
 				echo " style='display:none;' ";
 		echo ">	<td> <label for='comments' valign='top'>".LangUtil::$generalTerms['COMMENTS'];
-		if($_SESSION['comm'] == 2) 
-		    $this->getAsterisk(); 
+		if($_SESSION['comm'] == 2)
+		    $this->getAsterisk();
 		echo "</label>	</td><td>   </td>		<td>
 					<textarea name=\"comments\" id=\"comments\" class='uniform_width'></textarea>
 				</td>
@@ -4649,15 +4648,15 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</tr>
 		<?php
 	}
-	
+
 	function generate_doctors($doc_row_id, $doc=""){
 		/* $doc_array= getDoctorList();
 		$php_array= addslashes(implode("%", $doc_array));
 		echo '<script type="text/javascript">$(document).ready(function(){';
-			
+
 		echo 'var data_string="'.$php_array;
 		echo 'var data=data_string.split("%");
-					
+
 			$("#doc_row_1_input").autocomplete(data);
 		}</script>';
  */
@@ -4672,15 +4671,15 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				echo " style='display:none;' ";
 		echo ">
 				<td><label for='doctor' valign='top'>".LangUtil::$generalTerms['DOCTOR'];
-			if($_SESSION['doctor'] == 2) 
-				$this->getAsterisk(); 
+			if($_SESSION['doctor'] == 2)
+				$this->getAsterisk();
 		echo "</label></label>
 				</td>
 				<td>";
 		$labtitlefieldoptions = get_custom_fields_labtitle(1);
 		$lab_titles = explode("/",$labtitlefieldoptions);
 		echo "<SELECT name='title' id='".$doc_row_id."_title'>";
-		
+
 		foreach($lab_titles as $option)
 			{
 				if(trim($option) == "")
@@ -4701,7 +4700,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		{
 			echo "<option value='" .$option. "'>";
 		}
-		
+
 		echo "</datalist></td>";
 			/*
 		echo "	</SELECT>
@@ -4713,7 +4712,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			</tr>";
 			*/
 	}
-	
+
 	function generate_refOut($ref_out_check_id, $ref_out_row_id, $refTo_row_id, $ref_from_row_id, $refTo=""){
 // refTo_row_
 		echo "<tr valign='top'";
@@ -4722,7 +4721,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		echo ">
 				<td>
 					<label for='ref_out' valign='top'>".LangUtil::$generalTerms['REF_OUT']."?";
-			if($_SESSION['refout'] == 2) $this->getAsterisk(); 
+			if($_SESSION['refout'] == 2) $this->getAsterisk();
 		echo "</label>
 				</td>
 				<td>   </td>
@@ -4736,17 +4735,17 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td>
 					<input type='text' name='ref_out_name' id='".$refTo_row_id."_input"."' value='".$refTo."'></input></td>
 					<td>&nbsp;&nbsp; OR </td>
-				
+
 			</tr>
 			<tr valign='top' id='".$ref_from_row_id."' style='display:none'>
 				<td>Referred From</td>
 				<td>
 					<input type='text' name='ref_from_name' id='".$ref_from_row_id."_input"."'></input>
-					
+
 				</td>
 			</tr>";
 	}
-	
+
 	function generate_customFields($custom_field){
 		echo "<tr valign='top'>
 					<td>".$custom_field->fieldName."</td>
@@ -4755,8 +4754,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		$this->getCustomFormField($custom_field);
 		echo "</td>	</tr>";
 	}
-	
-		
+
+
 	function getNewSpecimenForm($form_num, $pid, $dnum, $session_num, $doc="" ,$title ="Dr.", $refTo="")
 	{
 		# Returns HTML for new specimen form
@@ -4776,10 +4775,10 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		$refTo_row_id = 'refTo_row_'.$form_num;
 		$ref_out_row_id = 'ref_out_row_'.$form_num;
 		$ref_out_check_id = 'ref_out_'.$form_num;
-		
+
 		$ref_from_row_id = 'ref_from_row_'.$form_num;
 		$ref_from_check_id = 'ref_out_'.$form_num;
-		
+
 		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
 		?>
 		<div id='<?php echo $div_id; ?>'>
@@ -4789,17 +4788,17 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<?php /*<input type='hidden' name='session_num' value='<?php echo get_session_number(); ?>' class='uniform_width'></input> */ ?>
 			<table class='regn_form_table'>
 			<tbody>
-			
+
 			<?php $this->generate_patient_Number($dnum);?>
 			<?php $this->generate_specimen_type($stype_id, $testbox_id);?>
 			<?php $this->generate_test($testbox_id);?>
-			
-			<?php 
+
+			<?php
 					$specimenFieldOrder = $_SESSION['specimenFieldOrder'];
 					$custom_field_list = get_custom_fields_specimen();
 					$custFieldArray = array();
 					foreach($custom_field_list as $custom_field)
-					{	
+					{
 						if(($custom_field->flag)==NULL)
 						{
 							array_push($custFieldArray, $custom_field->fieldName);
@@ -4807,7 +4806,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					}
 					if(sizeOf($specimenFieldOrder) > 0){
 						foreach($specimenFieldOrder as $field){
-							
+
 							if(in_array($field, $custFieldArray)){
 								// custom field generation
 								$custom_field = null;
@@ -4816,18 +4815,18 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 										$custom_field = $custField;
 									}
 								}
-								$this->generate_customFields($custom_field); 
+								$this->generate_customFields($custom_field);
 							}
 							else if($field == "Specimen ID"){
 								 $this->generate_specimen_addId($lab_config);
 							} /*else if($field == "Specimen Additional ID"){
 								<?php $this->generate_specimen_addId($lab_config);?>
 							}*/ else if($field == "Comments"){
-								$this->generate_comments(); 
+								$this->generate_comments();
 							} else if($field == "Lab Reciept Date"){
 								 $this->generate_reciept_date($lab_config, $form_id);
 							} else if($field == "Referred Out"){
-								$this->generate_refOut($ref_out_check_id, $ref_out_row_id, $refTo_row_id, $ref_from_row_id, $refTo); 
+								$this->generate_refOut($ref_out_check_id, $ref_out_row_id, $refTo_row_id, $ref_from_row_id, $refTo);
 							} else if($field == "Physician"){
 								$this->generate_doctors($doc_row_id, $doc);
 							}
@@ -4835,12 +4834,12 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					}
 			$this->generate_sites($lab_config, $lab_config->site_choice_enabled);
 				?>
-				
-				
-			
-			
-			
-			
+
+
+
+
+
+
 			<tr valign='top'<?php
 			//if($_SESSION['sid'] == 0)
 			if(true)
@@ -4861,11 +4860,11 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<br><span id='<?php echo $specimen_err_div_id; ?>'></span>
 				</td>
 			</tr>
-			
-			
-			
-			
-			
+
+
+
+
+
 			<tr valign='top' style='display:none;'>
 				<td>
 					<label><?php echo LangUtil::$generalTerms['C_DATE']; ?></label>
@@ -4902,8 +4901,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						//if($option == 9)
 							echo "selected ";
 						echo ">$option</option>";
-						
-						
+
+
 					}
 					?>
 					</select>
@@ -4927,8 +4926,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					&nbsp;&nbsp;hrs
 				</td>
 			</tr>
-			
-			
+
+
 			<tr valign='top' style='display:none' <?php ## Disabled for now ?>>
 				<td>
 					<label for='report_to' valign='top'>Report To</label>
@@ -4945,10 +4944,10 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</select>
 				</td>
 			</tr>
-			
-			
-			
-			
+
+
+
+
 			<?php
 			/*$custom_field_list = get_custom_fields_specimen();
 			foreach($custom_field_list as $custom_field)
@@ -4964,9 +4963,9 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				}
 			}*/
 			?>
-			
-			
-			
+
+
+
 			<?php
 			if($form_num != 1)
 			{
@@ -5000,7 +4999,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</div>
 		<?php
 	}
-	
+
 	public function getReportResultsForm($form_name, $form_id)
 	{
 		$specimen_list = Specimen::getUnreported();
@@ -5097,8 +5096,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</table>
 		<?php
 	}
-	
-	
+
+
 	public function getGoalTatForm($lab_config_id)
 	{
 		# Returns HTML form for setting/modifying goal TAT values
@@ -5184,7 +5183,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</table>
 		<?php
 	}
-	
+
 	public function getGetGoalTatTable($lab_config_id)
 	{
 		# Returns HTML table showing existing goal TAT values
@@ -5213,7 +5212,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				}
 			  	// days exists^M
 			 	if($value >= 24) {
-			  		$days = round($value/24); 
+			  		$days = round($value/24);
 			  		$hours = $value - $days*24;
 			  	}
 
@@ -5255,7 +5254,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</table>
 		<?php
 	}
-	
+
 	public function getCustomFieldTable($lab_config_id, $custom_field_list, $type)
 	{
 		# Returns a list of existing custom fields in a lab configuration
@@ -5313,7 +5312,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							Edit
 							</a>
 						</td>
-						
+
 					</tr>
 				<?php
 				$count++;
@@ -5323,7 +5322,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</table>
 		<?php
 	}
-	
+
 	public function getCustomFieldTypeOptions($edit=0, $type='')
 	{
 		# Returns <select> options for custom field type
@@ -5360,7 +5359,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 
 	<?php
 	}
-		
+
 	public function getCustomFieldNewForm($lab_config_id)
 	{
 		# Returns HTML form field for adding a new custom field
@@ -5464,7 +5463,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</table>
 		<?php
 	}
-	
+
 	public function getCustomFieldEditForm($field_id, $lab_config_id, $type)
 	{
 		# Returns HTML form fields for editing a custom field
@@ -5481,7 +5480,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<?php
 			return;
 		}
-		
+
 		?>
 		<input type='hidden' name='id' value='<?php echo $custom_field->id; ?>'></input>
 		<input type='hidden' name='lid' value='<?php echo $lab_config_id; ?>'></input>
@@ -5618,7 +5617,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					Enable:
 					</td>
 					<td>
-					
+
 					<input type="checkbox" name="Enable" value="enable" <?php if(($custom_field->flag)==0) { ?> checked <?php }?> >
 					</td>
 				</tr>
@@ -5661,7 +5660,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</table>
 		<?php
 	}
-	
+
 	public function getSpecimenTypeCheckboxes($lab_config_id=null, $allCompatibleCheckingOn=true)
 	{
 		# Returns a set of checkboxes with existing specimen types checked if allCompatibleCheckingOn is set to true,
@@ -5712,7 +5711,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					echo ">$specimen_name";
 				?>
 				</input></td>
-				
+
 				<?php
 				if($count % 3 == 0)
 					echo "</tr><tr>";
@@ -5722,7 +5721,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</table>
 		<?php
 	}
-	
+
 	public function getTestTypeCheckboxes($lab_config_id=null, $allCompatibleCheckingOn=true)
 	{
 		# Returns a set of checkboxes with existing test types checked, if allCompatibleCheckingOn is set to true,
@@ -5782,7 +5781,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					echo ">$test_name";
 				?>
 				</input></td>
-				
+
 				<?php
 				if($count % 3 == 0)
 					echo "</tr><tr>";
@@ -5792,7 +5791,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</table>
 		<?php
 	}
-	
+
         //NC3065
         public function getTestTypeCheckboxes_dir($lab_config_id=null, $allCompatibleCheckingOn=true)
 	{
@@ -5853,7 +5852,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					echo ">$test_name";
 				?>
 				</input></td>
-				
+
 				<?php
 				if($count % 3 == 0)
 					echo "</tr><tr>";
@@ -5868,7 +5867,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
         public function getSearchFieldsCheckboxes($lab_config_id=null)
 	{
 		# Returns a set of checkboxes with existing fields types checked.
-		
+
 		$lab_config = get_lab_config_by_id($lab_config_id);
 		if($lab_config == null && $lab_config_id != "")
 		{
@@ -5885,7 +5884,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		//else
 			//$specimen_list = get_search_fields($lab_config_id);
                         $sfields = get_search_fields($lab_config_id);
-                        $ssfields = get_lab_config_settings_search();
+                        $ssfields = get_lab_config_settings_search($lab_config_id);
                        //"SELECT pid, p_addl, daily_num, pname, age, sex, dob FROM lab_config WHERE lab_config_id=$lab_config_id";
 
 		//$current_specimen_list = array();
@@ -5895,7 +5894,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		?>
 		<table class='hor-minimalist-b' style='width:700px;'>
 			<tbody>
-			
+
                         <tr>
 				<td><input type='checkbox' class='sfields_entry' name='sfields_daily_num' id='sfields_daily_num' value='1'
 				<?php
@@ -5922,7 +5921,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
                                         }
 				?>
 				</input></td>
-				
+
 			</tr>
 
 
@@ -5949,7 +5948,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
         public function getBarcodeFields($lab_config_id=null)
 	{
 		# Returns a set of checkboxes with existing fields types checked.
-		
+
 		$lab_config = get_lab_config_by_id($lab_config_id);
 		if($lab_config == null && $lab_config_id != "")
 		{
@@ -6096,7 +6095,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				echo $measure_name;
 				?>
 				</input></td>
-				
+
 				<?php
 				if($count % 2 == 0)
 					echo "</tr><tr>";
@@ -6106,7 +6105,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</table>
 		<?php
 	}
-	
+
 	public function getConfirmDialog($div_id, $message, $ok_function_call, $cancel_function_call, $width=300)
 	{
 		?>
@@ -6119,7 +6118,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</div>
 		<?php
 	}
-	
+
 	public function getAlertDialog($div_id, $message, $width=300)
 	{
 		?>
@@ -6130,7 +6129,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</div>
 		<?php
 	}
-	
+
 	public function getCompatibilityJsArray($array_name, $lab_config_id=null)
 	{
 		# Returns a JavaScript array storing compatible test types for each specimen type
@@ -6143,7 +6142,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			echo $array_name."[".$key."]='$test_csv'; ";
 		}
 	}
-	
+
         public function getGroupedCountReportConfigureForm($lab_config)
         {
             $configArray = getTestCountGroupedConfig($lab_config->id);
@@ -6219,7 +6218,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						<div id='t_agegrouplist'>
 							<span id='t_agegrouplist_inner'>
 							<?php
-							
+
 								# Group by age enabled. Shoe prefilled form fields.
                                                             $age_parts = explode(",", $ageGroups);
 								foreach($age_parts as $age_part)
@@ -6231,7 +6230,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									<input type='text' name='age_l[]' class='range_field' value='<?php echo $age_bounds[0]; ?>'></input>-<input type='text' name='age_u[]' class='range_field' value='<?php echo $age_bounds[1]; ?>'></input>&nbsp;&nbsp;&nbsp;
 									<?php
 								}
-							
+
 							?>
 							</span>
 							<br>
@@ -6299,7 +6298,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						<div id='s_agegrouplist'>
 							<span id='s_agegrouplist_inner'>
 							<?php
-							
+
 								# Group by age enabled. Shoe prefilled form fields.
                                                             $sp_age_parts = explode(",", $sp_ageGroups);
 								foreach($sp_age_parts as $age_part)
@@ -6311,7 +6310,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									<input type='text' name='sp_age_l[]' class='range_field' value='<?php echo $age_bounds[0]; ?>'></input>-<input type='text' name='sp_age_u[]' class='range_field' value='<?php echo $age_bounds[1]; ?>'></input>&nbsp;&nbsp;&nbsp;
 									<?php
 								}
-							
+
 							?>
 							</span>
 							<br>
@@ -6392,7 +6391,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 					</td>
 				</tr>
-				
+
 				<tr valign='top'>
 					<td><?php echo LangUtil::$pageTerms['AGE_UNIT']; ?></td>
 					<td>
@@ -6427,7 +6426,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						<div id='agegrouplist'>
 							<span id='agegrouplist_inner'>
 							<?php
-							
+
 								# Group by age enabled. Shoe prefilled form fields.
                                                             $age_parts = explode(",", $ageGroups);
 								foreach($age_parts as $age_part)
@@ -6439,7 +6438,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									<input type='text' name='age_l[]' class='range_field' value='<?php echo $age_bounds[0]; ?>'></input>-<input type='text' name='age_u[]' class='range_field' value='<?php echo $age_bounds[1]; ?>'></input>&nbsp;&nbsp;&nbsp;
 									<?php
 								}
-							
+
 							?>
 							</span>
 							<br>
@@ -6462,7 +6461,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</td>
 				</tr>
 
-				
+
                                 <tr valign='top'>
 					<td><?php echo "Counts to Display"; ?></td>
 					<td>
@@ -6548,7 +6547,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						<div id='s_agegrouplist'>
 							<span id='s_agegrouplist_inner'>
 							<?php
-							
+
 								# Group by age enabled. Shoe prefilled form fields.
                                                             $sp_age_parts = explode(",", $sp_ageGroups);
 								foreach($sp_age_parts as $age_part)
@@ -6560,7 +6559,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									<input type='text' name='sp_age_l[]' class='range_field' value='<?php echo $age_bounds[0]; ?>'></input>-<input type='text' name='sp_age_u[]' class='range_field' value='<?php echo $age_bounds[1]; ?>'></input>&nbsp;&nbsp;&nbsp;
 									<?php
 								}
-							
+
 							?>
 							</span>
 							<br>
@@ -7238,7 +7237,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							echo $age_bounds[0]."-".$age_bounds[1];
 							echo "&nbsp;&nbsp;&nbsp;";
 						}
-					
+
 					?>
 					</td>
 				</tr>
@@ -7299,7 +7298,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							echo $age_bounds[0]."-".$age_bounds[1];
 							echo "&nbsp;&nbsp;&nbsp;";
 						}
-					
+
 					?>
 					</td>
 				</tr>
@@ -7402,7 +7401,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							echo $age_bounds[0]."-".$age_bounds[1];
 							echo "&nbsp;&nbsp;&nbsp;";
 						}
-					
+
 					?>
 					</td>
 				</tr>
@@ -7481,7 +7480,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							echo $age_bounds[0]."-".$age_bounds[1];
 							echo "&nbsp;&nbsp;&nbsp;";
 						}
-					
+
 					?>
 					</td>
 				</tr>
@@ -7496,7 +7495,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	{
 		# Returns HTML form elements for configuring aggregate reports
 		# Called from lab_config_home.php
-		
+
 		# Fetch site-wide settings for all tests from dummy record
 		$site_settings = DiseaseReport::getByKeys($lab_config->id, 0, 0);
 		if($site_settings == null)
@@ -7607,7 +7606,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									# Numeric ranges
 									# Show fields to select range slots
 									$measure_to_set = true;
-									
+
 									if(count($measure_list) != 1)
 									{
 										# Show measure names if more than one.
@@ -7665,7 +7664,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							}
 							?>
 						</td>
-					</tr>				
+					</tr>
 					<?php
 				}
 				?>
@@ -7691,12 +7690,12 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	}
 
 
-	
+
 	public function getInfectionReportConfigureForm()
 	{
 		# Returns HTML form elements for configuring infection reports
 		# Called from lab_config_home.php
-		
+
 		# Fetch site-wide settings for all tests from dummy record
 		$site_settings = GlobalInfectionReport::getByKeys($_SESSION['user_id'], 0, 0);
 		?>
@@ -7801,7 +7800,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									# Numeric ranges
 									# Show fields to select range slots
 									$measure_to_set = true;
-									
+
 									if(count($measure_list) != 1)
 									{
 										# Show measure names if more than one.
@@ -7849,7 +7848,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							}
 							?>
 						</td>
-					</tr>				
+					</tr>
 					<?php
 				}
 				?>
@@ -7873,12 +7872,12 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</div>
 		<?php
 	}
-	
+
 	public function getAggregateReportSummary($lab_config)
 	{
 		# Returns HTML form elements for configuring infection report
 		# Called from lab_config_home.php
-		
+
 		# Fetch site-wide settings for all tests from dummy record
 		$site_settings = DiseaseReport::getByKeys($lab_config->id, 0, 0);
 		if($site_settings == null)
@@ -7929,7 +7928,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							echo $age_bounds[0]."-".$age_bounds[1];
 							echo "&nbsp;&nbsp;&nbsp;";
 						}
-					
+
 					?>
 					</td>
 				</tr>
@@ -7965,7 +7964,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									# Numeric ranges
 									# Show fields to select range slots
 									$measure_to_set = true;
-									
+
 									if(count($measure_list) != 1)
 									{
 										# Show measure names if more than one.
@@ -7983,7 +7982,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									if($disease_report == null)
 									{
 										# No entry exists. Show default values.
-										echo $range_bounds[0]."-".$range_bounds[1];											
+										echo $range_bounds[0]."-".$range_bounds[1];
 									}
 									else
 									{
@@ -8009,7 +8008,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							}
 							?>
 						</td>
-					</tr>				
+					</tr>
 					<?php
 				}
 				?>
@@ -8018,12 +8017,12 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</div>
 		<?php
 	}
-	
+
 	public function getInfectonReportSummary()
 	{
 		# Returns HTML form elements for configuring infection report for country administrators
 		# Called from reports.php
-		
+
 		# Fetch settings for all tests from dummy record
 		$site_settings = GlobalInfectionReport::getByKeys($_SESSION['user_id'], 0, 0);
 		?>
@@ -8069,7 +8068,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							echo $age_bounds[0]."-".$age_bounds[1];
 							echo "&nbsp;&nbsp;&nbsp;";
 						}
-					
+
 					?>
 					</td>
 				</tr>
@@ -8105,7 +8104,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									# Numeric ranges
 									# Show fields to select range slots
 									$measure_to_set = true;
-									
+
 									if(count($measure_list) != 1)
 									{
 										# Show measure names if more than one.
@@ -8115,7 +8114,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									if($disease_report == null)
 									{
 										# No entry exists. Show default values.
-										echo $range_bounds[0]."-".$range_bounds[1];											
+										echo $range_bounds[0]."-".$range_bounds[1];
 									}
 									else
 									{
@@ -8139,7 +8138,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							}
 							?>
 						</td>
-					</tr>				
+					</tr>
 					<?php
 				}
 				?>
@@ -8148,7 +8147,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</div>
 		<?php
 	}
-	
+
 	public function getReportConfigForm($report_config, $worksheet_config=false, $test_type_id = 0)
 	{
 		# Creates html fields for report configuration form
@@ -8191,7 +8190,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<input type='radio' name='align' value='right' <?php
 					if($report_config->alignment_header == 'right') echo " checked "; ?>>Right</input>
 				</td>
-			
+
 			<tr valign='top'>
 				<td>Header</td>
 				<td>
@@ -8259,7 +8258,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<input type='radio' name='do_landscape' value='N' <?php
 					if($report_config->landscape == false) echo " checked "; ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'>
 				<td>Clinical Data</td>
@@ -8291,7 +8290,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					if($report_config->showResultBorder == 0) echo " checked "; ?> onclick="javascript:$('#R_Border').hide();"><?php echo LangUtil::$generalTerms['NO']; ?></input>
                     &nbsp;&nbsp;&nbsp;&nbsp;<span id="R_Border">
                    <input type="checkbox" name="result_box_hori" value="Y" <?php if($report_config->resultborderHorizontal == 1) echo " checked "; ?> ><?php echo  LangUtil::$pageTerms['RPT_R_BORDER_HOR'];?>&nbsp;
-                    <input type="checkbox" name="result_box_vert"  value="Y"  <?php if($report_config->resultborderVertical == 1) echo " checked "; ?>  ><?php echo LangUtil::$pageTerms['RPT_R_BORDER_VERT'];?>                  
+                    <input type="checkbox" name="result_box_vert"  value="Y"  <?php if($report_config->resultborderVertical == 1) echo " checked "; ?>  ><?php echo LangUtil::$pageTerms['RPT_R_BORDER_VERT'];?>
                     </span>
                     </td>
             </tr>
@@ -8300,7 +8299,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			 if (file_exists("../logos/logo_".$report_config->labConfigId.".jpg")==true)
 			echo "LOGO being Used "; ?></h4></td></tr>
 	  		<tr><td><h3>File Upload:</h3></td><td><?php
-			
+
 	 if (file_exists("../logos/logo_".$report_config->labConfigId.".jpg")==false)
 	{echo "( Add a Logo)"; }else echo "(Change Logo)"; ?>
 	Choose a .jpg logo File to upload:
@@ -8309,8 +8308,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	<br />
 	</td></tr> <?php }?>
 	<br/>
-	
-	
+
+
 		</table>
 		<table cellspacing='5px' class='smaller_font'>
 			<tr valign='top'>
@@ -8471,14 +8470,14 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				}
 			}
 			?>
-			
+
 			<tr valign='top'<?php
 			if($report_config->reportId != 6)
 				echo " style='display:none;' ";
 			?>>
 				<td><b>Patient Daily Report - Other Fields</b></td>
 			</tr>
-			
+
 			<tr valign='top'>
 				<td>
 				<?php if($report_config->reportId == 6){?>
@@ -8492,7 +8491,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td></td>
 			<!--<?php echo $report_config->reportId. " | Requester ".$report_config->useRequesterName." | ReferredTo ".$report_config->useReferredTo ?>-->
 			</tr>
-			
+
 			<tr valign='top'<?php
 			if($report_config->reportId != 4)
 				echo " style='display:none;' ";
@@ -8512,7 +8511,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td></td>
 			<!--<?php echo $report_config->reportId. " | Requester ".$report_config->useRequesterName." | ReferredTo ".$report_config->useReferredTo ?>-->
 			</tr>
-				
+
 			<tr valign='top'<?php
 			if($report_config->reportId == 6)
 				echo " style='display:none;' ";
@@ -8565,7 +8564,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['SPECIMEN_TYPE']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6)
@@ -8579,7 +8578,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['R_DATE']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6)
@@ -8593,7 +8592,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['COMMENTS']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6)
@@ -8607,7 +8606,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo "Referred To";//LangUtil::$generalTerms['REF_OUT']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6)
@@ -8621,8 +8620,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['DOCTOR']; ?>
 				</td>
-				
-			</tr>			
+
+			</tr>
 			<?php
 			# Specimen custom fields
 			$lab_config = LabConfig::getById($report_config->labConfigId);
@@ -8632,7 +8631,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				{
 					?>
 					<tr valign='top'<?php
-					
+
 				if($report_config->reportId == 6)
 					echo " style='display:none;' ";
 				?>>
@@ -8644,21 +8643,21 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							</input>
 							<?php echo $custom_field->fieldName; ?>
 						</td>
-						
+
 					</tr>
 				<?php
 				}
 			}
 			?>
-			
+
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
 				echo " style='display:none;' ";
 			?>>
 				<td><b><?php echo LangUtil::$generalTerms['TESTS']?></b></td>
-				
+
 			</tr>
-			
+
 
 			<?php # Test main fields ?>
 			<tr valign='top'<?php
@@ -8712,7 +8711,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						?>>
 					</input>
 					<?php echo LangUtil::$generalTerms['RANGE']; ?></td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
@@ -8726,7 +8725,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['RESULT_COMMENTS']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
@@ -8740,7 +8739,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['E_DATE']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
@@ -8754,7 +8753,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['ENTERED_BY']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
@@ -8768,12 +8767,12 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['VERIFIED_BY']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
 				echo " style='display:none;' ";
-			
+
 			?>>
 				<td>
 					<input type='checkbox' name='t_field_6' <?php
@@ -8783,7 +8782,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['SP_STATUS']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
@@ -8797,7 +8796,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo "Confirm before print" ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
@@ -8811,12 +8810,12 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo "Confirm before updating results" ?>
 				</td>
-				
+
 			</tr>
 		</table>
 		<table>
 			<tr valign='top'>
-				
+
 				<td>
 					<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick="<?php
 					if($worksheet_config === false)
@@ -8847,15 +8846,15 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<tr valign='top'>
 				<td></td>
 				<td>
-					
+
 				</td>
 			</tr>
-			
+
 		</table>
 		</form>
-		<?php		
+		<?php
 	}
-	
+
 	public function getReportConfigSummary($report_config, $worksheet_config=false)
 	{
 		if($report_config == null)
@@ -8936,7 +8935,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td><?php  echo LangUtil::$pageTerms['RPT_ITEMS_ON_ROW'];?></td>
 				<td>
 					<?php
-					echo $report_config->rowItems;					
+					echo $report_config->rowItems;
 					?>
 				</td>
 			</tr>
@@ -8965,7 +8964,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						if( $report_config->resultborderVertical == 1)
 							echo ": ".LangUtil::$generalTerms['YES'];
 						else
-							echo ": ".LangUtil::$generalTerms['NO'];						 
+							echo ": ".LangUtil::$generalTerms['NO'];
 					?>
                     &nbsp;&nbsp;
                      <?php
@@ -8973,7 +8972,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						if( $report_config->resultborderHorizontal == 1)
 							echo ": ".LangUtil::$generalTerms['YES'];
 						else
-							echo ": ".LangUtil::$generalTerms['NO'];						 
+							echo ": ".LangUtil::$generalTerms['NO'];
 					?>
 				</td>
 			</tr>
@@ -9040,7 +9039,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					if($report_config->useGender == 1)
 						echo LangUtil::$generalTerms['GENDER'];
 					?>
-				</td>			
+				</td>
 			</tr>
 			<tr valign='top'>
 				<td>
@@ -9100,8 +9099,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<?php
 			}
 			?> <br/>
-			
-			
+
+
 			<?php
 			if($report_config->reportId == 4 || $report_config->reportId == 6){
 			 if($report_config->useRequesterName == 1 || $report_config->useReferredToHospital == 1) {
@@ -9111,8 +9110,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				<td></td>
 			</tr>
 			<?php }?>
-			
-			
+
+
 			<tr valign='top'>
 				<td>
 					<?php
@@ -9130,9 +9129,9 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				</td>
 			</tr>
 			<?php }?>
-				
+
 				<br/>
-				
+
 			<tr valign='top'<?php
 			if($report_config->reportId == 6)
 				echo " style='display:none;' ";
@@ -9173,7 +9172,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						echo LangUtil::$generalTerms['R_DATE'];
 					?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6)
@@ -9196,8 +9195,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						echo LangUtil::$generalTerms['REF_OUT'];
 					?>
 				</td>
-				
-			</tr>	
+
+			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 7)
 				echo " style='display:none;' ";
@@ -9208,8 +9207,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						echo LangUtil::$generalTerms['DOCTOR'];
 					?>
 				</td>
-				
-			</tr>				
+
+			</tr>
 			<?php
 			# Specimen custom fields
 			$lab_config = LabConfig::getById($report_config->labConfigId);
@@ -9231,13 +9230,13 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<?php
 			}
 			?>
-			
+
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
 				echo " style='display:none;' ";
 			?>>
 				<td><b><?php echo LangUtil::$generalTerms['TESTS']?></b></td>
-				
+
 			</tr>
 			<?php # Test main fields ?>
 			<tr valign='top'<?php
@@ -9306,7 +9305,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						echo LangUtil::$generalTerms['E_DATE'];
 					?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
@@ -9329,12 +9328,12 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						echo LangUtil::$generalTerms['VERIFIED_BY'];
 					?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
 				echo " style='display:none;' ";
-			
+
 			?>>
 				<td>
 					<?php
@@ -9342,7 +9341,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						echo LangUtil::$generalTerms['SP_STATUS'];
 					?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
@@ -9354,7 +9353,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						echo 'Confirm before print';
 					?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'<?php
 			if($report_config->reportId == 6 || $report_config->reportId == 2)
@@ -9366,13 +9365,13 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						echo 'Confirm before updating results';
 					?>
 				</td>
-				
-			</tr>			
+
+			</tr>
 			</tbody>
 		</table>
 		<?php
 	}
-	
+
 	public function getReportConfigCss($margin_list, $left_margin_line=true)
 	{
 		?>
@@ -9387,11 +9386,11 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			{
 				echo "border-left: 1px solid black;";
 			}
-			?>			
+			?>
 		}
 	<?php
 	}
-	
+
 	public function getTableSortTip()
 	{
 		$tips_string = LangUtil::$pageTerms['TIPS_TABLESORT'];
@@ -9401,7 +9400,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</small>
 		<?php
 	}
-	
+
 	public function getDateFormatSelect($lab_config)
 	{
 		global $DATE_FORMAT_LIST, $DATE_FORMAT_PRETTY_LIST;
@@ -9417,7 +9416,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			$count++;
 		}
 	}
-	
+
 	public function getExportTxtScript()
 	{
 		?>
@@ -9434,7 +9433,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</form>
 		<?php
 	}
-	
+
 	public function getRegistrationFieldsSummary($lab_config)
 	{
 		?>
@@ -9449,7 +9448,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 									else
 										echo "Not in use";
 									if($lab_config->pid == 1 )
-										echo "(allows duplicates)";										
+										echo "(allows duplicates)";
 									if($lab_config->pid == 2 )
 										echo " (Mandatory field) (allows duplicates)";
 									if($lab_config->pid == 4)
@@ -9660,16 +9659,16 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 							</tr>
 						</tbody>
 					</table>
-					
+
 		<?php
 	}
-	
+
 	public function getDoctorRegistrationFieldsSummary($lab_config)
 	{
 		?>
 			<table class='hor-minimalist-b' style='width:auto;'>
 							<tbody>
-								
+
 								<tr>
 									<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></td>
 									<td>
@@ -9858,10 +9857,10 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 								</tr>
 							</tbody>
 						</table>
-						
+
 			<?php
 		}
-		
+
 	public function getPatientSearchAttribSelect($hide_patient_name=false)
 	{
             $userrr = get_user_by_id($_SESSION['user_id']);
@@ -9877,7 +9876,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			$_SESSION['user_level'] == 17
 		)
 		{
-			$lab_config = LabConfig::getById($_SESSION['lab_config_id']); 
+			$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
                         $patientBarcodeSearch = patientSearchBarcodeCheck();
                         echo $hide_patient_name;
                         echo $lab_config->pname ;
@@ -9960,25 +9959,25 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<option value='3'><?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></option>
 			<option value='0'><?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></option>
 			<option value='2'><?php echo LangUtil::$generalTerms['ADDL_ID']; ?></option>
-			
-			
-			<?php 
+
+
+			<?php
                if($patientBarcodeSearch != 0 && is_country_dir($userrr) != 1 && is_super_admin($userrr) != 1 ){ ?>
                         				<option value='10'><?php echo 'Patient Barcode'; ?></option>
                                                         <?php } ?>
-                                                        
-                                                        
-            <?php 
+
+
+            <?php
                 if($specimenBarcodeSearch != 0 && is_country_dir($userrr) != 1 && is_super_admin($userrr) != 1 ){ ?>
                         				<option value='9'><?php echo 'Specimen Barcode'; ?></option>
                                                         <?php } ?>
-                                                        
-                        
+
+
 
 			<?php
 		}
 	}
-	
+
 	public function getNewCustomWorksheetForm($lab_config)
 	{
 		if($lab_config == null)
@@ -10064,7 +10063,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					<small><a href='javascript:add_another_uf();'><?php echo LangUtil::$generalTerms['ADDANOTHER']; ?>&raquo;</a></small>
 				</td>
 			</tr>
-			
+
 			<tr valign='top'>
 				<td><?php echo LangUtil::$generalTerms['LAB_SECTION']; ?></td>
 				<td>
@@ -10159,7 +10158,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<?php
 			}
 			?>
-				
+
 			<tr valign='top'>
 				<td><b><?php echo LangUtil::$generalTerms['SPECIMENS']?></b></td>
 			</tr>
@@ -10180,7 +10179,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['SPECIMEN_TYPE']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'>
 				<td>
@@ -10188,7 +10187,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['R_DATE']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'>
 				<td>
@@ -10196,7 +10195,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['COMMENTS']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'>
 				<td>
@@ -10204,7 +10203,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['REF_OUT']; ?>
 				</td>
-				
+
 			</tr>
 			<tr valign='top'>
 				<td>
@@ -10212,8 +10211,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					</input>
 					<?php echo LangUtil::$generalTerms['DOCTOR']; ?>
 				</td>
-				
-			</tr>			
+
+			</tr>
 			<?php
 			# Specimen custom fields
 			$custom_field_list = $lab_config->getSpecimenCustomFields();
@@ -10226,7 +10225,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						</input>
 						<?php echo $custom_field->fieldName; ?>
 					</td>
-					
+
 				</tr>
 			<?php
 			}
@@ -10243,7 +10242,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		?>
 		<br>
 		<div id='test_boxes' class='smaller_font' style='width:auto;'>
-		
+
 		</div>
 		<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' id='worksheet_submit_button' onclick='javascript:submit_worksheet_form();'>
 		</input>
@@ -10257,9 +10256,9 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		<span id='worksheet_submit_progress' style='display:none;'>
 			<?php $this->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
 		</span>
-		<?php		
+		<?php
 	}
-	
+
 	public function getCustomWorksheetSummary($worksheet)
 	{
 		?>
@@ -10361,7 +10360,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						echo LangUtil::$pageTerms['COLUMN_WIDTH'].": ";
 						echo $field_width;
 						echo ")";
-						echo "<br>";						
+						echo "<br>";
 					}
 					?>
 					</span>
@@ -10417,7 +10416,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	</div>
 	<?php
 	}
-	
+
 	public function getCustomWorksheetSelect($lab_config)
 	{
 		if($lab_config == null)
@@ -10431,7 +10430,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			echo "<option value='$worksheet->id'>$worksheet->name</option>";
 		}
 	}
-	
+
 	public function getCustomWorksheetTable($lab_config)
 	{
 		echo "Custom Worksheets";
@@ -10488,7 +10487,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</table>
 		<?php
 	}
-	
+
 	public function getEditCustomWorksheetForm($worksheet_id, $lab_config)
 	{
 		if($lab_config == null)
@@ -10631,7 +10630,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					$record = query_associative_one($query_string);
 					$cat_code = $record['test_category_id'];
 					$cat_name = get_test_category_name_by_id($cat_code);
-					DbUtil::switchRestore($saved_db);				
+					DbUtil::switchRestore($saved_db);
 					echo $cat_name;
 					?>
 				</td>
@@ -10711,7 +10710,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				toggle_mlist(this);
 			});
 		});
-		
+
 		function toggle_mlist(elem)
 		{
 			var target_div = elem.name+"_mlist";
@@ -10727,14 +10726,14 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		</script>
 		<?php
 	}
-	
+
 	public function getBackupRevertRadio($field_name, $lab_config_id)
 	{
 		# Returns radio options for selecting one among existing backup directories
 		$folder_list = get_backup_folders($lab_config_id);
 		if($folder_list === null || count($folder_list) == 0)
 		{
-			echo LangUtil::$generalTerms['MSG_NOTFOUND'];			
+			echo LangUtil::$generalTerms['MSG_NOTFOUND'];
 			return;
 		}
 		$count = 0;
@@ -10752,14 +10751,14 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			$count++;
 		}
 	}
-	
+
 	public function getPatientSearchCondition()
 	{
 		?>
         	<option value='%[pq]%'><?php echo LangUtil::getSearchCondition('SEARCH_CONTAINS'); ?></option>
-			<option value='[pq]%'><?php echo LangUtil::getSearchCondition('SEARCH_BEGIN_WITH'); ?></option>           
+			<option value='[pq]%'><?php echo LangUtil::getSearchCondition('SEARCH_BEGIN_WITH'); ?></option>
 		<?php
-		
+
 	}
 
 	public function getToggleTestReportsForm()
@@ -10850,11 +10849,11 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	    foreach ($tests as $test)
 				echo "<option id='$test->testTypeId' value='$test->testTypeId'>".$test->name."</option>";
 	}
-	
+
 	//starting point of changes
-	public function getBatchResultsFieldsForm()
+	public function getBatchResultsFieldsForm($lab_config_id)
 	{
-		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);	
+		$lab_config = LabConfig::getById($lab_config_id);
 		$report_config = $lab_config->getAnyWorksheetConfig();
 		// echo $report_config->usePatientId, "hello";
 		// echo "<br>";
@@ -10982,7 +10981,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 
 		</table>
 
-	<?php	
+	<?php
 	}
 	// ending point of changes
 
@@ -10993,7 +10992,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		<table cellspacing='5px' class='smaller_font'>
 			<tr valign='top'>
 				<td><b><?php echo LangUtil::$generalTerms['PATIENT_FIELDS']?></b></td>
-                <td></td>               
+                <td></td>
 				<td><b><?php echo LangUtil::$generalTerms['PATIENT_ORDERED_FIELDS']?></b></td>
                 <td></td>
 			</tr>
@@ -11001,21 +11000,21 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 			<tr valign='top'>
             <td>
             <input type="hidden" id="p_fields_left" name="p_fields_left" />
-            <input type="hidden" id="o_fields_left" name="o_fields_left" />                         
+            <input type="hidden" id="o_fields_left" name="o_fields_left" />
             <select id="p_fields" name="p_fields"  size="15" onchange="javascript:setSel(this);">
-            <?php 
+            <?php
 			 $combined_fields =$SYSTEM_PATIENT_FIELDS;
-				$lab_config = LabConfig::getById($_SESSION['lab_config_id']);				
+				$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
 				if( $lab_config ) {
 					$custom_field_list = $lab_config->getPatientCustomFields();
 					foreach($custom_field_list as $custom_field)
 					{
 						 $custom_array = array ("p_custom_$custom_field->id" => $custom_field->fieldName);
 						 $combined_fields = array_merge($combined_fields,$custom_array);
-					
+
 					}
 				}
-			
+
 			$record=Patient::getReportfieldsOrder();
 			if((!is_array($record)) or (is_array($record) and (strlen(trim($record["o_fields"])) ==0)))
 			{
@@ -11023,26 +11022,26 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				{?>
 					<option value="<?php echo $field ?>">
 						<?php
-						if(!stristr($field,"custom")) 
-							echo LangUtil::$generalTerms[$text]; 
-							
+						if(!stristr($field,"custom"))
+							echo LangUtil::$generalTerms[$text];
+
 						else
 							echo $text;
 						?></option>
-                
+
 				<?php
-				}		
-				
+				}
+
 			}
 			else
 			{
-				$unordered=explode(",",$record['p_fields']);				
+				$unordered=explode(",",$record['p_fields']);
 				foreach( $unordered as $field)
 				{
 				?>
-				<option value="<?php echo $field ?>"><?php 
-				if(!stristr($field,"custom")) 
-					echo LangUtil::$generalTerms[$combined_fields[$field]]; 
+				<option value="<?php echo $field ?>"><?php
+				if(!stristr($field,"custom"))
+					echo LangUtil::$generalTerms[$combined_fields[$field]];
 				else
 					echo $combined_fields[$field];
 					?></option>
@@ -11050,60 +11049,60 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				}
             }
 			?>
-            
+
             </select>
             </td>
-            <td valign="middle"> 
-            <input type="button" name="AddOrder" id="AddOrder" value=">" disabled="disabled"  onclick="javascript:setOrder();"/> 
+            <td valign="middle">
+            <input type="button" name="AddOrder" id="AddOrder" value=">" disabled="disabled"  onclick="javascript:setOrder();"/>
             <input type="button" name="RemOrder" id="RemOrder" value="<" disabled="disabled"  onclick="javascript:remOrder();" />
             </td>
             <td><select id="o_fields" name="o_fields" size="15" onchange="javascript:setSel(this);">
             <?php
 			if(is_array($record) and (strlen(trim($record["o_fields"]))>0))
 			{
-				$ordered=explode(",",$record['o_fields']);				
+				$ordered=explode(",",$record['o_fields']);
 				foreach( $ordered as $field)
 				{
 				?>
-				<option value="<?php echo $field ?>"><?php 
-				if(!stristr($field,"custom")) 
-					echo LangUtil::$generalTerms[$combined_fields[$field]]; 
+				<option value="<?php echo $field ?>"><?php
+				if(!stristr($field,"custom"))
+					echo LangUtil::$generalTerms[$combined_fields[$field]];
 				else
 					echo $combined_fields[$field];?></option>
 			<?php
 				}
             }
-			?>			
-            </select>          
+			?>
+            </select>
             </td>
             <td valign="middle">
-            <input type="button" id="o_up" name="o_up" value="Move Up"  onclick="javascript:reorder('up');"/><br /> 
-             <input type="button" id="o_down" name="o_down" value="Move Down" onclick="javascript:reorder('down');" />  
+            <input type="button" id="o_up" name="o_up" value="Move Up"  onclick="javascript:reorder('up');"/><br />
+             <input type="button" id="o_down" name="o_down" value="Move Down" onclick="javascript:reorder('down');" />
             </td>
             </tr>
             <tr>
-            
+
             <td> <br />   <input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' id='ordered_fields_submit' onclick='javascript:submit_ordered_fields_form();'>
 		</input><small>
 		<a href='lab_config_home.php?id=<?php echo $lab_config->id; ?>'>
 			<?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?>
 		</a>
 		</small>
-		</td>           
+		</td>
             <td>&nbsp;&nbsp;&nbsp;
 		<span id='ordered_fields_submit_progress' style='display:none;'>
 			<?php $this->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
 		</span></td> <td></td>
             </tr>
             </table>
-                 
+
        <script type='text/javascript'>
 		var selvalue;
 		var seltext;
-		var selIndex;		
+		var selIndex;
 		function setSel(sel)
 		{
-			
+
 			selvalue=sel.options[sel.selectedIndex].value;
 			seltext=sel.options[sel.selectedIndex].text;
 			selIndex=sel.selectedIndex;
@@ -11118,41 +11117,41 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				document.getElementById("AddOrder").disabled=true;
 			}
 		}
-		
+
 		function setOrder()
 		{
 			var opt = document.createElement("option");
-			document.getElementById("o_fields").options.add(opt);       
+			document.getElementById("o_fields").options.add(opt);
 			opt.text = seltext;
-			opt.value = selvalue;		
+			opt.value = selvalue;
 			document.getElementById("p_fields").options.remove(selIndex);
 			document.getElementById("AddOrder").disabled=true;
 		}
-		
+
 		function remOrder()
 		{
 			var opt = document.createElement("option");
-			document.getElementById("p_fields").options.add(opt);       
+			document.getElementById("p_fields").options.add(opt);
 			opt.text = seltext;
-			opt.value = selvalue;		
+			opt.value = selvalue;
 			document.getElementById("o_fields").options.remove(selIndex);
 			document.getElementById("RemOrder").disabled=true;
 		}
-		
+
 		function reorder(direction)
 		{
-					
-			var o_fields=document.getElementById("o_fields");			
-			var newIndex=0;			
-			
+
+			var o_fields=document.getElementById("o_fields");
+			var newIndex=0;
+
 			if(direction=="up")
 				newIndex=selIndex-1;
 			else
-				newIndex=selIndex+1;						
-			
+				newIndex=selIndex+1;
+
 			if(newIndex >=o_fields.options.length || newIndex < 0)
 				return;
-			
+
 			var keys = new Array();
 			var texts = new Array();
 			var tempkey="";
@@ -11160,40 +11159,40 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 				for(var i=0;i<o_fields.options.length;i++)
 				{
 					keys[i] = o_fields.options[i].value;
-					texts[i] = o_fields.options[i].text;					
-				}	
-				
+					texts[i] = o_fields.options[i].text;
+				}
+
 				while(o_fields.options.length>0)
 				{
 					o_fields.options.remove(0);
 				}
-				
+
 				tempkey=keys[newIndex];
 				temptext=texts[newIndex];
-				
+
 				keys[newIndex]=keys[selIndex];
 				texts[newIndex]=texts[selIndex];
-				
+
 				keys[selIndex]=tempkey;
 				texts[selIndex]=temptext;
-				
+
 				for(var i=0;i<keys.length;i++)
-				{			
+				{
 					var opt = document.createElement("option");
-					o_fields.options.add(opt);       
+					o_fields.options.add(opt);
 					opt.text = texts[i];
-					opt.value = keys[i];							
-				}	
-				
+					opt.value = keys[i];
+				}
+
 			o_fields.selectedIndex=newIndex;
 			selIndex=newIndex;
-			
+
 		}
-		</script>			
+		</script>
   <?php
 	}
 	public function DHIMS2ConfigsForm($lab_config_id)
-	{ ?>    
+	{ ?>
    	<div class='pretty_box' style='width:800px;'>
    	  <table class='hor-minimalist-b'>
             <tr>
@@ -11203,49 +11202,49 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
     	<tbody>
         <tr>
         <td>Username:</td>
-        <td><input type="text"  name="dhims2username"  id="dhims2username"/></td>  
-        </tr>      
+        <td><input type="text"  name="dhims2username"  id="dhims2username"/></td>
+        </tr>
         <tr>
          <td>Password:</td>
-        <td><input type="password"  name="dhims2password"  id="dhims2password"/></td>       
-       
+        <td><input type="password"  name="dhims2password"  id="dhims2password"/></td>
+
         </tr>
         <tr>
          <td></td>
         <td><input type="button" id="dhims2Authenticate" name="dhims2Authenticate" value="Authenticate" onclick="javascript:authenticateDHIMS2();" />
         	<span id='DHIMS2AuthenticateProgress' style='display:none'>
             <br />
-											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait..."); 
+											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait...");
 											?>
-                                            
-		  </span>  
-        </td>       
-       
+
+		  </span>
+        </td>
+
         </tr>
          <tr>
          <td>Organisation Unit:</td>
-        <td><select id="dhims2orgunit" name="dhims2orgunit" onchange="javascript:getDHIMS2DataSet(this.value);">        
+        <td><select id="dhims2orgunit" name="dhims2orgunit" onchange="javascript:getDHIMS2DataSet(this.value);">
         </select><span id='DHIMS2orgunitProgress' style='display:none'>
             <br />
-											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait..."); 
+											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait...");
 											?>
-                                            
-										</span>  </td>       
-       
+
+										</span>  </td>
+
         </tr>
         <th></th>
           <th><b>Dataset Mapping:</b></th>
           </tr>
          <tr>
          <td>Dataset:</td>
-        <td><select id="dhims2dataset" name="dhims2dataset" onchange="javascript:getDHIMS2DataElements(this.value);">       
+        <td><select id="dhims2dataset" name="dhims2dataset" onchange="javascript:getDHIMS2DataElements(this.value);">
         </select><a style="display:none" id="DHIMS2datasetProgressRetry" href="javascript:getDHIMS2DataElements(null);">Retry</a><span id='DHIMS2datasetProgress' style='display:none'>
             <br />
-											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait..."); 
+											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait...");
 											?>
-                                            
-										</span> </td>       
-       
+
+										</span> </td>
+
         </tr>
         <tr>
         <td>Entry Period:</td>
@@ -11253,7 +11252,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
         </tr>
        <tr><th></th>
           <th><b>DataElements Mapping:</b></th>
-        </tr>     
+        </tr>
         </tbody>
         </table>
         <table class='hor-minimalist-b'>
@@ -11264,22 +11263,22 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
           </tr>
            <tr valign="middle">
          <td>DataElement:<select id="dhims2dataelement" name="dhims2dataelement" onchange="javascript:getDHIMS2CatComboOptions(this.value);">
-        
+
         </select><a style="display:none" id="DHIMS2ElementProgressRetry" href="javascript:getDHIMS2CatComboOptions(null);">Retry</a><span id='DHIMS2ElementProgress' style='display:none'>
             <br />
-											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait..."); 
+											<?php $this->getProgressSpinner("Connecting to DHIMS2, Please wait...");
 											?>
-                                            
+
 										</span> </td>
-        <td valign="middle">   
+        <td valign="middle">
         <select id="blis2dataelement" name="blis2dataelement" class='uniform_width' onchange="javascript:setSelB(this);">
         <option value="">-</option>
         <?php
 			$this->getTestTypesSelect($lab_config_id->id);
 		?>
         </select><input type="button" id="addBlisTest" value=">" onclick="javascript:addtoBlisList();" /><input type="button" id="removeBlisTest"  onclick="javascript: remBOrder();" value="<" /></td><td>Selected:<select id="blistestSelected" name="blistestSelected" size="5" onchange="javascript: setSelB(this);">
-        </select></td> 
-           </tr>      
+        </select></td>
+           </tr>
           <tr>
          <td>Date Range:<select id="dhims2catCombo" name="dhims2catCombo">
          </select></td>
@@ -11300,10 +11299,10 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		}
 		?>
         </select>
-        
+
         Sex:<input type="text" id="blisgender" name="blisgender" size="1" value="B" /><input type="button" id="addtolist" name="addtolist" value="Apply"  onclick="javascript:AddnewDHIMS2Config();" disabled="disabled"/><span id='DHIMS2ApplyProgress' style='display:none'>
-											<?php $this->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); 
-											?>                                            
+											<?php $this->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']);
+											?>
 										</span>
          <input type="hidden" name="dhims2orgunit_text"  id="dhims2orgunit_text" />
          <input type="hidden" name="dhims2dataset_text" id="dhims2dataset_text" />
@@ -11311,71 +11310,71 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
          <input type="hidden" name="blis2dataelement_text" id="blis2dataelement_text" />
          <input type="hidden" name="dhims2catCombo_text" id="dhims2catCombo_text" />
          <input type="hidden" name="lid" id="lid" value="<?php echo $lab_config_id->id?>" />
-        </td>       
-       
+        </td>
+
         </tr>
         <tr>
         <td colspan="3"><?php $this->getDHIMSConfigs($lab_config_id->id);?></td>
         </tr>
           <tr>
          <td colspan="3" align="center"><a href="javascript:toggle_DHIMS2();"><?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?></a></td>
-           
+
         </tr>
          </tbody>
-        </table>         
+        </table>
     </div>
-	<?php	
+	<?php
 	}
-	
-	
+
+
 	public function getDHIMSConfigs($lab_config_id)
 	{
 		?>
         <script type='text/javascript'>
 		var selvalue;
 		var seltext;
-		var selIndex;		
+		var selIndex;
 		function setSelB(sel)
-		{			
+		{
 			selvalue=sel.options[sel.selectedIndex].value;
 			seltext=sel.options[sel.selectedIndex].text;
-			selIndex=sel.selectedIndex;			
+			selIndex=sel.selectedIndex;
 		}
 		function addtoBlisList()
-		{			
+		{
 			 if (isNaN(parseInt(selvalue)))
 				return;
-			
+
 			var opt = document.createElement("option");
-			document.getElementById("blistestSelected").options.add(opt);       
+			document.getElementById("blistestSelected").options.add(opt);
 			opt.text = seltext;
-			opt.value = selvalue;		
+			opt.value = selvalue;
 			//document.getElementById("p_fields").options.remove(selIndex);
 			//document.getElementById("AddOrder").disabled=true;
 		}
-		
+
 		function remBOrder()
 		{
 			if (isNaN(parseInt(selvalue)))
 				return;
 			//var opt = document.createElement("option");
-			//document.getElementById("p_fields").options.add(opt);       
+			//document.getElementById("p_fields").options.add(opt);
 			//opt.text = seltext;
-			//opt.value = selvalue;		
+			//opt.value = selvalue;
 			document.getElementById("blistestSelected").options.remove(selIndex);
 			//document.getElementById("remBOrder").disabled=true;
 		}
 		var zTree, rMenu;
 		$(document).ready(function(){
-			showTree();			
+			showTree();
 			zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			rMenu = $("#rMenu");
 
 		});
-		
+
 		function showTree()
 		{
-			//alert("here");			
+			//alert("here");
 			var setting = {
 				check: {
 					enable: true
@@ -11384,7 +11383,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					enable: true,
 					url:"ajax/getDHIMS2Config.php",
 					autoParam:["id", "name=n", "level=lv"],
-					otherParam:{"l":"<?php echo $lab_config_id ?>"}				
+					otherParam:{"l":"<?php echo $lab_config_id ?>"}
 				},
 				callback: {
 					onRightClick: OnRightClick
@@ -11394,14 +11393,14 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 						enable: true
 					}
 				}
-			};	
-		
-			try{	
+			};
+
+			try{
 				$.fn.zTree.init($("#treeDemo"), setting);
 				$.fn.zTree.init($("#treeDemo2"), setting);
 			}catch(err){ alert(err.message);}
 		}
-			
+
 function OnRightClick(event, treeId, treeNode) {
 			if (!treeNode && event.target.tagName.toLowerCase() != "button" && $(event.target).parents("a").length == 0) {
 				zTree.cancelSelectedNode();
@@ -11468,11 +11467,11 @@ function OnRightClick(event, treeId, treeNode) {
 				}
 			}
 		}
-		
+
 		var listtodelete="";
-		
+
 		function prepareDeleteList(node)
-		{			
+		{
 			if (node.children && node.children.length > 0)
 			{
 				for(var i=0; i<node.children.length;i++)
@@ -11488,7 +11487,7 @@ function OnRightClick(event, treeId, treeNode) {
 					listtodelete = node.ename;
 			}
 		}
-		
+
 		function deleteItems()
 		{
 			//alert(listtodelete);
@@ -11498,29 +11497,29 @@ function OnRightClick(event, treeId, treeNode) {
 				resetTree();
 			}});
 		}
-		
+
 		function resetTree() {
 			hideRMenu();
 			showTree();
 		}
-		
+
 		function hideNodes()
 		{
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			var nodes = zTree.getNodes();
 			for(var i=0;i<nodes.length;i++)
-			{	
-				zTree.hideNodes(nodes[i].children);	
-				zTree.hideNode(nodes[i]);		
+			{
+				zTree.hideNodes(nodes[i].children);
+				zTree.hideNode(nodes[i]);
 			}
 		}
-		
+
 		function showNodes()
 		{
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			var nodes = zTree.getNodes();
 			for(var i=0;i<nodes.length;i++)
-			{	
+			{
 				zTree.showNodes(nodes[i].children);
 			}
 		}
@@ -11529,7 +11528,7 @@ function OnRightClick(event, treeId, treeNode) {
 			//var value = $('#listSearch').attr('value');
 			$('#listSearch').attr('value','');
 		}
-		
+
 		function searchList(value)
 		{
 			hideNodes();
@@ -11538,31 +11537,31 @@ function OnRightClick(event, treeId, treeNode) {
 			var node;
 			var value = value;
 			var keyType = "name";
-			nodeList = zTree.getNodesByParamFuzzy(keyType, value);	
+			nodeList = zTree.getNodesByParamFuzzy(keyType, value);
 			for(var i=0;i<nodeList.length;i++)
 			{
-				showNode(nodeList[i]);		
-			}				
-				
+				showNode(nodeList[i]);
+			}
+
 		}
-		
+
 		function showNode(node)
 		{
 			var flag = false;
-			try{			
+			try{
 				var nodeParent = node.getParentNode();
 				flag = true;
-			}catch(err){ nodeParent = "";}			
+			}catch(err){ nodeParent = "";}
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-			zTree.showNode(node);	
+			zTree.showNode(node);
 			if(flag)
 			{
-				//alert("hasParent");				
-				showNode(nodeParent);				
+				//alert("hasParent");
+				showNode(nodeParent);
 			}
 		}
-		
-				
+
+
 		function resetsearch()
 		{
 			var value = $('#listSearch').attr('value');
@@ -11571,21 +11570,21 @@ function OnRightClick(event, treeId, treeNode) {
 				$('#listSearch').attr('value','Search here');
 				showNodes();
 			}
-			
+
 		}
 		</script>
-        
+
         <table class='tablesorter' id='dhims_config_list'  style='width:750px'>
 	<thead>
     <tr align='left'>
     <th colspan="4"><b>Saved Interface mappings</b>&nbsp;&nbsp;(Right click on item to delete or show details)&nbsp;&nbsp;
-    <input type="text" id="listSearch" name="listSearch" value="Search here" onclick="javascript:clearsearch();" onkeyup="javascript:searchList(this.value);" onblur="javascript:resetsearch();" /> </th>  
-   
+    <input type="text" id="listSearch" name="listSearch" value="Search here" onclick="javascript:clearsearch();" onkeyup="javascript:searchList(this.value);" onblur="javascript:resetsearch();" /> </th>
+
     </tr>
     </thead>
     <tbody>
     <tr align='left'>
-    <td colspan="4"><ul id="treeDemo" class="ztree"></ul></td>    
+    <td colspan="4"><ul id="treeDemo" class="ztree"></ul></td>
     </tr>
     </tbody>
     </table>
@@ -11593,49 +11592,49 @@ function OnRightClick(event, treeId, treeNode) {
     <style type="text/css">._css3m{display:none}</style>
     <style type="text/css">
 div#rMenu {position:absolute; visibility:visible; top:0;}
-div#rMenu ul li{	
+div#rMenu ul li{
 	cursor: pointer;
-	list-style: none outside none;	
+	list-style: none outside none;
 }
 
 	</style>
 
     <div id="rMenu">
-	<ul id="css3menu1">	
-	<ul>		
+	<ul id="css3menu1">
+	<ul>
 		<li><a href="javascript:removeTreeNode();">Delete Node</a></li>
 		<li class="sublast"><a href="javascript:resetTree();">Refresh Tree</a></li>
-        
-	</ul>	
+
+	</ul>
 </ul>
 </div>
 
-        <?php		
+        <?php
 	}
 	public function DHIMS2ConfigsSummary($lab_config_id)
-	{ ?>   
+	{ ?>
     	<div class='pretty_box' style='width:750px;'>
 		  <table class='tablesorter' id='dhims_config_list'  style='width:750px'>
 			<thead>
     			<tr align='left'>
-    			<th colspan="4"><b>Saved Interface mappings</b></th>  	   
+    			<th colspan="4"><b>Saved Interface mappings</b></th>
     			</tr>
     		</thead>
     		<tbody>
     			<tr align='left'>
-    			<td colspan="4"><ul id="treeDemo2" class="ztree"></ul></td>    
+    			<td colspan="4"><ul id="treeDemo2" class="ztree"></ul></td>
     			</tr>
     		</tbody>
     	  </table>
    		</div>
-	<?php	
+	<?php
 	}
 
-	
+
 	public function getEquipmentList()
 	{
 		# Returns a set of drop down options for equipment List
-		$list = getEquipmentList();		
+		$list = getEquipmentList();
 		if(is_array($list) && count($list) > 0)
 		{
 			foreach($list as $Equipment)
@@ -11643,7 +11642,7 @@ div#rMenu ul li{
 				echo "<option value='".$Equipment['id']."'>".$Equipment['equipment_name']."</option>";
 			}
 		}
-		
+
 	}
 }
 
