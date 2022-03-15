@@ -1,29 +1,29 @@
 ﻿<?php
-include("../includes/header.php");
-//$labConfigId = $_REQUEST['id'];
-$labConfigId =$_SESSION['lab_config_id'];
-putUILog('backup_data_ui', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
-$target_set=KeyMgmt::getAllKeys();
+    include("../includes/header.php");
+    //$labConfigId = $_REQUEST['id'];
+    $labConfigId =$_SESSION['lab_config_id'];
+    putUILog('backup_data_ui', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
+    $target_set=KeyMgmt::getAllKeys();
 ?>
 
 <script type="text/javascript">
 function findFile()
 {
-var inp=		document.getElementById("target_input").value;
+    var inp=		document.getElementById("target_input").value;
     var x = document.getElementById("targets");
     var i;
-var found=0;
-    for (i = 0; i < x.options.length; i++) {
-if(inp===x.options[i].value)
-{
-found=1;
-document.getElementById("pkey").disabled=true;
-break;
+    var found=0;
+        for (i = 0; i < x.options.length; i++) {
+            if(inp===x.options[i].value)
+        {
+    found=1;
+    document.getElementById("pkey").disabled=true;
+    break;
 }
 
 }
 if(found==0)
-document.getElementById("pkey").disabled=false;
+    document.getElementById("pkey").disabled=false;
 }
 	function keyTextInput(val) {
 		if(val==1)
@@ -42,16 +42,15 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 	<input type='hidden' value='<?php echo $labConfigId; ?>' id='labConfigId' name='labConfigId' />
 	<table>
 <tr>
-	<td>Choose who is this Backup For</td>
+<td>Choose who is this Backup For</td>
 <td>
 <input value="Current Lab" onBlur="findFile()" onInput="findFile()" name='target'  class ='target_auto' id='target_input' placeholder='Enter Receiver&apos;s name' list='targets' size='30' required></input>
 <datalist id='targets'>
-<option value="Current Lab" selected/>
+<option value="Current Lab" selected>
 <?php
-
 		foreach ($target_set as $option)
 		{
-			echo "<option value='" .$option->LabName. "'>".$option->LabName."</option>>";
+			echo "<option value='".$option->LabName."'>".$option->LabName."</option>>";
 		}?></datalist>
 </td>
 </tr>
@@ -71,16 +70,11 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 		<td></td>
 		<td><input type='radio' id='backupTypeSelect'  name='backupTypeSelect' value='encrypted' onclick='keyTextInput(1);'>Encrypted Backup</option></td>
 	</tr>-->
-	<tr style="display:none;" name="keyInputTR" id="keyInputTR">
+	<tr name="keyInputTR" id="keyInputTR">
 		<td></td>
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;<input type='radio' name='keyType' id='keyType' value='uploaded'><small>Upload Public Key for Encryption: </small>
-			<input type="file" name="publicKey" id="publicKey"/>
-			<br>
-			&nbsp;&nbsp;&nbsp;&nbsp;
-			<small>
-				<?php echo "or use Default Public Key"; ?>
-				<input type='radio' name='keyType' id='keyType' value='default'> 
-			</small>
+			<input type="file" name="publicKey" id="publicKey"/><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;<small><input type='radio' name='keyType' id='keyType' value='default'> or use Default Public Key</small>
 		</td>
 	</tr>
 	<tr>
@@ -89,11 +83,11 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 	</tr>
 	<tr>
 		<td></td>
-		<td>
+        <td>
 			<input type='submit' name='local_or_server' id='local_or_server' value='<?php echo LangUtil::$generalTerms['BACKUP_LOCAL']; ?>'>
 			<input type='submit' name='local_or_server' id='local_or_server' value='<?php echo LangUtil::$generalTerms['BACKUP_ONLINE']; ?>'>
-		</td>
-	</tr>
+		</td>	
+    </tr>
 	<tr id='exporting' style='display:none;'>
 		<td></td>
 		<td>
@@ -119,3 +113,4 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 <?php
 include("../includes/footer.php");
 ?>
+
