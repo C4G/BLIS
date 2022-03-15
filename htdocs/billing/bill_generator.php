@@ -1,6 +1,7 @@
 <?php
 #
 # Allows user to create a custom bill for a patient, and accept payments
+# Need to look at file extensions
 #
 
 include("../includes/db_lib.php");
