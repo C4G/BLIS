@@ -368,10 +368,12 @@ if ($button_clicked == $local_text) {
     $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
     $result = query_associative_one($query);
     $server_ip = reset($result); 
-    echo $server_ip;
-    $response = send_backup_to_server($zipFileLoc, $server_ip);
+    $response = send_backup_to_server($zipFile, $server_ip);
     echo $response;
 }
+
+
+// 
 
 function hasFile()
 {

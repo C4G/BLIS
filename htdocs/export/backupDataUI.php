@@ -55,8 +55,8 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 </td>
 </tr>
 <tr id="key_upload">
-<td>Choose Key File</td> 
-<td><input type="file" name="pkey" id="pkey" disabled/></td>
+<td></td> <!--Choose Key File</td>  -->
+<!-- <td><input type="file" name="pkey" id="pkey" disabled/></td> -->
 </tr>
 	<tr>
 		<td>Choose type of Backup</td>
@@ -74,13 +74,14 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 		<td></td>
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;<input type='radio' name='keyType' id='keyType' value='uploaded'><small>Upload Public Key for Encryption: </small>
 			<input type="file" name="publicKey" id="publicKey"/><br>
-			&nbsp;&nbsp;&nbsp;&nbsp;<small><input type='radio' name='keyType' id='keyType' value='default'> or use Default Public Key</small>
+			&nbsp;&nbsp;&nbsp;&nbsp;<small><input type='radio' name='keyType' id='keyType' value='default' checked> or use Default Public Key</small>
 		</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td><input type='radio' id='backupTypeSelect' name='backupTypeSelect' value='anonymized' onclick='keyTextInput(0);'>Anonymized Backup</option></td>
 	</tr>
+	<br>
 	<tr>
 		<td></td>
         <td>
