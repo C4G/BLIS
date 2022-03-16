@@ -357,8 +357,23 @@ createZipFile($zipFile, realpath($destination));
 copy($zipFile, $zipFileLoc);
 //removeDirectory(realpath($destination));
 
-# All okay
-echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/".$zipFile."'/>Download Zip</a>";
+
+$button_clicked = $_REQUEST['local_or_server'];
+$local_text = LangUtil::$generalTerms['BACKUP_LOCAL'];
+if ($button_clicked == $local_text) {
+    // handle local download here
+    echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/".$zipFile."'/>Download Zip</a>";
+} else {
+    // handle server backup here  
+    $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
+    $result = query_associative_one($query);
+    $server_ip = reset($result); 
+    $response = send_backup_to_server($zipFile, $server_ip);
+    echo $response;
+}
+
+
+// 
 
 function hasFile()
 {
@@ -448,4 +463,21 @@ function removeDirectory($dir)
         }
     }
     rmdir($dir);
+}
+
+
+function send_backup_to_server($zipped, $server_ip)
+{
+    $endpoint = 'http://'.$server_ip.'/export/import_data_director.php';
+    $curlfile = curl_file_create( $zipped, 'application/zip');
+
+    $curl = curl_init();
+    curl_setopt( $curl, CURLOPT_URL, $endpoint );
+    curl_setopt( $curl, CURLOPT_POST, true );
+    curl_setopt( $curl, CURLOPT_POSTFIELDS,  $curlfile);
+    // if this doesn't work, try array with curlfile
+    curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+    $response = curl_exec( $curl );
+    curl_close( $curl );
+    return $response;
 }
