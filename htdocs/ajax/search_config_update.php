@@ -110,10 +110,9 @@ if($lab_config->dob != $f_dob)
 if($lab_config->pname != $f_pname)
 	$lab_config->updatePname($f_pname);
 */
-    
+
  $res = intval($_REQUEST['sfields_resultsPerPage']);
- update_lab_config_settings_search($res);
+ update_lab_config_settings_search($res, $lab_config->id);
 SessionUtil::restore($saved_session);
 
 ?>
- 

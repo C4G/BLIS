@@ -420,7 +420,7 @@ if($patient == null)
 	if (! isset($_SESSION['specimenFieldOrder']))
 	{
 		$lab_config = get_lab_config_by_id($_SESSION['lab_config_id']);
-		$specimenFieldOrderingObj = field_order_update::install_first_order($lab_config, 2);
+		$specimenFieldOrderingObj = field_order_update::install_first_order($lab_config, 2, $_SESSION['lab_config_id']);
 		$specimenOrder = $specimenFieldOrderingObj->form_field_inOrder;
 		$_SESSION['specimenFieldOrder'] = explode( ',', $specimenOrder );
 	}
