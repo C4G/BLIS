@@ -1,25 +1,10 @@
 <?php
 
-include("../includes/db_lib.php");
-include("../includes/SessionCheck.php");
+require_once(dirname(__FILE__)."/../includes/keymgmt.php");
+require_once("../includes/SessionCheck.php");
+
 $userId = $_SESSION['user_id'];
 $lab=$_REQUEST['lab_name'];
-//$key=$_REQUEST['pub_key'];
-$target_loc="../key.blis";
 
-	if ( move_uploaded_file($_FILES["keys"]["tmp_name"], $target_loc) ) {
-$key=file_get_contents($target_loc);
-$keyMgmt=new KeyMgmt();
-$keyMgmt->LabName=$lab;
-$keyMgmt->PubKey=$key;
-$keyMgmt->AddedBy=$userId;
-$ret=KeyMgmt::add_key_mgmt($keyMgmt);
-echo $ret;
-}
-else
-{
-echo "FAIL";
-return;
-}
-
-?>
+$key_text = file_get_contents($_FILES["keys"]["tmp_name"]);
+echo KeyMgmt::add_key_mgmt(KeyMgmt::create($lab, $key_text, $userId));
