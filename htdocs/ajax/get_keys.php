@@ -1,8 +1,5 @@
 <?php
+require_once("../includes/keymgmt.php");
+require_once("../includes/SessionCheck.php");
 
-include("../includes/db_lib.php");
-include("../includes/SessionCheck.php");
-$ret=KeyMgmt::getAllKeys();
-$json = json_encode($ret);
-echo $json;
-?>
+echo json_encode(KeyMgmt::getAllKeys());

@@ -51,7 +51,6 @@ require_once($locale_file);
 
 require_once("debug_lib.php");
 require_once("date_lib.php");
-require_once("user_lib.php");
 
 // PDF Modules
 require_once(dirname(__FILE__).'/../tcpdf/config/lang/eng.php');
