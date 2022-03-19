@@ -37,6 +37,7 @@ Thumbs.db
 /blis_backup_*
 /htdocs/export/blis_backup_*
 /htdocs/export/uploads/blis_backup_*
+/files/**/*
 
 # RSA Keypairs
 /**/*.blis

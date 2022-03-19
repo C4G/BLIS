@@ -1,6 +1,7 @@
 <?php
 
-require_once(dirname(__FILE__).'/../../htdocs/includes/db_lib.php');
+require_once(dirname(__FILE__).'/db_lib.php');
+require_once(dirname(__FILE__).'/platform_lib.php');
 
 class KeyMgmt
 {
@@ -109,6 +110,26 @@ class KeyMgmt
         query_blind($query);
         DbUtil::switchRestore($saved_db);
         return "Key deleted successfully.";
+    }
+
+    public static function generateKeyPair($privateKeyLocation, $publicKeyLocation) {
+          // Configuration for 4096 RSA key Pair with Digest Algo 512
+        $config = array(
+            "digest_alg" => "sha512",
+            "private_key_bits" => 1024,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+        );
+
+        // Create the keypair
+        $res=openssl_pkey_new($config);
+
+        // Get private key and write to disk
+        openssl_pkey_export($res, $privkey, null, $config);
+        file_put_contents($privateKeyLocation, $privkey);
+
+        // Get public key and write to disk
+        $pubkey=openssl_pkey_get_details($res)["key"];
+        file_put_contents($publicKeyLocation, $pubkey);
     }
 
     private static function getObject($record)

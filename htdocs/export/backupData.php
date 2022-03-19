@@ -1,4 +1,5 @@
 <?php
+require_once("../includes/composer.php");
 require_once("../includes/db_lib.php");
 require_once("../includes/platform_lib.php");
 require_once("redirect.php");
@@ -10,51 +11,43 @@ if ($SERVER == $ON_ARC) {
     echo "Sorry, data backup option is not available in online version.";
 }
 //AS changed lab config fix.
-$user = get_user_by_name($_SESSION['username']);
+
+$user = get_user_by_id($_SESSION['user_id']);
 $lab_config_id = $user->labConfigId;
-//$lab_config_id = $_REQUEST['labConfigId'];
-$backupType = $_REQUEST['backupTypeSelect'];
-$keyLocation = "../tmpPublicKey.pem";
-$LabName=$_POST['target'];
-$ploc="../ajax/LAB_".$_SESSION['lab_config_id']."_pubkey.blis";
-if (KeyMgmt::read_enc_setting()==1) {
-    if ($LabName==="Current Lab") {
-        if (!file_exists($ploc)) {
-            echo "Please go to Lab Configuration -> Manage Backup Keys and click the download public key button to be able to use the encryption functionality.";
-            return;
-        }
-        $pubKey=file_get_contents($ploc);
-    }
+$request_lab_config_id = $_REQUEST['labConfigId'];
+if ($lab_config_id != $request_lab_config_id) {
+    echo "You do not have permission to back up lab #$request_lab_config_id!";
+    return;
 }
 
-if ($LabName!=="Current Lab") {
-    if (count($_FILES)==1) {
-        $keyMgmt=KeyMgmt::getByLabName($LabName);
-        $pubKey=$keyMgmt->PubKey;
-    } else {
-        $target_loc= dirname(__FILE__)."/../key.blis";
-        if (move_uploaded_file($_FILES["pkey"]["tmp_name"], $target_loc)) {
-            $pubKey = file_get_contents($target_loc);
-            $keyMgmt=new KeyMgmt();
-            $keyMgmt->LabName=$LabName;
-            $keyMgmt->PubKey=$pubKey;
-            $keyMgmt->AddedBy=$_SESSION['user_id'];
-            KeyMgmt::add_key_mgmt($keyMgmt);
-        }
-    }
-}
+$backupType = $_POST['backupTypeSelect'];
 
-if ($_REQUEST['keyType'] == "uploaded") {
-    if (move_uploaded_file($_FILES["publicKey"]["tmp_name"], $keyLocation)) {
-        echo "succeeded!";
+$keyContents = "";
+
+$keySelection=$_POST['target'];
+
+if ($keySelection == "-1") {
+    // A new key is uploaded
+    $pkey_alias = $_POST['pkey_alias'];
+    $pkey_contents = file_get_contents($_FILES['pkey']['tmp_name']);
+    $res = KeyMgmt::add_key_mgmt(KeyMgmt::create($pkey_alias, $pkey_contents, $user->userId));
+    $log->info("Uploading $pkey_alias: $res");
+    $keyContents = $pkey_contents;
+} else if ($keySelection == "0") {
+    // The Current Lab key is used
+    $labKeyFile = dirname(__FILE__) . "/../../files/LAB_".$lab_config_id."_pubkey.blis";
+    if (!file_exists($labKeyFile)) {
+        // generate key
+        KeyMgmt::generateKeyPair(
+            dirname(__FILE__) . "/../../files/LAB_".$lab_config_id.".blis",
+            $labKeyFile);
+        $log->info("Keypair generated successfully.");
     }
-    //$ret = move_uploaded_file("/public.pem", $keyLocation);
-    else {
-        echo "fail";
-    }
-    $publicKey = file_get_contents($keyLocation);
+    $keyContents = file_get_contents($labKeyFile);
 } else {
-    $publicKey = file_get_contents("public.pem");
+    // a specific key in the database was requested
+    $key = KeyMgmt::getByID($keySelection);
+    $keyContents = $key->PubKey;
 }
 
 $file_list1 = array();
@@ -144,9 +137,10 @@ if ($backupType == "encrypted") {
 }
 $file_list1[] = $backupLabDbFileNameEnc;
 
-$server_public_key = openssl_pkey_get_public($pubKey);
+$server_public_key = openssl_pkey_get_public($keyContents);
 if (!$server_public_key) {
-    echo "Unable to open " . $ploc;
+    $log->info($keyContents);
+    echo openssl_error_string();
     return;
 }
 
@@ -364,16 +358,16 @@ if ($button_clicked == $local_text) {
     // handle local download here
     echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/".$zipFile."'/>Download Zip</a>";
 } else {
-    // handle server backup here  
+    // handle server backup here
     $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
     $result = query_associative_one($query);
-    $server_ip = reset($result); 
+    $server_ip = reset($result);
     $response = send_backup_to_server($zipFile, $server_ip);
     echo $response;
 }
 
 
-// 
+//
 
 function hasFile()
 {
