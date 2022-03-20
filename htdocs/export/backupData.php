@@ -231,6 +231,7 @@ dump_log("../../local/UILog_2-2.csv", "$backup_dir/UILog_2-2.csv");
 dump_log("../../local/UILog_2-3.csv", "$backup_dir/UILog_2-3.csv");
 dump_log("../../log/application.log", "$backup_dir/application.log");
 dump_log("../../log/apache2_error.log", "$backup_dir/apache2_error.log");
+dump_log("../../log/php_error.log", "$backup_dir/apache2_error.log");
 
 $zipFile=$backup_dir;
 if ($encryption_enabled) {
