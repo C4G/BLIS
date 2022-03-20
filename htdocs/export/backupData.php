@@ -259,6 +259,9 @@ echo "Download the below zip of the backup and save it to your disk. <br/><a hre
 
 function createZipFile($zipFile, $rootPath)
 {
+    global $log;
+    $log->info("createZipFile: $zipFile, $rootPath");
+
     $zip = new ZipArchive();
     $zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
     // Create recursive directory iterator
