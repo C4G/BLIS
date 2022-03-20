@@ -128,8 +128,8 @@ class KeyMgmt
         file_put_contents($privateKeyLocation, $privkey);
 
         // Get public key and write to disk
-        $pubkey=openssl_pkey_get_details($res)["key"];
-        file_put_contents($publicKeyLocation, $pubkey);
+        $pubkey=openssl_pkey_get_details($res);
+        file_put_contents($publicKeyLocation, $pubkey["key"]);
     }
 
     private static function getObject($record)
