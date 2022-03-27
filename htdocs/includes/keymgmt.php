@@ -113,15 +113,26 @@ class KeyMgmt
     }
 
     public static function generateKeyPair($privateKeyLocation, $publicKeyLocation) {
-          // Configuration for 4096 RSA key Pair with Digest Algo 512
+        global $log;
+
+        // Configuration for 4096 RSA key Pair with Digest Algo 512
         $config = array(
             "digest_alg" => "sha512",
             "private_key_bits" => 1024,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
         );
 
+        if (PlatformLib::runningOnWindows()) {
+            $openssl_conf_location = dirname(__FILE__).'/../../server/php/extras/openssl/openssl.cnf';
+            $config["config"] = $openssl_conf_location;
+        }
+
         // Create the keypair
         $res=openssl_pkey_new($config);
+        if (!$res) {
+            $log->error("OpenSSL error: ".openssl_error_string());
+            return false;
+        }
 
         // Get private key and write to disk
         openssl_pkey_export($res, $privkey, null, $config);

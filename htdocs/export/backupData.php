@@ -53,16 +53,14 @@ if ($encryption_enabled) {
 function mySqlDump($databaseName, $backupFilename) {
     global $log, $DB_HOST, $DB_PORT, $DB_USER, $DB_PASS;
 
-    $mysqldumpPath = '"'.PlatformLib::mySqlDumpPath().'"';
-    $command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $databaseName -r $backupFilename";
+    $mysqldumpPath = PlatformLib::mySqlDumpPath();
+    $command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $databaseName -r ".escapeshellarg($backupFilename);
+    $output = system($command, $result);
 
-    $log->info($command);
-
-    $last_line = system($command, $result);
     if ($result == 0) {
         return $backupFilename;
     } else {
-        $log->error("Could not dump MySQL database; command: $command, last line: $last_line");
+        $log->error("Could not dump MySQL database; command: $command, err code $result, output:\n $output");
         return false;
     }
 }
@@ -89,7 +87,7 @@ $file_list3 = array();
 $lab_db = "blis_$lab_config_id";
 
 // Create backup directory structure
-$backup_dir = dirname(__FILE__)."/../../files/backups/blis_backup_".date("Ymd-His");
+$backup_dir = "../../files/backups/blis_backup_".date("Ymd-His");
 mkdir($backup_dir, 0700, true);
 mkdir("$backup_dir/$lab_db/", 0700, false);
 mkdir("$backup_dir/blis_revamp/", 0700, false);
@@ -127,7 +125,7 @@ if ($backupType == "anonymized") {
     unlink($plaintext_backup);
 
     // Reimport the new database data
-    $mysqlExePath = '"'.PlatformLib::mySqlClientPath().'"';
+    $mysqlExePath = PlatformLib::mySqlClientPath();
     $command = "$mysqlExePath -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $anonymized_db < \"$backupLabDbTempFileName\"";
     $last_line = system($command, $result);
     if ($result != 0) {
@@ -200,7 +198,7 @@ if ($encryption_enabled) {
 }
 
 // Add language data files to backup folder
-$lab_langdata = dirname(__FILE__)."/../../local/langdata_$lab_config_id";
+$lab_langdata = "../../local/langdata_$lab_config_id";
 if ($handle = opendir($lab_langdata)) {
     while (false !== ($file = readdir($handle))) {
         if ($file === "." || $file == "..") {
