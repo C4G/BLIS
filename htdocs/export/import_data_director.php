@@ -2,9 +2,11 @@
 
 require_once("redirect.php");
 require_once("../includes/db_lib.php");
-require_once(dirname(__FILE__)."/../includes/platform_lib.php");
+require_once("../includes/platform_lib.php");
+require_once("../includes/composer.php");
 
 $file_name = $_FILES['sqlFile']['name'];
+$log->info("Uploaded $file_name");
 $file_name_and_extension = explode('.', $file_name);
 $fileName = $_FILES['sqlFile']['tmp_name'];
 if ($file_name_and_extension[1]=="zip") {

@@ -177,11 +177,14 @@ if ($encryption_enabled) {
     }
 
     $encrypted_backup = "$backup_dir/$lab_db/$lab_db"."_backup.sql.enc";
-    $encrypted_backup_key = "$backup_dir/$lab_db/$lab_db"."_backup.key";
+    $encrypted_backup_key = "$backup_dir/$lab_db/$lab_db"."_backup.sql.key";
     encryptFile($plaintext_backup, $server_public_key, $encrypted_backup, $encrypted_backup_key);
 
     // Delete plaintext backup
     unlink($plaintext_backup);
+
+    // Move encrypted backup file to expected file name
+    rename($encrypted_backup, $plaintext_backup);
 }
 
 
@@ -195,6 +198,9 @@ if ($encryption_enabled) {
     encryptFile($backupDbFileName, $server_public_key, $encrypted_backup, $encrypted_backup_key);
 
     unlink($backupDbFileName);
+
+    // Move encrypted backup to expected file name
+    rename($encrypted_backup, $backupDbFileName);
 }
 
 // Add language data files to backup folder
@@ -279,6 +285,11 @@ function createZipFile($zipFile, $rootPath)
             // Get real and relative path for current file
             $filePath = $file->getRealPath();
             $relativePath = substr($filePath, strlen($rootPath) + 1);
+            if (PlatformLib::runningOnWindows()) {
+                // If running on Windows, replace all path separators (\) with Unix-style path separators (/)
+                // Why: https://www.php.net/manual/en/ziparchive.addfile.php
+                $relativePath = str_replace("\\", "/", $relativePath);
+            }
 
             //echo $zipFile + "\n" + $filePath;
             // Add current file to archive
@@ -309,7 +320,7 @@ function removeDirectory($dir)
 
 function send_file_to_server($file_path) {
     // TODO
-    $server_ip = "http://188.166.124.131";
+    $server_ip = "http://localhost:80";
 
     send_file($file_path, $server_ip);
 }
