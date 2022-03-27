@@ -177,7 +177,7 @@ if ($encryption_enabled) {
     }
 
     $encrypted_backup = "$backup_dir/$lab_db/$lab_db"."_backup.sql.enc";
-    $encrypted_backup_key = "$backup_dir/$lab_db/$lab_db"."_backup.enc.key";
+    $encrypted_backup_key = "$backup_dir/$lab_db/$lab_db"."_backup.key";
     encryptFile($plaintext_backup, $server_public_key, $encrypted_backup, $encrypted_backup_key);
 
     // Delete plaintext backup
@@ -191,7 +191,7 @@ mySqlDump($dbname, $backupDbFileName);
 
 if ($encryption_enabled) {
     $encrypted_backup = "$backup_dir/$dbname/$dbname"."_backup.sql.enc";
-    $encrypted_backup_key = "$backup_dir/$dbname/$dbname"."_backup.sql.enc.key";
+    $encrypted_backup_key = "$backup_dir/$dbname/$dbname"."_backup.sql.key";
     encryptFile($backupDbFileName, $server_public_key, $encrypted_backup, $encrypted_backup_key);
 
     unlink($backupDbFileName);
@@ -214,7 +214,7 @@ function dump_log($logfile, $dest_base) {
     if (file_exists($logfile)) {
         if ($encryption_enabled) {
             $dest = "$dest_base.enc";
-            $key_dest = "$dest_base.enc.key";
+            $key_dest = "$dest_base.key";
             encryptFile($logfile, $server_public_key, $dest, $key_dest);
         } else {
             copy($logfile, $dest_base);
@@ -238,15 +238,19 @@ if ($encryption_enabled) {
     $zipFile = $zipFile.".zip";
 }
 
-$log->info("Creating zip file: $zipFile");
 createZipFile($zipFile, realpath($backup_dir));
-rename($zipFile, dirname(__FILE__)."/backups/".basename($zipFile));
+
+$new_path = dirname(__FILE__)."/backups/".basename($zipFile);
+rename($zipFile, $new_path);
 
 // Removes the backup directory in files/
 // Comment this out if you want to figure out what went wrong somewhere!
 removeDirectory($backup_dir);
 
-echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/backups/".basename($zipFile)."'/>Download Zip</a>";
+echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/backups/".basename($new_path)."'/>Download Zip</a>";
+
+send_file_to_server($new_path);
+
 // } else {
 //     // handle server backup here
 //     $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
@@ -259,7 +263,7 @@ echo "Download the below zip of the backup and save it to your disk. <br/><a hre
 function createZipFile($zipFile, $rootPath)
 {
     global $log;
-    $log->info("createZipFile: $zipFile, $rootPath");
+    $log->info("Creating zip file: $zipFile from path $rootPath");
 
     $zip = new ZipArchive();
     $zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -303,18 +307,49 @@ function removeDirectory($dir)
 }
 
 
-function send_backup_to_server($zipped, $server_ip)
+function send_file_to_server($file_path) {
+    // TODO
+    $server_ip = "http://188.166.124.131";
+
+    send_file($file_path, $server_ip);
+}
+
+function send_file($file_path, $server_host)
 {
-    $endpoint = 'http://'.$server_ip.'/export/import_data_director.php';
-    $curlfile = curl_file_create( $zipped, 'application/zip');
+    global $log;
+
+    $endpoint = $server_host.'/export/import_data_director.php';
+    $log->info("Attempting to upload $file_path to $endpoint...");
+
+    if (function_exists('curl_file_create')) {
+        // For PHP 5.5+, which is what we use in the BLIS docker image
+        $curlfile = curl_file_create($file_path, 'application/zip');
+    } else {
+        // For old-school PHP, which is in-use by the Desktop BLIS
+        $curlfile = '@' . realpath($file_path);
+        $log->info("Resolved path to: $curlfile");
+    }
+
+    // The sqlFile name is the form name for the file
+    // This should match the name used in import_data_director.php
+    $post = array('sqlFile'=> $curlfile);
 
     $curl = curl_init();
-    curl_setopt( $curl, CURLOPT_URL, $endpoint );
-    curl_setopt( $curl, CURLOPT_POST, true );
-    curl_setopt( $curl, CURLOPT_POSTFIELDS,  $curlfile);
-    // if this doesn't work, try array with curlfile
-    curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+    curl_setopt($curl, CURLOPT_URL, $endpoint);
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POSTFIELDS,  $post);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     $response = curl_exec( $curl );
     curl_close( $curl );
+
+    // See https://www.php.net/manual/en/function.curl-exec.php
+    // for why to use the === here
+    if ($response === false) {
+        $log->error("Failed to upload file.");
+    } else {
+        $log->info("File uploaded successfully!");
+        echo("<p>Backup was transferred to server $server_host</p>");
+    }
+
     return $response;
 }
