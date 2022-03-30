@@ -1650,11 +1650,11 @@
 		</term>
 		<term>
 			<key>TIPS_SETUPSERVER_1</key>
-			<value>First, enter the IP address of the BLIS Online server and click 'Save'.</value>
+			<value>Enter the IP address of the BLIS Online server and click 'Save'.</value>
 		</term>
 		<term>
 			<key>TIPS_SETUPSERVER_2</key>
-			<value>Second, click the 'Backup Server' button to send data to the BLIS Online server.</value>
+			<value>You can send a backup to the server from the Backup Data tab.</value>
 		</term>
 		<term>
 			<key>MENU_TOGGLE_TEST_REPORTS</key>
