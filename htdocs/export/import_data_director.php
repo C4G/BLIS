@@ -34,6 +34,9 @@ if ($file_name_and_extension[1]=="zip") {
         $zip->close();
     }
 
+    // Lab ID to import - set by examining the zip archive
+    $lid = false;
+
     if ($zip->open($name) === true) {
         $zip->extractTo($extractPath);
         $zip->close();
@@ -50,6 +53,12 @@ if ($file_name_and_extension[1]=="zip") {
                 continue;
             } else {
                 if (startsWith($fname, "blis_")) {
+
+                    $lid_start = strpos($fname, "_");
+                    // Set the lab ID that we are importing
+                    $lid = intval(substr($fname, $lid_start+1, strlen($fname) - $lid_start));
+                    $log->info("Detected a lab with ID $lid");
+
                     $sqlFile=$fname."/".$fname."_backup.sql";
                     $sqlFolder=$fname;
                     if ($is_encrypted) {
@@ -65,7 +74,6 @@ if ($file_name_and_extension[1]=="zip") {
 
         //~~
         $file_name_parts = explode("_", $sqlFolder);
-        $lid = $file_name_parts[1];
         $fileName=$extractPath."/".$sqlFile;
 
         $log->info("Processing $fileName");
@@ -93,7 +101,6 @@ if ($file_name_and_extension[1]=="zip") {
         $log->info("Running: $command");
         system($command, $return);
         $result = $return;
-        $log->info("Returned: $result");
 
         if ($is_encrypted) {
            unlink($fileName.".dec");
@@ -109,7 +116,7 @@ if ($file_name_and_extension[1]=="zip") {
         #the following code copies folder containing langdata_<labid> files from back up to the local folder
 
         $src_langdata_path = trim($extractPath."/".$langFile);
-        $dest_path = dirname(__FILE__)."/../../local/langdata_".$lid;
+        $dest_path = dirname(__FILE__)."/../../local/";
         $res = PlatformLib::copyDirectory($src_langdata_path, $dest_path);
         if (!$res) {
            $log->error("There was a problem copying the langdata folder.");
@@ -119,6 +126,7 @@ if ($file_name_and_extension[1]=="zip") {
         // in blis_revamp when developers are importing a backup into the app on their machine
         $dev = 1;
         $adminName = 'admin_'.$lid;
+        $log->info("Creating user $adminName");
         $lab_admin_id = checkAndAddAdmin($adminName, $lid, $dev);
 
         checkAndAddUserConfig($lab_admin_id);
