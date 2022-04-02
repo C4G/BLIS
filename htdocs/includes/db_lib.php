@@ -11312,7 +11312,7 @@ function get_compatible_test_types($lab_config_id, $specimen_type_id)
 	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
 	$query_string =
-		"SELECT tt.* FROM test_type tt, lab_config_test_type lctt, specimen_test st ".
+		"SELECT distinct tt.* FROM test_type tt, lab_config_test_type lctt, specimen_test st ".
 		"WHERE tt.test_type_id=lctt.test_type_id ".
 		"AND lctt.lab_config_id=$lab_config_id ".
 		"AND st.specimen_type_id=$specimen_type_id ".
