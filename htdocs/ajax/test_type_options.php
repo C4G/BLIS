@@ -11,6 +11,7 @@ LangUtil::setPageId("new_specimen");
 $specimen_type_id = $_REQUEST['stype'];
 $lab_config_id = $_SESSION['lab_config_id'];
 $test_type_list = get_compatible_test_types($lab_config_id, $specimen_type_id);
+// $test_type_list = array_unique($test_type_list);
 
 if(count($test_type_list) == 0)
 {
@@ -28,7 +29,8 @@ if(count($test_type_list) == 0)
 <tr valign='top'>
 <?php
 $count = 0;
-foreach($test_type_list as $test_type)
+$unique_test_list = array_unique($test_type_list);
+foreach($unique_test_list as $test_type)
 {
 ?>
 	<td>

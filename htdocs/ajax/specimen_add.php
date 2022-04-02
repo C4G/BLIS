@@ -109,7 +109,8 @@ foreach($custom_field_list as $custom_field)
 	add_custom_data_specimen($custom_data);
 }
 # Add entries to 'test' table
-foreach($tests_list as $test_type_id)
+$unique_tests = array_unique($tests_list);
+foreach($unique_tests as $test_type_id)
 {
 	$test = new Test();
 	$test->specimenId = $specimen_id;
