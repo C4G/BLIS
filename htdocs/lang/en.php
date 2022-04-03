@@ -500,7 +500,8 @@ $LANG_ARRAY = array (
         "SELECT_SITE_FOR_REMOVAL" => "Select sites for removal",
         "OUT_OF_RANGE" => "Out of range",
         "INTERPRETATION" => "Interpretation",
-        "MODIFY_SITE" => "Modify sites"
+        "MODIFY_SITE" => "Modify sites",
+		"PRINT_UNVERIFIED" => "Allow printing of unverified tests"
 
 	) ,
 	"lab_admins" => array ( 
