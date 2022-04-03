@@ -1022,6 +1022,7 @@ function submit_save_server_ip()
 		success: function() {
 			document.getElementById('serverIpUpdateBtn').style.display = 'none';
 			document.getElementById('serverIpUpdateMsg').style.display = 'inline';
+			alert("<?php echo LangUtil::$pageTerms['IP_SAVED']; ?>")
 		}
 	})
 }
@@ -4346,7 +4347,7 @@ function AddnewDHIMS2Config()
 					<div id='test_report_configuration_msg' class='clean-orange' style='display:none;width:350px;'>
 					</div>
 					<br>
-					<div><input type="checkbox" class="sfields_entry" id="print_verified" <?php if (($page_elems->getPrintUnverified($lab_config->id))==1) { ?> checked <?php }?>  onchange="javascript:savePrintPending();"><?php echo LangUtil::$pageTerms['PRINT_UNVERIFIED']; ?></div>
+					<div><input type="checkbox" class="sfields_entry" id="print_verified" <?php if (($page_elems->getPrintUnverified($lab_config->id))==1) { ?> checked <?php }?>  onchange="javascript:savePrintPending();"><?php echo LangUtil::$page['PRINT_UNVERIFIED']; ?></div>
 					<br>
 					<div id="test_report_configuration_form_div"
 						 style="text-align: center;">

@@ -481,8 +481,8 @@ $LANG_ARRAY = array (
         "ENABLE_SITE_ENTRY" => "Enable Site Entry for a Specimen",
         "SELECT_SITE_FOR_REMOVAL" => "Select sites for removal",
         "MODIFY_SITE" => "Modify sites",
-        "PRINT_UNVERIFIED" => "Allow printing of unverified tests"
-
+        "PRINT_UNVERIFIED" => "Allow printing of unverified tests",
+		"IP_SAVED" => "IP address saved."
 	) ,
 	"lab_admins" => array ( 
 		"TITLE" => "Lab Managers", 

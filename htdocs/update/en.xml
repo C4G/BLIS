@@ -1380,6 +1380,15 @@
 			<key>TIPS_REVERTDONE</key>
 			<value>Backup reverted successfully. Please shutdown the system and restart to complete the reverting process.</value>
 		</term>	
+		<term>
+			<key>PRINT_UNVERIFIED</key>
+			<value>Allow printing of unverified tests</value>
+		</term>
+		<term>
+			<key>IP_SAVED</key>
+			<value>IP address saved.</value>
+		</term>
+		
 	</page>
 	<page id="lab_admins" descr="Lab Managers Page">
 		<term>

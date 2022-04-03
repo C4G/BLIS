@@ -509,7 +509,8 @@ $LANG_ARRAY = array (
         "OUT_OF_RANGE" => "Out of range",
         "INTERPRETATION" => "Interpretation",
         "MODIFY_SITE" => "Modify sites",
-		"PRINT_UNVERIFIED" => "Allow printing of unverified tests"
+		"PRINT_UNVERIFIED" => "Allow printing of unverified tests",
+		"IP_SAVED" => "IP address saved."
 	) ,
 	"lab_admins" => array ( 
 		"TITLE" => "Lab Managers", 
