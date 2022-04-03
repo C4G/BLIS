@@ -1030,7 +1030,9 @@ function submit_save_server_ip()
 {
 	$('#blis_online_config_form').ajaxSubmit({
 		success: function() {
-			window.location=reload_url;
+			alert("<?php echo LangUtil::$pageTerms['IP_SAVED']; ?>")
+			// window.location=reload_url;
+
 		}
 	})
 }
@@ -4079,7 +4081,7 @@ function AddnewDHIMS2Config()
 					<br><br>
 					<input type="button"
 							value="<?php echo LangUtil::$pageTerms['SAVE_BUTTON']; ?>"
-							onclick="submit_save_server_ip();">
+							onclick='submit_save_server_ip();' >
 				</form>
 				</div>
 
@@ -4354,7 +4356,7 @@ function AddnewDHIMS2Config()
 					<div id='test_report_configuration_msg' class='clean-orange' style='display:none;width:350px;'>
 					</div>
 					<br>
-					<div><input type="checkbox" class="sfields_entry" id="print_verified" <?php if (($page_elems->getPrintUnverified($lab_config->id))==1) { ?> checked <?php }?>  onchange="javascript:savePrintPending();"><?php echo LangUtil::$pageTerms['PRINT_UNVERIFIED']; ?></div>
+					<div><input type="checkbox" class="sfields_entry" id="print_verified" <?php if (($page_elems->getPrintUnverified($lab_config->id))==1) { ?> checked <?php }?>  onchange="javascript:savePrintPending();"><?php echo LangUtil::$page['PRINT_UNVERIFIED']; ?></div>
 					<br>
 					<div id="test_report_configuration_form_div"
 						 style="text-align: center;">
