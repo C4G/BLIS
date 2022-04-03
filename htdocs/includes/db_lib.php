@@ -8673,12 +8673,16 @@ function checkAndAddUserConfig($lab_admin_id){
 
 function add_lab_config($lab_config, $dev=0)
 {
+	global $log;
+
 	# Adds a new lab configuration to DB
 	$saved_db = DbUtil::switchToGlobal();
 	$query_check = "SELECT admin_user_id FROM lab_config WHERE lab_config_id = $lab_config->id";
 	$record = query_associative_one($query_check);
 
 	if($dev == 0){
+		$log->info("add_lab_config: inserting new lab with full configuration");
+
 		#This branch is taken when a new lab is created by a country director
 		# Adds a new lab configuration to DB
 		$query_add_lab_config =
@@ -8686,15 +8690,17 @@ function add_lab_config($lab_config, $dev=0)
 			"VALUES ('$lab_config->name', '$lab_config->location', $lab_config->adminUserId, $lab_config->idMode, '$lab_config->id', '$lab_config->country')";
 		query_insert_one($query_add_lab_config);
 	}
-	else if($dev == 1  && is_null($record)){
+	else if($dev == 1  && ($record == false)){
+		$log->info("add_lab_config: inserting new lab with admin_user_id and lab_config_id");
 		# This branch is taken when an entry for lab in the config param doesn't exist in revamp db
 		# (for devs importing lab backups using country director's interface)
 		$query_add_lab_config =
-			"INSERT INTO lab_config(admin_user_id, lab_config_id) ".
-			"VALUES ($lab_config->adminUserId, $lab_config->id)";
+			"INSERT INTO lab_config(admin_user_id, lab_config_id, `name`) ".
+			"VALUES ($lab_config->adminUserId, $lab_config->id, '$lab_config->name')";
 		query_insert_one($query_add_lab_config);
 	}
 	else if($dev == 1 && (intval($record['admin_user_id']) != intval($lab_config->adminUserId))){
+		$log->info("add_lab_config: lab already exists, updating admin user");
 		# This branch is taken when a lab backup is imported by developers in country director's interface,
 		# and when an entry exists with an admin userid which is not the same as the one in lab config object param
 		#Update the admin user id for the lab config in the object param passed
@@ -11107,7 +11113,7 @@ function add_lab_config_specimen_type($lab_config_id, $specimen_type_id)
 function add_lab_config_access($user_id, $lab_config_id)
 {
 	# Adds access to a new lab config for a country dir user
-	global $con;
+	global $con, $log;
 	$user_id = mysql_real_escape_string($user_id, $con);
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	$saved_db = DbUtil::switchToGlobal();
@@ -11117,8 +11123,7 @@ function add_lab_config_access($user_id, $lab_config_id)
 	$flag_exists = query_associative_one($query_check);
 	if($flag_exists != null)
 	{
-		# Mapping already exists
-		# TODO: Add error handling?
+		$log->info("User ID $user_id already has access to lab ID $lab_config_id");
 		return;
 	}
 	$query_add =

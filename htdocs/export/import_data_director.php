@@ -135,6 +135,12 @@ if ($file_name_and_extension[1]=="zip") {
         // are importing a backup into the app on their machine
         $lab_config = new LabConfig();
         $lab_config->adminUserId = $lab_admin_id;
+        $labName = "Lab Import on ".date("Y-m-d");
+        if (strlen($_SESSION['user_id'] > 0)) {
+            $log->info("user id" . User::getByUserId($_SESSION['user_id'])->username);
+            $labName = $labName . " by " . User::getByUserId($_SESSION['user_id'])->username;
+        }
+        $lab_config->name = $labName;
         $lab_config->id = $lid;
         add_lab_config($lab_config, $dev);
 
