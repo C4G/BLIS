@@ -70,8 +70,10 @@ header('Content-Type: text/html; charset=UTF-8');
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>
-		Basic Laboratory Information System v<?php echo $VERSION; ?>
+		Basic Laboratory Information System v<?php echo $VERSION; ?> 
 		</title>
+
+    </style>
 <?php
 		include("styles.php");
 		/*if ($_SESSION['theme'] ==  1) 
@@ -141,30 +143,30 @@ if(isset($_SESSION['username']))
 {
 ?>
 	<?php echo LangUtil::getPageTerm("LOGGEDINAS"); ?>: <?php echo $_SESSION['username'];?> | 
-	<a href='edit_profile.php'><?php echo LangUtil::$pageTerms['EDITPROFILE']; ?></a> | 
+	<a href='edit_profile.php' class='black'><?php echo LangUtil::$pageTerms['EDITPROFILE']; ?></a> | 
 	<?php
 	//echo "test".$_SESSION['admin_as_tech'];
 	if(isset($_SESSION['admin_as_tech']) && $_SESSION['admin_as_tech'] === true)
 	{
 		?>
-		<a href='switchto_admin.php'><?php echo LangUtil::getPageTerm("SWITCH_TOMGR"); ?></a> | 
+		<a href='switchto_admin.php' class='black'><?php echo LangUtil::getPageTerm("SWITCH_TOMGR"); ?></a> | 
 		<?php
 	}
 	else if(isset($_SESSION['dir_as_tech']) && $_SESSION['dir_as_tech'] === true)
 	{
 		?>
-		<a href='switchto_admin.php'><?php echo LangUtil::getPageTerm("SWITCH_TODIR"); ?></a> | 
+		<a href='switchto_admin.php' class='black'><?php echo LangUtil::getPageTerm("SWITCH_TODIR"); ?></a> | 
 		<?php
 	}
 	else if(User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level']))
 	{
 		$lab_config_list = get_lab_configs($_SESSION['user_id']);
 		?>
-		<a href='switchto_tech.php?id=<?php echo $lab_config_list[0]->id; ?>'><?php echo LangUtil::getPageTerm("SWITCH_TOTECH"); ?></a> | 
+		<a href='switchto_tech.php?id=<?php echo $lab_config_list[0]->id; ?>' class='black'><?php echo LangUtil::getPageTerm("SWITCH_TOTECH"); ?></a> | 
 		<?php
 	}
 	?>
-	<a rel='facebox' href='user_rating.php'><?php echo LangUtil::getPageTerm("LOGOUT"); ?></a>
+	<a rel='facebox' href='user_rating.php' class='black'><?php echo LangUtil::getPageTerm("LOGOUT"); ?></a>
 	
 	<?php
 	//if(User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level']))
