@@ -35,8 +35,9 @@ Thumbs.db
 
 # BLIS Backup directories - don't need to be in source control
 /blis_backup_*
-/htdocs/export/blis_backup_*
-/htdocs/export/uploads/blis_backup_*
+/htdocs/export/backups/**/*
+/htdocs/export/uploads/**/*
+/files/**/*
 
 # RSA Keypairs
 /**/*.blis
@@ -44,4 +45,4 @@ Thumbs.db
 
 # Tooling
 ## php-cs-fixer cache
-/.php_cs.cache
+.php_cs.cache

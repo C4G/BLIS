@@ -19,7 +19,7 @@ services:
       - "80:80"
   db:
     image: mysql:5.7
-    command: --default-authentication-plugin=mysql_native_password --sql-mode=""
+    command: --default-authentication-plugin=mysql_native_password --innodb-strict-mode=OFF --sql-mode=""
     restart: unless-stopped
     volumes:
       - blis-data:/var/lib/mysql

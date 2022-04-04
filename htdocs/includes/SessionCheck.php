@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once("../includes/user_lib.php");
+require_once("../includes/user_lib.php");
 if(basename($_SERVER['PHP_SELF'])!=="login.php")
 {
 if(!isset($_SESSION['user_id']))

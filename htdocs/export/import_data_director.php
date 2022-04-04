@@ -2,9 +2,11 @@
 
 require_once("redirect.php");
 require_once("../includes/db_lib.php");
-require_once(dirname(__FILE__)."/../includes/platform_lib.php");
+require_once("../includes/platform_lib.php");
+require_once("../includes/composer.php");
 
 $file_name = $_FILES['sqlFile']['name'];
+$log->info("Uploaded $file_name");
 $file_name_and_extension = explode('.', $file_name);
 $fileName = $_FILES['sqlFile']['tmp_name'];
 if ($file_name_and_extension[1]=="zip") {
@@ -17,6 +19,24 @@ if ($file_name_and_extension[1]=="zip") {
 
     $extractPath=dirname(__FILE__).'/uploads/'.$file_name_and_extension[0];
     $zip = new ZipArchive;
+
+    // Older versions of BLIS create archives with paths separated by '\'
+    // This causes the archive to extract incorrectly on non-Windows systems.
+    // To preserve compatibility with old backups, replace the '\' with '/'
+    // before extraction on a non-Windows system.
+    if (!PlatformLib::runningOnWindows() && $zip->open($name)) {
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $path = $zip->getNameIndex($i);
+            $new_path = str_replace("\\","/", $path);
+            $zip->renameIndex($i, $new_path);
+            $log->debug("Renamed zip path: $path to $new_path");
+        }
+        $zip->close();
+    }
+
+    // Lab ID to import - set by examining the zip archive
+    $lid = false;
+
     if ($zip->open($name) === true) {
         $zip->extractTo($extractPath);
         $zip->close();
@@ -33,6 +53,12 @@ if ($file_name_and_extension[1]=="zip") {
                 continue;
             } else {
                 if (startsWith($fname, "blis_")) {
+
+                    $lid_start = strpos($fname, "_");
+                    // Set the lab ID that we are importing
+                    $lid = intval(substr($fname, $lid_start+1, strlen($fname) - $lid_start));
+                    $log->info("Detected a lab with ID $lid");
+
                     $sqlFile=$fname."/".$fname."_backup.sql";
                     $sqlFolder=$fname;
                     if ($is_encrypted) {
@@ -48,11 +74,12 @@ if ($file_name_and_extension[1]=="zip") {
 
         //~~
         $file_name_parts = explode("_", $sqlFolder);
-        $lid = $file_name_parts[1];
         $fileName=$extractPath."/".$sqlFile;
 
-        $mysqlExePath = "\"".PlatformLib::mySqlClientPath()."\"";
-        $command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS  < ";
+        $log->info("Processing $fileName");
+
+        $mysqlExePath = PlatformLib::mySqlClientPath();
+        $command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS < ";
         if(PlatformLib::runningOnWindows()) {
             // the C: is a useless command to prevent the original command from failing because of having more than 2 double quotes
             $command = "C: &".$command;
@@ -62,7 +89,7 @@ if ($file_name_and_extension[1]=="zip") {
         if ($is_encrypted) {
             if (file_exists($pvt)) {
                 $decryptedFile = decryptFile($fileName, $pvt);
-                $command = $command . $decryptedFile;
+                $command = $command . escapeshellarg($decryptedFile);
             } else {
                 error_log("File $fileName is encrypted, but the server does not have a private key file generated yet.");
                 // error handling if key not downloaded, pending.
@@ -71,6 +98,7 @@ if ($file_name_and_extension[1]=="zip") {
             $command = $command . $fileName;
         }
 
+        $log->info("Running: $command");
         system($command, $return);
         $result = $return;
 
@@ -79,6 +107,7 @@ if ($file_name_and_extension[1]=="zip") {
         }
 
         if ($result == 0) {
+            $log->info("Database imported successfully!");
             insert_import_entry(intval($lid));
         }
 
@@ -87,16 +116,17 @@ if ($file_name_and_extension[1]=="zip") {
         #the following code copies folder containing langdata_<labid> files from back up to the local folder
 
         $src_langdata_path = trim($extractPath."/".$langFile);
-        $dest_path = dirname(__FILE__)."/../../local/langdata_".$lid;
+        $dest_path = dirname(__FILE__)."/../../local/";
         $res = PlatformLib::copyDirectory($src_langdata_path, $dest_path);
         if (!$res) {
-           error_log("There was a problem copying the langdata folder.");
+           $log->error("There was a problem copying the langdata folder.");
         }
 
         // the following code adds lab admin to user and user_config tables
         // in blis_revamp when developers are importing a backup into the app on their machine
         $dev = 1;
         $adminName = 'admin_'.$lid;
+        $log->info("Creating user $adminName");
         $lab_admin_id = checkAndAddAdmin($adminName, $lid, $dev);
 
         checkAndAddUserConfig($lab_admin_id);
@@ -105,6 +135,12 @@ if ($file_name_and_extension[1]=="zip") {
         // are importing a backup into the app on their machine
         $lab_config = new LabConfig();
         $lab_config->adminUserId = $lab_admin_id;
+        $labName = "Lab Import on ".date("Y-m-d");
+        if (strlen($_SESSION['user_id'] > 0)) {
+            $log->info("user id" . User::getByUserId($_SESSION['user_id'])->username);
+            $labName = $labName . " by " . User::getByUserId($_SESSION['user_id'])->username;
+        }
+        $lab_config->name = $labName;
         $lab_config->id = $lid;
         add_lab_config($lab_config, $dev);
 
@@ -129,6 +165,8 @@ function endsWith($haystack, $needle)
 }
 function decryptFile($fname, $pvt)
 {
+    global $log;
+
     if (!file_exists($fname.".key") || !file_exists($pvt)) {
         error_log("Both of these files must exist but at least one does not: $fname.key, $pvt");
         return;
@@ -144,6 +182,7 @@ function decryptFile($fname, $pvt)
     openssl_free_key($private_key_id);
 
     if (!$res) {
+        $log->error("Could not decrypt $fname with $fname.key: " . openssl_error_string());
         return "";
     }
 

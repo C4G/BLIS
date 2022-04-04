@@ -1,4 +1,5 @@
 <?php
+require_once("../includes/composer.php");
 require_once("../includes/db_lib.php");
 require_once("../includes/platform_lib.php");
 require_once("redirect.php");
@@ -10,420 +11,266 @@ if ($SERVER == $ON_ARC) {
     echo "Sorry, data backup option is not available in online version.";
 }
 //AS changed lab config fix.
-$user = get_user_by_name($_SESSION['username']);
+
+$user = get_user_by_id($_SESSION['user_id']);
 $lab_config_id = $user->labConfigId;
-//$lab_config_id = $_REQUEST['labConfigId'];
-$backupType = $_REQUEST['backupTypeSelect'];
-$keyLocation = "../tmpPublicKey.pem";
-$LabName=$_POST['target'];
-$ploc="../ajax/LAB_".$_SESSION['lab_config_id']."_pubkey.blis";
-if (KeyMgmt::read_enc_setting()==1) {
-    if ($LabName==="Current Lab") {
-        if (!file_exists($ploc)) {
-            echo "Please go to Lab Configuration -> Manage Backup Keys and click the download public key button to be able to use the encryption functionality.";
-            return;
-        }
-        $pubKey=file_get_contents($ploc);
-    }
+$request_lab_config_id = $_REQUEST['labConfigId'];
+if ($lab_config_id != $request_lab_config_id) {
+    echo "You do not have permission to back up lab #$request_lab_config_id!";
+    return;
 }
 
-if ($LabName!=="Current Lab") {
-    if (count($_FILES)==1) {
-        $keyMgmt=KeyMgmt::getByLabName($LabName);
-        $pubKey=$keyMgmt->PubKey;
+$encryption_enabled = (KeyMgmt::read_enc_setting() == 1);
+
+$keyContents = "";
+if ($encryption_enabled) {
+    $keySelection=$_POST['target'];
+    if ($keySelection == "-1") {
+        // A new key is uploaded
+        $pkey_alias = $_POST['pkey_alias'];
+        $pkey_contents = file_get_contents($_FILES['pkey']['tmp_name']);
+        $res = KeyMgmt::add_key_mgmt(KeyMgmt::create($pkey_alias, $pkey_contents, $user->userId));
+        $log->info("Uploading $pkey_alias: $res");
+        $keyContents = $pkey_contents;
+    } else if ($keySelection == "0") {
+        // The Current Lab key is used
+        $labKeyFile = dirname(__FILE__) . "/../../files/LAB_".$lab_config_id."_pubkey.blis";
+        if (!file_exists($labKeyFile)) {
+            // generate key
+            KeyMgmt::generateKeyPair(
+                dirname(__FILE__) . "/../../files/LAB_".$lab_config_id.".blis",
+                $labKeyFile);
+            $log->info("Keypair generated successfully.");
+        }
+        $keyContents = file_get_contents($labKeyFile);
     } else {
-        $target_loc= dirname(__FILE__)."/../key.blis";
-        if (move_uploaded_file($_FILES["pkey"]["tmp_name"], $target_loc)) {
-            $pubKey = file_get_contents($target_loc);
-            $keyMgmt=new KeyMgmt();
-            $keyMgmt->LabName=$LabName;
-            $keyMgmt->PubKey=$pubKey;
-            $keyMgmt->AddedBy=$_SESSION['user_id'];
-            KeyMgmt::add_key_mgmt($keyMgmt);
-        }
+        // a specific key in the database was requested
+        $key = KeyMgmt::getByID($keySelection);
+        $keyContents = $key->PubKey;
     }
 }
 
-if ($_REQUEST['keyType'] == "uploaded") {
-    if (move_uploaded_file($_FILES["publicKey"]["tmp_name"], $keyLocation)) {
-        echo "succeeded!";
+function mySqlDump($databaseName, $backupFilename) {
+    global $log, $DB_HOST, $DB_PORT, $DB_USER, $DB_PASS;
+
+    $mysqldumpPath = PlatformLib::mySqlDumpPath();
+    $command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $databaseName -r ".escapeshellarg($backupFilename);
+    $output = system($command, $result);
+
+    if ($result == 0) {
+        return $backupFilename;
+    } else {
+        $log->error("Could not dump MySQL database; command: $command, err code $result, output:\n $output");
+        return false;
     }
-    //$ret = move_uploaded_file("/public.pem", $keyLocation);
-    else {
-        echo "fail";
+}
+
+function encryptFile($filename, $publicKey, $outputFilename, $decryptionKeyFilename)
+{
+    global $log;
+
+    $data = file_get_contents($filename);
+    $res = openssl_seal($data, $sealed, $ekeys, array($publicKey));
+    if (!$res) {
+        $log->error("Failed to encrypt data: " . openssl_error_string());
+        return false;
     }
-    $publicKey = file_get_contents($keyLocation);
-} else {
-    $publicKey = file_get_contents("public.pem");
+    $env_key = $ekeys[0];
+    file_put_contents($decryptionKeyFilename, base64_encode($env_key));
+    file_put_contents($outputFilename, $sealed);
 }
 
 $file_list1 = array();
 $file_list2 = array();
 $file_list3 = array();
-$file_list4 = array();
 
-$mysqldumpPath = '"'.PlatformLib::mySqlDumpPath().'"';
-$dbname = "blis_".$lab_config_id;
-$backupLabDbFileName= "blis_".$lab_config_id."_backup.sql";
-$count=0;
-$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname -r $backupLabDbFileName";
-system($command);
-if ($backupType == "encrypted") {
-    /* Encrypt the sql with the public key */
-    $fileHandle = fopen($backupLabDbFileName, "r");
-    $backupLabDbFileNameEnc = $backupLabDbFileName.".enc";
-    $fileWriteHandle = fopen($backupLabDbFileNameEnc, "w");
+$lab_db = "blis_$lab_config_id";
 
-    while (!feof($fileHandle)) {
-        $line = fgets($fileHandle);
-        $return = openssl_public_encrypt($line, $encLine, $publicKey);
-        fwrite($fileWriteHandle, $encLine);
-    }
-    fclose($fileWriteHandle);
-    fclose($fileHandle);
-    unlink($backupLabDbFileName);
-} elseif ($backupType == "anonymized") {
-    $query = "CREATE DATABASE ".$dbname."_temp";
-    mysql_query($query, $con);
-    $fileHandle = fopen($backupLabDbFileName, "r");
-    $backupLabDbTempFileName = "blis_".$lab_config_id."_temp_backup.sql";
+// Create backup directory structure
+$backup_dir = "../../files/backups/blis_backup_".date("Ymd-His");
+mkdir($backup_dir, 0700, true);
+mkdir("$backup_dir/$lab_db/", 0700, false);
+mkdir("$backup_dir/blis_revamp/", 0700, false);
+mkdir("$backup_dir/langdata_$lab_config_id/", 0700, false);
+
+$plaintext_backup = "$backup_dir/$lab_db/$lab_db"."_backup.sql";
+
+// Dump the database
+mySqlDump($lab_db, $plaintext_backup);
+
+$backupType = $_POST['backupTypeSelect'];
+
+// If backup type is anonymous, then re-import the database and hash the patient names
+if ($backupType == "anonymized") {
+    // Create the database we will reimport to
+    $anonymized_db = $lab_db."_anonymized";
+    $query = "CREATE DATABASE $anonymized_db";
+    query_blind($query, $con);
+
+    // Copy the plaintext database backup and replace the old database name with the anonymized one.
+    $fileHandle = fopen($plaintext_backup, "r");
+    $backupLabDbTempFileName = "$backup_dir/$lab_db/blis_".$lab_config_id."_reimport.sql";
     $fileWriteHandle = fopen($backupLabDbTempFileName, "w");
-
     while (!feof($fileHandle)) {
         $line = fgets($fileHandle);
-        if (strstr($line, "CREATE DATABASE ")) {
-            $line = str_replace($dbname, $dbname."_temp", $line);
-        } elseif (strstr($line, "USE ")) {
-            $line = str_replace($dbname, $dbname."_temp", $line);
+        if (strstr($line, "CREATE DATABASE ") || strstr($line, "USE ")) {
+            $line = str_replace($lab_db, $anonymized_db, $line);
         }
         fwrite($fileWriteHandle, $line);
     }
     fclose($fileWriteHandle);
     fclose($fileHandle);
 
-    $blisLabBackupTempFilePath = "\"".$mainBlisDir."\htdocs\export\blis_".$lab_config_id."_temp_backup.sql\"";
-    $mysqlExePath = "\"".$mainBlisDir."server\mysql\bin\mysql.exe\"";
-    $dbTempName = "blis_".$lab_config_id."_temp";
-    $command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbTempName < $blisLabBackupTempFilePath";
-    $command = "C: &".$command; //the C: is a useless command to prevent the original command from failing because of having more than 2 double quotes
-    system($command, $return);
+    // Delete the original database dump
+    unlink($plaintext_backup);
+
+    // Reimport the new database data
+    $mysqlExePath = PlatformLib::mySqlClientPath();
+    $command = "$mysqlExePath -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $anonymized_db < \"$backupLabDbTempFileName\"";
+    $last_line = system($command, $result);
+    if ($result != 0) {
+        $log->error("Could not import MySQL database to anonymize data; command: $command, last line: $last_line");
+        return;
+    }
+
+    // Delete the temporary dump used to import data
+    unlink($backupLabDbTempFileName);
+
+    // Replace each patient name with a SHA-256 hash of the name
+    $saved_db= db_get_current();
+    db_change($anonymized_db);
+    $queryUpdate = "UPDATE patient SET name = SHA2(name, 256);";
+    query_blind($queryUpdate);
+    DbUtil::switchRestore($saved_db);
+
+    // Re-dump the anonymized database to a temp file
+    mySqlDump($anonymized_db, $backupLabDbTempFileName);
+
+    // Drop anonymized database
+    query_blind("DROP DATABASE $anonymized_db;");
+
+    // Replace instances of the anonymized db name with the real db name
+    $fileHandle = fopen($backupLabDbTempFileName, "r");
+    $fileWriteHandle = fopen($plaintext_backup, "w");
+    while (!feof($fileHandle)) {
+        $line = fgets($fileHandle);
+        if (strstr($line, "CREATE DATABASE ") || strstr($line, "USE ")) {
+            $line = str_replace($anonymized_db, $lab_db, $line);
+        }
+        fwrite($fileWriteHandle, $line);
+    }
+    fclose($fileWriteHandle);
+    fclose($fileHandle);
 
     unlink($backupLabDbTempFileName);
-    $saved_db= db_get_current();
-    $switchDatabaseName = "blis_".$lab_config_id."_temp";
-    db_change($switchDatabaseName);
-    $queryUpdate = "UPDATE patient ".
-                   "SET name = hash_value";
-    query_blind($queryUpdate);
-    $backupLabDbTempFileName= "blis_".$lab_config_id."_temp_backup";
-    $count=0;
-    $command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbTempName -r $backupLabDbTempFileName";
-    system($command);
-    DbUtil::switchRestore($saved_db);
-    $query = "DROP DATABASE ".$dbname."_temp";
-    mysql_query($query, $con);
-    $fileHandle = fopen($backupLabDbTempFileName, "r");
-    $backupLabDbFileName= "blis_".$lab_config_id."_backup.sql";
-    unlink($backupLabDbFileName);
-    $fileWriteHandle = fopen($backupLabDbFileName, "w");
 
-    while (!feof($fileHandle)) {
-        $line = fgets($fileHandle);
-        if (strstr($line, "CREATE DATABASE ")) {
-            $line = str_replace($dbname."_temp", $dbname, $line);
-        } elseif (strstr($line, "USE ")) {
-            $line = str_replace($dbname."_temp", $dbname, $line);
-        }
-        fwrite($fileWriteHandle, $line);
+    // Now the file located at $plaintext_backup is anonymized!
+}
+
+$server_public_key = false;
+
+if ($encryption_enabled) {
+    $server_public_key = openssl_pkey_get_public($keyContents);
+    if (!$server_public_key) {
+        $log->error(openssl_error_string());
+        return;
     }
-    fclose($fileWriteHandle);
-    fclose($fileHandle);
-    $backupLabDbFileNameEnc = $backupLabDbFileName;
-} else {
-    $backupLabDbFileNameEnc = $backupLabDbFileName;
-}
-$file_list1[] = $backupLabDbFileNameEnc;
 
-$server_public_key = openssl_pkey_get_public($pubKey);
-if (!$server_public_key) {
-    echo "Unable to open " . $ploc;
-    return;
+    $encrypted_backup = "$backup_dir/$lab_db/$lab_db"."_backup.sql.enc";
+    $encrypted_backup_key = "$backup_dir/$lab_db/$lab_db"."_backup.sql.key";
+    encryptFile($plaintext_backup, $server_public_key, $encrypted_backup, $encrypted_backup_key);
+
+    // Delete plaintext backup
+    unlink($plaintext_backup);
+
+    // Move encrypted backup file to expected file name
+    rename($encrypted_backup, $plaintext_backup);
 }
 
-encryptFile($backupLabDbFileName, $server_public_key);
-$backupDbFileName = "blis_revamp_backup.sql";
 
 $dbname = "blis_revamp";
-$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname -r $backupDbFileName";
-system($command);
-if ($backupType == "encrypted") {
-    $fileHandle = fopen($backupDbFileName, "r");
-    $backupDbFileNameEnc = $backupDbFileName.".enc";
-    $fileWriteHandle = fopen($backupDbFileNameEnc, "w");
+$backupDbFileName = "$backup_dir/$dbname/$dbname"."_backup.sql";
+mySqlDump($dbname, $backupDbFileName);
 
-    while (!feof($fileHandle)) {
-        $line = fgets($fileHandle);
-        $return = openssl_public_encrypt($line, $encLine, $publicKey);
-        fwrite($fileWriteHandle, $encLine);
-    }
-    fclose($fileWriteHandle);
-    fclose($fileHandle);
+if ($encryption_enabled) {
+    $encrypted_backup = "$backup_dir/$dbname/$dbname"."_backup.sql.enc";
+    $encrypted_backup_key = "$backup_dir/$dbname/$dbname"."_backup.sql.key";
+    encryptFile($backupDbFileName, $server_public_key, $encrypted_backup, $encrypted_backup_key);
+
     unlink($backupDbFileName);
-} else {
-    $backupDbFileNameEnc = $backupDbFileName;
-}
-encryptFile($backupDbFileNameEnc, $server_public_key);
-$file_list2[] = $backupDbFileNameEnc;
 
-$dir_name3 = "../../local/langdata_".$lab_config_id;
-if ($handle = opendir($dir_name3)) {
+    // Move encrypted backup to expected file name
+    rename($encrypted_backup, $backupDbFileName);
+}
+
+// Add language data files to backup folder
+$lab_langdata = "../../local/langdata_$lab_config_id";
+if ($handle = opendir($lab_langdata)) {
     while (false !== ($file = readdir($handle))) {
         if ($file === "." || $file == "..") {
             continue;
         }
-        $file_list3[] = $dir_name3."/$file";
+        copy("$lab_langdata/$file", "$backup_dir/langdata_$lab_config_id/$file");
     }
 }
 
-$lab_config = LabConfig::getById($lab_config_id);
-$site_name = str_replace(" ", "-", $lab_config->getSiteName());
-if ($LabName!=="Current Lab") {
-    $site_name=$LabName;
-}
-$destination = "../../blis_backup_".$site_name."_".date("Ymd-Hi")."/";
-$toScreenDestination = "blis_backup_".$site_name."_".date("Ymd-Hi");
-mkdir($destination, 0755);
-mkdir($destination."blis_revamp/", 0755);
-mkdir($destination."blis_".$lab_config_id."/", 0755);
-mkdir($destination."langdata_".$lab_config_id."/", 0755);
-
-foreach ($file_list1 as $file) {
-    $file_name_parts = explode("/", $file);
-    $target_file_name = $destination."blis_".$lab_config_id."/".$file_name_parts[count($file_name_parts)-1];
-    $ourFileHandle = fopen($target_file_name, 'w') or die("can't open file");
-    fclose($ourFileHandle);
-    if (!copy($file, $target_file_name)) {
-        echo "Error: $file -> $destination.$file <br>";
-    };
-    if (KeyMgmt::read_enc_setting()==1) {
-        if (!copy($file.".key", $target_file_name.".key")) {
-            echo "Error: $file -> $destination.$file <br>";
-        };
-    }
-}
-unlink($backupLabDbFileNameEnc);
-
-foreach ($file_list2 as $file) {
-    $file_name_parts = explode("/", $file);
-    if (!copy($file, $destination."blis_revamp/".$file_name_parts[count($file_name_parts)-1])) {
-        echo "Error: $file -> $destination.$file <br>";
-    };
-    if (KeyMgmt::read_enc_setting()==1) {
-        if (!copy($file.".key", $destination."blis_revamp/".$file_name_parts[count($file_name_parts)-1].".key")) {
-            echo "Error: $file -> $destination.$file <br>";
-        };
-    }
-}
-unlink($backupDbFileNameEnc);
-
-foreach ($file_list3 as $file) {
-    $file_name_parts = explode("/", $file);
-    if (!copy($file, $destination."langdata_".$lab_config_id."/".$file_name_parts[count($file_name_parts)-1])) {
-        echo "Error: $file -> $destination.$file <br>";
-    };
-}
-
-# Backup log file if exists
-
-$log_file1 = "../../local/log_".$lab_config_id.".txt";
-$log_file2 = "../../local/log_".$lab_config_id."_updates.sql";
-$log_file3 = "../../local/log_".$lab_config_id."_revamp_updates.sql";
-
-if (file_exists($log_file1)) {
-    encryptFile($log_file1, $server_public_key);
-    $copyDestination = $destination."log_".$lab_config_id.".txt";
-    if ($backupType == "encrypted") {
-        $fileHandle = fopen($log_file1, "r");
-        $logFile = $log_file1.".enc";
-        $fileWriteHandle = fopen($logFile, "w");
-
-        while (!feof($fileHandle)) {
-            $line = fgets($fileHandle);
-            $return = openssl_public_encrypt($line, $encLine, $publicKey);
-            fwrite($fileWriteHandle, $encLine);
-        }
-        fclose($fileWriteHandle);
-        fclose($fileHandle);
-        $copyDestination = $copyDestination.".enc";
-    } else {
-        $logFile = $log_file1;
-    }
-    copy($logFile, $copyDestination);
-    //unlink($logFile);
-}
-
-if (file_exists($log_file2)) {
-    encryptFile($log_file2, $server_public_key);
-    $copyDestination = $destination."log_".$lab_config_id."_updates.sql";
-    if ($backupType == "encrypted") {
-        $fileHandle = fopen($log_file2, "r");
-        $logFile = $log_file1.".enc";
-        $fileWriteHandle = fopen($logFile, "w");
-
-        while (!feof($fileHandle)) {
-            $line = fgets($fileHandle);
-            $return = openssl_public_encrypt($line, $encLine, $publicKey);
-            fwrite($fileWriteHandle, $encLine);
-        }
-        fclose($fileWriteHandle);
-        fclose($fileHandle);
-        $copyDestination = $copyDestination.".enc";
-    } else {
-        $logFile = $log_file2;
-    }
-    copy($logFile, $copyDestination);
-    //unlink($logFile);
-}
-if (file_exists($log_file3)) {
-    encryptFile($log_file3, $server_public_key);
-    $copyDestination = $destination."log_".$lab_config_id."_revamp_updates.sql";
-    if ($backupType == "encrypted") {
-        $fileHandle = fopen($log_file3, "r");
-        $logFile = $log_file1.".enc";
-        $fileWriteHandle = fopen($logFile, "w");
-
-        while (!feof($fileHandle)) {
-            $line = fgets($fileHandle);
-            $return = openssl_public_encrypt($line, $encLine, $publicKey);
-            fwrite($fileWriteHandle, $encLine);
-        }
-        fclose($fileWriteHandle);
-        fclose($fileHandle);
-        $copyDestination = $copyDestination.".enc";
-    } else {
-        $logFile = $log_file3;
-    }
-    copy($logFile, $copyDestination);
-    //unlink($logFile);
-}
-
-
-$versions = array();
-$vstr = "2-2,2-3";
-$versions = explode(',', $vstr);
-$uilog_files = array();
-
-foreach ($versions as $vr) {
-    $uilog_files[] = "../../local/UILog_".$vr.".csv";
-}
-
-$i = 0;
-
-foreach ($uilog_files as $log_file3) {
-    if (file_exists($log_file3)) {
-        encryptFile($log_file3, $server_public_key);
-        $vers = $versions[$i];
-        $copyDestination = $destination."UILog_".$vers.".csv";
-        if ($backupType == "encrypted") {
-            $fileHandle = fopen($log_file3, "r");
-            $logFile = $log_file1.".enc";
-            $fileWriteHandle = fopen($logFile, "w");
-
-            while (!feof($fileHandle)) {
-                $line = fgets($fileHandle);
-                $return = openssl_public_encrypt($line, $encLine, $publicKey);
-                fwrite($fileWriteHandle, $encLine);
-            }
-            fclose($fileWriteHandle);
-            fclose($fileHandle);
-            $copyDestination = $copyDestination.".enc";
+# Backup log files if they exist
+function dump_log($logfile, $dest_base) {
+    global $encryption_enabled, $server_public_key;
+    if (file_exists($logfile)) {
+        if ($encryption_enabled) {
+            $dest = "$dest_base.enc";
+            $key_dest = "$dest_base.key";
+            encryptFile($logfile, $server_public_key, $dest, $key_dest);
         } else {
-            $logFile = $log_file3;
+            copy($logfile, $dest_base);
         }
-        copy($logFile, $copyDestination);
-        //unlink($logFile);
     }
-    $i++;
 }
-//$rootPath=getcwd()+'/../../'.$toScreenDestination;
-$zipFile=$toScreenDestination.".zip";
-if (KeyMgmt::read_enc_setting()==1) {
-    $zipFile=$toScreenDestination."_enc.zip";
-}
-$zipFileLoc=realpath("../../")."/".$zipFile;
 
-//echo $zipFileLoc;
-createZipFile($zipFile, realpath($destination));
-copy($zipFile, $zipFileLoc);
-//removeDirectory(realpath($destination));
+dump_log("../../local/log_$lab_config_id.txt", "$backup_dir/log_$lab_config_id.txt");
+dump_log("../../local/log_$lab_config_id"."_updates.txt", "$backup_dir/log_$lab_config_id"."_updates.txt");
+dump_log("../../local/log_$lab_config_id"."_revamp_updates.txt", "$backup_dir/log_$lab_config_id"."_revamp_updates.txt");
+dump_log("../../local/UILog_2-2.csv", "$backup_dir/UILog_2-2.csv");
+dump_log("../../local/UILog_2-3.csv", "$backup_dir/UILog_2-3.csv");
+dump_log("../../log/application.log", "$backup_dir/application.log");
+dump_log("../../log/apache2_error.log", "$backup_dir/apache2_error.log");
+dump_log("../../log/php_error.log", "$backup_dir/apache2_error.log");
 
-
-$button_clicked = $_REQUEST['local_or_server'];
-$local_text = LangUtil::$generalTerms['BACKUP_LOCAL'];
-if ($button_clicked == $local_text) {
-    // handle local download here
-    echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/".$zipFile."'/>Download Zip</a>";
+$zipFile=$backup_dir;
+if ($encryption_enabled) {
+    $zipFile=$zipFile."_enc.zip";
 } else {
-    // handle server backup here  
-    $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
-    $result = query_associative_one($query);
-    $server_ip = reset($result); 
-    $response = send_backup_to_server($zipFile, $server_ip);
-    echo $response;
+    $zipFile = $zipFile.".zip";
 }
 
+createZipFile($zipFile, realpath($backup_dir));
 
-// 
+$new_path = dirname(__FILE__)."/backups/".basename($zipFile);
+rename($zipFile, $new_path);
 
-function hasFile()
-{
-    echo count($_FILES);
-    foreach ($_FILES['pkey']['tmp_name'] as $tmp_name) {
-        if (is_uploaded_file($tmp_name)) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-}
-function encryptFile($fname, $pub)
-{
-    if (KeyMgmt::read_enc_setting()==0) {
-        return;
-    }
-    $data=file_get_contents($fname);
-    $sealed = '';
-    openssl_seal($data, $sealed, $ekeys, array($pub));
-    $env_key = $ekeys[0];
-    file_put_contents($fname.".key", base64_encode($env_key));
-    $f=fopen($fname, "w");
-    fwrite($f, $sealed);
-    fclose($f);
-    //file_put_contents($fname,base64_encode($sealed));
-}
-function encryptFile1($fname, $pubKey)
-{
-    $fileHandle = fopen($fname, "r");
-    $fnameEnc = $fname.".enc";
-    $fileWriteHandle = fopen($fnameEnc, "w");
-    ini_set('auto_detect_line_endings', true);
-    while (!feof($fileHandle)) {
-        $line = fgets($fileHandle);
-        $return = openssl_public_encrypt($line, $encLine, $pubKey, OPENSSL_PKCS1_PADDING);
-        if ($return) {
-            fwrite($fileWriteHandle, base64_encode($encLine)."\r\n");
-        } else {
-            fwrite($fileWriteHandle, "~".$line."\r\n");
-        }
-    }
-    fclose($fileWriteHandle);
-    fclose($fileHandle);
-    $temp=file_get_contents($fnameEnc);
-    file_put_contents($fname, $temp);
-    unlink($fnameEnc);
-}
+// Removes the backup directory in files/
+// Comment this out if you want to figure out what went wrong somewhere!
+removeDirectory($backup_dir);
+
+echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/backups/".basename($new_path)."'/>Download Zip</a>";
+
+send_file_to_server($new_path);
+
+// } else {
+//     // handle server backup here
+//     $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
+//     $server_ip = query_associative_one($query)['server_ip'];
+//     $response = send_backup_to_server($zipFile, $server_ip);
+//     echo $response;
+// }
+
+
 function createZipFile($zipFile, $rootPath)
 {
+    global $log;
+    $log->info("Creating zip file: $zipFile from path $rootPath");
+
     $zip = new ZipArchive();
     $zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
     // Create recursive directory iterator
@@ -438,6 +285,11 @@ function createZipFile($zipFile, $rootPath)
             // Get real and relative path for current file
             $filePath = $file->getRealPath();
             $relativePath = substr($filePath, strlen($rootPath) + 1);
+            if (PlatformLib::runningOnWindows()) {
+                // If running on Windows, replace all path separators (\) with Unix-style path separators (/)
+                // Why: https://www.php.net/manual/en/ziparchive.addfile.php
+                $relativePath = str_replace("\\", "/", $relativePath);
+            }
 
             //echo $zipFile + "\n" + $filePath;
             // Add current file to archive
@@ -466,18 +318,49 @@ function removeDirectory($dir)
 }
 
 
-function send_backup_to_server($zipped, $server_ip)
+function send_file_to_server($file_path) {
+    // TODO
+    $server_ip = "http://localhost:80";
+
+    send_file($file_path, $server_ip);
+}
+
+function send_file($file_path, $server_host)
 {
-    $endpoint = 'http://'.$server_ip.'/export/import_data_director.php';
-    $curlfile = curl_file_create( $zipped, 'application/zip');
+    global $log;
+
+    $endpoint = $server_host.'/export/import_data_director.php';
+    $log->info("Attempting to upload $file_path to $endpoint...");
+
+    if (function_exists('curl_file_create')) {
+        // For PHP 5.5+, which is what we use in the BLIS docker image
+        $curlfile = curl_file_create($file_path, 'application/zip');
+    } else {
+        // For old-school PHP, which is in-use by the Desktop BLIS
+        $curlfile = '@' . realpath($file_path);
+        $log->info("Resolved path to: $curlfile");
+    }
+
+    // The sqlFile name is the form name for the file
+    // This should match the name used in import_data_director.php
+    $post = array('sqlFile'=> $curlfile);
 
     $curl = curl_init();
-    curl_setopt( $curl, CURLOPT_URL, $endpoint );
-    curl_setopt( $curl, CURLOPT_POST, true );
-    curl_setopt( $curl, CURLOPT_POSTFIELDS,  $curlfile);
-    // if this doesn't work, try array with curlfile
-    curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+    curl_setopt($curl, CURLOPT_URL, $endpoint);
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POSTFIELDS,  $post);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     $response = curl_exec( $curl );
     curl_close( $curl );
+
+    // See https://www.php.net/manual/en/function.curl-exec.php
+    // for why to use the === here
+    if ($response === false) {
+        $log->error("Failed to upload file.");
+    } else {
+        $log->info("File uploaded successfully!");
+        echo("<p>Backup was transferred to server $server_host</p>");
+    }
+
     return $response;
 }

@@ -4,12 +4,14 @@
 # This file contains entity classes and functions for DB queries
 #
 
+require_once(dirname(__FILE__).'/keymgmt.php');
+
 # Start session if not already started
 if(session_id() == "")
 	session_start();
 
+require_once("defaults.php");
 
-include("defaults.php");
 // List of known user roles (These could be fetched from DB and populated)
 $LIS_TECH_RW = 0;
 $LIS_TECH_RO = 1;
@@ -31,6 +33,7 @@ $LIS_111 = 12;
 $LIS_VERIFIER = 15;
 $READONLYMODE = 16;
 $LIS_PHYSICIAN = 17;
+
 require_once("db_mysql_lib.php");
 
 if(!isset($_SESSION['langdata_path']))
@@ -43,16 +46,15 @@ if(!isset($_SESSION['locale']))
 $locale_catalog_file = $_SESSION['langdata_path'].$_SESSION['locale']."_catalog.php";
 $locale_file = $_SESSION['langdata_path'].$_SESSION['locale'].".php";
 
-include($locale_catalog_file);
-include($locale_file);
+require_once($locale_catalog_file);
+require_once($locale_file);
 
 require_once("debug_lib.php");
 require_once("date_lib.php");
-//require_once("user_lib.php");
 
 // PDF Modules
-require_once('../tcpdf/config/lang/eng.php');
-require_once('../tcpdf/tcpdf.php');
+require_once(dirname(__FILE__).'/../tcpdf/config/lang/eng.php');
+require_once(dirname(__FILE__).'/../tcpdf/tcpdf.php');
 
 
 #
@@ -442,121 +444,6 @@ class FieldOrdering
 	}
 }
 
-
-
-
-class KeyMgmt
-{
-public $ID;
-public $LabName;
-	public $PubKey;
-public $AddedBy;
-public $ModOn;
-public static function read_enc_setting()
-{
-		$saved_db = DbUtil::switchToGlobal();
-		$query_config = "SELECT max(enc_enabled) as enc_enabled from encryption_setting";
-		$record = query_associative_one($query_config);
-		DbUtil::switchRestore($saved_db);
-return $record['enc_enabled'];
-}
-public static function write_enc_setting($val)
-{
-		$saved_db = DbUtil::switchToGlobal();
-		$query_config = "update encryption_setting set enc_enabled=".$val;
-query_blind($query_config);
-		DbUtil::switchRestore($saved_db);
-}
-	public static function getObject($record)
-	{
-		if($record == null)
-			return null;
-$keyMgmt=new KeyMgmt();
-		if(isset($record['id']))
-{
-$keyMgmt->ID=$record['id'];
-$keyMgmt->LabName=$record['lab_name'];
-$keyMgmt->PubKey=$record['pub_key'];
-$keyMgmt->AddedBy=$record['added_by'];
-$keyMgmt->ModOn=$record['last_modified'];
-return $keyMgmt;
-}
-return null;
-}
-
-	public static function getByLabName($labName) {
-		$saved_db = DbUtil::switchToGlobal();
-		$query_config = "SELECT * FROM keymgmt WHERE lab_name ='$labName' LIMIT 1";
-
-		$record = query_associative_one($query_config);
-		DbUtil::switchRestore($saved_db);
-		return KeyMgmt::getObject($record);
-	}
-
-	public static function getById($keyID) {
-		$saved_db = DbUtil::switchToGlobal();
-		$query_config = "SELECT * FROM keymgmt WHERE id =$keyID  LIMIT 1";
-		$record = query_associative_one($query_config);
-		DbUtil::switchRestore($saved_db);
-		return KeyMgmt::getObject($record);
-	}
-function getAllKeys()
-{
-	$saved_db = DbUtil::switchToGlobal();
-		$query_configs = "SELECT id,'' as pub_key,lab_name,added_by,last_modified FROM keymgmt ORDER BY lab_name";
-	$resultset = query_associative_all($query_configs);
-	$retval = array();
-	if($resultset == null)
-	{
-		DbUtil::switchRestore($saved_db);
-		return $retval;
-	}
-	foreach($resultset as $record)
-	{
-$r=KeyMgmt::getObject($record);
-$r->AddedBy=User::getByUserId($r->AddedBy)->username;
-		$retval[] = $r;
-	}
-	DbUtil::switchRestore($saved_db);
-	return $retval;
-}
-function add_key_mgmt($keyMgmt)
-{
-	$saved_db = DbUtil::switchToGlobal();
-	$query_check = "SELECT count(*) as cnt from keymgmt where lab_name='".$keyMgmt->LabName."'";
-	$record = query_associative_one($query_check);
-if($record['cnt']!=0)
-{
-return "Key For This Lab Already Exists";
-}
-$query="insert into keymgmt(lab_name,pub_key,added_by,last_modified) values('";
-$query=$query.$keyMgmt->LabName."','".$keyMgmt->PubKey."',".$keyMgmt->AddedBy.",now())";
-		query_insert_one($query);
-	DbUtil::switchRestore($saved_db);
-	return "Key added successfully";
-}
-function update_key_mgmt($keyMgmt)
-{
-	$saved_db = DbUtil::switchToGlobal();
-	$query_check = "SELECT count(*) as cnt from keymgmt where id=".$keyMgmt->ID;
-	$record = query_associative_one($query_check);
-if($record['cnt']<1)
-return "This Lab Does Not Exists.";
-$query="update keymgmt set lab_name='";
-$query=$query.$keyMgmt->LabName."',pub_key='".$keyMgmt->PubKey."',added_by=".$keyMgmt->AddedBy.",last_modified=now() where id=".$keyMgmt->ID;
-		query_blind($query);
-	DbUtil::switchRestore($saved_db);
-	return "Key updated successfully";
-}
-function delete_key_mgmt($keyID)
-{
-	$saved_db = DbUtil::switchToGlobal();
-$query="delete from keymgmt where id=".$keyID;
-		query_blind($query);
-	DbUtil::switchRestore($saved_db);
-	return "Key deleted successfully";
-}
-}
 class LabConfig
 {
 	public $id;
@@ -5779,25 +5666,6 @@ class SessionUtil
 			$_SESSION[$key] = $value;
 		}
 	}
-
-	public static function includeIfMissing($include_path, $test_string)
-	{
-		# Includes a php file if found to be not included already
-		$file_included = false;
-		$included_list = get_included_files();
-		foreach($included_list as $included_file)
-		{
-			if(strpos($included_file, $test_string) === true)
-			{
-				$file_included = true;
-				break;
-			}
-		}
-		if($file_included === false)
-		{
-			include($include_path);
-		}
-	}
 }
 
 class UILog
@@ -8805,12 +8673,16 @@ function checkAndAddUserConfig($lab_admin_id){
 
 function add_lab_config($lab_config, $dev=0)
 {
+	global $log;
+
 	# Adds a new lab configuration to DB
 	$saved_db = DbUtil::switchToGlobal();
 	$query_check = "SELECT admin_user_id FROM lab_config WHERE lab_config_id = $lab_config->id";
 	$record = query_associative_one($query_check);
 
 	if($dev == 0){
+		$log->info("add_lab_config: inserting new lab with full configuration");
+
 		#This branch is taken when a new lab is created by a country director
 		# Adds a new lab configuration to DB
 		$query_add_lab_config =
@@ -8818,15 +8690,17 @@ function add_lab_config($lab_config, $dev=0)
 			"VALUES ('$lab_config->name', '$lab_config->location', $lab_config->adminUserId, $lab_config->idMode, '$lab_config->id', '$lab_config->country')";
 		query_insert_one($query_add_lab_config);
 	}
-	else if($dev == 1  && is_null($record)){
+	else if($dev == 1  && ($record == false)){
+		$log->info("add_lab_config: inserting new lab with admin_user_id and lab_config_id");
 		# This branch is taken when an entry for lab in the config param doesn't exist in revamp db
 		# (for devs importing lab backups using country director's interface)
 		$query_add_lab_config =
-			"INSERT INTO lab_config(admin_user_id, lab_config_id) ".
-			"VALUES ($lab_config->adminUserId, $lab_config->id)";
+			"INSERT INTO lab_config(admin_user_id, lab_config_id, `name`) ".
+			"VALUES ($lab_config->adminUserId, $lab_config->id, '$lab_config->name')";
 		query_insert_one($query_add_lab_config);
 	}
 	else if($dev == 1 && (intval($record['admin_user_id']) != intval($lab_config->adminUserId))){
+		$log->info("add_lab_config: lab already exists, updating admin user");
 		# This branch is taken when a lab backup is imported by developers in country director's interface,
 		# and when an entry exists with an admin userid which is not the same as the one in lab config object param
 		#Update the admin user id for the lab config in the object param passed
@@ -11239,7 +11113,7 @@ function add_lab_config_specimen_type($lab_config_id, $specimen_type_id)
 function add_lab_config_access($user_id, $lab_config_id)
 {
 	# Adds access to a new lab config for a country dir user
-	global $con;
+	global $con, $log;
 	$user_id = mysql_real_escape_string($user_id, $con);
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
 	$saved_db = DbUtil::switchToGlobal();
@@ -11249,8 +11123,7 @@ function add_lab_config_access($user_id, $lab_config_id)
 	$flag_exists = query_associative_one($query_check);
 	if($flag_exists != null)
 	{
-		# Mapping already exists
-		# TODO: Add error handling?
+		$log->info("User ID $user_id already has access to lab ID $lab_config_id");
 		return;
 	}
 	$query_add =

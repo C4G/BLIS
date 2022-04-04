@@ -13,11 +13,12 @@ class PlatformLib {
 	}
 
 	public static function mySqlDumpPath() {
-		$currentDir = dirname(realpath(__FILE__));
 		if(self::runningOnWindows()) {
 			// If running on Windows, assume that we're running the portable/traditional
 			// version of BLIS, and use the bundled mysqldump.
-			return "../../server/mysql/bin/mysqldump.exe";
+			$exe_path = realpath(dirname(__FILE__)."/../../server/mysql/bin/mysqldump.exe");
+            // https://www.php.net/manual/en/function.escapeshellcmd.php
+            return preg_replace('`(?<!^) `', '^ ', escapeshellcmd('"'.$exe_path.'"'));
 		} else {
 			// Otherwise, assume that mysqldump is in the system PATH.
 			// This should work on Linux!
@@ -27,11 +28,11 @@ class PlatformLib {
 	}
 
 	public static function mySqlClientPath() {
-		$currentDir = dirname(realpath(__FILE__));
 		if(self::runningOnWindows()) {
 			// If running on Windows, assume that we're running the portable/traditional
 			// version of BLIS, and use the bundled mysql.
-			return "../../server/mysql/bin/mysql.exe";
+            $exe_path = realpath(dirname(__FILE__)."\..\..\server\mysql\bin\mysql.exe");
+			return preg_replace('`(?<!^) `', '^ ', escapeshellcmd('"'.$exe_path.'"'));
 		} else {
 			// Otherwise, assume that mysql is in the system PATH.
 			// This should work on Linux!

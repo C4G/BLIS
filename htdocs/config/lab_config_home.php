@@ -827,15 +827,13 @@ function blis_update()
 }
 function load_key_table()
 {
-//alert("ok");
     $.ajax({
       type: "GET",
       dataType: "json",
       url: "ajax/get_keys.php",
-//      data: data,
       success: function(data) {
 col=["LabName","AddedBy","ModOn"];
-col_disp=["<?php echo LangUtil::$pageTerms['key_alias']; ?>","Modified By","Modified On","",""];
+col_disp=["<?php echo LangUtil::$pageTerms['key_alias']; ?>","Modified By","Modified On",""];
             // CREATE A TABLE.
             var table = document.createElement('table');
             table.setAttribute('id', 'publicKeyTable');     // SET TABLE ID.
@@ -862,11 +860,9 @@ th.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;paddin
   tabCell.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;");
 }
 var tabCell = tr.insertCell(-1);
-//                    tabCell.innerHTML = "<a onclick='edit_key("+data[i]['ID']+")'>Edit</a>";
-//  tabCell.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;font: 15px Calibri;cursor: pointer;border: none;color: #FFF;");
-//tabCell = tr.insertCell(-1);
+
                     tabCell.innerHTML = "<a onclick='delete_key("+data[i]['ID']+")'>Delete</a>";
-  tabCell.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;font: 15px Calibri;cursor: pointer;border: none;color: #FFF;");
+  tabCell.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;font: 15px Calibri;cursor: pointer;color: #FFF;");
 }
             var div = document.getElementById('container');
             div.innerHTML = '';
@@ -4417,17 +4413,16 @@ function AddnewDHIMS2Config()
 				<div class='right_pane' id='key_management_div' style='display:none;margin-left:10px;'>
 					<p style="text-align: right;"><a rel='facebox' href='#Keymgmt'>Page Help</a></p>
 <table border="0">
-<tr>
-<td><input id="btn_enc" style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="toggle_encryption()" value="<?php echo KeyMgmt::read_enc_setting()==0?LangUtil::$pageTerms['enable_encrypted_backup']:LangUtil::$pageTerms['disable_encrypted_backup']; ?>"/></td>
-<td><input style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="download_key()" value="<?php echo LangUtil::$pageTerms['download_key']; ?>"/></td>
-</tr>
+    <tr>
+        <td><input id="btn_enc" style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="toggle_encryption()" value="<?php echo KeyMgmt::read_enc_setting()==0?LangUtil::$pageTerms['enable_encrypted_backup']:LangUtil::$pageTerms['disable_encrypted_backup']; ?>"/></td>
+        <td><input style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="download_key()" value="<?php echo LangUtil::$pageTerms['download_key']; ?>"/></td>
+        <td><input style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" id="addbtn" onclick="add_key()" value="<?php echo LangUtil::$pageTerms['add_key']; ?>"/>
+    </tr>
 </table>
-<br/><br/>
-<input id="addbtn" style="font: 17px Calibri;cursor: pointer;" type="button" onclick="add_key()" value="<?php echo LangUtil::$pageTerms['add_key']; ?>"/>
 <br/>
-    <div id="container" style="width:700px;">
-    </div>
-    <div id="container1" style="width:700px;display:none">
+<div id="container" style="width:700px;">
+</div>
+<div id="container1" style="width:700px;display:none">
 <form id="form_key" action="../ajax/add_keys.php" method="post" enctype="multipart/form-data">
 <h3><?php echo LangUtil::$pageTerms['add_header']; ?></h3>
 <table border="0">
