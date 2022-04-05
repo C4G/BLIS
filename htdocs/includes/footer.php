@@ -49,7 +49,7 @@ LangUtil::setPageId("footer");
 			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank'>User Guide</a>";
 		}
 		?>
-		<a> | </a> 
+		|
 		<a rel='facebox' href='feedback/comments.php?src=<?php echo $_SERVER['PHP_SELF']; ?>'><?php echo "Comments" ?>?</a> |
 		C4G BLIS v<?php echo $VERSION; ?> - <?php echo LangUtil::getPageTerm("FOOTER_MSG"); ?>
 		<?php
