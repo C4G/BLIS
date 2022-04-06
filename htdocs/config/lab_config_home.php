@@ -25,13 +25,7 @@ $script_elems->enableJQueryForm();
 
 
 <script src="js/jquery-ui-1.8.16.js" type="text/javascript"></script>
-<link rel="stylesheet" href="css//jquery-ui-1.8.16.css" type="text/css" media="all">
-
- <link rel="stylesheet" href="css/jquery-ui-1.8.16.css" type="text/css" media="all">
-<!-- <link rel="stylesheet" href="/resources/demos/style.css" /> -->
-<!-- <script type="text/javascript" src="js/jquery.ui.js"></script>
-<script type="text/javascript" src="js/dialog/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="js/dialog/jquery.ui.dialog.js"></script> -->
+<link rel="stylesheet" href="css/jquery-ui-1.8.16.css" type="text/css" media="all">
 
 <div id='Summary_config' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
