@@ -1020,7 +1020,8 @@ function submit_save_server_ip()
 {
 	$('#blis_online_config_form').ajaxSubmit({
 		success: function() {
-			window.location=reload_url;
+			document.getElementById('serverIpUpdateBtn').style.display = 'none';
+			document.getElementById('serverIpUpdateMsg').style.display = 'inline';
 		}
 	})
 }
@@ -4063,13 +4064,14 @@ function AddnewDHIMS2Config()
 					<?php echo LangUtil::$pageTerms['ADD_ONLINE_SERVER']; ?>
                     <input type="text" id="server_ip"
 						name="server_ip"
-						value='<?php $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
-                                $result = query_associative_one($query);
-                                echo reset($result); ?>'>
+						value='<?php echo $lab_config->blis_cloud_hostname; ?>'>
 					<br><br>
-					<input type="button"
+					<input type="button" id="serverIpUpdateBtn"
 							value="<?php echo LangUtil::$pageTerms['SAVE_BUTTON']; ?>"
 							onclick="submit_save_server_ip();">
+					<p id="serverIpUpdateMsg" style="display:none">
+						BLIS Cloud hostname updated successfully!
+					</p>
 				</form>
 				</div>
 
