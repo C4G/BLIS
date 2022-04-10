@@ -1,4 +1,4 @@
-﻿<?php
+<?php
     require_once("../includes/header.php");
     require_once("../includes/keymgmt.php");
     //$labConfigId = $_REQUEST['id'];
@@ -7,13 +7,6 @@
     $target_set=KeyMgmt::getAllKeys();
     $encryption_enabled = (KeyMgmt::read_enc_setting() == 1);
 ?>
-
-<style type="text/css">
-td {
-    padding: 5px 0;
-    line-height: 1.5rem;
-}
-</style>
 
 <script type="text/javascript">
 
@@ -46,7 +39,7 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 
 <form id='databaseBackupType' name='databaseBackupType' action='backupData.php' method='post' target='_blank' enctype="multipart/form-data">
     <input type='hidden' value='<?php echo $labConfigId; ?>' id='labConfigId' name='labConfigId' />
-	<table>
+    <table>
 <tr id="keySelectRow" style="<?php echo($encryption_enabled ? '' : 'display: none') ?>">
     <td style="text-align: right">Backup encryption key: </td>
     <td>
@@ -76,8 +69,11 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 <tr>
     <td style="text-align: right">Type of backup:</td>
     <td>
-        <input type='radio' id='backupTypeSelect' name='backupTypeSelect' value='normal' checked>General Backup</option><br/>
-        <input type='radio' id='backupTypeSelect' name='backupTypeSelect' value='anonymized'>Anonymized Backup</option>
+        <input type='radio' id='backupTypeSelectGeneral' name='backupTypeSelect' value='normal' checked>
+        <label for="backupTypeSelectGeneral">General Backup</label>
+        <br/>
+        <input type='radio' id='backupTypeSelectAnon' name='backupTypeSelect' value='anonymized'>
+        <label for="backupTypeSelectAnon">Anonymized Backup</label>
     </td>
 </tr>
 

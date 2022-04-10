@@ -1,16 +1,14 @@
-﻿<?php
+<?php
 #
 # (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
 # This file contains entity classes and functions for DB queries
 #
 
+require_once('SessionCheck.php');
+
 require_once('db_util.php');
 require_once('keymgmt.php');
 require_once('lab_config.php');
-
-# Start session if not already started
-if(session_id() == "")
-	session_start();
 
 require_once("defaults.php");
 
