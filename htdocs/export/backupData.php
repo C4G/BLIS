@@ -255,7 +255,7 @@ removeDirectory($backup_dir);
 
 echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/backups/".basename($new_path)."'/>Download Zip</a>";
 
-send_file_to_server($new_path);
+send_file_to_server($new_path, $lab_config_id);
 
 function createZipFile($zipFile, $rootPath)
 {
