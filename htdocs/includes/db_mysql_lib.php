@@ -21,13 +21,12 @@ function query_insert_one($query)
 {
 	# Single insert statement
 	global $con;
-	mysql_query( $query, $con ) or die(mysql_error());
-	if($LOG_QUERIES == true)
-        {
-		DebugLib::logDBUpdates($query, db_get_current());
-		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
-        }
-		
+    mysql_query( $query, $con ) or die(mysql_error());
+    $LOG_QUERIES = true;
+	if($LOG_QUERIES == true) {
+        DebugLib::logDBUpdates($query, db_get_current());
+        DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
+    }
 }
 
 

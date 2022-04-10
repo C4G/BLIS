@@ -257,15 +257,6 @@ echo "Download the below zip of the backup and save it to your disk. <br/><a hre
 
 send_file_to_server($new_path);
 
-// } else {
-//     // handle server backup here
-//     $query = "select server_ip from lab_config where lab_config_id = ".$lab_config_id;
-//     $server_ip = query_associative_one($query)['server_ip'];
-//     $response = send_backup_to_server($zipFile, $server_ip);
-//     echo $response;
-// }
-
-
 function createZipFile($zipFile, $rootPath)
 {
     global $log;
@@ -317,17 +308,17 @@ function removeDirectory($dir)
     rmdir($dir);
 }
 
-
-function send_file_to_server($file_path) {
-    // TODO
-    $server_ip = "http://localhost:80";
-
-    send_file($file_path, $server_ip);
-}
-
-function send_file($file_path, $server_host)
+function send_file_to_server($file_path, $lab_config_id)
 {
     global $log;
+
+    $lab_config = LabConfig::getById($lab_config_id);
+    $server_host = $lab_config->blis_cloud_hostname;
+
+    if (strlen($server_host === 0)) {
+        $log->info("blis_cloud_hostname is not set for lab ID $lab_config_id");
+        return false;
+    }
 
     $endpoint = $server_host.'/export/import_data_director.php';
     $log->info("Attempting to upload $file_path to $endpoint...");

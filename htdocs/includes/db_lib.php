@@ -7686,7 +7686,7 @@ function add_lab_config($lab_config, $dev=0)
 		#This branch is taken when a new lab is created by a country director
 		# Adds a new lab configuration to DB
 		$query_add_lab_config =
-			"INSERT INTO lab_config(name, location, admin_user_id, id_mode, lab_config_id, country) ".
+			"INSERT INTO lab_config(`name`, `location`, admin_user_id, id_mode, lab_config_id, country) ".
 			"VALUES ('$lab_config->name', '$lab_config->location', $lab_config->adminUserId, $lab_config->idMode, '$lab_config->id', '$lab_config->country')";
 		query_insert_one($query_add_lab_config);
 	}
@@ -12573,21 +12573,21 @@ function setBaseConfig($from_id, $to_id)
     query_blind($query_string);
     $dbn = "blis_".$from_id.".test_category";
     $dbnn = "blis_".$to_id.".test_category";
-    $query_string = "INSERT INTO ".$dbnn." (test_category_id, name, description) SELECT test_category_id, name, description FROM ".$dbn;
+    $query_string = "INSERT INTO ".$dbnn." (test_category_id, `name`, description) SELECT test_category_id, `name`, description FROM ".$dbn;
     query_insert_one($query_string);
 
     $query_string = "DELETE FROM measure WHERE measure_id > 0";
     query_blind($query_string);
     $dbn = "blis_".$from_id.".measure";
     $dbnn = "blis_".$to_id.".measure";
-    $query_string = "INSERT INTO ".$dbnn." (measure_id, name, unit_id, range, description, unit) SELECT measure_id, name, unit_id, range, description, unit FROM ".$dbn;
+    $query_string = "INSERT INTO ".$dbnn." (measure_id, `name`, unit_id, `range`, description, unit) SELECT measure_id, `name`, unit_id, `range`, description, unit FROM ".$dbn;
     query_insert_one($query_string);
 
     $query_string = "DELETE FROM specimen_type WHERE specimen_type_id > 0";
     query_blind($query_string);
     $dbn = "blis_".$from_id.".specimen_type";
     $dbnn = "blis_".$to_id.".specimen_type";
-    $query_string = "INSERT INTO ".$dbnn." (specimen_type_id, name, description) SELECT specimen_type_id, name, description FROM ".$dbn;
+    $query_string = "INSERT INTO ".$dbnn." (specimen_type_id, `name`, description) SELECT specimen_type_id, `name`, description FROM ".$dbn;
     query_insert_one($query_string);
 
     $query_string = "DELETE FROM reference_range WHERE id > 0";
@@ -12601,7 +12601,7 @@ function setBaseConfig($from_id, $to_id)
     query_blind($query_string);
     $dbn = "blis_".$from_id.".test_type";
     $dbnn = "blis_".$to_id.".test_type";
-    $query_string = "INSERT INTO ".$dbnn." (test_type_id, name, description, test_category_id, is_panel, disabled, clinical_data, hide_patient_name, prevalence_threshold, target_tat) SELECT test_type_id, name, description, test_category_id, is_panel, disabled, clinical_data, hide_patient_name, prevalence_threshold, target_tat FROM ".$dbn;
+    $query_string = "INSERT INTO ".$dbnn." (test_type_id, `name`, description, test_category_id, is_panel, disabled, clinical_data, hide_patient_name, prevalence_threshold, target_tat) SELECT test_type_id, `name`, description, test_category_id, is_panel, disabled, clinical_data, hide_patient_name, prevalence_threshold, target_tat FROM ".$dbn;
     query_insert_one($query_string);
 
     $query_string = "DELETE FROM test_type_measure WHERE test_type_id > 0";
@@ -12707,7 +12707,7 @@ function setBaseConfigSpecimens($from_id, $to_id)
     }*/
     $dbn = "blis_".$from_id.".measure";
     $dbnn = "blis_".$to_id.".measure";
-     $query_string = "INSERT INTO ".$dbnn." (measure_id, name, unit_id, range, description, unit) SELECT measure_id, name, unit_id, range, description, unit FROM ".$dbn;
+     $query_string = "INSERT INTO ".$dbnn." (measure_id, `name`, unit_id, range, description, unit) SELECT measure_id, `name`, unit_id, range, description, unit FROM ".$dbn;
      query_insert_one($query_string);
     DbUtil::switchRestore($saved_db);
     return;
