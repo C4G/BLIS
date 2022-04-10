@@ -1,6 +1,6 @@
-# C4G BLIS User Guide Version 3.72
+# C4G BLIS User Guide Version 3.8
 
-## User Instruction Manual Rev 3.72
+## User Instruction Manual Rev 3.8
 
 C4G Basic Laboratory Information System is a collaboration between Computing-for-Good (C4G) at Georgia Tech, the CDC, and participating PEPFAR countries.
 
@@ -57,6 +57,9 @@ Installing command-line tools can be done with a Windows package manager such as
 
 * `git`
 
+#### Instructions for Installation
+1. Navigate to the [C4G BLIS home page](http://blis.cc.gatech.edu/). 
+2. 
 
 ### BLIS On The Cloud <a name="blis_cloud"></a>
 Insert information about BLIS on the Cloud
