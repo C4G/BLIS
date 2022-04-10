@@ -8,7 +8,7 @@
 
 include("../users/accesslist.php");
 include("redirect.php");
-include("includes/user_lib.php");
+require_once("includes/user_lib.php");
 
 
 if( !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList))

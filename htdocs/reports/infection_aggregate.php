@@ -7,7 +7,7 @@ include("redirect.php");
 include("includes/db_lib.php");
 include("includes/stats_lib.php");
 include("includes/script_elems.php");
-include("includes/user_lib.php");
+require_once("includes/user_lib.php");
 
 LangUtil::setPageId("reports");
 

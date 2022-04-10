@@ -46,7 +46,7 @@ body {
 
 <?php 
 include("../includes/db_lib.php");
-include("../includes/user_lib.php");
+require_once("../includes/user_lib.php");
 $reset_before_date = "2013-08-30";
 ?>
 

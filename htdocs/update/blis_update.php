@@ -12,7 +12,7 @@ if( !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_
 */
 include("redirect.php");
 include("../includes/db_lib.php");
-include("../includes/user_lib.php");
+require_once("../includes/user_lib.php");
 
 LangUtil::setPageId("update");
 

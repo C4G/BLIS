@@ -7,7 +7,7 @@
 include("../includes/header.php");
 include("../includes/db_constants.php");
 //include("../export/backup_lib.php");
-//include("../includes/user_lib.php");
+//require_once("../includes/user_lib.php");
 $saved_session = SessionUtil::save();
 //$labConfigId = 129;
 $labConfigId = $_REQUEST['labConfigId'];

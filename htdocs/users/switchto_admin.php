@@ -4,7 +4,7 @@
 #
 include("redirect.php");
 include("includes/db_lib.php");
-include("includes/user_lib.php");
+require_once("includes/user_lib.php");
 
 # Restore required session variables
 $_SESSION['lab_config_id'] = $_SESSION['lab_config_id_backup'];

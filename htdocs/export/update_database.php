@@ -6,7 +6,7 @@
 #
 include("../includes/db_constants.php");
 include("../export/backup_lib.php");
-include("../includes/user_lib.php");
+require_once("../includes/user_lib.php");
 $saved_session = SessionUtil::save();
 
 function page_redirect($is_done, $lid)
