@@ -127,7 +127,6 @@ $access_rights=array(
 "toggle_test_reports.php"=>"~CD~SA~",
 "UpdateDoctorNames.php"=>"~CD~SA~A~",
 "update_barcode_settings.php"=>"~CD~SA~",
-"update_blis.php"=>"~CD~A~SA~",
 "update_country_level_section.php"=>"~CD~SA~",
 "update_country_level_test.php"=>"~CD~SA~",
 "userlog_fetch.php"=>"~CD~A~SA~RP~",

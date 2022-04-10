@@ -97,17 +97,33 @@ $(document).ready(function(){
 
 function capLock(e)
 {
-	kc = e.keyCode?e.keyCode:e.which;
-	if(kc == 8)
-	{
-		//delete key pressed, maintain same state
+	keyCode = e.keyCode ? e.keyCode : e.which;
+	if(keyCode == 8) {
+		// delete key pressed, maintain same state
 		return;
-	}		
-	sk = e.shiftKey?e.shiftKey:((kc == 16)?true:false);
-	if(((kc >= 65 && kc <= 90) && !sk)||((kc >= 97 && kc <= 122) && sk))
+	}
+
+	var capsLockOn = false;
+
+	// Modern browsers (Firefox >= 15) support this
+	if (typeof e.getModifierState === 'function') {
+		capsLockOn = e.getModifierState('CapsLock');
+	} else {
+		// Otherwise test to see if caps lock is on by seeing
+		// whether or not the character entered matches the
+		// state of the Shift key.
+
+		var lowerCaseLetterEntered = keyCode >= 97 && keyCode <= 122;
+		var upperCaseLetterEntered = keyCode >= 65 && keyCode <= 90
+
+		capsLockOn = (e.shiftKey && lowerCaseLetterEntered) || (!e.shiftKey && upperCaseLetterEntered);
+	}
+
+	if(capsLockOn) {
 		$('#caps_lock_msg_div').show();
-	else
+	} else {
 		$('#caps_lock_msg_div').hide();
+	}
 }
 </script>
 

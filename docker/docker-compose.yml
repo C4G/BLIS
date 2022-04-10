@@ -15,6 +15,8 @@ services:
       DB_PASS: 'blis123'
     depends_on:
       - db
+    volumes:
+      - blis-files:/var/www/blis/files
     ports:
       - "80:80"
   db:
@@ -31,3 +33,4 @@ services:
 
 volumes:
   blis-data:
+  blis-files:

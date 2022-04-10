@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 #
 # (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
 # Contains functions for calculating various statistics for reports

@@ -8,7 +8,7 @@
 
 include("../users/accesslist.php");
 include("redirect.php");
-include("includes/user_lib.php");
+require_once("includes/user_lib.php");
 include("includes/header.php");
 
 

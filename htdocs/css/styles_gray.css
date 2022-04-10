@@ -31,7 +31,7 @@
 	font-family:Trebuchet MS, Times New Roman;
 }
 
-.parent_pane {
+body {
 	width: 1000px; 
 	margin: auto;
 	text-align: left;

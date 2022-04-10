@@ -3,11 +3,11 @@
 # Adds a new test type to catalog in DB
 #
 include("redirect.php");
-
 include("includes/header.php");
 include("includes/stats_lib.php");
 include("lang/lang_xml2php.php");
 include("../users/accesslist.php");
+include("../AntiXSS.php");
 
 LangUtil::setPageId("stocks");
 
@@ -61,6 +61,10 @@ function getBarcodeSearchResults()
         $('#error_empty').show();
         return;
     }
+    //input validation
+    //whitelistFilter($str, $whiteFilterPattern);
+    //blacklistFilter(code);
+    htmlspecialchars(code, ENT_QUOTES, 'UTF-8');
     //alert(code);
     $('#barcode_search_result').html('');
     var url = "inventory/get_barcode_scan_results.php?code="+code;
@@ -77,7 +81,7 @@ Barcode Scan Search: <input type="text" id="barcode_search_field" name="barcode_
 
 </div>
 <br>
-<a href='inv_new_reagent.php'> <?php echo "Add Item" ; ?></a> &nbsp;|&nbsp;<a href='generate_barcode.php'> <?php echo "Generate Barcodes" ; ?></a> &nbsp;| &nbsp;<b> <?php echo LangUtil::$pageTerms['Current_Inventory']; ?></b>
+<a href='inv_new_reagent.php'> <?php htmlspecialchars($code, ENT_QUOTES, 'UTF-8'); echo "Add Item" ; ?></a> &nbsp;|&nbsp;<a href='generate_barcode.php'> <?php echo "Generate Barcodes" ; ?></a> &nbsp;| &nbsp;<b> <?php echo LangUtil::$pageTerms['Current_Inventory']; ?></b>
 <table class='tablesorter' id='current_inventory'  style='width:600px'>
 	<thead>
 		<tr align='center'>
@@ -110,10 +114,10 @@ if(count($reagents_list)!=0)
     foreach($reagents_list as $reagent) {
 ?>  <tbody>
 		<tr align='center'>
-			<td><?php echo $reagent['name'];?></td>
+			<td><?php echo htmlspecialchars($reagent['name'], ENT_QUOTES, 'UTF-8');?></td>
 			<td><?php 
                         
-                            $quant = Inventory::getQuantity($lid, $reagent['id']);
+                            $quant = Inventory::getQuantity($lid, htmlspecialchars($reagent['id'], ENT_QUOTES, 'UTF-8'));
                             if($quant == '')
                                 echo "0";
                             else 
@@ -124,21 +128,23 @@ if(count($reagents_list)!=0)
                             if($uni == '')
                                 echo "units";
                             else 
-                                echo $uni;
+                                echo htmlspecialchars($uni, ENT_QUOTES, 'UTF-8');;
                             ?></td>
                         <?php if($view_update == 1){ ?>
                         <td><?php 
-                            echo "<a href='stock_lots.php?id=".$reagent['id']."'> Log Stock Usage</a>";
+                        //performing output encoding to prevent XSS
+                        $safe_id = htmlspecialchars($reagent['id'], ENT_QUOTES, 'UTF-8');
+                            echo "<a href='stock_lots.php?id=".$safe_id."'> Log Stock Usage</a>";
                             ?></td>
                         <?php } ?>
                         <?php if($view_add == 1){ ?>
                         <td><?php 
-                            echo "<a href='inv_new_stock.php?id=".$reagent['id']."'> Add Stock</a>";
+                            echo "<a href='inv_new_stock.php?id=".$safe_id."'> Add Stock</a>";
                             ?></td>
                         <?php } ?>
                         <?php if($view_edit == 1){ ?>
                         <td><?php 
-                            echo "<a href='edit_stock.php?id=".$reagent['id']."'> Edit Details</a>";
+                            echo "<a href='edit_stock.php?id=".$safe_id."'> Edit Details</a>";
                             ?></td>
                         <?php } ?>
                         

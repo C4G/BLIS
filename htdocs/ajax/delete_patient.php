@@ -7,7 +7,7 @@ include("../includes/db_lib.php");
 include("../includes/SessionCheck.php");
 include("../includes/script_elems.php");
 include("../includes/page_elems.php");
-#include("../includes/user_lib.php");
+#require_once("../includes/user_lib.php");
 $patient_id=$_REQUEST['patient_id'];
 
 //$lab_config = LabConfig::getById($_SESSION['lab_config_id']);

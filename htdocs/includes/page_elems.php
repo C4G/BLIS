@@ -34,7 +34,7 @@ class PageElems
 	public function getProgressSpinner($message)
 	{
 		?>
-		<img src='includes/img/small_spinner.gif'></img><?php echo "<small> ".$message."</small>";
+		<img src='includes/img/small_spinner.gif' /><?php echo "<small> ".$message."</small>";
 	}
 
 	public function getProgressSpinnerBig($message)
