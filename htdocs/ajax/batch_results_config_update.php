@@ -11,7 +11,6 @@ $report_config = new ReportConfig();
 $report_config->labConfigId = $lab_config_id;
 
 echo "debugging -> ", $pfield_csv;
-// alert("hi");
 
 # Patient main fields
 $patient_main_field_count = 13;
