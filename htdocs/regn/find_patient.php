@@ -146,7 +146,6 @@ function hideCondition(p_attrib)
 
 <p style="text-align: right;"><a rel='facebox' href='#Registration'>Page Help</a></p>
 <div class='sidetip_patient'>
-<b> Tips </b>
 <br />
 <br />
 		<?php

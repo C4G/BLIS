@@ -3338,7 +3338,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 		?>
 			<div class='sidetip_nopos'>
 			<p>
-				<a href='new_specimen.php?pid=<?php echo $patient_id; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register a New Specimen for this Patient' class="black">
+				<a href='new_specimen.php?pid=<?php echo $patient_id; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register a New Specimen for this Patient'>
 					<?php echo LangUtil::$pageTerms['MSG_REGNEWSPECIMEN']; ?>
 				</a>
 			</p>
@@ -3347,7 +3347,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			{
 				?>
 				<p>
-					<a href='javascript:toggle_profile_divs();' title='Click to Update Patient Profile' class="black">
+					<a href='javascript:toggle_profile_divs();' title='Click to Update Patient Profile'>
 						<?php echo LangUtil::$pageTerms['MSG_UPDATEPROFILE']; ?>
 					</a>
 
@@ -3356,7 +3356,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			}
 			?>
 			<p>
-				<a href='reports_testhistory.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>' title='Click to Generate Test History Report for this Patient' target='_blank' class="black">
+				<a href='reports_testhistory.php?location=<?php echo $_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>' title='Click to Generate Test History Report for this Patient' target='_blank'>
 					<?php echo LangUtil::$pageTerms['MSG_PRINTHISTORY']; ?>
 				</a>
 			</p>
@@ -3365,7 +3365,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			{
 				?>
 				<p>
-					<a href='javascript:print_patient_barcode();' title='Click to Print Patient Barcode' class="black">
+					<a href='javascript:print_patient_barcode();' title='Click to Print Patient Barcode'>
 						<?php echo "Print Patient Barcode" ?>
 					</a>
 
@@ -3378,7 +3378,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				if (is_billing_enabled($_SESSION['lab_config_id']))
 					{ ?>
 				<p>
-					<a rel='facebox' href='bill_generator.php?location=<?php echo$_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>' title='Click to generate a billing statement for this Patient' target='_blank' class="black">
+					<a rel='facebox' href='bill_generator.php?location=<?php echo$_SESSION['lab_config_id']; ?>&patient_id=<?php echo $patient_id; ?>' title='Click to generate a billing statement for this Patient' target='_blank'>
 						<?php echo "Billing Report" ?>
 					</a>
 				</p>
