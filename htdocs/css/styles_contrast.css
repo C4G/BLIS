@@ -454,11 +454,11 @@ div.sidetip_batch_results_subdiv_help {
 }
 
 div.sidetip_nopos {
-	background:#FF9933;
-	border: 1px solid #333333;
+	background:#fff7d1;
 	padding: 10px 10px 10px 10px;
 	font-size: 14px;
 	width:300px;
+	box-shadow: 0px 1px 5px #999;
 }
 
 .right_pane_float {
@@ -472,7 +472,7 @@ div.sidetip_nopos {
 div.pretty_box {
 	padding: 20px;
 	font-size: 14px;
-	border: 7px solid #FF9933;
+	border: 3px solid #FF9933;
 }
 
 font.smaller_font {

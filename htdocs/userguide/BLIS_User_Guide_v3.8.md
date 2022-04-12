@@ -9,13 +9,14 @@ C4G Basic Laboratory Information System is a collaboration between Computing-for
 # Table of contents
 1. [Introduction to C4G BLIS](#introduction)
 2. [BLIS Start-Up Guide](#startup)
-    1. [BLIS For Windows](#blis_windows)
-    2. [BLIS On The Cloud](#blis_cloud)
-    3. [BLIS In A Devcontainer](#blis_devcontainer)
+    1. [Installing BLIS For Windows](#blis_windows)
+    2. [Starting BLIS](#starting_blis)
+    3. [Stopping BLIS](#stopping_blis)
+
 3. [Roles in BLIS](#blis_roles)
-    1. [Manager Overview](#manager_overview)
-    2. [Technician Overview](#technician_overview)
-    3. [Director Overview](#director_overview)
+    1. [Director Overview](#director_overview)
+    2. [Manager Overview](#manager_overview)
+    3. [Technician Overview](#technician_overview)
 
 # Introduction to C4G BLIS <a name="introduction"></a>
 The Basic Laboratory Information System, BLIS, is a freeware Web-based system that can be installed in a local, district, or national laboratory. It is a tool that can help to standardize data, which improves the ability to run useful reports and can both give a realistic picture of laboratory services and assist with staff and budget planning. With enough data, BLIS can be used to track disease prevalence over time.
@@ -43,35 +44,49 @@ As with any properly implemented electronic record system, BLIS may be found ove
 # BLIS Start-Up Guide <a name="startup"></a>
 There are three versions of BLIS that currently exists. 
 
-Firstly, <b>BLIS on Windows</b> was the original version developed for end-users. Stand-alone versions, updates, and packaged content are still publically available on the C4G BLIS home page, [accessible here](http://blis.cc.gatech.edu/). 
+Firstly, **BLIS on Windows** was the original version developed for end-users. Stand-alone versions, updates, and packaged content are still publically available on the C4G BLIS home page, [accessible here](http://blis.cc.gatech.edu/).
 
-Secondly, <b>BLIS on the Cloud</b> is a newly deployed version of BLIS that is capable of running on a Cloud Provider, and was originally intended to be used as an online backup database for aggregating country-wide data for analysis. 
+Secondly, **BLIS on the Cloud** is a newly deployed version of BLIS that is capable of running on a Cloud Provider, and was originally intended to be used as an online backup database for aggregating country-wide data for analysis. For instructions on installing **BLIS on the Cloud**, please see the Developer's Documentation.
 
-Thirdly, <b>BLIS in a Devcontainer</b> is an instantiation of BLIS that allows for developers to specify the development environment, and is intended to be used by developers only.
+Thirdly, **BLIS in a Devcontainer** is an instantiation of BLIS that allows for developers to specify the development environment, and is intended to be used by developers only. For instructions on installing **BLIS in a Devcontainer**, please see the Developer's Documentation.
 
-### BLIS For Windows <a name="blis_windows"></a>
+## BLIS For Windows <a name="blis_windows"></a>
 BLIS was originally developed to run on Windows using a discontinued project called Server2Go. This packages Apache2, MySQL, PHP, and Firefox together into a package that can be run all at once on a desktop computer. BLIS on Windows is the primary way that end-users are using BLIS, but can and should be used by developers to test updates.
 
-#### Prerequesites
+### Prerequesites
 Installing command-line tools can be done with a Windows package manager such as [Scoop](https://scoop.sh/).
 
 * `git`
 
-#### Instructions for Installation
+### Instructions for Installation
 1. Navigate to the [C4G BLIS home page](http://blis.cc.gatech.edu/). 
-2. 
+2. Click on the *Download* tab in the top menu bar, then click **Download BLIS v3.8 Complete**.
+3. Follow all instructions on the Download page.
 
-### BLIS On The Cloud <a name="blis_cloud"></a>
-Insert information about BLIS on the Cloud
+## Starting BLIS <a name="starting_blis"></a>
 
-### BLIS In A Devcontainer <a name="blis_devcontainer"></a>
-Insert informationa bout BLIS in a Devcontainer
+1. Double-click on the BLIS.exe file.
+2. A page requesting login information will appear. Enter in your login credentials.
 
-## Roles in BLIS <a name="blis_roles"></a>
-Overview of the three roles in BLIS
+<img src="../images/user_guide/login.png" width="50%"/> 
 
-### Manager Overview <a name="manager_overview"></a>
+## Stopping BLIS <a name="stopping_blis"></a>
+1. After your session is complete, click the **Logout** button in the top right pane of the screen.
+2. A popup window will appear where you can rate your experience with C4G BLIS and write any comments you may have. After entering your feedback, press the **Submit** button to fully logout. Alternatively, you may press **Skip** to logout immediately without providing any feedback. If you do not wish to logout, press **CLOSE**.
 
-### Technician Overview <a name="technician_overview"></a>
+<img src="../images/user_guide/logout.png" width="50%"/> 
 
-### Director Overview <a name="director_overview"></a>
+# Roles in BLIS <a name="blis_roles"></a>
+There are three roles in BLIS. 
+
+Firstly, **Directors** (also referenced to as country directors) are a role held by a single individual at the management level of each country. The roles of Directors are to oversee many laboratories using BLIS, summarize data trends from uploaded patient data from across the country, and work with C4G developers to provide user feedback for future versions of BLIS.
+
+Secondly, **Managers** (also referenced as admin users) are the managerial supervisors of laboratories. The rolse of Managers are to maintain the user permissions to individual labs and alter individual lab configurations as needed.
+
+Thirdly, **Technicians** are the majority of BLIS users. The role of Technicians is to enter in and verify patient data.
+
+## Director Overview <a name="director_overview"></a>
+## Manager Overview <a name="manager_overview"></a>
+
+## Technician Overview <a name="technician_overview"></a>
+

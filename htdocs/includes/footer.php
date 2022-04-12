@@ -36,17 +36,21 @@ LangUtil::setPageId("footer");
 		<small>
 		
 		<?php
+			echo '<a href="https://github.com/C4G/BLIS/tree/master/htdocs/userguide/faq.md">FAQ</a>';
+		?>
+		|
+		<?php
 		if($_SESSION['locale'] == "en")
 		{
-			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank'>User Guide</a>";
+			echo "<a href='userguide/BLIS_User_Guide_v3.8.md' target='_blank'>User Guide</a>";
 		}
 		else if($_SESSION['locale'] == "fr")
 		{
-			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank'>Guide de l'utilisateur</a>";
+			echo "<a href='userguide/BLIS_User_Guide_v3.8.md' target='_blank'>Guide de l'utilisateur</a>";
 		}
 		else
 		{
-			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank'>User Guide</a>";
+			echo "<a href='userguide/BLIS_User_Guide_v3.8.md' target='_blank'>User Guide</a>";
 		}
 		?>
 		|
