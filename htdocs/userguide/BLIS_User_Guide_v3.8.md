@@ -16,6 +16,8 @@ C4G Basic Laboratory Information System is a collaboration between Computing-for
 3. [Roles in BLIS](#blis_roles)
     1. [Director Overview](#director_overview)
     2. [Manager Overview](#manager_overview)
+        1. [Lab Configuration](#lab_configuration)
+
     3. [Technician Overview](#technician_overview)
 
 # Introduction to C4G BLIS <a name="introduction"></a>
@@ -85,8 +87,45 @@ Secondly, **Managers** (also referenced as admin users) are the managerial super
 
 Thirdly, **Technicians** are the majority of BLIS users. The role of Technicians is to enter in and verify patient data.
 
-## Director Overview <a name="director_overview"></a>
-## Manager Overview <a name="manager_overview"></a>
+# Director Overview <a name="director_overview"></a>
+# Manager Overview <a name="manager_overview"></a>
+The manager interface allows the Manager to do the following:
+1. Add, edit, and delete users
+2. Change the laboratory configuration settings in the **Lab Configuration** tab in the top menu bar
+3. Generate and print reports in the **Reports** tab in the top menu bar
 
+## Lab Configuration <a name="lab_configuration"></a>
+The laboratory configuration can be changed by Managers or admin users of BLIS. Here, you can change how reports are generated, what patient data is collected, as well as various other settings. In general, laboratory settings are usually initalized by the Country Director, but can be modified to suit individual labs' needs.
+
+The menu selection for the Lab Configuration tab - accessiable in the top menu bar - is as follows:
+1. [Summary](#summary)
+2. [Tests](#tests)
+3. [Search](#search)
+4. [Reports](#reports)
+5. [Sites](#sites)
+6. [Inventory](#inventory)
+7. [Barcode Settings](#barcode_settings)
+8. [Billing](#billing)
+9. [User Accounts](#user_accounts)
+9. [Registration Fields](#registration_fields)
+10. [Doctor Registration Fields](#doctor_registration_fields)
+11. [Modify Language](#modify_language)
+12. [Setup Local Network](#setup_local_network)
+13. [BLIS Online](#blis_online)
+14. [External Interface](#external_interface)
+15. [Revert to Backup](#revert_to_backup)
+16. [Manage Backup Keys](#manage_backup_keys)
+27. [Export Configuration](#export_configuration)
+
+### Summary <a name="summary"></a>
+The Summary page displays information about the laboratory. Specific information includes the Facility Name, Location, Lab Manager, available Specimen Types, available Test Types, and Technician Accounts allocated to the specific laboratory.
+
+<img src="../images/user_guide/lab_configuration.png" width="50%"/>
+
+### Tests <a name="tests"></a>
+
+### Search <a name="search"></a>
+
+### Reports <a name="reports"></a>
 ## Technician Overview <a name="technician_overview"></a>
 
