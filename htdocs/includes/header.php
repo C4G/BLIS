@@ -78,7 +78,7 @@ if(isset($_SESSION['username']))
     if(isset($_SESSION['admin_as_tech']) && $_SESSION['admin_as_tech'] === true)
     {
         ?>
-        <a.black href='switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOMGR"); ?></a> | 
+        <a href='switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOMGR"); ?></a> | 
         <?php
     }
     else if(isset($_SESSION['dir_as_tech']) && $_SESSION['dir_as_tech'] === true)

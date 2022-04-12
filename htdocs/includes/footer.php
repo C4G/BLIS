@@ -36,7 +36,7 @@ LangUtil::setPageId("footer");
 		<small>
 		
 		<?php
-			echo '<a href="https://github.com/C4G/BLIS/tree/master/htdocs/userguide/faq.md">FAQ</a>';
+			echo '<a href="https://c4g-spr22-blis.github.io/faq/">FAQ</a>';
 		?>
 		|
 		<?php
