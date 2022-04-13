@@ -145,8 +145,8 @@ function hideCondition(p_attrib)
 </script>
 
 <p style="text-align: right;"><a rel='facebox' href='#Registration'>Page Help</a></p>
+<span class='page_title'><?php echo LangUtil::getTitle(); ?></span>
 <div class='sidetip_patient'>
-<b> Tips </b>
 <br />
 <br />
 		<?php
@@ -157,7 +157,8 @@ function hideCondition(p_attrib)
 		
 		?>
 </div>
-<span class='page_title'><?php echo LangUtil::getTitle(); ?></span>
+
+
 <!--| <a href='new_patient.php' title='Click to add a new patient in the system'>Add New Patient &raquo;</a>-->
 <br><br>
 <form>
