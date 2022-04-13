@@ -129,9 +129,10 @@ dl dt label {
 	padding:0.3em 1.5em;
 	border:2px solid #4e4780;
 	border-radius: 3px;
-	font-family: Trebuchet MS, Tahoma;
+	font-family: Trebuchet MS, Tahoma, Sans-Serif;
 	cursor: pointer;
-	transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    -moz-transition-duration: 0.4s;
 
 }
 
