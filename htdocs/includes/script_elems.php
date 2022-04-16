@@ -78,7 +78,7 @@ class ScriptElems
 					var today = new Date();
 					var today_y = today.getFullYear();
 					var today_m = today.getMonth()+1;
-					var today_d = today.getDate();
+					var today_d = today.getDate()+1; 	// date is 0 indexed, same as month
 					if(parseInt(y) > today_y){
                         return false;
                     }

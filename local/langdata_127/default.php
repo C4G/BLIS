@@ -479,8 +479,8 @@ $LANG_ARRAY = array (
 		"TIPS_REVERTDONE" => "Backup reverted successfully. Please shutdown the system and restart to complete the reverting process.",
 		"TIPS_SETUPNETWORK_3" => "You will now be able to access BLIS by clicking on BlisSetup.html and entering your username and password.",
 		"TIPS_SETUPNETWORK_4" => "In case of a computer restart or network failure click on Setup Network option again.",
-		"TIPS_SETUPSERVER_1" => "First, enter the IP address of the BLIS Online server and click 'Save'.",
-		"TIPS_SETUPSERVER_2" => "Second, click the 'Backup Server' button to send data to the BLIS Online server.",
+		"TIPS_SETUPSERVER_1" => "Enter the IP address of the BLIS Online server and click 'Save'.",
+		"TIPS_SETUPSERVER_2" => "You can send a backup to the server from the Backup Data tab.",
 		"RPT_ITEMS_ON_ROW"=>"Items on a row",
 		"RPT_SHOW_DEMO_BORDER"=>"Show Demographics border",
 		"RPT_SHOW_SPM_BORDER"=>"Show Results border",
@@ -509,7 +509,8 @@ $LANG_ARRAY = array (
         "OUT_OF_RANGE" => "Out of range",
         "INTERPRETATION" => "Interpretation",
         "MODIFY_SITE" => "Modify sites",
-
+		"PRINT_UNVERIFIED" => "Allow printing of unverified tests",
+		"IP_SAVED" => "IP address saved."
 	) ,
 	"lab_admins" => array ( 
 		"TITLE" => "Lab Managers", 
