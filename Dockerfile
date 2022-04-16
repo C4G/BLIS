@@ -7,7 +7,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         gpg \
         htop \
         mysql-client \
-        software-properties-common
+        software-properties-common \
+        certbot \
+        python3-certbot-apache
 
 # PPAs - additional software from questionable sources go here...
 # Namely, pulling in PHP 5.6 here from a repo
@@ -25,29 +27,22 @@ RUN add-apt-repository ppa:ondrej/php && apt-get update && \
 RUN echo "column-statistics = 0" | tee -a /etc/mysql/conf.d/mysqldump.cnf
 
 # Copy the custom Apache2 config (blis.conf) into the 
-# Apache2 configuration directory and enable it.
-COPY docker/config/blis-release.conf /etc/apache2/sites-available/blis-release.conf
-RUN rm /etc/apache2/sites-enabled/000-default.conf && \
-    ln -s /etc/apache2/sites-available/blis-release.conf /etc/apache2/sites-enabled/blis-release.conf && \
-    a2enmod rewrite
+# Apache2 configuration directory. This will be enabled by the start-blis.sh
+COPY docker/config/blis-release.conf /etc/apache2/blis-release.conf
+ENV BLIS_APACHE2_CONFIG /etc/apache2/sites-available/blis-release.conf
 
 COPY docker/config/php.ini /etc/php/5.6/apache2/php.ini
+
+# Copy utility scripts to /usr/bin
+COPY docker/bin/set-apache2-servername.py /usr/bin/
+COPY docker/bin/get-https-cert.sh /usr/bin/
+COPY docker/bin/start-blis.sh /usr/bin/
 
 RUN mkdir /var/www/blis
 COPY . /var/www/blis
 RUN chown -R www-data:www-data /var/www/blis
 
-ENV APACHE_RUN_USER www-data
-ENV APACHE_RUN_GROUP www-data
-ENV APACHE_LOG_DIR /var/log/apache2
-ENV APACHE_PID_FILE /var/run/apache2.pid
-ENV APACHE_RUN_DIR /var/run/apache2
-ENV APACHE_LOCK_DIR /var/lock/apache2
-
-RUN mkdir -p /var/lock/apache2
-
 EXPOSE 80
+EXPOSE 443
 
-CMD rm -f $APACHE_PID_FILE \
-    && /usr/sbin/apache2 \
-    & tail -f /var/log/apache2/error.log
+CMD start-blis.sh && tail -f /var/log/apache2/error.log
