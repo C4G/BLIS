@@ -64,11 +64,12 @@ $script_elems->enableTableSorter();
                        
 		</tr>
 	</thead>
+    <tbody>
 <?php
     $reagents_list = array();
     $reagents_list = Inventory::getAllReagents($lid);
     foreach($reagents_list as $reagent) {
-?>  <tbody>
+?>
 		<tr align='center'>
 			<td><?php echo $reagent['name'];?></td>
 			<td><?php 
