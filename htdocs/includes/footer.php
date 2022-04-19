@@ -42,15 +42,15 @@ LangUtil::setPageId("footer");
 		<?php
 		if($_SESSION['locale'] == "en")
 		{
-			echo "<a href='userguide/BLIS_User_Guide_v3.8.md' target='_blank'>User Guide</a>";
+			echo "<a href='https://github.com/c4g-spr22-blis/BLIS/blob/master/htdocs/userguide/BLIS_User_Guide_v3.8.md' target='_blank'>User Guide</a>";
 		}
 		else if($_SESSION['locale'] == "fr")
 		{
-			echo "<a href='userguide/BLIS_User_Guide_v3.8.md' target='_blank'>Guide de l'utilisateur</a>";
+			echo "<a href='https://github.com/c4g-spr22-blis/BLIS/blob/master/htdocs/userguide/BLIS_User_Guide_v3.8.md' target='_blank'>Guide de l'utilisateur</a>";
 		}
 		else
 		{
-			echo "<a href='userguide/BLIS_User_Guide_v3.8.md' target='_blank'>User Guide</a>";
+			echo "<a href='https://github.com/c4g-spr22-blis/BLIS/blob/master/htdocs/userguide/BLIS_User_Guide_v3.8.md' target='_blank'>User Guide</a>";
 		}
 		?>
 		|

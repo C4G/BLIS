@@ -17,8 +17,12 @@ C4G Basic Laboratory Information System is a collaboration between Computing-for
     1. [Director Overview](#director_overview)
     2. [Manager Overview](#manager_overview)
         1. [Lab Configuration](#lab_configuration)
+        2. [Test Catalog](#test_catalog)
+        3. [Reports](#reports)
+        4. [Backup Data](#backup_data)
 
     3. [Technician Overview](#technician_overview)
+4. [Glossary](#glossary)
 
 # Introduction to C4G BLIS <a name="introduction"></a>
 The Basic Laboratory Information System, BLIS, is a freeware Web-based system that can be installed in a local, district, or national laboratory. It is a tool that can help to standardize data, which improves the ability to run useful reports and can both give a realistic picture of laboratory services and assist with staff and budget planning. With enough data, BLIS can be used to track disease prevalence over time.
@@ -204,6 +208,81 @@ The **Inventory** page is a list of any existing reagents being tracked in BLIS.
 The **Barcode Settings** page allows you to configure the settings for barcode formats. Click on the **Page Help** for more details. After changing the settings, click **Submit** to save your edits.
 
 <img src="../images/user_guide/barcode_settings.png" width="50%"/>
+
+### User Accounts <a name="user_accounts"></a>
+
+### Registration Fields <a name="registration_fields"></a>
+
+### Doctor Registration Fields <a name="doctor_registration_fields"></a>
+
+### Modify Language <a name="modify_language"></a>
+
+### Setup Local Network <a name="modify_language"></a>
+
+### BLIS Online <a name="blis_online"></a>
+The **BLIS Online** page allows you to enter an IP address of a **BLIS on the Cloud** server. For more details about **BLIS on the Cloud** and how to create your own instantiation, please read the Developer's Documentation.
+
+Please enter the IP address into the text box and click **Submit**. A message stating "BLIS Cloud hostname updated successfully!" will pop up if submitted correctly. 
+
+<img src="../images/user_guide/blis_online.png" width="50%"/>
+
+### External Interface <a name="external_interface"></a>
+
+### Revert to Backup <a name="revert_to_backup"></a>
+
+### Manage Backup Keys <a name="manage_backup_keys"></a>
+The **Manage Backup Keys** page allows you to create, manage, or delete key pairs in order to encrypt laboratory backup data. Encrypting laboratory backup data with a unique key-pair ensures that only the personnel with the correct private key will be able to successfully decrypt the encrypted data with the correlated public key.
+
+The home screen of the **Manage Backup Keys** page displays the list of currently active public keys. In the example image below, only one public key is available for use, with a key alias of "my_pubkey".
+
+<img src="../images/user_guide/manage_backup_keys.png" width="50%"/>
+
+#### Disable Encrypted Backups
+Toggle this button to disable or enable encrypted backups. It is recommended to enable encrypted backups to protect private patient information.
+
+#### Download Public Key
+This button opens a popup window prompting the user to download a public key. This key should be saved onto the computer.
+
+<img src="../images/user_guide/download_public_key.png" width="50%"/>
+
+#### Add Key Alias
+To add a new public key, click **Add Key Alias**. Fill free to enter in any key alias names here. We recommend entering in some identifying information that describes the origin of the public key. For example, if the public key was provided by the country director, the key alias name could be "country_director_pubkey".
+
+To upload the public key, click **Browse** and use the File Upload navigational controls to select the desired public key (ending in a .blis file extension). After selecting the correct public key, click **Add** to add the public key to the list of currently active public keys, or **Cancel** to discard changes.
+
+<img src="../images/user_guide/add_key_alias.png" width="50%"/>
+
+### Export Configuration <a name="export_configuration"></a>
+
+
+## Test Catalog <a name="test_catalog"></a>
+
+## Reports <a name="reports"></a>
+
+## Backup Data <a name="backup_data"></a>
+The **Backup Data** feature was created for two reasons - to revert to a previously backed-up copy in cases of system failure, but also to create a backup file of the current laboratory patient data for uploading to a **BLIS on Cloud** version. 
+
+For example, one intended use of the second scenario would be to upload the current laboratory data to the director's instantiation of BLIS. A conglomeration of multiple labs' data would permit the director to visualize larger trends in the healthcare data across several laboratories. This would aid the director in understanding the needs of individual labs, and permit them to mobilize aid catered to the specific needs of each laboratories.
+
+The below image is the default view of the **Backup Data** page.
+
+<img src="../images/user_guide/backup_data.png" width="50%"/>
+
+### Backup Data with Pre-Existing Key
+If a public key has already been registered to the personnel account through the **Lab Configuration** > **Manage Backup Keys** functionality, then the key should appear in the drop-down menu. In the image below, *my_pubkey* is a pre-existing public key that had been previously registered. Please select the key from the drop-down menu.
+
+<img src="../images/user_guide/backup_data_preexisting_key.png" width="50%"/>
+
+### Backup Data without Pre-Existing Key
+If the desired public key has not already been registered to the account, then please select *New Key...* from the drop-down menu. Two new boxes should appear. Give the key a name (recommend either the lab name or lab ID), and click on the **Browse** button. Find the public key that was previously downloaded onto your computer and select it to upload.
+
+<img src="../images/user_guide/backup_data_no_preexisting_key.png" width="50%"/>
+
+After selecting the public key of choice, please choose the desired backup (General or Anonymized) and then click **Backup** to trigger the data backup. A new page should pop up, confirming that the backup was successful. Please click the **Download Zip** hyperlink to download the zipped file to your Desktop. 
+
+Additionally, if a Backup IP Address was previously set in **Lab Configuration** > **BLIS Online** page, a copy of the backup will be sent to the BLIS version hosted on the specified IP Address.
+
+<img src="../images/user_guide/download_successful.png" width="50%"/>
 
 ## Technician Overview <a name="technician_overview"></a>
 
