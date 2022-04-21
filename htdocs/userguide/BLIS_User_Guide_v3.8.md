@@ -88,6 +88,38 @@ Secondly, **Managers** (also referenced as admin users) are the managerial super
 Thirdly, **Technicians** are the majority of BLIS users. The role of Technicians is to enter in and verify patient data.
 
 # Director Overview <a name="director_overview"></a>
+The director role allows a user to control some components at a country level. This is organized into tabs, as with the other interfaces. 
+
+## Lab Configurations
+In the Lab Configurations tab, the director can view lab backups that have been imported. A list of the different lab configurations is also displayed, along with links to export each of these lab configurations. This allows a director to setup a lab configuration in advance and then export it for a new lab to import to streamline the process. 
+
+To setup a new lab configuration, click the button to add a new lab. This walks the user through four steps to setup site information, technicians, base configuation, and test types. 
+
+<p align="center">
+<img src="../images/user_guide/new_lab_configuration.png" width=50%>
+</p>
+
+It is possible to add technicians during this setup process, but note that additional technicians can be added later. During setup of the base configuration, an existing lab configuration can be selected from the dropdown menu to use as a base. During the next step, test can be imported from an existing facility by selecting it from the dropdown menu. As with the other steps, the configuation can be further customized later from the Lab Configuration tab when logged in and work as a Manager. 
+
+Clicking on the name of a facility takes the user to the Lab Configuration view, with all the same options available in the Manager view, plus three additional menu options: General Settings, Change Manager, Delete Configuration, and Import Configuration. For information on the other menu options and how they work, please go to the [Lab Configuration](#lab-configuration-a-name"labconfiguration") section. Each of the additional options are covered here.
+
+The General Settings option allows the director to change the name or location of a facility. Additionally, the user can populate the database with random data or clear randomly populated data. The Change Manager option is self-explanatory. This option allows the director to select a user from the dropdown menu as the new lab manager. The Delete Configuration menu option should be used with caution. This allows the director to delete an entire lab configuation. Please use this with caution! 
+
+TODO add import data 
+TODO add donwload public key
+
+## Lab Managers
+Under the Lab Managers tab, the director can add, edit, or delete lab managers. Click "edit" on an existing manager to change the name, email address, phone number, or language of a manager, or to reset the managers password. Note that you must go to the User Accounts menu option in the Lab Configurations tab from the Manager view to edit/reset passwords for Technician accounts (as opposed to manager accounts). 
+
+## Test Catalog
+The test catalog tab allows the director to add country-wide specimens and tests. 
+
+## Reports 
+The reports tab allows the director to build reports for some or all of the labs that are under the country's management. The aggregate reports work much as the aggegrate reports do within the Manager view, with two additional options to select a specific test and select which facilities should be included in the report. There is also a menu option to configure some of the aggregation settings (e.g. age ranges) for the reports. 
+
+
+<br>
+
 # Manager Overview <a name="manager_overview"></a>
 The manager interface allows the Manager to do the following:
 1. Add, edit, and delete users
