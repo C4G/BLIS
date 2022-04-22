@@ -7,8 +7,8 @@ version: '3'
 services:
   app:
     # This image is automatically built and pushed from the GitHub action in .github/workflows/ folder
-    #image: "ghcr.io/c4g-spr22-blis/blis:latest"
-    build: ..
+    image: "ghcr.io/c4g-spr22-blis/blis:latest"
+    # build: ..
     environment:
       DB_HOST: 'db'
       DB_PORT: '3306'
