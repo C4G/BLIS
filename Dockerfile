@@ -28,7 +28,7 @@ RUN add-apt-repository ppa:ondrej/php && apt-get update && \
 # preserve backwards compatibility with earlier versions of mysqldump
 RUN echo "column-statistics = 0" | tee -a /etc/mysql/conf.d/mysqldump.cnf
 
-# Copy the custom Apache2 config (blis.conf) into the 
+# Copy the custom Apache2 config (blis.conf) into the
 # Apache2 configuration directory. This will be enabled by the start-blis.sh
 COPY docker/config/blis-release.conf /etc/apache2/blis-release.conf
 

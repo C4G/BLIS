@@ -10,7 +10,7 @@
         }
     },
     "forwardPorts": [80],
-    "postAttachCommand": "sudo service apache2 start",
     "service": "app",
-    "workspaceFolder": "/workspace"
+    "workspaceFolder": "/workspace",
+    "postAttachCommand": "start-blis.sh"
 }
