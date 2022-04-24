@@ -9,7 +9,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mysql-client \
         software-properties-common \
         certbot \
-        python3-certbot-apache
+        python3-certbot-apache \
+        sudo
 
 # PPAs - additional software from questionable sources go here...
 # Namely, pulling in PHP 5.6 here from a repo
