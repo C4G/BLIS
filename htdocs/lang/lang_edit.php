@@ -6,6 +6,7 @@
 //include("redirect.php");
 //include("includes/header.php");
 
+require_once('../includes/composer.php');
 
 LangUtil::setPageId("lang_modify");
 
@@ -34,13 +35,21 @@ $script_elems->enableJQueryForm();
 //$script_elems->enableAutogrowTextarea();
 function get_locale_page_select()
 {
-	global $DEFAULT_LANG, $LANGDATA_PATH;
+	global $DEFAULT_LANG, $LANGDATA_PATH, $log;
+	libxml_use_internal_errors(true);
 	$default_lang_pages = simplexml_load_file($LANGDATA_PATH.$DEFAULT_LANG.".xml");
+	if ($default_lang_pages === false) {
+		$log->warn("Loading $LANGDATA_PATH$DEFAULT_LANG.xml failed.");
+		foreach (libxml_get_errors() as $error) {
+		  $log->error($error->message);
+		}  
+	}
 	/*$utf_encoded_content = utf8_encode(file_get_contents($LANGDATA_PATH.$DEFAULT_LANG.".xml"));
 	$default_lang_pages = simplexml_load_string($utf_encoded_content);*/
 	foreach($default_lang_pages as $default_lang_page)
 	{
 		$page_id = $default_lang_page['id'];
+		$log->info($page_id);
 		$page_descr = $default_lang_page['descr'];
 		echo "<option value='$page_id'>$page_descr</option>";
 	}
@@ -344,15 +353,6 @@ function check_specialchar(elem)
 			<select name='lang_id' id='lang_id'>
 				<option value='en' <?php if($locale == "en") echo " selected "; ?>>English</option>
 				<option value='fr' <?php if($locale == "fr") echo " selected "; ?>>Francais</option>
-				<?php
-				//if(is_super_admin($user) || is_country_dir($user))
-				if(false)
-				{
-					?>
-					<option value='default'>Default</option>
-					<?php
-				}
-				?>
 			</select>
 			&nbsp;&nbsp;&nbsp;
 			<?php echo LangUtil::$pageTerms['CATEGORY']; ?>

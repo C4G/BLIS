@@ -1701,11 +1701,11 @@
 			<value>Enter IP address of BLIS server: </value>
 		</term>
 		<term>
-			<key>SAVE_BUTTON</KEY>
+			<key>SAVE_BUTTON</key>
 			<value>Save</value>
 		</term>
 		<term>
-			<key>BACKUP_BUTTON</KEY>
+			<key>BACKUP_BUTTON</key>
 			<value>Backup Now</value>
 		</term>
 		<term>
