@@ -164,7 +164,7 @@ class BackupLib
      */
     public static function performBackup($lab_config_id, $include_langdata=true, $encryption_key=false)
     {
-        global $log;
+        global $log, $con, $DB_HOST, $DB_PORT, $DB_USER, $DB_PASS;
         $encryption_enabled = !!$encryption_key;
 
         $lab_db = "blis_$lab_config_id";
