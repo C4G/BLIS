@@ -12,7 +12,18 @@ function mysql_exec {
     return $?
 }
 
+if [[ $* == *--clean* ]];
+    CLEAN_DBS="true"    
+fi
+
 echo Dropping ALL MySQL databases! Press any key to continue or Ctrl-C to quit.
+
+if [[ "$CLEAN_DBS" == "true" ]]; then
+    echo Creating empty databases.
+else
+    echo Creating prepopulated databases with data from BLIS 3.72.
+fi
+
 read -rn1
 
 if ! mysql_exec "blis_revamp" "-e 'DROP DATABASE blis_revamp;'"; then
