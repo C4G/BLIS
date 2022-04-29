@@ -4,8 +4,10 @@
 # Called via POST from lab_config_home.php
 # Redirects back after revert complete
 #
-include("../includes/db_constants.php");
-include("../export/backup_lib.php");
+require_once("../export/backup_lib.php");
+require_once("../includes/db_constants.php");
+require_once("../includes/platform_lib.php");
+
 $saved_session = SessionUtil::save();
 function page_redirect($is_done)
 {
@@ -51,7 +53,17 @@ if($_REQUEST['do_currbackup'] == 'Y')
 	$do_currbackup = true;
 if($do_currbackup === true)
 {
-	if(!BackupLib::performBackup($lab_config_id, getcwd() ) === true)
+	// The Current Lab key is used since we are backing up this lab
+	$labKeyFile = dirname(__FILE__) . "/../../files/LAB_".$lab_config_id."_pubkey.blis";
+	if (!file_exists($labKeyFile)) {
+		// generate key
+		KeyMgmt::generateKeyPair(
+			dirname(__FILE__) . "/../../files/LAB_".$lab_config_id.".blis",
+			$labKeyFile);
+		$log->info("Keypair generated successfully.");
+	}
+	$keyContents = file_get_contents($labKeyFile);
+	if(!BackupLib::performBackup($lab_config_id, true, $keyContents))
 	{
 		# Backup of current version failed.
 		page_redirect(false);

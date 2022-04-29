@@ -143,7 +143,6 @@ $access_rights=array(
 "lab_config_home.php"=>"~CD~SA~",
 "lab_config_new.php"=>"~CD~SA~",
 "lab_config_status.php"=>"~CD~SA~",
-"data_backup.php"=>"~A~",
 "update_database.php"=>"~CD~SA~",
 "remarks_edit.php"=>"~CD~A~SA~",
 "stock_edit.php"=>"~CD~A~SA~",
@@ -303,7 +302,6 @@ else if ($user_role == $READONLYMODE) {
 			$lab_config_list = get_lab_configs ( $_SESSION ['user_id'] );
 			$id = $lab_config_list [0]->id;
 		}
-		// $page_list[LangUtil::$pageTerms['MENU_BACKUP']] = "data_backup?id=".$id;
 		$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
 	} 
 else if ($user_role == $LIS_TECH_RO || $user_role == $LIS_TECH_SHOWPNAME) {
@@ -320,7 +318,6 @@ else if ($user_role == $LIS_ADMIN) {
 			if (User::onlyOneLabConfig ( $_SESSION ['user_id'], $_SESSION ['user_level'] )) {
 				// Back up data option
 				$lab_config_list = get_lab_configs ( $_SESSION ['user_id'] );
-				// $page_list[LangUtil::$pageTerms['MENU_BACKUP']] = "data_backup?id=".$lab_config_list[0]->id;
 				$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $lab_config_list [0]->id;
 			}
 		}

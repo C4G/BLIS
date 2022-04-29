@@ -153,7 +153,6 @@ RewriteRule ^export_word\.php$ export/export_word.php
 RewriteRule ^export_word_aggregate\.php$ export/export_word_aggregate.php
 RewriteRule ^export_txt\.php$ export/export_txt.php
 RewriteRule ^export_pdf\.php$ export/export_pdf.php
-RewriteRule ^data_backup$ export/data_backup.php
 RewriteRule ^data_backup_revert.php$ export/data_backup_revert.php
 RewriteRule ^update_database.php$ export/update_database.php
 RewriteRule ^export_config$ export/export_config.php

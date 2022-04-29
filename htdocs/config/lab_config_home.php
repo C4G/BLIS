@@ -2426,9 +2426,6 @@ function AddnewDHIMS2Config()
 					<?php
                     $page_elems->getLabConfigInfo($lab_config->id);
                     ?>
-					<form id='backup_form' name='backup_form' action='data_backup' method='post' target='_blank'>
-						<input type='hidden' name='id' value='<?php echo $_REQUEST['id']; ?>'></input>
-					</form>
 				</div>
 
                                 <div class='right_pane' id='blis_update_div' style='display:none;margin-left:10px;'>

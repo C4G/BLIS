@@ -95,20 +95,7 @@ if(isset($_SESSION['username']))
         <?php
     }
     ?>
-    <a rel='facebox' href='user_rating.php' class="black"><?php echo LangUtil::getPageTerm("LOGOUT"); ?></a>
-    
-    <?php
-    //if(User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level']))
-    if(false)
-    {
-        $lab_config_list = get_lab_configs($_SESSION['user_id']);
-        ?>
-        <br><br>
-        <a class='dummy_class' id='top_pane_secondrow' href='data_backup?id=<?php echo $lab_config_list[0]->id; ?>' class="black"><?php echo LangUtil::$pageTerms['MENU_BACKUP']; ?></a>
-        <?php
-    }
-}
-?>		
+    <a rel='facebox' href='user_rating.php' class="black"><?php echo LangUtil::getPageTerm("LOGOUT"); ?></a>	
         </div>
         <table cellspacing="10px">
             <tr>
