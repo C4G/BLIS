@@ -74,13 +74,13 @@ B. Click on the **Download** tab in the top menu bar, then click **Download BLIS
 1. Double-click on the BLIS.exe file.
 2. A page requesting login information will appear. Enter in your login credentials.
 
-<img src="../images/user_guide/login.png" width="50%"/> 
+<img src="./images/user_guide/login.png" width="50%"/> 
 
 ## Stopping BLIS <a name="stopping_blis"></a>
 1. After your session is complete, click the **Logout** button in the top right pane of the screen.
 2. A popup window will appear where you can rate your experience with C4G BLIS and write any comments you may have. After entering your feedback, press the **Submit** button to fully logout. Alternatively, you may press **Skip** to logout immediately without providing any feedback. If you do not wish to logout, press **CLOSE**.
 
-<img src="../images/user_guide/logout.png" width="50%"/> 
+<img src="./images/user_guide/logout.png" width="50%"/> 
 
 # Roles in BLIS <a name="blis_roles"></a>
 There are three roles in BLIS. 
@@ -100,7 +100,7 @@ In the Lab Configurations tab, the director can view lab backups that have been 
 To setup a new lab configuration, click the button to add a new lab. This walks the user through four steps to setup site information, technicians, base configuation, and test types. 
 
 <p align="center">
-<img src="../images/user_guide/new_lab_configuration.png" width=50%>
+<img src="./images/user_guide/new_lab_configuration.png" width=50%>
 </p>
 
 It is possible to add technicians during this setup process, but note that additional technicians can be added later. During setup of the base configuration, an existing lab configuration can be selected from the dropdown menu to use as a base. During the next step, test can be imported from an existing facility by selecting it from the dropdown menu. As with the other steps, the configuation can be further customized later from the Lab Configuration tab when logged in and work as a Manager. 
