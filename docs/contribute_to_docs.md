@@ -14,6 +14,9 @@ This webpage also allows you to conduct search through the docs.
 ### Recommendation readings:
 We are maintaining this webpage via [github page](https://pages.github.com/). Using [mkdocs](https://www.mkdocs.org/) to generate static sites from [markdown](https://en.wikipedia.org/wiki/Markdown) files under `/docs`. You can learn more from [this tutorial](https://squidfunk.github.io/mkdocs-material/publishing-your-site/).
 
+### Setup Python envs:
+Using any Python virtual environment management tools (virtualenv, poetry, conda etc) to create an venv of Python 3. Then run `pip install -r requirements.txt`. This will automatically adding the required packages for you.
+
 ### Develop & deploy steps:
 If you are contributing to this repo, please follow the steps of:
 - Add your documentations under /docs
