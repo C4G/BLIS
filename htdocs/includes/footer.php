@@ -36,21 +36,21 @@ LangUtil::setPageId("footer");
 		<small>
 		
 		<?php
-			echo '<a href="https://c4g-spr22-blis.github.io/faq/">FAQ</a>';
+			echo '<a href="https://c4g.github.io/BLIS/faq/">FAQ</a>';
 		?>
 		|
 		<?php
 		if($_SESSION['locale'] == "en")
 		{
-			echo "<a href='https://github.com/c4g-spr22-blis/BLIS/blob/master/htdocs/userguide/BLIS_User_Guide_v3.8.md' target='_blank'>User Guide</a>";
+			echo "<a href='https://c4g.github.io/BLIS/' target='_blank'>User Guide</a>";
 		}
 		else if($_SESSION['locale'] == "fr")
 		{
-			echo "<a href='https://github.com/c4g-spr22-blis/BLIS/blob/master/htdocs/userguide/BLIS_User_Guide_v3.8.md' target='_blank'>Guide de l'utilisateur</a>";
+			echo "<a href='https://c4g.github.io/BLIS/' target='_blank'>Guide de l'utilisateur</a>";
 		}
 		else
 		{
-			echo "<a href='https://github.com/c4g-spr22-blis/BLIS/blob/master/htdocs/userguide/BLIS_User_Guide_v3.8.md' target='_blank'>User Guide</a>";
+			echo "<a href='https://c4g.github.io/BLIS/' target='_blank'>User Guide</a>";
 		}
 		?>
 		|
