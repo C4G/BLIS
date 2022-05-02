@@ -1,5 +1,5 @@
 # BLIS Runtime Files
-# These files come from c4g-spr22-blis/BLISRuntime
+# These files come from C4G/BLISRuntime
 # If you change them, commit them to that repository instead.
 /dbdir
 /dlls
