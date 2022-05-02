@@ -9,6 +9,7 @@ include("includes/db_lib.php");
 include("includes/header.php");
 include("includes/random.php");
 include("includes/stats_lib.php");
+include("../AntiXSS.php");
 
 require_once(dirname(__FILE__).'/../includes/composer.php');
 
