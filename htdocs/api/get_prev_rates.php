@@ -2,7 +2,7 @@
 
 include "../includes/db_lib.php";
 include "../includes/stats_lib.php";
-include "../includes/user_lib.php";
+require_once "../includes/user_lib.php";
 include("../includes/SessionCheck.php");
 DbUtil::switchToLabConfig($lab_config_id);
 if(!isset($_REQUEST['yf']) || !isset($_REQUEST['mf']) || !isset($_REQUEST['df']) || !isset($_REQUEST['yt']) || !isset($_REQUEST['dt']) || !isset($_REQUEST['mt']) )

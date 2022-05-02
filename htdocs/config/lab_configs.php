@@ -8,7 +8,7 @@
 
 include("../users/accesslist.php");
 include("redirect.php");
-include("includes/user_lib.php");
+require_once("includes/user_lib.php");
 
 
 if( !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList))
@@ -120,8 +120,8 @@ function search_labs(view_all)
 <br>
 <b><?php echo LangUtil::getTitle(); ?></b>
  | <a href='lab_config_new.php'><?php echo LangUtil::$pageTerms['CMD_ADDNEWLAB']; ?></a>
-  | <a href='lab_backups.php'><?php echo 'Import Lab Data'; ?></a>
-|<a href="../ajax/download_key.php?role=dir">Download Public Key</a>
+ | <a href='lab_backups.php'><?php echo 'Import Lab Data'; ?></a>
+ | <a href="../ajax/download_key.php?role=dir">Download Public Key</a>
 
      <?php /* Enable when data merging is implemented
  | <a href='updateNationalDatabaseUI.php'><?php echo "Update National Database"; ?></a>

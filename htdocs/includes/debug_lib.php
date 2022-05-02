@@ -3,6 +3,8 @@
 # Contains debugging related methods
 #
 
+require_once("composer.php");
+
 class DebugLib
 {
 	public static function getCallerFunctionName($backtrace)
@@ -12,16 +14,16 @@ class DebugLib
 		# Uses result of debug_backtrace()
 		return $backtrace[1]['function'];
 	}
-	
+
 	public static function getCurrentFunctionName()
 	{
-		# Returns the name of the current function 
+		# Returns the name of the current function
 		# i.e. the function which called this method
 		$backtrace = debug_backtrace();
 		return $backtrace[1]['function'];
 	}
-	
-	public static function browserInfo($agent=null) 
+
+	public static function browserInfo($agent=null)
 	{
 		// Declare known browsers to look for
 		$known = array('msie', 'firefox', 'safari', 'webkit', 'opera', 'netscape',
@@ -35,9 +37,9 @@ class DebugLib
 			')[/ ]+(?<version>[0-9]+(?:\.[0-9]+)?)#';
 
 		// Find all phrases (or return empty array if none found)
-		if (!preg_match_all($pattern, $agent, $matches)) 
+		if (!preg_match_all($pattern, $agent, $matches))
 			return array();
-		
+
 		// Since some UAs have more than one phrase (e.g Firefox has a Gecko phrase,
 		// Opera 7,8 have a MSIE phrase), use the last one found (the right-most one
 		// in the UA).  That's usually the most correct.
@@ -54,9 +56,11 @@ class DebugLib
 		}
 		return false;
 	}
-	
+
 	public static function logQuery($query_string, $db_name, $username)
 	{
+        global $log;
+
 		# Adds current query to log
         date_default_timezone_set("UTC");
 		$file_name = "../../local/log_".$_SESSION['lab_config_id'].".txt";
@@ -67,10 +71,13 @@ class DebugLib
 			$file_handle = fopen($file_name, "w");
 		$timestamp = date("Y-m-d H:i:s");
 		$log_line = $timestamp."\t".$username."\t".$db_name."\t".$query_string."\n";
+
+        $log->debug("[query] [$db_name] [$username] $query_string");
+
 		fwrite($file_handle, $log_line);
 		fclose($file_handle);
 	}
-	
+
 	public static function logDBUpdates($query_string, $db_name)
 	{
 		# Adds current query to update log
@@ -78,38 +85,38 @@ class DebugLib
 		$file_name_revamp = "../../local/log_".$_SESSION['lab_config_id']."_revamp_updates.sql";
 		$file_handle = null;
 		$file_handle_revamp = null;
-		
+
 		if(file_exists($file_name)) {
 			$file_handle = fopen($file_name, "a");
-		}	
+		}
 		else {
 			$file_handle = fopen($file_name, "w");
 			fwrite($file_handle, "USE blis_".$_SESSION['lab_config_id'].";\n\n");
-		}	
-			
+		}
+
 		if(file_exists($file_name_revamp)) {
 			$file_handle_revamp = fopen($file_name_revamp, "a");
-		}	
+		}
 		else {
-			$file_handle_revamp = fopen($file_name_revamp, "w");	
+			$file_handle_revamp = fopen($file_name_revamp, "w");
 			fwrite($file_handle_revamp, "USE blis_revamp;\n\n");
-		}	
-			
+		}
+
 		$timestamp = date("Y-m-d H:i:s");
 		$log_line = $timestamp."\t".$query_string."\n";
 		$pos = stripos($query_string, "SELECT");
-		
+
         if($pos === false) {
 			if($db_name=="blis_revamp")
 				fwrite($file_handle_revamp, $log_line);
 			else
 				fwrite($file_handle, $log_line);
         }
-		
+
 		fclose($file_handle);
 		fclose($file_handle_revamp);
 	}
-	
+
 	#TODO: Add or transfer other debugging related functions here
 }
 ?>

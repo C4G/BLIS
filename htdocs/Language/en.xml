@@ -1340,7 +1340,7 @@
 			<key>MENU_ST_TYPES</key>
 			<value>Specimen/Test Types</value>
 		</term>
-				<term>
+		<term>
 			<key>TIPS_SPECIMENTESTTYPES</key>
 			<value>Specimen / Test Types - This option allows us to configure the Specimens can be collected and Tests that are performed at the particular lab.</value>
 		</term>
@@ -1387,6 +1387,14 @@
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_3</key>
 			<value>-</value>
+		</term>
+		<term>
+			<key>TIPS_SETUPSERVER_1</key>
+			<value>Enter the IP address of the BLIS Online server and click 'Save'.</value>
+		</term>
+		<term>
+			<key>TIPS_SETUPSERVER_2</key>
+			<value>You can send a backup to the server from the Backup Data tab.</value>
 		</term>
 		<term>
 			<key>MENU_TAT</key>
@@ -1718,7 +1726,10 @@
 			<key>PRINT_UNVERIFIED</key>
 			<value>Allow printing of unverified tests</value>
 		</term>
-		
+		<term>
+			<key>IP_SAVED</key>
+			<value>IP address saved.</value>
+		</term>		
 	</page>
 	<page id="lab_admins" descr="Lab Managers Page">
 		<term>

@@ -57,7 +57,7 @@ With the Docker application running, after installing the `Remote-Containers` an
 A quick way to test the dependencies installed correctly is:
 1. Clone the BLIS repository to your computer:
     ```
-    $ git clone https://github.com/c4g-spr22-blis/BLIS.git
+    $ git clone https://github.com/C4G/BLIS.git
     ```
     <!---
     TODO: get the link up-to-date after the end of this semester.
@@ -106,7 +106,7 @@ This is the primary way that end-users are still using BLIS. You can still run B
 1. Clone the BLIS repository to your computer:
 
     ```
-    $ git clone https://github.com/c4g-spr22-blis/BLIS.git
+    $ git clone https://github.com/C4G/BLIS.git
     ```
 
 2. Download the latest version of [BLISRuntime.zip](https://github.com/c4g-spr22-blis/BLISRuntime/archive/refs/heads/main.zip) archive
@@ -117,7 +117,7 @@ The bundled Firefox will start and you can use BLIS normally, or make changes to
 
 
 ## Code directory and organization
-As you can see [in the directory](https://github.com/c4g-spr22-blis/BLIS), there is the first level file tree directory. And in the following sections, we will cover the some of important file/directory for your faster & better understanding about the BLIS code organization.
+As you can see [in the directory](https://github.com/C4G/BLIS), there is the first level file tree directory. And in the following sections, we will cover the some of important file/directory for your faster & better understanding about the BLIS code organization.
 
 ```bash
 ├── .devcontainer
@@ -203,6 +203,6 @@ There may be some confusion on `default`, `en`, `fr` versions across the repo. T
 
 After you are satisfied with your new changes and want to deploy a newer version BLIS on cloud. In this doc, we will use [DigitalOcean](https://www.digitalocean.com/) for the deployment platform as example. You will go through two main steps:
 
-1. Push & merge your changes to github repo. Based on `./github/workflows/release-docker.yml`, the newest change will reflect in the `ghcr.io/c4g-spr22-blis/blis:latest` docker repo.
+1. Push & merge your changes to github repo. Based on `./github/workflows/release-docker.yml`, the newest change will reflect in the `ghcr.io/C4G/blis:latest` docker repo.
 2. Use the docker image to deploy BLIS service as well as database service. An step-by-step detailed instruction can be seen [in this site](blis_cloud.md)
 <!-- TODO, change the workflow file hyperlink after merging into the main -->

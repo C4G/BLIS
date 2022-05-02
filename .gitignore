@@ -1,30 +1,26 @@
-# Compiled source #
-###################
-*.com
-*.class
-*.dll
+# BLIS Runtime Files
+# These files come from C4G/BLISRuntime
+# If you change them, commit them to that repository instead.
+/dbdir
+/dlls
+/FirefoxPortable
+/server
+/7za.exe
+/autorun.inf
+/BLIS.exe
+/BLIS.exe.manifest
+/BlisSetup.html
+/gdiplus.dll
+/md5.exe
+/pms_config.ini
+/XXMKLINK.EXE
 
-*.o
-*.so
 
-# Packages #
-############
-# it's better to unpack these files and commit the raw source
-# git has its own built in compression methods
-*.7z
-*.dmg
-*.gz
-*.iso
-*.jar
-*.rar
-*.tar
-*.zip
-
-# Logs and databases #
+# Log files #
 ######################
-*.log
-
-*.sqlite
+/log/*
+/local/log*
+/local/UILog*
 
 # OS generated files #
 ######################
@@ -36,44 +32,17 @@
 Icon?
 ehthumbs.db
 Thumbs.db
-CVS/
 
-# Custom Stuff #
-################
-.buildpath
-.project
-.metadata/
-.idle/
-BLIS.exe.manifest
-BlisSetup.html
-FirefoxPortable/
-autorun.inf
-dbdir/
-pms_config.ini
-server/
-/htdocs/config/lab_configdffs.php
-/htdocs/ajax/search_p_1.php
-/htdocs/ajax/search_p_2.php
-/htdocs/ajax/search_p_dyn_1.php
-/htdocs/api/dhims2_send1.php
-/htdocs/config/lab_configs_1.php
-/htdocs/catalog/test_type_edit_v2.1.php
-/htdocs/catalog/test_type_edit_dir_1.php
-/htdocs/lang/current_inventory_1.php
-/htdocs/reports/reports_1.php
-/htdocs/reports/reports1.php
-/htdocs/reports/reports_testhistory2.php
-/htdocs/reports/reports_testhistory_new.php
-/htdocs/export/export_word2.php
-/local/myFile.txt
-/local/log_*
-/local/UILog_*
-/includes/*dff.php
-*\ \-\ Copy*
-*_old.php
-*_old.xml
-*_copy.php
-*.bak
-/htdocs/regn/new_patient_updated.php
-*~
-*nbproject/
+# BLIS Backup directories - don't need to be in source control
+/blis_backup_*
+/htdocs/export/backups/**/*
+/htdocs/export/uploads/**/*
+/files/**/*
+
+# RSA Keypairs
+/**/*.blis
+/**/*.sql.key
+
+# Tooling
+## php-cs-fixer cache
+.php_cs.cache

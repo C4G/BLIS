@@ -2,6 +2,14 @@
 <pages lang="default" descr="Default" version="0.8.4">
 	<page id="general" descr="General Terms">
 		<term>
+			<key>BACKUP_LOCAL</key>
+			<value>Download local .ZIP backup</value>
+		</term>
+		<term>
+			<key>BACKUP_ONLINE</key>
+			<value>Send data backup to server</value>
+		</term>
+		<term>
 			<key>TIPS</key>
 			<value>Tips</value>
 		</term>
@@ -1641,6 +1649,14 @@
 			<value>In case of a computer restart or network failure click on Setup Network option again.</value>
 		</term>
 		<term>
+			<key>TIPS_SETUPSERVER_1</key>
+			<value>Enter the IP address of the BLIS Online server and click 'Save'.</value>
+		</term>
+		<term>
+			<key>TIPS_SETUPSERVER_2</key>
+			<value>You can send a backup to the server from the Backup Data tab.</value>
+		</term>
+		<term>
 			<key>MENU_TOGGLE_TEST_REPORTS</key>
 			<value>Enable/Disable Test Reports</value>
 		</term>
@@ -1688,6 +1704,18 @@
 			<key>ADD_SITE</key>
 			<value>Enter New Site Name</value>
 		</term>
+		<term> 
+			<key>ADD_ONLINE_SERVER</key>
+			<value>Enter IP address of BLIS server: </value>
+		</term>
+		<term>
+			<key>SAVE_BUTTON</key>
+			<value>Save</value>
+		</term>
+		<term>
+			<key>BACKUP_BUTTON</key>
+			<value>Backup Now</value>
+		</term>
 		<term>
 			<key>SAMPLES_RECEIVED</key>
 			<value>Samples Received</value>
@@ -1717,6 +1745,10 @@
 		<term>
 			<key>PRINT_UNVERIFIED</key>
 			<value>Allow printing of unverified tests</value>
+		</term>
+		<term>
+			<key>IP_SAVED</key>
+			<value>IP address saved.</value>
 		</term>
 		
 	</page>
@@ -2495,10 +2527,6 @@
 		<term>
 			<key>TIPS_EXPORTCONFIG</key>
 			<value>This option gives the configuration summary for the entire system as a Microsoft Word document.</value>
-		</term>
-		<term>
-			<key>MENU_BACKUP</key>
-			<value>Backup Data</value>
 		</term>
 		<term>
 			<key>TIPS_BACKUP</key>

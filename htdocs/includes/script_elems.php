@@ -36,8 +36,7 @@ class ScriptElems
 		{
 		?>
 			
-			<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script> -->
-			<script type="text/javascript" src="../js/jquery-1.3.2.js"></script>
+			<script src="../js/jquery-1.3.2.js"></script>
 			
 			<script type='text/javascript'>
 			
@@ -79,7 +78,7 @@ class ScriptElems
 					var today = new Date();
 					var today_y = today.getFullYear();
 					var today_m = today.getMonth()+1;
-					var today_d = today.getDate();
+					var today_d = today.getDate()+1; 	// date is 0 indexed, same as month
 					if(parseInt(y) > today_y){
                         return false;
                     }
@@ -338,9 +337,9 @@ class ScriptElems
 		if($this->enabledMultiSelect === false)
 		{
 		?>
-			<script src="js/jquery.multiSelect/jquery.bgiframe.min.js" type="text/javascript"></script> 
-			<script src="js/jquery.multiSelect/jquery.multiSelect.js" type="text/javascript"></script> 
- 			<link href="js/jquery.multiSelect/jquery.multiSelect.css" rel="stylesheet" type="text/css" /> 
+			<script src="js/jquery.multiselect/jquery.bgiframe.min.js" type="text/javascript"></script> 
+			<script src="js/jquery.multiselect/jquery.multiSelect.js" type="text/javascript"></script> 
+ 			<link href="js/jquery.multiselect/jquery.multiSelect.css" rel="stylesheet" type="text/css" /> 
 		<?php
 		}
 		$this->enabledMultiSelect = true;

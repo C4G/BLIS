@@ -19,7 +19,7 @@ function get_records_to_print($lab_config, $patient_id)
 			"WHERE t.specimen_id=sp.specimen_id ".
 			"AND sp.patient_id=$patient_id ";
 		
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	if(count($resultset) == 0 || $resultset == null)
 		return $retval;
 	foreach($resultset as $record)

@@ -223,7 +223,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					$query_string =
 						"SELECT * FROM specimen WHERE patient_id=$patient->patientId ".
 						"ORDER BY date_collected DESC";
-					$resultset = query_associative_all($query_string, $row_count);
+					$resultset = query_associative_all($query_string);
 					if($resultset == null || count($resultset) == 0)
 						$daily_num = "-";
 					else
@@ -269,7 +269,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				# Show status of most recently registered specimens
 				$today = date("Y-m-d");
 				$query_string = "SELECT * FROM specimen WHERE patient_id=$patient->patientId and date_collected='$today'";
-				$resultset = query_associative_all($query_string, $row_count);
+				$resultset = query_associative_all($query_string);
 				$status = LangUtil::$generalTerms['DONE'];
 				foreach($resultset as $record)
 				{

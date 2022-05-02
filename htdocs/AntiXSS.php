@@ -1,13 +1,23 @@
 <?php
+/*
+ * This file contains code that uses the following license.
+ *
+ * @file    : antixss.php
+ * @created : Apr 18, 2010, 11:17:16 PM
+ * @author  : Canberk BOLAT <canberk.bolat at gmail.com>
+ * @version : v1.2 (Beta)
+ * @license : GNU Public License v2.0 http://www.gnu.org/licenses/gpl-2.0.html
+ * @desc    : PHP Anti-XSS Library.
+ */
 
 class AntiXSS {
 
     /*
      * @var        : error message
-     * @description: Display error message.
+     * @description: Give your special error message.
      */
     public static $err = "XSS Detected!";
-    
+
     /*
      * @function   : setEncoding
      * @return     : String
@@ -22,7 +32,7 @@ class AntiXSS {
         $encodingList = mb_list_encodings();
         $currentEncoding = mb_detect_encoding($str, $encodingList);
         $changeEncoding = mb_convert_encoding($str, $newEncoding, $currentEncoding);
-        
+
         return $changeEncoding;
     }
 
@@ -99,7 +109,7 @@ class AntiXSS {
         if ($noHTMLTag == 1) {
             $str = strip_tags($str);
         }
-        
+
         $str = strtolower($str);
         $str = addslashes($str);
 	$str = htmlspecialchars(trim($str));

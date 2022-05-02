@@ -2,7 +2,7 @@
 
 include "../includes/db_lib.php";
 include "../includes/stats_lib.php";
-include "../includes/user_lib.php";
+require_once "../includes/user_lib.php";
 include("../includes/SessionCheck.php");
 //DbUtil::switchToLabConfig($lab_config_id);
 // returns total , nrgative and prev threshold

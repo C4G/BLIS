@@ -25,7 +25,7 @@ $saved_db = DbUtil::switchToLabConfig($importLabConfigId);
 $querySelect = 
 	"SELECT * FROM specimen ".
 	"WHERE patient_id=$importPatientId";
-$resultset = query_associative_all($querySelect, $rowCount);
+$resultset = query_associative_all($querySelect);
 
 foreach($resultset as $record)
 	$specimenRecords[] = Specimen::getObject($record);
@@ -34,7 +34,7 @@ foreach($specimenRecords as $specimenRecord) {
 	$querySelect = 
 		"SELECT * FROM test ".
 		"WHERE specimen_id=$specimenRecord->specimenId";
-	$resultset = query_associative_all($querySelect, $rowCount);
+	$resultset = query_associative_all($querySelect);
 	foreach($resultset as $record) {
 		$testRecords[] = Test::getObject($record);
 	}
@@ -45,7 +45,7 @@ DbUtil::switchRestore($saved_db);
 $saved_db = DbUtil::switchToGlobal();
 $querySelect = 
 	"SELECT * FROM specimen_mapping";
-$resultset = query_associative_all($querySelect, $rowCount);
+$resultset = query_associative_all($querySelect);
 if($resultset) {
 	$specimenIds = array();
 	foreach($resultset as $record) {
@@ -66,7 +66,7 @@ if($resultset) {
 /* Build a mapping of Tests from the Global Table & make appropriate substitutions */
 $querySelect = 
 	"SELECT * FROM test_mapping";
-$resultset = query_associative_all($querySelect, $rowCount);
+$resultset = query_associative_all($querySelect);
 if($resultset) {
 	$testIds = array();
 	foreach($resultset as $record) {
@@ -112,7 +112,7 @@ foreach($specimenRecords as $specimenRecord) {
 	$querySelect = 
 		"SELECT * FROM test ".
 		"WHERE specimen_id=$specimenRecord->specimenId";
-	$resultset = query_associative_all($querySelect, $rowcount);
+	$resultset = query_associative_all($querySelect);
 	DbUtil::switchRestore($saved_db);
 	//$specimenRecord->specimenId = get_max_specimen_id() + 1;
 	$specimenRecord->patientId = $importPatientId;

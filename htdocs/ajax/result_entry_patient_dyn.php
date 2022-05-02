@@ -498,7 +498,7 @@ else
 }
 
 //echo $query_string;
-$resultset = query_associative_all($query_string, $row_count);
+$resultset = query_associative_all($query_string);
 
 if(count($resultset) == 0 || $resultset == null)
 {

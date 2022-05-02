@@ -4,7 +4,7 @@
 #
 include("redirect.php");
 include("includes/db_lib.php");
-include("includes/user_lib.php");
+require_once("includes/user_lib.php");
 include("includes/page_elems.php");
 include("includes/script_elems.php");
 include("includes/stats_lib.php");
@@ -29,7 +29,7 @@ $script_elems->enableFlotBasic();
 $script_elems->enableFlipV();
 $script_elems->enableTableSorter();
    
-    $lid = $_SESSION['$lab_config_id'];
+    $lid = $_SESSION['lab_config_id'];
 ?>
 
 <script type='text/javascript'>
@@ -64,11 +64,12 @@ $script_elems->enableTableSorter();
                        
 		</tr>
 	</thead>
+    <tbody>
 <?php
     $reagents_list = array();
     $reagents_list = Inventory::getAllReagents($lid);
     foreach($reagents_list as $reagent) {
-?>  <tbody>
+?>
 		<tr align='center'>
 			<td><?php echo $reagent['name'];?></td>
 			<td><?php 

@@ -36,27 +36,31 @@ LangUtil::setPageId("footer");
 		<small>
 		
 		<?php
+			echo '<a href="https://c4g.github.io/BLIS/faq/">FAQ</a>';
+		?>
+		|
+		<?php
 		if($_SESSION['locale'] == "en")
 		{
-			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank' >User Guide |</a>";
+			echo "<a href='https://c4g.github.io/BLIS/' target='_blank'>User Guide</a>";
 		}
 		else if($_SESSION['locale'] == "fr")
 		{
-			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank' >Guide de l'utilisateur |</a>";
+			echo "<a href='https://c4g.github.io/BLIS/' target='_blank'>Guide de l'utilisateur</a>";
 		}
 		else
 		{
-			echo "<a href='userguide/BLIS_User_Guide.pdf' target='_blank'>User Guide |</a>";
+			echo "<a href='https://c4g.github.io/BLIS/' target='_blank'>User Guide</a>";
 		}
 		?>
-		
+		|
 		<a rel='facebox' href='feedback/comments.php?src=<?php echo $_SERVER['PHP_SELF']; ?>'><?php echo "Comments" ?>?</a> |
 		C4G BLIS v<?php echo $VERSION; ?> - <?php echo LangUtil::getPageTerm("FOOTER_MSG"); ?>
 		<?php
 		if($_SESSION['locale'] !== "en")
 		{
 			?>
-			 | <a href='lang_switch?to=en'><?php echo "English"; ?></a>
+			 | <a href='lang_switch?to=en''><?php echo "English"; ?></a>
 			<?php
 		}
 		else
@@ -76,7 +80,7 @@ LangUtil::setPageId("footer");
 		if($_SESSION['locale'] !== "default")
 		{
 			?>
-			 | <a href='lang_switch?to=default'><?php echo "Default"; ?></a>
+			 | <a href='lang_switch?to=default' class='blue'><?php echo "Default"; ?></a>
 			<?php
 		}
 		else

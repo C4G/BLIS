@@ -53,7 +53,8 @@ CREATE TABLE `lab_config` (
    `dformat` varchar(45) not null default 'd-m-Y',
    `dnum_reset` int(10) unsigned not null default '1',
    `doctor` int(10) unsigned not null default '1',
-   'site_choice_enabled' boolean default '0',
+   `site_choice_enabled` boolean default '0',
+   `blis_cloud_hostname`, char(45) NULL,
    PRIMARY KEY (`lab_config_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=213;
 

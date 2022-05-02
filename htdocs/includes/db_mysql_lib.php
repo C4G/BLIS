@@ -21,13 +21,12 @@ function query_insert_one($query)
 {
 	# Single insert statement
 	global $con;
-	mysql_query( $query, $con ) or die(mysql_error());
-	if($LOG_QUERIES == true)
-        {
-		DebugLib::logDBUpdates($query, db_get_current());
-		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
-        }
-		
+    mysql_query( $query, $con ) or die(mysql_error());
+    $LOG_QUERIES = true;
+	if($LOG_QUERIES == true) {
+        DebugLib::logDBUpdates($query, db_get_current());
+        DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
+    }
 }
 
 
@@ -68,14 +67,13 @@ function query_alter($query)
         }
 }
 
-function query_associative_all( $query, $row_count ) 
+function query_associative_all($query) 
 {
     global $con;
 	if( !($result = mysql_query( $query, $con ) ) ) 
 	{
         return null;
     }
-	$row_count = mysql_num_rows( $result );
     $retval = array();
     while ( $row = mysql_fetch_assoc($result) ){ $retval[] = $row; }
     $LOG_QUERIES = true;

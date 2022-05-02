@@ -11,6 +11,8 @@ include("includes/random.php");
 include("includes/stats_lib.php");
 include("../AntiXSS.php");
 
+require_once(dirname(__FILE__).'/../includes/composer.php');
+
 include_once("includes/field_order_update.php");
 
 LangUtil::setPageId("lab_config_home");
@@ -22,36 +24,30 @@ $script_elems->enableJQueryForm();
 
 ?>
 
-  
-<script src="js/jquery-ui-1.8.16.js" type="text/javascript"></script>
-<link rel="stylesheet" href="css//jquery-ui-1.8.16.css" type="text/css" media="all">
 
- <link rel="stylesheet" href="css/jquery-ui-1.8.16.css" type="text/css" media="all"> 
-<!-- <link rel="stylesheet" href="/resources/demos/style.css" /> -->
-<!-- <script type="text/javascript" src="js/jquery.ui.js"></script>
-<script type="text/javascript" src="js/dialog/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="js/dialog/jquery.ui.dialog.js"></script> -->
+<script src="js/jquery-ui-1.8.16.js" type="text/javascript"></script>
+<link rel="stylesheet" href="css/jquery-ui-1.8.16.css" type="text/css" media="all">
 
 <div id='Summary_config' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
-	<?php 
-	if(LangUtil::$pageTerms['TIPS_SUMMARY_1'] != '-') {
-		echo "<li>";
-		echo LangUtil::$pageTerms['TIPS_SUMMARY_1'];
-		echo "</li>";
-	}	
-	if(LangUtil::$pageTerms['TIPS_SUMMARY_2']!="-") {
-		echo "<li>"; 
-		echo LangUtil::$pageTerms['TIPS_SUMMARY_2'];
-		echo "</li>";
-	}
-	if(LangUtil::$pageTerms['TIPS_SUMMARY_3']!="-") {
-		echo "<li>"; 
-		echo LangUtil::$pageTerms['TIPS_SUMMARY_3'];
-		echo "</li>"; 
-	}	
-	?>	
-	</ul>	
+	<?php
+    if (LangUtil::$pageTerms['TIPS_SUMMARY_1'] != '-') {
+        echo "<li>";
+        echo LangUtil::$pageTerms['TIPS_SUMMARY_1'];
+        echo "</li>";
+    }
+    if (LangUtil::$pageTerms['TIPS_SUMMARY_2']!="-") {
+        echo "<li>";
+        echo LangUtil::$pageTerms['TIPS_SUMMARY_2'];
+        echo "</li>";
+    }
+    if (LangUtil::$pageTerms['TIPS_SUMMARY_3']!="-") {
+        echo "<li>";
+        echo LangUtil::$pageTerms['TIPS_SUMMARY_3'];
+        echo "</li>";
+    }
+    ?>
+	</ul>
 </div>
 
 <div id='Tests_config' class='right_pane' style='display:none;margin-left:10px;'>
@@ -60,22 +56,22 @@ $script_elems->enableJQueryForm();
 	<p>This has the following options:</p>
 	<ul>
 		<?php
-		if(LangUtil::$pageTerms['TIPS_SPECIMENTESTTYPES']!="-") {
-			echo "<li>";
-			echo LangUtil::$pageTerms['TIPS_SPECIMENTESTTYPES'];
-			echo "</li>";
-		}	
-		if(LangUtil::$pageTerms['TIPS_TARGETTAT']!="-") {
-			echo "<li>"; 
-			echo LangUtil::$pageTerms['TIPS_TARGETTAT'];
-			echo "</li>";
-		}
-		if(LangUtil::$pageTerms['TIPS_RESULTINTERPRETATION']!="-") {
-			echo "<li>"; 
-			echo LangUtil::$pageTerms['TIPS_RESULTINTERPRETATION'];
-			echo "</li>"; 
-		}
-		?>
+        if (LangUtil::$pageTerms['TIPS_SPECIMENTESTTYPES']!="-") {
+            echo "<li>";
+            echo LangUtil::$pageTerms['TIPS_SPECIMENTESTTYPES'];
+            echo "</li>";
+        }
+        if (LangUtil::$pageTerms['TIPS_TARGETTAT']!="-") {
+            echo "<li>";
+            echo LangUtil::$pageTerms['TIPS_TARGETTAT'];
+            echo "</li>";
+        }
+        if (LangUtil::$pageTerms['TIPS_RESULTINTERPRETATION']!="-") {
+            echo "<li>";
+            echo LangUtil::$pageTerms['TIPS_RESULTINTERPRETATION'];
+            echo "</li>";
+        }
+        ?>
 	</ul>
 </div>
 
@@ -90,7 +86,7 @@ $script_elems->enableJQueryForm();
     <ul>
         <li>Enable Billing: Toggles whether or not your lab uses the billing engine.</li>
         <li>Currency Name: Denotes what name will be used when printing monetary amounts in the billing engine.</li>
-        <li>Currency Delimiter: Denotes what is used to separate 'dollars' from 
+        <li>Currency Delimiter: Denotes what is used to separate 'dollars' from
             'cents' when printing monetary amounts in the billing engine.  For example, the '.' in 10.50</li>
     </ul>
 </div>
@@ -99,8 +95,8 @@ $script_elems->enableJQueryForm();
 	<ul>
 			<li><?php echo LangUtil::$pageTerms['TIPS_INFECTIONREPORT']; ?></li>
 		</ul>
-	</div>	
-	
+	</div>
+
 	<div id='DRS_rc' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
 			<li><?php echo LangUtil::$pageTerms['TIPS_DAILYREPORTSETTINGS']; ?></li>
@@ -113,7 +109,7 @@ $script_elems->enableJQueryForm();
 			<li><?php echo LangUtil::$pageTerms['TIPS_BATCHRESULTSCONFIGSETTINGS']; ?></li>
 		</ul>
 	</div>
-	
+
 	 <div id='PFO' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
 			<li><?php echo LangUtil::$pageTerms['TIPS_PATIENTFIELDSORDER']; ?></li>
@@ -139,93 +135,93 @@ $script_elems->enableJQueryForm();
 			<li><?php echo LangUtil::$pageTerms['TIPS_WORKSHEETS']; ?></li>
 		</ul>
 	</div>
-	
+
 	<div id='UserAccounts_config' class='right_pane' style='display:none;margin-left:10px;'>
-	<ul>	
+	<ul>
 		<?php
-		if(LangUtil::$pageTerms['TIPS_USERACCOUNTS_1']!="-") {
-			echo "<li>";
-			echo LangUtil::$pageTerms['TIPS_USERACCOUNTS_1'];
-			echo "</li>";
-		}	
-		if(LangUtil::$pageTerms['TIPS_USERACCOUNTS_2']!="-") {
-			echo "<li>"; 
-			echo LangUtil::$pageTerms['TIPS_USERACCOUNTS_2'];
-			echo "</li>";
-		}
-		if(LangUtil::$pageTerms['TIPS_USERACCOUNTS_3']!="-") {
-			echo "<li>"; 
-			echo LangUtil::$pageTerms['TIPS_USERACCOUNTS_3'];
-			echo "</li>"; 
-		}
-		?>
+        if (LangUtil::$pageTerms['TIPS_USERACCOUNTS_1']!="-") {
+            echo "<li>";
+            echo LangUtil::$pageTerms['TIPS_USERACCOUNTS_1'];
+            echo "</li>";
+        }
+        if (LangUtil::$pageTerms['TIPS_USERACCOUNTS_2']!="-") {
+            echo "<li>";
+            echo LangUtil::$pageTerms['TIPS_USERACCOUNTS_2'];
+            echo "</li>";
+        }
+        if (LangUtil::$pageTerms['TIPS_USERACCOUNTS_3']!="-") {
+            echo "<li>";
+            echo LangUtil::$pageTerms['TIPS_USERACCOUNTS_3'];
+            echo "</li>";
+        }
+        ?>
 	</ul>
 	</div>
-	
+
 	<div id='RegistrationFields_config' class='right_pane' style='display:none;margin-left:10px;'>
-	<ul>	
+	<ul>
 		<?php
-		if(LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_1']!="-") {
-			echo "<li>";
-			echo LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_1'];
-			echo "</li>";
-		}	
-		if(LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_2']!="-") {
-			echo "<li>"; 
-			echo LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_2'];
-			echo "</li>";
-		}
-		if(LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_3']!="-") {
-			echo "<li>"; 
-			echo LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_3'];
-			echo "</li>"; 
-		}
-		?>
+        if (LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_1']!="-") {
+            echo "<li>";
+            echo LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_1'];
+            echo "</li>";
+        }
+        if (LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_2']!="-") {
+            echo "<li>";
+            echo LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_2'];
+            echo "</li>";
+        }
+        if (LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_3']!="-") {
+            echo "<li>";
+            echo LangUtil::$pageTerms['TIPS_REGISTRATIONFIELDS_3'];
+            echo "</li>";
+        }
+        ?>
 	</ul>
 	</div>
 
         <!--NC3065-->
-        
+
         <div id='search_config' class='right_pane' style='display:none;margin-left:10px;'>
-	<ul>	
+	<ul>
 		<?php
-		
-			echo "<li>";
-			echo " Toggle Patient Number or Patient's Age to be displayed as part of Search Results";
-			echo "</li>";
+
+            echo "<li>";
+            echo " Toggle Patient Number or Patient's Age to be displayed as part of Search Results";
+            echo "</li>";
                         echo "<li>";
-			echo " Choosing to display Patient Number and/or Patient's Age as part of Search results slows down the time taken to search ";
-			echo "</li>";
-                        
-                        
-		
-		?>
+            echo " Choosing to display Patient Number and/or Patient's Age as part of Search results slows down the time taken to search ";
+            echo "</li>";
+
+
+
+        ?>
 	</ul>
 	</div>
-        
+
         <div id='barcode_config' class='right_pane' style='display:none;margin-left:10px;'>
-	<ul>	
+	<ul>
 		<?php
-		
-			echo "<li>";
-			echo " Configure your settings for barcode formats";
-			echo "</li>";
+
+            echo "<li>";
+            echo " Configure your settings for barcode formats";
+            echo "</li>";
                         echo "<li>";
-			echo " Width and Height are the dimensions of the bars ";
-			echo "</li>";
+            echo " Width and Height are the dimensions of the bars ";
+            echo "</li>";
                         echo "<li>";
-			echo " Text size os the for the code printed underneath the barcodes";
-			echo "</li>";
-                       
-                        
-                        
-		
-		?>
+            echo " Text size os the for the code printed underneath the barcodes";
+            echo "</li>";
+
+
+
+
+        ?>
 	</ul>
 	</div>
-        
+
         <!---NC3065-->
-	
+
 	<div id='SetupNet' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
 			<li><?php echo LangUtil::$pageTerms['TIPS_SETUPNETWORK_3']; ?></li>
@@ -236,12 +232,20 @@ $script_elems->enableJQueryForm();
 	<ul>
 		<li><?php echo LangUtil::$pageTerms['TIPS_KEY_MANAGEMENT']; ?></li>
 	</ul>
-	</div>	
+	</div>
 	<div id='Revert' class='right_pane' style='display:none;margin-left:10px;'>
 	<ul>
 		<li><?php echo LangUtil::$pageTerms['TIPS_REVERT']; ?></li>
 	</ul>
 	</div>
+
+	<div id='SetupServer' class='right_pane' style='display:none;margin-left:3px;margin-top:15px;'>
+	<ul>
+			<li><?php echo LangUtil::$pageTerms['TIPS_SETUPSERVER_1']; ?></li>
+			<li><?php echo LangUtil::$pageTerms['TIPS_SETUPSERVER_2']; ?></li>
+	</ul><br>
+	</div>
+
 
 <div id='new_help' style='display:none'>
 <small>
@@ -253,21 +257,21 @@ $script_elems->enableJQueryForm();
 
 $lab_config_id = $_REQUEST['id'];
 $user = get_user_by_id($_SESSION['user_id']);
-if ( !((is_country_dir($user)) || (is_super_admin($user)) ) ) {
-	$saved_db = DbUtil::switchToGlobal();
-	$query = "SELECT lab_config_id FROM lab_config WHERE admin_user_id = ".$_SESSION['user_id'].
+if (!(is_country_dir($user) || is_super_admin($user))) {
+    $saved_db = DbUtil::switchToGlobal();
+    $query = "SELECT lab_config_id FROM lab_config WHERE admin_user_id = ".$_SESSION['user_id'].
     " OR lab_config_id IN ( ".
     "	SELECT lab_config_id FROM lab_config_access ".
     "	WHERE user_id='".$_SESSION['user_id'] .
     "') ORDER BY name";
-	$record = query_associative_one($query);
-	$labId = $record['lab_config_id'];
-	if($labId != $lab_config_id) {
-		echo "You are not authorized to access the configuration";
-		include("includes/footer.php");
-		die();
-	}
-	DbUtil::switchRestore($saved_db);
+    $record = query_associative_one($query);
+    $labId = $record['lab_config_id'];
+    if ($labId != $lab_config_id) {
+        echo "You are not authorized to access the configuration";
+        include("includes/footer.php");
+        die();
+    }
+    DbUtil::switchRestore($saved_db);
 }
 //echo "Lab Config Id ".$lab_config_id;
 $lab_config = LabConfig::getById($lab_config_id);
@@ -277,20 +281,19 @@ $custom_field_list_patients = get_lab_config_patient_custom_fields($lab_config->
 $custom_field_list_specimen = get_lab_config_specimen_custom_fields($lab_config->id);
 $custom_field_list_labTitle = get_lab_config_labtitle_custom_fields($lab_config->id);
 //echo "custom fields = ".$custom_field_list[0]->id;
-if($lab_config == null)
-{
-	?>
+if ($lab_config == null) {
+    ?>
 	<br><br>
 	<div class='sidetip_nopos'>
 	<?php echo LangUtil::$generalTerms['MSG_NOTFOUND']; ?>
 	</div>
 	<?php
-	include("includes/footer.php");
-	return;
+    include("includes/footer.php");
+    return;
 }
 
-$field_odering_patients = field_order_update::install_first_order($lab_config, 1);
-$field_odering_specimen = field_order_update::install_first_order($lab_config, 2);
+$field_odering_patients = field_order_update::install_first_order($lab_config, 1, $lab_config_id);
+$field_odering_specimen = field_order_update::install_first_order($lab_config, 2, $lab_config_id);
 ?>
 <style type='text/css'>
 
@@ -311,7 +314,7 @@ $field_odering_specimen = field_order_update::install_first_order($lab_config, 2
     input.text { margin-bottom:12px; width:95%; padding: .4em; }
     fieldset { padding:0; border:0; margin-top:25px; }
     h1 { font-size: 1.2em; margin: .6em 0; }
-    
+
     .validateTips { border: 1px solid transparent; padding: 0.3em; } */
 
 .range_field {
@@ -338,7 +341,7 @@ alert("Invalid key, please upload the key provided by BLIS Software.");
 return;
 }
   formData.append('keys', file, file.name);
-formData.append("lab_name", lab_name.value);    
+formData.append("lab_name", lab_name.value);
 }
 var xhr = new XMLHttpRequest();
 xhr.open('POST', '../ajax/add_keys.php', true);
@@ -367,289 +370,202 @@ xhr.send(formData);
 	$('#revert_done_msg').hide();
 	$('#reorder_fields').hide();
 	$('#doctor_reorder_fields').hide();
-	
-	
+
+
 	$('#cat_code12').change( function() { get_test_types_bycat() });
 	get_test_types_bycat
 	<?php
-	if(isset($_REQUEST['show_u']))
-	{
-		# Preload user accounts pane
-		?>
+    if (isset($_REQUEST['show_u'])) {
+        # Preload user accounts pane
+        ?>
 		right_load(3, 'users_div');
-		<?php		
-	}
-	else if(isset($_REQUEST['show_f']))
-	{
-		# Preload custom fields pane
-		?>
+		<?php
+    } elseif (isset($_REQUEST['show_f'])) {
+        # Preload custom fields pane
+        ?>
 		right_load(4, 'fields_div');
 		<?php
-	}
-	
-	else if(isset($_REQUEST['show_df']))
-	{
-	# Preload custom fields pane
-	?>
+    } elseif (isset($_REQUEST['show_df'])) {
+        # Preload custom fields pane
+    ?>
 			right_load(4, 'doctor_fields_div');
 			<?php
-		}
-		
-	else if(isset($_REQUEST['show_i']))
-	{
-		# Preload the inventory pane
-		?>
+    } elseif (isset($_REQUEST['show_i'])) {
+        # Preload the inventory pane
+        ?>
 		right_load(15, 'inventory_div');
-		<?
-	}
-	else if(isset($_REQUEST['set_locale']))
-	{
-		$locale = $_REQUEST['locale'];
-		?>
+		<?php
+    } elseif (isset($_REQUEST['set_locale'])) {
+        $locale = $_REQUEST['locale']; ?>
 		language_div_load();
 		<?php
-	}
-	else
-	{
-		$locale = $_SESSION['locale'];
-		?>
+    } elseif (isset($_REQUEST['setup_server'])) {
+        ?>
+			right_load(33, 'server_setup_div');
+		<?php
+    } else {
+        $locale = $_SESSION['locale']; ?>
 		right_load(1, 'site_info_div');
 		<?php
-	}
-	
-	if(isset($_REQUEST['aupdate']))
-	{
-		# Show user account updated message
-		?>
+    }
+
+    if (isset($_REQUEST['aupdate'])) {
+        # Show user account updated message?>
 		$('#user_acc_msg').html("'<?php echo $_REQUEST['aupdate']; ?>' - <?php echo LangUtil::$generalTerms['MSG_ACC_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('user_acc_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#user_acc_msg').show();
 		<?php
-	}
-	else if(isset($_REQUEST['aupdatetype']))
-	{
-		# Show user account updated message
-		?>
+    } elseif (isset($_REQUEST['aupdatetype'])) {
+        # Show user account updated message?>
 		$('#user_acc_msg1').html("'<?php echo $_REQUEST['aupdatetype']; ?>' - <?php echo 'Account updated'; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('user_acc_msg1');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#user_acc_msg1').show();
 		<?php
-	}
-
-	else if(isset($_REQUEST['adel']))
-	{
-		# Show user account deleted message
-		?>
+    } elseif (isset($_REQUEST['adel'])) {
+        # Show user account deleted message?>
 		$('#user_acc_msg').html("<?php echo LangUtil::$generalTerms['MSG_ACC_DELETED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('user_acc_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#user_acc_msg').show();
 		<?php
-	}
-		else if(isset($_REQUEST['adeltype']))
-	{
-		# Show user account deleted message
-		?>
+    } elseif (isset($_REQUEST['adeltype'])) {
+            # Show user account deleted message?>
 		$('#user_acc_msg1').html("<?php echo LangUtil::$generalTerms['MSG_ACC_DELETED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('user_acc_msg1');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#user_acc_msg1').show();
 		<?php
-	}
-	else if(isset($_REQUEST['aadd']))
-	{
-		# Show user account added message
-		?>
+        } elseif (isset($_REQUEST['aadd'])) {
+        # Show user account added message?>
 		$('#user_acc_msg').html("'<?php echo $_REQUEST['aadd']; ?>' - <?php echo LangUtil::$generalTerms['MSG_ACC_ADDED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('user_acc_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#user_acc_msg').show();
 		<?php
-	}
-	else if(isset($_REQUEST['aaddtype']))
-	{
-		# Show user account added message
-		if ($_REQUEST['typeflag']=='1'){
-			?>
+    } elseif (isset($_REQUEST['aaddtype'])) {
+        # Show user account added message
+        if ($_REQUEST['typeflag']=='1') {
+            ?>
 			$('#user_acc_msg1').html("'<?php echo 'User type already exists'; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('user_acc_msg1');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 			$('#user_acc_msg1').show();
 			<?php
-		}
-		else{
-			?>
+        } else {
+            ?>
 			$('#user_acc_msg1').html("'<?php echo $_REQUEST['aaddtype']; ?>' - <?php echo 'User type added'; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('user_acc_msg1');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 			$('#user_acc_msg1').show();
 			<?php
-		}
-
-		
-	}
-	else if(isset($_REQUEST['siteupdate']))
-	{
-		?>
+        }
+    } elseif (isset($_REQUEST['siteupdate'])) {
+        ?>
 		$('#site_config_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('site_config_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#site_config_msg').show();
 		right_load(54, 'site_config_div');
 		<?php
-	}
-	else if(isset($_REQUEST['tupdate']))
-	{
-		# Show TAT values updated message
-		?>
+    } elseif (isset($_REQUEST['tupdate'])) {
+        # Show TAT values updated message?>
 		$('#tat_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('tat_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#tat_msg').show();
 		right_load(5, 'target_tat_div');
 		<?php
-	}
-	else if(isset($_REQUEST['fupdate']))
-	{
-		# Show custom field updated message
-		?>
+    } elseif (isset($_REQUEST['fupdate'])) {
+        # Show custom field updated message?>
 		$('#cfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('cfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#cfield_msg').show();
 		right_load(4, 'fields_div');
 		<?php
-	}
-	else if(isset($_REQUEST['dfupdate']))
-	{
-	# Show custom field updated message
-	?>
+    } elseif (isset($_REQUEST['dfupdate'])) {
+        # Show custom field updated message?>
 			$('#cfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('cfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 			$('#cfield_msg').show();
 			right_load(4, 'doctor_fields_div');
 			<?php
-		}
-	else if(isset($_REQUEST['fadd']))
-	{
-		# Show custom field added message
-		?>
+    } elseif (isset($_REQUEST['fadd'])) {
+        # Show custom field added message?>
 		$('#cfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_ADDED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('cfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#cfield_msg').show();
 		right_load(4, 'fields_div');
 		<?php
-	}
-	else if(isset($_REQUEST['dfadd']))
-	{
-	# Show custom field added message
-	?>
+    } elseif (isset($_REQUEST['dfadd'])) {
+        # Show custom field added message?>
 			$('#cfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_ADDED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('cfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 			$('#cfield_msg').show();
 			right_load(4, 'doctor_fields_div');
 			<?php
-		}
-	else if(isset($_REQUEST['stupdate']))
-	{
-		# Show custom field updated message
-		?>
+    } elseif (isset($_REQUEST['stupdate'])) {
+        # Show custom field updated message?>
 		$('#sttypes_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('sttypes_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#sttypes_msg').show();
 		right_load(2, 'st_types_div');
 		<?php
-	}
-        else if(isset($_REQUEST['billingupdate']))
-        {
-                ?>
+    } elseif (isset($_REQUEST['billingupdate'])) {
+            ?>
                 $('#billing_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('billing_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#billing_msg').show();
                 right_load(22, 'billing_div');
                 <?php
-        }
-        
-        else if(isset($_REQUEST['addedCurrency']))
-        {
-        	?>
+        } elseif (isset($_REQUEST['addedCurrency'])) {
+            ?>
                 $('#billing_msg').html("New Currecy added. &nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('billing_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
         		$('#billing_msg').show();
                 right_load(22, 'billing_div');
             <?php
-         }
-	else if(isset($_REQUEST['adupdate']))
-	{
-		# Show custom field updated message
-		?>
+        } elseif (isset($_REQUEST['adupdate'])) {
+        # Show custom field updated message?>
 		$('#admin_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('admin_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#admin_msg').show();
 		right_load(7, 'change_admin_div');
 		<?php
-	}
-	else if(isset($_REQUEST['aggupdate']))
-	{
-		# Show custom field updated message
-		?>
+    } elseif (isset($_REQUEST['aggupdate'])) {
+        # Show custom field updated message?>
 		$('#agg_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('agg_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#agg_msg').show();
 		right_load(8, 'agg_report_div');
 		<?php
-	}
-        else if(isset($_REQUEST['grouped_count_update']))
-	{
-		# Show custom field updated message
-		?>
+    } elseif (isset($_REQUEST['grouped_count_update'])) {
+            # Show custom field updated message?>
 		$('#grouped_count_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('grouped_count_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#grouped_count_msg').show();
 		right_load(36, 'grouped_count_div');
 		<?php
-	}
-	else if(isset($_REQUEST['miscupdate']))
-	{
-		# Show general settings updated message
-		?>
+        } elseif (isset($_REQUEST['miscupdate'])) {
+        # Show general settings updated message?>
 		$('#misc_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('misc_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#misc_msg').show();
 		right_load(9, 'misc_div');
 		<?php
-	}
-	else if(isset($_REQUEST['langupd']))
-	{
-		# Show locale updated message
-		?>
+    } elseif (isset($_REQUEST['langupd'])) {
+        # Show locale updated message?>
 		$('#main_msg').html("<?php echo LangUtil::$pageTerms['MSG_LANGUPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('main_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#main_msg').show();
 		<?php
-	}
-	else if(isset($_REQUEST['ofupdate']))
-	{
-		# Show other fields updated message
-		?>
+    } elseif (isset($_REQUEST['ofupdate'])) {
+        # Show other fields updated message?>
 		$('#cfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('cfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#cfield_msg').show();
 		right_load(4, 'fields_div');
 		<?php
-	}
-	else if(isset($_REQUEST['brfupdate']))
-	{
-		# Show batch results fields updated message
-		?>
+    } elseif (isset($_REQUEST['brfupdate'])) {
+        # Show batch results fields updated message?>
 		$('#batch_results_fields_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('batch_results_fields_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#batch_results_fields_msg').show();
 		right_load(54, 'batch_results_div');
 		<?php
-	}
-	else if(isset($_REQUEST['odfupdate']))
-	{
-	# Show other fields updated message
-	?>
+    } elseif (isset($_REQUEST['odfupdate'])) {
+        # Show other fields updated message?>
 			$('#cfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('cfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 			$('#cfield_msg').show();
 			right_load(4, 'doctor_fields_div');
 			<?php
-		}
+    }
         //NC3065
-        else if(isset($_REQUEST['sfcupdate']))
-	{
-		# Show other fields updated message
-		?>
+        elseif (isset($_REQUEST['sfcupdate'])) {
+            # Show other fields updated message?>
 		$('#searchfield_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('searchfield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#searchfield_msg').show();
 		right_load(21, 'search_div');
 		<?php
-	}
-        else if(isset($_REQUEST['brcupdate']))
-	{
-		# Show other fields updated message
-		?>
+        } elseif (isset($_REQUEST['brcupdate'])) {
+            # Show other fields updated message?>
 		$('#barcodefield_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('barcodefield_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#barcodefield_msg').show();
 		right_load(28, 'barcode_div');
 		<?php
-	}
+        }
         //-NC3065
-	else if(isset($_REQUEST['rcfgupdate']))
-	{
-		# Show report config updated message
-		?>
+    elseif (isset($_REQUEST['rcfgupdate'])) {
+        # Show report config updated message?>
 		$('#report_config_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('report_config_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#report_config_msg').show();
 		var report_type=<?php echo $_REQUEST['rcfgupdate']; ?>;
@@ -658,85 +574,69 @@ xhr.send(formData);
 		//fetch_report_config();
 		fetch_report_summary();
 		<?php
-	}
-	else if(isset($_REQUEST['ttrupdate']))
-	{
-		?>
+    } elseif (isset($_REQUEST['ttrupdate'])) {
+        ?>
 		$('#toggle_test_reports_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('toggle_test_reports_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
     	$('#toggle_test_reports_msg').show();
 		right_load(52, 'toggle_test_reports_div');
 		<?php
-	}
-	else if(isset($_REQUEST['treport_conf_update']))
-	{
-		?>
+    } elseif (isset($_REQUEST['treport_conf_update'])) {
+        ?>
 		$('#test_agg_report_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('test_agg_report_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#test_agg_report_msg').show();
 		<?php
-	}
-	else if(isset($_REQUEST['rpfoupdate']))
-	{
-		# Show updated ordered patient fields on reports
-		?>
+    } elseif (isset($_REQUEST['rpfoupdate'])) {
+        # Show updated ordered patient fields on reports?>
 		$('#patient_fields_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('patient_fields_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
-		$('#patient_fields_msg').show();				
-		right_load(40, 'patient_fields_config_div');		
+		$('#patient_fields_msg').show();
+		right_load(40, 'patient_fields_config_div');
 		//fetch_report_summary();
 		<?php
-	}
-	else if(isset($_REQUEST['wcfgupdate']))
-	{
-		# Show report config updated message
-		?>
+    } elseif (isset($_REQUEST['wcfgupdate'])) {
+        # Show report config updated message?>
 		$('#worksheet_config_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('worksheet_config_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#worksheet_config_msg').show();
-		<?php 
-		$post_parts = explode(",", $_REQUEST['wcfgupdate']); 
-		?>
+		<?php
+        $post_parts = explode(",", $_REQUEST['wcfgupdate']); ?>
 		right_load(12, 'worksheet_config_div');
 		$('#cat_code12').attr("value", "<?php echo $post_parts[0]; ?>");
 		$('#test_type12').attr("value", "<?php echo $post_parts[1]; ?>");
 		fetch_worksheet_summary();
 		<?php
-	}
-        else if(isset($_REQUEST['importupdate']))
-	{
-		# Show report config updated message
-		?>
+    } elseif (isset($_REQUEST['importupdate'])) {
+            # Show report config updated message?>
 		$('#worksheet_config_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('worksheet_config_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 		$('#worksheet_config_msg').show();
-		<?php 
-		$post_parts = explode(",", $_REQUEST['wcfgupdate']); 
-		?>
+		<?php
+        $post_parts = explode(",", $_REQUEST['wcfgupdate']); ?>
 		right_load(12, 'worksheet_config_div');
 		$('#cat_code12').attr("value", "<?php echo $post_parts[0]; ?>");
 		$('#test_type12').attr("value", "<?php echo $post_parts[1]; ?>");
 		fetch_worksheet_summary();
 		<?php
-	}
-	else if( isset($_REQUEST['revert']) ) {
-		if( isset($_REQUEST['updateChange'])) { ?>
+        } elseif (isset($_REQUEST['revert'])) {
+        if (isset($_REQUEST['updateChange'])) { ?>
 			right_load(18, 'update_database_div');
-			<?php 
-				if($_REQUEST['revert'] == 1) { ?>
+			<?php
+                if ($_REQUEST['revert'] == 1) { ?>
 					$('#update_success').show();
 				<?php } else { ?>
 					$('#update_failure').show();
 			<?php }
-		} else { ?>
+        } else { ?>
 			right_load(13, 'backup_revert_div');
-			<?php if($_REQUEST['revert'] == 1) { ?>
-				//$('#backup_revert_msg').html("<?php #echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('backup_revert_msg');\"><?php #echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
+			<?php if ($_REQUEST['revert'] == 1) { ?>
+				//$('#backup_revert_msg').html("<?php #echo LangUtil::$generalTerms['MSG_UPDATED'];?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('backup_revert_msg');\"><?php #echo LangUtil::$generalTerms['CMD_HIDE'];?></a>");
 				$('#revert_done_msg').show();
 				<?php
-				} else { ?>
+                } else { ?>
 					$('#backup_revert_msg').html("<?php echo LangUtil::$generalTerms['ERROR']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('backup_revert_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
 					$('#backup_revert_msg').show();
 				<?php
-				}
-		}
-	}
-	?>
+                }
+        }
+    }
+    ?>
 	$('#lab_admin').attr("value", "<?php echo $lab_config->adminUserId; ?>");
 	/*$('.stype_entry').change(function() {
 		check_compatible();
@@ -814,7 +714,7 @@ function get_testbox2(stype_id)
 	}
 	$('#test_list_by_site').html("<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>");
 	$('#test_list_by_site').load(
-		"ajax/test_list_by_site.php", 
+		"ajax/test_list_by_site.php",
 		{
 			site_id: stype_val
 		}
@@ -883,7 +783,7 @@ if(document.getElementById('api_setup').style.display =='none')
 $('#api_setup').show();
 else
 $('#api_setup').hide();
- 
+
 }
 
 function check_compatible()
@@ -894,12 +794,12 @@ function blis_update_t()
 {
     $('#update_button').hide();
     $('#update_spinner').show();
-    setTimeout( "blis_update();", 5000); 
+    setTimeout( "blis_update();", 5000);
 }
 
 function blis_update()
 {
-    
+
     $.ajax({
 		type : 'POST',
 		url : 'update/blis_update.php',
@@ -917,20 +817,18 @@ function blis_update()
 			}
 		}
 	});
-        
+
     $('#update_button').show();
 }
 function load_key_table()
 {
-//alert("ok");
     $.ajax({
       type: "GET",
       dataType: "json",
-      url: "ajax/get_keys.php", 
-//      data: data,
+      url: "ajax/get_keys.php",
       success: function(data) {
 col=["LabName","AddedBy","ModOn"];
-col_disp=["<?php echo LangUtil::$pageTerms['key_alias']; ?>","Modified By","Modified On","",""];
+col_disp=["<?php echo LangUtil::$pageTerms['key_alias']; ?>","Modified By","Modified On",""];
             // CREATE A TABLE.
             var table = document.createElement('table');
             table.setAttribute('id', 'publicKeyTable');     // SET TABLE ID.
@@ -953,16 +851,14 @@ th.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;paddin
 
                 for (var j = 0; j < col.length; j++) {
                     var tabCell = tr.insertCell(-1);
-                    tabCell.innerHTML = data[i][col[j]];	
+                    tabCell.innerHTML = data[i][col[j]];
   tabCell.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;");
 }
 var tabCell = tr.insertCell(-1);
-//                    tabCell.innerHTML = "<a onclick='edit_key("+data[i]['ID']+")'>Edit</a>";
-//  tabCell.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;font: 15px Calibri;cursor: pointer;border: none;color: #FFF;");
-//tabCell = tr.insertCell(-1);
+
                     tabCell.innerHTML = "<a onclick='delete_key("+data[i]['ID']+")'>Delete</a>";
-  tabCell.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;font: 15px Calibri;cursor: pointer;border: none;color: #FFF;");
-}                
+  tabCell.setAttribute("style","border: solid 1px #DDD;border-collapse: collapse;padding: 2px 3px;text-align: center;font: 15px Calibri;cursor: pointer;color: #FFF;");
+}
             var div = document.getElementById('container');
             div.innerHTML = '';
             div.appendChild(table);    // ADD THE TABLE TO THE WEB PAGE.
@@ -1014,7 +910,7 @@ function delete_key(id)
     $.ajax({
       type: "GET",
 //      dataType: "json",
-      url: "../ajax/delete_keys.php?id="+id, 
+      url: "../ajax/delete_keys.php?id="+id,
 //      data: data,
       success: function(data) {
 alert(data);
@@ -1056,13 +952,13 @@ function export_html()
 <?php
 $myFile = "../../BlisSetup.html";
 $fh = fopen($myFile, 'w') or die("can't open file");
-$content =('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
-<html xmlns="http://www.w3.org/1999/xhtml">  
+$content =('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <META HTTP-EQUIV="Refresh"
 CONTENT="1; URL=');
 $content1=('">
-</head> 
+</head>
 </html>');
 $content=$content.StatsLib::get_ip().$content1;
 fwrite($fh, $content);
@@ -1120,6 +1016,19 @@ function submit_site_add()
 	})
 }
 
+
+function submit_save_server_ip()
+{
+	$('#blis_online_config_form').ajaxSubmit({
+		success: function() {
+			document.getElementById('serverIpUpdateBtn').style.display = 'none';
+			document.getElementById('serverIpUpdateMsg').style.display = 'inline';
+			alert("<?php echo LangUtil::$pageTerms['IP_SAVED']; ?>")
+		}
+	})
+}
+
+
 function submit_site_remove()
 {
 	$('#site_config_form').ajaxSubmit({
@@ -1152,7 +1061,7 @@ function updateCurrencyRatio(row_id)
 		alert("Enter a valid exchange rate");
 		return;
 	}
-	
+
 	var url_string = "ajax/add_currency_rate.php?lid=<?php echo $lab_config->id; ?>&defaultCurrency="+
 	defaultCurrency+"&secondaryCurrency="+secondaryCurrency+"&exchangeRate="+exchangeRate;
 	var reload_url = "lab_config_home.php?id=<?php echo $lab_config_id; ?>&billingupdate=1";
@@ -1165,7 +1074,7 @@ function deleteCurrencyRatio(row_id)
 {
 	var defaultCurrency = $("#default_currency").val();
 	var secondaryCurrency= $("#currency"+row_id).text();
-	
+
 	var url_string = "ajax/delete_currency_rate.php?lid=<?php echo $lab_config->id; ?>&defaultCurrency="+
 	defaultCurrency+"&secondaryCurrency="+secondaryCurrency;
 	var reload_url = "lab_config_home.php?id=<?php echo $lab_config_id; ?>&billingupdate=1";
@@ -1305,7 +1214,7 @@ function generateICfile()
 		async: false,
 		success : function(data) {
 			alert("Equipment configuration has been saved in ../BLISInterfaceClient/BLISInterfaceClient.ini")
-		}	
+		}
 	});
 }
 function updateICFields(prop_count)
@@ -1332,7 +1241,7 @@ function updateICFields(prop_count)
 		async: false,
 		success : function(data) {
 			alert("Interface details updated!");
-		}	
+		}
 	});
 }
 
@@ -1356,18 +1265,18 @@ $(function() {
 					var field_name = $this.text();
 					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
 				});
-				
+
 				orders = orders.match(/(.*).$/)[1];
-								
+
 				$.ajax({
 					url : "ajax/process-field-ordering.php?"+orders,
 					async: false,
 					success : function(data) {
 						alert("Patient Field Order Updated");
 						window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
-					}	
+					}
 				});
-   		     
+
 				},
             Cancel: function() {
                 $( this ).dialog( "close" );
@@ -1378,7 +1287,7 @@ $(function() {
         }
     });
 
-    
+
 
     $( "#field_reorder_link_patient" ).click(function() {
             $( "#dialog-form-patients" ).dialog( "open" );
@@ -1404,18 +1313,18 @@ $(function() {
 					var field_name = $this.text();
 					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
 				});
-				
+
 				orders = orders.match(/(.*).$/)[1];
-								
+
 				$.ajax({
 					url : "ajax/process-field-ordering.php?"+orders,
 					async: false,
 					success : function(data) {
 						alert("Specimen Field Order Updated");
 						window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
-					}	
+					}
 				});
-   		     
+
 				},
             Cancel: function() {
                 $( this ).dialog( "close" );
@@ -1426,12 +1335,12 @@ $(function() {
         }
     });
 
-    
+
     $("#sortablePatients").sortable({     	});
     $("#sortableSpecimen").sortable({     	});
     $( "#sortablePatients" ).disableSelection();
     $( "#sortableSpecimen" ).disableSelection();
-    
+
 });
 
 $(function() {
@@ -1454,18 +1363,18 @@ $(function() {
 					var field_name = $this.text();
 					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
 				});
-				
+
 				orders = orders.match(/(.*).$/)[1];
-								
+
 				$.ajax({
 					url : "ajax/process-field-ordering.php?"+orders,
 					async: false,
 					success : function(data) {
 						alert("Patient Field Order Updated");
 						window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
-					}	
+					}
 				});
-   		     
+
 				},
             Cancel: function() {
                 $( this ).dialog( "close" );
@@ -1476,7 +1385,7 @@ $(function() {
         }
     });
 
-    
+
 
     $( "#doctor_field_reorder_link_patient" ).click(function() {
             $( "#doctor-dialog-form-patients" ).dialog( "open" );
@@ -1502,18 +1411,18 @@ $(function() {
 					var field_name = $this.text();
 					orders = orders+encodeURIComponent(field_name)+"="+index+"&";
 				});
-				
+
 				orders = orders.match(/(.*).$/)[1];
-								
+
 				$.ajax({
 					url : "ajax/process-field-ordering.php?"+orders,
 					async: false,
 					success : function(data) {
 						alert("Specimen Field Order Updated");
 						window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>";
-					}	
+					}
 				});
-   		     
+
 				},
             Cancel: function() {
                 $( this ).dialog( "close" );
@@ -1524,12 +1433,12 @@ $(function() {
         }
     });
 
-    
+
     $("#doctor_sortablePatients").sortable({     	});
     $("#doctor_sortableSpecimen").sortable({     	});
     $( "#doctor_sortablePatients" ).disableSelection();
     $( "#sortableSpecimen" ).disableSelection();
-    
+
 });
 function add_new_currency(action)
 {
@@ -1547,7 +1456,7 @@ function stype_toggle()
 	$('#stype_box').toggle();
 	if($('#stype_link').html() == "Show")
 	{
-		$('#stype_link').html("Hide");		
+		$('#stype_link').html("Hide");
 	}
 	else
 	{
@@ -1560,7 +1469,7 @@ function ttype_toggle()
 	$('#ttype_box').toggle();
 	if($('#ttype_link').html() == "Show")
 	{
-		$('#ttype_link').html("Hide");		
+		$('#ttype_link').html("Hide");
 	}
 	else
 	{
@@ -1643,14 +1552,14 @@ function submit_new_currency()
     			}
     			else {
     				$('#billing_progress').hide();
-    				alert("Currency already exists. Enter a different currency name");	
+    				alert("Currency already exists. Enter a different currency name");
     			}
     		}
     	});
 }
 
 function cancel_new_currency(){
-	
+
 }
 
 function delete_config()
@@ -1766,7 +1675,7 @@ function misc_checkandsubmit()
 		$('#misc_errormsg').html(err_msg);
 		$('#misc_errormsg').show();
 		return;
-	}	
+	}
 	//All okay
 	$('#misc_progress').show();
 	$('#misc_form').submit();
@@ -1913,7 +1822,7 @@ function test_report_conf_submit()
 }
 
 function update_file()
-{ 
+{
 var report_id = $('#report_type11').attr("value");
 	$('#submit_report_config_progress').show();
 	$('#report_config_submit_form').ajaxSubmit({
@@ -1924,7 +1833,7 @@ var report_id = $('#report_type11').attr("value");
 	});
 }
  function update_report_config()
-{ 
+{
 	var report_id = $('#report_type11').attr("value");
 	$('#submit_report_config_progress').show();
 	$('#report_config_submit_form').ajaxSubmit({
@@ -1973,36 +1882,36 @@ function submit_batch_results_fields_form()
 }
 
 function submit_ordered_fields_form()
-{ 
+{
 	$('#ordered_fields_submit_progress').show();
-	
+
 	var p_fields = document.getElementById('p_fields');
 	var o_fields = document.getElementById('o_fields');
 	var p_fields_left="";
 	var o_fields_left="";
-		
-	
+
+
 	for(var i=0;i<p_fields.options.length;i++)
 	{
-		
+
 		p_fields_left = p_fields_left + ","+ p_fields.options[i].value;
-	}	
-	
+	}
+
 	for(var i=0;i<o_fields.options.length;i++)
 	{
 		o_fields_left = o_fields_left + ","+ o_fields.options[i].value;
 	}
-	
 
-	
-	$('#p_fields_left').attr('value',p_fields_left);	
-	$('#o_fields_left').attr('value',o_fields_left);		
-	
+
+
+	$('#p_fields_left').attr('value',p_fields_left);
+	$('#o_fields_left').attr('value',o_fields_left);
+
 	$('#patient_fields_order_from').ajaxSubmit({
 		success: function() {
 		$('#ordered_fields_submit_progress').hide();
 			window.location="lab_config_home.php?id=<?php echo $lab_config->id; ?>&rpfoupdate=orderedfields";
-			
+
 		}
 	});
 }
@@ -2083,7 +1992,7 @@ function right_load_1(option_num, div_id)
 	$('.menu_option').removeClass('current_menu_option');
 	$('#'+div_id).show();
 	$('#option'+option_num).addClass('current_menu_option');
-	
+
 }
 function authenticateDHIMS2()
 {
@@ -2091,88 +2000,88 @@ function authenticateDHIMS2()
     $('#dhims2Authenticate').attr({
     disabled: 'disabled',
     value: 'Processing'});
-    
+
     var username= $('#dhims2username').attr("value");
-    var password= $('#dhims2password').attr("value"); 
-    $.ajax({        
-        url :'api/dhims2Authenticate.php?dhims2username='+username+"&dhims2password="+password,               
-        success : function (user) {         
+    var password= $('#dhims2password').attr("value");
+    $.ajax({
+        url :'api/dhims2Authenticate.php?dhims2username='+username+"&dhims2password="+password,
+        success : function (user) {
             $('#DHIMS2AuthenticateProgress').hide();
             if ( user=="false" ) {
                 $('#dhims2Authenticate').removeAttr('disabled');
                 $('#dhims2Authenticate').attr('value',"Authenticate");
-                alert("Authentication Error: Invalid Login credentials");             
+                alert("Authentication Error: Invalid Login credentials");
             }
-            else if ( user=="404" ) {             
+            else if ( user=="404" ) {
                 $('#dhims2Authenticate').removeAttr('disabled');
                 $('#dhims2Authenticate').attr('value',"Authenticate");
                 alert("The DHIMS2 server cannot be found! Please check your internet connection");
             }
-            else if ( user=="502" ) {             
+            else if ( user=="502" ) {
                 $('#dhims2Authenticate').removeAttr('disabled');
                 $('#dhims2Authenticate').attr('value',"Authenticate");
                 alert("The DHIMS2 server returned Error 502! BAD GATEWAY\n Server might be down for maintenance");
             }
-            else 
+            else
             {
-                $('#dhims2Authenticate').attr('value',"Success"); 
-                        
+                $('#dhims2Authenticate').attr('value',"Success");
+
                     var objUser = JSON.parse( user );
                     for(var i=0;i<objUser.organisationUnits.length;i++)
                     {
                         var opt = document.createElement("option");
-                        document.getElementById("dhims2orgunit").options.add(opt);       
+                        document.getElementById("dhims2orgunit").options.add(opt);
                         opt.text = objUser.organisationUnits[i].name;
-                        opt.value = objUser.organisationUnits[i].id;    
+                        opt.value = objUser.organisationUnits[i].id;
                     }
                     getDHIMS2DataSet(null);
-                    
+
                     $('#addtolist').removeAttr('disabled');
-                    
+
             }
-        }       
-    });     
+        }
+    });
 }
- 
+
 function getDHIMS2DataSet(userID)
 {
     $('#DHIMS2orgunitProgress').show();
-    document.getElementById("dhims2dataset").options.length=0;    
+    document.getElementById("dhims2dataset").options.length=0;
     if(null == userID)
     {
         userID = $('#dhims2orgunit').attr('value');
     }
     var username= $('#dhims2username').attr("value");
-    var password= $('#dhims2password').attr("value");     
-    $.ajax({        
-        url :'api/dhims2get_datasets.php?dhims2username='+username+"&dhims2password="+password+"&orgunitid="+userID,                
-        success : function (orgunit) {          
+    var password= $('#dhims2password').attr("value");
+    $.ajax({
+        url :'api/dhims2get_datasets.php?dhims2username='+username+"&dhims2password="+password+"&orgunitid="+userID,
+        success : function (orgunit) {
             $('#DHIMS2orgunitProgress').hide();
-            if ( orgunit=="false" ) {             
-                alert("Authentication Error: Invalid Login credentials");             
+            if ( orgunit=="false" ) {
+                alert("Authentication Error: Invalid Login credentials");
             }
-            else if ( orgunit=="404" ) {                          
+            else if ( orgunit=="404" ) {
                 alert("The DHIMS2 server cannot be found! Please check your internet connection");
             }
-            else 
-            {               
-                        
-                    var orgunitObj = JSON.parse( orgunit );                                 
+            else
+            {
+
+                    var orgunitObj = JSON.parse( orgunit );
                     for(var i=0;i<orgunitObj.dataSets.length;i++)
                     {
                         var opt = document.createElement("option");
-                        document.getElementById("dhims2dataset").options.add(opt);       
+                        document.getElementById("dhims2dataset").options.add(opt);
                         opt.text = orgunitObj.dataSets[i].name;
-                        opt.value = orgunitObj.dataSets[i].id;  
+                        opt.value = orgunitObj.dataSets[i].id;
                     }
-                    
+
                     getDHIMS2DataElements(null);
-                    
+
             }
-        }       
-    }); 
+        }
+    });
 }
- 
+
 function getDHIMS2DataElements(dataSetID)
 {
     $('#DHIMS2datasetProgress').show();
@@ -2185,46 +2094,46 @@ function getDHIMS2DataElements(dataSetID)
         dataSetID = $('#dhims2dataset').attr('value');
     }
     var username= $('#dhims2username').attr("value");
-    var password= $('#dhims2password').attr("value");     
-    $.ajax({        
-        url :'api/dhims2get_data_elements.php?dhims2username='+username+"&dhims2password="+password+"&datasetid="+dataSetID,                
-        success : function (dataset) {          
+    var password= $('#dhims2password').attr("value");
+    $.ajax({
+        url :'api/dhims2get_data_elements.php?dhims2username='+username+"&dhims2password="+password+"&datasetid="+dataSetID,
+        success : function (dataset) {
             $('#DHIMS2datasetProgress').hide();
-            if ( dataset=="false" ) {             
-                alert("Authentication Error: Invalid Login credentials");             
+            if ( dataset=="false" ) {
+                alert("Authentication Error: Invalid Login credentials");
             }
-            else if ( dataset=="404" ) {                          
+            else if ( dataset=="404" ) {
                 alert("The DHIMS2 server cannot be found! Please check your internet connection");
                 $('#DHIMS2datasetProgressRetry').show();
             }
-            else 
-            {           
-                    
+            else
+            {
+
                     var datasetObj = JSON.parse( dataset );
                     $('#entryperiod').attr('value',datasetObj.periodType);
-                                                        
+
                     for(var i=0;i<datasetObj.dataElements.length;i++)
                     {
                         var opt = document.createElement("option");
-                        document.getElementById("dhims2dataelement").options.add(opt);       
+                        document.getElementById("dhims2dataelement").options.add(opt);
                         opt.text = datasetObj.dataElements[i].name;
-                        opt.value = datasetObj.dataElements[i].id;  
+                        opt.value = datasetObj.dataElements[i].id;
                     }
-                    
+
                     getDHIMS2CatComboOptions(null);
             }
-        }       
-    }); 
+        }
+    });
 }
- 
- 
+
+
 function getDHIMS2CatComboOptions(dataElementID)
 {
     $('#DHIMS2ElementProgress').show();
     $('#DHIMS2ElementProgressRetry').hide();
-    
+
     document.getElementById("blistestSelected").options.length=0;
-            
+
     //$('#entryperiod').attr('value','');
     document.getElementById("dhims2catCombo").options.length=0;
     if(null == dataElementID)
@@ -2232,44 +2141,44 @@ function getDHIMS2CatComboOptions(dataElementID)
         dataElementID = $('#dhims2dataelement').attr('value');
     }
     var username= $('#dhims2username').attr("value");
-    var password= $('#dhims2password').attr("value");     
-    $.ajax({        
-        url :'api/dhims2get_data_elements_combo.php?dhims2username='+username+"&dhims2password="+password+"&dataElementID="+dataElementID,              
-        success : function (dataset) {     
-        	//console.log(dataset);     
+    var password= $('#dhims2password').attr("value");
+    $.ajax({
+        url :'api/dhims2get_data_elements_combo.php?dhims2username='+username+"&dhims2password="+password+"&dataElementID="+dataElementID,
+        success : function (dataset) {
+        	//console.log(dataset);
             $('#DHIMS2ElementProgress').hide();
-            if ( dataset=="false" ) {             
-                alert("Authentication Error: Invalid Login credentials");             
+            if ( dataset=="false" ) {
+                alert("Authentication Error: Invalid Login credentials");
             }
-            else if ( dataset=="404" ) {                          
+            else if ( dataset=="404" ) {
                 alert("The DHIMS2 server cannot be found! Please check your internet connection");
                 $('#DHIMS2ElementProgressRetry').show();
             }
-            else 
-            {           
-                    
+            else
+            {
+
                     var datasetObj = JSON.parse( dataset );
                     console.log(datasetObj);
                     //$('#entryperiod').attr('value',datasetObj.periodType);
-                                
+
                     for(var i=0;i<datasetObj.categoryOptionCombos.length;i++)
                     {
                         if(!alreadyInList(dataElementID,datasetObj.categoryOptionCombos[i].id))
                         {
-                        	
+
                             var opt = document.createElement("option");
-                            document.getElementById("dhims2catCombo").options.add(opt);       
+                            document.getElementById("dhims2catCombo").options.add(opt);
                             opt.text = datasetObj.categoryOptionCombos[i].name;
-                            opt.value = datasetObj.categoryOptionCombos[i].id;  
+                            opt.value = datasetObj.categoryOptionCombos[i].id;
                         }
                     }
-                    
+
             }
-        }       
-    }); 
+        }
+    });
 }
- 
- 
+
+
 function alreadyInList(dataelementID,comboId)
 {
     var flag = false;
@@ -2280,22 +2189,22 @@ function alreadyInList(dataelementID,comboId)
         var node;
         var value = comboId;
         var keyType = "id";
-        nodeList = zTree.getNodesByParam(keyType, value);       
-        for( var i=0, l=nodeList.length; i<l; i++) 
-        {           
+        nodeList = zTree.getNodesByParam(keyType, value);
+        for( var i=0, l=nodeList.length; i<l; i++)
+        {
                 if(startsWith(nodeList[i].pId,dataelementID))
-                {                   
+                {
                     flag = true;
                     break;
-                }               
+                }
         }
- 
+
     }
-    
+
     return flag;
 }
- 
-function startsWith(s,starter) {    
+
+function startsWith(s,starter) {
   for (var i = 0,cur_c; i < starter.length; i++) {
     cur_c = starter[i];
     if (s[i] !== starter[i]) {
@@ -2304,41 +2213,41 @@ function startsWith(s,starter) {
   }
   return true;
 }
- 
+
 function getSelBLISTests()
 {
     var tests = "";
-    var o_fields = document.getElementById("blistestSelected");       
+    var o_fields = document.getElementById("blistestSelected");
     for(var i=0;i<o_fields.options.length;i++)
     {
         if(tests.length > 0)
         {
-            tests = tests +"|"; 
+            tests = tests +"|";
         }
         tests = tests + o_fields.options[i].value + "^";
-        tests = tests + o_fields.options[i].text;                   
-    }   
-                
-    
-    
+        tests = tests + o_fields.options[i].text;
+    }
+
+
+
     return tests;
-    
+
 }
 function AddnewDHIMS2Config()
 {
-    
+
     //I need the text as well. Set the text to the hidden textboxes
     $('#dhims2orgunit_text').attr('value',$('#dhims2orgunit option:selected').text());
     $('#dhims2dataset_text').attr('value',$('#dhims2dataset option:selected').text());
     $('#dhims2dataelement_text').attr('value',$('#dhims2dataelement option:selected').text());
     $('#blis2dataelement_text').attr('value',getSelBLISTests());
     $('#dhims2catCombo_text').attr('value',$('#dhims2catCombo option:selected').text());
-        
+
     var  dataset = $('#dhims2dataset').attr('value');
     var  dhims2dataelement = $('#dhims2dataelement').attr('value');
     var  dhims2catCombo = $('#dhims2catCombo').attr('value');
     var testsSelected = $('#blis2dataelement_text').attr('value');
-    
+
     //return;
     if(null == dataset || dataset.length == 0)
     {
@@ -2355,7 +2264,7 @@ function AddnewDHIMS2Config()
         alert("No DHIMS2 Category Combo Option selected!");
         return;
     }
-    
+
     if(null == testsSelected || testsSelected.length == 0)
     {
         alert("No Corresponding  BLIS test selected!");
@@ -2366,12 +2275,12 @@ function AddnewDHIMS2Config()
         success: function() {
             $('#dhims2catCombo option:selected').remove();
             //alert("Submited");
-            showTree(); 
-            
+            showTree();
+
         }
     });
-    
-    
+
+
     $('#DHIMS2ApplyProgress').hide();
 }
 </script>
@@ -2384,15 +2293,15 @@ function AddnewDHIMS2Config()
 			<td class='left_menu' id='left_pane' width='160px'><ul>
 				<a id='option1' class='menu_option' href="javascript:right_load(1, 'site_info_div');"><?php echo LangUtil::$pageTerms['MENU_SUMMARY']; ?></a>
 				<br>
-				
+
 				<?php
-				# If super-admin or country-dir, show option to Delete this configuration
-				# If super-admin or country-dir, show option to Change lab manager/admin
-				# If super-admin or country-dir, show option to Back up Data
-				# For lab admin, the option appears as a separate tab
-				$user = get_user_by_id($_SESSION['user_id']);
-				if(is_super_admin($user) || is_country_dir($user)) {			
-					?>
+                # If super-admin or country-dir, show option to Delete this configuration
+                # If super-admin or country-dir, show option to Change lab manager/admin
+                # If super-admin or country-dir, show option to Back up Data
+                # For lab admin, the option appears as a separate tab
+                $user = get_user_by_id($_SESSION['user_id']);
+                if (is_super_admin($user) || is_country_dir($user)) {
+                    ?>
 					<br>
 					<a id='option9' class='menu_option' href="javascript:right_load(9, 'misc_div');"><?php echo LangUtil::$pageTerms['MENU_GENERAL']; ?></a>
 					<br><br>
@@ -2400,11 +2309,11 @@ function AddnewDHIMS2Config()
 					<br><br>
 					<a id='option6' class='menu_option' href="javascript:right_load(6, 'del_config_div');"><?php echo LangUtil::$pageTerms['MENU_DEL']; ?></a></li>
 					<br>
-					<?php					
-				}
-				?>
+					<?php
+                }
+                ?>
 				<br>
-				
+
 				<a id='test' class='menu_option' href="javascript:test_setup();"><?php echo LangUtil::$pageTerms['Tests']; ?> </a>
 				<br><br>
 				<div id='test_setup' name='test_setup' style='display:none;'>
@@ -2415,10 +2324,10 @@ function AddnewDHIMS2Config()
 					-<a href='remarks_edit.php?id=<?php echo $_REQUEST['id']; ?>'><?php echo "Results Interpretation"; ?></a>
 					<br><br>
 				</div>
-                                
+
                 <a id='option21' class='menu_option' href="javascript:right_load(21, 'search_div');"><?php echo "Search" ?></a>
                 <br><br>
-                                
+
 				<a id='report' class='menu_option' href="javascript:report_setup();"><?php echo LangUtil::$pageTerms['Reports']; ?> </a>
 				<br><br></li>
 				<div id='report_setup' name='report_setup' style='display:none;'>
@@ -2465,10 +2374,12 @@ function AddnewDHIMS2Config()
 				<a id='option4' class='menu_option' href="javascript:right_load(4, 'fields_div');"><?php echo LangUtil::$pageTerms['MENU_CUSTOM']; ?></a>
 				<br><br>
 				<a id='option50' class='menu_option' href="javascript:right_load(50, 'doctor_fields_div');">Doctor Registration Fields</a>
-				<br><br>			
+				<br><br>
 				<a id='option19' class='menu_option' href="javascript:language_div_load();"><?php echo LangUtil::getPageTerm("MODIFYLANG"); ?></a>
 				<br><br>
-				<a id='option14' class='menu_option' href="javascript:export_html();"><?php echo "Setup Network" ?></a>
+				<a id='option14' class='menu_option' href="javascript:export_html();"><?php echo "Setup Local Network" ?></a>
+				<br><br>
+				<a id='option33' class='menu_option' href="javascript:right_load(33, 'server_setup_div');">BLIS Online</a>
 				<br><br>
 				<a id='api' class='menu_option' href="javascript:api_setup();"><?php echo "External Interface" ?> </a>
                 <br><br></li>
@@ -2479,27 +2390,27 @@ function AddnewDHIMS2Config()
                     <br><br>
                 </div>
 				<?php
-					if($SERVER != $ON_ARC) {
-						?>
+                    if ($SERVER != $ON_ARC) {
+                        ?>
 						<a id='option13' class='menu_option' href="javascript:right_load(13, 'backup_revert_div');"><?php echo LangUtil::$pageTerms['MENU_BACKUP_REVERT']; ?></a><br><br></li>
 						<a id='option131' class='menu_option' href="javascript:right_load(131, 'key_management_div');"><?php echo LangUtil::$pageTerms['MENU_KEY_MANAGEMENT']; ?></a><br><br></li>
-						<?php if(is_super_admin($user) || is_country_dir($user)) { ?>
+						<?php if (is_super_admin($user) || is_country_dir($user)) { ?>
 								<a id='option18' class='menu_option' href="javascript:right_load(18, 'update_database_div');"><?php echo 'Update Data'; ?></a><br><br></li>
                                                                 <a id='option34' class='menu_option' href="javascript:right_load(34, 'import_config_div');"><?php echo 'Import Configuration' ?></a><br><br></li>
 
 						<?php }
-					}
-				?>
-				
+                    }
+                ?>
+
 				<a href='export_config?id=<?php echo $_REQUEST['id']; ?>' target='_blank'><?php echo LangUtil::$pageTerms['MENU_EXPORTCONFIG']; ?></a><br><br></li>
                                 <div id="old_update_div" style="display:none;">
 				<a id='option39' class='menu_option' href="javascript:right_load(39, 'blis_update_div');">Update to New Version</a>
 				<br><br>
 				</div>
 				<?php /* Enable for Data Merging
-				<a rel='facebox' id='option18' class='menu_option' href="updateCountryDbAtLocalUI.php">Update National Database</a>
-				</ul>
-				*/ ?>
+                <a rel='facebox' id='option18' class='menu_option' href="updateCountryDbAtLocalUI.php">Update National Database</a>
+                </ul>
+                */ ?>
 			</td>
 			<td>
 				<br><br><br><br><br>
@@ -2513,13 +2424,10 @@ function AddnewDHIMS2Config()
 					</div>
 					<br>
 					<?php
-					$page_elems->getLabConfigInfo($lab_config->id);
-					?>
-					<form id='backup_form' name='backup_form' action='data_backup' method='post' target='_blank'>
-						<input type='hidden' name='id' value='<?php echo $_REQUEST['id']; ?>'></input>
-					</form>
+                    $page_elems->getLabConfigInfo($lab_config->id);
+                    ?>
 				</div>
-                            
+
                                 <div class='right_pane' id='blis_update_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#Summary_config'>Page Help</a></p>
 				<b><?php echo "BLIS Update"; ?></b>
@@ -2528,7 +2436,7 @@ function AddnewDHIMS2Config()
                                         <br>
                                         <div id='update_spinner' style='display:none;'>
                                         <?php
-					$spinner_message = "Updating to C4G BLIS v2.2"."<br>";
+                    $spinner_message = "Updating to C4G BLIS v2.2"."<br>";
                                         $page_elems->getProgressSpinnerBig($spinner_message);
                                         ?>
                                         </div>
@@ -2540,7 +2448,7 @@ function AddnewDHIMS2Config()
                                             Update to v2.2 Failed! Try Again.
                                         </div>
 				</div>
-				
+
 				<div class='right_pane' id='st_types_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#Tests_config'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_ST_TYPES']; ?></b>
@@ -2549,7 +2457,7 @@ function AddnewDHIMS2Config()
 					</div>
 					<br>
 					<form id='st_types_form' name='st_types_form' action='ajax/st_types_update.php' method='post'>
-					<input type='hidden' name='lid' value='<?php echo $lab_config->id; ?>'></input>					
+					<input type='hidden' name='lid' value='<?php echo $lab_config->id; ?>'></input>
 					<?php echo LangUtil::$generalTerms['SPECIMEN_TYPES']; ?>
 					<small><a id='stype_link' href='javascript:stype_toggle();'><?php echo LangUtil::$generalTerms['CMD_SHOW']; ?></a></small>
 					<div class='pretty_box' id='stype_box' style='display:none'>
@@ -2562,38 +2470,35 @@ function AddnewDHIMS2Config()
 					<small><a id='ttype_link' href='javascript:ttype_toggle();'><?php echo LangUtil::$generalTerms['CMD_SHOW']; ?></a></small>
 					<div class='pretty_box' id='ttype_box' style='display:none'>
 					<b><u><?php echo LangUtil::$generalTerms['TEST_TYPES']; ?></u></b>
-                                        
+
                                         <?php
                                         //NC3065
-                                        
+
                                         $user = get_user_by_id($_SESSION['user_id']);
-                                        if(is_super_admin($user) || is_country_dir($user))
-                                        {
+                                        if (is_super_admin($user) || is_country_dir($user)) {
                                             $page_elems->getTestTypeCheckboxes_dir($lab_config->id);
-                                        }
-                                        else
-                                        {
-                                            $page_elems->getTestTypeCheckboxes($lab_config->id); 
+                                        } else {
+                                            $page_elems->getTestTypeCheckboxes($lab_config->id);
                                         }
                                         //NC3065
-					?>
-                                        
-                                         <?php //$page_elems->getTestTypeCheckboxes($lab_config->id); ?>
-                                        
+                    ?>
+
+                                         <?php //$page_elems->getTestTypeCheckboxes($lab_config->id);?>
+
 					</div>
 					<br><br>
 					<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='checkandsubmit_st_types()'>
 					</input>
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					<span id='st_types_progress' style='display:none;'>
-                                  
+
 						<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SUBMITTING']); ?>
 					</span>
 					</form>
 				</div>
-			
+
                                 <!--NC3065-->
-                                
+
                                 <div class='right_pane' id='search_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#search_config'>Page Help</a></p>
 					<b><?php echo "Configure Fields for search results"; ?></b>
@@ -2601,7 +2506,7 @@ function AddnewDHIMS2Config()
                                         <div id='searchfield_msg' class='clean-orange' style='display:none;width:350px;'>
 					</div>
 					<form id='searchfields_form' name='searchfields_form' action='ajax/search_config_update.php' method='post'>
-					<input type='hidden' name='lab_config_id' value='<?php echo $lab_config->id; ?>'></input>					
+					<input type='hidden' name='lab_config_id' value='<?php echo $lab_config->id; ?>'></input>
 						<?php $page_elems->getSearchFieldsCheckboxes($lab_config->id); ?>
 					<br><br>
 					<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='submit_searchconfig()'>
@@ -2614,7 +2519,7 @@ function AddnewDHIMS2Config()
 					</span>
 					</form>
 				</div>
-                                
+
                                 <div class='right_pane' id='barcode_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#barcode_config'>Page Help</a></p>
 					<b><?php echo "Configure Barcode Format Settings"; ?></b>
@@ -2622,9 +2527,9 @@ function AddnewDHIMS2Config()
                                         <div id='barcodefield_msg' class='clean-orange' style='display:none;width:350px;'>
 					</div>
 					<form id='barcodefields_form' name='barcodefields_form' action='ajax/update_barcode_settings.php' method='post'>
-					<input type='hidden' name='lab_config_id' value='<?php echo $lab_config->id; ?>'></input>					
+					<input type='hidden' name='lab_config_id' value='<?php echo $lab_config->id; ?>'></input>
 						<?php $page_elems->getBarcodeFields($lab_config->id);
-                                                //$page_elems->getSearchFieldsCheckboxes($lab_config->id); ?>
+                                                //$page_elems->getSearchFieldsCheckboxes($lab_config->id);?>
 					<br><br>
 					<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>' onclick='submit_barcodeconfig()'>
 					</input>
@@ -2636,14 +2541,14 @@ function AddnewDHIMS2Config()
 					</span>
 					</form>
 				</div>
-                                
+
                                 <!--NC3065-->
 
-                            
+
 				<div class='right_pane' id='users_div' style='display:none;margin-left:10px;'>
 					<?php
-					$reload_url = "lab_config_home.php?id=$lab_config_id";
-					?>
+                    $reload_url = "lab_config_home.php?id=$lab_config_id";
+                    ?>
 					<p style="text-align: right;"><a rel='facebox' href='#UserAccounts_config'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_USERS']; ?></b>
 					 | <a rel='facebox' href='lab_user_new.php?ru=<?php echo $reload_url; ?>&lid=<?php echo $lab_config_id; ?>'><?php echo LangUtil::$generalTerms['CMD_ADDNEWACCOUNT']; ?></a>
@@ -2652,9 +2557,9 @@ function AddnewDHIMS2Config()
 					</div>
 					<div id='user_list_table'>
 					<?php
-					$user_list = $lab_config->getUsers();
-					$page_elems->getLabUsersTable($user_list, $lab_config_id);
-					?>
+                    $user_list = $lab_config->getUsers();
+                    $page_elems->getLabUsersTable($user_list, $lab_config_id);
+                    ?>
 					</div>
 					<br>
 					<b><?php echo "User Types" ?></b>
@@ -2664,10 +2569,10 @@ function AddnewDHIMS2Config()
 					</div>
 					<div id='user_list_table1'>
 					<?php
-					//$user_list = $lab_config->getUsers();
-					$user_type_list = $lab_config->getUserTypes();
-					$page_elems->getLabUserTypesTable($user_type_list, $lab_config_id);
-					?>
+                    //$user_list = $lab_config->getUsers();
+                    $user_type_list = $lab_config->getUserTypes();
+                    $page_elems->getLabUserTypesTable($user_type_list, $lab_config_id);
+                    ?>
 					</div>
 				</div>
 
@@ -2682,8 +2587,8 @@ function AddnewDHIMS2Config()
 							  method="post">
 							<br> <?php echo LangUtil::$pageTerms['MODIFY_SITE'];  ?> :<br>
 							<?php
-							$page_elems->getSiteConfigForm($_SESSION['lab_config_id']);
-							?>
+                            $page_elems->getSiteConfigForm($_SESSION['lab_config_id']);
+                            ?>
 							<br><br>
 							<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>'
 								   onsubmit="return confirm('Are you sure?');"
@@ -2709,16 +2614,16 @@ function AddnewDHIMS2Config()
 						</form>
 					</div>
 				</div>
-					
+
 				<div class='right_pane' id='inventory_div' style='display:none;margin-left:10px;'>
 				</div>
-                                
+
                                 <div class='right_pane' id='billing_div' style='display:none;margin-left:10px;'>
-                                         
+
                                     <p style="text-align: right;"><a rel='facebox' href='#Billing_config'>Page Help</a></p>
                                     <div id='billing_msg' class='clean-orange' style='display:none;width:350px;'>
                                     </div>
-                           
+
 									<form id='billing_form' name='billing_form' action='ajax/billing_update.php' method='post'>
                                         <input type='hidden' name='lid' value='<?php echo $lab_config->id; ?>'></input>
                                         <div class="pretty_box">
@@ -2737,19 +2642,19 @@ function AddnewDHIMS2Config()
                                         <select name='default_currency' id='default_currency'>
                                         <?php $allCurrencies = currencyConfig::getAllDifferenctCurrencies($lab_config_id);
                                         $defaultCurrency = "";
-                                        foreach ($allCurrencies as $currency){ 
-										//echo $currency->getFlag1(). " " . $currency->getCurrencyFrom();
-                                        if($currency->getFlag1()){
-										$defaultCurrency = $currency; 
-                                        ?>
+                                        foreach ($allCurrencies as $currency) {
+                                            //echo $currency->getFlag1(). " " . $currency->getCurrencyFrom();
+                                            if ($currency->getFlag1()) {
+                                                $defaultCurrency = $currency; ?>
 											<option value='<?php echo $currency->getCurrencyFrom(); ?>' selected><?php echo $currency->getCurrencyFrom(); ?></option>
-										<?php } 
-										else {
-                                        ?>
+										<?php
+                                            } else {
+                                                ?>
                                         	<option value='<?php echo $currency->getCurrencyFrom(); ?>'><?php echo $currency->getCurrencyFrom(); ?></option>
-                                        <?php } 
-										}?>
-											
+                                        <?php
+                                            }
+                                        }?>
+
 										</select>
                                         <br><br>
                                         <?php echo LangUtil::$generalTerms['CURRENCY_DELIMITER']; ?>
@@ -2757,16 +2662,16 @@ function AddnewDHIMS2Config()
                                         <br><br>
                                         Currency will display as: 00<?php echo get_currency_delimiter_from_lab_config_settings(); ?>00 <?php echo get_currency_type_from_lab_config_settings() ?>
                                         <br/><br/>
-                                        <?php if($defaultCurrency==""){?>
+                                        <?php if ($defaultCurrency=="") {?>
                                         <div id="exchange_rate" style='display:none;' ></div><?php } else {?>
-                                        <?php 
+                                        <?php
                                         $alreadyExistingExchangeRates = array();
-                                        if($defaultCurrency!=""){
-                                        $exchangeRates = currencyConfig::getExchangeRateSnap($lab_config_id, $defaultCurrency->getCurrencyFrom());
-                                        $totalCurrencies = count($allCurrencies);
-                                        $totalExchangeRates = count($exchangeRates);
+                                        if ($defaultCurrency!="") {
+                                            $exchangeRates = currencyConfig::getExchangeRateSnap($lab_config_id, $defaultCurrency->getCurrencyFrom());
+                                            $totalCurrencies = count($allCurrencies);
+                                            $totalExchangeRates = count($exchangeRates);
                                         }?>
-										<?php if($totalExchangeRates <1){?>
+										<?php if ($totalExchangeRates <1) {?>
                                         <div id="exchange_rate" style='display:none;'></div>
 										<?php } else {?>
                                         <div id="exchange_rate" >
@@ -2777,10 +2682,10 @@ function AddnewDHIMS2Config()
                                         <th>&nbsp;&nbsp; <?php echo LangUtil::$generalTerms['UPDATED_DATE']; ?>&nbsp;&nbsp; </th>
                                         <th>&nbsp;&nbsp; <?php echo LangUtil::$generalTerms['ACTIONS']; ?>&nbsp;&nbsp; </th>
                                         </tr>
-                                        <?php 
+                                        <?php
                                         $row=0;
-                                        foreach($exchangeRates as $currencyExchageRow){?>
-                                        <tr> 
+                                        foreach ($exchangeRates as $currencyExchageRow) {?>
+                                        <tr>
                                         <td>&nbsp;&nbsp; <div id="currency<?php echo $row;?>"><?php echo $currencyExchageRow->getCurrencyTo();
                                                          array_push($alreadyExistingExchangeRates, $currencyExchageRow->getCurrencyTo()); ?> </div>&nbsp;&nbsp;</td>
                                         <td>&nbsp;&nbsp; <input type="text" id="exchangeRate<?php echo $row;?>" value="<?php echo $currencyExchageRow->getExchangeRate();?>" size="4" />&nbsp;&nbsp; </td>
@@ -2793,61 +2698,66 @@ function AddnewDHIMS2Config()
                                         <?php } ?>
                                         <a href="javascript:addCurrencyRatio();"><?php echo LangUtil::$generalTerms['ADD_CURRENCY_RATE']; ?></a><br/>
 										<?php }?>
-                                        
+
                                         <div id="addCurrencyRatioDiv">
                                         <?php
                                         $validAddableCurrency = array();
-                                        foreach ($allCurrencies as $currency){ 
-										if($currency->getCurrencyTo() != $defaultCurrency->getCurrencyFrom() && !(in_array($currency->getCurrencyTo(), $alreadyExistingExchangeRates))){
-										array_push($validAddableCurrency, $currency);
-										} 
-										}
-										if(count($validAddableCurrency)>0){?>
-                                        Secondary Currency&nbsp;&nbsp;&nbsp; 
+                                        foreach ($allCurrencies as $currency) {
+                                            if ($currency->getCurrencyTo() != $defaultCurrency->getCurrencyFrom() && !(in_array($currency->getCurrencyTo(), $alreadyExistingExchangeRates))) {
+                                                array_push($validAddableCurrency, $currency);
+                                            }
+                                        }
+                                        if (count($validAddableCurrency)>0) {?>
+                                        Secondary Currency&nbsp;&nbsp;&nbsp;
                                         <select name='added_currency' id='added_currency'>
                                         <?php
-                                        foreach ($validAddableCurrency as $currency){ 
-										?>
+                                        foreach ($validAddableCurrency as $currency) {
+                                            ?>
 											<option value='<?php echo $currency->getCurrencyFrom(); ?>'><?php echo $currency->getCurrencyFrom(); ?></option>
-										<?php } 
-										?>
-                                        </select> 
+										<?php
+                                        }
+                                        ?>
+                                        </select>
                                         &nbsp;&nbsp;&nbsp; <input type="text" id="added_currency_rate" size="12" placeholder="Exchange Rate">
                                         &nbsp;&nbsp;&nbsp; <input type="button" value="Add" onclick="add_new_currency_ratio(1)" />
                                         &nbsp;&nbsp;&nbsp; <input type="button" value="Cancel" onclick="add_new_currency_ratio(0)" />
-                                        <?php }  else {
-											echo "<br/>"."Add secondary currencies to enter the exchange rates";
-										}?>
+                                        <?php } else {
+                                            echo "<br/>"."Add secondary currencies to enter the exchange rates";
+                                        }?>
                                         </div>
-                                        <br/>                                       
+                                        <br/>
                                         <div>
                                     	<a href='javascript:add_new_currency(1);' id='add_new_currency_link'><?php echo LangUtil::$generalTerms['ADD_CURRENCY']; ?></a>
-                                    	                                    
+
                                    	 	<div id="new_currency" style='display:none;'>
                                    	 	<?php echo LangUtil::$generalTerms['NEW_CURRENCY']; ?>
-                                    	&nbsp;&nbsp;&nbsp;<input type="text" name="new_currency_name" id="new_currency_name" /> 
+                                    	&nbsp;&nbsp;&nbsp;<input type="text" name="new_currency_name" id="new_currency_name" />
                                     	&nbsp;&nbsp;&nbsp;<input type="button" value="Add Currency Type" onclick="submit_new_currency()" />
                                     	&nbsp;&nbsp;&nbsp; <input type="button" value="Cancel" onclick="add_new_currency(0)" />
                                     	</div>
                                     	</div>
-                                       
+
                                         <br/>
-                                        
+
                                         <!-- Billing logo upload code -->
                                         <?php $name="../logos/logo_billing_".$lab_config->id.".jpg";
-										 if (file_exists("../logos/logo_billing_".$lab_config->id.".jpg")==true)
-										 echo "LOGO being Used "; ?></h4>
+                                         if (file_exists("../logos/logo_billing_".$lab_config->id.".jpg")==true) {
+                                             echo "LOGO being Used ";
+                                         } ?></h4>
 	  									<h3>File Upload:</h3><?php
-			
-	 									if (file_exists("../logos/logo_billing_".$lab_config->id.".jpg")==false)
-										{echo "( Add a Logo)"; }else echo "(Change Logo)"; ?>
+
+                                        if (file_exists("../logos/logo_billing_".$lab_config->id.".jpg")==false) {
+                                            echo "( Add a Logo)";
+                                        } else {
+                                            echo "(Change Logo)";
+                                        } ?>
 										Choose a .jpg logo File to upload:
 										<input type="file" name="billingLogo" >
 										</>
-										<br />	
 										<br />
-	
-                                        
+										<br />
+
+
                                         <input type="button" value="Update" onclick="submit_billing_update()" />
 
                                         <span id='billing_progress' style='display:none;'>
@@ -2855,11 +2765,11 @@ function AddnewDHIMS2Config()
 										</span>
                                     </form>
                                     </div>
-								
+
                                 </div>
-				
+
 				<div class='right_pane' id='fields_div' style='display:none;margin-left:10px;'>
-				
+
 <div id="dialog-form-patients" title="Customize Field Order - Patient Registration Form">
 <!-- <table>
 <tr>
@@ -2867,13 +2777,13 @@ function AddnewDHIMS2Config()
 <div >Tips : Drag and Drop and click update to reorder patient fields</div>
 <div align="center">
    <ul id="sortablePatients">
-   <?php  
+   <?php
    $field_odering_form_names = explode(',', $field_odering_patients->form_field_inOrder);
-   foreach($field_odering_form_names as $value){
-   	echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
+   foreach ($field_odering_form_names as $value) {
+       echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
    }
    ?>
-  
+
 </ul> </div>
 <!-- </td><td width='30%'><div align='top'>Tips : Drag and Drop and click update to reorder the existing fields</div></td>
 </table> -->
@@ -2883,18 +2793,18 @@ function AddnewDHIMS2Config()
 <div >Tips : Drag and Drop and click update to reorder specimen fields</div>
 <div align="center">
    <ul id="sortableSpecimen">
-   <?php  
+   <?php
    $field_odering_form_names = explode(',', $field_odering_specimen->form_field_inOrder);
-   foreach($field_odering_form_names as $value){
-   	echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
+   foreach ($field_odering_form_names as $value) {
+       echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
    }
    ?>
-  
+
 </ul> </div>
 </div>
- 
- 
-		
+
+
+
 					<p style="text-align: right;"><a rel='facebox' href='#RegistrationFields_config'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_CUSTOM']; ?></b>
 					 | <a href='javascript:toggle_ofield_div();' id='ofield_toggle_link'><?php echo LangUtil::$generalTerms['CMD_EDIT']; ?></a>
@@ -2919,36 +2829,41 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['PATIENT_ID']; ?></td>
 								<td>
 									<input type='checkbox' name='use_pid' id='use_pid' <?php
-									if($lab_config->pid != 0)
-										echo " checked ";
-									?>>
+                                    if ($lab_config->pid != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='use_pid_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_pid_radio' value='Y' <?php
-										if($lab_config->pid == 2 || $lab_config->pid == 4)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->pid == 2 || $lab_config->pid == 4) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_pid_radio' value='N' <?php
-										if($lab_config->pid == 1 || $lab_config->pid == 3 )
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
-                                        
+                                        if ($lab_config->pid == 1 || $lab_config->pid == 3) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+
                                         &nbsp;&nbsp;
 										<?php echo 'Allow Duplicate' ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='dup_pid_radio' value='Y' <?php
-										if($lab_config->pid == 1 || $lab_config->pid == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->pid == 1 || $lab_config->pid == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='dup_pid_radio' value='N' <?php
-										if($lab_config->pid == 3 || $lab_config->pid == 4)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($lab_config->pid == 3 || $lab_config->pid == 4) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -2956,23 +2871,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['ADDL_ID']; ?></td>
 								<td>
 									<input type='checkbox' name='use_p_addl' id='use_p_addl' <?php
-									if($lab_config->patientAddl != 0)
-										echo " checked ";
-									?>>
+                                    if ($lab_config->patientAddl != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='use_p_addl_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_p_addl_radio' value='Y' <?php
-										if($lab_config->patientAddl == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->patientAddl == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_p_addl_radio' value='N' <?php
-										if($lab_config->patientAddl != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($lab_config->patientAddl != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -2980,24 +2898,27 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></td>
 								<td>
 									<input type='checkbox' name='use_dnum' id='use_dnum'<?php
-									
-                                                                        if($lab_config->dailyNum == 1 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 12)
-										echo " checked ";
-									?>>
+
+                                                                        if ($lab_config->dailyNum == 1 || $lab_config->dailyNum == 2 || $lab_config->dailyNum == 11 || $lab_config->dailyNum == 12) {
+                                                                            echo " checked ";
+                                                                        }
+                                    ?>>
 									</input>
 									<span id='use_dnum_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_dnum_radio' value='Y'<?php
-										if($lab_config->dailyNum == 2 || $lab_config->dailyNum == 12)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->dailyNum == 2 || $lab_config->dailyNum == 12) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_dnum_radio' value='N' <?php
-										if($lab_config->dailyNum != 2 && $lab_config->dailyNum != 12)
-											echo " checked ";
-										?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($lab_config->dailyNum != 2 && $lab_config->dailyNum != 12) {
+                                            echo " checked ";
+                                        }
+                                        ?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_RESET']; ?>
 										<select name='dnum_reset' id='dnum_reset'>
@@ -3011,7 +2932,7 @@ function AddnewDHIMS2Config()
 											$('#dnum_reset').attr("value", "<?php echo $lab_config->dailyNumReset; ?>");
 											$("#addCurrencyRatioDiv").hide();
 											$("#updateCurrencyRatioDialog").hide();
-										});										
+										});
 										</script>
 									</span>
 								</td>
@@ -3020,23 +2941,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['NAME']; ?></td>
 								<td>
 									<input type='checkbox' name='use_pname' id='use_pname'<?php
-									if($lab_config->pname != 0)
-										echo " checked ";
-									?>>
+                                    if ($lab_config->pname != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='use_pname_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_pname_radio' value='Y'<?php
-										if($lab_config->pname == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->pname == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_pname_radio' value='N' <?php
-										if($lab_config->pname != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($lab_config->pname != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3044,9 +2968,10 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['GENDER']; ?></td>
 								<td>
 									<input type='checkbox' name='use_sex' id='use_sex' <?php
-									if($lab_config->sex != 0)
-										echo " checked ";
-									?>>
+                                    if ($lab_config->sex != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='use_sex_mand' style='display:none;'>
 										&nbsp;&nbsp;
@@ -3058,23 +2983,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['DOB']; ?></td>
 								<td>
 									<input type='checkbox' name='use_dob' id='use_dob'<?php
-									if($lab_config->dob != 0)
-										echo " checked ";
-									?>>
+                                    if ($lab_config->dob != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='use_dob_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_dob_radio' value='Y'<?php
-										if($lab_config->dob == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->dob == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_dob_radio' value='N' <?php
-										if($lab_config->dob != 2)
-											echo " checked ";
-										?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($lab_config->dob != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3082,24 +3010,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['AGE']; ?></td>
 								<td>
 									<input type='checkbox' name='use_age' id='use_age'<?php
-                                                                        if($lab_config->age == 1 || $lab_config->age == 2 || $lab_config->age == 11 || $lab_config->age == 12)
-									
-										echo " checked ";
-									?>>
+                                                                        if ($lab_config->age == 1 || $lab_config->age == 2 || $lab_config->age == 11 || $lab_config->age == 12) {
+                                                                            echo " checked ";
+                                                                        }
+                                    ?>>
 									</input>
 									<span id='use_age_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_age_radio' value='Y'<?php
-										if($lab_config->age == 2 || $lab_config->age == 12)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->age == 2 || $lab_config->age == 12) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_age_radio' value='N' <?php
-										if($lab_config->age != 2 && $lab_config->age != 12)
-											echo " checked ";
-										?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($lab_config->age != 2 && $lab_config->age != 12) {
+                                            echo " checked ";
+                                        }
+                                        ?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3115,10 +3045,11 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></td>
 								<td>
 									<input type='checkbox' name='use_sid' id='use_sid'<?php
-									//if($lab_config->sid != 0)
-									if(true)
-										echo " checked ";
-									?>>
+                                    //if($lab_config->sid != 0)
+                                    if (true) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='use_sid_mand' style='display:none;'>
 										&nbsp;&nbsp;
@@ -3130,24 +3061,27 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></td>
 								<td>
 									<input type='checkbox' name='use_s_addl' id='use_s_addl'<?php
-									if($lab_config->specimenAddl != 0)
-										echo " checked ";
-									?>>
-									
+                                    if ($lab_config->specimenAddl != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
+
 									</input>
 									<span id='use_s_addl_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_s_addl_radio' value='Y'<?php
-										if($lab_config->specimenAddl == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->specimenAddl == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_s_addl_radio' value='N' <?php
-										if($lab_config->specimenAddl != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($lab_config->specimenAddl != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3155,23 +3089,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['COMMENTS']; ?></td>
 								<td>
 									<input type='checkbox' name='use_comm' id='use_comm'<?php
-									if($lab_config->comm != 0)
-										echo " checked ";
-									?>>
+                                    if ($lab_config->comm != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='use_comm_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_comm_radio' value='Y'<?php
-										if($lab_config->comm == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->comm == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_comm_radio' value='N' <?php
-										if($lab_config->comm != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($lab_config->comm != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3179,23 +3116,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['R_DATE']; ?></td>
 								<td>
 									<input type='checkbox' name='use_rdate' id='use_rdate'<?php
-									if($lab_config->rdate != 0)
-										echo " checked ";
-									?>>
+                                    if ($lab_config->rdate != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='use_rdate_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_rdate_radio' value='Y'<?php
-										if($lab_config->rdate == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->rdate == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_rdate_radio' value='N' <?php
-										if($lab_config->rdate != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($lab_config->rdate != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3203,23 +3143,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['REF_OUT']; ?></td>
 								<td>
 									<input type='checkbox' name='use_refout' id='use_refout'<?php
-									if($lab_config->refout != 0)
-										echo " checked ";
-									?>>
+                                    if ($lab_config->refout != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='use_refout_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_refout_radio' value='Y'<?php
-										if($lab_config->refout == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->refout == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_refout_radio' value='N' <?php
-										if($lab_config->refout != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($lab_config->refout != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3227,23 +3170,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['DOCTOR']; ?></td>
 								<td>
 									<input type='checkbox' name='use_doctor' id='use_doctor'<?php
-									if($lab_config->doctor != 0)
-										echo " checked ";
-									?>>
+                                    if ($lab_config->doctor != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='use_doctor_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='use_doctor_radio' value='Y'<?php
-										if($lab_config->doctor == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($lab_config->doctor == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='use_doctor_radio' value='N' <?php
-										if($lab_config->doctor != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($lab_config->doctor != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3272,10 +3218,10 @@ function AddnewDHIMS2Config()
 					</div> <br/>
 					<div><a href='javascript:openReorder()'>Reorder Fields</div>
 					<div id='reorder_fields'>
-					
+
 					&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;&nbsp;<a href="#" id='field_reorder_link_patient'>Patient Registration Form</a><br/>
 					&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;&nbsp;<a href="#" id='field_reorder_link_specimen'>Specimen Registration Form</a>
-					 
+
 					<br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick='javascript:closeReorder();' value='cancel' />
 					</div>
@@ -3486,34 +3432,34 @@ function AddnewDHIMS2Config()
 					<?php echo LangUtil::$pageTerms['CUSTOMFIELDS']." - ".LangUtil::$generalTerms['SPECIMENS']; ?>
 					 | <a href='cfield_new.php?lid=<?php echo $lab_config_id; ?>'><?php echo LangUtil::$generalTerms['ADDNEW']; ?></a>[<a href='#new_help' rel='facebox'>?</a>]
 					<div id='specimen_custom_field_list'>
-					<?php 
-					
-					$page_elems->getCustomFieldTable($lab_config->id, $custom_field_list_specimen, 1); 
-					?>
+					<?php
+
+                    $page_elems->getCustomFieldTable($lab_config->id, $custom_field_list_specimen, 1);
+                    ?>
 					</div>
-					
+
 					<br>
 					<?php echo LangUtil::$pageTerms['CUSTOMFIELDS']." - ".LangUtil::$generalTerms['PATIENTS']; ?>
 					 | <a href='cfield_new.php?lid=<?php echo $lab_config_id; ?>'><?php echo LangUtil::$generalTerms['ADDNEW']; ?></a> [<a href='#new_help' rel='facebox'>?</a>]
 					<div id='patient_custom_field_list'>
-					<?php 
-						$page_elems->getCustomFieldTable($lab_config->id, $custom_field_list_patients, 2); 
-					?>
+					<?php
+                        $page_elems->getCustomFieldTable($lab_config->id, $custom_field_list_patients, 2);
+                    ?>
 					</div>
-					
+
 					<br>
 					<?php echo LangUtil::$pageTerms['CUSTOMFIELDS']." - Lab Titles"; ?>
 					 | <a href='cfield_new.php?lid=<?php echo $lab_config_id; ?>'><?php echo LangUtil::$generalTerms['ADDNEW']; ?></a> [<a href='#new_help' rel='facebox'>?</a>]
 					<div id='labtitle_custom_field_list'>
-					<?php 
-					
-					$page_elems->getCustomFieldTable($lab_config->id, $custom_field_list_labTitle, 3); 
-					?>
+					<?php
+
+                    $page_elems->getCustomFieldTable($lab_config->id, $custom_field_list_labTitle, 3);
+                    ?>
 					</div>
 				</div>
-	
+
 				<div class='right_pane' id='doctor_fields_div' style='display:none;margin-left:10px;'>
-				
+
 <div id="doctor-dialog-form-patients" title="Customize Field Order - Patient Registration Form">
 <!-- <table>
 <tr>
@@ -3521,13 +3467,13 @@ function AddnewDHIMS2Config()
 <div >Tips : Drag and Drop and click update to reorder patient fields</div>
 <div align="center">
    <ul id="doctor_sortablePatients">
-   <?php  
+   <?php
    $field_odering_form_names = explode(',', $field_odering_patients->form_field_inOrder);
-   foreach($field_odering_form_names as $value){
-   	echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
+   foreach ($field_odering_form_names as $value) {
+       echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
    }
    ?>
-  
+
 </ul> </div>
 <!-- </td><td width='30%'><div align='top'>Tips : Drag and Drop and click update to reorder the existing fields</div></td>
 </table> -->
@@ -3537,18 +3483,18 @@ function AddnewDHIMS2Config()
 <div >Tips : Drag and Drop and click update to reorder specimen fields</div>
 <div align="center">
    <ul id="sortableSpecimen">
-   <?php  
+   <?php
    $field_odering_form_names = explode(',', $field_odering_specimen->form_field_inOrder);
-   foreach($field_odering_form_names as $value){
-   	echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
+   foreach ($field_odering_form_names as $value) {
+       echo "<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>".$value."</li>";
    }
    ?>
-  
+
 </ul> </div>
 </div>
- 
- 
-		
+
+
+
 					<p style="text-align: right;"><a rel='facebox' href='#RegistrationFields_config'>Page Help</a></p>
 					<b>Doctor Registration Fields</b>
 					 | <a href='javascript:doctor_toggle_ofield_div();' id='doctor_ofield_toggle_link'><?php echo LangUtil::$generalTerms['CMD_EDIT']; ?></a>
@@ -3569,29 +3515,32 @@ function AddnewDHIMS2Config()
 							</tr>
 						</thead>
 						<tbody>
-							
+
 							<tr>
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['PATIENT_DAILYNUM']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_dnum' id='doctor_use_dnum'<?php
-									
-                                                                        if($doctor_lab_config->dailyNum == 1 || $doctor_lab_config->dailyNum == 2 || $doctor_lab_config->dailyNum == 11 || $doctor_lab_config->dailyNum == 12)
-										echo " checked ";
-									?>>
+
+                                                                        if ($doctor_lab_config->dailyNum == 1 || $doctor_lab_config->dailyNum == 2 || $doctor_lab_config->dailyNum == 11 || $doctor_lab_config->dailyNum == 12) {
+                                                                            echo " checked ";
+                                                                        }
+                                    ?>>
 									</input>
 									<span id='doctor_use_dnum_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_dnum_radio' value='Y'<?php
-										if($doctor_lab_config->dailyNum == 2 || $doctor_lab_config->dailyNum == 12)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($doctor_lab_config->dailyNum == 2 || $doctor_lab_config->dailyNum == 12) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_dnum_radio' value='N' <?php
-										if($doctor_lab_config->dailyNum != 2 && $doctor_lab_config->dailyNum != 12)
-											echo " checked ";
-										?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($doctor_lab_config->dailyNum != 2 && $doctor_lab_config->dailyNum != 12) {
+                                            echo " checked ";
+                                        }
+                                        ?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_RESET']; ?>
 										<select name='dnum_reset' id='dnum_reset'>
@@ -3605,7 +3554,7 @@ function AddnewDHIMS2Config()
 											$('#dnum_reset').attr("value", "<?php echo $doctor_lab_config->dailyNumReset; ?>");
 											$("#addCurrencyRatioDiv").hide();
 											$("#updateCurrencyRatioDialog").hide();
-										});										
+										});
 										</script>
 									</span>
 								</td>
@@ -3614,23 +3563,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['NAME']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_pname' id='doctor_use_pname'<?php
-									if($doctor_lab_config->pname != 0)
-										echo " checked ";
-									?>>
+                                    if ($doctor_lab_config->pname != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='doctor_use_pname_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_pname_radio' value='Y'<?php
-										if($doctor_lab_config->pname == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($doctor_lab_config->pname == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_pname_radio' value='N' <?php
-										if($doctor_lab_config->pname != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($doctor_lab_config->pname != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3638,9 +3590,10 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['GENDER']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_sex' id='doctor_use_sex' <?php
-									if($doctor_lab_config->sex != 0)
-										echo " checked ";
-									?>>
+                                    if ($doctor_lab_config->sex != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='doctor_use_sex_mand' style='display:none;'>
 										&nbsp;&nbsp;
@@ -3652,23 +3605,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['DOB']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_dob' id='doctor_use_dob'<?php
-									if($doctor_lab_config->dob != 0)
-										echo " checked ";
-									?>>
+                                    if ($doctor_lab_config->dob != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='doctor_use_dob_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_dob_radio' value='Y'<?php
-										if($doctor_lab_config->dob == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($doctor_lab_config->dob == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_dob_radio' value='N' <?php
-										if($doctor_lab_config->dob != 2)
-											echo " checked ";
-										?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($doctor_lab_config->dob != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3676,24 +3632,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['PATIENTS']; ?> - <?php echo LangUtil::$generalTerms['AGE']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_age' id='doctor_use_age'<?php
-                                                                        if($doctor_lab_config->age == 1 || $doctor_lab_config->age == 2 || $doctor_lab_config->age == 11 || $doctor_lab_config->age == 12)
-									
-										echo " checked ";
-									?>>
+                                                                        if ($doctor_lab_config->age == 1 || $doctor_lab_config->age == 2 || $doctor_lab_config->age == 11 || $doctor_lab_config->age == 12) {
+                                                                            echo " checked ";
+                                                                        }
+                                    ?>>
 									</input>
 									<span id='doctor_use_age_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_age_radio' value='Y'<?php
-										if($doctor_lab_config->age == 2 || $doctor_lab_config->age == 12)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($doctor_lab_config->age == 2 || $doctor_lab_config->age == 12) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_age_radio' value='N' <?php
-										if($doctor_lab_config->age != 2 && $doctor_lab_config->age != 12)
-											echo " checked ";
-										?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($doctor_lab_config->age != 2 && $doctor_lab_config->age != 12) {
+                                            echo " checked ";
+                                        }
+                                        ?> ><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3709,10 +3667,11 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_sid' id='doctor_use_sid'<?php
-									//if($doctor_lab_config->sid != 0)
-									if(true)
-										echo " checked ";
-									?>>
+                                    //if($doctor_lab_config->sid != 0)
+                                    if (true) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='doctor_use_sid_mand' style='display:none;'>
 										&nbsp;&nbsp;
@@ -3724,24 +3683,27 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['SPECIMEN_ID']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_s_addl' id='doctor_use_s_addl'<?php
-									if($doctor_lab_config->specimenAddl != 0)
-										echo " checked ";
-									?>>
-									
+                                    if ($doctor_lab_config->specimenAddl != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
+
 									</input>
 									<span id='doctor_use_s_addl_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_s_addl_radio' value='Y'<?php
-										if($doctor_lab_config->specimenAddl == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($doctor_lab_config->specimenAddl == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_s_addl_radio' value='N' <?php
-										if($doctor_lab_config->specimenAddl != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($doctor_lab_config->specimenAddl != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3749,23 +3711,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['COMMENTS']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_comm' id='doctor_use_comm'<?php
-									if($doctor_lab_config->comm != 0)
-										echo " checked ";
-									?>>
+                                    if ($doctor_lab_config->comm != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='doctor_use_comm_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_comm_radio' value='Y'<?php
-										if($doctor_lab_config->comm == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($doctor_lab_config->comm == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_comm_radio' value='N' <?php
-										if($doctor_lab_config->comm != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($doctor_lab_config->comm != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3773,23 +3738,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['R_DATE']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_rdate' id='doctor_use_rdate'<?php
-									if($doctor_lab_config->rdate != 0)
-										echo " checked ";
-									?>>
+                                    if ($doctor_lab_config->rdate != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='doctor_use_rdate_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_rdate_radio' value='Y'<?php
-										if($doctor_lab_config->rdate == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($doctor_lab_config->rdate == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_rdate_radio' value='N' <?php
-										if($doctor_lab_config->rdate != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($doctor_lab_config->rdate != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3797,23 +3765,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['REF_OUT']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_refout' id='doctor_use_refout'<?php
-									if($doctor_lab_config->refout != 0)
-										echo " checked ";
-									?>>
+                                    if ($doctor_lab_config->refout != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='doctor_use_refout_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_refout_radio' value='Y'<?php
-										if($doctor_lab_config->refout == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($doctor_lab_config->refout == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_refout_radio' value='N' <?php
-										if($doctor_lab_config->refout != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($doctor_lab_config->refout != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -3821,23 +3792,26 @@ function AddnewDHIMS2Config()
 								<td><?php echo LangUtil::$generalTerms['SPECIMENS']; ?> - <?php echo LangUtil::$generalTerms['DOCTOR']; ?></td>
 								<td>
 									<input type='checkbox' name='doctor_use_doctor' id='doctor_use_doctor'<?php
-									if($doctor_lab_config->doctor != 0)
-										echo " checked ";
-									?>>
+                                    if ($doctor_lab_config->doctor != 0) {
+                                        echo " checked ";
+                                    }
+                                    ?>>
 									</input>
 									<span id='doctor_use_doctor_mand' style='display:none;'>
 										&nbsp;&nbsp;
 										<?php echo LangUtil::$generalTerms['MSG_MANDATORYFIELD']; ?>?
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_doctor_radio' value='Y'<?php
-										if($doctor_lab_config->doctor == 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
+                                        if ($doctor_lab_config->doctor == 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['YES']; ?></input>
 										&nbsp;&nbsp;
 										<input type='radio' name='doctor_use_doctor_radio' value='N' <?php
-										if($doctor_lab_config->doctor != 2)
-											echo " checked ";
-										?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
+                                        if ($doctor_lab_config->doctor != 2) {
+                                            echo " checked ";
+                                        }
+                                        ?>><?php echo LangUtil::$generalTerms['NO']; ?></input>
 									</span>
 								</td>
 							</tr>
@@ -4067,15 +4041,40 @@ function AddnewDHIMS2Config()
 					});
 					</script>
 					<br>
-					
+
 					<br>
-					
+
 				</div>
-				
+
 				<div class='right_pane' id='network_setup_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#SetupNet'>Page Help</a></p>
-				Setup can be accessed from BlisSetup.html in the main folder.
+				<p>Setup for a local network for your hospital or laboratory can be accessed from BlisSetup.html in the main folder.</p>
 				</div>
+
+				<div class='right_pane' id='server_setup_div' style='display:none;margin-left:10px;'>
+				<p style="text-align: right;"><a rel='facebox' href='#SetupServer'>Page Help</a></p>
+				<form id="blis_online_config_form"
+					name="blis_online_config_form"
+					action="../ajax/lab_config_save_ip.php"
+					method="post">
+					<input type="hidden" id="lab_config_id"
+						name="lab_config_id"
+						value="<?php echo $lab_config_id; ?>">
+					<?php echo LangUtil::$pageTerms['ADD_ONLINE_SERVER']; ?>
+                    <input type="text" id="server_ip"
+						name="server_ip"
+						value='<?php echo $lab_config->blis_cloud_hostname; ?>'>
+					<br><br>
+					<input type="button" id="serverIpUpdateBtn"
+							value="<?php echo LangUtil::$pageTerms['SAVE_BUTTON']; ?>"
+							onclick="submit_save_server_ip();">
+					<p id="serverIpUpdateMsg" style="display:none">
+						BLIS Cloud hostname updated successfully!
+					</p>
+				</form>
+				</div>
+
+
 				<div class='right_pane' id='target_tat_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#Tests_config'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_TAT']; ?></b>
@@ -4097,10 +4096,10 @@ function AddnewDHIMS2Config()
 						</span>
 					</form>
 				</div>
-				
+
 
                             <div id='view_stocks_help' class='right_pane' style='display:none;margin-left:10px;'>
-                                    <ul>	
+                                    <ul>
                                             <?php
 
                                                     echo "<li>";
@@ -4116,8 +4115,8 @@ function AddnewDHIMS2Config()
                                     </ul>
                                     </div>
 
-                                
-                                
+
+
 				<div class='right_pane' id='del_config_div' style='display:none;margin-left:10px;'>
 					<b><?php echo LangUtil::$pageTerms['MENU_DEL']; ?></b>
 					<br><br>
@@ -4129,7 +4128,7 @@ function AddnewDHIMS2Config()
 					<input type='button' onclick="javascript:right_load(1, 'site_info_div');" value='<?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?>'>
 					</div>
 				</div>
-				
+
 				<div class='right_pane' id='change_admin_div' style='display:none;margin-left:10px;'>
 					<b><?php echo LangUtil::$pageTerms['MENU_MGR']; ?></b>
 					<br><br>
@@ -4137,17 +4136,17 @@ function AddnewDHIMS2Config()
 					</div>
 					<br>
 					<select name='lab_admin' id='lab_admin' class='uniform_width'>
-					<?php 
-						# Fetch list of existing lab admins 
-						$page_elems->getAdminUserOptions();
-					?>
+					<?php
+                        # Fetch list of existing lab admins
+                        $page_elems->getAdminUserOptions();
+                    ?>
 					</select>
 					<br><br>
 					<input type='button' onclick='javascript:change_admin();' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>'>
 					&nbsp;&nbsp;&nbsp;
 					<small><a href="javascript:right_load(1, 'site_info_div');"><?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?></a></small>
 				</div>
-				
+
 				<div class='right_pane' id='agg_report_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#IR_rc'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_INFECTION']; ?></b>
@@ -4162,13 +4161,13 @@ function AddnewDHIMS2Config()
 					<div id='agg_report_form_div' style='display:none;'>
 						<form id='agg_report_form' name='agg_report_form' action='ajax/report_agg_update.php' method='post'>
 							<?php $page_elems->getAggregateReportConfigureForm($lab_config); ?>
-						</form>	
-						<form id='agg_preview_form' style='display:none;' name='agg_preview_form' action='report_disease_preview.php' method='post' target='_blank'>					
-							<?php # This form is cloned from agg_report_form in javascript:agg_preview() function ?>
+						</form>
+						<form id='agg_preview_form' style='display:none;' name='agg_preview_form' action='report_disease_preview.php' method='post' target='_blank'>
+							<?php # This form is cloned from agg_report_form in javascript:agg_preview() function?>
 						</form>
 					</div>
 				</div>
-				
+
                                 <div class='right_pane' id='grouped_count_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#IR_rc'>Page Help</a></p>
 					<b><?php echo "Test/Specimen Count Grouped Reports"; ?></b>
@@ -4183,11 +4182,11 @@ function AddnewDHIMS2Config()
 					<div id='grouped_count_report_form_div' style='display:none;'>
 						<form id='grouped_count_report_form' name='grouped_count_report_form' action='ajax/grouped_count_reports_update.php' method='post'>
 							<?php $page_elems->getGroupedCountReportConfigureForm($lab_config); ?>
-						</form>	
-						
+						</form>
+
 					</div>
 				</div>
-                                
+
 				<div class='right_pane' id='misc_div' style='display:none;margin-left:10px;'>
 					<b><?php echo LangUtil::$pageTerms['MENU_GENERAL']; ?></b>
 					<br><br>
@@ -4235,7 +4234,7 @@ function AddnewDHIMS2Config()
 								<tr valign='top' class='random_params' style='display:none;'>
 									<td>Total Specimens</td>
 									<td>
-										<input type='text' class='uniform_width' name='num_s' value='<?php echo "2000"; #$MAX_NUM_SPECIMENS/2; ?>'></input>
+										<input type='text' class='uniform_width' name='num_s' value='<?php echo "2000"; #$MAX_NUM_SPECIMENS/2;?>'></input>
 									</td>
 								</tr>
 								<tr>
@@ -4261,14 +4260,14 @@ function AddnewDHIMS2Config()
 								<tr>
 									<td></td>
 									<td>
-										
+
 									</td>
 								</tr>
 							</tbody>
 						</table>
-					</form>			
+					</form>
 				</div>
-				
+
 				<!--  Daily Report Settings Pane -->
 				<div class='right_pane' id='report_config_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#DRS_rc'>Page Help</a></p>
@@ -4283,19 +4282,17 @@ function AddnewDHIMS2Config()
 						<select name='report_type' id='report_type11'>
 							<option value='1'><?php echo $LANG_ARRAY['reports']['MENU_PATIENT']; ?></option>
 							<?php
-							if($SHOW_SPECIMEN_REPORT === true)
-							{
-								?>
+                            if ($SHOW_SPECIMEN_REPORT === true) {
+                                ?>
 								<option value='2'><?php echo $LANG_ARRAY['reports']['MENU_SPECIMEN']; ?></option>
 								<?php
-							}
-							if($SHOW_TESTRECORD_REPORT === true)
-							{
-								?>
+                            }
+                            if ($SHOW_TESTRECORD_REPORT === true) {
+                                ?>
 								<option value='3'><?php echo $LANG_ARRAY['reports']['MENU_TESTRECORDS']; ?></option>
 								<?php
-							}
-							?>
+                            }
+                            ?>
 							<option value='4'><?php echo $LANG_ARRAY['reports']['MENU_DAILYLOGS']."-".LangUtil::$generalTerms['SPECIMENS']; ?></option>
 							<option value='6'><?php echo $LANG_ARRAY['reports']['MENU_DAILYLOGS']."-".LangUtil::$generalTerms['PATIENTS']; ?></option>
 							<!-- <option value='77'><?php echo $LANG_ARRAY['reports']['MENU_DAILYLOGS']."-".LangUtil::$generalTerms['PATIENT_BARCODE']; ?></option> -->
@@ -4309,7 +4306,7 @@ function AddnewDHIMS2Config()
 						<br><br>
 						<div id='report_config_content'>
 						</div>
-					</form>	
+					</form>
 
 				</div>
 
@@ -4348,7 +4345,7 @@ function AddnewDHIMS2Config()
 					<div id='test_report_configuration_msg' class='clean-orange' style='display:none;width:350px;'>
 					</div>
 					<br>
-					<div><input type="checkbox" class="sfields_entry" id="print_verified" <?php if(($page_elems->getPrintUnverified($lab_config->id))==1) { ?> checked <?php }?>  onchange="javascript:savePrintPending();"><?php echo LangUtil::$pageTerms['PRINT_UNVERIFIED']; ?></div>
+					<div><input type="checkbox" class="sfields_entry" id="print_verified" <?php if (($page_elems->getPrintUnverified($lab_config->id))==1) { ?> checked <?php }?>  onchange="javascript:savePrintPending();"><?php echo LangUtil::$pageTerms['PRINT_UNVERIFIED']; ?></div>
 					<br>
 					<div id="test_report_configuration_form_div"
 						 style="text-align: center;">
@@ -4358,8 +4355,8 @@ function AddnewDHIMS2Config()
 							<select id="select_test_for_config"
 									name="select_test_for_config[]">
 								<?php
-								$page_elems->getTestTypesByReportingStatusOptions(1);
-								?>
+                                $page_elems->getTestTypesByReportingStatusOptions(1);
+                                ?>
 							</select>
 							<input type='button' id='test_report_config_button'
 								   value="<?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?>"
@@ -4380,15 +4377,15 @@ function AddnewDHIMS2Config()
 				<div class='right_pane' id='batch_results_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#BRC'>Page Help</a></p>
 					<!-- configure the echo below to something like this LangUtil::$pageTerms['MENU_BATCHRESULTSFIELDS'] -->
-					<b><?php echo LangUtil::$pageTerms['MENU_BATCHRESULTSFIELDS']; ?></b> 
+					<b><?php echo LangUtil::$pageTerms['MENU_BATCHRESULTSFIELDS']; ?></b>
 					<br><br>
 					<div id='batch_results_fields_msg' class='clean-orange' style='display:none;width:350px;'>
 					</div>
 					<br>
                     <div class='pretty_box' style='width:300px;'>
 					<form id='batch_results_form' name='batch_results_form' action='ajax/batch_results_config_update.php' method='post'>
-						<?php $page_elems->getBatchResultsFieldsForm() ?>
-						
+						<?php $page_elems->getBatchResultsFieldsForm($lab_config_id) ?>
+
 					</form>
                     </div>
 				</div>
@@ -4403,7 +4400,7 @@ function AddnewDHIMS2Config()
 					<br>
                     <div class='pretty_box'>
 					<form id='patient_fields_order_from' name='patient_fields_order_from' action='ajax/report_fields_order.php' method='post'>
-						<?php $page_elems->getPatientFieldsOrderForm(); ?>                         
+						<?php $page_elems->getPatientFieldsOrderForm(); ?>
 					</form>
                     </div>
 				</div>
@@ -4411,17 +4408,16 @@ function AddnewDHIMS2Config()
 				<div class='right_pane' id='key_management_div' style='display:none;margin-left:10px;'>
 					<p style="text-align: right;"><a rel='facebox' href='#Keymgmt'>Page Help</a></p>
 <table border="0">
-<tr>
-<td><input id="btn_enc" style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="toggle_encryption()" value="<?php echo KeyMgmt::read_enc_setting()==0?LangUtil::$pageTerms['enable_encrypted_backup']:LangUtil::$pageTerms['disable_encrypted_backup']; ?>"/></td>
-<td><input style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="download_key()" value="<?php echo LangUtil::$pageTerms['download_key']; ?>"/></td>
-</tr>
+    <tr>
+        <td><input id="btn_enc" style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="toggle_encryption()" value="<?php echo KeyMgmt::read_enc_setting()==0?LangUtil::$pageTerms['enable_encrypted_backup']:LangUtil::$pageTerms['disable_encrypted_backup']; ?>"/></td>
+        <td><input style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="download_key()" value="<?php echo LangUtil::$pageTerms['download_key']; ?>"/></td>
+        <td><input style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" id="addbtn" onclick="add_key()" value="<?php echo LangUtil::$pageTerms['add_key']; ?>"/>
+    </tr>
 </table>
-<br/><br/>
-<input id="addbtn" style="font: 17px Calibri;cursor: pointer;" type="button" onclick="add_key()" value="<?php echo LangUtil::$pageTerms['add_key']; ?>"/>
 <br/>
-    <div id="container" style="width:700px;">
-    </div>
-    <div id="container1" style="width:700px;display:none">
+<div id="container" style="width:700px;">
+</div>
+<div id="container1" style="width:700px;display:none">
 <form id="form_key" action="../ajax/add_keys.php" method="post" enctype="multipart/form-data">
 <h3><?php echo LangUtil::$pageTerms['add_header']; ?></h3>
 <table border="0">
@@ -4493,13 +4489,13 @@ function AddnewDHIMS2Config()
 							</tbody>
 						</table>
 					</form>
-	
+
 					<br><br>
 					<div class='clean-orange' id='revert_done_msg' style='width:300px' style='display:none;'>
 						<?php echo LangUtil::$pageTerms['TIPS_REVERTDONE']; ?>
 					</div>
 				</div>
-				
+
 				<div class='right_pane' id='update_database_div' style='display:none;margin-left:10px;'>
 					<p style="text-align: right;"><a rel='facebox' href='#Revert'>Page Help</a></p>
 					<b><?php echo "Update Data"; ?></b>
@@ -4542,7 +4538,7 @@ function AddnewDHIMS2Config()
 						Update Failed&nbsp;&nbsp;&nbsp;<a href="javascript:toggle_div('update_failure');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>
 					</div>
 				</div>
-                                
+
                                 <div class='right_pane' id='import_config_div' style='display:none;margin-left:10px;'>
 					<p style="text-align: right;"><a rel='facebox' href='#importconfig'>Page Help</a></p>
 					<b><?php echo "Import Configuration"; ?></b>
@@ -4569,11 +4565,11 @@ function AddnewDHIMS2Config()
                                                                         $page_elems->getSiteOptions();
                                                                     ?>
                                                                     </select>
-                                                                    
-                                                                        
+
+
                                                                 </td>
 									<td>
-										<?php //echo $lab_config->id; ?>
+										<?php //echo $lab_config->id;?>
 									</td>
 								</tr>
                                                                 <tr valign='top'>
@@ -4592,7 +4588,7 @@ function AddnewDHIMS2Config()
 										<?php echo ""; ?>
 									</td>
 								</tr>
-								
+
 								<tr valign='top'>
 									<td><?php echo 'Import test catalog'; ?></td>
 									<td>
@@ -4642,7 +4638,7 @@ function AddnewDHIMS2Config()
 						Update Failed&nbsp;&nbsp;&nbsp;<a href="javascript:toggle_div('update_failure');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>
 					</div>
 				</div>
-				
+
 				<div class='right_pane' id='worksheet_config_div' style='display:none;margin-left:10px;'>
 				<p style="text-align: right;"><a rel='facebox' href='#WS_rc'>Page Help</a></p>
 					<b><?php echo LangUtil::$pageTerms['MENU_WORKSHEETCONFIG']; ?></b>
@@ -4692,38 +4688,38 @@ function AddnewDHIMS2Config()
 					<br>
 					<small><a href='worksheet_custom_new.php?id=<?php echo $lab_config->id; ?>'><?php echo LangUtil::$pageTerms['NEW_CUSTOMWORKSHEET']; ?> &raquo;</a></small>
 				</div>
-				
+
 				<div class='right_pane' id='language_div' style='display:none;margin-left:10px;'>
 					<div id='language_contents'></div>
 					<?php
-						include('lang/lang_edit.php'); 
-					?>
+                        include('lang/lang_edit.php');
+                    ?>
 				</div>
 				<div class='right_pane' id='dhims2_config_div' style='display:none;margin-left:10px;'>
                 <p style="text-align: right;"><a rel='facebox' href='#DHIMS2INFO'>Page Help</a></p>
                     <b><?php echo "DHIMS 2 Configurations" ?></b> | <a href='javascript:toggle_DHIMS2();' id='DHIMS2_edit_link'><?php echo LangUtil::$generalTerms['CMD_EDIT']; ?></a>
-                    <br><br>                        
-        
+                    <br><br>
+
                     <div id='DHIMS2_msg' class='clean-orange' style='display:none;width:350px;'>
-                    </div>                        
+                    </div>
                     <div id='DHIMS2_summary_div'>
                         <?php echo $page_elems->DHIMS2ConfigsSummary($lab_config); ?>
                     </div>
-                   
+
                     <div id='DHIMS2_form_div' style='display:none;'>
                     <form id='DHIMSconf_from' name='DHIMSconf_from' action='ajax/DHIMS2conf_add.php' method='post'>
-                        <?php $page_elems->DHIMS2ConfigsForm($lab_config); ?>                         
+                        <?php $page_elems->DHIMS2ConfigsForm($lab_config); ?>
                     </form>
-                    
-                    </div>                      
-                                 
+
+                    </div>
+
                 </div>
-                 
+
                   <div class='right_pane' id='analyzer_setup_config_div' style='display:none;margin-left:10px;'>
                 	<p style="text-align: right;"><a rel='facebox' href='#analyzer_setup_INFO'>Page Help</a></p>
                     <form id="analyzer_setup">
                     <table>
-                            <tbody>                           
+                            <tbody>
                                 <tr valign='top'>
                                     <td><?php echo 'Select Equipment to be interfaced through BLISInterfaceClient' ?><br></td>
                                 </tr>
@@ -4741,17 +4737,17 @@ function AddnewDHIMS2Config()
                                 </tbody>
                                 </table>
                     </form>
-                    
+
                     <script type="text/javascript">
                         function fetch_equipment_details()
                         {
-                            $('#eq_con_details').html("");                            
+                            $('#eq_con_details').html("");
                             $selected_equ = $('#eq_list').attr('value');
                             if($selected_equ !='0')
                             {
                                 $.ajax({
-                                    url : "ajax/getEquipmentDetails.php?id="+$selected_equ,                                   
-                                    success : function(data) {                                  
+                                    url : "ajax/getEquipmentDetails.php?id="+$selected_equ,
+                                    success : function(data) {
                                         var objData = JSON.parse(data);
                                         if(objData.length > 0)
                                         {
@@ -4796,8 +4792,8 @@ function AddnewDHIMS2Config()
 										        "<tbody>";
 
 										        $.ajax({
-                                    				url : "ajax/getEquipmentProps.php?id="+$selected_equ,                                   
-				                                    success : function(data1) {                               
+                                    				url : "ajax/getEquipmentProps.php?id="+$selected_equ,
+				                                    success : function(data1) {
 				                                        var objData1 = JSON.parse(data1);
 				                                        for (var c_i = 0; c_i < objData1.length; c_i++){
 				                                        	html +=  "<tr>"+
@@ -4819,11 +4815,11 @@ function AddnewDHIMS2Config()
 				                                });
 
                                         }
-                                    }   
+                                    }
                                 });
-                                
+
                             }
-                            
+
                         }
                     </script>
                 </div>

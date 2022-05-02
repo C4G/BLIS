@@ -775,7 +775,7 @@ function isInputNumber(evt) {
 			<?php echo LangUtil::$generalTerms['COMPATIBLE_SPECIMENS']; ?> <?php $page_elems->getAsterisk(); ?>  [<a href='#specimen_help' rel='facebox'>?</a>]  
 		</td>
 		<td>
-			<?php $page_elems->getSpecimenTypeCheckboxes($lab_config_id); ?>
+			<?php $page_elems->getSpecimenTypeCheckboxes($_SESSION['lab_config_id']); ?>
 		</td>
 	</tr>
 	<td></td>

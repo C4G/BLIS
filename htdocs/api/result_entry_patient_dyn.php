@@ -5,7 +5,7 @@
 #
 
 include("../includes/db_lib.php");
-include("../includes/user_lib.php");
+require_once("../includes/user_lib.php");
 LangUtil::setPageId("results_entry");
 
 $attrib_value = $_REQUEST['a'];
@@ -373,7 +373,7 @@ else
 }
 
 //echo $query_string;
-$resultset = query_associative_all($query_string, $row_count);
+$resultset = query_associative_all($query_string);
 
 if(count($resultset) == 0 || $resultset == null)
 {

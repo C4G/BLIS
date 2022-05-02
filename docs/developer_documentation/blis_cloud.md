@@ -56,7 +56,7 @@ Now you're ready to run BLIS!
 1. In the DigitalOcean Droplet via SSH, clone the BLIS repository:
 
     ```bash
-    $ git clone https://github.com/c4g-spr22-blis/BLIS.git
+    $ git clone https://github.com/C4G/BLIS.git
     ```
 
 1. Change to the BLIS Docker directory
@@ -117,7 +117,7 @@ You will need to add the `BLIS_SERVER_NAME` to the `docker-compose.yml` configur
 services:
   app:
     # This image is automatically built and pushed from the GitHub action in .github/workflows/ folder
-    image: "ghcr.io/c4g-spr22-blis/blis:latest"
+    image: "ghcr.io/C4G/blis:latest"
     environment:
       DB_HOST: 'db'
       DB_PORT: '3306'

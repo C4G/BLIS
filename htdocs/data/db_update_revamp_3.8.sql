@@ -1,0 +1,1 @@
+ALTER TABLE `lab_config` ADD `blis_cloud_hostname` CHAR(45) DEFAULT '';

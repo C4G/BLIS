@@ -1,7 +1,7 @@
 <?php
 $LANG_ARRAY = array ( 
 		"general" => array ( 
-"backup_tip"=>"Select the receiver who should be able to revert this backup. 'Current Lab' will create backups that can be reverted on this lab for current instance of BLIS. If the receiver you have selected does not exist in the system, you will be prompted to upload their public key. The public key can be obtained by contacting the receiver. Public Key is a .blis file and can be obtained by lab managers under the lab configuration -> Manage Backup Keys -> Download Public Key option.",
+"backup_tip"=>"Please select the receiver who should be able to revert this backup from the drop-down list. <br> <br> <i>Current Lab</i> is the default key and will create backups that can be reverted on this lab for the current instance of BLIS. <br><br>If the receiver does not appear in the drop-down list, you will be prompted to upload a new public key, which is a .blis file and can be obtained by lab managers under the Lab Configuration > Manage Backup Keys > Download Public Key.",
 		"TIPS" => "Tips", 
 		"USERNAME" => "Username", 
 		"PWD" => "Password", 
@@ -250,7 +250,7 @@ $LANG_ARRAY = array (
 		"TITLE" => "Home", 
 		"WELCOME" => "Welcome", 
 		"TIPS_BLISINTRO" => "The Basic Laboratory Information System (BLIS) tracks patient specimens and laboratory results.", 
-		"TIPS_PWD" => "You can update your profile and password by clicking on Edit Profile."
+		"TIPS_PWD" => "You can update your profile and password by clicking on <b>Edit Profile</b>."
 	) , 
 	"regn" => array ( 
 		"TITLE" => "Registration"
@@ -499,8 +499,9 @@ $LANG_ARRAY = array (
         "SELECT_SITE_FOR_REMOVAL" => "Select sites for removal",
         "OUT_OF_RANGE" => "Out of range",
         "INTERPRETATION" => "Interpretation",
-        "MODIFY_SITE" => "Modify sites"
-
+        "MODIFY_SITE" => "Modify sites",
+		"PRINT_UNVERIFIED" => "Allow printing of unverified tests",
+		"IP_SAVED" => "IP address saved."
 	) ,
 	"lab_admins" => array ( 
 		"TITLE" => "Lab Managers", 

@@ -1,0 +1,16 @@
+{
+    "dockerComposeFile": "docker-compose.yml",
+    "extensions": [
+        "eamodio.gitlens",
+    ],
+    "portsAttributes": {
+        "80": {
+            "label": "apache2",
+            "onAutoForward": "notify"
+        }
+    },
+    "forwardPorts": [80],
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    "postAttachCommand": "start-blis.sh"
+}

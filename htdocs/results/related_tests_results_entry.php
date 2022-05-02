@@ -18,7 +18,7 @@ function get_unverified_tests($test_type_id)
 		"WHERE verified_by=0 ".
 		"AND result <> '' ".
 		"AND test_type_id=$test_type_id";
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	$retval = array();
 	foreach($resultset as $record)
 	{

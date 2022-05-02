@@ -192,7 +192,7 @@ else
 				}
     } 
 	}
-$resultset = query_associative_all($query_string, $row_count);
+$resultset = query_associative_all($query_string);
 $specimen_id_list = array();
 foreach($resultset as $record)
 {

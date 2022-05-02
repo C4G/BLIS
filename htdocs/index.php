@@ -8,11 +8,11 @@
 # If reverting back to PHP redirection, un-comment the follwing line:
 # header("Location:home.php");
 ?>
-<script language="JavaScript">
+<script type="application/javascript">
 	window.location = 'home.php';
 </script>
 <p>
 Sorry, your browser either does not support JavaScript or has disabled it. <br>
-Please enable JavaSript on your browser and refresh this page in order to proceed.
+Please enable JavaScript on your browser and refresh this page in order to proceed.
 </p>
 <?php include("includes/footer.php"); ?>

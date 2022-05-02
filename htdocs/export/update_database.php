@@ -6,7 +6,7 @@
 #
 include("../includes/db_constants.php");
 include("../export/backup_lib.php");
-include("../includes/user_lib.php");
+require_once("../includes/user_lib.php");
 $saved_session = SessionUtil::save();
 
 function page_redirect($is_done, $lid)
@@ -81,7 +81,7 @@ function performUpdate($lab_config_id, $backup_folder) {
 	$blisLabBackupFilePath = "\"".$mainBlisDir.$backup_folder."\blis_".$lab_config_id."\blis_".$lab_config_id."_backup.sql\"";
 	$mysqlExePath = "\"".$mainBlisDir."server\mysql\bin\mysql.exe\"";
 	$dbname = "blis_".$lab_config_id;
-	$command = $mysqlExePath." -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbname < $blisLabBackupFilePath";
+	$command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname < $blisLabBackupFilePath";
 	$command = "C: &".$command; //the C: is a useless command to prevent the original command from failing because of having more than 2 double quotes
 	system($command, $return_var);
 	if( $return_var == 0 )

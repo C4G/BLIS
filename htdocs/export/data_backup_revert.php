@@ -4,8 +4,10 @@
 # Called via POST from lab_config_home.php
 # Redirects back after revert complete
 #
-include("../includes/db_constants.php");
-include("../export/backup_lib.php");
+require_once("../export/backup_lib.php");
+require_once("../includes/db_constants.php");
+require_once("../includes/platform_lib.php");
+
 $saved_session = SessionUtil::save();
 function page_redirect($is_done)
 {
@@ -51,7 +53,17 @@ if($_REQUEST['do_currbackup'] == 'Y')
 	$do_currbackup = true;
 if($do_currbackup === true)
 {
-	if(!BackupLib::performBackup($lab_config_id, getcwd() ) === true)
+	// The Current Lab key is used since we are backing up this lab
+	$labKeyFile = dirname(__FILE__) . "/../../files/LAB_".$lab_config_id."_pubkey.blis";
+	if (!file_exists($labKeyFile)) {
+		// generate key
+		KeyMgmt::generateKeyPair(
+			dirname(__FILE__) . "/../../files/LAB_".$lab_config_id.".blis",
+			$labKeyFile);
+		$log->info("Keypair generated successfully.");
+	}
+	$keyContents = file_get_contents($labKeyFile);
+	if(!BackupLib::performBackup($lab_config_id, true, $keyContents))
 	{
 		# Backup of current version failed.
 		page_redirect(false);
@@ -70,7 +82,7 @@ else
 $blisLabBackupFilePath = "\"".$mainBlisDir.$backup_folder."\blis_".$lab_config_id."\blis_".$lab_config_id."_backup.sql\"";
 $mysqlExePath = "\"".$mainBlisDir."server\mysql\bin\mysql.exe\"";
 $dbname = "blis_".$lab_config_id;
-$command = $mysqlExePath." -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbname < $blisLabBackupFilePath";
+$command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname < $blisLabBackupFilePath";
 $command = "C: &".$command; //the C: is a useless command to prevent the original command from failing because of having more than 2 double quotes
 
 system($command, $return);
@@ -85,7 +97,7 @@ if(file_exists($blisLabBackupFilePath.".key"))
 $blisBackUpFilePath = "\"".$mainBlisDir.$backup_folder."\blis_revamp\blis_revamp_backup.sql.dec\"";
 else
 $blisBackUpFilePath = "\"".$mainBlisDir.$backup_folder."\blis_revamp\blis_revamp_backup.sql\"";
-$command = $mysqlExePath." -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbName < $blisBackUpFilePath";
+$command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbName < $blisBackUpFilePath";
 $command = "C: &".$command;
 
 system($command,$return);
@@ -93,7 +105,7 @@ echo $return;
 unlink($temp);
 
 $langdata_dir = "../../".$backup_folder."/langdata_".$lab_config_id;
-chmod("../../dbdir/", 777);
+chmod("../../dbdir/", 0755);
 
 if($do_langdata === true)
 	dir_copy($langdata_dir, "../../local/langdata_".$lab_config_id);

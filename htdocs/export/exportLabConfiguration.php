@@ -3,25 +3,25 @@
 include("redirect.php");
 include("../includes/header.php");
 include("../includes/db_constants.php");
+require_once("../includes/platform_lib.php");
+
 $lab_config_id=$_REQUEST['id'];
 $user = get_user_by_id($_SESSION['user_id']);
 $country = $user->country;
 
 global $DB_HOST,$DB_USER,$DB_PASS;
 		
-$currentDir = getcwd();		
-$mainBlisDir = substr($currentDir,$length,strpos($currentDir,"htdocs"));
-$mysqldumpPath = "\"".$mainBlisDir."server\mysql\bin\mysqldump.exe\"";
+$mysqldumpPath = '"'.PlatformLib::mySqlDumpPath().'"';
 $dbname = "blis_".$lab_config_id;
 $backupLabDbFileName= "blis_".$lab_config_id."_configuration.sql";
 $count=0;
-$command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbname > $backupLabDbFileName";
+$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupLabDbFileName";
 system($command,$return);
 $file_list1[] = $backupLabDbFileName;
 		
 $dbname = "blis_revamp";
 $backupDbFileName = "blis_revamp_configuration.sql";
-$command = $mysqldumpPath." -B -h $DB_HOST -P 7188 -u $DB_USER -p$DB_PASS $dbname > $backupDbFileName";
+$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupDbFileName";
 system($command,$return);
 $file_list2[] = $backupDbFileName;
 
@@ -32,7 +32,7 @@ $toScreenDestination = "blis_configuration_".$site_name."_".$country;
 @mkdir($destination);
 @mkdir($destination."blis_revamp/");
 @mkdir($destination."blis_".$lab_config_id."/");
-chmod($destination, 777);
+chmod($destination, 0755);
 
 foreach($file_list1 as $file) {
 	$file_name_parts = explode("/", $file);

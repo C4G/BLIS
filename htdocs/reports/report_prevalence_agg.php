@@ -317,7 +317,7 @@ function processWeeklyTrends( $lab_config_id, $test_type_id, $date_from, $date_t
 		$userId = $_SESSION['user_id'];
 		$saved_db = DbUtil::switchToGlobal();
 		$query = "SELECT * FROM test_mapping WHERE user_id = $userId";
-		$resultset = query_associative_all($query, $row_count);
+		$resultset = query_associative_all($query);
 		foreach($resultset as $record) {
 				$labIdTestIds = explode(';',$record['lab_id_test_id']);
 				foreach($labIdTestIds as $labIdTestId) {
@@ -371,7 +371,7 @@ function processWeeklyTrends( $lab_config_id, $test_type_id, $date_from, $date_t
 		$userId = $_SESSION['user_id'];
 		$saved_db = DbUtil::switchToGlobal();
 		$query = "SELECT * FROM test_mapping WHERE user_id = $userId";
-		$resultset = query_associative_all($query, $row_count);
+		$resultset = query_associative_all($query);
 		foreach($resultset as $record) {
 				$labIdTestIds = explode(';',$record['lab_id_test_id']);
 				foreach($labIdTestIds as $labIdTestId) {

@@ -52,7 +52,7 @@ function get_records_to_print($lab_config, $patient_id)
 		$query_string .= "ORDER BY sp.date_collected DESC";		
 	
 	}
-	$resultset = query_associative_all($query_string, $row_count);
+	$resultset = query_associative_all($query_string);
 	if(count($resultset) == 0 || $resultset == null)
 		return $retval;
 	foreach($resultset as $record)

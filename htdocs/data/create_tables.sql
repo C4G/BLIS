@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `lab_config` (
   `comm` int(10) unsigned NOT NULL default '1',
   `dformat` varchar(45) NOT NULL default 'd-m-Y',
   `dnum_reset` int(10) unsigned NOT NULL default '1',
-  `doctor` int(10) unsigned NOT NULL default '1',
+  `doctor` int(10) unsigned NOT NULL default '1'
   PRIMARY KEY  (`lab_config_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED;
 
