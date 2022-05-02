@@ -17,7 +17,7 @@ plugins:
   - search
 
 edit_uri: edit/main/docs/
-repo_url: https://github.com/c4g-blis-docs/c4g-blis-docs.github.io
+repo_url: https://github.com/c4g/BLIS
 
 theme:
   name: material
