@@ -12,7 +12,7 @@ function mysql_exec {
     return $?
 }
 
-if [[ $* == *--clean* ]];
+if [[ $* == *--clean* ]]; then
     CLEAN_DBS="true"    
 fi
 
@@ -36,8 +36,14 @@ if ! mysql_exec "blis_127" "-e 'DROP DATABASE blis_127;'"; then
     echo "Failed to drop blis_127"
 fi
 
-for f in "$DIR"/../docker/database/*.sql; do
-    [ -f "$f" ] || break
-    mysql_exec "" "< $f"
-done
-
+if ! [[ "$CLEAN_DBS" == "true" ]]; then
+    for f in "$DIR"/../docker/database/*.sql; do
+        [ -f "$f" ] || break
+        mysql_exec "" "< $f"
+    done
+else
+    for f in "$DIR"/../docker/db_3.8/*.sql; do
+        [ -f "$f" ] || break
+        mysql_exec "" "< $f"
+    done
+fi
