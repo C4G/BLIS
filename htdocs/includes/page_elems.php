@@ -4,11 +4,11 @@
 # Contains method calls for commonly used HTML page elements
 #
 
+require_once("../export/backup_lib.php");
+require_once("../regn/field_htmlFactory.php");
+require_once("../regn/generate_customize_field_order_patient.php");
 require_once("db_lib.php");
-
-include_once("field_order_update.php");
-include_once("../regn/generate_customize_field_order_patient.php");
-include_once("../regn/field_htmlFactory.php");
+require_once("field_order_update.php");
 
 
 class PageElems
@@ -10729,25 +10729,39 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 
 	public function getBackupRevertRadio($field_name, $lab_config_id)
 	{
+		global $log;
+
 		# Returns radio options for selecting one among existing backup directories
 		$folder_list = get_backup_folders($lab_config_id);
-		if($folder_list === null || count($folder_list) == 0)
+
+		$zip_list = BackupLib::listServerBackups($lab_config_id);
+
+		$backups_not_found = ($folder_list === null || count($folder_list) == 0) && count($zip_list) == 0;
+
+		if ($backups_not_found)
 		{
 			echo LangUtil::$generalTerms['MSG_NOTFOUND'];
 			return;
 		}
+
 		$count = 0;
 		foreach($folder_list as $key=>$value)
 		{
-			echo "<input type='radio' name='$field_name' value='$key'";
-			/*if($count == count($folder_list) - 1)
-				echo " checked ";
-			echo ">$value</option><br>";
+			echo "<input type='radio' id='backup-$count' name='$field_name' value='$key'";
+			echo $count == 0 ? " checked>\n" : ">\n";
+			echo "<label for='backup-$count'>$value</label>";
+			echo "<br>\n";
 			$count++;
-			*/
-			if($count == 0)
-				echo " checked ";
-			echo ">$value</option><br>";
+		}
+
+		foreach($zip_list as $backup)
+		{
+			echo "<input type='radio' id='backup-$count' name='$field_name' value='" .
+				$backup->file_name()."'" . 
+				($count == 0 ? " checked " : "") .
+				">" . 
+				"<label for='backup-$count'>" . $backup->friendlyDate() .
+				"</label><br>\n";
 			$count++;
 		}
 	}
