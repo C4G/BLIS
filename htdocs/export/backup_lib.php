@@ -6,6 +6,42 @@ require_once("../includes/composer.php");
 require_once("../includes/db_lib.php");
 require_once("../includes/platform_lib.php");
 
+class BackupArchive {
+    private $file_path;
+    private $timestamp;
+    private $lab_config_id;
+
+    public function __construct($file_path, $lab_config_id) {
+        $this->file_path = $file_path;
+        $this->lab_config_id = $lab_config_id;
+
+        $filename = pathinfo($file_path)['filename'];
+        $parts = explode("_", $filename);
+        $probable_timestamp = $parts[2];
+        $this->timestamp = date_create_from_format("Ymd-His", $probable_timestamp);
+    }
+
+    public function file_path() {
+        return $this->file_path;
+    }
+
+    public function file_name() {
+        return basename($this->file_path);
+    }
+
+    public function timestamp() {
+        return $this->timestamp;
+    }
+
+    public function friendlyDate() {
+        return $this->timestamp->format("Y-m-d H:i:s");
+    }
+
+    public function lab_config_id() {
+        return $this->lab_config_id;
+    }
+}
+
 class BackupLib
 {
     private static function mySqlDump($databaseName, $backupFilename)
@@ -105,9 +141,9 @@ class BackupLib
         rmdir($dir);
     }
 
-	/**
-	 * Upload a backup file to a BLIS Cloud server
-	 */
+    /**
+     * Upload a backup file to a BLIS Cloud server
+     */
     public static function send_file_to_server($file_path, $lab_config_id)
     {
         global $log;
@@ -316,13 +352,59 @@ class BackupLib
 
         self::createZipFile($zipFile, realpath($backup_dir));
 
-        $new_path = dirname(__FILE__)."/backups/".basename($zipFile);
+        $new_path = dirname(__FILE__)."/../../files/backups/".basename($zipFile);
         rename($zipFile, $new_path);
 
         // Removes the backup directory in files/
         // Comment this out if you want to figure out what went wrong somewhere!
         self::removeDirectory($backup_dir);
 
-		return $new_path;
+        return $new_path;
+    }
+
+    /**
+     * Lists server backup zip files compatible with the given $lab_config_id
+     */
+    public static function listServerBackups($lab_config_id)
+    {
+        // TODO: Can't determine if the backups are compatible from an encryption POV
+        # Returns a list of all backup folders available on main dir
+        global $log;
+        $backups = array();
+        $searchPath = dirname(__FILE__)."/../../files/backups";
+
+        if ($handle = opendir($searchPath)) {
+            while (false !== ($file = readdir($handle))) {
+                $file_parts = pathinfo($file);
+                if (!(is_file("$searchPath/$file") && $file_parts['extension'] === "zip")) {
+                    // we only want .zip files
+                    continue;
+                }
+                
+                $zip = new ZipArchive;
+                if ($zip->open("$searchPath/$file") !== false) {
+                    for ($i = 0; $i < $zip->numFiles; $i++) {
+                        $path = $zip->getNameIndex($i);
+                        if (dirname($path) === "blis_$lab_config_id") {
+                            $backup = new BackupArchive("$searchPath/$file", $lab_config_id);
+                            array_push($backups, $backup);
+                            break;
+                        }
+                    }
+                    $zip->close();
+                } else {
+                    $log->error("Could not open zip to examine: $file");
+                    continue;
+                }
+            }
+        }
+
+        closedir($handle);
+
+        usort($backups,function($first,$second){
+            return $first->timestamp() < $second->timestamp();
+        });
+
+        return $backups;
     }
 }

@@ -7,6 +7,12 @@ require_once("../includes/composer.php");
 
 $file_name = $_FILES['sqlFile']['name'];
 $log->info("Uploaded $file_name");
+
+$replace_revamp_database = $_REQUEST['replaceRevampDatabase'] === "true";
+if ($replace_revamp_database) {
+    $log->warn("Revamp database is being replaced with this import!");
+}
+
 $file_name_and_extension = explode('.', $file_name);
 $fileName = $_FILES['sqlFile']['tmp_name'];
 if ($file_name_and_extension[1]=="zip") {
@@ -40,6 +46,9 @@ if ($file_name_and_extension[1]=="zip") {
     if ($zip->open($name) === true) {
         $zip->extractTo($extractPath);
         $zip->close();
+        $revampFile="";
+        $revampFolder="";
+        $revampKey="";
         $sqlFile="";
         $langFile="";
         $sqlFolder="";
@@ -50,7 +59,11 @@ if ($file_name_and_extension[1]=="zip") {
             }
             $fname=$fileInfo->getFilename();
             if ($fname==="blis_revamp") {
-                continue;
+                $revampFile=$fname."/".$fname."_backup.sql";
+                $revampFolder=$fname;
+                if ($is_encrypted) {
+                    $revampKey=$fname."/".$fname.".sql.key";
+                }
             } else {
                 if (startsWith($fname, "blis_")) {
 
@@ -72,10 +85,40 @@ if ($file_name_and_extension[1]=="zip") {
             }
         }
 
-        //~~
-        $file_name_parts = explode("_", $sqlFolder);
-        $fileName=$extractPath."/".$sqlFile;
+        if ($replace_revamp_database) {
+            $fileName=$extractPath."/".$revampFile;
+            $log->info("Processing $fileName");
 
+            $mysqlExePath = PlatformLib::mySqlClientPath();
+            $command = $mysqlExePath." -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS < ";
+            if(PlatformLib::runningOnWindows()) {
+                // the C: is a useless command to prevent the original command from failing because of having more than 2 double quotes
+                $command = "C: &".$command;
+            }
+
+            $pvt=dirname(__FILE__)."/../ajax/LAB_dir.blis";
+            if ($is_encrypted) {
+                if (file_exists($pvt)) {
+                    $decryptedFile = decryptFile($fileName, $pvt);
+                    $command = $command . escapeshellarg($decryptedFile);
+                } else {
+                    error_log("File $fileName is encrypted, but the server does not have a private key file generated yet.");
+                    // error handling if key not downloaded, pending.
+                }
+            } else {
+                $command = $command . $fileName;
+            }
+
+            $log->info("Running: $command");
+            system($command, $return);
+            $result = $return;
+
+            if ($is_encrypted) {
+                unlink($fileName.".dec");
+            }
+        }
+
+        $fileName=$extractPath."/".$sqlFile;
         $log->info("Processing $fileName");
 
         $mysqlExePath = PlatformLib::mySqlClientPath();

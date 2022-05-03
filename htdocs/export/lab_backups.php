@@ -191,6 +191,11 @@ Select backup zip file
 <!--Please copy and paste langdata folder path present in backup folder 
 <input type="text" name="lang_data_folder_path" id="lang_data_folder_path" value=" ">
 <br>-->
+<p>
+    <input type="checkbox" id="replaceRevampDatabase" name="replaceRevampDatabase" value="true">
+    <label for="replaceRevampDatabase">Replace <b>ALL</b> user account, specimen, and configuration data with data from this backup.</label>
+    <br/><b>Be very careful with this option!</b> You will lose access to ALL lab data other than what you are importing!
+</p>
 <input type="button" id="import" value="Import" onclick="javascript:confirmationMsg();">
 </form>
 <br>

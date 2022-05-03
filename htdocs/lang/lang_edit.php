@@ -39,7 +39,7 @@ function get_locale_page_select()
 	libxml_use_internal_errors(true);
 	$default_lang_pages = simplexml_load_file($LANGDATA_PATH.$DEFAULT_LANG.".xml");
 	if ($default_lang_pages === false) {
-		$log->warn("Loading $LANGDATA_PATH$DEFAULT_LANG.xml failed.");
+		$log->error("Loading $LANGDATA_PATH$DEFAULT_LANG.xml failed.");
 		foreach (libxml_get_errors() as $error) {
 		  $log->error($error->message);
 		}  
@@ -49,7 +49,6 @@ function get_locale_page_select()
 	foreach($default_lang_pages as $default_lang_page)
 	{
 		$page_id = $default_lang_page['id'];
-		$log->info($page_id);
 		$page_descr = $default_lang_page['descr'];
 		echo "<option value='$page_id'>$page_descr</option>";
 	}
