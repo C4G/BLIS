@@ -1,8 +1,8 @@
 New-Item -ItemType Directory -Path "Build-BLIS/" -Force
 Push-Location -Path "Build-BLIS/"
 
-$runtime_url = "https://github.com/c4g-spr22-blis/BLISRuntime/archive/refs/heads/main.zip"
-$code_url = "https://github.com/c4g-spr22-blis/BLIS/archive/refs/heads/master.zip"
+$runtime_url = "https://github.com/C4G/BLISRuntime/archive/refs/heads/main.zip"
+$code_url = "https://github.com/C4G/BLIS/archive/refs/heads/master.zip"
 
 Write-Host "Downloading BLIS Runtime..."
 Invoke-WebRequest -Uri $runtime_url -OutFile "BLISRuntime.zip"
