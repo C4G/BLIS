@@ -109,7 +109,7 @@ This is the primary way that end-users are still using BLIS. You can still run B
     $ git clone https://github.com/C4G/BLIS.git
     ```
 
-2. Download the latest version of [BLISRuntime.zip](https://github.com/c4g-spr22-blis/BLISRuntime/archive/refs/heads/main.zip) archive
+2. Download the latest version of [BLISRuntime.zip](https://github.com/C4G/BLISRuntime/archive/refs/heads/main.zip) archive
 3. Unzip BLISRuntime.zip into the BLIS repository directory
 4. Run `BLIS.exe`
 
