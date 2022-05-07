@@ -10,16 +10,23 @@ C4G Basic Laboratory Information System is a collaboration between Computing-for
     1. [Installing BLIS For Windows](#blis_windows)
     2. [Starting BLIS](#starting_blis)
     3. [Stopping BLIS](#stopping_blis)
-
-3. [Roles in BLIS](#blis_roles)
-    1. [Director Overview](#director_overview)
-    2. [Manager Overview](#manager_overview)
-        1. [Lab Configuration](#lab_configuration)
-        2. [Test Catalog](#test_catalog)
-        3. [Reports](#reports)
-        4. [Backup Data](#backup_data)
-
-    3. [Technician Overview](#technician_overview)
+3. [Overview of Roles in BLIS](#blis_roles)
+4. [Director Overview](#director_overview)
+    1. [Director Lab Configuration](#director_lab_configuration)
+    2. [Lab Managers](#lab_managers)
+    3. [Test Catalog](#director_test_catalog)
+    4. [Reports](#director_reports)
+5. [Manager Overview](#manager_overview)
+    1. [Manager Lab Configuration](#manager_lab_configuration)
+    2. [Test Catalog](#test_catalog)
+    3. [Reports](#manager_reports)
+    4. [Backup Data](#backup_data)
+6. [Technician Overview](#technician_overview)
+    1. [Registration](#registration)
+    2. [Results](#results)
+    3. [Search](#search)
+    4. [Inventory](#inventory)
+    5. [Backup Data](#tech_backup_data)
 4. [Glossary](#glossary)
 
 
@@ -27,24 +34,26 @@ C4G Basic Laboratory Information System is a collaboration between Computing-for
 The Basic Laboratory Information System, BLIS, is a freeware Web-based system that can be installed in a local, district, or national laboratory. It is a tool that can help to standardize data, which improves the ability to run useful reports and can both give a realistic picture of laboratory services and assist with staff and budget planning. With enough data, BLIS can be used to track disease prevalence over time.
 
 Features of BLIS include:
-- One-time entry of each unique patient
-- Standardization of data collected (allowable entries for specimen type, test type, patient data, reagents are set at MOH level and then entered consistently throughout a country)
-- Customization to a country’s needs
-- Ability to track lab supplies such as test kits, reagents
-- Ability to run reports as specified by a country
-- Automatic alerting of data values that may be out of range(reference ranges and panic values are set at the regional or national level)
-- Daily logs to be reviewed for data verification
-- Simple data backup to a zipped file 
-- [NEW] BLIS running on a cloud provider
-- [NEW] Manual data backup to a version of BLIS running on a remote server
+
+* One-time entry of each unique patient
+* Standardization of data collected (allowable entries for specimen type, test type, patient data, reagents are set at MOH level and then entered consistently throughout a country)
+* Customization to a country’s needs
+* Ability to track lab supplies such as test kits, reagents
+* Ability to run reports as specified by a country
+* Automatic alerting of data values that may be out of range(reference ranges and panic values are set at the regional or national level)
+* Daily logs to be reviewed for data verification
+* Simple data backup to a zipped file 
+* [NEW] BLIS running on a cloud provider
+* [NEW] Manual data backup to a version of BLIS running on a remote server
 
 As with any properly implemented electronic record system, BLIS may be found over time to improve data accuracy and reduce costs in laboratories. Benefits already seen in labs using BLIS:
-- Reduced burden for technicians, as results are available soon after testing
-- Improved consistency of data entry
-- Ability to view patient history and track samples
-- Ability to aggregate data and analyze data patterns and trends at a regional or national level
-- Printed patient records in place of handwritten records
-- Printed daily logs that make the reports look like the paper forms used in the laboratory
+
+* Reduced burden for technicians, as results are available soon after testing
+* Improved consistency of data entry
+* Ability to view patient history and track samples
+* Ability to aggregate data and analyze data patterns and trends at a regional or national level
+* Printed patient records in place of handwritten records
+* Printed daily logs that make the reports look like the paper forms used in the laboratory
 
 ## BLIS Start-Up Guide <a name="startup"></a>
 There are three versions of BLIS that currently exists. 
@@ -73,15 +82,19 @@ Installing command-line tools can be done with a Windows package manager such as
 1. Double-click on the BLIS.exe file.
 2. A page requesting login information will appear. Enter in your login credentials.
 
+<p align="center">
 <img src="./images/user_guide/login.png" width="100%"/> 
+</p>
 
 ### Stopping BLIS <a name="stopping_blis"></a>
 1. After your session is complete, click the **Logout** button in the top right pane of the screen.
 2. A popup window will appear where you can rate your experience with C4G BLIS and write any comments you may have. After entering your feedback, press the **Submit** button to fully logout. Alternatively, you may press **Skip** to logout immediately without providing any feedback. If you do not wish to logout, press **CLOSE**.
 
+<p align="center">
 <img src="./images/user_guide/logout.png" width="100%"/> 
+</p>
 
-## Roles in BLIS <a name="blis_roles"></a>
+## Overview of Roles in BLIS <a name="blis_roles"></a>
 There are three roles in BLIS. 
 
 Firstly, **Directors** (also referenced to as country directors) are a role held by a single individual at the management level of each country. The roles of Directors are to oversee many laboratories using BLIS, summarize data trends from uploaded patient data from across the country, and work with C4G developers to provide user feedback for future versions of BLIS.
@@ -91,10 +104,10 @@ Secondly, **Managers** (also referenced as admin users) are the managerial super
 Thirdly, **Technicians** are the majority of BLIS users. The role of Technicians is to enter in and verify patient data.
 
 ## Director Overview <a name="director_overview"></a>
-The director role allows a user to control some components at a country level. This is organized into tabs, as with the other interfaces. 
+The Director role allows a user to control some components at a country level. This is organized into tabs, as with the other interfaces. 
 
-### Lab Configurations
-In the **Lab Configurations** tab, the director can view lab backups that have been imported. A list of the different lab configurations is also displayed, along with links to export each of these lab configurations. This allows a director to setup a lab configuration in advance and then export it for a new lab to import to streamline the process. 
+### Lab Configurations <a name="director_lab_configuration"></a>
+In the **Lab Configurations** tab, the Director can view lab backups that have been imported. A list of the different lab configurations is also displayed, along with links to export each of these lab configurations. This allows a Director to setup a lab configuration in advance and then export it for a new lab to import to streamline the process. 
 
 To setup a new lab configuration, click the button to add a new lab. This walks the user through four steps to setup site information, technicians, base configuation, and test types. 
 
@@ -102,45 +115,53 @@ To setup a new lab configuration, click the button to add a new lab. This walks 
 <img src="./images/user_guide/new_lab_configuration.png" width=100%>
 </p>
 
-It is possible to add technicians during this setup process, but note that additional technicians can be added later. During setup of the base configuration, an existing lab configuration can be selected from the dropdown menu to use as a base. During the next step, test can be imported from an existing facility by selecting it from the dropdown menu. As with the other steps, the configuation can be further customized later from the Lab Configuration tab when logged in and work as a Manager. 
+It is possible to add Technicians during this setup process, but note that additional Technicians can be added later. During setup of the base configuration, an existing lab configuration can be selected from the dropdown menu to use as a base. During the next step, test can be imported from an existing facility by selecting it from the dropdown menu. As with the other steps, the configuation can be further customized later from the **Lab Configuration** tab when logged in and work as a Manager. 
 
-Clicking on the name of a facility takes the user to the Lab Configuration view, with all the same options available in the Manager view, plus three additional menu options: General Settings, Change Manager, Delete Configuration, and Import Configuration. For information on the other menu options and how they work, please go to the [Lab Configuration](#lab-configuration-a-name"labconfiguration") section. Each of the additional options are covered here.
+Clicking on the name of a facility takes the user to the **Lab Configuration** view, with all the same options available in the Manager view, plus three additional menu options: **General Settings**, **Change Manager**, **Delete Configuration**, and **Import Configuration**. For information on the other menu options and how they work, please go to the [Manager Lab Configuration](#manager_lab_configuration) section. Each of the additional options are covered here.
 
-The General Settings option allows the director to change the name or location of a facility. Additionally, the user can populate the database with random data or clear randomly populated data. The Change Manager option is self-explanatory. This option allows the director to select a user from the dropdown menu as the new lab manager. The Delete Configuration menu option should be used with caution. This allows the director to delete an entire lab configuation. Please use this with caution! 
+The **General Settings** option allows the Director to change the name or location of a facility. Additionally, the user can populate the database with random data or clear randomly populated data. The **Change Manager** option is self-explanatory. This option allows the director to select a user from the dropdown menu as the new Lab Manager. The **Delete Configuration** menu option should be used with caution. This allows the Director to delete an entire lab configuation. Please use this with caution! 
 
-Another functionality available on the Lab Configuration tab is importing lab backups. Lab managers can perform backups and send the backups to the director. To import a lab backup, from the Lab Configuration tab, select Import Lab Data. Browse to find the zipped backup provided by the lab, and click the import button. You will receive a confirmation message that the backup was successful or an error message if there is something wrong with the backup. 
+!!! warning 
+    After a Lab Configuration is deleted, it cannot be recovered. Please take caution when proceeding with deleting a lab configuration.
+
+Another functionality available on the **Lab Configuration** tab is importing lab backups. Lab Managers can perform backups and send the backups to the director. To import a lab backup from the **Lab Configuration** tab, select **Import Lab Data**. Browse to find the zipped backup provided by the lab, and click the import button. You will receive a confirmation message that the backup was successful or an error message if there is something wrong with the backup. 
 
 If the backup is encrypted, it can only be unencrypted with the correct key. If you want the lab to send you an encrypted backup, you must first download the public key and share it with the lab. To do this, click the button to download a public key. It will get saved in your downloads folder by default. Send this file to the lab that is going to perform the backup. The lab manager can use the public key to export an encrypted backup from the Backup Data tab, and then share the zipped backup folder with you, which can be imported as described above. 
 
-### Lab Managers
-Under the Lab Managers tab, the director can add, edit, or delete lab managers. Click "edit" on an existing manager to change the name, email address, phone number, or language of a manager, or to reset the managers password. Note that you must go to the User Accounts menu option in the Lab Configurations tab from the Manager view to edit/reset passwords for Technician accounts (as opposed to manager accounts). 
+!!! info "See Also"
+    Lab Configurations can also be set by Lab Managers. [Click here for more details.](#manager_lab_configuration) 
 
-### Test Catalog
-The test catalog tab allows the director to add country-wide specimens and tests. 
+### Lab Managers <a name="lab_managers"></a>
+Under the **Lab Managers** tab, the Director can add, edit, or delete Lab Managers. Click "edit" on an existing manager to change the name, email address, phone number, or language of a manager, or to reset the managers password. 
 
-### Reports 
-The reports tab allows the director to build reports for some or all of the labs that are under the country's management. The aggregate reports work much as the aggegrate reports do within the Manager view, with two additional options to select a specific test and select which facilities should be included in the report. There is also a menu option to configure some of the aggregation settings (e.g. age ranges) for the reports. 
+!!! info "Note"
+    Navigate to the **User Accounts** menu option in the **Lab Configurations** tab from the Manager view to edit/reset passwords for Technician accounts (as opposed to manager accounts). 
 
+### Test Catalog <a name="director_test_catalg"></a>
+The **Test Catalog** tab allows the director to add country-wide specimens and tests. 
 
-<br>
+### Reports <a name="director_reports"></a>
+The **Reports** tab allows the director to build reports for some or all of the labs that are under the country's management. The aggregate reports work much as the aggegrate reports do within the Manager view, with two additional options to select a specific test and select which facilities should be included in the report. There is also a menu option to configure some of the aggregation settings (e.g. age ranges) for the reports. 
 
 ## Manager Overview <a name="manager_overview"></a>
 The manager interface allows the Manager to do the following:
+
 1. Add, edit, and delete users
 2. Change the laboratory configuration settings in the **Lab Configuration** tab in the top menu bar
 3. Generate and print reports in the **Reports** tab in the top menu bar
 
-### Lab Configuration <a name="lab_configuration"></a>
+### Manager Lab Configuration <a name="manager_lab_configuration"></a>
 The laboratory configuration can be changed by Managers or admin users of BLIS. Here, you can change how reports are generated, what patient data is collected, as well as various other settings. In general, laboratory settings are usually initialized by the Country Director, but can be modified to suit individual labs' needs.
 
 The menu selection for the **Lab Configuration** tab - accessible in the top menu bar - is as follows:
+
 1. [Summary](#summary)
-2. [Tests](#tests)
-3. [Search](#search)
-4. [Reports](#reports)
-5. [Results](#results)
-6. [Sites](#sites)
-7. [Inventory](#inventory)
+2. [Tests](#tests_config)
+3. [Search](#search_config)
+4. [Reports](#lab_config_reports)
+5. [Results](#results_config)
+6. [Sites](#sites_config)
+7. [Inventory](#inventory_config)
 8. [Barcode Settings](#barcode_settings)
 9. [Billing](#billing)
 10. [User Accounts](#user_accounts)
@@ -157,117 +178,199 @@ The menu selection for the **Lab Configuration** tab - accessible in the top men
 #### Summary <a name="summary"></a>
 The **Summary** page displays information about the laboratory. Specific information includes the Facility Name, Location, Lab Manager, available Specimen Types, available Test Types, and Technician Accounts allocated to the specific laboratory.
 
+<p align="center">
 <img src="./images/user_guide/lab_configuration.png" width="100%"/>
+</p>
 
-#### Tests <a name="tests"></a>
+#### Tests <a name="tests_config"></a>
 The **Tests** page has a drop down menu that opens up to reveal three different options: **Specimen/Test Types**, **Target TAT**, and **Results Interpretation**.
 
 ##### Specimen/Test Types
 The **Specimen/Test Types** page allows you to set the specimen and test types as appropriate for your country. Click **Show** to reveal hidden panes and **Hide** to close the panes. Check the box for each specimen type collected or test done at this facility, and click **Submit** to save.
 
+<p align="center">
 <img src="./images/user_guide/specimen_test_type.png" width="100%"/>
+</p>
 
 ##### Target TAT
 The **Target TAT** page displays turnaround times for tests. To enter or change turnaround time, click **Edit**. The number and unit (such as “24 hours”) change to a text field and a drop-down list. Enter the desired number and choose **Hours** or **Days**. When finished, click the **Submit** button to save changes, or **Cancel** to discard changes. These options are below the list.
 
+<p align="center">
 <img src="./images/user_guide/target_tat.png" width="100%"/>
+</p>
 
-#### Results Interpretation
+##### Results Interpretation
 
 The **Results Interpretation** page allows you to specify the interpretation for multiple ranges of values for each test type. To view or edit an existing test’s result, choose the test type from the drop-down list and click the **Search** button. The current interpretation appears. Edit using the text boxes.
 
 To add a new range to the list, click the **Add Another** link and enter data in the text boxes. Click the **Submit** button to save changes, or **Cancel** to discard them.
 
+<p align="center">
 <img src="./images/user_guide/results_interpretation.png" width="100%"/>
+</p>
 
-#### Search <a name="search"></a>
+#### Search <a name="search_config"></a>
 The **Search** page allows you to configure what results are displayed for each patient when a search is executed. It also allows you to change how many results are displayed on each page.
 
+<p align="center">
 <img src="./images/user_guide/search.png" width="100%"/>
+</p>
 
-#### Reports <a name="reports"></a>
+#### Reports <a name="lab_config_reports"></a>
 The **Reports** page has a drop down menu that opens up to reveal seven different options: **Infection Report**, **Test/Specimen Grouped Reports**, **Daily Report Settings**, **Enable/Disable Test Reports**, **Test Report Configuration**, **Worksheet**, and **Order Patient Fields**.
 
-#### Infection Report
+##### Infection Report
 The **Infection Report** page generates an aggregate report of laboratory test results for a particular period for one or all lab sections. The tests listed in the report are the ones checked to include on the **Specimen/Test Types** page. Click **Edit** to make changes to the details reported. When finished, click **Submit** button to save changes, **Preview** to view the report, or **Cancel** to discard changes.
 
+<p align="center">
 <img src="./images/user_guide/infection_report.png" width="100%"/>
+</p>
 
-#### Test/Specimen Grouped Reports
+##### Test/Specimen Grouped Reports
 The **Test/Specimen Grouped Reports** page allows you to set the **Test Count (Grouped) Report** settings and the **Specimen Count (Grouped) Report** settings. Click **Edit** to change settings. When finished, click the **Submit** button to save changes, or **Cancel** to discard changes. 
 
+<p align="center">
 <img src="./images/user_guide/test_specimen_grouped_reports.png" width="100%"/>
+</p>
 
-#### Daily Report Settings
+##### Daily Report Settings
 The **Daily Report Settings** page allows you to set the layout of the **Patient Report**, **Daily Log - Specimens**, and **Daily Log - Patients**. Use the drop-down to select the report type, then click **Search**. Check or un-check boxes to show or hide patient, specimen, and test information. If desired, you can upload a .jpg logo file to appear on the report. When finished, click the **Submit** button to save changes, or **Cancel** to discard changes. These options are below the list.
 
+<p align="center">
 <img src="./images/user_guide/test_specimen_grouped_reports.png" width="100%"/>
+</p>
 
-#### Enable/Disable Test Results
+##### Enable/Disable Test Results
 The **Enable/Disable Test Results** page allows you to enable or disable specific tests. Items on the left side are disabled; move the test items to the right side to enable them. When finished, click the **Submit** button to save changes, or **Cancel** to discard changes.
 
+<p align="center">
 <img src="./images/user_guide/enable_disable_test_results.png" width="100%"/>
+</p>
 
-#### Test Report Configuration
-The **Test Report Configuration** page allows you to visualize your enabled test configurations. Use the drop-down to select the test type from the enabled test list, then click **Search**. Click **Edit** to edit the configuration of the reported test data. Check or un-check boxes to show or hide patient, specimen, and test information. When finished, click the **Submit** button to save changes, or **Cancel** to discard changes
+##### Test Report Configuration
+The **Test Report Configuration** page allows you to visualize your enabled test configurations. Use the drop-down to select the test type from the enabled test list, then click **Search**. Click **Edit** to edit the configuration of the reported test data. Check or un-check boxes to show or hide patient, specimen, and test information. When finished, click the **Submit** button to save changes, or **Cancel** to discard changes.
 
-#### Worksheet
+##### Worksheet
 The **Worksheet** page allows you to create templates for gather patient data in the lab. In lab settings where data are not entered at the point of service, the data entry staff can enter the laboratory's patient information and ordered tests, then print the worksheet so that lab technicians can write test results and other data to be entered into BLIS. 
 
 Select the **Lab Section** and **Test Type** and click **Search** to edit the report format. To edit a custom report, click **Edit** to the right of the report. To create a new custom worksheet, click the **Add Custom Worksheet** link at the bottom of the list.
 
+<p align="center">
 <img src="./images/user_guide/worksheet.png" width="100%"/>
+</p>
 
-#### Results <a name="results"></a>
+#### Results <a name="results_config"></a>
 The **Results** page allows you to edit the parameters displayed in the batch results page. Currently, the editable data is limited to Patient information.
 
+<p align="center">
 <img src="./images/user_guide/results.png" width="100%"/>
+</p>
 
-### Sites <a name="sites"></a>
+#### Sites <a name="sites_config"></a>
 The **Sites** page allows you to add, modify, or remove specimen collection sites to the laboratory records. When first spawning a laboratory, only one site - the default site - will exist. 
 
 Additional information about the site can be provided in the textboxes - currently, BLIS supports adding in District and Region information. To add another site, click on the **Add Another** hyperlink at the top and fill in textbox with the new site name, then click **Submit**. To go back, click **Cancel**. 
 
+<p align="center">
 <img src="./images/user_guide/sites.png" width="100%"/>
+</p>
 
-#### Inventory <a name="inventory"></a>
-The **Inventory** page is a list of any existing reagents being tracked in BLIS. To add another, click the
-**Add Item** link above the list and input the name, unit of measurement associated with the reagent, and any miscellaneous remarks about the reagent. After pressing **Submit**, don't forget to add the item's stock. On the **Current Inventory** page, you can **Log Stock Usage**, **Add Stock**, or **Edit Details**.
+#### Inventory <a name="inventory_config"></a>
+The **Inventory** page is a list of any existing reagents being tracked in BLIS. To add another, click the **Add Item** link above the list and input the name, unit of measurement associated with the reagent, and any miscellaneous remarks about the reagent. After pressing **Submit**, don't forget to add the item's stock. On the **Current Inventory** page, you can **Log Stock Usage**, **Add Stock**, or **Edit Details**.
 
+<p align="center">
 <img src="./images/user_guide/inventory.png" width="100%"/>
+</p>
 
 #### Barcode Settings <a name="barcode_settings"></a>
 The **Barcode Settings** page allows you to configure the settings for barcode formats. Click on the **Page Help** for more details. After changing the settings, click **Submit** to save your edits.
 
+<p align="center">
 <img src="./images/user_guide/barcode_settings.png" width="100%"/>
+</p>
 
 #### User Accounts <a name="user_accounts"></a>
+The **User Accounts** page shows all the users with access to the system. Here, a Lab Manager can create new user accounts, edit account settings, delete accounts, and monitor account activity.
+
+Click **Add New Account** to enter a new user.
+
+<p align="center">
+<img src="./images/user_guide/user_accounts.png" width="100%"/>
+</p>
+
+
+Click **Edit** on a user to edit the user account details or to reset password. User Type dictates the access the user has in the system. **Reset Password** allows you as administrator to enter a new password for this user. Click the **Submit** button to save changes, or **Cancel** to discard.
+
+To remove a user account, click the **Delete** link for that user. A confirmation box appears. Click **OK** to complete the deletion, or **Cancel** to keep that user’s information.
+
+
+<p align="center">
+<img src="./images/user_guide/edit_user_accounts.png" width="100%"/>
+</p>
 
 #### Registration Fields <a name="registration_fields"></a>
+The **Registration Fields** page shows the configuration of the patient registration page. It allows the Lab Manager to create mandatory fields and hide the fields that are not used, per the country’s protocols. It also allows for creation of certain custom fields for Patient registration and new Specimen addition which may be needed by certain labs only.
+
+<p align="center">
+<img src="./images/user_guide/registration_fields.png" width="100%"/>
+</p>
+
+To customize fields, click **Edit** to make changes: check the box to display a field, uncheck to hide. Set fields as required. After editing, click **Update** button below the fields to save changes, Cancel to discard.
+
+To create new fields, choose the **Add New** link for which to add, and enter field name and type. Click **Submit** button to save changes, **Cancel** to discard.
+
+Also, the Lab Manager can customize the order of the registration fields for Patient and Specimen Registration forms.
 
 #### Doctor Registration Fields <a name="doctor_registration_fields"></a>
+The **Registration Fields** page shows the configuration of the patient registration page. There is currently an issue opened to address the duplicity of the previous **Registration Fields** page.
+
 
 #### Modify Language <a name="modify_language"></a>
+One of the features of BLIS is the ability to toggle between languages. The **Modify Language** page allows the Lab Manager to change the language for a few pages using this option. The pages are listed as a drop-down menu.
 
-### Setup Local Network <a name="modify_language"></a>
+<p align="center">
+<img src="./images/user_guide/modify_language.png" width="100%"/>
+</p>
 
-### BLIS Online <a name="blis_online"></a>
+Select the language and category (type of page or section). Select **Search** button to view or edit the text. When finished, click **Submit** button to save changes, or **Cancel** to discard.
+
+#### Setup Local Network <a name="modify_language"></a>
+The **Setup Local Page** is an instructional page on how to set up a local network for your hospital or laboratory. Please access it from BlisSetup.html in the main folder, then entering your username and password. 
+
+#### BLIS Online <a name="blis_online"></a>
 The **BLIS Online** page allows you to enter an IP address of a **BLIS on the Cloud** server. For more details about **BLIS on the Cloud** and how to create your own instantiation, please read the Developer's Documentation.
 
 Please enter the IP address into the text box and click **Submit**. A message stating "BLIS Cloud hostname updated successfully!" will pop up if submitted correctly. 
 
+<p align="center">
 <img src="./images/user_guide/blis_online.png" width="100%"/>
+</p>
 
 #### External Interface <a name="external_interface"></a>
+The **External Interface** Laboratory settings allows the Lab Manager to set up an interface with external devices or websites. The currently featured interface for alternative patient registration system is DHIMS 2. Others may be added upon request.
+
+The **Interfaced Equipment** page allows the Lab Manager to select the equipment to be interfaced through BLISIntterfaceClient. Configurations may be set in the *BLISInterfaceClient.ini* file.
+
+<p align="center">
+<img src="./images/user_guide/external_interface" width="100%"/>
+</p>
+
 
 #### Revert to Backup <a name="revert_to_backup"></a>
+In case of system failure, the **Revert to Backup** page allows the Lab manager to revert to a previously backed-up copy of the data. Clicking the link presents the dates of the previous backups, click one to select which data set to load.
+
+<p align="center">
+<img src="./images/user_guide/revert_to_backup" width="100%"/>
+</p>
 
 #### Manage Backup Keys <a name="manage_backup_keys"></a>
 The **Manage Backup Keys** page allows you to create, manage, or delete key pairs in order to encrypt laboratory backup data. Encrypting laboratory backup data with a unique key-pair ensures that only the personnel with the correct private key will be able to successfully decrypt the encrypted data with the correlated public key.
 
 The home screen of the **Manage Backup Keys** page displays the list of currently active public keys. In the example image below, only one public key is available for use, with a key alias of "my_pubkey".
 
+<p align="center">
 <img src="./images/user_guide/manage_backup_keys.png" width="100%"/>
+</p>
 
 ##### Disable Encrypted Backups
 Toggle this button to disable or enable encrypted backups. It is recommended to enable encrypted backups to protect private patient information.
@@ -275,30 +378,40 @@ Toggle this button to disable or enable encrypted backups. It is recommended to 
 ##### Download Public Key
 This button opens a popup window prompting the user to download a public key. This key should be saved onto the computer.
 
+<p align="center">
 <img src="./images/user_guide/download_public_key.png" width="100%"/>
+</p>
 
 ##### Add Key Alias
 To add a new public key, click **Add Key Alias**. Fill free to enter in any key alias names here. We recommend entering in some identifying information that describes the origin of the public key. For example, if the public key was provided by the country director, the key alias name could be "country_director_pubkey".
 
 To upload the public key, click **Browse** and use the File Upload navigational controls to select the desired public key (ending in a .blis file extension). After selecting the correct public key, click **Add** to add the public key to the list of currently active public keys, or **Cancel** to discard changes.
 
+<p align="center">
 <img src="./images/user_guide/add_key_alias.png" width="100%"/>
+</p>
 
 #### Export Configuration <a name="export_configuration"></a>
 The **Export Configuration** page allows you to export all configuration settings to Microsoft Word. Clicking this link opens a new browser tab with a preview showing all preset and custom fields as well as report settings. The preview has three buttons at the top: Print, Export as Word document, and Close.
 Click the **Print** button to open the print dialog box; **Export as Word document** to create a file named **blisreport_[date of report].doc**, which you may open or save, or **Close** to close this browser tab.
 
+<p align="center">
 <img src="./images/user_guide/export_configuration.png" width="100%"/>
+</p>
 
 ### Test Catalog <a name="test_catalog"></a>
 The **Test Catalog** page allows the Manager to add or edit specimen or test types used in their laboratory.
 
+<p align="center">
 <img src="./images/user_guide/test_catalog.png" width="100%"/>
+</p>
 
 #### Specimen Type
 The **Specimen Type** page allows for adding or editing specimen types used in the laboratory.
 
+<p align="center">
 <img src="./images/user_guide/test_catalog_specimen.png" width="100%"/>
+</p>
 
 Click **Add** New to enter a new specimen type. Required fields are **Name**, which is a text box for entering the name of the specimen, and **Compatible Tests**, which allows you to check the tests that can be performed using that specimen. **Ctrl-F** opens the Find function to search for a test. You may enter a **Description** of the specimen type, which is optional.
 
@@ -307,12 +420,16 @@ and then click the **Edit** link in the far-right column.
 
 Click **Submit** button to save changes, **Cancel** to discard.
 
+<p align="center">
 <img src="./images/user_guide/test_catalog_specimen_edit.png" width="100%"/>
+</p>
 
 #### Test Type
 The **Test Type** page allows for adding or editing test types used in the laboratory. It is controlled the same way as Specimen Types.
 
+<p align="center">
 <img src="./images/user_guide/test_catalog_test.png" width="100%"/>
+</p>
 
 Click **Add New** to enter a new test type. Required fields are Name, which is a text box; **Lab Section**, a drop-down list that includes an option to add a new section; **Measures**, which are editable; and **Compatible Specimens**, which allows you to check one or more specimens that can be used for this test.
 
@@ -322,13 +439,17 @@ To edit the information about a test type, find the one you wish to edit on the 
 
 Click **Submit** button to save changes, or **Cancel** to discard.
 
+<p align="center">
 <img src="./images/user_guide/test_catalog_test_edit.png" width="100%"/>
+</p>
 
-
-### Reports <a name="reports"></a>
+### Reports <a name="manager_reports"></a>
 The **Reports** page can be accessed by either the Technician or Manager. 
 
+
+<p align="center">
 <img src="./images/user_guide/reports.png" width="100%"/>
+</p>
 
 #### Daily Reports
 The **Daily Reports** should be generated each day for both the Patient Report and also Daily Log.
@@ -340,7 +461,9 @@ Search for the patient by Patient Name, Patient Number, or Patient ID and Lab Se
 
 You can edit the report to show activity within a date range, include pending tests for which results are not available, set printing information, or export to Word using the controls at the top of the page.
 
+<p align="center">
 <img src="./images/user_guide/patient_report.png" width="100%"/>
+</p>
 
 ##### Daily Log
 The **Daily Log** creats a report of the day's activity.
@@ -349,18 +472,19 @@ Set the date range to reflect the log to print. You can run a report of the day�
 
 Also patient barcodes for each patient with the number of specimens they have handed over can also be printed over a given a range of time by selecting the **Patient Barcode** option.
 
+<p align="center">
 <img src="./images/user_guide/daily_log.png" width="100%"/>
+</p>
 
 #### Aggregate Reports
-Aggregate Reports generates reports for specific data selected by the user.
+Aggregate Reports generates reports for specific data selected by the user. There are currently six types of reports to generate:
 
-##### Prevalence Rate
-
-##### Counts
-
-##### Turnaround Time
-
-
+1. **Prevalence Rate** which opens an infection graph and prevalence rates.
+2. **Counts** which can open a specified kind of ungrouped or grouped, test/specimen/doctor statistics.
+3. **Turnaround Time** which opens the average test-wise turnaround times for the lab test reports.
+4. **Infection Report** which opens an Infection Report for a specified laboratory.
+5. **User Statistics** which displays user specific statistics and user activity logs.
+6. **Test Specific Reports** which provides information on specific tests, and can be specified to an individual site.
 
 ### Backup Data <a name="backup_data"></a>
 The **Backup Data** feature was created for two reasons - to revert to a previously backed-up copy in cases of system failure, but also to create a backup file of the current laboratory patient data for uploading to a **BLIS on Cloud** version. 
@@ -369,39 +493,132 @@ For example, one intended use of the second scenario would be to upload the curr
 
 The below image is the default view of the **Backup Data** page.
 
+<p align="center">
 <img src="./images/user_guide/backup_data.png" width="100%"/>
+</p>
 
 #### Backup Data with Pre-Existing Key
 If a public key has already been registered to the personnel account through the **Lab Configuration** > **Manage Backup Keys** functionality, then the key should appear in the drop-down menu. In the image below, *my_pubkey* is a pre-existing public key that had been previously registered. Please select the key from the drop-down menu.
 
+<p align="center">
 <img src="./images/user_guide/backup_data_preexisting_key.png" width="100%"/>
+</p>
 
 #### Backup Data without Pre-Existing Key
 If the desired public key has not already been registered to the account, then please select *New Key...* from the drop-down menu. Two new boxes should appear. Give the key a name (recommend either the lab name or lab ID), and click on the **Browse** button. Find the public key that was previously downloaded onto your computer and select it to upload.
 
+<p align="center">
 <img src="./images/user_guide/backup_data_no_preexisting_key.png" width="100%"/>
+</p>
 
 After selecting the public key of choice, please choose the desired backup (General or Anonymized) and then click **Backup** to trigger the data backup. A new page should pop up, confirming that the backup was successful. Please click the **Download Zip** hyperlink to download the zipped file to your Desktop. 
 
 Additionally, if a Backup IP Address was previously set in **Lab Configuration** > **BLIS Online** page, a copy of the backup will be sent to the BLIS version hosted on the specified IP Address.
 
+<p align="center">
 <img src="./images/user_guide/download_successful.png" width="100%"/>
+</p>
 
-### Technician Overview <a name="technician_overview"></a>
+## Technician Overview <a name="technician_overview"></a>
 The technician interface allows the Technician to do the following:
-1. Register new patients and look up existing patients
-2. Add results for a patient based on the specimens provided
-3. Manage existing reagents currently being tracked in BLIS
 
-#### Registration
+1. [Register new patients](#add_new_patient) and [look up existing patients.](#patient_lookup)
+2. [Add results for a patient based on the specimens provided.](#add_specimen)
+3. [Manage existing reagents currently being tracked in BLIS.](#results)
+
+Users with Admin rights can click the **Work as Manager** link in the top right corner to switch to the Lab Manager view.
+
+Users with only Technician rights can access their profile page by clicking **Edit Profile**. Users can edit their profile to add or change email, phone, and language. The Username cannot be changed. Click on the **Change Password** link to change your password.
+
+### Registration <a name="registration"></a>
 The **Registration** page allows the Technician to register new patients or lookup existing patients based on name, patient ID or number.
 
-#### Add New Patient
-Click on the hyperlink to *Add New Patient >>* illustrated in the red circle in the image below.
+#### Add New Patient <a name="add_new_patient"></a>
+To add a new patient: Click the **Search** button without entering any search criteria. The **Add New Patient** link appears, illustrated in the red circle in the image below.
 
+<p align="center">
 <img src="./images/user_guide/add_new_patient.png" width="100%"/>
+</p>
 
+Also, if no results are found for the patient you are
+searching for, you will be given the option to create a new patient, and the name you searched will automatically be filled into the new patient form. Click the link and wait for a dialog box to appear on your screen. Fill in the blank fields and check the appropriate elements. Elements with asterisks * are mandatory. 
 
+Click on **Submit** to save, or **Cancel** to discard changes and return to patient look-up page.
 
+<p align="center">
 <img src="./images/user_guide/add_new_patient_2.png" width="100%"/>
+</p>
 
+#### Patient Look-Up <a name="patient_lookup"></a>
+Once a patient has been registered, you can use the **Registration** page to view or edit patient profiles. You can also register a specimen the patient has provided for a particular
+test.
+
+Click on the drop-down list and select patient name, ID, or number. Type in the blank space the patient name, ID, or number you have selected. Enter all the information you have for that patient.
+
+<p align="center">
+<img src="./images/user_guide/patient_lookup.png" width="100%"/>
+</p>
+
+#### Add or Edit a Specimen Record <a name="add_specimen"></a>
+To add or edit a specimen record, first begin by finding the patient to whom the specimen belongs to. Then, click the **Register Specimen** link to the right of the patient name. 
+
+<p align="center">
+<img src="./images/user_guide/register_specimen.png" width="100%"/>
+</p>
+
+Fill in the blank fields and check the appropriate elements. Elements with asterisks * are mandatory. 
+
+<p align="center">
+<img src="./images/user_guide/register_specimen_2.png" width="100%"/>
+</p>
+
+Click on **Submit** to save, or **Cancel** to discard changes and return to patient look-up page. **Add Another Specimen** allows you to add another specimen for this patient.
+
+### Results <a name="specimen_results"></a>
+The **Results** page allows the Technician to see, evaluate, and verify results for collected specimens.
+
+#### Single Specimen Results 
+This option allows you to add results for a patient based on the specimens provided and Lab sections to which the specimen tests are registered. Click on the drop-down list and select patient name, ID, or number. Type in the field at least 2 characters to
+search.
+
+<p align="center">
+<img src="./images/user_guide/single_specimen_results.png" width="100%"/>
+</p>
+
+To add or edit a specimen record: Find the patient as above and then click the **Enter Results** link to the right of the patient name. Fill in the blank fields and check the appropriate elements.
+
+ Click on **Submit** to save, or **Cancel** to discard changes.
+
+#### Batch Results
+This option allows you to add results for a particular Test Type.
+
+Select a test for which to find results. Set a date range, then click Search. The results appear without patient names. Click on **Submit** to save, or **Cancel** to discard changes.
+
+<p align="center">
+<img src="./images/user_guide/batch_results.png" width="100%"/>
+</p>
+
+#### Verify Results
+This option allows you to verify the result based on the test type. It shows the list of results for all patients whose results have not been verified. You can modify the results and enter remarks before verifying the results.
+
+<p align="center">
+<img src="./images/user_guide/verify_results.png" width="100%"/>
+</p>
+
+Select a **Test Type** and click **Search**. All test results for that test appear. Look over the test results for accuracy. Edit the results as appropriate. When you are finished, click on **Verify**, or **Cancel** to discard changes. Choosing **Verify** opens a confirmation dialog box.
+
+Click **OK** to mark results as verified, **Cancel** to discard changes.
+
+#### Worksheet
+
+<p align="center">
+<img src="./images/user_guide/worksheet_results.png" width="100%"/>
+</p>
+
+### Search <a name="search"></a>
+
+### Inventory <a name="inventory"></a>
+
+### Backup Data <a name="tech_backup_data"></a>
+
+## Glossary <a name="glossary"></a>
