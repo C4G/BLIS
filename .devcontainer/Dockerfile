@@ -52,10 +52,11 @@ COPY docker/bin/start-blis.sh /usr/bin/
 
 # Modify the www-data user (which Apache runs as) to be usable by us and give it password-less sudo
 # Also add the www-data user to the adm group so we can view some logs
-RUN usermod -aG sudo www-data && \
-    usermod -aG adm www-data && \
-    chown -R www-data:www-data /var/www && \
-    chsh -s /bin/bash www-data && \
+RUN groupadd vscode && \
+    useradd -m -s /bin/bash -g vscode vscode && \
+    usermod -aG sudo vscode && \
+    usermod -aG adm vscode && \
+    usermod -aG www-data vscode && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-USER www-data
+USER vscode
 WORKDIR /workspace
