@@ -15,7 +15,8 @@ class BackupArchive {
         $this->file_path = $file_path;
         $this->lab_config_id = $lab_config_id;
 
-        $filename = pathinfo($file_path)['filename'];
+        $info = pathinfo($file_path);
+        $filename = $info['filename'];
         $parts = explode("_", $filename);
         $probable_timestamp = $parts[2];
         $this->timestamp = date_create_from_format("Ymd-His", $probable_timestamp);
