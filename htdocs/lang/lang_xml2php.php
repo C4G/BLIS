@@ -5,7 +5,7 @@
 #
 
 
-require_once("../includes/db_lib.php");
+require_once(dirname(__FILE__)."/../includes/db_lib.php");
 
 #
 # Functions for handling language translation
@@ -53,7 +53,7 @@ EOF;
 	$string_data = <<<EOF
 );
 
-include("../lang/lang_util.php");
+require_once(dirname(__FILE__)."/../lang/lang_util.php");
 ?>
 EOF;
 	fwrite($handle, "\n".$string_data);

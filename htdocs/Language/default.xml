@@ -2,14 +2,6 @@
 <pages lang="default" descr="Default" version="0.8.4">
 	<page id="general" descr="General Terms">
 		<term>
-			<key>BACKUP_LOCAL</key>
-			<value>Download local .ZIP backup</value>
-		</term>
-		<term>
-			<key>BACKUP_ONLINE</key>
-			<value>Send data backup to server</value>
-		</term>
-		<term>
 			<key>TIPS</key>
 			<value>Tips</value>
 		</term>
@@ -907,7 +899,7 @@
 		</term>
 		<term>
 			<key>TIPS_PWD</key>
-			<value>You can update your profile and password by clicking on Edit Profile.</value>
+			<value>You can update your profile and password by clicking on &lt;b&gt;Edit Profile.&lt;/b&gt;</value>
 		</term>
 		
 	</page>	
@@ -1649,6 +1641,14 @@
 			<value>In case of a computer restart or network failure click on Setup Network option again.</value>
 		</term>
 		<term>
+			<key>TIPS_SETUPSERVER_1</key>
+			<value>Enter the IP address of the BLIS Online server and click 'Save'.</value>
+		</term>
+		<term>
+			<key>TIPS_SETUPSERVER_2</key>
+			<value>You can send a backup to the server from the Backup Data tab.</value>
+		</term>
+		<term>
 			<key>MENU_TOGGLE_TEST_REPORTS</key>
 			<value>Enable/Disable Test Reports</value>
 		</term>
@@ -1696,7 +1696,7 @@
 			<key>ADD_SITE</key>
 			<value>Enter New Site Name</value>
 		</term>
-				<term> 
+		<term> 
 			<key>ADD_ONLINE_SERVER</key>
 			<value>Enter IP address of BLIS server: </value>
 		</term>

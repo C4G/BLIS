@@ -19,6 +19,9 @@
 -- Table structure for table `dhims2_api_config`
 --
 
+CREATE DATABASE IF NOT EXISTS blis_revamp;
+USE blis_revamp;
+
 DROP TABLE IF EXISTS `dhims2_api_config`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;

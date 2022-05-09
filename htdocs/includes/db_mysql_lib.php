@@ -4,10 +4,10 @@
 # For e.g., use query_associative_all() instead of mysql_query()
 #
 
-require_once( "db_constants.php" );
+require_once("db_constants.php" );
 //include( "db_constants.php" );
 
-include("../includes/debug_lib.php");
+require_once(dirname(__FILE__)."/../includes/debug_lib.php");
 
 $con = mysql_connect( $DB_HOST, $DB_USER, $DB_PASS );
 if (!$con) {
