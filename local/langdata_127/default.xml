@@ -2,14 +2,6 @@
 <pages lang="default" descr="Default" version="0.8.4">
 	<page id="general" descr="General Terms">
 		<term>
-			<key>BACKUP_LOCAL</key>
-			<value>Download local .ZIP backup</value>
-		</term>
-		<term>
-			<key>BACKUP_ONLINE</key>
-			<value>Send data backup to server</value>
-		</term>
-		<term>
 			<key>TIPS</key>
 			<value>Tips</value>
 		</term>
@@ -332,7 +324,7 @@
 		<term>
 			<key>VIEW_REPORT</key>
 			<value>View Report</value>
-		</term>		
+		</term>	
 		<term>
 			<key>AGE</key>
 			<value>Age</value>
@@ -907,7 +899,7 @@
 		</term>
 		<term>
 			<key>TIPS_PWD</key>
-			<value>You can update your profile and password by clicking on Edit Profile.</value>
+			<value>You can update your profile and password by clicking on &lt;b&gt;Edit Profile&lt;/b&gt;.</value>
 		</term>
 		
 	</page>	
@@ -1341,6 +1333,10 @@
 			<value>Backup Version</value>
 		</term>
 		<term>
+			<key>BACKUP_TIP</key>
+			<value>Please select the receiver who should be able to revert this backup from the drop-down list. &lt;br&gt; &lt;br&gt; &lt;i&gt;Current Lab&lt;/i&gt; is the default key and will create backups that can be reverted on this lab for the current instance of BLIS. &lt;br&gt;&lt;br&gt;If the receiver does not appear in the drop-down list, you will be prompted to upload a new public key, which is a .blis file and can be obtained by lab managers under the Lab Configuration > Manage Backup Keys > Download Public Key.</value>
+		</term>
+		<term>
 			<key>INCLUDE_LANGUAGE_SETTINGS</key>
 			<value>Include Language Settings</value>
 		</term>
@@ -1348,7 +1344,7 @@
 			<key>MENU_ST_TYPES</key>
 			<value>Specimen/Test Types</value>
 		</term>
-				<term>
+		<term>
 			<key>TIPS_SPECIMENTESTTYPES</key>
 			<value>Specimen / Test Types - This option allows us to configure the Specimens can be collected and Tests that are performed at the particular lab.</value>
 		</term>
@@ -1750,7 +1746,6 @@
 			<key>IP_SAVED</key>
 			<value>IP address saved.</value>
 		</term>
-		
 	</page>
 	<page id="lab_admins" descr="Lab Managers Page">
 		<term>
@@ -2527,6 +2522,14 @@
 		<term>
 			<key>TIPS_EXPORTCONFIG</key>
 			<value>This option gives the configuration summary for the entire system as a Microsoft Word document.</value>
+		</term>
+		<term>
+			<key>BACKUP_LOCAL</key>
+			<value>Download local .ZIP backup</value>
+		</term>
+		<term>
+			<key>BACKUP_ONLINE</key>
+			<value>Send data backup to server</value>
 		</term>
 		<term>
 			<key>TIPS_BACKUP</key>
