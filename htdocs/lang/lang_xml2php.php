@@ -50,10 +50,18 @@ EOF;
 			fwrite($handle, $string_data."\n");
 		}
 	}
+
+	$langutil_path = "/../lang/lang_util.php";
+	if (stripos($langdata_path, "local/langdata") !== false) {
+		// Dirty dirty hack: determine if we're in the local/ folder
+		// If so, we have to go up an additional directory
+		$langutil_path = "/../../htdocs/lang/lang_util.php";
+	}
+
 	$string_data = <<<EOF
 );
 
-require_once(dirname(__FILE__)."/../lang/lang_util.php");
+require_once(dirname(__FILE__)."$langutil_path");
 ?>
 EOF;
 	fwrite($handle, "\n".$string_data);

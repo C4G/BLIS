@@ -9,9 +9,12 @@ if ($argc < 2) {
     die(1);
 }
 
+if (!file_exists($argv[1])) {
+    die("File does not exist: " . $argv[1] . "\n");
+}
+
 $xml_path = realpath($argv[1]);
 $info = pathinfo($xml_path);
-
 $locale = $info['filename'];
 $dirname = $info['dirname'];
 
