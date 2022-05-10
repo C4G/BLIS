@@ -54,9 +54,16 @@ COPY docker/bin/start-blis.sh /usr/bin/
 # Also add the www-data user to the adm group so we can view some logs
 RUN groupadd vscode && \
     useradd -m -s /bin/bash -g vscode vscode && \
+    # add vscode to admin groups to see logs and get sudo access
     usermod -aG sudo vscode && \
     usermod -aG adm vscode && \
+    # add vscode to www-data group so we can edit webserver stuff
     usermod -aG www-data vscode && \
+    # add www-data to vscode group so it can edit files (write logs, files)
+    usermod -aG vscode www-data && \
+    # add sticky bit so all files remain belonging to vscode:vscode
+    chmod -R u+s /workspace && \
+    chmod -R g+s /workspace && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER vscode
 WORKDIR /workspace
