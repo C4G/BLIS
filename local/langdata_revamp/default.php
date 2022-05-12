@@ -353,6 +353,17 @@ $LANG_ARRAY = array (
 		"TIPS_SUMMARY_1" => "Gives a summary of lab setup including the lab personnel accounts, test and specimen types.", 
 		"TIPS_SUMMARY_2" => "-", 
 		"TIPS_SUMMARY_3" => "-", 
+		"enable_encrypted_backup" => "Enable Encrypted Backups", 
+		"disable_encrypted_backup" => "Disable Encrypted Backups", 
+		"MENU_KEY_MANAGEMENT" => "Manage Backup Keys", 
+		"TIPS_KEY_MANAGEMENT" => "Use this page to generate key pair to encrypt the Backups and to add public keys from other labs.", 
+		"key_alias" => "Key Alias", 
+		"download_key" => "Download Public Key", 
+		"add_button" => "Add", 
+		"cancel_button" => "Cancel", 
+		"public_key_label" => "Public Key", 
+		"add_key" => "Add Key Alias", 
+		"add_header" => "Add a new Key Alias", 
 		"MENU_BACKUP_REVERT" => "Revert To Backup", 
 		"TIPS_REVERT" => "In case of system failure, if we want to revert to a previously backedup copy of the data we can use this option. You can choose to backup current version before doing this. You may also choose to include to revert back the language settings.", 
 		"BACKUP_LOCATION" => "Backup Version", 
@@ -721,5 +732,5 @@ $LANG_ARRAY = array (
 	) 
 );
 
-require_once(dirname(__FILE__)."/../../htdocs/lang/lang_util.php");
+include_once(dirname(__FILE__)."/../lang/lang_util.php");
 ?>

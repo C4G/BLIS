@@ -1321,6 +1321,50 @@
 			<value>-</value>
 		</term>
 		<term>
+			<key>enable_encrypted_backup</key>
+			<value>Enable Encrypted Backups</value>
+		</term>
+		<term>
+			<key>disable_encrypted_backup</key>
+			<value>Disable Encrypted Backups</value>
+		</term>
+		<term>
+			<key>MENU_KEY_MANAGEMENT</key>
+			<value>Manage Backup Keys</value>
+		</term>
+		<term>
+			<key>TIPS_KEY_MANAGEMENT</key>
+			<value>Use this page to generate key pair to encrypt the Backups and to add public keys from other labs.</value>
+		</term>
+		<term>
+			<key>key_alias</key>
+			<value>Key Alias</value>
+		</term>
+		<term>
+			<key>download_key</key>
+			<value>Download Public Key</value>
+		</term>
+		<term>
+			<key>add_button</key>
+			<value>Add</value>
+		</term>
+		<term>
+			<key>cancel_button</key>
+			<value>Cancel</value>
+		</term>
+		<term>
+			<key>public_key_label</key>
+			<value>Public Key</value>
+		</term>
+		<term>
+			<key>add_key</key>
+			<value>Add Key Alias</value>
+		</term>
+		<term>
+			<key>add_header</key>
+			<value>Add a new Key Alias</value>
+		</term>
+		<term>
 			<key>MENU_BACKUP_REVERT</key>
 			<value>Revert To Backup</value>
 		</term>

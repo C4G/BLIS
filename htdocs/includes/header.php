@@ -20,6 +20,7 @@ if ($TRACK_LOADTIME) {
 
 require_once("includes/page_elems.php");
 require_once("includes/script_elems.php");
+require_once("../lang/lang_util.php");
 LangUtil::setPageId("header");
 require_once("includes/perms_check.php");
 
