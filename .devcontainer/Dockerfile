@@ -15,6 +15,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         htop \
         mysql-client \
         p7zip \
+        python3-pip \
         shellcheck \
         software-properties-common \
         sudo \
@@ -34,6 +35,8 @@ RUN add-apt-repository ppa:ondrej/php && apt-get update && \
         php5.6-zip \
         php5.6-mbstring \
         php5.6-xml
+
+RUN pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin
 
 RUN echo "column-statistics = 0" | tee -a /etc/mysql/conf.d/mysqldump.cnf
 
