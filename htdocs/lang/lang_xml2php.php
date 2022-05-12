@@ -61,7 +61,7 @@ EOF;
 	$string_data = <<<EOF
 );
 
-require_once(dirname(__FILE__)."$langutil_path");
+include_once(dirname(__FILE__)."$langutil_path");
 ?>
 EOF;
 	fwrite($handle, "\n".$string_data);
