@@ -11,8 +11,7 @@ fi
 
 if [[ -d "/workspace" ]]; then
     # add sticky bit so all files remain belonging to vscode:vscode
-    sudo chmod u+s /workspace
-    sudo chmod g+s /workspace
+    find /workspace -type d -exec sudo chmod ug+s {} \;
 fi
 
 # This is a little funky...
