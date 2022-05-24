@@ -9,6 +9,12 @@ if ! grep -q 'apache2_blis.env' /etc/apache2/envvars; then
     echo ". /etc/apache2/apache2_blis.env" | sudo tee -a /etc/apache2/envvars
 fi
 
+if [[ -d "/workspace" ]]; then
+    # add sticky bit so all files remain belonging to vscode:vscode
+    sudo chmod u+s /workspace
+    sudo chmod g+s /workspace
+fi
+
 # This is a little funky...
 # The container build puts the config in /etc/apache2, but this is not the correct place for it.
 # The reason for this is so you can mount a volume to /etc/apache2/sites-available to persist your changes.

@@ -64,9 +64,6 @@ RUN groupadd vscode && \
     usermod -aG www-data vscode && \
     # add www-data to vscode group so it can edit files (write logs, files)
     usermod -aG vscode www-data && \
-    # add sticky bit so all files remain belonging to vscode:vscode
-    chmod -R u+s /workspace && \
-    chmod -R g+s /workspace && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER vscode
 WORKDIR /workspace
