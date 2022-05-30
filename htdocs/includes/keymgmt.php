@@ -11,6 +11,30 @@ class KeyMgmt
     public $AddedBy;
     public $ModOn;
 
+    /**
+     * Returns the path to a key file.
+     * If the file exists in the ajax/ folder, this is bad because it can be accessed by anyone.
+     * Move it to the files/ folder, and then return the updated path.
+     */
+    public static function pathToKey($keyName) {
+        global $log;
+        $log->debug("Looking for key: $keyName");
+        $ajax_dir = __DIR__ . "/../ajax/";
+        $files_dir = __DIR__ . "/../../files/";
+
+        if (file_exists("$ajax_dir/$keyName")) {
+            $log->warn("Found $keyName in ajax/ folder, moving it to htdocs/files/");
+            rename("$ajax_dir/$keyName", "$files_dir/$keyName");
+        }
+
+        if (file_exists("$files_dir/$keyName")) {
+            return "$files_dir/$keyName";
+        }
+
+        $log->error("Could not find keyfile: $keyName");
+        return false;
+    }
+
     public static function read_enc_setting()
     {
         $saved_db = DbUtil::switchToGlobal();

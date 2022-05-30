@@ -123,23 +123,8 @@ class BackupLib
 
         // Zip archive will be created only after closing object
         $zip->close();
-    }
 
-    private static function removeDirectory($dir)
-    {
-        $it = new RecursiveDirectoryIterator($dir);//, RecursiveDirectoryIterator::SKIP_DOTS);
-        $files = new RecursiveIteratorIterator(
-            $it,
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
-        foreach ($files as $file) {
-            if ($file->isDir()) {
-                rmdir($file->getRealPath());
-            } else {
-                unlink($file->getRealPath());
-            }
-        }
-        rmdir($dir);
+        $log->info("$zipFile created successfully!");
     }
 
     /**
@@ -358,7 +343,7 @@ class BackupLib
 
         // Removes the backup directory in files/
         // Comment this out if you want to figure out what went wrong somewhere!
-        self::removeDirectory($backup_dir);
+        PlatformLib::removeDirectory($backup_dir);
 
         return $new_path;
     }
