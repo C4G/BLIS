@@ -22,7 +22,7 @@ mkdir BLIS-Upgrade/
 cp -r BLISRuntime-main/* BLIS-Standalone/ &
 cp -r BLIS-master/* BLIS-Standalone/ &
 
-cp -r BLIS-master/* BLIS-Upgrade/ &
+cp -r BLIS-master/* BLIS-Upgrade/ && rm -rf BLIS-Upgrade/local/ &
 cp -r BLISRuntime-main/server BLIS-Upgrade/server &
 
 wait
