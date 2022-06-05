@@ -37,3 +37,8 @@ rm -rf BLISRuntime-main/
 
 rm BLISCode.zip
 rm BLISRuntime.zip
+
+rm -rf BLIS-Standalone/
+rm -rf BLIS-Upgrade/
+
+mv BLIS-*.zip ../
