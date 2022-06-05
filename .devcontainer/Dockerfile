@@ -21,7 +21,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         sudo \
         tmux \
         unzip \
-        vim
+        vim \
+        zip
 
 # PPAs - additional software from questionable sources go here...
 # Namely, pulling in PHP 5.6 here from a repo
