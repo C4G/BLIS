@@ -9,6 +9,7 @@ require_once("../regn/field_htmlFactory.php");
 require_once("../regn/generate_customize_field_order_patient.php");
 require_once("db_lib.php");
 require_once("field_order_update.php");
+require_once("../lang/lang_util.php");
 
 
 class PageElems
