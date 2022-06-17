@@ -7,6 +7,7 @@
 require_once('db_util.php');
 require_once('keymgmt.php');
 require_once('lab_config.php');
+require_once('../lang/lang_util.php');
 
 # Start session if not already started
 if(session_id() == "")

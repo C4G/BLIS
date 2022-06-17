@@ -3,6 +3,9 @@
 # Library functions for Ajax calls and JSON data
 #
 
+# Require LangUtil class here so AJAX pages have access to it
+require_once("../lang/lang_util.php");
+
 function list_to_json($value_list, $json_params)
 {
 	# Utility function that converts an associative list to JSON string
