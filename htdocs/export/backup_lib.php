@@ -48,11 +48,11 @@ class BackupLib
     private static function mySqlDump($databaseName, $backupFilename)
     {
         global $log, $DB_HOST, $DB_PORT, $DB_USER, $DB_PASS;
-    
+
         $mysqldumpPath = PlatformLib::mySqlDumpPath();
         $command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $databaseName -r ".escapeshellarg($backupFilename);
         $output = system($command, $result);
-    
+
         if ($result == 0) {
             return $backupFilename;
         } else {
@@ -60,11 +60,11 @@ class BackupLib
             return false;
         }
     }
-    
+
     private static function encryptFile($filename, $publicKey, $outputFilename, $decryptionKeyFilename)
     {
         global $log;
-    
+
         $data = file_get_contents($filename);
         $res = openssl_seal($data, $sealed, $ekeys, array($publicKey));
         if (!$res) {
@@ -358,6 +358,9 @@ class BackupLib
         global $log;
         $backups = array();
         $searchPath = dirname(__FILE__)."/../../files/backups";
+        if (!file_exists($searchPath)) {
+            mkdir($searchPath, 0600);
+        }
 
         if ($handle = opendir($searchPath)) {
             while (false !== ($file = readdir($handle))) {
@@ -366,7 +369,7 @@ class BackupLib
                     // we only want .zip files
                     continue;
                 }
-                
+
                 $zip = new ZipArchive;
                 if ($zip->open("$searchPath/$file") !== false) {
                     for ($i = 0; $i < $zip->numFiles; $i++) {

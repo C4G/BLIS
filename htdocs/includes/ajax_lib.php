@@ -4,7 +4,11 @@
 #
 
 # Require LangUtil class here so AJAX pages have access to it
-require_once("../lang/lang_util.php");
+if(!class_exists('LangUtil')) {
+    # Hack to prevent legacy language files from double-including this file
+    require_once("../lang/lang_util.php");
+}
+
 
 function list_to_json($value_list, $json_params)
 {
