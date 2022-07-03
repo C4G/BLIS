@@ -2,6 +2,14 @@
 <pages lang="default" descr="Default" version="0.8.4">
 	<page id="general" descr="General Terms">
 		<term>
+			<key>BACKUP_LOCAL</key>
+			<value>Download local .ZIP backup</value>
+		</term>
+		<term>
+			<key>BACKUP_ONLINE</key>
+			<value>Send data backup to server</value>
+		</term>
+		<term>
 			<key>TIPS</key>
 			<value>Tips</value>
 		</term>
@@ -324,7 +332,7 @@
 		<term>
 			<key>VIEW_REPORT</key>
 			<value>View Report</value>
-		</term>	
+		</term>		
 		<term>
 			<key>AGE</key>
 			<value>Age</value>
@@ -899,7 +907,7 @@
 		</term>
 		<term>
 			<key>TIPS_PWD</key>
-			<value>You can update your profile and password by clicking on &lt;b&gt;Edit Profile&lt;/b&gt;.</value>
+			<value>You can update your profile and password by clicking on Edit Profile.</value>
 		</term>
 		
 	</page>	
@@ -1321,50 +1329,6 @@
 			<value>-</value>
 		</term>
 		<term>
-			<key>enable_encrypted_backup</key>
-			<value>Enable Encrypted Backups</value>
-		</term>
-		<term>
-			<key>disable_encrypted_backup</key>
-			<value>Disable Encrypted Backups</value>
-		</term>
-		<term>
-			<key>MENU_KEY_MANAGEMENT</key>
-			<value>Manage Backup Keys</value>
-		</term>
-		<term>
-			<key>TIPS_KEY_MANAGEMENT</key>
-			<value>Use this page to generate key pair to encrypt the Backups and to add public keys from other labs.</value>
-		</term>
-		<term>
-			<key>key_alias</key>
-			<value>Key Alias</value>
-		</term>
-		<term>
-			<key>download_key</key>
-			<value>Download Public Key</value>
-		</term>
-		<term>
-			<key>add_button</key>
-			<value>Add</value>
-		</term>
-		<term>
-			<key>cancel_button</key>
-			<value>Cancel</value>
-		</term>
-		<term>
-			<key>public_key_label</key>
-			<value>Public Key</value>
-		</term>
-		<term>
-			<key>add_key</key>
-			<value>Add Key Alias</value>
-		</term>
-		<term>
-			<key>add_header</key>
-			<value>Add a new Key Alias</value>
-		</term>
-		<term>
 			<key>MENU_BACKUP_REVERT</key>
 			<value>Revert To Backup</value>
 		</term>
@@ -1377,10 +1341,6 @@
 			<value>Backup Version</value>
 		</term>
 		<term>
-			<key>BACKUP_TIP</key>
-			<value>Please select the receiver who should be able to revert this backup from the drop-down list. &lt;br&gt; &lt;br&gt; &lt;i&gt;Current Lab&lt;/i&gt; is the default key and will create backups that can be reverted on this lab for the current instance of BLIS. &lt;br&gt;&lt;br&gt;If the receiver does not appear in the drop-down list, you will be prompted to upload a new public key, which is a .blis file and can be obtained by lab managers under the Lab Configuration > Manage Backup Keys > Download Public Key.</value>
-		</term>
-		<term>
 			<key>INCLUDE_LANGUAGE_SETTINGS</key>
 			<value>Include Language Settings</value>
 		</term>
@@ -1388,7 +1348,7 @@
 			<key>MENU_ST_TYPES</key>
 			<value>Specimen/Test Types</value>
 		</term>
-		<term>
+				<term>
 			<key>TIPS_SPECIMENTESTTYPES</key>
 			<value>Specimen / Test Types - This option allows us to configure the Specimens can be collected and Tests that are performed at the particular lab.</value>
 		</term>
@@ -1790,6 +1750,7 @@
 			<key>IP_SAVED</key>
 			<value>IP address saved.</value>
 		</term>
+		
 	</page>
 	<page id="lab_admins" descr="Lab Managers Page">
 		<term>
@@ -2566,14 +2527,6 @@
 		<term>
 			<key>TIPS_EXPORTCONFIG</key>
 			<value>This option gives the configuration summary for the entire system as a Microsoft Word document.</value>
-		</term>
-		<term>
-			<key>BACKUP_LOCAL</key>
-			<value>Download local .ZIP backup</value>
-		</term>
-		<term>
-			<key>BACKUP_ONLINE</key>
-			<value>Send data backup to server</value>
 		</term>
 		<term>
 			<key>TIPS_BACKUP</key>
