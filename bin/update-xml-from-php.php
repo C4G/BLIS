@@ -2,12 +2,10 @@
 
 <?php
 
-
 if ($argc < 2) {
     echo("You must supply the locale name you want to perform a 2-way update on.\n");
     die(1);
 }
-
 
 $locale = $argv[1];
 $xml_path = realpath($locale.".xml");
