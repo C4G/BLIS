@@ -3,7 +3,7 @@
 <?php
 
 if ($argc < 2) {
-    echo("You must supply the locale name you want to perform a 2-way update on.\n");
+    echo("You must supply the locale name you want to perform an XML-from-PHP update on.\n");
     die(1);
 }
 
@@ -11,7 +11,7 @@ $locale = $argv[1];
 $xml_path = realpath($locale.".xml");
 $info = pathinfo($xml_path);
 $dirname = $info['dirname'];
-$php_path = "$dirname/$locale.php";
+$php_path = "$locale.php";
 
 if (!file_exists($xml_path)) {
     die("File does not exist: " . $xml_path . "\n");
