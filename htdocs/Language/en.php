@@ -1,6 +1,6 @@
 <?php
-$LANG_ARRAY = array ( 
-		"general" => array ( 
+$LANG_ARRAY = array (
+	"general" => array ( 
 		"TIPS" => "Tips", 
 		"USERNAME" => "Username", 
 		"PWD" => "Password", 
@@ -200,7 +200,19 @@ $LANG_ARRAY = array (
 		"ALL_FACILITIES" => "All Facilities", 
 		"ALL_SITES" => "All Sites", 
 		"DISTRICT" => "District", 
-		"REGION" => "Region"
+		"REGION" => "Region", 
+		"BACKUP_LOCAL" => "Download local .ZIP backup", 
+		"BACKUP_ONLINE" => "Send data backup to server", 
+		"backup_tip" => "Please select the receiver who should be able to revert this backup from the drop-down list. <br> <br> <i>Current Lab</i> is the default key and will create backups that can be reverted on this lab for the current instance of BLIS. <br><br>If the receiver does not appear in the drop-down list, you will be prompted to upload a new public key, which is a .blis file and can be obtained by lab managers under the Lab Configuration > Manage Backup Keys > Download Public Key.", 
+		"CNFRMPWD" => "Confirm Password", 
+		"PASSWORDRESET_ERR" => "Password reset expired. Mail c4gbackup@gmail.com with the subject 'Password' to enable password recovery", 
+		"PASSWORDRESET_COMPLETE" => "Password Reset complete. Visit login.php to reset the password", 
+		"ADD_CURRENCY_RATE" => "Add new currency rate", 
+		"WIDTH" => "Width", 
+		"HEIGHT" => "Height", 
+		"FONT_SIZE" => "Font Size", 
+		"COL_COUNT" => "Column-Count", 
+		"CMD_REFRESH" => "Refresh"
 	) , 
 	"header" => array ( 
 		"TITLE" => "", 
@@ -225,13 +237,15 @@ $LANG_ARRAY = array (
 		"MSG_ERR_PWD" => "Incorrect username/password", 
 		"MSG_CAPSLOCK" => "Caps Lock is On", 
 		"MSG_NEWPWD" => "Request a New Password", 
-		"TIPS_NEWPWD" => "If you forgot your password, click on the Request a New Password link and a new, temporary password will be sent to your email address."
+		"TIPS_NEWPWD" => "If you forgot your password, click on the Request a New Password link and a new, temporary password will be sent to your email address.", 
+		"MSG_ERR_PWDRST" => "Password cannot be reset now. Contact your admin or mail c4gbackup@gmail.com with the subject 'Password'", 
+		"MSG_RESETPWD" => "Reset Password"
 	) , 
 	"home" => array ( 
 		"TITLE" => "Home", 
 		"WELCOME" => "Welcome", 
 		"TIPS_BLISINTRO" => "The Basic Laboratory Information System (BLIS) tracks patient specimens and laboratory results.", 
-		"TIPS_PWD" => "You can update your profile and password by clicking on <b>Edit Profile</b>."
+		"TIPS_PWD" => "You can update your profile and password by clicking on Edit Profile."
 	) , 
 	"regn" => array ( 
 		"TITLE" => "Registration"
@@ -469,7 +483,15 @@ $LANG_ARRAY = array (
 		"INTERPRETATION" => "Interpretation", 
 		"MODIFY_SITE" => "Modiify site", 
 		"PRINT_UNVERIFIED" => "Allow printing of unverified tests", 
-		"IP_SAVED" => "IP address saved."
+		"IP_SAVED" => "IP address saved.", 
+		"RPT_ITEMS_ON_ROW" => "Items on a row", 
+		"RPT_SHOW_DEMO_BORDER" => "Show Demographics border", 
+		"RPT_SHOW_SPM_BORDER" => "Show Results border", 
+		"TIPS_PATIENTFIELDSORDER" => "This page is used to set how patient fields are ordered on the report. That is; which one comes first...", 
+		"MENU_PATIENTFIELDSORDER" => "Patient Fields Order Setup", 
+		"RPT_R_BORDER_HOR" => "Horizontal", 
+		"RPT_R_BORDER_VERT" => "Vertical", 
+		"SAMPLES_RECIVED" => "Samples Received"
 	) , 
 	"lab_admins" => array ( 
 		"TITLE" => "Lab Managers", 
@@ -723,14 +745,27 @@ $LANG_ARRAY = array (
 		"TIPS_COUNTS" => "Counts: This option generates a report for a particular period of time based on the count of tests, specimen or doctor statistics.", 
 		"TIPS_TURNAROUNDTIME" => "Turnaround Time: This option generates the turnaround time for all or chosen test for a particular period of time. It also generates a graph of the statistics. You can choose to include both pending and completed tests or just the completed tests.", 
 		"TIPS_INFECTIONREPORT" => "Infection Report: This option generates an aggregate infection report for a particular period for one or all Lab sections. It also provides an option to create a Word document of the generated report.", 
-		"TIPS_INVENTORY" => "Inventory: This option generates a listing of the current inventory."
+		"TIPS_INVENTORY" => "Inventory: This option generates a listing of the current inventory.", 
+		"MENU_BACKUP" => "Backup Data"
 	) , 
 	"search_condition" => array ( 
 		"SEARCH_BEGIN_WITH" => "Starts with", 
 		"SEARCH_END_WITH" => "End with", 
 		"SEARCH_CONTAINS" => "Contains"
+	) , 
+	"doctor_register" => array ( 
+		"TITLE" => "Patient Look-up", 
+		"ADD_NEW_PATIENT" => "Add New Patient", 
+		"TIPS_REGISTRATION_1" => "This page allows us to register new patients or lookup existing patients based on name, patient ID or number.", 
+		"TIPS_REGISTRATION_2" => "Once a patient has been registered, we can use this page to view,edit the patients profile.", 
+		"TIPS_PATIENT_LOOKUP" => "To register a new specimen, enter Patient by ID/Name or add a new Patient first.", 
+		"MSG_NOMATCH" => "No match found", 
+		"CMD_REGISTERSPECIMEN" => "Register Specimen", 
+		"CMD_VIEWPROFILE" => "View Profile", 
+		"CMD_DELPROFILE" => "Delete Profile", 
+		"CMD_UPDPROFILE" => "Update Profile"
 	) 
 );
 
-include_once(dirname(__FILE__)."/../lang/lang_util.php");
+include_once(__DIR__."/../lang/lang_util.php");
 ?>
