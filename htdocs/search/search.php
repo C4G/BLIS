@@ -7,6 +7,8 @@ include("includes/header.php");
 LangUtil::setPageId("search");
 putUILog('search', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
+$lab_config_id = $_SESSION['lab_config_id'];
+
 ?>
 <script type='text/javascript'>
 $(document).ready(function(){
@@ -39,8 +41,8 @@ function specimen_search()
 	}
 	$('#specimen_search_spinner').show();
 	var url = 'ajax/search_s.php';
-	$("#specimen_search_results").load(url, 
-		{q: specimen_id, a: search_attrib }, 
+	$("#specimen_search_results").load(url,
+		{q: specimen_id, a: search_attrib },
 		function()
 		{
 			$('#specimen_search_spinner').hide();
@@ -64,9 +66,9 @@ function patient_search()
 		return;
 	}
 	$('#patient_search_spinner').show();
-	var url = 'ajax/search_p_dyn.php';
-	$("#patient_search_results").load(url, 
-		{q: patient_id, a: search_attrib, c: condition_attrib }, 
+	var url = 'ajax/search_p_dyn.php?lab_config_id=' + <?php echo $lab_config_id ?>;
+	$("#patient_search_results").load(url,
+		{q: patient_id, a: search_attrib, c: condition_attrib },
 		function()
 		{
 			$('#patient_search_spinner').hide();
@@ -86,7 +88,7 @@ function hideCondition(p_attrib)
 <b><?php echo LangUtil::getTitle(); ?></b>
 <br><br>
 <table>
-		
+
 	<tr class="card_num_row" id="card_num_row">
 	<td><?php echo LangUtil::$generalTerms['PATIENT']; ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td>
@@ -94,12 +96,12 @@ function hideCondition(p_attrib)
 			<?php $page_elems->getPatientSearchAttribSelect(); ?>
 		</select><select name='h_attrib' id='h_attrib' style='font-family:Tahoma;'>
 		<?php $page_elems->getPatientSearchCondition(); ?>
-        
+
 	</select>
 		&nbsp;&nbsp;
 	</td>
 	<td><input type="text" name="patient_id" id="patient_id" value="" size="30" />&nbsp;&nbsp;<span class='error_string' id='patient_search_error'><?php echo LangUtil::$generalTerms['MSG_REQDFIELD']; ?></span></td>
-	
+
 	<td><input type='button' id='patient_search_button' value='<?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?>' onclick='javascript:patient_search();' /></td>
 	<td><span id='patient_search_spinner' style='display:none'><?php echo $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SEARCHING']);?></span></td>
 	</tr>
@@ -128,7 +130,7 @@ if($_SESSION['s_addl'] == 0)
 				<?php
 				 # Search by accession num hidden from the user
 				 /*
-				<option value='2'><?php echo LangUtil::$generalTerms['ACCESSION_NUM']; ?></option> 
+				<option value='2'><?php echo LangUtil::$generalTerms['ACCESSION_NUM']; ?></option>
 				*/
 				}
 				?>
@@ -156,16 +158,16 @@ if($_SESSION['s_addl'] == 0)
 			echo "<li>";
 			echo LangUtil::$pageTerms['TIPS_SEARCH_1'];
 			echo "</li>";
-		}	
+		}
 		if(LangUtil::$pageTerms['TIPS_SEARCH_2']!="-") {
-			echo "<li>"; 
+			echo "<li>";
 			echo LangUtil::$pageTerms['TIPS_SEARCH_2'];
 			echo "</li>";
 		}
 		if(LangUtil::$pageTerms['TIPS_SEARCH']!="-")	{
-			echo "<li>"; 
+			echo "<li>";
 			echo LangUtil::$pageTerms['TIPS_SEARCH'];
-			echo "</li>"; 
+			echo "</li>";
 		}
 		?>
 	</ul>

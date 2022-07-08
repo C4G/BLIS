@@ -4,17 +4,22 @@
 # Returns list of matched patients
 # Called via Ajax from /search.php
 #
-require_once("../includes/ajax_lib.php");
 require_once("../includes/db_lib.php");
 require_once("../includes/script_elems.php");
 require_once("../includes/SessionCheck.php");
+require_once("../includes/ajax_lib.php");
 LangUtil::setPageId("find_patient");
 
 $script_elems = new ScriptElems();
 //$script_elems->enableTableSorter();
 $saved_session = SessionUtil::save();
 $dynamic_fetch = 1;
-$lab_config_id = $_SESSION['lab_config_id'];
+$lab_config_id = $_GET['lab_config_id'];
+if ($lab_config_id == "") {
+    // If the lab_config_id is not set in the URL,
+    // use the ID from the session, if there is one
+    $lab_config_id = $_SESSION['lab_config_id'];
+}
 $search_settings = get_lab_config_settings_search($lab_config_id);
 $rcap = $search_settings['results_per_page'];
 ?>

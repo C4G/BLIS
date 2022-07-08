@@ -1,8 +1,9 @@
 <?php
 
-include("redirect.php");
-include("../includes/db_lib.php");
-require_once("../includes/user_lib.php");
+include_once("redirect.php");
+include_once("../includes/db_lib.php");
+include_once("../includes/user_lib.php");
+include_once("../lang/lang_util.php");
 
 LangUtil::setPageId("update");
 global $VERSION;
