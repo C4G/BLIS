@@ -16,6 +16,12 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mysql-client \
         p7zip \
         python3-pip \
+        rubocop \
+        ruby \
+        ruby-dev \
+        ruby-bundler \
+        ruby-byebug \
+        ruby-graphviz \
         shellcheck \
         software-properties-common \
         sudo \
