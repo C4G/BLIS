@@ -3,6 +3,9 @@
 // (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
 // Contains functions for managing user roles, privileges and logging
 //
+
+include_once("../lang/lang_util.php");
+
 //list of access rights
 $access_rights=array(
 "addUserLog.php"=>"~CD~SA~A~R~RP~",
@@ -242,9 +245,9 @@ function get_top_menu_options($user_role, $user_rwoption = "") {
 	$page_list = array ();
 	$rw_option = array ();
 	$page_list [LangUtil::getPageTitle ( "home" )] = "home.php";
-	
+
 	$rw_option = explode ( ',', $user_rwoption );
-	
+
 	// Write Mode starts
 /*	if ($user_role == $LIS_TECH_RW || $user_role == $LIS_001 ||$user_role == $LIS_010||$user_role == $LIS_011||$user_role == $LIS_100||$user_role==$LIS_TECH_SHOWPNAME||$user_role == $LIS_101||$user_role == $LIS_110||$user_role == $LIS_111|| $user_role == $LIS_VERIFIER) {
 		if (in_array ( "2", $rw_option ))
@@ -259,10 +262,10 @@ function get_top_menu_options($user_role, $user_rwoption = "") {
 			$page_list ["Inventory"] = "view_stock.php";
 		if (in_array ( "7", $rw_option ))
 			$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
-	} 
+	}
 else if ($user_role == $READONLYMODE) {
 				$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
-	} 	
+	}
 		else */
 if($user_role == $LIS_PHYSICIAN) {
 	// echo "lis physician";
@@ -278,19 +281,19 @@ if($user_role == $LIS_PHYSICIAN) {
 			$page_list ["Inventory"] = "view_stock.php";
 		if (in_array ( "7", $rw_option ))
 			$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
-		
+
 		// $page_list [LangUtil::getPageTitle ( "regn" )] = "doctor_register.php";
 		// $page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
 	}
 else if ($user_role == $READONLYMODE) {
 	// echo "readonlymode";
 				$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
-	} 	
+	}
 			else if ($user_role == $LIS_CLERK) {
 				echo "lis clerk";
 		$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
 		$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
-	} 
+	}
 /*else if ($user_role == $LIS_TECH_RW || $user_role == $LIS_TECH_SHOWPNAME) {
 		$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
 		$page_list [LangUtil::getPageTitle ( "results_entry" )] = "results_entry.php";
@@ -303,7 +306,7 @@ else if ($user_role == $READONLYMODE) {
 			$id = $lab_config_list [0]->id;
 		}
 		$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
-	} 
+	}
 else if ($user_role == $LIS_TECH_RO || $user_role == $LIS_TECH_SHOWPNAME) {
 		$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
 		$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
@@ -332,9 +335,9 @@ else if ($user_role == $LIS_ADMIN) {
 	} else if ($user_role == $LIS_VERIFIER) {
 		// echo "lis verifier";
 		$page_list [LangUtil::getPageTitle ( "results_entry" )] = "results_entry.php";
-	} 
+	}
 else
-{	
+{
 	// echo "final";
 		if (in_array ( "2", $rw_option ))
 			$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
@@ -399,7 +402,7 @@ else
 }
 function rand_str($length = 32, $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890') {
 	// Random string generator used by get_random_password()
-	
+
 	// Length of character list
 	$chars_length = (strlen ( $chars ) - 1);
 	// Start our string

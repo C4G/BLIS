@@ -5,7 +5,7 @@
 # Calls ajax/update.php which actually performs the update operations
 
 /*include("../users/accesslist.php");
-if( !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList)) 
+if( !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList))
 	&& !(isSuperAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $superAdminPageList)) &&
 	!(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList)) )
 	header( 'Location: home.php' );
@@ -13,7 +13,7 @@ if( !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_
 
 include("redirect.php");
 include("../includes/script_elems.php");
-include("lang/lang_util.php");
+include_once("lang/lang_util.php");
 LangUtil::setPageId("updateCountryDbAtLocal");
 
 $script_elems = new ScriptElems();

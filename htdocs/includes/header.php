@@ -20,7 +20,7 @@ if ($TRACK_LOADTIME) {
 
 require_once("includes/page_elems.php");
 require_once("includes/script_elems.php");
-require_once("../lang/lang_util.php");
+include_once("../lang/lang_util.php");
 LangUtil::setPageId("header");
 require_once("includes/perms_check.php");
 
@@ -58,7 +58,7 @@ $page_elems = new PageElems();
             $('.globalnav_option').removeClass('globalnav_option_current');
             $(this).addClass('globalnav_option_current');
         });
-    });	
+    });
     </script>
     </head>
 
@@ -69,26 +69,26 @@ $page_elems = new PageElems();
 <?php
 if (isset($_SESSION['username'])) {
         ?>
-    <?php echo LangUtil::getPageTerm("LOGGEDINAS"); ?>: <?php echo $_SESSION['username']; ?> | 
-    <a href='edit_profile.php' class="black"><?php echo LangUtil::$pageTerms['EDITPROFILE']; ?></a> | 
+    <?php echo LangUtil::getPageTerm("LOGGEDINAS"); ?>: <?php echo $_SESSION['username']; ?> |
+    <a href='edit_profile.php' class="black"><?php echo LangUtil::$pageTerms['EDITPROFILE']; ?></a> |
     <?php
     //echo "test".$_SESSION['admin_as_tech'];
     if (isset($_SESSION['admin_as_tech']) && $_SESSION['admin_as_tech'] === true) {
         ?>
-        <a href='switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOMGR"); ?></a> | 
+        <a href='switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOMGR"); ?></a> |
         <?php
     } elseif (isset($_SESSION['dir_as_tech']) && $_SESSION['dir_as_tech'] === true) {
         ?>
-        <a href='switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TODIR"); ?></a> | 
+        <a href='switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TODIR"); ?></a> |
         <?php
     } elseif (User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level'])) {
         $lab_config_list = get_lab_configs($_SESSION['user_id']); ?>
-        <a href='switchto_tech.php?id=<?php echo $lab_config_list[0]->id; ?>' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOTECH"); ?></a> | 
+        <a href='switchto_tech.php?id=<?php echo $lab_config_list[0]->id; ?>' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOTECH"); ?></a> |
         <?php
     }
     }
     ?>
-    <a rel='facebox' href='user_rating.php' class="black"><?php echo LangUtil::getPageTerm("LOGOUT"); ?></a>	
+    <a rel='facebox' href='user_rating.php' class="black"><?php echo LangUtil::getPageTerm("LOGOUT"); ?></a>
         </div>
         <table cellspacing="10px">
             <tr>
@@ -97,7 +97,7 @@ if (isset($_SESSION['username'])) {
                 </td>
                 <td>
                 </td>
-                <td> 
+                <td>
                 </td>
             </tr>
         </table>
@@ -113,7 +113,7 @@ if (strpos($_SERVER['PHP_SELF'], 'login.php') === false) {
     if (isset($top_menu_options)) {
         foreach ($top_menu_options as $key => $value) {
             //echo "hello "."<br/>";
-            
+
             echo "<li ";
             echo "><a href='".$value."' ";
             if (

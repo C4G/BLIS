@@ -311,7 +311,7 @@ EOF;
 	$string_data = <<<EOF
 );
 
-require_once("../lang/lang_util.php");
+include_once("../lang/lang_util.php");
 ?>
 EOF;
 	fwrite($handle, "\n".$string_data);

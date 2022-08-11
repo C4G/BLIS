@@ -14,10 +14,7 @@ include("redirect.php");
 include("../includes/db_lib.php");
 require_once("../includes/user_lib.php");
 
-if(!class_exists('LangUtil')) {
-    # Hack to prevent legacy language files from double-including this file
-    require_once("../lang/lang_util.php");
-}
+include_once("../lang/lang_util.php");
 
 LangUtil::setPageId("update");
 

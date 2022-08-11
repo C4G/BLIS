@@ -4,6 +4,7 @@
 # This file contains entity classes and functions for DB queries
 #
 
+include_once("../lang/lang_util.php");
 require_once('db_util.php');
 require_once('keymgmt.php');
 require_once('lab_config.php');
