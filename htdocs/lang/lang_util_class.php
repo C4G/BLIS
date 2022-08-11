@@ -21,6 +21,9 @@ class LangUtil
 	public static function setPageId($page_id)
 	{
 		global $LANG_ARRAY;
+		if (self::$generalTerms == null) {
+			self::init();
+		}
 		self::$pageId = $page_id;
 		self::$pageTerms = $LANG_ARRAY[self::$pageId];
 	}
