@@ -51,7 +51,7 @@ function exportDb() {
 	<?php if( $_SESSION['locale'] != "fr" ) { ?>
 		<p>Exporting Database.. Please wait</p>
 	<?php } else { ?>
-		<p>Sauvegarde des données.. Sil vous plait attendre</p>
+		<p>Sauvegarde des donnÃ©es.. Sil vous plait attendre</p>
 	<?php } ?>
 	<p><img src='includes/img/ajax-loader.gif'></p>
 </div>

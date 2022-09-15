@@ -46,3 +46,6 @@ Thumbs.db
 # Tooling
 ## php-cs-fixer cache
 .php_cs.cache
+
+# Directory that BLIS releases will be built into
+/dist

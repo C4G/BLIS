@@ -5,7 +5,7 @@
 #
 
 
-require_once("../includes/db_lib.php");
+require_once(dirname(__FILE__)."/../includes/db_lib.php");
 
 #
 # Functions for handling language translation
@@ -16,13 +16,13 @@ function lang_xml2php($lang_code, $langdata_path)
 	$handle = fopen($langdata_path.$lang_code.".php", "w");
 	$string_data = <<<EOF
 <?php
-\$LANG_ARRAY = array ( 
-	
+\$LANG_ARRAY = array (
+
 EOF;
 	fwrite($handle, $string_data);
 
 	$pages = simplexml_load_file($langdata_path.$lang_code.".xml");
-	
+
 	$page_count = 0;
 	foreach($pages as $page)
 	{
@@ -41,7 +41,7 @@ EOF;
 			}
 			fwrite($handle, "\t\t".$string_data."\n");
 		}
-		
+
 		$string_data = ") ";
 		fwrite($handle, "\t".$string_data);
 		if($page_count < count($pages))
@@ -50,10 +50,11 @@ EOF;
 			fwrite($handle, $string_data."\n");
 		}
 	}
+
 	$string_data = <<<EOF
 );
 
-include("../lang/lang_util.php");
+include_once(__DIR__."/../lang/lang_util.php");
 ?>
 EOF;
 	fwrite($handle, "\n".$string_data);
@@ -81,7 +82,7 @@ EOF;
 		$key = $record['test_category_id'];
 		$value = $record['name'];
 		$string_data = <<<EOF
-		
+
 		<term>
 			<key>$key</key>
 			<value>$value</value>
@@ -90,13 +91,13 @@ EOF;
 		fwrite($handle, $string_data);
 	}
 	$string_data = <<<EOF
-	
+
 	</entity>
 EOF;
-	fwrite($handle, $string_data);	
+	fwrite($handle, $string_data);
 	# Add test types
 	$string_data = <<<EOF
-	
+
 	<entity id="test" descr="Test Type">
 EOF;
 	fwrite($handle, $string_data);
@@ -107,7 +108,7 @@ EOF;
 		$key = $record['test_type_id'];
 		$value = $record['name'];
 		$string_data = <<<EOF
-		
+
 		<term>
 			<key>$key</key>
 			<value>$value</value>
@@ -116,13 +117,13 @@ EOF;
 		fwrite($handle, $string_data);
 	}
 	$string_data = <<<EOF
-	
+
 	</entity>
 EOF;
-	fwrite($handle, $string_data);	
+	fwrite($handle, $string_data);
 	# Add measures
 	$string_data = <<<EOF
-	
+
 	<entity id="measure" descr="Measures">
 EOF;
 	fwrite($handle, $string_data);
@@ -133,7 +134,7 @@ EOF;
 		$key = $record['measure_id'];
 		$value = $record['name'];
 		$string_data = <<<EOF
-		
+
 		<term>
 			<key>$key</key>
 			<value>$value</value>
@@ -142,13 +143,13 @@ EOF;
 		fwrite($handle, $string_data);
 	}
 	$string_data = <<<EOF
-	
+
 	</entity>
 EOF;
-	fwrite($handle, $string_data);	
+	fwrite($handle, $string_data);
 	# Add specimen types
 	$string_data = <<<EOF
-	
+
 	<entity id="specimen" descr="Specimen Types">
 EOF;
 	fwrite($handle, $string_data);
@@ -159,7 +160,7 @@ EOF;
 		$key = $record['specimen_type_id'];
 		$value = $record['name'];
 		$string_data = <<<EOF
-		
+
 		<term>
 			<key>$key</key>
 			<value>$value</value>
@@ -168,13 +169,13 @@ EOF;
 		fwrite($handle, $string_data);
 	}
 	$string_data = <<<EOF
-	
+
 	</entity>
 EOF;
-	fwrite($handle, $string_data);	
+	fwrite($handle, $string_data);
 	# End catalog
 	$string_data = <<<EOF
-	
+
 </catalog>
 EOF;
 	fwrite($handle, $string_data);
@@ -186,13 +187,13 @@ function catalog_xml2php($lang_code)
 	$handle = fopen("../../langdata/".$lang_code."_catalog.php", "w");
 	$string_data = <<<EOF
 <?php
-\$CATALOG_ARRAY = array ( 
-	
+\$CATALOG_ARRAY = array (
+
 EOF;
 	fwrite($handle, $string_data);
 
 	$catalog = simplexml_load_file("../../langdata/".$lang_code."_catalog.xml");
-	
+
 	$catalog_count = 0;
 	foreach($catalog as $entity)
 	{
@@ -211,7 +212,7 @@ EOF;
 			}
 			fwrite($handle, "\t\t".$string_data."\n");
 		}
-		
+
 		$string_data = ") ";
 		fwrite($handle, "\t".$string_data);
 		if($catalog_count < count($catalog))
@@ -235,7 +236,7 @@ EOF;
 		echo " => ";
 		echo print_r($value);
 		echo "<br>";
-	
+
 	}
 	*/
 }
@@ -273,13 +274,13 @@ function remarks_xml2php($langdata_path)
 	$handle = fopen($langdata_path."remarks.php", "w");
 	$string_data = <<<EOF
 <?php
-\$REMARKS_ARRAY = array ( 
-	
+\$REMARKS_ARRAY = array (
+
 EOF;
 	fwrite($handle, $string_data);
 
 	$measures = simplexml_load_file($langdata_path."remarks.xml");
-	
+
 	$measure_count = 0;
 	foreach($measures as $measure)
 	{
@@ -298,7 +299,7 @@ EOF;
 			}
 			fwrite($handle, "\t\t".$string_data."\n");
 		}
-		
+
 		$string_data = ") ";
 		fwrite($handle, "\t".$string_data);
 		if($measure_count < count($measures))
@@ -310,7 +311,7 @@ EOF;
 	$string_data = <<<EOF
 );
 
-require_once("../lang/lang_util.php");
+include_once("../lang/lang_util.php");
 ?>
 EOF;
 	fwrite($handle, "\n".$string_data);
@@ -382,7 +383,7 @@ EOF;
 </measures>
 
 EOF;
-	fwrite($handle, $string_data);	
+	fwrite($handle, $string_data);
 	fclose($handle);
 	DbUtil::switchRestore($saved_db);
 }

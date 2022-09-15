@@ -3,6 +3,7 @@
 # Functions for date calculations and date formatting
 #
 
+include_once("../lang/lang_util.php");
 
 class DateLib
 {

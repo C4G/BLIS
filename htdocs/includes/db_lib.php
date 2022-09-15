@@ -4,6 +4,7 @@
 # This file contains entity classes and functions for DB queries
 #
 
+include_once("../lang/lang_util.php");
 require_once('db_util.php');
 require_once('keymgmt.php');
 require_once('lab_config.php');
@@ -48,8 +49,8 @@ if(!isset($_SESSION['locale']))
 $locale_catalog_file = $_SESSION['langdata_path'].$_SESSION['locale']."_catalog.php";
 $locale_file = $_SESSION['langdata_path'].$_SESSION['locale'].".php";
 
-require_once($locale_catalog_file);
-require_once($locale_file);
+require_once(dirname(__FILE__)."/$locale_catalog_file");
+require_once(dirname(__FILE__)."/$locale_file");
 
 require_once("debug_lib.php");
 require_once("date_lib.php");

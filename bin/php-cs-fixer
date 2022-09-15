@@ -1,1 +1,5 @@
-../tools/php-cs-fixer/vendor/bin/php-cs-fixer
+#!/bin/bash
+
+PHP_CS_FIXER_PATH="$(dirname "$0")/../tools/php-cs-fixer/vendor/bin/php-cs-fixer"
+
+exec "$PHP_CS_FIXER_PATH" "${@}"

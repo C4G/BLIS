@@ -11,8 +11,13 @@ if ($_GET["role"]==="dir") {
     $f_pvt="$basedir/LAB_dir.blis";
     $f_pub="$basedir/LAB_dir_pubkey.blis";
 } else {
-    $f_pvt="$basedir/LAB_".$_SESSION['lab_config_id'].".blis";
-    $f_pub="$basedir/LAB_".$_SESSION['lab_config_id']."_pubkey.blis";
+    $lab_id = $_REQUEST["id"];
+    if (strlen($lab_id) == 0) {
+        $lab_id = $_SESSION['lab_config_id'];
+    }
+
+    $f_pvt="$basedir/LAB_".$lab_id.".blis";
+    $f_pub="$basedir/LAB_".$lab_id."_pubkey.blis";
 }
 
 

@@ -897,10 +897,6 @@ val=0;
 $('#btn_enc').val(l);
 $.get('../ajax/update_enc_setting.php?val='+val);
 }
-function download_key()
-{
-window.location.href="../ajax/download_key.php";
-}
 function edit_key(id)
 {
 alert("edit "+id);
@@ -4410,8 +4406,8 @@ function AddnewDHIMS2Config()
 <table border="0">
     <tr>
         <td><input id="btn_enc" style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="toggle_encryption()" value="<?php echo KeyMgmt::read_enc_setting()==0?LangUtil::$pageTerms['enable_encrypted_backup']:LangUtil::$pageTerms['disable_encrypted_backup']; ?>"/></td>
-        <td><input style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" onclick="download_key()" value="<?php echo LangUtil::$pageTerms['download_key']; ?>"/></td>
         <td><input style="font: 15px Calibri;cursor: pointer;border: none;color: green;" type="button" id="addbtn" onclick="add_key()" value="<?php echo LangUtil::$pageTerms['add_key']; ?>"/>
+		<td><a style="font: 15px Calibri;cursor: pointer;border: none;padding:2px;" type="button" href="../ajax/download_key.php?id=<?php echo($lab_config_id) ?>"><?php echo LangUtil::$pageTerms['download_key']; ?></a></td>
     </tr>
 </table>
 <br/>

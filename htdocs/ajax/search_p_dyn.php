@@ -4,16 +4,23 @@
 # Returns list of matched patients
 # Called via Ajax from /search.php
 #
-include("../includes/db_lib.php");
-include("../includes/script_elems.php");
-include("../includes/SessionCheck.php");
+require_once("../includes/db_lib.php");
+require_once("../includes/script_elems.php");
+require_once("../includes/SessionCheck.php");
+require_once("../includes/ajax_lib.php");
 LangUtil::setPageId("find_patient");
 
 $script_elems = new ScriptElems();
 //$script_elems->enableTableSorter();
 $saved_session = SessionUtil::save();
 $dynamic_fetch = 1;
-$search_settings = get_lab_config_settings_search();
+$lab_config_id = $_GET['lab_config_id'];
+if ($lab_config_id == "") {
+    // If the lab_config_id is not set in the URL,
+    // use the ID from the session, if there is one
+    $lab_config_id = $_SESSION['lab_config_id'];
+}
+$search_settings = get_lab_config_settings_search($lab_config_id);
 $rcap = $search_settings['results_per_page'];
 ?>
 <style type="text/css">
@@ -36,13 +43,13 @@ width:100%;
 border-collapse:collapse;
 table-layout:inherit
 }
-.customers td, .customers th 
+.customers td, .customers th
 {
 font-size:1em;
 border:1px solid #98bf21;
 padding:3px 7px 2px 7px;
 }
-.customers th 
+.customers th
 {
 font-size:1.1em;
 text-align:left;
@@ -51,7 +58,7 @@ padding-bottom:4px;
 background-color:#A7C942;
 color:#ffffff;
 }
-.customers tr.alt td 
+.customers tr.alt td
 {
 color:#000000;
 background-color:#EAF2D3;
@@ -184,7 +191,7 @@ background-color:#EAF2D3;
     clear: both;
 }
 
-#patient_search_results thead th { 
+#patient_search_results thead th {
     height: 30px;
     line-height: 30px;
 }
@@ -221,10 +228,10 @@ background-color:#EAF2D3;
         url_string = 'ajax/get_result_count.php?a='+'<?php echo $_REQUEST['a']; ?>'+'&q='+'<?php echo $_REQUEST['q']; ?>'+'&labsection='+lab_section+'&c=<?php echo $_REQUEST['c']; ?>';
         var cap = parseInt($('#rcap').html());
         //console.log(cap);
-         $('.prev_link').hide();	
+         $('.prev_link').hide();
 		//alert(cap);
-        $.ajax({ 
-		url: url_string, 
+        $.ajax({
+		url: url_string,
                 async : false,
 		success: function(count){
 					//alert(count);
@@ -257,13 +264,13 @@ background-color:#EAF2D3;
                                 else
                                     var max_pages = parseInt(icount / cap) + 1;
                                  $('#page_counts').html('1/' + max_pages + ' Page');
-								 
+
                                  $('#mpage').html(max_pages);
                                 $('#tot').html(count);
                                 var rem = icount - cap;
                                 $('#rem').html(rem);
                         }
-                    
+
 
                }
 	});
@@ -272,37 +279,37 @@ background-color:#EAF2D3;
 
 function get_next(url, sno, cap)
 {
-    var page = parseInt($('#page').html()); 
+    var page = parseInt($('#page').html());
     page = page + 1;
     $('#page').html(page);
     var rem = parseInt($('#rem').html());
     var tot = parseInt($('#tot').html());
     var cap = parseInt($('#rcap').html());
-	rem = rem -  cap; 
+	rem = rem -  cap;
 	$('#rem').html(rem);
     var mpage = parseInt($('#mpage').html());
-    
+
     var displayed = tot - rem;
-    
+
     if(displayed > tot)
         displayed = tot;
     $('#page_counts').html(page + '/' + mpage + ' Page');
-    
-    $('.prev_link').hide();    
+
+    $('.prev_link').hide();
     $('.next_link').hide();
     url = url + '&rem=' + rem;
     var div_name = 'resultset'+sno;
     var html_content = "<div id='"+div_name+"'</div>";
     //$('#data_table').html(html_content);
     $('#data_table').load(url);
-}   
+}
 
 function get_prev(url, sno, cap)
 {
-    var page = parseInt($('#page').html()); 
+    var page = parseInt($('#page').html());
     page = page - 1;
     $('#page').html(page);
-    var rem = parseInt($('#rem').html()); 
+    var rem = parseInt($('#rem').html());
     var tot = parseInt($('#tot').html());
     var cap = parseInt($('#rcap').html());
     var mpage = parseInt($('#mpage').html());
@@ -393,7 +400,7 @@ if($a == 0)
         {
             $patient_list = search_patients_by_id_dyn($q, $result_cap, $result_counter, $lab_section);
         }
-        
+
 }
 else if($a == 1)
 {
@@ -408,7 +415,7 @@ else if($a == 1)
         	//echo "Fetch By Name section is ".$lab_section;
             $patient_list = search_patients_by_name_dyn($q, $result_cap, $result_counter, $c, $lab_section);
         }
-	//DB Merging - Currently Disabled 
+	//DB Merging - Currently Disabled
 	# See if there's a patient by the exact same name in another lab
 	//$patient = searchPatientByName($q);
 	/*if($patient != null) {
@@ -466,7 +473,7 @@ if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null
 		echo " ".LangUtil::$generalTerms['NAME']." ";
 	else if($a == 2)
 		echo " ".LangUtil::$generalTerms['ADDL_ID']." ";
-	
+
                 if($a == 9)
                 {
                     echo 'Try searching by Patient Name';
@@ -490,13 +497,13 @@ if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null
 	SessionUtil::restore($saved_session);
 	return;
 }
-//DB Merging - Currently disabled 
+//DB Merging - Currently disabled
 else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient != null) ) {
 	?>
 	<br>
 	<div class='sidetip_nopos'>
 	<?php
-		echo "A record of the patient has been found in another hospital.<br><br>"; 
+		echo "A record of the patient has been found in another hospital.<br><br>";
 	?>
             </div>
 		<a rel='facebox' href='viewPatientInfo.php?pid=<?php echo $patient->patientId; ?>&type=national'>View Patient Info>></a><br>
@@ -521,10 +528,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					} else {
 						$("#target_div_id_del").html("Patient cannot be Retrieved");
 					}
-					
+
 				}
-			}); 
-			
+			});
+
 		}
 
 		</script>
@@ -553,10 +560,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			}
 			?>
 			<?php  #TODO: Add check if user has patient name/private data access here ?>
-                        
+
 			<th><?php echo LangUtil::$generalTerms['NAME']; ?></th>
 			<th><?php echo LangUtil::$generalTerms['GENDER']; ?></th>
-                        
+
                         <?php
 			if($lab_config->age >= 11)
 			{
@@ -564,7 +571,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				<th><?php echo LangUtil::$generalTerms['AGE']; ?></th>
 				<?php
 			}?>
-			
+
                         <?php
 			if(strpos($_SERVER["HTTP_REFERER"], "search.php") !== false)
 			{
@@ -572,12 +579,12 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				echo "<th>".LangUtil::$generalTerms['SP_STATUS']."</th>";
 			}
 			?>
-			<?php 
+			<?php
 			$user = get_user_by_id($_SESSION['user_id']);
 			$rwopts = explode(",", $user->rwoptions);
 			if (in_array("51", $rwopts) || in_array("2", $rwopts) || in_array("3", $rwopts) || in_array("4", $rwopts) || in_array("6", $rwopts) || in_array("7", $rwopts)) {
 				echo "<th></th>";
-			} 
+			}
 			if (in_array("52", $rwopts) || in_array("2", $rwopts) || in_array("3", $rwopts) || in_array("4", $rwopts) || in_array("6", $rwopts) || in_array("7", $rwopts)) {
 				echo "<th></th>";
 			}
@@ -655,7 +662,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				</td>
 				<?php
 			}?>
-                        
+
 			<?php
 			if(strpos($_SERVER["HTTP_REFERER"], "search.php") !== false)
 			{
@@ -681,7 +688,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			}
 			?>
 			<td>
-				<?php 
+				<?php
 				if(strpos($_SERVER["HTTP_REFERER"], "find_patient.php") !== false || strpos($_SERVER["HTTP_REFERER"], "doctor_register.php") !== false)
 				{
 					# Called from find_patient.php. Show 'profile' and 'register specimen' link
@@ -696,7 +703,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					# Called from reports.php. Show 'Test History' link
 					# Default to today for date range
 					$today = date("Y-m-d");
-					$today_parts = explode("-", $today);    
+					$today_parts = explode("-", $today);
 					$url_string = "reports_testhistory.php?patient_id=".$patient->patientId."&location=".$_REQUEST['l']."&yf=".$today_parts[0]."&mf=".$today_parts[1]."&df=".$today_parts[2]."&yt=".$today_parts[0]."&mt=".$today_parts[1]."&dt=".$today_parts[2]."&ip=0"."&labsection=".$lab_section;
 					$billing_url_string = "reports_billing.php?patient_id=".$patient->patientId."&location=".$_REQUEST['l']."&yf=".$today_parts[0]."&mf=".$today_parts[1]."&df=".$today_parts[2]."&yt=".$today_parts[0]."&mt=".$today_parts[1]."&dt=".$today_parts[2]."&ip=0"."&labsection=".$lab_section;
 
@@ -704,7 +711,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					<a href='<?php echo $url_string; ?>' title='Click to View Report for this Patient' target='_blank'><?php echo LangUtil::$generalTerms['CMD_VIEW']; ?> Report</a>
 					</td>
 					<td>
-					
+
 					<?php $user = get_user_by_id($_SESSION['user_id']);
 					$rw_option = array();
 					$rw_option = explode(",",$user->rwoptions);
@@ -712,42 +719,42 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 						 if (in_array("51", $rw_option) || in_array("2", $rw_option) || in_array("3", $rw_option) || in_array("4", $rw_option) || in_array("6", $rw_option) || in_array("7", $rw_option)) {
 					?>
 					<a href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>&labsection=<?php echo $lab_section?>' title='Click to View Patient Profile'>Select Tests</a>
-					<?php } 
+					<?php }
 					} else {?>
 						<a href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>&labsection=<?php echo $lab_section?>' title='Click to View Patient Profile'>Select Tests</a>
 					<?php }?>
 										</td>
                                         <td <?php (is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none'")) ?> >
-                    <?php          
+                    <?php
                     if($user->level == 16){
 						 if (in_array("52", $rw_option) || in_array("2", $rw_option) || in_array("3", $rw_option) || in_array("4", $rw_option) || in_array("6", $rw_option) || in_array("7", $rw_option)) {
 					?>
 			               <a  target='_blank' href=<?php echo $billing_url_string; ?> title='Click to generate a bill for this patient'>Generate Bill</a>
-					<?php } 
+					<?php }
 					} else {?>
 			               <a  target='_blank' href=<?php echo $billing_url_string; ?> title='Click to generate a bill for this patient'>Generate Bill</a>
-					<?php }?>          
-    		                              </td>                                      
-					<td>					
+					<?php }?>
+    		                              </td>
+					<td>
 					<?php
 				}
 				else
 				{
 					# Called from search.php. Show only 'profile' link
 					?>
-					
+
 					<a href='patient_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'><?php echo LangUtil::$pageTerms['CMD_VIEWPROFILE']; ?></a>
-					
+
 					</td><td>
 					<?php
 				}
 				?>
 			</td>
-			
+
 			<?php if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
-				
+
 			?>
-				<?php 
+				<?php
 				if(check_removal_record($_SESSION['lab_config_id'], $patient->patientId, "patient")){ ?>
 						<td><a href='javascript:retrieve_deleted(<?php echo $patient->patientId;?>, "patient")' title="Click to Retrieve the deleted patient" >Retrieve</a></td>
 			<?php } else {?>
@@ -760,31 +767,31 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 	?>
 	</tbody>
 </table>
-    <?php 
+    <?php
         if(isset($_REQUEST['l']))
-        { 
-            $next_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter + 1); 
+        {
+            $next_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter + 1);
         }
         else
         {
-            $next_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&result_cap=".$result_cap."&result_counter=".($result_counter + 1);             
+            $next_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&result_cap=".$result_cap."&result_counter=".($result_counter + 1);
         }
         if(isset($_REQUEST['l']))
-        { 
-            $prev_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1); 
+        {
+            $prev_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&l=".$_REQUEST['l']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1);
         }
         else
         {
-            $prev_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1);             
+            $prev_link = "../ajax/patient_data_page.php?q=".$_REQUEST['q']."&a=".$_REQUEST['a']."&c=".$_REQUEST['c']."&result_cap=".$result_cap."&result_counter=".($result_counter - 1);
         }
     ?>
-<div class="prev_link">                       
+<div class="prev_link">
      <small><a onclick="javascript:get_prev('<?php echo $prev_link; ?>', '<?php echo $result_counter - 1; ?>', '<?php echo $result_cap; ?>');">&lt;&nbsp;Previous&nbsp;</a></small>
 </div>
-<div class="next_link">                
+<div class="next_link">
      <small><a onclick="javascript:get_next('<?php echo $next_link; ?>', '<?php echo $result_counter + 1; ?>', '<?php echo $result_cap; ?>');">&nbsp;Next&nbsp&nbsp;&gt;</a></small>
 </div>
-</div>                
+</div>
 </div>
 <?php
 # Switch back context

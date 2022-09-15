@@ -15,12 +15,20 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         htop \
         mysql-client \
         p7zip \
+        python3-pip \
+        rubocop \
+        ruby \
+        ruby-dev \
+        ruby-bundler \
+        ruby-byebug \
+        ruby-graphviz \
         shellcheck \
         software-properties-common \
         sudo \
         tmux \
         unzip \
-        vim
+        vim \
+        zip
 
 # PPAs - additional software from questionable sources go here...
 # Namely, pulling in PHP 5.6 here from a repo
@@ -34,6 +42,8 @@ RUN add-apt-repository ppa:ondrej/php && apt-get update && \
         php5.6-zip \
         php5.6-mbstring \
         php5.6-xml
+
+RUN pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin
 
 RUN echo "column-statistics = 0" | tee -a /etc/mysql/conf.d/mysqldump.cnf
 
@@ -54,9 +64,13 @@ COPY docker/bin/start-blis.sh /usr/bin/
 # Also add the www-data user to the adm group so we can view some logs
 RUN groupadd vscode && \
     useradd -m -s /bin/bash -g vscode vscode && \
+    # add vscode to admin groups to see logs and get sudo access
     usermod -aG sudo vscode && \
     usermod -aG adm vscode && \
+    # add vscode to www-data group so we can edit webserver stuff
     usermod -aG www-data vscode && \
+    # add www-data to vscode group so it can edit files (write logs, files)
+    usermod -aG vscode www-data && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER vscode
 WORKDIR /workspace

@@ -10,6 +10,8 @@ $script_elems->enableDatePicker();
 $script_elems->enableJQueryForm();
 $script_elems->enableTableSorter();
 db_get_current();
+
+$lab_config_id = $_SESSION['lab_config_id'];
 ?>
 
     <div class='reports_subdiv_help' id='reports_div_help' style='display:none'>
@@ -1478,13 +1480,15 @@ alert(dd_to);
 
         function search_patient_history()
         {
+            var superuser = <?php echo (is_super_admin(get_user_by_id($_SESSION["user_id"])) ? 'true' : 'false'); ?>;
             var location = $("#location8").attr("value");
             var search_attrib = $('#p_attrib').attr("value");
             var condition_attrib = $('#h_attrib').attr("value");
             var pid = $('#patient_id8').attr("value");
+            var lid = $('#lab_config_id8').attr("value");
             // alert(location);
             // alert("hello");
-            if(pid == "")
+            if(pid == "" || (superuser && lid == ""))
             {
                 alert("<?php echo LangUtil::$generalTerms['TIPS_INCOMPLETEINFO']; ?>");
                 return;
@@ -1492,7 +1496,7 @@ alert(dd_to);
             var cat_code =  $('#cat_code_patient_report').attr("value");
             //alert(cat_code);
             $('#test_history_progress_spinner').show();
-            var url = 'ajax/search_p_dyn.php';
+            var url = 'ajax/search_p_dyn.php?lab_config_id=' + lid;
             //alert(search_attrib+" "+condition_attrib);
             $("#phistory_list").load(url,
                 {q: pid, a: search_attrib, l: location, lab_section : cat_code, c: condition_attrib },
@@ -1874,7 +1878,8 @@ alert(dd_to);
             <td id='left_pane' width='200px'>
                 <?php
                 $site_list = get_site_list($_SESSION['user_id']);
-                if ( !is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) ) {
+                $user = get_user_by_id($_SESSION['user_id']);
+                if ( !is_country_dir($user) ) {
                     echo LangUtil::$pageTerms['MENU_DAILY']; ?>
                     <ul>
                         <!--
@@ -3385,6 +3390,29 @@ alert(dd_to);
                                     </select>
                                 </td>
                             </tr>
+                            <?php
+                                $current_user_id = $_SESSION['user_id'];
+                                $current_user = get_user_by_id($current_user_id);
+                                if (is_super_admin($current_user)) {
+                                    $labs = get_lab_configs($current_user_id);
+                            ?>
+                                <tr>
+                                    <td><?php echo LangUtil::$generalTerms['LOCATION']; ?> &nbsp;&nbsp;&nbsp;</td>
+                                    <td>
+                                        <select name="lab_config_id8" id="lab_config_id8" form="test_history_form" class='uniform_width'>
+                                        <?php
+                                            foreach($labs as $lab) {
+                                                $c_lab_id = $lab->id;
+                                                $c_lab_name = $lab->name;
+                                                echo "<option value='$c_lab_id'>$c_lab_name</option>";
+                                            }
+                                        ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                            <?php
+                                }
+                            ?>
                             <tr>
                                 <td></td>
                                 <td>
