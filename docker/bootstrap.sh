@@ -53,3 +53,10 @@ cd "$SETUP_DIR" || exit 1
 
 echo -e "\n--> Done downloading BLIS!"
 
+if [[ "$USER" != "root" ]]; then
+    echo -e "--> Adding $USER to docker group..."
+    sudo usermod -aG docker "$USER"
+    echo -e "\n--> Please log out and log back in to this server to continue."
+fi
+
+
