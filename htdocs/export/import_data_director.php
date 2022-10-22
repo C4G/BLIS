@@ -96,7 +96,7 @@ if ($file_name_and_extension[1]=="zip") {
                 $command = "C: &".$command;
             }
 
-            $pvt=dirname(__FILE__)."/../ajax/LAB_dir.blis";
+            $pvt = KeyMgmt::pathToKey("LAB_dir.blis");
             if ($is_encrypted) {
                 if (file_exists($pvt)) {
                     $decryptedFile = decryptFile($fileName, $pvt);
@@ -128,7 +128,7 @@ if ($file_name_and_extension[1]=="zip") {
             $command = "C: &".$command;
         }
 
-        $pvt=dirname(__FILE__)."/../ajax/LAB_dir.blis";
+        $pvt = KeyMgmt::pathToKey("LAB_dir.blis");
         if ($is_encrypted) {
             if (file_exists($pvt)) {
                 $decryptedFile = decryptFile($fileName, $pvt);
