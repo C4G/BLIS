@@ -19,7 +19,6 @@ services:
       - db
     volumes:
       - blis-files:/var/www/blis/files
-      - blis-backup:/var/www/blis/htdocs/export
       - blis-apache2:/etc/apache2/sites-available
       - blis-letsencrypt:/etc/letsencrypt
     ports:
@@ -42,4 +41,3 @@ volumes:
   blis-files:
   blis-apache2:
   blis-letsencrypt:
-  blis-backup:
