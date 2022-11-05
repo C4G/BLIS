@@ -28,7 +28,7 @@ if (!file_exists($f_pvt) || !file_exists($f_pub)) {
 }
 
 header('Content-Type: application/force-download');
-header("Content-Disposition: attachment; filename=\"" . basename($f_pub) . "\";");
+header("Content-Disposition: attachment; filename=\"" .basename($f_pub) . "\";");
 header('Content-Transfer-Encoding: binary');
 header('Expires: 0');
 header('Cache-Control: must-revalidate');

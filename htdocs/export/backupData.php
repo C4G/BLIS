@@ -16,6 +16,7 @@ if ($SERVER == $ON_ARC) {
 $user = get_user_by_id($_SESSION['user_id']);
 $lab_config_id = $user->labConfigId;
 $request_lab_config_id = $_REQUEST['labConfigId'];
+$log->debug("[Lab config vars] $_SESSION, $_REQUEST");
 if ($lab_config_id != $request_lab_config_id) {
     echo "You do not have permission to back up lab #$request_lab_config_id!";
     return;
@@ -30,6 +31,8 @@ if ($encryption_enabled) {
         // A new key is uploaded
         $pkey_alias = $_POST['pkey_alias'];
         $pkey_contents = file_get_contents($_FILES['pkey']['tmp_name']);
+        $pkey_contents = substr($pkey_contents, ($pos = strpos($pkey_contents, '-')) !== false ? $pos : 0);
+        $log->debug("Position of - : $pos, Public key contents trimmed: $pkey_contents");
         $res = KeyMgmt::add_key_mgmt(KeyMgmt::create($pkey_alias, $pkey_contents, $user->userId));
         $log->info("Uploading $pkey_alias: $res");
         $keyContents = $pkey_contents;
@@ -48,6 +51,9 @@ if ($encryption_enabled) {
         // a specific key in the database was requested
         $key = KeyMgmt::getByID($keySelection);
         $keyContents = $key->PubKey;
+        $log->debug("Public key contents before trim: $keyContents");
+        $keyContents = substr($keyContents, ($pos = strpos($keyContents, '-')) !== false ? $pos : 0);
+        $log->debug("Position of - : $pos, Public key contents trimmed: $keyContents");
     }
 }
 

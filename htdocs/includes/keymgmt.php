@@ -99,6 +99,7 @@ class KeyMgmt
 
     public static function add_key_mgmt($keyMgmt)
     {
+        global $log;
         $saved_db = DbUtil::switchToGlobal();
         $query_check = "SELECT count(*) as cnt from keymgmt where lab_name='".$keyMgmt->LabName."'";
         $record = query_associative_one($query_check);
@@ -107,6 +108,7 @@ class KeyMgmt
         }
         $query="insert into keymgmt(lab_name,pub_key,added_by,last_modified) values('";
         $query=$query.$keyMgmt->LabName."','".$keyMgmt->PubKey."',".$keyMgmt->AddedBy.",now())";
+        $log->debug("Adding public key: $keyMgmt->PubKey");
         query_insert_one($query);
         DbUtil::switchRestore($saved_db);
         return "Key added successfully";

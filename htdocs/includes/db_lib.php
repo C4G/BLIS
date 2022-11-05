@@ -7622,7 +7622,7 @@ function get_specimens_by_session($session_num)
 * Checks if an administrator is present. If not, adds administrator to users table and returns id
 */
 function checkAndAddAdmin($adminName, $labConfigId, $dev=0) {
-	global $con;
+	global $con, $log;
 	$labConfigId = mysql_real_escape_string($labConfigId, $con);
 	$saved_db = DbUtil::switchToGlobal();
 	if($dev == 0)
@@ -7633,6 +7633,7 @@ function checkAndAddAdmin($adminName, $labConfigId, $dev=0) {
 					FROM user a WHERE a.lab_config_id = $labConfigId";
 
 	$record = query_associative_one($query_check);
+	$log->debug("Record found in check admin query $record for LabConfigId $labConfigId");
 
 	if($record) {
 		DbUtil::switchRestore($saved_db);
