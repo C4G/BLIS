@@ -31,8 +31,6 @@ if ($encryption_enabled) {
         // A new key is uploaded
         $pkey_alias = $_POST['pkey_alias'];
         $pkey_contents = file_get_contents($_FILES['pkey']['tmp_name']);
-        $pkey_contents = substr($pkey_contents, ($pos = strpos($pkey_contents, '-')) !== false ? $pos : 0);
-        $log->debug("Position of - : $pos, Public key contents trimmed: $pkey_contents");
         $res = KeyMgmt::add_key_mgmt(KeyMgmt::create($pkey_alias, $pkey_contents, $user->userId));
         $log->info("Uploading $pkey_alias: $res");
         $keyContents = $pkey_contents;
