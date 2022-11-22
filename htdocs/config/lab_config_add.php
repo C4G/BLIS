@@ -27,12 +27,12 @@ $blocation = $_REQUEST['blocation'];
 $itests = $_REQUEST['itest'];
 global $labIdArray;
 $count = 0;
-foreach($labIdArray as $key => $value) {
-	if(strcmp($key, $country) == 0 ) {
-		$count = $value;
-		break;
-	}
-}
+// foreach($labIdArray as $key => $value) {
+// 	if(strcmp($key, $country) == 0 ) {
+// 		$count = $value;
+// 		break;
+// 	}
+// }
 
 /*
 $master_test_list = get_test_types_catalog(true);
@@ -57,13 +57,26 @@ $lab_config->specimenList = $selected_specimen_list;
 
 $lab_config->idMode = $_REQUEST['id_mode'];
 $saved_db = DbUtil::switchToGlobal();
-$query = "SELECT country from lab_config";
+
+$query = "SELECT lab_config_id from lab_config";
 $records = query_associative_all($query);
+$inds = array();
 foreach($records as $record) {
-	if ( strcmp($record['country'], $country) == 0 ) 
-		$count++;
+	$inds[] = $record['lab_config_id'];
 }
-$count++;
+sort($inds);
+$elems = count($inds);
+$count = $elems + 2;
+for($i=1;$i<=$elems;$i++){
+	if($inds[$i] != $i) {
+		$count = $i;
+		break;
+	}
+}
+$log->debug('Found lab ids: '.print_r($inds));
+$log->debug('New lab in: $count');
+
+
 DbUtil::switchRestore($saved_db);
 /*
 $query_string = "show databases";
