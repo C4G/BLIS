@@ -185,6 +185,8 @@ if ($file_name_and_extension[1]=="zip") {
         }
         $lab_config->name = $labName;
         $lab_config->id = $lid;
+        $lab_config->db_name = 'blis_'.$lid;        
+
         add_lab_config($lab_config, $dev);
 
         #the following code adds user id of the admin for imported lab and the lab id are added to lab_access_config table of the revamp db
