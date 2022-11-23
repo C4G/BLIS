@@ -65,16 +65,16 @@ foreach($records as $record) {
 	$inds[] = $record['lab_config_id'];
 }
 sort($inds);
+$log->debug('Found lab ids: '.print_r($inds, 1));
 $elems = count($inds);
 $count = $elems + 2;
-for($i=1;$i<=$elems;$i++){
-	if($inds[$i] != $i) {
-		$count = $i;
+for($i=0;$i<=$elems;$i++){
+	if($inds[$i] != $i+1) {
+		$count = $i+1;
 		break;
 	}
 }
-$log->debug('Found lab ids: '.print_r($inds));
-$log->debug('New lab in: $count');
+$log->debug("New lab in: $count");
 
 
 DbUtil::switchRestore($saved_db);
