@@ -7688,8 +7688,8 @@ function add_lab_config($lab_config, $dev=0)
 		#This branch is taken when a new lab is created by a country director
 		# Adds a new lab configuration to DB
 		$query_add_lab_config =
-			"INSERT INTO lab_config(`name`, `location`, admin_user_id, id_mode, lab_config_id, country) ".
-			"VALUES ('$lab_config->name', '$lab_config->location', $lab_config->adminUserId, $lab_config->idMode, '$lab_config->id', '$lab_config->country')";
+			"INSERT INTO lab_config(`name`, `location`, admin_user_id, `db_name`, id_mode, lab_config_id, country) ".
+			"VALUES ('$lab_config->name', '$lab_config->location', $lab_config->adminUserId, '$lab_config->db_name', $lab_config->idMode, '$lab_config->id', '$lab_config->country')";
 		query_insert_one($query_add_lab_config);
 	}
 	else if($dev == 1  && ($record == false)){
@@ -7697,8 +7697,8 @@ function add_lab_config($lab_config, $dev=0)
 		# This branch is taken when an entry for lab in the config param doesn't exist in revamp db
 		# (for devs importing lab backups using country director's interface)
 		$query_add_lab_config =
-			"INSERT INTO lab_config(admin_user_id, lab_config_id, `name`) ".
-			"VALUES ($lab_config->adminUserId, $lab_config->id, '$lab_config->name')";
+			"INSERT INTO lab_config(admin_user_id, lab_config_id, `name`, `db_name`) ".
+			"VALUES ($lab_config->adminUserId, $lab_config->id, '$lab_config->name', '$lab_config->db_name')";
 		query_insert_one($query_add_lab_config);
 	}
 	else if($dev == 1 && (intval($record['admin_user_id']) != intval($lab_config->adminUserId))){

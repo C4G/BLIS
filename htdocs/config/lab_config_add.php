@@ -92,11 +92,13 @@ $count++;
 $lab_config_id = $lab_config->country."_".$count;
 */
 $lab_config_id = $count;
+$db_name = "blis_".$lab_config_id;
 $lab_config->id = $lab_config_id;
 $lab_admin_id = checkAndAddAdmin($lab_admin, $lab_config_id);
 checkAndAddUserConfig($lab_admin_id);
 # Link admin user id to session variable of selection box value
 $lab_config->adminUserId = $lab_admin_id;
+$lab_config->db_name = $db_name;
 # Add new lab configuration entry to DB
 add_lab_config($lab_config);
 $saved_config_id = $lab_config_id;
@@ -105,8 +107,6 @@ if(is_country_dir($user))
 	add_lab_config_access($_SESSION['user_id'], $lab_config_id);
 
 //$revamp_db_name = "blis_revamp_".$lab_config_id;
-
-$db_name = "blis_".$lab_config_id;
 
 set_lab_config_db_name($lab_config_id, $db_name);
 
