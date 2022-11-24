@@ -27,12 +27,12 @@ $blocation = $_REQUEST['blocation'];
 $itests = $_REQUEST['itest'];
 global $labIdArray;
 $count = 0;
-foreach($labIdArray as $key => $value) {
-	if(strcmp($key, $country) == 0 ) {
-		$count = $value;
-		break;
-	}
-}
+// foreach($labIdArray as $key => $value) {
+// 	if(strcmp($key, $country) == 0 ) {
+// 		$count = $value;
+// 		break;
+// 	}
+// }
 
 /*
 $master_test_list = get_test_types_catalog(true);
@@ -57,13 +57,26 @@ $lab_config->specimenList = $selected_specimen_list;
 
 $lab_config->idMode = $_REQUEST['id_mode'];
 $saved_db = DbUtil::switchToGlobal();
-$query = "SELECT country from lab_config";
+
+$query = "SELECT lab_config_id from lab_config";
 $records = query_associative_all($query);
+$inds = array();
 foreach($records as $record) {
-	if ( strcmp($record['country'], $country) == 0 ) 
-		$count++;
+	$inds[] = $record['lab_config_id'];
 }
-$count++;
+sort($inds);
+$log->debug('Found lab ids: '.print_r($inds, 1));
+$elems = count($inds);
+$count = $elems + 2;
+for($i=0;$i<=$elems;$i++){
+	if($inds[$i] != $i+1) {
+		$count = $i+1;
+		break;
+	}
+}
+$log->debug("New lab in: $count");
+
+
 DbUtil::switchRestore($saved_db);
 /*
 $query_string = "show databases";
@@ -79,11 +92,13 @@ $count++;
 $lab_config_id = $lab_config->country."_".$count;
 */
 $lab_config_id = $count;
+$db_name = "blis_".$lab_config_id;
 $lab_config->id = $lab_config_id;
 $lab_admin_id = checkAndAddAdmin($lab_admin, $lab_config_id);
 checkAndAddUserConfig($lab_admin_id);
 # Link admin user id to session variable of selection box value
 $lab_config->adminUserId = $lab_admin_id;
+$lab_config->db_name = $db_name;
 # Add new lab configuration entry to DB
 add_lab_config($lab_config);
 $saved_config_id = $lab_config_id;
@@ -92,8 +107,6 @@ if(is_country_dir($user))
 	add_lab_config_access($_SESSION['user_id'], $lab_config_id);
 
 //$revamp_db_name = "blis_revamp_".$lab_config_id;
-
-$db_name = "blis_".$lab_config_id;
 
 set_lab_config_db_name($lab_config_id, $db_name);
 

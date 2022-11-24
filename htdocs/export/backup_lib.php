@@ -54,6 +54,7 @@ class BackupLib
         $output = system($command, $result);
 
         if ($result == 0) {
+            $log->debug("Successfully dumped MySQL database; command: $command, code $result, output:\n $output");
             return $backupFilename;
         } else {
             $log->error("Could not dump MySQL database; command: $command, err code $result, output:\n $output");
@@ -280,7 +281,6 @@ class BackupLib
                 $log->error(openssl_error_string());
                 return;
             }
-
             $encrypted_backup = "$backup_dir/$lab_db/$lab_db"."_backup.sql.enc";
             $encrypted_backup_key = "$backup_dir/$lab_db/$lab_db"."_backup.sql.key";
             self::encryptFile($plaintext_backup, $server_public_key, $encrypted_backup, $encrypted_backup_key);

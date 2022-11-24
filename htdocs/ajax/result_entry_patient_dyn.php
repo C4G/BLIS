@@ -27,7 +27,7 @@ if(isset($_REQUEST['labsec']))
 
 
 $dynamic = 1;
-$search_settings = get_lab_config_settings_search();
+$search_settings = get_lab_config_settings_search($_SESSION['lab_config_id']);
 $rcap = $search_settings['results_per_page'];
 $lab_config = LabConfig::getById($_SESSION['lab_config_id']);
 $uiinfo = "op=".$_REQUEST['a']."&qr=".$_REQUEST['t'];
