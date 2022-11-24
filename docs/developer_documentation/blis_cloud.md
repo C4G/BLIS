@@ -117,7 +117,7 @@ You will need to add the `BLIS_SERVER_NAME` to the `docker-compose.yml` configur
 services:
   app:
     # This image is automatically built and pushed from the GitHub action in .github/workflows/ folder
-    image: "ghcr.io/C4G/blis:pbajjuri_test"
+    image: "ghcr.io/C4G/blis:latest"
     environment:
       DB_HOST: 'db'
       DB_PORT: '3306'

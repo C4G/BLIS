@@ -3,10 +3,10 @@ name: Build Docker Release Images
 on:
   workflow_dispatch:
     branches:
-      - 'pbajjuri_branch'
+      - 'master'
   push:
     branches:
-      - 'pbajjuri_branch'
+      - 'master'
 
 jobs:
   ghcr_io:
@@ -34,5 +34,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/c4g/blis:pbajjuri_test
+            ghcr.io/c4g/blis:latest
 

@@ -40,7 +40,7 @@ fi
 cd "$SETUP_DIR" || exit 1
 
 echo -e "--> Downloading docker-compose.yml..."
-curl -s "https://raw.githubusercontent.com/C4G/BLIS/pbajjuri_branch/docker/docker-compose.yml" > docker-compose.yml
+curl -s "https://raw.githubusercontent.com/C4G/BLIS/master/docker/docker-compose.yml" > docker-compose.yml
 
 echo -e "--> Downloading database seed files..."
 if [[ ! -d database ]]; then
