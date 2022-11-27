@@ -16,6 +16,6 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
-      - run: apt-get install weasyprint
+      - run: sudo apt-get install -y weasyprint
       - run: pip install mkdocs-material mkdocs-git-revision-date-plugin mkdocs-with-pdf
       - run: mkdocs gh-deploy --force
