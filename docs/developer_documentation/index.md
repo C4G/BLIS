@@ -33,17 +33,17 @@ Depending on your computer OS, there will be different step to setup git. You ca
     On Windows, installing command-line tools can be done with a Windows package manager such as [Scoop](https://scoop.sh/).
     On MacOS or Linux systems, installing tools can be done with package manager [brew](https://brew.sh/).
 
-1. VScode  
-For IDE, we recommended using [VSCode](https://code.visualstudio.com/docs/setup/setup-overview), which is a lightweight, opensource IDE.   
-VSCode-Extension recommended to install:      
+1. VScode
+For IDE, we recommended using [VSCode](https://code.visualstudio.com/docs/setup/setup-overview), which is a lightweight, opensource IDE.
+VSCode-Extension recommended to install:
 
     - [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
     - [Remote-WSL](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl)
     - [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
     - [Docker-compose](https://marketplace.visualstudio.com/items?itemName=p1c2u.docker-compose)
 
-2. Docker  
-We will need [Docker](https://www.docker.com/) as the major tool in the development cycle.  
+2. Docker
+We will need [Docker](https://www.docker.com/) as the major tool in the development cycle.
 
 With the Docker application running, after installing the `Remote-Containers` and related extensions, we will be able to start the [devcontainer](https://code.visualstudio.com/docs/remote/create-dev-container) which has been setup under `/root/.devcontainer` directory.
 
@@ -65,17 +65,17 @@ A quick way to test the dependencies installed correctly is:
 
 1. Open the folder in Visual Studio Code
 
-1. A pop-up that says something like "This folder contains a devcontainer configuration" will appear. Click the button to open the folder in a container.    
- 
-1. If that does not appear, open the command palette (Ctrl-Shift-P or Cmd-Shift-P) and find "Open folder in container" and select the BLIS folder.   
+1. A pop-up that says something like "This folder contains a devcontainer configuration" will appear. Click the button to open the folder in a container.
+
+1. If that does not appear, open the command palette (Ctrl-Shift-P or Cmd-Shift-P) and find "Open folder in container" and select the BLIS folder.
     <img src="../../images/dev_guide/remote-containers-step1.png" width="100%"/>
 
-1. Once the container is started, the ports should forward automatically. You can see apache2 running if you click the "Ports" tab on the bottom (if the bottom panel is not open, use Ctrl-` (backtick) to open it)     
+1. Once the container is started, the ports should forward automatically. You can see apache2 running if you click the "Ports" tab on the bottom (if the bottom panel is not open, use Ctrl-` (backtick) to open it)
 
-    In this plot, you can see the terminal output, where the apache servers starts.    
+    In this plot, you can see the terminal output, where the apache servers starts.
     <img src="../../images/dev_guide/container-terminal.png" width="100%"/>
 
-    In this plot, you can see the port, click the little earth button and then it will take you to the local hosted BLIS instance.    
+    In this plot, you can see the port, click the little earth button and then it will take you to the local hosted BLIS instance.
     <img src="../../images/dev_guide/remote-container-ports.png" width="100%"/>
 
 1. You can then browse BLIS in your normal browser by visiting http://localhost:80 (substituting 80 for another port, depending on what port VS Code has mapped to apache2.)
@@ -178,7 +178,7 @@ As for the `composer.json` and `composer.lock` file, you can refer to [this docu
 And the `vendor` directory is where the specified packages installed.
 
 ### Source code directories
-After going through the developer tools directories, you will find one few files/directories left. 
+After going through the developer tools directories, you will find one few files/directories left.
 ```bash
 ├── API_documentation.txt
 ├── Update_Instructions.txt
@@ -187,7 +187,7 @@ After going through the developer tools directories, you will find one few files
 ├── local
 ├── update_C4GBLIS_v3.3.bat
 ```
-And among those, the most important two directories are `htdocs` and `local`. The `htdocs` contains almost all the modules in BLIS. And `local` directory contains the localization versions' settings of phrases, tips, UI appearance. Due to the complexity of this section, few features will be focused for illustration, feel free to add your findings when working on some features. :smile: 
+And among those, the most important two directories are `htdocs` and `local`. The `htdocs` contains almost all the modules in BLIS. And `local` directory contains the localization versions' settings of phrases, tips, UI appearance. Due to the complexity of this section, few features will be focused for illustration, feel free to add your findings when working on some features. :smile:
 
 #### Backup Data and Cloud Backup
 Cloud backup means you can specify the IP Address and then send backup to the BLIS instance hosted on that IP Address. (More details of UI can be found in User Guide -> Backup Data section).
@@ -204,5 +204,5 @@ There may be some confusion on `default`, `en`, `fr` versions across the repo. T
 After you are satisfied with your new changes and want to deploy a newer version BLIS on cloud. In this doc, we will use [DigitalOcean](https://www.digitalocean.com/) for the deployment platform as example. You will go through two main steps:
 
 1. Push & merge your changes to github repo. Based on `./github/workflows/release-docker.yml`, the newest change will reflect in the `ghcr.io/C4G/blis:latest` docker repo.
-2. Use the docker image to deploy BLIS service as well as database service. An step-by-step detailed instruction can be seen [in this site](blis_cloud.md)
+2. Use the docker image to deploy BLIS service as well as database service. An step-by-step detailed instruction can be seen [in this site](../user_guide/11_blis_cloud.md)
 <!-- TODO, change the workflow file hyperlink after merging into the main -->

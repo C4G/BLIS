@@ -1,25 +1,34 @@
 # Running BLIS on a Cloud Provider
 
-There is experimental support for running BLIS on a cloud provider in the form of a Docker container!
+**Running BLIS in the cloud is still a new process and there may be issues.**
 
 ## Quick Version
 
-**Skip this section for step-by-step instructions on getting BLIS running.**
+!!! warning
+    You must already have an account with a cloud provider to continue, and you must create a virtual machine running a relatively modern Linux distribution.
 
-1. You must already have an account with a cloud provider to continue, and you must create a virtual machine running a relatively modern Linux distribution. For testing, Digital Ocean and the minimum-level $5/month droplet was used.
+    **The minimum amount of RAM required to run the BLIS container is 1 GB.** As of writing, this is $6 USD per month, not including backups.
 
-2. You must [install Docker Engine](https://docs.docker.com/engine/install/) for the Linux distro you are running.
+You can run our official bootstrap script to start BLIS on a new, Ubuntu-based Digital Ocean image:
 
-3. You must [install Docker Compose](https://docs.docker.com/compose/). Either V1 (`docker-compose`) or V2 (`docker compose`) will work, but for this example, **docker-compose V1 will be used.**
+```bash
+curl https://raw.githubusercontent.com/C4G/BLIS/master/docker/bootstrap.sh | bash
+```
 
-## Creating a Droplet
+You may now proceed to [Accessing BLIS](#accessing-blis).
 
-1. You can follow the [instructions on DigitalOcean to create a droplet here](https://docs.digitalocean.com/products/droplets/how-to/create/).
+If you are not using Ubuntu, or you want to install BLIS manually, follow the instructions below.
+
+## Manual Instructions
+
+### Creating a Droplet
+
+5. You can follow the [instructions on DigitalOcean to create a droplet here](https://docs.digitalocean.com/products/droplets/how-to/create/).
   - Any Linux distribution should work, but for the purposes of this guide, it is assumed you will use Ubuntu.
-2. After creating the droplet, make sure you either note down the root user password you set, or you have an key configured for passwordless login.
-3. [Follow the instructions here to connect to the droplet via SSH](https://docs.digitalocean.com/products/droplets/how-to/connect-with-ssh/).
+1. After creating the droplet, make sure you either note down the root user password you set, or you have an key configured for passwordless login.
+2. [Follow the instructions here to connect to the droplet via SSH](https://docs.digitalocean.com/products/droplets/how-to/connect-with-ssh/).
 
-## Installing Docker
+### Installing Docker
 
 1. When you are SSH'd into the droplet, in the terminal, run these commands to install Docker:
 
@@ -29,14 +38,14 @@ There is experimental support for running BLIS on a cloud provider in the form o
 
    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg \
      --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-   
+
    echo \
      "deb [arch=$(dpkg --print-architecture) \
      signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] \
      https://download.docker.com/linux/ubuntu \
      $(lsb_release -cs) stable" | sudo tee \
      /etc/apt/sources.list.d/docker.list > /dev/null
-     
+
   sudo apt-get update
   sudo apt-get install -y docker-ce docker-ce-cli containerd.io
   ```
@@ -45,13 +54,13 @@ There is experimental support for running BLIS on a cloud provider in the form o
 
   ```bash
    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-   
+
    chmod +x /usr/local/bin/docker-compose
   ```
 
 Now you're ready to run BLIS!
 
-## Running BLIS
+### Running BLIS
 
 1. In the DigitalOcean Droplet via SSH, clone the BLIS repository:
 
@@ -100,7 +109,7 @@ And that's it!
 
 ## Adding an HTTPS certificate to BLIS
 
-By default, BLIS will only communicate over HTTP on port 80 (see `docker/docker-compose.yml` 
+By default, BLIS will only communicate over HTTP on port 80 (see `docker/docker-compose.yml`
 for the full port configuration.)
 
 BLIS includes support for automatically retrieving and configuring a certificate from
@@ -156,7 +165,7 @@ $ docker-compose exec app get-https-cert.sh
 This will verify the environment configuration seems correct and execute the certificate tool for you!
 Answer the questions about the domain to the best of your knowledge.
 
-Once the domain is verified and the certificate installed, you can visit your BLIS instance 
+Once the domain is verified and the certificate installed, you can visit your BLIS instance
 with an `https://` URL and hopefully it just works!
 
 
