@@ -1,4 +1,4 @@
-site_name: "C4G BLIS Documentations"
+site_name: "C4G BLIS Documentation"
 
 markdown_extensions:
   - abbr
@@ -11,13 +11,19 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.details
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
 
 plugins:
   - git-revision-date
   - search
 
-edit_uri: edit/main/docs/
-repo_url: https://github.com/c4g/BLIS
+edit_uri: edit/master/docs/
+repo_url: https://github.com/C4G/BLIS
 
 theme:
   name: material
@@ -25,12 +31,3 @@ theme:
     repo: fontawesome/brands/github
   features:
     - search.suggest
-
-markdown_extensions:
-  - admonition
-  - pymdownx.details
-  - pymdownx.superfences
-  - attr_list
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
