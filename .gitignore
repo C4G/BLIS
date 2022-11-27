@@ -49,3 +49,7 @@ Thumbs.db
 
 # Directory that BLIS releases will be built into
 /dist
+
+# Directory that gets created by mkdocs when you build the docs
+# with eg. `mkdocs build`
+/site/
