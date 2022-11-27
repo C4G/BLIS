@@ -34,4 +34,4 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/blis-devcontainer:latest
+            ghcr.io/c4g/blis-devcontainer:latest
