@@ -21,6 +21,8 @@ markdown_extensions:
 plugins:
   - git-revision-date
   - search
+  - with-pdf:
+        author: C4G BLIS
 
 edit_uri: edit/master/docs/
 repo_url: https://github.com/C4G/BLIS
