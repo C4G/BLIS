@@ -326,6 +326,7 @@ class BackupLib
         self::dumpLog("../../local/UILog_2-2.csv", "$backup_dir/UILog_2-2.csv", $server_public_key);
         self::dumpLog("../../local/UILog_2-3.csv", "$backup_dir/UILog_2-3.csv", $server_public_key);
         self::dumpLog("../../log/application.log", "$backup_dir/application.log", $server_public_key);
+        self::dumpLog("../../log/database.log", "$backup_dir/database.log", $server_public_key);
         self::dumpLog("../../log/apache2_error.log", "$backup_dir/apache2_error.log", $server_public_key);
         self::dumpLog("../../log/php_error.log", "$backup_dir/apache2_error.log", $server_public_key);
 

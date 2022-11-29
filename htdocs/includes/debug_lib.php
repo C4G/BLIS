@@ -59,7 +59,7 @@ class DebugLib
 
 	public static function logQuery($query_string, $db_name, $username)
 	{
-        global $log;
+        global $db_log;
 
 		# Adds current query to log
         date_default_timezone_set("UTC");
@@ -72,7 +72,7 @@ class DebugLib
 		$timestamp = date("Y-m-d H:i:s");
 		$log_line = $timestamp."\t".$username."\t".$db_name."\t".$query_string."\n";
 
-        $log->debug("[query] [$db_name] [$username] $query_string");
+        $db_log->debug("[database: $db_name] [application user: $username] $query_string");
 
 		fwrite($file_handle, $log_line);
 		fclose($file_handle);
