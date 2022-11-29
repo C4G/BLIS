@@ -16,6 +16,9 @@ if (!file_exists(__DIR__."/../../log")) {
 $log = new Logger('application');
 $log->pushHandler(new StreamHandler(dirname(__FILE__).'/../../log/application.log', Logger::DEBUG));
 
+$db_log = new Logger('database');
+$db_log->pushHandler(new StreamHandler(dirname(__FILE__).'/../../log/database.log', Logger::DEBUG));
+
 # Check for other folders needed by application
 if (!file_exists(__DIR__."/../../files")) {
     # If not, create it
