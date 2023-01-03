@@ -8,7 +8,7 @@ Secondly, **BLIS on the Cloud** is a newly deployed version of BLIS that is capa
 
 !!! info "Installation Instructions for **BLIS on the Cloud**"
 
-    For instructions on installing **BLIS on the Cloud**, please see the [article on Running BLIS on a Cloud Provider.](./11_blis_cloud/)
+    For instructions on installing **BLIS on the Cloud**, please see the [article on Running BLIS on a Cloud Provider.](../11_blis_cloud/)
 
 
 Thirdly, **BLIS in a Devcontainer** is an instantiation of BLIS that allows for developers to specify the development environment, and is intended to be used by developers only.
