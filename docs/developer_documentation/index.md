@@ -68,7 +68,7 @@ A quick way to test the dependencies installed correctly is:
 1. A pop-up that says something like "This folder contains a devcontainer configuration" will appear. Click the button to open the folder in a container.
 
 1. If that does not appear, open the command palette (Ctrl-Shift-P or Cmd-Shift-P) and find "Open folder in container" and select the BLIS folder.
-    <img src="../../images/dev_guide/remote-containers-step1.png" width="100%"/>
+    <img src="../images/dev_guide/remote-containers-step1.png" width="100%"/>
 
 1. Once the container is started, the ports should forward automatically. You can see apache2 running if you click the "Ports" tab on the bottom (if the bottom panel is not open, use Ctrl-` (backtick) to open it)
 
