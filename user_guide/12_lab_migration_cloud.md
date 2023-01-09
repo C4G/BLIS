@@ -9,23 +9,23 @@
 5. Now, inorder to create an encrypted backup of the local lab:
     1. Navigate to the **Backup Data** tab.
     2. Upload the public key dowloaded in the previous step.
-    <p align="center">
-    <img src="../../images/user_guide/add_new_dir_key.png" width="100%"/>
-    </p>
+        <p align="center">
+        <img src="../../images/user_guide/add_new_dir_key.png" width="100%"/>
+        </p>
     3. Now click on **Backup** and save the .zip encrypted backup.
 6. Now the Director of the country can upload this lab's encrypted backup onto cloud:
     1. Login onto http://<digital-ocean-blis-url>/login.php as a Director.
     2. Navigate to **Lab Configurations**.
     3. Click on **Import Lab Data** and upload the encrypted lab backup.
-    <p align="center">
-    <img src="../../images/user_guide/importing_ofl_backup.png" width="100%"/>
-    </p>
+        <p align="center">
+        <img src="../../images/user_guide/importing_ofl_backup.png" width="100%"/>
+        </p>
     4. Upon successfully importing the lab you will see something like this: 
-    <p align="center">
-    <img src="../../images/user_guide/successful_ofl_lab_import.png" width="100%"/>
-    </p>
+        <p align="center">
+        <img src="../../images/user_guide/successful_ofl_lab_import.png" width="100%"/>
+        </p>
     5. And in the **Lab Configurations** tab you would see:
-    <p align="center">
-    <img src="../../images/user_guide/post_ofl_lab_import.png" width="100%"/>
-    </p>
+        <p align="center">
+        <img src="../../images/user_guide/post_ofl_lab_import.png" width="100%"/>
+        </p>
 7. Now the new admin created for the newly imported lab can login using the default credentials using the BLIS on cloud. 
