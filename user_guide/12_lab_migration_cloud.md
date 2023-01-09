@@ -1,8 +1,8 @@
 # Migrating labs to Cloud
 1. Upgrade your labs to version 3.8 from [C4G BLIS web page](http://blis.cc.gatech.edu/).
 2. Open your Firefox browser.
-3. Go to the Digital Ocean hosted BLIS webpage. Example: [http://142.93.49.10/login.php]
-4. Go to the url http://<digital-ocean-blis-url>/ajax/download_key.php?role=dir to download the public key needed to encrypt the back-up. Example: [http://142.93.49.10/ajax/download_key.php?role=dir]
+3. Go to the Digital Ocean hosted BLIS webpage. Example: http://142.93.49.10/login.php
+4. Go to the url http://\<digital-ocean-blis-url>/ajax/download_key.php?role=dir to download the public key needed to encrypt the back-up. Example: http://142.93.49.10/ajax/download_key.php?role=dir
     <p align="center">
     <img src="../../images/user_guide/download_public_key_onl.png" width="100%"/>
     </p>
@@ -14,7 +14,7 @@
         </p>
     3. Now click on **Backup** and save the .zip encrypted backup.
 6. Now the Director of the country can upload this lab's encrypted backup onto cloud:
-    1. Login onto http://<digital-ocean-blis-url>/login.php as a Director.
+    1. Login onto http://\<digital-ocean-blis-url>/login.php as a Director.
     2. Navigate to **Lab Configurations**.
     3. Click on **Import Lab Data** and upload the encrypted lab backup.
         <p align="center">
