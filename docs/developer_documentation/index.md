@@ -68,15 +68,15 @@ A quick way to test the dependencies installed correctly is:
 1. A pop-up that says something like "This folder contains a devcontainer configuration" will appear. Click the button to open the folder in a container.
 
 1. If that does not appear, open the command palette (Ctrl-Shift-P or Cmd-Shift-P) and find "Open folder in container" and select the BLIS folder.
-    <img src="../../images/dev_guide/remote-containers-step1.png" width="100%"/>
+    <img src="../images/dev_guide/remote-containers-step1.png" width="100%"/>
 
 1. Once the container is started, the ports should forward automatically. You can see apache2 running if you click the "Ports" tab on the bottom (if the bottom panel is not open, use Ctrl-` (backtick) to open it)
 
     In this plot, you can see the terminal output, where the apache servers starts.
-    <img src="../../images/dev_guide/container-terminal.png" width="100%"/>
+    <img src="../images/dev_guide/container-terminal.png" width="100%"/>
 
     In this plot, you can see the port, click the little earth button and then it will take you to the local hosted BLIS instance.
-    <img src="../../images/dev_guide/remote-container-ports.png" width="100%"/>
+    <img src="../images/dev_guide/remote-container-ports.png" width="100%"/>
 
 1. You can then browse BLIS in your normal browser by visiting http://localhost:80 (substituting 80 for another port, depending on what port VS Code has mapped to apache2.)
 
