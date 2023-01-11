@@ -66,7 +66,7 @@ CREATE TABLE `encryption_setting` (
 
 LOCK TABLES `encryption_setting` WRITE;
 /*!40000 ALTER TABLE `encryption_setting` DISABLE KEYS */;
-INSERT INTO `encryption_setting` VALUES (1),(1);
+INSERT INTO `encryption_setting` VALUES (0);
 /*!40000 ALTER TABLE `encryption_setting` ENABLE KEYS */;
 UNLOCK TABLES;
 
