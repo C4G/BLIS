@@ -153,11 +153,11 @@ function startUpload(){
 }
 function stopUpload(success){
       var result = '';
-      if (success == 0){
+      if (success < 2){
          document.getElementById('result').innerHTML =
            '<span class="smsg">The file was imported successfully!</span><br/>';
       }
-      else {
+      else{
          document.getElementById('result').innerHTML = 
            '<span class="emsg">There was an error during file import!</span><br/>';
       }

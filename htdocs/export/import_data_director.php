@@ -174,14 +174,44 @@ if ($file_name_and_extension[1]=="zip") {
 
         checkAndAddUserConfig($lab_admin_id);
 
+        //getting facility name from revamp sql dump
+        $facility = "";
+        try{
+            $fileName = $extractPath."/".$revampFile;
+            $fileHandle = fopen($fileName, "r");
+            while (!feof($fileHandle)) {
+                $line = fgets($fileHandle);
+                if(strstr($line, "INSERT INTO `lab_config` VALUES")) {
+                    $find_lid = "(".$lid."," ;
+                    $pos = strpos($line, $find_lid);
+                    $log->debug("Found lab id in revamp sql dump!".$pos);
+                    $length = strlen($line);
+                    for ($index = $pos + strlen($find_lid); $index < $length; $index++) {
+                        //assuming second element inserted into the table is the lab's name.
+                        if($line[$index] == "'") {
+                            do {
+                                $facility = $facility.$line[++$index];
+                            } while($line[$index] !== "'");
+                            $facility = substr($facility, 0, -1);
+                            break;
+                        }
+                    }
+                }
+            }
+            fclose($fileHandle);
+        } catch (Exception $e) {
+            $log->info('Caught exception while fetching facility name!'.$e->getMessage());
+            $facility = 'Lab_'.$lid;
+        }
+
         // the following code adds lab config to lab_config table in blis_revamp when developers
         // are importing a backup into the app on their machine
         $lab_config = new LabConfig();
         $lab_config->adminUserId = $lab_admin_id;
-        $labName = "Lab Import on ".date("Y-m-d");
+        $labName = $facility;
         if (strlen($_SESSION['user_id'] > 0)) {
             $log->info("user id" . User::getByUserId($_SESSION['user_id'])->username);
-            $labName = $labName . " by " . User::getByUserId($_SESSION['user_id'])->username;
+            $labName = $labName #. " by " . User::getByUserId($_SESSION['user_id'])->username;
         }
         $lab_config->name = $labName;
         $lab_config->id = $lid;
@@ -191,6 +221,8 @@ if ($file_name_and_extension[1]=="zip") {
 
         #the following code adds user id of the admin for imported lab and the lab id are added to lab_access_config table of the revamp db
         add_lab_config_access($lab_admin_id, $lid);
+
+        $log->debug('Result after backup:'. $result);
     } else {
         $result=1;
     }
