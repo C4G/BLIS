@@ -222,7 +222,6 @@ if ($file_name_and_extension[1]=="zip") {
         #the following code adds user id of the admin for imported lab and the lab id are added to lab_access_config table of the revamp db
         add_lab_config_access($lab_admin_id, $lid);
 
-        $log->debug('Result after backup:'. $result);
     } else {
         $result=1;
     }
