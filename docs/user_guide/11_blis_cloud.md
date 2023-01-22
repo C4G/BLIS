@@ -15,7 +15,7 @@ You can run our official bootstrap script to start BLIS on a new, Ubuntu-based D
 curl https://raw.githubusercontent.com/C4G/BLIS/master/docker/bootstrap.sh | bash
 ```
 
-You may now proceed to [Accessing BLIS](#accessing-blis).
+You may now proceed to [Running BLIS](#running-blis).
 
 If you are not using Ubuntu, or you want to install BLIS manually, follow the instructions below.
 
