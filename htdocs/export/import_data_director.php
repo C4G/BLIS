@@ -149,7 +149,7 @@ if ($file_name_and_extension[1]=="zip") {
            unlink($fileName.".dec");
         }
 
-        if ($result == 0) {
+        if ($result < 2) {
             $log->info("Database imported successfully!");
             insert_import_entry(intval($lid));
         }
@@ -184,7 +184,6 @@ if ($file_name_and_extension[1]=="zip") {
                 if(strstr($line, "INSERT INTO `lab_config` VALUES")) {
                     $find_lid = "(".$lid."," ;
                     $pos = strpos($line, $find_lid);
-                    $log->debug("Found lab id in revamp sql dump!".$pos);
                     $length = strlen($line);
                     for ($index = $pos + strlen($find_lid); $index < $length; $index++) {
                         //assuming second element inserted into the table is the lab's name.
@@ -204,6 +203,7 @@ if ($file_name_and_extension[1]=="zip") {
             $facility = 'Lab_'.$lid;
         }
 
+        $log->debug("Facility name: ".$facility);
         // the following code adds lab config to lab_config table in blis_revamp when developers
         // are importing a backup into the app on their machine
         $lab_config = new LabConfig();
@@ -211,7 +211,7 @@ if ($file_name_and_extension[1]=="zip") {
         $labName = $facility;
         if (strlen($_SESSION['user_id'] > 0)) {
             $log->info("user id" . User::getByUserId($_SESSION['user_id'])->username);
-            $labName = $labName #. " by " . User::getByUserId($_SESSION['user_id'])->username;
+            $labName = $labName; #. " by " . User::getByUserId($_SESSION['user_id'])->username;
         }
         $lab_config->name = $labName;
         $lab_config->id = $lid;
