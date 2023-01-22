@@ -25,9 +25,8 @@ CREATE TABLE `encryption_setting` (
    `enc_enabled` int(11)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `encryption_setting` (`enc_enabled`) VALUES 
-('1'),
-('1');
+INSERT INTO `encryption_setting` (`enc_enabled`) VALUES
+('0');
 
 CREATE TABLE `equip_config` (
    `equip_id` int(11),
@@ -36,7 +35,7 @@ CREATE TABLE `equip_config` (
    `prop_value` varchar(1000)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `equip_config` (`equip_id`, `prop_id`, `config_prop`, `prop_value`) VALUES 
+INSERT INTO `equip_config` (`equip_id`, `prop_id`, `config_prop`, `prop_value`) VALUES
 ('1', '1', 'PORT', '5150'),
 ('1', '2', 'MODE', 'client'),
 ('1', '3', 'CLIENT_RECONNECT', 'chameleon'),
@@ -120,7 +119,7 @@ CREATE TABLE `ii_quickcodes` (
    PRIMARY KEY (`prop_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=20;
 
-INSERT INTO `ii_quickcodes` (`prop_id`, `feed_source`, `config_prop`) VALUES 
+INSERT INTO `ii_quickcodes` (`prop_id`, `feed_source`, `config_prop`) VALUES
 ('1', 'TCP/IP', 'PORT'),
 ('2', 'TCP/IP', 'MODE'),
 ('3', 'TCP/IP', 'CLIENT_RECONNECT'),
@@ -182,7 +181,7 @@ CREATE TABLE `interfaced_equipment` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=13;
 
-INSERT INTO `interfaced_equipment` (`id`, `equipment_name`, `comm_type`, `equipment_version`, `lab_department`, `feed_source`, `config_file`) VALUES 
+INSERT INTO `interfaced_equipment` (`id`, `equipment_name`, `comm_type`, `equipment_version`, `lab_department`, `feed_source`, `config_file`) VALUES
 ('1', 'Mindray BS-200E', 'Bi-directional', '01.00.07', 'Chemistry', 'TCP/IP', '\\BLISInterfaceClient\\configs\\BT3000Plus\\bt3000pluschameleon.xml'),
 ('2', 'ABX Pentra 60 C+', 'Bi-directional', '', 'Haematology', 'MSACCESS', '\\BLISInterfaceClient\\configs\\pentra\\pentra60cplus.xml'),
 ('3', 'ABX MACROS 60', 'Uni-directional', '', 'Haematology', 'RS232', '\\BLISInterfaceClient\\configs\\micros60\\abxmicros60.xml'),
@@ -234,7 +233,7 @@ CREATE TABLE `lab_config` (
    PRIMARY KEY (`lab_config_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1006;
 
-INSERT INTO `lab_config` (`lab_config_id`, `name`, `location`, `admin_user_id`, `db_name`, `id_mode`, `p_addl`, `s_addl`, `daily_num`, `pid`, `pname`, `sex`, `age`, `dob`, `sid`, `refout`, `rdate`, `comm`, `dformat`, `dnum_reset`, `doctor`, `country`, `site_choice_enabled`) VALUES 
+INSERT INTO `lab_config` (`lab_config_id`, `name`, `location`, `admin_user_id`, `db_name`, `id_mode`, `p_addl`, `s_addl`, `daily_num`, `pid`, `pname`, `sex`, `age`, `dob`, `sid`, `refout`, `rdate`, `comm`, `dformat`, `dnum_reset`, `doctor`, `country`, `site_choice_enabled`) VALUES
 ('12', 'FONDATION SOCIALE SUISSE, HD PETTE', 'MAROUA', '504', 'blis_12', '1', '1', '0', '1', '4', '1', '2', '1', '1', '2', '1', '2', '0', 'd-m-Y', '3', '1', 'Cameroon', '0'),
 ('127', 'Testlab1', 'GT', '53', 'blis_127', '1', '0', '0', '1', '2', '1', '2', '1', '1', '0', '0', '2', '0', 'd-m-Y', '1', '1', 'USA', '0');
 
@@ -244,7 +243,7 @@ CREATE TABLE `lab_config_access` (
    PRIMARY KEY (`user_id`,`lab_config_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `lab_config_access` (`user_id`, `lab_config_id`) VALUES 
+INSERT INTO `lab_config_access` (`user_id`, `lab_config_id`) VALUES
 ('123', '12');
 
 CREATE TABLE `lab_config_specimen_type` (
@@ -252,7 +251,7 @@ CREATE TABLE `lab_config_specimen_type` (
    `specimen_type_id` int(10) unsigned not null default '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `lab_config_specimen_type` (`lab_config_id`, `specimen_type_id`) VALUES 
+INSERT INTO `lab_config_specimen_type` (`lab_config_id`, `specimen_type_id`) VALUES
 ('106', '7'),
 ('106', '6'),
 ('106', '9'),
@@ -617,7 +616,7 @@ CREATE TABLE `lab_config_test_type` (
    `print_unverified` int(11) default '1'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `lab_config_test_type` (`lab_config_id`, `test_type_id`, `print_unverified`) VALUES 
+INSERT INTO `lab_config_test_type` (`lab_config_id`, `test_type_id`, `print_unverified`) VALUES
 ('106', '7', '1'),
 ('106', '13', '1'),
 ('106', '10', '1'),
@@ -1416,7 +1415,7 @@ CREATE TABLE `misc` (
    `ts` timestamp not null default CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `misc` (`username`, `action`, `ts`) VALUES 
+INSERT INTO `misc` (`username`, `action`, `ts`) VALUES
 ('initial', 'password reset completed', '2013-09-19 01:16:47'),
 ('initial', 'password reset completed', '2013-09-19 01:16:54'),
 ('initial', 'password reset completed', '2014-04-07 13:23:51');
@@ -1451,7 +1450,7 @@ CREATE TABLE `report_config` (
    PRIMARY KEY (`report_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=5;
 
-INSERT INTO `report_config` (`report_id`, `header`, `footer`, `margins`, `p_fields`, `s_fields`, `t_fields`, `p_custom_fields`, `s_custom_fields`, `test_type_id`, `title`, `landscape`, `age_unit`) VALUES 
+INSERT INTO `report_config` (`report_id`, `header`, `footer`, `margins`, `p_fields`, `s_fields`, `t_fields`, `p_custom_fields`, `s_custom_fields`, `test_type_id`, `title`, `landscape`, `age_unit`) VALUES
 ('1', 'Grouped Test Count Report Configuration', '0:4,5:9,10:14,15:19,20:24,25:29,29:34,35:39,39:44,45:49,49:54,55:59,59:64,65:+', '0', '1', '1', '0', '1', '0', '9999009', '0', '9999009', '1'),
 ('2', 'Grouped Specimen Count Report Configuration', '0:4,4:9,9:14,14:19,19:24,24:29,29:34,34:39,39:44,44:49,49:54,54:59,59:64,64:+', '0', '1', '1', '0', '1', '0', '9999019', '0', '9999019', '1'),
 ('3', 'Grouped Test Count Report Configuration', '0:4,5:9,10:14,15:19,20:24,25:29,29:34,35:39,39:44,45:49,49:54,55:59,59:64,65:+', '0', '1', '1', '0', '1', '0', '9999009', '0', '9999009', '1'),
@@ -1486,7 +1485,7 @@ CREATE TABLE `test_mapping` (
    PRIMARY KEY (`user_id`,`test_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `test_mapping` (`user_id`, `test_name`, `lab_id_test_id`, `test_id`, `test_category_id`) VALUES 
+INSERT INTO `test_mapping` (`user_id`, `test_name`, `lab_id_test_id`, `test_id`, `test_category_id`) VALUES
 ('27', 'Cameroon', '', '1', '');
 
 CREATE TABLE `user` (
@@ -1505,7 +1504,7 @@ CREATE TABLE `user` (
    UNIQUE KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=506;
 
-INSERT INTO `user` (`user_id`, `username`, `password`, `actualname`, `email`, `created_by`, `ts`, `lab_config_id`, `level`, `phone`, `lang_id`, `rwoptions`) VALUES 
+INSERT INTO `user` (`user_id`, `username`, `password`, `actualname`, `email`, `created_by`, `ts`, `lab_config_id`, `level`, `phone`, `lang_id`, `rwoptions`) VALUES
 ('26', 'monu', '18865bfdeed2fd380316ecde609d94d7285af83f', 'Ruban', 'rubanm@gatech.edu', '0', '2010-04-30 03:22:39', '0', '3', '', 'en', '2,3,4,6,7'),
 ('27', 'vempala', '18865bfdeed2fd380316ecde609d94d7285af83f', 'Santosh Vempala', 'vempala@cc.gatech.edu', '0', '2010-01-10 10:00:55', '0', '3', '', 'default', '2,3,4,6,7'),
 ('53', 'testlab1_admin', '18865bfdeed2fd380316ecde609d94d7285af83f', 'Testlab1 admin', '', '26', '2010-01-14 12:05:44', '0', '2', '', 'default', '2,3,4,6,7'),
@@ -1531,7 +1530,7 @@ CREATE TABLE `user_config` (
    PRIMARY KEY (`user_id`,`parameter`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `user_config` (`user_id`, `level`, `parameter`, `value`, `created_by`, `created_on`, `modified_by`, `modified_on`) VALUES 
+INSERT INTO `user_config` (`user_id`, `level`, `parameter`, `value`, `created_by`, `created_on`, `modified_by`, `modified_on`) VALUES
 ('26', '3', 'rwoptions', '2,3,4,6,7', 'Aishwarya', '2015-08-26', 'Aishwarya', '2015-08-26'),
 ('27', '3', 'rwoptions', '2,3,4,6,7', 'Aishwarya', '2015-08-26', 'Aishwarya', '2015-08-26'),
 ('53', '2', 'rwoptions', '2,3,4,6,7', 'Aishwarya', '2015-08-26', 'Aishwarya', '2015-08-26'),
@@ -1555,7 +1554,7 @@ CREATE TABLE `user_log` (
    `created_by` int(11)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `user_log` (`patient_id`, `log_type`, `creation_date`, `created_by`) VALUES 
+INSERT INTO `user_log` (`patient_id`, `log_type`, `creation_date`, `created_by`) VALUES
 ('76', 'PRINT', '2021-10-26 15:06:07', '53');
 
 CREATE TABLE `user_type` (
@@ -1567,7 +1566,7 @@ CREATE TABLE `user_type` (
    PRIMARY KEY (`level`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=18;
 
-INSERT INTO `user_type` (`level`, `name`, `defaultdisplay`, `created_by`, `created_on`) VALUES 
+INSERT INTO `user_type` (`level`, `name`, `defaultdisplay`, `created_by`, `created_on`) VALUES
 ('1', 'LIS_TECH_RO', '1', 'Aishwarya', '2015-08-26 15:29:28'),
 ('2', 'LIS_ADMIN', '0', 'Aishwarya', '2015-08-26 15:29:28'),
 ('3', 'LIS_SUPERADMIN', '0', 'Aishwarya', '2015-08-26 15:29:28'),
@@ -1597,7 +1596,7 @@ CREATE TABLE `user_type_config` (
    PRIMARY KEY (`level`,`parameter`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `user_type_config` (`level`, `parameter`, `value`, `created_by`, `created_on`, `modified_by`, `modified_on`) VALUES 
+INSERT INTO `user_type_config` (`level`, `parameter`, `value`, `created_by`, `created_on`, `modified_by`, `modified_on`) VALUES
 ('1', 'rwoptions', '2,3,4,6,7', 'Aishwarya', '', 'Aishwarya', '2015-08-26 15:29:28'),
 ('2', 'rwoptions', '2,3,4,6,7', 'Aishwarya', '', 'Aishwarya', '2015-08-26 15:29:28'),
 ('3', 'rwoptions', '2,3,4,6,7', 'Aishwarya', '', 'Aishwarya', '2015-08-26 15:29:28'),
@@ -1627,7 +1626,7 @@ CREATE TABLE `version_data` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=16;
 
-INSERT INTO `version_data` (`id`, `version`, `status`, `user_id`, `remarks`, `i_ts`, `u_ts`) VALUES 
+INSERT INTO `version_data` (`id`, `version`, `status`, `user_id`, `remarks`, `i_ts`, `u_ts`) VALUES
 ('1', '2.4', '1', '116', '', '2013-03-09 01:01:13', '2013-03-09 01:01:13'),
 ('2', '2.6', '1', '53', '', '2013-09-19 01:16:47', '2013-09-19 01:16:47'),
 ('3', '2.6', '1', '53', '', '2013-09-19 01:16:54', '2013-09-19 01:16:54'),
