@@ -9552,10 +9552,16 @@ function get_test_type_by_id($test_type_id)
 	return TestType::getById($test_type_id);
 }
 
-function get_specimen_type_by_id($specimen_type_id)
+function get_specimen_type_by_id($specimen_type_id, $lab_config_id=null)
 {
 	global $con;
 	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
+
+	# Get current lab ID
+	if ($lab_config_id == null) {
+		$lab_config_id = $_SESSION['lab_config_id'];
+	}
+
 	# Returns specimen type record in DB
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string =

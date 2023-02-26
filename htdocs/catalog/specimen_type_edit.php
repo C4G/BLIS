@@ -9,7 +9,9 @@ LangUtil::setPageId("catalog");
 
 $script_elems->enableJQueryForm();
 $script_elems->enableTokenInput();
-$specimen_type = get_specimen_type_by_id($_REQUEST['sid']);
+
+$lab_config_id = $_SESSION['lab_config_id'];
+$specimen_type = get_specimen_type_by_id($_REQUEST['sid'], $lab_config_id);
 ?>
 <script type='text/javascript'>
 $(document).ready(function(){
@@ -19,7 +21,7 @@ $(document).ready(function(){
 	{
 		# Mark existing compatible tests as checked
 		?>
-		$('#t_type_<?php echo $test_type_id; ?>').attr("checked", "checked"); 
+		$('#t_type_<?php echo $test_type_id; ?>').attr("checked", "checked");
 		<?php
 	}
 	?>
@@ -27,7 +29,7 @@ $(document).ready(function(){
 
 function update_stype()
 {
-	var old_specimen_name = "<?php echo $specimen_type->getName(); ?>";	
+	var old_specimen_name = "<?php echo $specimen_type->getName(); ?>";
 	old_specimen_name = old_specimen_name.toLowerCase();
 	if($('#name').attr("value").trim() == "")
 	{
@@ -51,19 +53,19 @@ function update_stype()
 		//return;
 	}
 	var name_valid=true;
-	var specimen_name = $('#name').attr("value").toLowerCase();	
+	var specimen_name = $('#name').attr("value").toLowerCase();
 	if( specimen_name != old_specimen_name)
 	{
 		var check_url = "ajax/specimen_name_check.php?specimen_name="+specimen_name;
-		$.ajax({ url: check_url, async : false, success: function(response){			
-				if(response == "1")		
-				{	
+		$.ajax({ url: check_url, async : false, success: function(response){
+				if(response == "1")
+				{
 					alert("Spacemen :"+specimen_name + " already exist");
-					name_valid=false;								
-				}			
+					name_valid=false;
+				}
 		}
 		});
-	}	
+	}
 	if(name_valid)
 	{
 		$('#update_stype_progress').show();
