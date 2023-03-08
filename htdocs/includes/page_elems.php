@@ -10857,13 +10857,27 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	}
 
 
-	public function getTestTypesByReportingStatusOptions($enabled)
+	public function getTestTypesByReportingStatusOptions()
 	{
-	    $tests = TestType::getByReportingStatus($enabled);
+	    $tests = TestType::getByReportingStatus();
 //echo "<option>".$tests."</option>";
 	    foreach ($tests as $test)
 				echo "<option id='$test->testTypeId' value='$test->testTypeId'>".$test->name."</option>";
 	}
+
+	public function getTestTypewithreferencerangeOptions()
+	{
+	    $tests = TestType::getTestTypewithreferencerange();
+//echo "<option>".$tests."</option>";
+	    foreach ($tests as $test)
+				echo "<option id='$test->testTypeId' value='$test->testTypeId'>".$test->name."</option>";
+	}
+
+	public function getTestreferencerange()
+	{
+	    $tests = TestType::getTestreferencerange();
+	}
+
 
 	//starting point of changes
 	public function getBatchResultsFieldsForm($lab_config_id)

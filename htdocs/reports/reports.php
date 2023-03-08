@@ -130,6 +130,8 @@ $lab_config_id = $_SESSION['lab_config_id'];
         $page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
         ?>
     </div>
+    <div>
+
     <div class='reports_subdiv_help' id='disease_report_div_help' style='display:none'>
         <?php
         //Infection report
@@ -1871,6 +1873,50 @@ alert(dd_to);
             $("#test_aggregate_report_div").show();
             $("#site_aggregate_report_div").hide();
         }
+
+        function get_reference_range() {
+
+            $('#test_type_id_details').html("");
+            $selected_test_type_id = $('#test_type_id_1').attr('value');
+            if($selected_test_type_id !='0')
+            {
+                $.ajax({
+                    url : "ajax/getTestReferenceRange.php?id="+$selected_test_type_id,
+                    success : function(data) 
+                    {
+                        var objData = JSON.parse(data);
+                        var html = "<form>"+
+                                "<table class='hor-minimalist-b'>"+
+                                "<tr>"+
+                                    "<th></th>"+
+                                            "<th><b>Test Reference Range</b></th>"+
+                                "</tr>"+
+                                "<tr>"+
+                                "<td>Test Type :</td>"+
+                                "<td>Sex :</td>"+
+                                "<td>Ranage-Lower :</td>"+
+                                "<td>Range-Upper :</td>"+
+                                "<td>Age-Min :</td>"+
+                                "<td>Age-Max :</td>"+
+                                "</tr>";
+                        for (var c_i = 0; c_i < objData.length; c_i++){
+                        
+                             html+="<tr>"+
+                                "<td><input type='text' id = 'name' value = '"+objData[c_i].name+"'></td>  "+ 
+                                "<td><input type='text' id = 'name' value = '"+objData[c_i].sex+"'></td>  "+                                
+                                "<td><input type='text' id = 'range_lower' value = '"+objData[c_i].range_lower+"'></td>  "+
+                                "<td><input type='text' id = 'range_upper' value = '"+objData[c_i].range_upper+"'></td>  "+
+                                "<td><input type='text' id = 'range_lower' value = '"+objData[c_i].age_min+"'></td>  "+
+                                "<td><input type='text' id = 'range_upper' value = '"+objData[c_i].age_max+"'></td>  "+
+                                "</tr>"
+                                "</table> "+
+				                "</form>";                        
+                             }
+                             $('#test_type_id_details').html(html);   
+                }});
+            }
+        }
+
     </script>
     <br>
     <table name="page_panes" cellpadding="10px">
@@ -1912,6 +1958,10 @@ alert(dd_to);
                             echo " style='display:none;' ";
                         ?>>
                             <a href='javascript:show_pending_tests_form();'><?php echo LangUtil::$pageTerms['MENU_PENDINGTESTS']; ?></a>
+                        </li>
+
+                        <li class='menu_option' id='user_test_result_range_menu'>
+                                <a href='javascript:show_selection("test_results_range");'>Test Statistics</a>
                         </li>
 
 
@@ -1972,6 +2022,9 @@ alert(dd_to);
                                 <a href='javascript:show_selection("user_stats");'>User Statistics</a>
                             </li>
                         <?php } ?>
+                        
+
+
                         <!--<li class='menu_option' id='stock_report_menu'>
 							<a href='javascript:show_selection("stock_report");'>Previous Inventory Data</a>
 						</li>-->
@@ -3252,6 +3305,63 @@ alert(dd_to);
                             </table>
                         </div>
                     </form>
+                </div>
+
+                <div id='test_results_range_div' style='display:none;' class='reports_subdiv'>
+                    <b><?php echo "Test Statistics"; ?></b>
+                    <?php?>
+                    <br><br>
+                    <form name="test_results_range_form" id="test_results_range_form" action="" method="post">
+                    <input type="hidden" id="lab_config_id" value="<?php echo $lab_config_id; ?>">
+                    <table cellpadding="4px">
+                    <tr valign="top">
+                                <td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?></td>
+                                <td>
+                                    <?php
+                                    $name_list = array('yyyy_from', 'mm_from', 'dd_from');
+                                    $id_list = array('yyyy_from', 'mm_from', 'dd_from');
+                                    $value_list = $monthago_array;
+                                    $page_elems->getDatePicker($name_list, $id_list, $value_list);
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td><?php echo LangUtil::$generalTerms['TO_DATE']; ?></td>
+                                <td>
+                                    <?php
+                                    $name_list = array('yyyy_to', 'mm_to', 'dd_to');
+                                    $id_list = array('yyyy_to', 'mm1_to', 'dd_to');
+                                    $value_list = $today_array;
+                                    $page_elems->getDatePicker($name_list, $id_list, $value_list);
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td><?php echo LangUtil::$pageTerms['MENU_TEST_TYPES']; ?></td>
+ 
+                                <td>
+                                        <select name='test_type_id_1' id='test_type_id_1' class='uniform_width' onchange="get_reference_range();">                                        
+                                            <!--?php $page_elems->getTestTypesByReportingStatusOptions(1); ?-->
+                                               <option value="0">-</option>
+                                               <?php $page_elems->getTestTypewithreferencerangeOptions(); ?>
+                                            
+                                        </select>
+                                    </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><div id="test_type_id_details"></div></td>
+                            </tr> 
+                            <tr>
+                            <td></td>
+                            <td>
+                                <br>
+                                <input type='submit' id='test_results_range_submit_button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>'>
+                                </input>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            </tr>
+                    </table>
+
                 </div>
 
 
