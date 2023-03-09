@@ -1220,6 +1220,27 @@ class TestType
 return $retval;
     }
 
+	public static function getTestTypewithreferencerange()
+    {
+        # Return all test types that have reporting enabled/disabled
+        $retval = array();
+        $query_string = " SELECT  distinct b.test_type_id,c.name FROM reference_range a , ".
+		" test_type_measure b,test_type c, test_category d where a.measure_id=b.measure_id  ".
+		" and b.test_type_id=c.test_type_id  and c.test_category_id = d.test_category_id  order by c.name";
+		;
+
+        $saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+        $resultset = query_associative_all($query_string);
+        foreach ($resultset as $record)
+        {
+            $retval[] = TestType::getObject($record);
+        }
+        DbUtil::switchRestore($saved_db);
+/*        return $retval;*/
+return $retval;
+    }
+
+
     public static function updateReportingStatus($unadded, $added)
     {
         $query_string = "SELECT test_type_id FROM test_type ".
@@ -9552,16 +9573,10 @@ function get_test_type_by_id($test_type_id)
 	return TestType::getById($test_type_id);
 }
 
-function get_specimen_type_by_id($specimen_type_id, $lab_config_id=null)
+function get_specimen_type_by_id($specimen_type_id)
 {
 	global $con;
 	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
-
-	# Get current lab ID
-	if ($lab_config_id == null) {
-		$lab_config_id = $_SESSION['lab_config_id'];
-	}
-
 	# Returns specimen type record in DB
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string =
@@ -16370,11 +16385,10 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
 		//file_put_contents("dhims2.txt",print_r($results));
 
 		return $results;
-
 		//print_r($results);
 	}
 
-}
+}  
 
 
 	function getEquipmentList()
@@ -16411,4 +16425,23 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
 		DbUtil::switchRestore($saved_db);
 		return $resultset;
 	}
+
+	function getTestReferenceRange($id)
+    {
+        # Return all test types that have reporting enabled/disabled
+        //$saved_db = DbUtil::switchToGlobal();
+		//$retval = array();
+		console.log("inside get Test Reference Range");
+
+		$query_configs = " SELECT b.test_type_id,c.name, sex, range_lower, range_upper, age_min, age_max FROM reference_range a, ".
+		" test_type_measure b,test_type c, test_category d where a.measure_id=b.measure_id ".
+		" and b.test_type_id=c.test_type_id and c.test_category_id = d.test_category_id ".
+		" and b.test_type_id=$id";
+
+		console.log($query_configs);
+        $saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+        $resultset = query_associative_all($query_configs);
+		DbUtil::switchRestore($saved_db);
+		return $resultset;
+    }
 ?>
