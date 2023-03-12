@@ -161,10 +161,21 @@ if(count($pending_tests) == 0 || $pending_tests == null)
 		}
 		?>
 		<th><?php echo LangUtil::$generalTerms['RESULT_COMMENTS']." (".LangUtil::$generalTerms['OPTIONAL'].")"; ?></th>
-		<th><?php echo LangUtil::$generalTerms['CMD_SKIP']; ?>?</th>
+		<th><center><?php echo LangUtil::$generalTerms['CMD_SKIP']; ?>?
+		<input type='checkbox' id='select-all' title='Tick the box to select all reports to for printing' onClick='javascript:selectAll();'></input>
+	</center></th>
 		<th><!-- Related Tests Column --></th>
 	</tr>
 </thead>
+<script type="text/javascript">
+function selectAll() {
+    $(':checkbox').each(function() {
+        if (this.id != 'select-all') {
+            this.checked = document.getElementById('select-all').checked;
+        }
+    });
+}
+</script>
 <tbody>
 	<?php
 	for($i = 1; $i <= count($pending_tests); $i++)

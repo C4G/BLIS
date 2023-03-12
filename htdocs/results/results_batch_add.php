@@ -130,13 +130,10 @@ function fetch_specimen3(specimen_id, test_id)
 </script>
 <script type="text/javascript">
 function selectAll() {
-	$(':checkbox').each(function() {
-        this.checked = true;                        
-    });
-}
-function selectNone() {
-	$(':checkbox').each(function() {
-        this.checked = false;                        
+    $(':checkbox').each(function() {
+        if (this.id != 'select-all') {
+            this.checked = document.getElementById('select-all').checked;
+        }
     });
 }
 </script>
@@ -144,18 +141,19 @@ function selectNone() {
 <b><?php echo LangUtil::$pageTerms['MENU_BATCHRESULTS']; ?></b>: <?php echo $test_name;?>
  | <a href='results_entry.php'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>
 <div>
-<p style='float:left'><label id='select_all' onMouseOver="this.style.color='#336699'" onMouseOut="this.style.color='black'" onClick='javascript:selectAll();'><?php echo 'Select All'; ?></label> | <label id='select_none' onMouseOver="this.style.color='#336699'" onMouseOut="this.style.color='black'" onClick='javascript:selectNone();'><?php echo 'Select None'; ?></label></p>
 <p style='float:right'><label onMouseOver="this.style.color='#336699'" onMouseOut="this.style.color='black'"><?php echo 'Print Selected Reports'; ?></label></p>
 </div>
 <table class='tablesorter' id='status_table'>
 	<thead>
-		<tr>
+	<tr valign='top'>
+		<?php
+			?>
+			<th><center>
+			<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>?<br>
+			<input type='checkbox' id='select-all' title='Tick the box to select all reports to for printing' onClick='javascript:selectAll();'></input>
+			</center></th>
+			
 			<?php
-			{
-				?>
-				<th><center><?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>?</center></th>
-				<?php
-			}
 			if($_SESSION['pid'] != 0)
 			{
 				?>

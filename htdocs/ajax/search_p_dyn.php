@@ -220,6 +220,15 @@ background-color:#EAF2D3;
     border-right: none;
 }
 
+.print-selected {
+	color: black;
+	font-size: 14px;
+	
+}
+.print-selected:hover {
+	color: #336699;
+}
+
 
 </style>
 <script type='text/javascript'>
@@ -230,6 +239,7 @@ background-color:#EAF2D3;
         //console.log(cap);
          $('.prev_link').hide();
 		//alert(cap);
+		
         $.ajax({
 		url: url_string,
                 async : false,
@@ -536,9 +546,28 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 
 		</script>
 
+<script type="text/javascript">
+function selectAll() {
+    $(':checkbox').each(function() {
+        if (this.id != 'select-all') {
+            this.checked = document.getElementById('select-all').checked;
+        }
+    });
+}
+</script>
+<div>
+<p><label class='print-selected'><?php echo 'Print Selected Reports'; ?></label></p>
+</div>
 <table class='hor-minimalist-cs' id='patientListTable' name='patientListTable'>
 	<thead >
 		<tr valign='top'>
+			<?php
+			?>
+			<th><center>
+			<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>?
+			<input type='checkbox' id='select-all' title='Tick the box to select all reports to for printing' onClick='javascript:selectAll();'></input>
+			</center></th>
+			
 			<?php
 			if($lab_config->pid != 0)
 			{
@@ -603,7 +632,13 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 	{
 	?>
 		<tr valign='top'>
+			<td>
+			<center>
+			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing'></input>
+			</center>
+			</td>
 			<?php
+			
 			if($lab_config->pid != 0)
 			{
 				?>
