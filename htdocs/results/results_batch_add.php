@@ -20,6 +20,8 @@ $field_result = array();
 
 $comments_list = $_REQUEST['comments'];
 
+$patient_array = array();
+
 if($DEBUG)
 {
 	
@@ -128,6 +130,7 @@ function fetch_specimen3(specimen_id, test_id)
 	window.location = url+"?specimen_id="+specimen_id+"&test_id="+test_id;
 }
 </script>
+
 <script type="text/javascript">
 function selectAll() {
     $(':checkbox').each(function() {
@@ -136,12 +139,19 @@ function selectAll() {
         }
     });
 }
+function printSelectedReports() {
+
+}
 </script>
+
 <br>
 <b><?php echo LangUtil::$pageTerms['MENU_BATCHRESULTS']; ?></b>: <?php echo $test_name;?>
  | <a href='results_entry.php'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>
 <div>
-<p style='float:right'><label onMouseOver="this.style.color='#336699'" onMouseOut="this.style.color='black'"><?php echo 'Print Selected Reports'; ?></label></p>
+<?php
+$url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
+?>
+<a href='<?php echo $url2; ?>' target='_blank' title='Click to generate printable report'><?php echo 'Print Selected Reports'; ?></a>
 </div>
 <table class='tablesorter' id='status_table'>
 	<thead>
@@ -180,7 +190,6 @@ function selectAll() {
 		</tr>
 	</thead>
 	<tbody>
-
 	<?php
 	for($i = 0; $i < count($specimen_done_list); $i++)
 	{
@@ -189,6 +198,7 @@ function selectAll() {
 		$test_entry = $test_list[$i];
 		$specimen = Specimen::getById($specimen_id);
 		$patient = Patient::getById($specimen->patientId);
+		array_push($patient_array, $patient->patientId)
 		?>
 		<tr>
 			<td>
@@ -241,7 +251,6 @@ function selectAll() {
 				$date_parts = explode("-", $specimen->dateRecvd);
 				$url1 = "reports_testhistory.php?location=".$_SESSION['lab_config_id']."&patient_id=$patient->patientId&yf=".$date_parts[0]."&mf=".$date_parts[1]."&df=".$date_parts[2]."&yt=".$date_parts[0]."&mt=".$date_parts[1]."&dt=".$date_parts[2]."&ip=1";
 				$url2 = "specimen_info.php?sid=$specimen_id";
-				//if(strpos($status, "Error") === false)
 				if(true)
 				{
 				?>
@@ -258,4 +267,8 @@ function selectAll() {
 	?>
 	</tbody>
 </table>
+<?php
+$_SESSION['patient_array'] = $patient_array;
+?>
+
 <?php include("includes/footer.php"); ?>
