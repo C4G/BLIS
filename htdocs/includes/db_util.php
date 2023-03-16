@@ -64,6 +64,9 @@ class DbUtil
         global $log;
 
         $saved_db_name = db_get_current();
+        if ($lab_config_id == null) {
+            $lab_config_id = $_SESSION['lab_config_id'];
+        }
         $lab_config = get_lab_config_by_id($lab_config_id);
         if ($lab_config == null) {
             # Error: Lab configuration correspinding to $lab_config_id not found in DB
