@@ -165,7 +165,7 @@ function out_of_range($cleaned_result, $cleaned_range){
 
         return $result_offset> $full_range;
 
-    }else if(preg_match("/[-+]?[0-9]*\.?[0-9]+/", $cleaned_result)){
+    } else if(preg_match("/[-+]?[0-9]*\.?[0-9]+/", $cleaned_result)) {
 
         // numeric results with a specified range
         $numeric_part_split = explode(" ", $cleaned_range);
@@ -446,8 +446,7 @@ function get_records_to_print($lab_config, $patient_id) {
 		if(isset($_REQUEST['yf']))
 			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
 		$query_string .= "ORDER BY sp.date_collected DESC";
-	}
-	else {
+	} else {
 		# Include pending tests
 		$labsection = 0;
 		if(isset($_REQUEST['labsection'])){
@@ -499,23 +498,20 @@ $report_id = $REPORT_ID_ARRAY['reports_testhistory.php'];
 $report_config = $lab_config->getReportConfig($report_id);
 $margin_list = $report_config->margins;
 $userrr = get_user_by_id($_SESSION['user_id']);
-if(is_country_dir($userrr) || is_super_admin($userrr))
-{
-$code_type = 0;
-$bar_width = 0;
-$bar_height = 0;
-$font_size = 0;
-$printPatientBarcode = 0;
-}
-else
-{
-$barcodeSettings = get_lab_config_settings_barcode();
-//  print_r($barcodeSettings);
-$code_type = $barcodeSettings['type']; //"code39";
-$bar_width = $barcodeSettings['width']; //2;
-$bar_height = $barcodeSettings['height']; //40;
-$font_size = $barcodeSettings['textsize']; //11;
-$printPatientBarcode = patientReportBarcodeCheck();
+if(is_country_dir($userrr) || is_super_admin($userrr)) {
+    $code_type = 0;
+    $bar_width = 0;
+    $bar_height = 0;
+    $font_size = 0;
+    $printPatientBarcode = 0;
+} else {
+    $barcodeSettings = get_lab_config_settings_barcode();
+    //  print_r($barcodeSettings);
+    $code_type = $barcodeSettings['type']; //"code39";
+    $bar_width = $barcodeSettings['width']; //2;
+    $bar_height = $barcodeSettings['height']; //40;
+    $font_size = $barcodeSettings['textsize']; //11;
+    $printPatientBarcode = patientReportBarcodeCheck();
 }
 for($i = 0; $i < count($margin_list); $i++) {
 	$margin_list[$i] = ($SCREEN_WIDTH * $margin_list[$i] / 100);
@@ -578,11 +574,10 @@ function export_as_pdf(div_id) {
 
 function print_content(div_id) {
 	var user_id = <?php echo $_SESSION['user_id']; ?>;
-	var p_id = <?php echo $patient_id; ?>;
 	$.ajax({
 		type : 'POST',
 		url : 'ajax/fetchUserLog.php',
-		data: "p_id="+p_id+"&log_type=PRINT",
+		data: "&log_type=PRINT",
 		success : function (data) {
 			if ( data != "false" ) {
 					
@@ -597,7 +592,7 @@ function print_content(div_id) {
 			}
 			$("#myNicPanel").hide();
 			javascript:window.print();
-			var data_string = "user_id="+user_id+"&p_id="+p_id+"&log_type=PRINT";
+			var data_string = "user_id="+user_id+"&log_type=PRINT";
 			$.ajax({
 				type : 'POST',
 				url : 'ajax/addUserLog.php',
@@ -676,30 +671,30 @@ function change_orientation() {
 
 $(document).ready(function(){
   // Reset Font Size
-  var originalFontSize = $('#report_content').css('font-size');
+  var originalFontSize = $('.report_content').css('font-size');
    $(".resetFont").click(function(){
-  $('#report_content').css('font-size', originalFontSize);
-  $('#report_content table').css('font-size', originalFontSize);
-  $('#report_content table th').css('font-size', originalFontSize);
+  $('.report_content').css('font-size', originalFontSize);
+  $('.report_content table').css('font-size', originalFontSize);
+  $('.report_content table th').css('font-size', originalFontSize);
   });
   // Increase Font Size
   $(".increaseFont").click(function(){
-  	var currentFontSize = $('#report_content').css('font-size');
+  	var currentFontSize = $('.report_content').css('font-size');
  	var currentFontSizeNum = parseFloat(currentFontSize, 10);
     var newFontSize = currentFontSizeNum*1.1;
-		$('#report_content').css('font-size', newFontSize);
-	$('#report_content table').css('font-size', newFontSize);
-	$('#report_content table th').css('font-size', newFontSize);
+		$('.report_content').css('font-size', newFontSize);
+	$('.report_content table').css('font-size', newFontSize);
+	$('.report_content table th').css('font-size', newFontSize);
 	return false;
   });
   // Decrease Font Size
   $(".decreaseFont").click(function(){
-  	var currentFontSize = $('#report_content').css('font-size');
+  	var currentFontSize = $('.report_content').css('font-size');
  	var currentFontSizeNum = parseFloat(currentFontSize, 10);
     var newFontSize = currentFontSizeNum*0.9;
-	$('#report_content').css('font-size', newFontSize);
-	$('#report_content table').css('font-size', newFontSize);
-	$('#report_content table th').css('font-size', newFontSize);
+	$('.report_content').css('font-size', newFontSize);
+	$('.report_content table').css('font-size', newFontSize);
+	$('.report_content table th').css('font-size', newFontSize);
 	return false;
   });
   
@@ -816,7 +811,6 @@ $monthago_array = explode("-", $monthago_date);
 	</td>
 	<td>
 	<input type='button' class="decreaseFont" value='Decrease' title="Decrease Font-size"></input> <br>
-	<!--<input type='button' class="bold" value='Bold' title="Bold"></input> <br>-->
 	
 	</td>
 	</tr>
@@ -838,10 +832,78 @@ $monthago_array = explode("-", $monthago_date);
 </table>
 <hr>
 </div>
+<div id='report_content' class='report_content'>
+<link rel='stylesheet' type='text/css' href='css/table_print.css' />
+<style type='text/css'>
+tbody td, thead th { padding: .3em;} 
+div.editable {
+	/*padding: 2px 2px 2px 2px;*/
+	margin-top: 2px;
+	width:900px;
+	height:20px;
+}
+div.editable input {
+	width:700px;
+}
+div#printhead {
+position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+padding-bottom: 5em;
+margin-bottom: 100px;
+display:none;
+}
+#lab_logo{
+    margin-bottom:20px;
+    height: 165px;
+}
+td{
+    padding:5px;
+}
+
+@media all
+{
+ .page-break { display:none; }
+}
+@media print
+{
+	#options_header { display:none; }
+	/* div#printhead {	display: block;
+ } */
+ div#docbody {
+  margin-top: 5em;
+ }
+}
+.landscape_content {-moz-transform: rotate(90deg) translate(300px); }
+.portrait_content {-moz-transform: translate(1px); rotate(-90deg) }
+</style>
+<style type='text/css'>
+	<?php $page_elems->getReportConfigCss($margin_list,false); ?>
+</style>
+
+
+<?php $align=$report_config->alignment_header;?>
+<div id='report_config_content' style='display:block;'>
 <?php
 # All the report content
-include("report_content.php");
+# Make a loop to get all the reports we want to print and feed them in to the report content
+# 1. Store all the selected reports/patient data in an array
+# $_SESSION['patient_array'] includes patient Ids from the batch results page
+# 2. func generateReport(patient_data_array) {
+#    report_word_content.php
+#}
+# 3. foreach(patients as patient) {
+#    generateReport(patient)
+#}
+foreach($_SESSION['patient_array'] as $patienId => $patient_Id) {
+    generateReport($patientId, $patiend_Id);
+}
+
+function generateReport($patientId, $patient_Id) {
+    $patient = get_patient_by_id($patientId);
+    include("report_content.php");
+}
 ?>
+</div>
+</div>
 </body>
 
 </html>
