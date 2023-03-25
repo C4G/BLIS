@@ -10,7 +10,7 @@ include("includes/page_elems.php");
 include("barcode/barcode_lib.php");
 require_once("includes/user_lib.php");
 
-LangUtil::setPageId("print_page");
+LangUtil::setPageId("reports");
 
 include("../users/accesslist.php");
  if(!(isLoggedIn(get_user_by_id($_SESSION['user_id']))))
@@ -714,7 +714,7 @@ p.main {text-align:justify;}
 <body>
     <input type="text" id="barcodeCode" name="barcodeCode" value="<?php echo encodePatientBarcode($patient_id,$lab_config_id);  ?>" style="display: none;"></input>
 
-<div id='options_header' style="font-family: Arial;" >
+	<div id='options_header' style="font-family: Arial;" >
 <form name='word_format_form' id='word_format_form' action='export_pdf.php' method='post' target='_blank'>
 	<input type='hidden' name='data' value='' id='word_data' />
 	<input type='hidden' name='lab_id' value='<?php echo $lab_config_id; ?>' id='lab_id'>
@@ -768,7 +768,7 @@ $monthago_array = explode("-", $monthago_date);
 	</td>
 	
 	<td>
-		<input type='checkbox' name='ip' id='ip'></input> 
+		<input type='checkbox' name='ip' id='ip' value="1" checked></input> 
 		<?php echo LangUtil::$pageTerms['MSG_INCLUDEPENDING']; ?>
                 <br>
                 <input type='checkbox' name='viz' id='viz'></input> 
@@ -832,69 +832,9 @@ $monthago_array = explode("-", $monthago_date);
 </table>
 <hr>
 </div>
-<div id='report_content' class='report_content'>
-<link rel='stylesheet' type='text/css' href='css/table_print.css' />
-<style type='text/css'>
-tbody td, thead th { padding: .3em;} 
-div.editable {
-	/*padding: 2px 2px 2px 2px;*/
-	margin-top: 2px;
-	width:900px;
-	height:20px;
-}
-div.editable input {
-	width:700px;
-}
-div#printhead {
-position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-padding-bottom: 5em;
-margin-bottom: 100px;
-display:none;
-}
-#lab_logo{
-    margin-bottom:20px;
-    height: 165px;
-}
-td{
-    padding:5px;
-}
-
-@media all
-{
- .page-break { display:none; }
-}
-@media print
-{
-	#options_header { display:none; }
-	/* div#printhead {	display: block;
- } */
- div#docbody {
-  margin-top: 5em;
- }
-}
-.landscape_content {-moz-transform: rotate(90deg) translate(300px); }
-.portrait_content {-moz-transform: translate(1px); rotate(-90deg) }
-</style>
-<style type='text/css'>
-	<?php $page_elems->getReportConfigCss($margin_list,false); ?>
-</style>
-
-
-<?php $align=$report_config->alignment_header;?>
-<div id='report_config_content' style='display:block;'>
 <?php
-# All the report content
-# Make a loop to get all the reports we want to print and feed them in to the report content
-# 1. Store all the selected reports/patient data in an array
-# $_SESSION['patient_array'] includes patient Ids from the batch results page
-# 2. func generateReport(patient_data_array) {
-#    report_word_content.php
-#}
-# 3. foreach(patients as patient) {
-#    generateReport(patient)
-#}
-foreach($_SESSION['patient_array'] as $patienId => $patient_Id) {
-    generateReport($patientId, $patiend_Id);
+foreach($_SESSION['patient_array'] as $patienId => $patient) {
+    include("report_content.php");
 }
 
 function generateReport($patientId, $patient_Id) {
@@ -902,8 +842,5 @@ function generateReport($patientId, $patient_Id) {
     include("report_content.php");
 }
 ?>
-</div>
-</div>
 </body>
-
 </html>

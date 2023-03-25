@@ -198,11 +198,7 @@ $url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
 		$test_entry = $test_list[$i];
 		$specimen = Specimen::getById($specimen_id);
 		$patient = Patient::getById($specimen->patientId);
-		# instead of adding the ids here, we need to add them when a checkbox is clicked
-		# might have to create a dict to have the ids correlated with rows?
-		# of have the actual patient ID column map to the ids that are passed in
-		#array_push($patient_array, $patient->patientId)
-		$patient_array[$patient->patientId] = $patient->getSurrogateId();
+		$patient_array[$patient->patientId] = $patient;
 		?>
 		<tr>
 			<td>
@@ -273,7 +269,6 @@ $url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
 </table>
 <?php
 $_SESSION['patient_array'] = $patient_array;
-echo $patient_array['1521'];
 ?>
 
 <?php include("includes/footer.php"); ?>
