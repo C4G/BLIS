@@ -54,12 +54,7 @@ function draw_visualization($cleaned_result, $cleaned_range){
 	$visual_content = "";
 	$visual_content .= "<div><svg width=\"360\" height=\"20\">";
 	$marker_width = 5;
-	if(out_of_range($cleaned_result,$cleaned_range)){
-	   // echo "<span style='color:red'>&lt;Out of range&gt;</span>";
-    } else {
-       //echo "(NORMAL)";
-    }
-	
+
 	// use two or three part visualization format
 	if(strpos($cleaned_range, "<")===0){
 		// draw two part result range
@@ -343,7 +338,6 @@ function clean_range($test, $report_config, $patient){
 	$loop_count = 0;
 	foreach($measure_list as $measure) {
 		$type=$measure->getRangeType();
-        //print_r($measure->getNumericInterpretation());
 		if($type==Measure::$RANGE_NUMERIC) {
 			$range_list_array=$measure->getRangeString($patient);
 			$lower=$range_list_array[0];
@@ -411,7 +405,7 @@ function is_result_parsable($cleaned_result){
 }
 
 # Helper function to fetch test history records
-function get_records_to_print($lab_config, $patient_id) {
+function get_records_to_print($patient_id) {
 	global $date_from, $date_to;
 	$retval = array();
 	if(!isset($ip) or $ip == 0) {
@@ -465,7 +459,6 @@ function get_records_to_print($lab_config, $patient_id) {
 	}
 	
 	$resultset = query_associative_all($query_string);
-	//echo count($resultset);
 	if(count($resultset) == 0 || $resultset == null)
 		return $retval;
 	
@@ -499,7 +492,6 @@ if (is_country_dir($userrr) || is_super_admin($userrr)) {
     $printPatientBarcode = 0;
 } else {
     $barcodeSettings = get_lab_config_settings_barcode();
-    //  print_r($barcodeSettings);
     $code_type = $barcodeSettings['type']; //"code39";
     $bar_width = $barcodeSettings['width']; //2;
     $bar_height = $barcodeSettings['height']; //40;
@@ -604,25 +596,25 @@ function fetch_report() {
 	$dt = $('#dd_to').attr("value");
 	$ip = 0;
 	if($('#ip').is(":checked"))
-		ip = 1;
+		$ip = 1;
             
         if($('#viz').is(":checked"))
-		viz = 1;
+		$viz = 1;
 	$('#fetch_progress').show();
-	// instead of loading this via url we need to change the values for the current patient array
-	// var url_string = "reports_testhistory.php?location=<?php echo $lab_config_id; ?>&patient_id=<?php echo $patient_id; ?>&yf="+yf+"&mf="+mf+"&df="+df+"&yt="+yt+"&mt="+mt+"&dt="+dt+"&ip="+ip+"&viz="+viz;
+	//instead of loading this via url we need to change the values for the current patient array
+	var url_string = "print_page.php?location=<?php echo $lab_config_id; ?>";
 	// window.location=url_string;
-	generateReport();
+	$('#fetch_progress').hide();
 }
 
 $(document).ready(function() {
-        var code = $('#barcodeCode').val();
-        $('#patientBarcode').barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'css'});
+    var code = $('#barcodeCode').val();
+    $('#patientBarcode').barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'css'});
 	<?php
 	if(isset($ip) && $ip == 1) {
 		?>
 		$('#ip').attr("checked", "true");
-			<?php
+		<?php
 	}
 	?>
         <?php
@@ -641,64 +633,8 @@ $(document).ready(function() {
 		bg_over: "FFCC66",
 		field_type: "textarea"
 	});
-	$("input[name='do_landscape']").click( function() {
-		change_orientation();
-	});
-	myNicEditor = new nicEditor();
-    myNicEditor.setPanel('myNicPanel');
-    myNicEditor.addInstance('patient_table');
 });
 
-// function change_orientation() {
-// 	var do_landscape = $("input[name='do_landscape']:checked").attr("value");
-// 	if(do_landscape == "Y" && curr_orientation == 0) {
-// 		$('#report_config_content').removeClass("portrait_content");
-// 		$('#report_config_content').addClass("landscape_content");
-// 		curr_orientation = 1;
-// 	}
-// 	if(do_landscape == "N" && curr_orientation == 1) {
-// 		$('#report_config_content').removeClass("landscape_content");
-// 		$('#report_config_content').addClass("portrait_content");
-// 		curr_orientation = 0;
-// 	}
-// }
-
-// $(document).ready(function(){
-//   // Reset Font Size
-//   var originalFontSize = $('.report_content').css('font-size');
-//   $(".resetFont").click(function(){
-// 	$('.report_content').css('font-size', originalFontSize);
-// 	$('.report_content table').css('font-size', originalFontSize);
-// 	$('.report_content table th').css('font-size', originalFontSize);
-//   });
-//   // Increase Font Size
-//   $(".increaseFont").click(function(){
-//   	var currentFontSize = $('.report_content').css('font-size');
-//  	var currentFontSizeNum = parseFloat(currentFontSize, 10);
-//     var newFontSize = currentFontSizeNum*1.1;
-// 		$('.report_content').css('font-size', newFontSize);
-// 	$('.report_content table').css('font-size', newFontSize);
-// 	$('.report_content table th').css('font-size', newFontSize);
-// 	return false;
-//   });
-//   // Decrease Font Size
-//   $(".decreaseFont").click(function(){
-//   	var currentFontSize = $('.report_content').css('font-size');
-//  	var currentFontSizeNum = parseFloat(currentFontSize, 10);
-//     var newFontSize = currentFontSizeNum*0.9;
-// 	$('.report_content').css('font-size', newFontSize);
-// 	$('.report_content table').css('font-size', newFontSize);
-// 	$('.report_content table th').css('font-size', newFontSize);
-// 	return false;
-//   });
-  
-//    $(".bold").click(function(){
-//   	 var selObj = window.getSelection();
-// 		alert(selObj);
-// 		selObj.style.fontWeight='bold';
-// 	return false;
-//   });
-// });
 </script>
 <style type="text/css">
 p.main {text-align:justify;}
@@ -714,10 +650,10 @@ p.main {text-align:justify;}
 	<input type='hidden' name='lab_id' value='<?php echo $lab_config_id; ?>' id='lab_id'>
 </form>
 <?php
-$today = date("Y-m-d");
-$today_array = explode("-", $today);
-$monthago_date = date("Y-m-d", strtotime(date("Y-m-d", strtotime($today)) . " -1 months"));
-$monthago_array = explode("-", $monthago_date);
+	$today = date("Y-m-d");
+	$today_array = explode("-", $today);
+	$monthago_date = date("Y-m-d", strtotime(date("Y-m-d", strtotime($today)) . " -1 months"));
+	$monthago_array = explode("-", $monthago_date);
 ?>
 <table class='no_border'>
 	<tr valign='top'>
@@ -725,43 +661,22 @@ $monthago_array = explode("-", $monthago_date);
 		<?php echo LangUtil::$generalTerms['FROM_DATE']; ?>
 	</td>
 	<td>
-			<?php
-			$name_list = array("yyyy_from", "mm_from", "dd_from");
-			$id_list = $name_list;
-			if(!isset($yf)) {
-				$value_list = $monthago_array;
-			}
-			else {
-				$value_list = array($yf, $mf, $df);
-			}
-			$page_elems->getDatePickerPlain($name_list, $id_list, $value_list); 
-			?>
-	</td>
-
-	<!-- <td> -->
-		<!-- <table class='no border'>
-	<tr valign='top'>
-		
-	<td>
-	<input type='radio' name='do_landscape' value='N'<?php
-			//if($report_config->landscape == false) echo " checked ";
-			#echo " checked ";
-			?>>Portrait</input>
+		<?php
+		$name_list = array("yyyy_from", "mm_from", "dd_from");
+		$id_list = $name_list;
+		if(!isset($yf)) {
+			$value_list = $monthago_array;
+		} else {
+			$value_list = array($yf, $mf, $df);
+		}
+		$page_elems->getDatePickerPlain($name_list, $id_list, $value_list); 
+		?>
 	</td>
 	<td>
-		<input type='radio' name='do_landscape' value='Y' <?php
-			//if($report_config->landscape == true) echo " checked ";
-			?>>Landscape</input>
-	</td>
-	</tr>
-	</table> -->
-	<!-- </td> -->
-	
-	<td>
-		<input type='checkbox' name='ip' id='ip' value="1" checked></input> 
+		<input type='checkbox' name='ip' id='ip' value='1' checked></input> 
 		<?php echo LangUtil::$pageTerms['MSG_INCLUDEPENDING']; ?>
-                <br>
-                <input type='checkbox' name='viz' id='viz'></input> 
+			<br>
+			<input type='checkbox' name='viz' id='viz'></input> 
 		<?php echo "Include Range Visualization"; ?>
 	</td>
 	<td>
@@ -781,42 +696,25 @@ $monthago_array = explode("-", $monthago_date);
 		</span>
 		</td>
 	</td>
-
 </tr>
 <tr >
 	<td>
-			&nbsp;&nbsp;
-			<?php echo LangUtil::$generalTerms['TO_DATE']; ?>
+		&nbsp;&nbsp;
+		<?php echo LangUtil::$generalTerms['TO_DATE']; ?>
 	</td>
 	<td>
-			<?php
-			$name_list = array("yyyy_to", "mm_to", "dd_to");
-			$id_list = $name_list;
-			if(!isset($yf)) {
-				$value_list = $today_array;
-			}
-			else {
-				$value_list = array($yt, $mt, $dt);
-			}
-			$page_elems->getDatePickerPlain($name_list, $id_list, $value_list);
-			?>
+		<?php
+		$name_list = array("yyyy_to", "mm_to", "dd_to");
+		$id_list = $name_list;
+		if(!isset($yf)) {
+			$value_list = $today_array;
+		}
+		else {
+			$value_list = array($yt, $mt, $dt);
+		}
+		$page_elems->getDatePickerPlain($name_list, $id_list, $value_list);
+		?>
 	</td>
-	<!-- <td>
-	&nbsp;&nbsp;
-	Font
-	</td> -->
-	<!-- <td> -->
-	<!-- <table class='no border'>
-	<tr valign='top'><td>
-	<input  type='button' class="increaseFont" value='Increase' title="Increase Font-size"></input> <br>
-	</td>
-	<td>
-	<input type='button' class="decreaseFont" value='Decrease' title="Decrease Font-size"></input> <br>
-	
-	</td>
-	</tr>
-	</table> -->
-	<!-- </td> -->
 	<td>
 	&nbsp;&nbsp;
 	<input type='button' onClick="javascript:export_as_word('report_word_content');" value='Export Word Document' title='<?php echo LangUtil::$generalTerms['CMD_EXPORTWORD']; ?>'></input>
@@ -824,23 +722,16 @@ $monthago_array = explode("-", $monthago_date);
         <br/><small>(Export PDF requires Word 2010 or newer)</small>
         
 	</td>
-	<td>
-
-	</td>
-	
 	</tr>
 </table>
 <hr>
 </div>
 <?php
-foreach($_SESSION['patient_array'] as $patientId => $patient) {
-    include("report_content.php");
-}
 
-function generateReport($patientId, $patient_Id) {
-    foreach($_SESSION['patient_array'] as $patientId => $patient) {
+$patientDictJson = $_POST['patientDict'];
+$patientDict = json_decode($patientDictJson, true);
+foreach($patientDict as $patientId => $patient_arr) {
     include("report_content.php");
-}
 }
 ?>
 </body>

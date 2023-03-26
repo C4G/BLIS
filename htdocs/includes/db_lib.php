@@ -1930,6 +1930,46 @@ class Patient
 		return $patient;
 	}
 
+	public static function getPatientObject($record) {
+		# Converts a patient record in DB into a Patient object
+		if($record == null)
+			return null;
+		$patient = new Patient();
+		$patient->patientId = $record['patientId'];
+		$patient->addlId = $record['addlId'];
+		$patient->name = $record['name'];
+		$patient->dob = $record['dob'];
+		$patient->age = $record['age'];
+		$patient->sex = $record['sex'];
+		$patient->regDate = $record['regDate'];
+
+		$patient->specimenCount = 0;
+		$args = func_get_args();
+		if(func_num_args() ==1){
+			$patient->specimenCount = 0;
+		} else {
+			$patient->specimenCount = $args[1];
+		}
+
+		if(isset($record['partialDob']))
+			$patient->partialDob = $record['partialDob'];
+		else
+			$patient->partialDob = null;
+		if(isset($record['surrogateId']))
+			$patient->surrogateId = $record['surrogateId'];
+		else
+			$patient->surrogateId = null;
+		if(isset($record['createdBy']))
+			$patient->createdBy = $record['createdBy'];
+		else
+			$patient->createdBy = null;
+		if(isset($record['hashValue']))
+			$patient->hashValue = $record['hashValue'];
+		else
+			$patient->hashValue = null;
+		return $patient;
+	}
+
 	public static function checkNameExists($name)
 	{
 		# Checks if the given patient name (or similar match) already exists

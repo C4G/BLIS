@@ -65,7 +65,7 @@
 				$logo_path2 = "../ajax/logo_".$lab_config_id.".jpg";
 				$logo_path1="../../logo_".$lab_config_id.".jpg";
 				$align=$report_config->alignment_header;
-
+				
 				if(file_exists($logo_path1) === true) {	
 					copy($logo_path1,$logo_path);
 					?>
@@ -106,13 +106,14 @@
 
             <br>
             <?php
+			$patient = Patient::getPatientObject($patient_arr);
             $patient_id = $patient->surrogateId;
 
             if($patient == null) {
                 echo LangUtil::$generalTerms['PATIENT_ID']." $patient_id ".LangUtil::$generalTerms['MSG_NOTFOUND'];
             } else {
                 # Fetch test entries to print in report
-                $record_list = get_records_to_print($lab_config, $patient_id); 
+                $record_list = get_records_to_print($patient_id); 
                 # If single date supplied, check if-
                 # 1. Physician name is the same for all
                 # 2. Patient daily number is the same for all
@@ -130,6 +131,7 @@
                     $count_list= count($record_list);
                     
                     foreach($record_list as $record_set) {
+						print_r($record_set);
                         $value = $record_set;
                         $test = $value[0];
                         //check for test_id if its in the array

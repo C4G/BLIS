@@ -1,3 +1,4 @@
+
 <?php
 #
 # Adds batch results for a single test type
@@ -123,8 +124,8 @@ function fetch_specimen3(specimen_id, test_id)
 	window.location = url+"?specimen_id="+specimen_id+"&test_id="+test_id;
 }
 </script>
-
 <script type="text/javascript">
+
 function selectAll() {
     $(':checkbox').each(function() {
         if (this.id != 'select-all') {
@@ -132,11 +133,17 @@ function selectAll() {
         }
     });
 }
-function printSelectedReports() {
+let patientDict = {};
 
+function updatePatientDict(checkbox, patientId, patientJson) {   
+	if (checkbox.checked) {
+    	patientDict[patientId] = patientJson;
+	} else {
+        delete patientDict[patientId];
+    }
+	document.getElementById("patientDictInput").value = JSON.stringify(patientDict);
 }
 </script>
-
 <br>
 <b><?php echo LangUtil::$pageTerms['MENU_BATCHRESULTS']; ?></b>: <?php echo $test_name;?>
  | <a href='results_entry.php'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>
@@ -144,7 +151,11 @@ function printSelectedReports() {
 <?php
 $url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
 ?>
-<a href='<?php echo $url2; ?>' target='_blank' title='Click to generate printable report'><?php echo 'Print Selected Reports'; ?></a>
+<form method="post" action="<?php echo $url2; ?>" target="_blank">
+    <input type="hidden" name="patientDict" value="" id="patientDictInput">
+    <button type="submit" title='Click to generate printable report'>Print Selected Reports</button>
+</form>
+
 </div>
 <table class='tablesorter' id='status_table'>
 	<thead>
@@ -191,12 +202,12 @@ $url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
 		$test_entry = $test_list[$i];
 		$specimen = Specimen::getById($specimen_id);
 		$patient = Patient::getById($specimen->patientId);
-		$patient_array[$patient->patientId] = $patient;
+		// $patient_dict[$patient->patientId] = $patient;
 		?>
 		<tr>
 			<td>
 			<center>
-			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing'></input>
+			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing' onChange='updatePatientDict(this, <?php echo $patient->patientId; ?>, <?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>)'></input>
 			</center>
 			</td>
 			<?php
@@ -260,8 +271,5 @@ $url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
 	?>
 	</tbody>
 </table>
-<?php
-$_SESSION['patient_array'] = $patient_array;
-?>
 
 <?php include("includes/footer.php"); ?>
