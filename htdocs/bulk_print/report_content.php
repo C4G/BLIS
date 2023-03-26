@@ -89,13 +89,20 @@
             <h4 align="<?php echo $align; ?>"><?php echo $report_config->titleText; ?></h4>
 
             <?php
+            $yf = $_POST['yf'];
+            $mf = $_POST['mf'];
+            $df = $_POST['df'];
+            $yt = $_POST['yt'];
+            $mt = $_POST['mt'];
+            $dt = $_POST['dt'];
+            $ip = $_POST['ip'];
+            $viz = $_POST['viz'];
             if(isset($yf))
             {
                 echo "<br>";
                 if($date_from == $date_to) {
                     echo LangUtil::$generalTerms['DATE'].": ".DateLib::mysqlToString($date_from);
-                }
-                else {	
+                } else {	
                     echo LangUtil::$generalTerms['FROM_DATE'].": ".DateLib::mysqlToString($date_from);
                     echo " | ";
                     echo LangUtil::$generalTerms['TO_DATE'].": ".DateLib::mysqlToString($date_to);
@@ -131,11 +138,8 @@
                     $count_list= count($record_list);
                     
                     foreach($record_list as $record_set) {
-						print_r($record_set);
                         $value = $record_set;
                         $test = $value[0];
-                        //check for test_id if its in the array
-                        //http://www.w3schools.com/php/func_array_in_array.asp
                         $specimen = $value[1];
                                     
                                     if(in_array($test->specimenId, $rem_specs))

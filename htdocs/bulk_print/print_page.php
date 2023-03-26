@@ -32,19 +32,20 @@ $rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
 // visualization parameters
 $chart_column_width = 360;
 $labsection = 0;
-if (isset($_REQUEST['labsection'])){
+if(isset($_REQUEST['labsection'])){
+	//echo $_REQUEST['labsection'];
 	$labsection = $_REQUEST['labsection'];
 }
-if (isset($yf)) {
-	$date_from = $yf."-".$mf."-".$df;
-	$date_to = $yt."-".$mt."-".$dt;
-} else {
+if(isset($_REQUEST['yf'])) {
+	$date_from = $_REQUEST['yf']."-".$_REQUEST['mf']."-".$_REQUEST['df'];
+	$date_to = $_REQUEST['yt']."-".$_REQUEST['mt']."-".$_REQUEST['dt'];
+}
+else {
 	$date_from = date("Y-m-d");
 	$date_to = $date_from;
 }
-$uiinfo = "from=".$date_from."&to=".$date_to."&ip=".$ip."&viz=".$viz;
-putUILog('reports_testhistory', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
-
+$uiinfo = "from=".$date_from."&to=".$date_to."&ip=".$_REQUEST['ip']."&viz=".$_REQUEST['viz'];
+putUILog('print_page', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 // function to draw vis
 function draw_visualization($cleaned_result, $cleaned_range){
 
@@ -408,7 +409,7 @@ function is_result_parsable($cleaned_result){
 function get_records_to_print($patient_id) {
 	global $date_from, $date_to;
 	$retval = array();
-	if(!isset($ip) or $ip == 0) {
+	if(!isset($_REQUEST['ip']) or $_REQUEST['ip'] == 0) {
 		# Do not include pending tests
 		$labsection = 0;
 		if(isset($_REQUEST['labsection'])){
@@ -429,7 +430,7 @@ function get_records_to_print($patient_id) {
 			"AND t.test_type_id = tt.test_type_id ".
 			"AND tt.test_type_id in (select test_type_id from test_type where test_category_id = $labsection)";
 		}
-		if(isset($yf)) {
+		if(isset($_REQUEST['yf'])) {
 			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
 		}
 		$query_string .= "ORDER BY sp.date_collected DESC";
@@ -452,7 +453,7 @@ function get_records_to_print($patient_id) {
 			"AND tt.test_type_id in (select test_type_id from test_type where test_category_id = $labsection)";
 		}
 				
-		if(isset($yf))
+		if(isset($_REQUEST['yf']))
 			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
 		$query_string .= "ORDER BY sp.date_collected DESC";		
 	
@@ -635,6 +636,43 @@ $(document).ready(function() {
 	});
 });
 
+$(document).ready(function(){
+  // Reset Font Size
+  var originalFontSize = $('#report_content').css('font-size');
+   $(".resetFont").click(function(){
+  $('#report_content').css('font-size', originalFontSize);
+  $('#report_content table').css('font-size', originalFontSize);
+  $('#report_content table th').css('font-size', originalFontSize);
+  });
+  // Increase Font Size
+  $(".increaseFont").click(function(){
+  	var currentFontSize = $('#report_content').css('font-size');
+ 	var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = currentFontSizeNum*1.1;
+		$('#report_content').css('font-size', newFontSize);
+	$('#report_content table').css('font-size', newFontSize);
+	$('#report_content table th').css('font-size', newFontSize);
+	return false;
+  });
+  // Decrease Font Size
+  $(".decreaseFont").click(function(){
+  	var currentFontSize = $('#report_content').css('font-size');
+ 	var currentFontSizeNum = parseFloat(currentFontSize, 10);
+    var newFontSize = currentFontSizeNum*0.9;
+	$('#report_content').css('font-size', newFontSize);
+	$('#report_content table').css('font-size', newFontSize);
+	$('#report_content table th').css('font-size', newFontSize);
+	return false;
+  });
+  
+   $(".bold").click(function(){
+  	 var selObj = window.getSelection();
+		alert(selObj);
+		selObj.style.fontWeight='bold';
+	return false;
+  });
+});
+
 </script>
 <style type="text/css">
 p.main {text-align:justify;}
@@ -664,10 +702,10 @@ p.main {text-align:justify;}
 		<?php
 		$name_list = array("yyyy_from", "mm_from", "dd_from");
 		$id_list = $name_list;
-		if(!isset($yf)) {
+		if(!isset($_REQUEST['yf'])) {
 			$value_list = $monthago_array;
 		} else {
-			$value_list = array($yf, $mf, $df);
+			$value_list = array($_REQUEST['yf'], $_REQUEST['mf'], $_REQUEST['df']);
 		}
 		$page_elems->getDatePickerPlain($name_list, $id_list, $value_list); 
 		?>
@@ -683,18 +721,14 @@ p.main {text-align:justify;}
 	</td>
 	<td>
 		<input type='button' onClick="javascript:print_content('report_content');" value='<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>'></input>
-		</td>
-		<td>
-		<div id="dialog" title="Basic dialog"></div>
 		<input type='button' onClick="javascript:window.close();" value='Close' title='<?php echo LangUtil::$generalTerms['CMD_CLOSEPAGE']; ?>'></input>
-		</td>
-		<td>
 		<input type='button' onClick="javascript:fetch_report();" value='<?php echo LangUtil::$generalTerms['CMD_VIEW']; ?>'></input>
-		</td><td><span id='fetch_progress' style='display:none'>
+	</td>
+	<td>
+	<span id='fetch_progress' style='display:none'>
 			&nbsp;&nbsp;&nbsp;
 			<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
 		</span>
-		</td>
 	</td>
 </tr>
 <tr >
@@ -706,21 +740,31 @@ p.main {text-align:justify;}
 		<?php
 		$name_list = array("yyyy_to", "mm_to", "dd_to");
 		$id_list = $name_list;
-		if(!isset($yf)) {
+		if(!isset($_REQUEST['yf'])) {
 			$value_list = $today_array;
-		}
-		else {
-			$value_list = array($yt, $mt, $dt);
+		} else {
+			$value_list = array($_REQUEST['yt'], $_REQUEST['mt'], $_REQUEST['dt']);
 		}
 		$page_elems->getDatePickerPlain($name_list, $id_list, $value_list);
 		?>
 	</td>
 	<td>
-	&nbsp;&nbsp;
 	<input type='button' onClick="javascript:export_as_word('report_word_content');" value='Export Word Document' title='<?php echo LangUtil::$generalTerms['CMD_EXPORTWORD']; ?>'></input>
         <input type='button' onClick="javascript:export_as_pdf('report_word_content');" value='Export PDF Document ' title='<?php echo LangUtil::$generalTerms['CMD_EXPORTWORD']; ?>'></input>
         <br/><small>(Export PDF requires Word 2010 or newer)</small>
-        
+	</td>
+	<td>
+	</td>
+	<td>
+		Font
+		<table class='no border'>
+			<tr valign='top'>
+				<td>
+					<input  type='button' class="increaseFont" value='Increase' title="Increase Font-size"></input>
+					<input type='button' class="decreaseFont" value='Decrease' title="Decrease Font-size"></input>
+				</td>
+			</tr>
+		</table>
 	</td>
 	</tr>
 </table>
@@ -731,7 +775,9 @@ p.main {text-align:justify;}
 $patientDictJson = $_POST['patientDict'];
 $patientDict = json_decode($patientDictJson, true);
 foreach($patientDict as $patientId => $patient_arr) {
+    echo '<div id="report_content_' . $patientId . '">';
     include("report_content.php");
+    echo '</div>';
 }
 ?>
 </body>
