@@ -94,23 +94,16 @@ for($i = 0; $i < count($specimen_id_list); $i++) {
 	$comments = $comments_list[$i];
 	$comments = preg_replace("/[^a-zA-z0-9,.;:_\s]/", "", $comments);
 	# Fetch entry in 'test' table
-	if($test == null)
-	{
+	if($test == null) {
 		# Error: This test type was not scheduled for current specimen ID
 		$status_list[] = "<font color='red'>".LangUtil::$generalTerms['ERROR']."</font>";
-	}
-	else if($test->isPending() == false)
-	{
+	} else if($test->isPending() == false) {
 		# Error: Results already entered
 		$status_list[] = "<font color='red'>".LangUtil::$generalTerms['ERROR']."</font>: ".LangUtil::$pageTerms['MSG_ALREADYENTERED'];		
-	}
-	else if($empty_result_field == true)
-	{
+	} else if($empty_result_field == true) {
 		# Error: Result value missing
 		$status_list[] = "<font color='red'>".LangUtil::$generalTerms['ERROR']."</font>: ".LangUtil::$pageTerms['MSG_RESULTMISSING'];		
-	}
-	else
-	{
+	} else {
 		# Add result values
 		$test_id = $test->testId;
 		$test->result = $result_csv;

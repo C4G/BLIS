@@ -19,7 +19,7 @@ include("../users/accesslist.php");
 $date_from = "";
 $date_to = "";
 $hidePatientName = 0;
-$view_viz = $_REQUEST['viz'];
+$view_viz = $viz;
 $rem_specs = array();
                 $rem_remarks = array();
 $rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
@@ -32,19 +32,17 @@ $rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
 // visualization parameters
 $chart_column_width = 360;
 $labsection = 0;
-if(isset($_REQUEST['labsection'])){
-	//echo $_REQUEST['labsection'];
+if (isset($_REQUEST['labsection'])){
 	$labsection = $_REQUEST['labsection'];
 }
-if(isset($_REQUEST['yf'])) {
-	$date_from = $_REQUEST['yf']."-".$_REQUEST['mf']."-".$_REQUEST['df'];
-	$date_to = $_REQUEST['yt']."-".$_REQUEST['mt']."-".$_REQUEST['dt'];
-}
-else {
+if (isset($yf)) {
+	$date_from = $yf."-".$mf."-".$df;
+	$date_to = $yt."-".$mt."-".$dt;
+} else {
 	$date_from = date("Y-m-d");
 	$date_to = $date_from;
 }
-$uiinfo = "from=".$date_from."&to=".$date_to."&ip=".$_REQUEST['ip']."&viz=".$_REQUEST['viz'];
+$uiinfo = "from=".$date_from."&to=".$date_to."&ip=".$ip."&viz=".$viz;
 putUILog('reports_testhistory', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 // function to draw vis
@@ -58,9 +56,7 @@ function draw_visualization($cleaned_result, $cleaned_range){
 	$marker_width = 5;
 	if(out_of_range($cleaned_result,$cleaned_range)){
 	   // echo "<span style='color:red'>&lt;Out of range&gt;</span>";
-    }
-    else
-    {
+    } else {
        //echo "(NORMAL)";
     }
 	
@@ -77,7 +73,7 @@ function draw_visualization($cleaned_result, $cleaned_range){
 			$marker_width = $chart_column_width/2;
 		}
 		
-	}else if(strpos($cleaned_range, ">")===0){
+	} else if(strpos($cleaned_range, ">")===0){
 		// draw two part result range
 		$visual_content .= "<rect width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.15; \"></rect>";
 		$visual_content .= "<rect x=\"180\"  width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.3; \"></rect>";
@@ -89,7 +85,7 @@ function draw_visualization($cleaned_result, $cleaned_range){
 			$marker_width = $chart_column_width/2;
 		}
 		
-	}else{
+	} else {
 		// draw three part result range
 		$visual_content .= "<rect width=\"90\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.2; \"></rect>";
 		$visual_content .= "<rect x=\"90\" width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.3; \"></rect>";
@@ -120,12 +116,9 @@ function out_of_range($cleaned_result, $cleaned_range){
     }
 
     if(preg_match("/[0-9]+min [0-9]+sec/", $cleaned_result)){
-
         //result
         $split_min = explode("min ", $cleaned_result);
         $min = $split_time[0];
-
-
         //range
         $split_range = explode(" min", $cleaned_range);
         $split_range_2 = explode("-", $split_range);
@@ -139,13 +132,12 @@ function out_of_range($cleaned_result, $cleaned_range){
 
         // < 6-
         $numeric_part = "";
-        if(strpos($split_range[1], "-")!==false){
+        if (strpos($split_range[1], "-")!==false) {
             $numeric_part = $split_range[1];
-        }else{
+        } else {
             $split_range_2 = explode("<", $split_range[0]);
             $numeric_part = $split_range_2[1];
         }
-
         // 6-
         $full_range_split = explode("-", $numeric_part);
         $full_range= $full_range_split[0];
@@ -183,7 +175,6 @@ function out_of_range($cleaned_result, $cleaned_range){
 
 }
 
-
 // get visualization result marker location
 function parse_result_x($cleaned_result, $cleaned_range){
 	$chart_location = 0;
@@ -192,9 +183,9 @@ function parse_result_x($cleaned_result, $cleaned_range){
 	$cleaned_result_split = explode(": ", $cleaned_result);
 	
 	// remove labels for results
-	if(count($cleaned_result_split)==1){
+	if (count($cleaned_result_split)==1){
 		$cleaned_result = $cleaned_result_split[0];
-	}else{
+	 }else {
 		$cleaned_result = $cleaned_result_split[1];
 	}
 	
@@ -217,15 +208,15 @@ function parse_result_x($cleaned_result, $cleaned_range){
 
 		$chart_location = ($chart_column_width/4) + ($chart_column_width/2)*($seconds_offset/$full_range);
 		
-	}else if(preg_match("/[-+]?[0-9]*\.?[0-9]+/", $cleaned_result) && (strpos($cleaned_range, "<")===0 || strpos($cleaned_range, ">")===0)){
+	} else if (preg_match("/[-+]?[0-9]*\.?[0-9]+/", $cleaned_result) && (strpos($cleaned_range, "<")===0 || strpos($cleaned_range, ">")===0)){
 		// have one-sided range, format < 6-, <6-
 		$split_range = explode(" ", $cleaned_range);
 		
 		// < 6-
 		$numeric_part = "";
-		if(strpos($split_range[1], "-")!==false){
+		if (strpos($split_range[1], "-")!==false){
 			$numeric_part = $split_range[1];
-		}else{
+		} else {
 			$split_range_2 = explode("<", $split_range[0]);
 			$numeric_part = $split_range_2[1];
 		}
@@ -243,16 +234,16 @@ function parse_result_x($cleaned_result, $cleaned_range){
 			
 			// just place it to 0, when the result is < something, it is in the normal range
 			$result_offset = 0;
-		}else{
+		} else {
 			$result_offset = floatval($cleaned_result);
 		}
 		
-        if($full_range == 0){
+        if ($full_range == 0) {
 		    $full_range = 0.00001;
         }
 		$chart_location = ($chart_column_width/2)*($result_offset/$full_range);
 		
-	}else if(preg_match("/[-+]?[0-9]*\.?[0-9]+/", $cleaned_result)){
+	} else if (preg_match("/[-+]?[0-9]*\.?[0-9]+/", $cleaned_result)) {
 
 		// numeric results with a specified range
 		$numeric_part_split = explode(" ", $cleaned_range);
@@ -263,7 +254,7 @@ function parse_result_x($cleaned_result, $cleaned_range){
 		$high_range = $numeric_part_range_split[1];
 		$full_range = ($high_range - $low_range);
 		$result_offset = floatval($cleaned_result) - $low_range;
-        if($full_range == 0){
+        if ($full_range == 0) {
             $full_range = 0.00001;
         }
 
@@ -272,9 +263,9 @@ function parse_result_x($cleaned_result, $cleaned_range){
 	
 	// to deal with double not being accurate
 	$chart_location_2 = round($chart_location);
-	if($chart_location<0){
+	if ($chart_location<0) {
 		$chart_location = 0;
-	}else if($chart_location_2 >= $chart_column_width){
+	} else if ($chart_location_2 >= $chart_column_width) {
 		$chart_location = $chart_column_width-5;
 	}
 	
@@ -284,12 +275,13 @@ function parse_result_x($cleaned_result, $cleaned_range){
 // clean results
 function clean_result_display($test, $report_config, $show_units){
 
-    if(trim($test->result) == "")
+    if (trim($test->result) == "") {
         $result = "";
-    else if($report_config->useMeasures == 1)
+	} else if ($report_config->useMeasures == 1) {
         $result = $test->decodeResultWithoutMeasures();
-    else
+	} else {
         $result = $test->decodeResult(false,$show_units);
+	}
 
     // cleaning up results
     $result = str_replace("&nbsp;", " ", $result);
@@ -422,7 +414,7 @@ function is_result_parsable($cleaned_result){
 function get_records_to_print($lab_config, $patient_id) {
 	global $date_from, $date_to;
 	$retval = array();
-	if(!isset($_REQUEST['ip']) or $_REQUEST['ip'] == 0) {
+	if(!isset($ip) or $ip == 0) {
 		# Do not include pending tests
 		$labsection = 0;
 		if(isset($_REQUEST['labsection'])){
@@ -443,8 +435,9 @@ function get_records_to_print($lab_config, $patient_id) {
 			"AND t.test_type_id = tt.test_type_id ".
 			"AND tt.test_type_id in (select test_type_id from test_type where test_category_id = $labsection)";
 		}
-		if(isset($_REQUEST['yf']))
+		if(isset($yf)) {
 			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
+		}
 		$query_string .= "ORDER BY sp.date_collected DESC";
 	} else {
 		# Include pending tests
@@ -465,7 +458,7 @@ function get_records_to_print($lab_config, $patient_id) {
 			"AND tt.test_type_id in (select test_type_id from test_type where test_category_id = $labsection)";
 		}
 				
-		if(isset($_REQUEST['yf']))
+		if(isset($yf))
 			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
 		$query_string .= "ORDER BY sp.date_collected DESC";		
 	
@@ -498,7 +491,7 @@ $report_id = $REPORT_ID_ARRAY['reports_testhistory.php'];
 $report_config = $lab_config->getReportConfig($report_id);
 $margin_list = $report_config->margins;
 $userrr = get_user_by_id($_SESSION['user_id']);
-if(is_country_dir($userrr) || is_super_admin($userrr)) {
+if (is_country_dir($userrr) || is_super_admin($userrr)) {
     $code_type = 0;
     $bar_width = 0;
     $bar_height = 0;
@@ -513,7 +506,7 @@ if(is_country_dir($userrr) || is_super_admin($userrr)) {
     $font_size = $barcodeSettings['textsize']; //11;
     $printPatientBarcode = patientReportBarcodeCheck();
 }
-for($i = 0; $i < count($margin_list); $i++) {
+for ($i = 0; $i < count($margin_list); $i++) {
 	$margin_list[$i] = ($SCREEN_WIDTH * $margin_list[$i] / 100);
 }
 ?>
@@ -603,39 +596,40 @@ function print_content(div_id) {
 }
 
 function fetch_report() {
-	var yf = $('#yyyy_from').attr("value");
-	var mf = $('#mm_from').attr("value");
-	var df = $('#dd_from').attr("value");
-	var yt = $('#yyyy_to').attr("value");
-	var mt = $('#mm_to').attr("value");
-	var dt = $('#dd_to').attr("value");
-	var ip = 0;
+	$yf = $('#yyyy_from').attr("value");
+	$mf = $('#mm_from').attr("value");
+	$df = $('#dd_from').attr("value");
+	$yt = $('#yyyy_to').attr("value");
+	$mt = $('#mm_to').attr("value");
+	$dt = $('#dd_to').attr("value");
+	$ip = 0;
 	if($('#ip').is(":checked"))
 		ip = 1;
             
         if($('#viz').is(":checked"))
 		viz = 1;
 	$('#fetch_progress').show();
-	var url_string = "reports_testhistory.php?location=<?php echo $lab_config_id; ?>&patient_id=<?php echo $patient_id; ?>&yf="+yf+"&mf="+mf+"&df="+df+"&yt="+yt+"&mt="+mt+"&dt="+dt+"&ip="+ip+"&viz="+viz;
-	window.location=url_string;
+	// instead of loading this via url we need to change the values for the current patient array
+	// var url_string = "reports_testhistory.php?location=<?php echo $lab_config_id; ?>&patient_id=<?php echo $patient_id; ?>&yf="+yf+"&mf="+mf+"&df="+df+"&yt="+yt+"&mt="+mt+"&dt="+dt+"&ip="+ip+"&viz="+viz;
+	// window.location=url_string;
+	generateReport();
 }
 
 $(document).ready(function() {
         var code = $('#barcodeCode').val();
         $('#patientBarcode').barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'css'});
 	<?php
-	if(isset($_REQUEST['ip']) && $_REQUEST['ip'] == 1) {
-	?>
-	$('#ip').attr("checked", "true");
-        <?php
+	if(isset($ip) && $ip == 1) {
+		?>
+		$('#ip').attr("checked", "true");
+			<?php
 	}
 	?>
         <?php
-	if(isset($_REQUEST['viz']) && $_REQUEST['viz'] == 1) {
-	?>
-	$('#viz').attr("checked", "true");
-
-	<?php
+	if(isset($viz) && $viz == 1) {
+		?>
+		$('#viz').attr("checked", "true");
+		<?php
 	}
 	?>
 	$('#report_content_table1').tablesorter();
@@ -655,56 +649,56 @@ $(document).ready(function() {
     myNicEditor.addInstance('patient_table');
 });
 
-function change_orientation() {
-	var do_landscape = $("input[name='do_landscape']:checked").attr("value");
-	if(do_landscape == "Y" && curr_orientation == 0) {
-		$('#report_config_content').removeClass("portrait_content");
-		$('#report_config_content').addClass("landscape_content");
-		curr_orientation = 1;
-	}
-	if(do_landscape == "N" && curr_orientation == 1) {
-		$('#report_config_content').removeClass("landscape_content");
-		$('#report_config_content').addClass("portrait_content");
-		curr_orientation = 0;
-	}
-}
+// function change_orientation() {
+// 	var do_landscape = $("input[name='do_landscape']:checked").attr("value");
+// 	if(do_landscape == "Y" && curr_orientation == 0) {
+// 		$('#report_config_content').removeClass("portrait_content");
+// 		$('#report_config_content').addClass("landscape_content");
+// 		curr_orientation = 1;
+// 	}
+// 	if(do_landscape == "N" && curr_orientation == 1) {
+// 		$('#report_config_content').removeClass("landscape_content");
+// 		$('#report_config_content').addClass("portrait_content");
+// 		curr_orientation = 0;
+// 	}
+// }
 
-$(document).ready(function(){
-  // Reset Font Size
-  var originalFontSize = $('.report_content').css('font-size');
-   $(".resetFont").click(function(){
-  $('.report_content').css('font-size', originalFontSize);
-  $('.report_content table').css('font-size', originalFontSize);
-  $('.report_content table th').css('font-size', originalFontSize);
-  });
-  // Increase Font Size
-  $(".increaseFont").click(function(){
-  	var currentFontSize = $('.report_content').css('font-size');
- 	var currentFontSizeNum = parseFloat(currentFontSize, 10);
-    var newFontSize = currentFontSizeNum*1.1;
-		$('.report_content').css('font-size', newFontSize);
-	$('.report_content table').css('font-size', newFontSize);
-	$('.report_content table th').css('font-size', newFontSize);
-	return false;
-  });
-  // Decrease Font Size
-  $(".decreaseFont").click(function(){
-  	var currentFontSize = $('.report_content').css('font-size');
- 	var currentFontSizeNum = parseFloat(currentFontSize, 10);
-    var newFontSize = currentFontSizeNum*0.9;
-	$('.report_content').css('font-size', newFontSize);
-	$('.report_content table').css('font-size', newFontSize);
-	$('.report_content table th').css('font-size', newFontSize);
-	return false;
-  });
+// $(document).ready(function(){
+//   // Reset Font Size
+//   var originalFontSize = $('.report_content').css('font-size');
+//   $(".resetFont").click(function(){
+// 	$('.report_content').css('font-size', originalFontSize);
+// 	$('.report_content table').css('font-size', originalFontSize);
+// 	$('.report_content table th').css('font-size', originalFontSize);
+//   });
+//   // Increase Font Size
+//   $(".increaseFont").click(function(){
+//   	var currentFontSize = $('.report_content').css('font-size');
+//  	var currentFontSizeNum = parseFloat(currentFontSize, 10);
+//     var newFontSize = currentFontSizeNum*1.1;
+// 		$('.report_content').css('font-size', newFontSize);
+// 	$('.report_content table').css('font-size', newFontSize);
+// 	$('.report_content table th').css('font-size', newFontSize);
+// 	return false;
+//   });
+//   // Decrease Font Size
+//   $(".decreaseFont").click(function(){
+//   	var currentFontSize = $('.report_content').css('font-size');
+//  	var currentFontSizeNum = parseFloat(currentFontSize, 10);
+//     var newFontSize = currentFontSizeNum*0.9;
+// 	$('.report_content').css('font-size', newFontSize);
+// 	$('.report_content table').css('font-size', newFontSize);
+// 	$('.report_content table th').css('font-size', newFontSize);
+// 	return false;
+//   });
   
-   $(".bold").click(function(){
-  	 var selObj = window.getSelection();
-		alert(selObj);
-		selObj.style.fontWeight='bold';
-	return false;
-  });
-});
+//    $(".bold").click(function(){
+//   	 var selObj = window.getSelection();
+// 		alert(selObj);
+// 		selObj.style.fontWeight='bold';
+// 	return false;
+//   });
+// });
 </script>
 <style type="text/css">
 p.main {text-align:justify;}
@@ -734,28 +728,24 @@ $monthago_array = explode("-", $monthago_date);
 			<?php
 			$name_list = array("yyyy_from", "mm_from", "dd_from");
 			$id_list = $name_list;
-			if(!isset($_REQUEST['yf'])) {
+			if(!isset($yf)) {
 				$value_list = $monthago_array;
 			}
 			else {
-				$value_list = array($_REQUEST['yf'], $_REQUEST['mf'], $_REQUEST['df']);
+				$value_list = array($yf, $mf, $df);
 			}
 			$page_elems->getDatePickerPlain($name_list, $id_list, $value_list); 
 			?>
 	</td>
-	<td>
-	&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type='button' onClick="javascript:print_content('report_content');" value='<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>'></input>
-			<div id="dialog" title="Basic dialog"></div>
-	</td>
-	<td>
-		<table class='no border'>
+
+	<!-- <td> -->
+		<!-- <table class='no border'>
 	<tr valign='top'>
 		
 	<td>
 	<input type='radio' name='do_landscape' value='N'<?php
 			//if($report_config->landscape == false) echo " checked ";
-			echo " checked ";
+			#echo " checked ";
 			?>>Portrait</input>
 	</td>
 	<td>
@@ -764,8 +754,8 @@ $monthago_array = explode("-", $monthago_date);
 			?>>Landscape</input>
 	</td>
 	</tr>
-	</table>
-	</td>
+	</table> -->
+	<!-- </td> -->
 	
 	<td>
 		<input type='checkbox' name='ip' id='ip' value="1" checked></input> 
@@ -775,12 +765,23 @@ $monthago_array = explode("-", $monthago_date);
 		<?php echo "Include Range Visualization"; ?>
 	</td>
 	<td>
+	</td>
+	<td>
+		<input type='button' onClick="javascript:print_content('report_content');" value='<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>'></input>
+		</td>
+		<td>
+		<div id="dialog" title="Basic dialog"></div>
+		<input type='button' onClick="javascript:window.close();" value='Close' title='<?php echo LangUtil::$generalTerms['CMD_CLOSEPAGE']; ?>'></input>
+		</td>
+		<td>
 		<input type='button' onClick="javascript:fetch_report();" value='<?php echo LangUtil::$generalTerms['CMD_VIEW']; ?>'></input>
 		</td><td><span id='fetch_progress' style='display:none'>
 			&nbsp;&nbsp;&nbsp;
 			<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
 		</span>
+		</td>
 	</td>
+
 </tr>
 <tr >
 	<td>
@@ -791,21 +792,21 @@ $monthago_array = explode("-", $monthago_date);
 			<?php
 			$name_list = array("yyyy_to", "mm_to", "dd_to");
 			$id_list = $name_list;
-			if(!isset($_REQUEST['yf'])) {
+			if(!isset($yf)) {
 				$value_list = $today_array;
 			}
 			else {
-				$value_list = array($_REQUEST['yt'], $_REQUEST['mt'], $_REQUEST['dt']);
+				$value_list = array($yt, $mt, $dt);
 			}
 			$page_elems->getDatePickerPlain($name_list, $id_list, $value_list);
 			?>
 	</td>
-	<td>
+	<!-- <td>
 	&nbsp;&nbsp;
 	Font
-	</td>
-	<td>
-	<table class='no border'>
+	</td> -->
+	<!-- <td> -->
+	<!-- <table class='no border'>
 	<tr valign='top'><td>
 	<input  type='button' class="increaseFont" value='Increase' title="Increase Font-size"></input> <br>
 	</td>
@@ -814,8 +815,8 @@ $monthago_array = explode("-", $monthago_date);
 	
 	</td>
 	</tr>
-	</table>
-	</td>
+	</table> -->
+	<!-- </td> -->
 	<td>
 	&nbsp;&nbsp;
 	<input type='button' onClick="javascript:export_as_word('report_word_content');" value='Export Word Document' title='<?php echo LangUtil::$generalTerms['CMD_EXPORTWORD']; ?>'></input>
@@ -824,8 +825,7 @@ $monthago_array = explode("-", $monthago_date);
         
 	</td>
 	<td>
-	&nbsp;&nbsp;
-	<input type='button' onClick="javascript:window.close();" value='Close' title='<?php echo LangUtil::$generalTerms['CMD_CLOSEPAGE']; ?>'></input>
+
 	</td>
 	
 	</tr>
@@ -833,13 +833,14 @@ $monthago_array = explode("-", $monthago_date);
 <hr>
 </div>
 <?php
-foreach($_SESSION['patient_array'] as $patienId => $patient) {
+foreach($_SESSION['patient_array'] as $patientId => $patient) {
     include("report_content.php");
 }
 
 function generateReport($patientId, $patient_Id) {
-    $patient = get_patient_by_id($patientId);
+    foreach($_SESSION['patient_array'] as $patientId => $patient) {
     include("report_content.php");
+}
 }
 ?>
 </body>

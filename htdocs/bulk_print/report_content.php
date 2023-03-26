@@ -49,7 +49,6 @@
     <style type='text/css'>
         <?php $page_elems->getReportConfigCss($margin_list,false); ?>
     </style>
-
     <?php $align=$report_config->alignment_header;?>
 
     <div id='report_config_content' style='display:block;'>
@@ -90,7 +89,7 @@
             <h4 align="<?php echo $align; ?>"><?php echo $report_config->titleText; ?></h4>
 
             <?php
-            if(isset($_REQUEST['yf']))
+            if(isset($yf))
             {
                 echo "<br>";
                 if($date_from == $date_to) {
@@ -363,9 +362,9 @@
                 </thead>
                 <tbody>
                 <?php
-                if(isset($_REQUEST['sid'])) {
+                if(isset($sid)) {
                     # Called after result entry for a single specimen
-                    $value = array($_REQUEST['sid'], $_REQUEST['tid']);
+                    $value = array($sid, $tid);
                     $record_list = array();
                     $record_list[] = $value;
                     $data_list=array();
@@ -767,9 +766,9 @@
                         }
                     }
                 } else {
-                        if(isset($_REQUEST['sid'])) {
+                        if(isset($sid)) {
                             # Called after result entry for a single specimen
-                            $value = array($_REQUEST['sid'], $_REQUEST['tid']);
+                            $value = array($sid, $tid);
                             $record_list = array();
                             $record_list[] = $value;
                             $data_list=array();
@@ -1041,7 +1040,7 @@
                 $earliest_specimen = $earliest_record[1];
                 $latest_collection_parts = explode("-", $latest_specimen->dateCollected);
                 $earliest_collection_parts = explode("-", $earliest_specimen->dateCollected);
-                if(!isset($_REQUEST['yf'])) {
+                if(!isset($yf)) {
                     ?>
                     <script type='text/javascript'>
                     $(document).ready(function(){
