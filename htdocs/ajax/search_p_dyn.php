@@ -554,9 +554,26 @@ function selectAll() {
         }
     });
 }
+let patientDict = {};
+
+function updatePatientDict(checkbox, patientId, patientJson) {   
+	if (checkbox.checked) {
+    	patientDict[patientId] = patientJson;
+	} else {
+        delete patientDict[patientId];
+    }
+	document.getElementById("patientDictInput").value = JSON.stringify(patientDict);
+}
 </script>
 <div>
-<p><label class='print-selected'><?php echo 'Print Selected Reports'; ?></label></p>
+<?php
+$url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
+?>
+<form method="post" action="<?php echo $url2; ?>" target="_blank">
+    <input type="hidden" name="patientDict" value="" id="patientDictInput">
+    <button type="submit" title='Click to generate printable report'>Print Selected Reports</button>
+</form>
+
 </div>
 <table class='hor-minimalist-cs' id='patientListTable' name='patientListTable'>
 	<thead >
@@ -634,7 +651,7 @@ function selectAll() {
 		<tr valign='top'>
 			<td>
 			<center>
-			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing'></input>
+			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing' onChange='updatePatientDict(this, <?php echo $patient->patientId; ?>, <?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>)'></input>
 			</center>
 			</td>
 			<?php
