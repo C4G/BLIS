@@ -89,17 +89,11 @@
             <h4 align="<?php echo $align; ?>"><?php echo $report_config->titleText; ?></h4>
 
             <?php
-            $yf = $_POST['yf'];
-            $mf = $_POST['mf'];
-            $df = $_POST['df'];
-            $yt = $_POST['yt'];
-            $mt = $_POST['mt'];
-            $dt = $_POST['dt'];
-            $ip = $_POST['ip'];
-            $viz = $_POST['viz'];
-            if(isset($yf))
-            {
+            if(isset($_SESSION['userDatesDict'][$patientId])) {
                 echo "<br>";
+                $userDates = $_SESSION['userDatesDict'][$patientId];
+                $date_from = $userDates['yf']."-".$userDates['mf']."-".$userDates['df'];
+                $date_to = $userDates['yt']."-".$userDates['mt']."-".$userDates['dt'];
                 if($date_from == $date_to) {
                     echo LangUtil::$generalTerms['DATE'].": ".DateLib::mysqlToString($date_from);
                 } else {	

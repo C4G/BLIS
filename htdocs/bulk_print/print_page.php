@@ -36,11 +36,16 @@ if(isset($_REQUEST['labsection'])){
 	//echo $_REQUEST['labsection'];
 	$labsection = $_REQUEST['labsection'];
 }
-if(isset($_REQUEST['yf'])) {
-	$date_from = $_REQUEST['yf']."-".$_REQUEST['mf']."-".$_REQUEST['df'];
-	$date_to = $_REQUEST['yt']."-".$_REQUEST['mt']."-".$_REQUEST['dt'];
-}
-else {
+if(isset($_SESSION['userDatesDict'])) {
+	foreach ($_SESSION['userDatesDict'] as $patientId => $dateRange) {
+		$from = sprintf('%04d-%02d-%02d', $dateRange['yf'], $dateRange['mf'], $dateRange['df']);
+		$to = sprintf('%04d-%02d-%02d', $dateRange['yt'], $dateRange['mt'], $dateRange['dt']);
+		$dates[] = strtotime($from);
+		$dates[] = strtotime($to);
+	}
+	$date_from = date('Y-m-d', min($dates));
+	$date_to = date('Y-m-d', max($dates));
+} else {
 	$date_from = date("Y-m-d");
 	$date_to = $date_from;
 }
@@ -430,7 +435,7 @@ function get_records_to_print($patient_id) {
 			"AND t.test_type_id = tt.test_type_id ".
 			"AND tt.test_type_id in (select test_type_id from test_type where test_category_id = $labsection)";
 		}
-		if(isset($_REQUEST['yf'])) {
+		if(isset($_SESSION['userDatesDict'])) {
 			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
 		}
 		$query_string .= "ORDER BY sp.date_collected DESC";
@@ -453,9 +458,10 @@ function get_records_to_print($patient_id) {
 			"AND tt.test_type_id in (select test_type_id from test_type where test_category_id = $labsection)";
 		}
 				
-		if(isset($_REQUEST['yf']))
+		if(isset($_SESSION['userDatesDict'])) {
 			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
-		$query_string .= "ORDER BY sp.date_collected DESC";		
+		}
+			$query_string .= "ORDER BY sp.date_collected DESC";		
 	
 	}
 	

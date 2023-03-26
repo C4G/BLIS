@@ -1,4 +1,3 @@
-
 <?php
 #
 # Adds batch results for a single test type
@@ -20,8 +19,6 @@ $measure_list = array();
 $field_result = array();
 
 $comments_list = $_REQUEST['comments'];
-
-$patient_array = array();
 
 if($DEBUG)
 {
@@ -147,12 +144,14 @@ function updatePatientDict(checkbox, patientId, patientJson) {
 <br>
 <b><?php echo LangUtil::$pageTerms['MENU_BATCHRESULTS']; ?></b>: <?php echo $test_name;?>
  | <a href='results_entry.php'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>
-<div>
+ <div>
 <?php
-$url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
+$url = "print_page.php?location=".$_SESSION['lab_config_id'];
+$userDatesDict = [];
 ?>
-<form method="post" action="<?php echo $url2; ?>" target="_blank">
-    <input type="hidden" name="patientDict" value="" id="patientDictInput">
+<form method="post" action="<?php echo $url; ?>" target="_blank">
+	<input type="hidden" name="patientDict" value="" id="patientDictInput">
+
     <button type="submit" title='Click to generate printable report'>Print Selected Reports</button>
 </form>
 
@@ -202,7 +201,6 @@ $url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
 		$test_entry = $test_list[$i];
 		$specimen = Specimen::getById($specimen_id);
 		$patient = Patient::getById($specimen->patientId);
-		// $patient_dict[$patient->patientId] = $patient;
 		?>
 		<tr>
 			<td>
@@ -254,14 +252,19 @@ $url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
 				# Form date range from specimen collection date
 				$date_parts = explode("-", $specimen->dateRecvd);
 				$url1 = "reports_testhistory.php?location=".$_SESSION['lab_config_id']."&patient_id=$patient->patientId&yf=".$date_parts[0]."&mf=".$date_parts[1]."&df=".$date_parts[2]."&yt=".$date_parts[0]."&mt=".$date_parts[1]."&dt=".$date_parts[2]."&ip=1";
-				$url2 = "specimen_info.php?sid=$specimen_id";
-				if(true)
-				{
+				$datesDict = [];
+				$datesDict['yf'] = $date_parts[0];
+				$datesDict['mf'] = $date_parts[1];
+				$datesDict['df'] = $date_parts[2];
+				$datesDict['yt'] = $date_parts[0];
+				$datesDict['mt'] = $date_parts[1];
+				$datesDict['dt'] = $date_parts[3];
+				$datesDict['ip'] = "1";
+				$userDatesDict[$patient->patientId] = $datesDict;
 				?>
 					<a href='<?php echo $url1; ?>' target='_blank' title='Click to generate printable report'><?php echo LangUtil::$generalTerms['CMD_GETREPORT']; ?></a>
 					&nbsp;&nbsp;&nbsp;
 				<?php
-				}
 				?>
 			</td>
 			<td><a href="javascript:fetch_specimen3(<?php echo $specimen->specimenId;?>,<?php echo $test_type_id; ?>)">Related Tests for this specimen</a></td>
@@ -271,5 +274,8 @@ $url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
 	?>
 	</tbody>
 </table>
+<?php
+$_SESSION['userDatesDict'] = $userDatesDict;
+?>
 
 <?php include("includes/footer.php"); ?>
