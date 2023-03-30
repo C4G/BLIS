@@ -2498,5 +2498,85 @@ $query_string=$query_string." and sp.site_id in (".$site_list.")";
 		}
 		return $retval;
 	}
+	/*-- Manav Kumar - Test Range Statistics */
+	public static function gettestRangeStats($lab_config, $date_from, $date_to,$test_id,$lower_range,$upper_range)
+    {
+		
+		# Count number of tests performed for each type
+		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
+		echo "lower range: ".$lower_range;
+		echo "upper range: ".$upper_range;
+		echo $date_from;
+		echo $date_to;
+
+
+        $query_string =	
+				" SELECT  BELOW_LOWER_RANGE,IN_RANGE, ABOVE_HIGH_RANGE FROM ".
+				" ( Select count(1) AS BELOW_LOWER_RANGE FROM ".
+				" ( select substring_index(a.result,',',1) AS RESULT, ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob ".
+				" FROM test a, specimen b, patient c ".
+				" where a.specimen_id=b.specimen_id ".
+				" AND b.patient_id = c.patient_id".
+				" AND a.test_type_id =$test_id ".
+				" AND a.result !='' ".
+				" having(RESULT < $lower_range )) f)f1, ".
+				" ( Select count(1) AS IN_RANGE FROM ".
+				" ( select  substring_index(a.result,',',1) AS RESULT, ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob ".
+				" FROM test a, specimen b, patient c ".
+				" where a.specimen_id=b.specimen_id ".
+				" AND b.patient_id = c.patient_id ".
+				" AND a.test_type_id =$test_id ".
+				" AND a.result !='' ".
+				" having(RESULT BETWEEN $lower_range and $upper_range ))d) d1, ".
+				" ( Select count(1) AS ABOVE_HIGH_RANGE FROM ".
+				" ( select substring_index(a.result,',',1) AS RESULT, ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob ".
+				" FROM test a, specimen b, patient c ".
+				" where a.specimen_id=b.specimen_id ".
+				" AND b.patient_id = c.patient_id  ".
+				" AND a.test_type_id =$test_id  ".
+				" AND a.result !='' ".
+				" having(RESULT > $upper_range ))e)e1 ";
+				
+		// echo "query: ".$query_string."\n";
+
+		$resultset = query_associative_one($query_string);
+		if(count($resultset) == 0 || $resultset == null)
+		{
+			DbUtil::switchRestore($saved_db);
+			return;
+		}
+        DbUtil::switchRestore($saved_db);
+		return $resultset;
+    }
+
+	function getUpplerLowerRange($lab_config, $test_id)
+    {
+        
+		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
+
+		
+		$query_string = " SELECT range_lower as LOWER_RANGE, range_upper as UPPER_RANGE ".
+		" FROM reference_range a, ".
+		" test_type_measure b,test_type c, test_category d where a.measure_id=b.measure_id ".
+		" and b.test_type_id=c.test_type_id and c.test_category_id = d.test_category_id ".
+		" and b.test_type_id=$test_id";
+
+		//echo "Range query:".$query_string."\n";
+    
+		$resultset = query_associative_one($query_string);
+		if(count($resultset) == 0 || $resultset == null)
+		{
+			echo "count is 0";
+			DbUtil::switchRestore($saved_db);
+			return;
+		}
+        DbUtil::switchRestore($saved_db);
+		//echo $lower_range." "  .$upper_range;
+		return $resultset;
+    }
+
 }
 ?>

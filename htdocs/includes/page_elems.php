@@ -11673,6 +11673,43 @@ div#rMenu ul li{
 		}
 
 	}
+
+	
+public function gettestRangeStatsTable($test_range_count)
+	{
+		# Returns HTML table showing number of tests performed
+		# Called from reports_tests_done.php
+		?>
+		<script type='text/javascript'>
+		$(document).ready(function(){
+			$('#testsdone_table').tablesorter();
+		});
+		</script>
+		<table class='tablesorter' id='testsdone_table' style='width:500px'>
+		<thead>
+			<tr>
+				<!--<th><?php echo LangUtil::$generalTerms['TEST_TYPE']; ?></th>-->
+				<th> Below Lower Range</th>
+				<th> In Range</th>
+				<th> Above Upper Range</th>
+			</tr>
+		</thead>
+		<tbodys>
+			<?php
+			$below_range=$test_range_count['BELOW_LOWER_RANGE'];
+			$in_range = $test_range_count['IN_RANGE'];
+			$above_high_range=$test_range_count['ABOVE_HIGH_RANGE']; ?>
+			<tr>
+			<td><?php echo $below_range; ?></td>
+			<td><?php echo $in_range; ?></td>
+			<td><?php echo $above_high_range; ?></td>
+			</tr>
+			<?php
+		?>
+		</tbody>
+		</table>
+		<?php
+	}
 }
 
 if(session_id() == "")

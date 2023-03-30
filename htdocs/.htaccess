@@ -64,6 +64,7 @@ RewriteRule ^reports_infection\.php$ reports/reports_infection.php
 RewriteRule ^doctor_stats\.php$ reports/doctor_stats.php
 RewriteRule ^reports_specimencount\.php$ reports/reports_specimencount.php
 RewriteRule ^reports_tests_done\.php$ reports/reports_tests_done.php
+RewriteRule ^reports_test_range_stats\.php$ reports/reports_test_range_stats.php
 RewriteRule ^reports_testcount_grouped\.php$ reports/reports_testcount_grouped.php
 RewriteRule ^reports_specimencount_grouped\.php$ reports/reports_specimencount_grouped.php
 RewriteRule ^reports_tat\.php$ reports/reports_tat.php

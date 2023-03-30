@@ -16433,7 +16433,8 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
 		//$retval = array();
 		console.log("inside get Test Reference Range");
 
-		$query_configs = " SELECT b.test_type_id,c.name, sex, range_lower, range_upper, age_min, age_max FROM reference_range a, ".
+		$query_configs = " SELECT b.test_type_id,c.name, sex, range_lower, range_upper, age_min, age_max ".
+		" FROM reference_range a, ".
 		" test_type_measure b,test_type c, test_category d where a.measure_id=b.measure_id ".
 		" and b.test_type_id=c.test_type_id and c.test_category_id = d.test_category_id ".
 		" and b.test_type_id=$id";
@@ -16444,4 +16445,54 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
 		DbUtil::switchRestore($saved_db);
 		return $resultset;
     }
+
+
+	function gettestRangeStats( $lab_config_id, $date_from, $date_to)
+    {
+        $saved_db = DbUtil::switchToLabConfig($lab_config_id);
+        $date_from_parts = explode("-", $date_from);
+        $date_to_parts = explode("-", $date_to);
+        $date_from_ts = mktime(0, 0, 0, $date_from_parts[1], $date_from_parts[2], $date_from_parts[0]);
+        $date_from_ts = date( 'Y-m-d H:i:s', $date_from_ts );
+        $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
+        $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
+
+        $query_string =	
+				" SELECT  BELOW_LOWER_RANGE,IN_RANGE, ABOVE_HIGH_RANGE FROM ".
+				" (Select count(1) AS BELOW_LOWER_RANGE FROM ".
+				" (select substring_index(a.result,',',1) AS RESULT, ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob ".
+				" FROM test a, specimen b, patient c ".
+				" where a.specimen_id=b.specimen_id ".
+				" AND b.patient_id = c.patient_id".
+				" AND a.test_type_id =12 ".
+				" AND a.result !='' ".
+				" having(RESULT < 8.1 )) f)f1, ".
+				" (Select count(1) AS IN_RANGE FROM ".
+				" (select  substring_index(a.result,',',1) AS RESULT, ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob ".
+				" FROM test a, specimen b, patient c ".
+				" where a.specimen_id=b.specimen_id ".
+				" AND b.patient_id = c.patient_id ".
+				" AND a.test_type_id =12 ".
+				" AND a.result !='' ".
+				" having(RESULT BETWEEN 8.1 and 10.5 ))d) d1, ".
+				" (select substring_index(a.result,',',1) AS RESULT, ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob ".
+				" FROM test a, specimen b, patient c ".
+				" where a.specimen_id=b.specimen_id ".
+				" AND b.patient_id = c.patient_id  ".
+				" AND a.test_type_id =12  ".
+				" AND a.result !='' ".
+				" having(RESULT > 10.5 ))e)e1 ";
+			//	BELOW_LOWER_RANGE,IN_RANGE, ABOVE_HIGH_RANGE
+
+	$resultset = query_associative_one($query_string);
+	//$retval = $resultset['BELOW_LOWER_RANGE'];
+        DbUtil::switchRestore($saved_db);
+        //return $retval;
+		return $resultset;
+    }
+
+
 ?>

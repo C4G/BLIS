@@ -1876,6 +1876,7 @@ alert(dd_to);
 
         function get_reference_range() {
 
+           
             $('#test_type_id_details').html("");
             $selected_test_type_id = $('#test_type_id_1').attr('value');
             if($selected_test_type_id !='0')
@@ -3311,8 +3312,10 @@ alert(dd_to);
                     <b><?php echo "Test Statistics"; ?></b>
                     <?php?>
                     <br><br>
-                    <form name="test_results_range_form" id="test_results_range_form" action="" method="post">
+
+                    <form name="test_range_form" id="test__range_form" action="reports_test_range_stats.php" method='post'>
                     <input type="hidden" id="lab_config_id" value="<?php echo $lab_config_id; ?>">
+                    <input type="hidden" id="test_type_id" value="<?php echo $_POST[test_type_id_1]; ?>">
                     <table cellpadding="4px">
                     <tr valign="top">
                                 <td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?></td>
@@ -3344,7 +3347,6 @@ alert(dd_to);
                                             <!--?php $page_elems->getTestTypesByReportingStatusOptions(1); ?-->
                                                <option value="0">-</option>
                                                <?php $page_elems->getTestTypewithreferencerangeOptions(); ?>
-                                            
                                         </select>
                                     </td>
                             </tr>
@@ -4032,7 +4034,7 @@ alert(dd_to);
                             <tbody>
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-$lab_id=get_lab_config_id($_SESSION['user_id']);
+                            $lab_id=get_lab_config_id($_SESSION['user_id']);
 //                            if(count($site_list) == 1)
 //                            {
 //                                foreach($site_list as $key=>$value)
