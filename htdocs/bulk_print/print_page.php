@@ -119,7 +119,7 @@ function out_of_range($cleaned_result, $cleaned_range){
     if(preg_match("/[0-9]+min [0-9]+sec/", $cleaned_result)){
         //result
         $split_min = explode("min ", $cleaned_result);
-        $min = $split_time[0];
+        $min = $split_min[0];
         //range
         $split_range = explode(" min", $cleaned_range);
         $split_range_2 = explode("-", $split_range);
@@ -194,8 +194,8 @@ function parse_result_x($cleaned_result, $cleaned_range){
 	
 		//result
 		$split_min = explode("min ", $cleaned_result);
-		$min = $split_time[0];
-		$split_sec = explode("sec", $split_time[1]);
+		$min = $split_min[0];
+		$split_sec = explode("sec", $split_min[1]);
 		$sec = $split_sec[0];
 		$total_seconds = $min*60 + intval($sec);
 		

@@ -155,7 +155,6 @@ $userDatesDict = [];
 ?>
 <form method="post" action="<?php echo $url; ?>" target="_blank">
 	<input type="hidden" name="patientDict" value="" id="patientDictInput">
-
     <button type="submit" title='Click to generate printable report'>Print Selected Reports</button>
 </form>
 
@@ -210,7 +209,6 @@ $userDatesDict = [];
 			<td>
 			<center>
 			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing' data-patient='<?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>' value='<?php echo $patient->patientId; ?>' onChange='updatePatientDict(this, <?php echo $patient->patientId; ?>, <?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>)'></input>
-	
 			</center>
 			</td>
 			<?php

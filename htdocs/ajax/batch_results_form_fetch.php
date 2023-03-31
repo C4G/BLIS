@@ -385,9 +385,8 @@ function selectAll() {
 <script type='text/javascript'>
 $(document).ready(function(){
 	var rows = $('table.tablesorter tr');
-	alert("Test");
 	rows.filter('.related_tests_tr_'+specimen_id).hide();
-}
+});
 </script>
 <!--
 <small>

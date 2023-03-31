@@ -51,7 +51,9 @@
     <style type='text/css'>
         <?php $page_elems->getReportConfigCss($margin_list,false); ?>
     </style>
-    <?php $align=$report_config->alignment_header;?>
+    
+    <?php 
+    $align=$report_config->alignment_header;?>
 
     <div id='report_config_content' style='display:block;'>
         <div id="docbody" name="docbody" class='report_content'>
@@ -117,7 +119,7 @@
                 echo LangUtil::$generalTerms['PATIENT_ID']." $patient_id ".LangUtil::$generalTerms['MSG_NOTFOUND'];
             } else {
                 # Fetch test entries to print in report
-                $record_list = get_records_to_print($patient_id); 
+                $record_list = get_records_to_print($patientId); 
                 # If single date supplied, check if-
                 # 1. Physician name is the same for all
                 # 2. Patient daily number is the same for all
@@ -133,6 +135,7 @@
                     $previous_physician = "";
                     $previous_daily_num = "";
                     $count_list= count($record_list);
+
                     
                     foreach($record_list as $record_set) {
                         $value = $record_set;
