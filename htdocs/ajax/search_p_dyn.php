@@ -551,6 +551,12 @@ function selectAll() {
     $(':checkbox').each(function() {
         if (this.id != 'select-all') {
             this.checked = document.getElementById('select-all').checked;
+			const patientId = this.value;
+			const patientJson = JSON.parse(this.getAttribute('data-patient'));
+			if (patientJson != undefined) {
+				console.log(patientJson)
+				updatePatientDict(this, patientId, patientJson);
+			}
         }
     });
 }
@@ -645,17 +651,16 @@ $url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
 	</thead>
 	<tbody>
 	<?php
-	foreach($patient_list as $patient)
-	{
+	foreach($patient_list as $patient) {
+		if (isset($patient)) {
 	?>
 		<tr valign='top'>
 			<td>
-			<center>
-			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing' onChange='updatePatientDict(this, <?php echo $patient->patientId; ?>, <?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>)'></input>
+			<center>	
+			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing' data-patient='<?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>' value='<?php echo $patient->patientId; ?>' onChange='updatePatientDict(this, <?php echo $patient->patientId; ?>, <?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>)'></input>
 			</center>
 			</td>
 			<?php
-			
 			if($lab_config->pid != 0)
 			{
 				?>
@@ -816,6 +821,7 @@ $url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
 		</tr>
 	<?php
 	}
+}
 	?>
 	</tbody>
 </table>

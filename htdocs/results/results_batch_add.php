@@ -127,6 +127,10 @@ function selectAll() {
     $(':checkbox').each(function() {
         if (this.id != 'select-all') {
             this.checked = document.getElementById('select-all').checked;
+			const patientId = this.value;
+			console.log(this.dataset.patient);
+			const patientJson = JSON.parse(this.dataset.patient);
+			updatePatientDict(this, patientId, patientJson);
         }
     });
 }
@@ -205,7 +209,8 @@ $userDatesDict = [];
 		<tr>
 			<td>
 			<center>
-			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing' onChange='updatePatientDict(this, <?php echo $patient->patientId; ?>, <?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>)'></input>
+			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing' data-patient='<?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>' value='<?php echo $patient->patientId; ?>' onChange='updatePatientDict(this, <?php echo $patient->patientId; ?>, <?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>)'></input>
+	
 			</center>
 			</td>
 			<?php
@@ -258,7 +263,7 @@ $userDatesDict = [];
 				$datesDict['df'] = $date_parts[2];
 				$datesDict['yt'] = $date_parts[0];
 				$datesDict['mt'] = $date_parts[1];
-				$datesDict['dt'] = $date_parts[3];
+				$datesDict['dt'] = $date_parts[2];
 				$datesDict['ip'] = "1";
 				$userDatesDict[$patient->patientId] = $datesDict;
 				?>

@@ -110,46 +110,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 }
 # Build HTML table
 ?>
-<script type="text/javascript">
-function selectAll() {
-    $(':checkbox').each(function() {
-        if (this.id != 'select-all') {
-            this.checked = document.getElementById('select-all').checked;
-        }
-    });
-}
-let patientDict = {};
-
-function updatePatientDict(checkbox, patientId, patientJson) {   
-	if (checkbox.checked) {
-    	patientDict[patientId] = patientJson;
-	} else {
-        delete patientDict[patientId];
-    }
-	document.getElementById("patientDictInput").value = JSON.stringify(patientDict);
-}
-</script>
-<div>
-<?php
-$url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
-?>
-<form method="post" action="<?php echo $url2; ?>" target="_blank">
-    <input type="hidden" name="patientDict" value="" id="patientDictInput">
-    <button type="submit" title='Click to generate printable report'>Print Selected Reports</button>
-</form>
-
-</div>
 <table class='hor-minimalist-cs' id='patientListTable' name='patientListTable'>
         <thead>
 
 		<tr valign='top'>
-			<?php
-			?>
-			<th><center>
-			<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>?
-			<input type='checkbox' id='select-all' title='Tick the box to select all reports to for printing' onClick='javascript:selectAll();'></input>
-			</center></th>
-			
 			<?php
 			if($lab_config->pid != 0)
 			{
@@ -202,11 +166,6 @@ $url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
 	{
 	?>
 		<tr valign='top'>
-			<td>
-			<center>
-			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing' onChange='updatePatientDict(this, <?php echo $patient->patientId; ?>, <?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>)'></input>
-			</center>
-			</td>
 			<?php
 			if($lab_config->pid != 0)
 			{

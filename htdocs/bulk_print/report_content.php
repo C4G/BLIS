@@ -27,7 +27,9 @@
         }
 
         @media all {
-        	.page-break { display:none; }
+        	.page-break { 
+                display:none; 
+            }
         }
         @media print {
             #options_header { 
@@ -36,12 +38,12 @@
 			div#docbody {
 				margin-top: 5em;
 			}
-			div#report_content {
+			#report_content {
 				page-break-after: always;
 			}
-			div#report_content:last-of-type {
-				page-break-after: avoid;
-			}
+            #report_content:last-of-type {
+                page-break-after: none;
+            }
         }
         .landscape_content {-moz-transform: rotate(90deg) translate(300px); }
         .portrait_content {-moz-transform: translate(1px); rotate(-90deg) }
@@ -95,6 +97,7 @@
                 $date_from = $userDates['yf']."-".$userDates['mf']."-".$userDates['df'];
                 $date_to = $userDates['yt']."-".$userDates['mt']."-".$userDates['dt'];
                 if($date_from == $date_to) {
+
                     echo LangUtil::$generalTerms['DATE'].": ".DateLib::mysqlToString($date_from);
                 } else {	
                     echo LangUtil::$generalTerms['FROM_DATE'].": ".DateLib::mysqlToString($date_from);
