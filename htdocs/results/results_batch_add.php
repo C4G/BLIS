@@ -134,7 +134,7 @@ function selectAll() {
         }
     });
 }
-let patientDict = {};
+var patientDict = {};
 
 function updatePatientDict(checkbox, patientId, patientJson) {   
 	if (checkbox.checked) {
