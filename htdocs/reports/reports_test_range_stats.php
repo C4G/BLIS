@@ -40,9 +40,10 @@ function toggle_stat_table()
 	font-family: Tahoma;
 }
 </style>
-<br>
-<b><?php echo "Test Range"; ?></b> 
 
+<b><?php echo "Test Range"; ?></b> 
+ | <a href='reports.php?show_tsr'>&laquo; <?php echo LangUtil::$pageTerms['MSG_BACKTOREPORTS']; ?></a>
+<br><br>
 <?php
 session_start();
 
@@ -56,14 +57,6 @@ putUILog('reports_test_range_stats', $uiinfo, basename($_SERVER['REQUEST_URI'], 
 DbUtil::switchToLabConfig($lab_config_id);
 $lab_config = get_lab_config_by_id($lab_config_id);
 
-$test_id = $_REQUEST['test_type_id_1'];
-$test_type_range = StatsLib::getUpplerLowerRange($lab_config,$test_id);
-$lower_range= $test_type_range['LOWER_RANGE'];
-$upper_range= $test_type_range['UPPER_RANGE'];
-
-echo "lower: ".$lower_range;
-echo "upper: ".$upper_range;
-
 if($lab_config == null)
 {
 	?>
@@ -73,9 +66,10 @@ if($lab_config == null)
 	<?php
 	return;
 } 
-?>
-<?php
 
+?>
+
+<?php
 if($date_from == $date_to)
 {
 	echo LangUtil::$generalTerms['DATE'].": ".DateLib::mysqlToString($date_from);
@@ -87,16 +81,29 @@ else
 	echo LangUtil::$generalTerms['TO_DATE'].": ".DateLib::mysqlToString($date_to);
 }
 ?>
-<br><br>
+<br/>
+<?php
+$test_id = $_REQUEST['test_type_id_1'];
+$result = StatsLib::getUpplerLowerRange($lab_config,$test_id);
 
-<?php 
-//$test_range_count = StatsLib::gettestRangeStats($lab_config, $date_from, $date_to,$test_id,$lower_range,$upper_range) ;
-$test_range_count = StatsLib::gettestRangeStats($lab_config, $date_from, $date_to,$test_id,$lower_range,$upper_range) ;
-$below_range=$test_range_count['BELOW_LOWER_RANGE'];
-$in_range = $test_range_count['IN_RANGE'];
-$above_high_range=$test_range_count['ABOVE_HIGH_RANGE'];
-?>
-<div id='stat_table'>
-	<?php $page_elems->gettestRangeStatsTable($test_range_count); ?>
-</div>
+foreach($result as $record) 
+{
+	$lower_range= str_replace(array('<','>'),'',$record['LOWER_RANGE']);
+	$upper_range= str_replace(array('<','>'),'',$record['UPPER_RANGE']);
+	$sex =$record['SEX'];
+
+	echo "Lower Range: ".$lower_range." Upper Range: ".$upper_range." SEX: ".$sex; ?>
+	<br><br>
+	<?php 
+		$test_range_count = StatsLib::gettestRangeStats($lab_config, $date_from, $date_to,$test_id,$lower_range,$upper_range, $sex) ;
+		/* $below_range=$test_range_count['BELOW_LOWER_RANGE'];
+		$in_range = $test_range_count['IN_RANGE'];
+		$above_high_range=$test_range_count['ABOVE_HIGH_RANGE'];*/ ?>
+<br><br>
+	<div id='stat_table'>
+		<?php $page_elems->gettestRangeStatsTable($test_range_count); ?>
+	</div>
+	<br><br>
+<?Php } ?>
+
 <?php include("includes/footer.php"); ?>

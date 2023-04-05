@@ -241,6 +241,12 @@ $lab_config_id = $_SESSION['lab_config_id'];
             show_tat_form();
             <?php
             }
+            else if (isset($_REQUEST['show_tsr']))
+            {
+            ?>
+            show_test_stats_form();
+            <?php
+            }
             else if (isset($_REQUEST['show_c']))
             {
             ?>
@@ -392,6 +398,17 @@ $lab_config_id = $_SESSION['lab_config_id'];
             $('#tat_div_help').show();
             $('.menu_option').removeClass('current_menu_option');
             $('#tat_menu').addClass('current_menu_option');
+        }
+
+        /* Manav */
+        function show_test_stats_form()
+        {
+            $('.reports_subdiv').hide();
+            $('.reports_subdiv_help').hide();
+            $('#test_results_range_div').show();
+            $('#test_results_range_div_help').show();
+            $('.menu_option').removeClass('current_menu_option');
+            $('#test_results_range_div').addClass('current_menu_option');
         }
 
         function show_tests_done_form()
@@ -3315,7 +3332,7 @@ alert(dd_to);
 
                     <form name="test_range_form" id="test__range_form" action="reports_test_range_stats.php" method='post'>
                     <input type="hidden" id="lab_config_id" value="<?php echo $lab_config_id; ?>">
-                    <input type="hidden" id="test_type_id" value="<?php echo $_POST[test_type_id_1]; ?>">
+                 
                     <table cellpadding="4px">
                     <tr valign="top">
                                 <td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?></td>
@@ -3344,7 +3361,6 @@ alert(dd_to);
  
                                 <td>
                                         <select name='test_type_id_1' id='test_type_id_1' class='uniform_width' onchange="get_reference_range();">                                        
-                                            <!--?php $page_elems->getTestTypesByReportingStatusOptions(1); ?-->
                                                <option value="0">-</option>
                                                <?php $page_elems->getTestTypewithreferencerangeOptions(); ?>
                                         </select>
