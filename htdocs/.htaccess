@@ -228,11 +228,6 @@ RewriteRule ^update.php$ update/update.php
 RewriteRule ^updateCountryDbAtLocalUI.php$ update/updateCountryDbAtLocalUI.php
 RewriteRule ^updateCountryDbAtLocal.php$ update/updateCountryDbAtLocal.php
 
-## /bulk_print folder
-RewriteRule ^print_functions\.php$ bulk_print/print_functions.php
-RewriteRule ^print_page\.php$ bulk_print/print_page.php
-RewriteRule ^report_content\.php$ bulk_print/report_content.php
-
 ## /debug folder
 RewriteRule ^testsuite_backend$ debug/testsuite_backend.php
 
@@ -269,4 +264,5 @@ RewriteRule ^update_lab_coords\.php$ director/update_lab_coords.php
 ## /bulk_print folder
 RewriteRule ^print_page\.php$ bulk_print/print_page.php
 RewriteRule ^report_content\.php$ bulk_print/report_content.php
+RewriteRule ^print_functions\.php$ bulk_print/print_functions.php
 RewriteRule ^report_word_content\.php$ bulk_print/report_word_content.php
