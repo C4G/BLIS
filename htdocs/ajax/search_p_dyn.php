@@ -220,6 +220,15 @@ background-color:#EAF2D3;
     border-right: none;
 }
 
+.print-selected {
+	color: black;
+	font-size: 14px;
+	
+}
+.print-selected:hover {
+	color: #336699;
+}
+
 
 </style>
 <script type='text/javascript'>
@@ -230,6 +239,7 @@ background-color:#EAF2D3;
         //console.log(cap);
          $('.prev_link').hide();
 		//alert(cap);
+		
         $.ajax({
 		url: url_string,
                 async : false,
@@ -536,9 +546,51 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 
 		</script>
 
+<script type="text/javascript">
+function selectAll() {
+    $(':checkbox').each(function() {
+        if (this.id != 'select-all') {
+            this.checked = document.getElementById('select-all').checked;
+			const patientId = this.value;
+			const patientJson = JSON.parse(this.getAttribute('data-patient'));
+			if (patientJson != undefined) {
+				console.log(patientJson)
+				updatePatientDict(this, patientId, patientJson);
+			}
+        }
+    });
+}
+var patientDict = {};
+
+function updatePatientDict(checkbox, patientId, patientJson) {   
+	if (checkbox.checked) {
+    	patientDict[patientId] = patientJson;
+	} else {
+        delete patientDict[patientId];
+    }
+	document.getElementById("patientDictInput").value = JSON.stringify(patientDict);
+}
+</script>
+<div>
+<?php
+$url2 = "print_page.php?location=".$_SESSION['lab_config_id'];
+?>
+<form method="post" action="<?php echo $url2; ?>" target="_blank">
+    <input type="hidden" name="patientDict" value="" id="patientDictInput">
+    <button type="submit" title='Click to generate printable report'>Print Selected Reports</button>
+</form>
+
+</div>
 <table class='hor-minimalist-cs' id='patientListTable' name='patientListTable'>
 	<thead >
 		<tr valign='top'>
+			<?php
+			?>
+			<th><center>
+			<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>?
+			<input type='checkbox' id='select-all' title='Tick the box to select all reports to for printing' onClick='javascript:selectAll();'></input>
+			</center></th>
+			
 			<?php
 			if($lab_config->pid != 0)
 			{
@@ -599,10 +651,15 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 	</thead>
 	<tbody>
 	<?php
-	foreach($patient_list as $patient)
-	{
+	foreach($patient_list as $patient) {
+		if (isset($patient)) {
 	?>
 		<tr valign='top'>
+			<td>
+			<center>	
+			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing' data-patient='<?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>' value='<?php echo $patient->patientId; ?>' onChange='updatePatientDict(this, <?php echo $patient->patientId; ?>, <?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>)'></input>
+			</center>
+			</td>
 			<?php
 			if($lab_config->pid != 0)
 			{
@@ -764,6 +821,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 		</tr>
 	<?php
 	}
+}
 	?>
 	</tbody>
 </table>
