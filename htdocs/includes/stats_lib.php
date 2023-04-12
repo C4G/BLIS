@@ -2522,33 +2522,33 @@ $query_string=$query_string." and sp.site_id in (".$site_list.")";
 				" SELECT  BELOW_LOWER_RANGE,IN_RANGE, ABOVE_HIGH_RANGE FROM ".
 				" ( Select count(1) AS BELOW_LOWER_RANGE FROM ".
 				" ( select substring_index(a.result,',',1) AS RESULT, ".
-				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob,a.ts ".
 				" FROM test a, specimen b, patient c ".
 				" where a.specimen_id=b.specimen_id ".
 				" AND b.patient_id = c.patient_id";
 		$query_string3 =	
 				" AND a.test_type_id =$test_id ".
 				" AND a.result !='' ".
-				" having(RESULT < $lower_range )) f)f1, ".
+				" having(RESULT < $lower_range  AND DATE(a.ts) between '$date_from' and '$date_to')) f)f1, ".
 				" ( Select count(1) AS IN_RANGE FROM ".
 				" ( select  substring_index(a.result,',',1) AS RESULT, ".
-				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob, a.ts ".
 				" FROM test a, specimen b, patient c ".
 				" where a.specimen_id=b.specimen_id ".
 				" AND b.patient_id = c.patient_id ";
 		$query_string4=		
 				" AND a.test_type_id =$test_id ".
 				" AND a.result !='' ".
-				" having(RESULT BETWEEN $lower_range and $upper_range ))d) d1, ".
+				" having(RESULT BETWEEN $lower_range and $upper_range AND DATE(a.ts) between '$date_from' and '$date_to' ))d) d1, ".
 				" ( Select count(1) AS ABOVE_HIGH_RANGE FROM ".
 				" ( select substring_index(a.result,',',1) AS RESULT, ".
-				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob, a.ts ".
 				" FROM test a, specimen b, patient c ".
 				" where a.specimen_id=b.specimen_id ".
 				" AND b.patient_id = c.patient_id  ";
 		$query_string5=	" AND a.test_type_id =$test_id  ".
 				" AND a.result !='' ".
-				" having(RESULT > $upper_range ))e)e1 ";
+				" having(RESULT > $upper_range AND DATE(a.ts) between '$date_from' and '$date_to' ))e)e1 ";
 		//echo "query7: ".$query_string7,"\n";
 
 		if($sex !=null || $sex !='')
@@ -2559,7 +2559,7 @@ $query_string=$query_string." and sp.site_id in (".$site_list.")";
 			$query_string=$query_string1.$query_string3.$query_string4.$query_string5;
 		}
 		
-		// echo "query: ".$query_string, "\n";
+		 //echo "query: ".$query_string, "\n";
 
 		$resultset = query_associative_one($query_string);
 		if(count($resultset) == 0 || $resultset == null)
