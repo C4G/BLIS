@@ -605,14 +605,14 @@ function fetch_report() {
 	if($('#ip').is(":checked"))
 		$ip = 1;
             
-        if($('#viz').is(":checked"))
+    if($('#viz').is(":checked"))
 		$viz = 1;
 	$('#fetch_progress').show();
 	//instead of loading this via url we need to change the values for the current patient array
 	var url_string = "print_page.php?location=<?php echo $lab_config_id; ?>";
 	// window.location=url_string;
-	$('#fetch_progress').hide();
-}
+		$('#fetch_progress').hide();
+	}
 
 $(document).ready(function() {
     var code = $('#barcodeCode').val();
@@ -720,15 +720,17 @@ p.main {text-align:justify;}
 		<input type='checkbox' name='ip' id='ip' value='1' checked></input> 
 		<?php echo LangUtil::$pageTerms['MSG_INCLUDEPENDING']; ?>
 			<br>
-			<input type='checkbox' name='viz' id='viz'></input> 
-		<?php echo "Include Range Visualization"; ?>
+			<!-- Disabling 'viz' option until the functionality has been added -->
+			<!-- <input type='checkbox' name='viz' id='viz'></input>  -->
+		<!-- <?php echo "Include Range Visualization"; ?> -->
 	</td>
 	<td>
 	</td>
 	<td>
 		<input type='button' onClick="javascript:print_content('report_content');" value='<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>'></input>
 		<input type='button' onClick="javascript:window.close();" value='Close' title='<?php echo LangUtil::$generalTerms['CMD_CLOSEPAGE']; ?>'></input>
-		<input type='button' onClick="javascript:fetch_report();" value='<?php echo LangUtil::$generalTerms['CMD_VIEW']; ?>'></input>
+		<!-- Disabling 'view' button until the functionality has been added -->
+		<!-- <input type='button' onClick="javascript:fetch_report();" value='<?php echo LangUtil::$generalTerms['CMD_VIEW']; ?>'></input> -->
 	</td>
 	<td>
 	<span id='fetch_progress' style='display:none'>
