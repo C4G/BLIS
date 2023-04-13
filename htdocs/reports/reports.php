@@ -3337,24 +3337,24 @@ alert(dd_to);
                     <tr valign="top">
                                 <td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?></td>
                                 <td>
-                                    <?php
-                                    $name_list = array('yyyy_from', 'mm_from', 'dd_from');
-                                    $id_list = array('yyyy_from', 'mm_from', 'dd_from');
-                                    $value_list = $monthago_array;
-                                    $page_elems->getDatePicker($name_list, $id_list, $value_list);
-                                    ?>
-                                </td>
+                                <?php
+                                $today = date("Y-m-d");
+                                $value_list = explode("-", $today);
+                                $name_list = array("daily_yyyy", "daily_mm", "daily_dd");
+                                $id_list = $name_list;
+                                $page_elems->getDatePicker($name_list, $id_list, $value_list, true);
+                                ?>
+                            </td>
                             </tr>
                             <tr valign="top">
                                 <td><?php echo LangUtil::$generalTerms['TO_DATE']; ?></td>
                                 <td>
-                                    <?php
-                                    $name_list = array('yyyy_to', 'mm_to', 'dd_to');
-                                    $id_list = array('yyyy_to', 'mm1_to', 'dd_to');
-                                    $value_list = $today_array;
-                                    $page_elems->getDatePicker($name_list, $id_list, $value_list);
-                                    ?>
-                                </td>
+                                <?php
+                                $name_list = array("daily_yyyy_to", "daily_mm_to", "daily_dd_to");
+                                $id_list = $name_list;
+                                $page_elems->getDatePicker($name_list, $id_list, $value_list, true);
+                                ?>
+                            </td>
                             </tr>
                             <tr valign="top">
                                 <td><?php echo LangUtil::$pageTerms['MENU_TEST_TYPES']; ?></td>

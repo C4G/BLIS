@@ -2506,7 +2506,7 @@ $query_string=$query_string." and sp.site_id in (".$site_list.")";
 		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
 		/*
 		echo "lower range : ".$lower_range, "\n";
-		echo "upper range : ".$upper_range, "\n";
+		echo "upper range : ".$upper_range, "\n"; 
 		echo "From Date: ".$date_from, "\n", "\n";
 		echo "To Date: ".$date_to, "\n";
 		echo "sex: ".$sex, "\n";
@@ -2519,36 +2519,39 @@ $query_string=$query_string." and sp.site_id in (".$site_list.")";
 		//echo "query2: ".$query_string2, "\n";
 
         $query_string1 =	
-				" SELECT  BELOW_LOWER_RANGE,IN_RANGE, ABOVE_HIGH_RANGE FROM ".
-				" ( Select count(1) AS BELOW_LOWER_RANGE FROM ".
+				" SELECT  BELOW_LOWER_RANGE,IN_RANGE, ABOVE_HIGH_RANGE, f1.TEST_TYPE AS TEST_TYPE FROM ".
+				" ( Select count(1) AS BELOW_LOWER_RANGE, f.name as TEST_TYPE FROM ".
 				" ( select substring_index(a.result,',',1) AS RESULT, ".
-				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob,a.ts ".
-				" FROM test a, specimen b, patient c ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob,a.ts, t.name as name ".
+				" FROM test a, specimen b, patient c, test_type t ".
 				" where a.specimen_id=b.specimen_id ".
-				" AND b.patient_id = c.patient_id";
+				" AND b.patient_id = c.patient_id ". 
+				" AND a.test_type_id=t.test_type_id ";
 		$query_string3 =	
 				" AND a.test_type_id =$test_id ".
 				" AND a.result !='' ".
-				" having(RESULT < $lower_range  AND DATE(a.ts) between '$date_from' and '$date_to')) f)f1, ".
-				" ( Select count(1) AS IN_RANGE FROM ".
+				" having(RESULT < $lower_range  AND DATE(a.ts) between '$date_from' and '$date_to')) f group by f.name )f1, ".
+				" ( Select count(1) AS IN_RANGE, d.name as TEST_TYPE FROM ".
 				" ( select  substring_index(a.result,',',1) AS RESULT, ".
-				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob, a.ts ".
-				" FROM test a, specimen b, patient c ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob, a.ts, t.name as name ".
+				" FROM test a, specimen b, patient c, test_type t ".
 				" where a.specimen_id=b.specimen_id ".
-				" AND b.patient_id = c.patient_id ";
+				" AND b.patient_id = c.patient_id ". 
+				" AND a.test_type_id=t.test_type_id ";
 		$query_string4=		
 				" AND a.test_type_id =$test_id ".
 				" AND a.result !='' ".
-				" having(RESULT BETWEEN $lower_range and $upper_range AND DATE(a.ts) between '$date_from' and '$date_to' ))d) d1, ".
-				" ( Select count(1) AS ABOVE_HIGH_RANGE FROM ".
+				" having(RESULT BETWEEN $lower_range and $upper_range AND DATE(a.ts) between '$date_from' and '$date_to' )) d group by d.name) d1, ".
+				" ( Select count(1) AS ABOVE_HIGH_RANGE, e.name as TEST_TYPE FROM ".
 				" ( select substring_index(a.result,',',1) AS RESULT, ".
-				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob, a.ts ".
-				" FROM test a, specimen b, patient c ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob, a.ts,t.name as name ".
+				" FROM test a, specimen b, patient c, test_type t ".
 				" where a.specimen_id=b.specimen_id ".
-				" AND b.patient_id = c.patient_id  ";
+				" AND b.patient_id = c.patient_id  ". 
+				" AND a.test_type_id=t.test_type_id ";
 		$query_string5=	" AND a.test_type_id =$test_id  ".
 				" AND a.result !='' ".
-				" having(RESULT > $upper_range AND DATE(a.ts) between '$date_from' and '$date_to' ))e)e1 ";
+				" having(RESULT > $upper_range AND DATE(a.ts) between '$date_from' and '$date_to' )) e group by e.name)e1 ";
 		//echo "query7: ".$query_string7,"\n";
 
 		if($sex !=null || $sex !='')

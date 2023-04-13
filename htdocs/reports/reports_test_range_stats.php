@@ -50,8 +50,14 @@ session_start();
 $user = get_user_by_name($_SESSION['username']);
 $lab_config_id = $user->labConfigId;
 
-$date_from = $_REQUEST['yyyy_from']."-".$_REQUEST['mm_from']."-".$_REQUEST['dd_from'];
-$date_to = $_REQUEST['yyyy_to']."-".$_REQUEST['mm_to']."-".$_REQUEST['dd_to'];
+
+$date_from = $_REQUEST['daily_yyyy']."-".$_REQUEST['daily_mm']."-".$_REQUEST['daily_dd'];
+
+//$date_from = $yf."-".$mf."-".$df;
+
+//echo "datefrom ".$date_from;
+
+$date_to = $_REQUEST['daily_yyyy_to']."-".$_REQUEST['daily_mm_to']."-".$_REQUEST['daily_dd_to'];
 $uiinfo = "from=".$date_from."&to=".$date_to;
 putUILog('reports_test_range_stats', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 DbUtil::switchToLabConfig($lab_config_id);

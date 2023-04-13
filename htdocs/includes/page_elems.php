@@ -11689,6 +11689,7 @@ public function gettestRangeStatsTable($test_range_count)
 		<thead>
 			<tr>
 				<!--<th><?php echo LangUtil::$generalTerms['TEST_TYPE']; ?></th>-->
+				<th> Test Type </th>
 				<th> Below Lower Range</th>
 				<th> In Range</th>
 				<th> Above Upper Range</th>
@@ -11698,8 +11699,11 @@ public function gettestRangeStatsTable($test_range_count)
 			<?php
 			$below_range=$test_range_count['BELOW_LOWER_RANGE'];
 			$in_range = $test_range_count['IN_RANGE'];
-			$above_high_range=$test_range_count['ABOVE_HIGH_RANGE']; ?>
+			$above_high_range=$test_range_count['ABOVE_HIGH_RANGE'];
+			$tt= $test_range_count['TEST_TYPE'];
+			?>
 			<tr>
+			<td><?php echo $tt; ?></td>
 			<td><?php echo $below_range; ?></td>
 			<td><?php echo $in_range; ?></td>
 			<td><?php echo $above_high_range; ?></td>
