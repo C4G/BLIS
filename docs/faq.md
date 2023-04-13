@@ -21,8 +21,6 @@
 
 ![patient_photo_screenshot](images/user_guide/patient_profile.png)
 
-### Q: How do I configure BLIS to upload data to the central web instance [Manager View Only]?
-<b>A</b>: In the Manager view, naviate to the Lab Configuration Tab, and then BLIS Online. Enter in the IP address of the BLIS server.
 
 ### Q: How do I change the language of BLIS?
 

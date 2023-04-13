@@ -23,10 +23,6 @@ You can see these Frequently Asked Questions displayed on Github!
 
 ![new_specimen_screenshot](images/patient_profile.png)
 
-### Q: How do I configure BLIS to upload data to the central web instance [Manager View Only]?
-<b>A</b>: In the Manager view, naviate to the Lab Configuration Tab, and then BLIS Online. Enter in the IP address of the BLIS server.
-
-
 ### Q: Sometimes, I load a page and the button text disappears. What's going on with the UI?
 
 <b>A</b>: We're still working out the bugs with the UI, but chances are, you might need to click on the Default language option at the bottom of the screen.

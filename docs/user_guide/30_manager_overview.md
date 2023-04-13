@@ -174,15 +174,6 @@ Select the language and category (type of page or section). Select **Search** bu
 #### Setup Local Network
 The **Setup Local Page** is an instructional page on how to set up a local network for a hospital or laboratory. Please access it from BlisSetup.html in the main folder, then enter login credentials (username and password).
 
-#### BLIS Online
-The **BLIS Online** page allows the Lab Manager to enter an IP address of a **BLIS on the Cloud** server. For more details about **BLIS on the Cloud** and how to create a new instantiation, please read the Developer's Documentation.
-
-Please enter the IP address into the text box and click **Submit**. A message stating "BLIS Cloud hostname updated successfully!" will pop up if submitted correctly.
-
-<p align="center">
-<img src="../../images/user_guide/blis_online.png" width="100%"/>
-</p>
-
 #### External Interface
 The **External Interface** Laboratory settings allows the Lab Manager to set up an interface with external devices or websites. The currently featured interface for alternative patient registration system is DHIMS 2. Others may be added upon request.
 
@@ -348,8 +339,6 @@ If the desired public key has not already been registered to the account, then p
 </p>
 
 After selecting the public key of choice, please choose the desired backup (General or Anonymized) and then click **Backup** to trigger the data backup. A new page should pop up, confirming that the backup was successful. Please click the **Download Zip** hyperlink to download the zipped file to the user's Desktop.
-
-Additionally, if a Backup IP Address was previously set in **Lab Configuration** > **BLIS Online** page, a copy of the backup will be sent to the BLIS version hosted on the specified IP Address.
 
 <p align="center">
 <img src="../../images/user_guide/download_successful.png" width="100%"/>

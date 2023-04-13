@@ -1697,10 +1697,6 @@
             <value>In case of a computer restart or network failure click on Setup Network option again.</value>
         </term>
         <term>
-            <key>TIPS_SETUPSERVER_1</key>
-            <value>Enter the IP address of the BLIS Online server and click 'Save'.</value>
-        </term>
-        <term>
             <key>TIPS_SETUPSERVER_2</key>
             <value>You can send a backup to the server from the Backup Data tab.</value>
         </term>
