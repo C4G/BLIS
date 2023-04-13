@@ -6385,24 +6385,6 @@ server_backup_2017-04-12_ 015/php_new/extras/openssl/openssl.cnf
 server_backup_2017-04-12_ 015/php_new/extras/openssl/openssl.exe
 server_backup_2017-04-12_ 015/php_new/extras/openssl/README-SSL.txt
 server_backup_2017-04-12_ 015/php_new/PEAR/go-pear.phar
-local/lang/current_inventory.php
-local/lang/lang_catalog_update.php
-local/lang/lang_edit.php
-local/lang/lang_switch.php
-local/lang/lang_update.php
-local/lang/lang_util_class.php
-local/lang/lang_util.php
-local/lang/lang_xml2php.php
-local/lang/redirect.php
-local/lang/remarks_edit.php
-local/lang/remarks_update.php
-local/lang/stock_add.php
-local/lang/stock_details.php
-local/lang/stock_edit_details.php
-local/lang/stock_edit.php
-local/lang/stock_management.php
-local/lang/stock_out.php
-local/lang/stock_update.php
 local/langdata_12/default.php
 local/langdata_12/default.xml
 local/langdata_12/en.php
