@@ -239,13 +239,6 @@ $script_elems->enableJQueryForm();
 	</ul>
 	</div>
 
-	<div id='SetupServer' class='right_pane' style='display:none;margin-left:3px;margin-top:15px;'>
-	<ul>
-			<li><?php echo LangUtil::$pageTerms['TIPS_SETUPSERVER_1']; ?></li>
-			<li><?php echo LangUtil::$pageTerms['TIPS_SETUPSERVER_2']; ?></li>
-	</ul><br>
-	</div>
-
 
 <div id='new_help' style='display:none'>
 <small>

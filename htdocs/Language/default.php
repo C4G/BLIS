@@ -459,7 +459,6 @@ $LANG_ARRAY = array (
 		"TIPS_REVERTDONE" => "Backup reverted successfully. Please shutdown the system and restart to complete the reverting process.", 
 		"TIPS_SETUPNETWORK_3" => "You will now be able to access BLIS by clicking on BlisSetup.html and entering your username and password.", 
 		"TIPS_SETUPNETWORK_4" => "In case of a computer restart or network failure click on Setup Network option again.", 
-		"TIPS_SETUPSERVER_2" => "You can send a backup to the server from the Backup Data tab.", 
 		"MENU_TOGGLE_TEST_REPORTS" => "Enable/Disable Test Reports", 
 		"TIPS_TOGGLETESTREPORTS" => "Enable/Disable test report generation in this lab", 
 		"MENU_TEST_REPORT_CONFIGURATION" => "Test Report Configuration", 
