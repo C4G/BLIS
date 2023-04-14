@@ -53,3 +53,4 @@ Thumbs.db
 # Directory that gets created by mkdocs when you build the docs
 # with eg. `mkdocs build`
 /site/
+/FirefoxPortable_3/
