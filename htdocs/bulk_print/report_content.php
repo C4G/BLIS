@@ -26,11 +26,6 @@
             padding:5px;
         }
 
-        @media all {
-        	.page-break { 
-                display:none; 
-            }
-        }
         @media print {
             #options_header { 
 				display:none; 
@@ -42,11 +37,9 @@
 				page-break-after: always;
 			}
             #report_content:last-of-type {
-                page-break-after: none;
+                page-break-after: avoid;
             }
         }
-        .landscape_content {-moz-transform: rotate(90deg) translate(300px); }
-        .portrait_content {-moz-transform: translate(1px); rotate(-90deg) }
     </style>
     <style type='text/css'>
         <?php $page_elems->getReportConfigCss($margin_list,false); ?>
@@ -142,10 +135,10 @@
                         $test = $value[0];
                         $specimen = $value[1];
                                     
-                                    if(in_array($test->specimenId, $rem_specs))
-                                    {
-                                            continue;
-                                    }
+                        if(in_array($test->specimenId, $rem_specs))
+                        {
+                                continue;
+                        }
                         if( $hidePatientName == 0) 
                             $hidePatientName = $value[2];
                             
@@ -382,7 +375,8 @@
                     continue;
                     }
                     $testObject = get_test_entry($test->specimenId, $test->testTypeId);
-                    $print_unverified = LabConfig::getPrintUnverified($_SESSION['lab_config_id']);
+                    $labCon = new LabConfig;
+                    $print_unverified = $labCon->getPrintUnverified($_SESSION['lab_config_id']);
                     if(!($testObject->isVerified() || $print_unverified)) {
                         continue;
                     }
@@ -783,10 +777,10 @@
                         foreach($record_list as $record_set) {
                             $value = $record_set;
                             $test = $value[0];
-                                            if(in_array($test->specimenId, $rem_specs))
-                                            {
-                                                    continue;
-                                            }
+                            if(in_array($test->specimenId, $rem_specs))
+                            {
+                                // continue;
+                            }
                             $specimen = $value[1];
                             $id=$test->testTypeId;
                             $clinical_data=get_clinical_data_by_id($test->testTypeId);

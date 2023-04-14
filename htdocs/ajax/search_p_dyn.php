@@ -554,7 +554,7 @@ function selectAll() {
 			const patientId = this.value;
 			const patientJson = JSON.parse(this.getAttribute('data-patient'));
 			if (patientJson != undefined) {
-				console.log(patientJson)
+				// console.log(patientJson)
 				updatePatientDict(this, patientId, patientJson);
 			}
         }

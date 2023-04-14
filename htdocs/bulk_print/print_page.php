@@ -471,7 +471,8 @@ function get_records_to_print($patient_id) {
 	
 	foreach($resultset as $record) {
 		$test = Test::getObject($record);
-		$hide_patient_name = TestType::toHidePatientName($test->testTypeId);
+		$testType = new TestType;
+		$hide_patient_name = $testType->toHidePatientName($test->testTypeId);
 		
 		if( $hide_patient_name == 1 )
 					$hidePatientName = 1;

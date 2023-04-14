@@ -128,7 +128,7 @@ function selectAll() {
         if (this.id != 'select-all') {
             this.checked = document.getElementById('select-all').checked;
 			const patientId = this.value;
-			console.log(this.dataset.patient);
+			// console.log(this.dataset.patient);
 			const patientJson = JSON.parse(this.dataset.patient);
 			updatePatientDict(this, patientId, patientJson);
         }
