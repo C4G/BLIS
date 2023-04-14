@@ -16471,7 +16471,7 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
         # Return all test types that have reporting enabled/disabled
         //$saved_db = DbUtil::switchToGlobal();
 		//$retval = array();
-		console.log("inside get Test Reference Range");
+		// console.log("inside get Test Reference Range");
 
 		$query_configs = " SELECT b.test_type_id,c.name, sex, range_lower, range_upper, age_min, age_max ".
 		" FROM reference_range a, ".
@@ -16479,7 +16479,7 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
 		" and b.test_type_id=c.test_type_id and c.test_category_id = d.test_category_id ".
 		" and b.test_type_id=$id";
 
-		console.log($query_configs);
+		// console.log($query_configs);
         $saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
         $resultset = query_associative_all($query_configs);
 		DbUtil::switchRestore($saved_db);
