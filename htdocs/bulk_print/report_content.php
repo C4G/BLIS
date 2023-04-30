@@ -37,7 +37,7 @@
 				page-break-after: always;
 			}
             #report_content:last-of-type {
-                page-break-after: avoid;
+                page-break-after: none;
             }
         }
     </style>
