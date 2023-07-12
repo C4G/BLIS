@@ -64,6 +64,7 @@ RewriteRule ^reports_infection\.php$ reports/reports_infection.php
 RewriteRule ^doctor_stats\.php$ reports/doctor_stats.php
 RewriteRule ^reports_specimencount\.php$ reports/reports_specimencount.php
 RewriteRule ^reports_tests_done\.php$ reports/reports_tests_done.php
+RewriteRule ^reports_test_range_stats\.php$ reports/reports_test_range_stats.php
 RewriteRule ^reports_testcount_grouped\.php$ reports/reports_testcount_grouped.php
 RewriteRule ^reports_specimencount_grouped\.php$ reports/reports_specimencount_grouped.php
 RewriteRule ^reports_tat\.php$ reports/reports_tat.php
@@ -260,3 +261,9 @@ RewriteRule ^update_discount_for_association\.php$ billing/update_discount_for_a
 RewriteRule ^lab_pin\.php$ director/lab_pin.php
 RewriteRule ^geo_report_dir\.php$ director/geo_report_dir.php
 RewriteRule ^update_lab_coords\.php$ director/update_lab_coords.php
+
+## /bulk_print folder
+RewriteRule ^print_page\.php$ bulk_print/print_page.php
+RewriteRule ^report_content\.php$ bulk_print/report_content.php
+RewriteRule ^print_functions\.php$ bulk_print/print_functions.php
+RewriteRule ^report_word_content\.php$ bulk_print/report_word_content.php

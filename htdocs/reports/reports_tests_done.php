@@ -85,94 +85,10 @@ else
 <br><br>
 
 <?php $stat_list = StatsLib::getTestsDoneStats($lab_config, $date_from, $date_to); 
-//print_r($stat_list);
+print_r($stat_list);
 
 ?>
-<?php
-/*
-<div id='stat_graph'>
-<?php
-# To avoid clutter on the graph, divide stat_list to chunks
-$chunk_size = 999;
-$stat_chunks = array_chunk($stat_list, $chunk_size, true);
-$i = 1;
-foreach($stat_chunks as $stat_chunk)
-{
-	$div_id = "placeholder_".$i;
-	$ylabel_id = "ylabel_".$i;
-	$legend_id = "legend_".$i;
-	$width_px = count($stat_chunk)*150;
-	?>
-	<table>
-	<tbody>
-	<tr valign='top'>
-	<td>
-		<span id="<?php echo $ylabel_id; ?>" class='flipv_up' style="width:30px;height:30px;"><?php echo LangUtil::$pageTerms['COUNT_TEST']; ?></span>
-	</td>
-	<td>
-		<div style='width:900px;height:340px;overflow:auto'>
-			<div id="<?php echo $div_id; ?>" style="width:<?php echo $width_px; ?>px;height:300px;"></div>
-		</div>
-	</td>
-	<td>
-		<div id="<?php echo $legend_id; ?>" style="width:200px;height:300px;"></div>
-	</td>
-	</tr>
-	</tbody>
-	</table>
-	<script id="source" language="javascript" type="text/javascript"> 
-	$(function () {
-		<?php
-		$x_val = 0;
-		$count = 1;
-		foreach($stat_chunk as $key=>$value)
-		{
-			$test_type_id = $key;
-			$tests_done_count = $value;
-			echo "var d$count = [];";
-			echo "d$count.push([$x_val, $tests_done_count]);";
-			$count++;
-			$x_val += 2;
-		}
-		?>
-		$.plot($("#<?php echo $div_id; ?>"), [
-			<?php
-			$count = 1;
-			$index_count = 0;
-			$tick_array = "[";
-			foreach($stat_chunk as $key=>$value)
-			{
-				$test_name = get_test_name_by_id($key);
-				$tick_array .= "[$index_count+0.4, '$test_name']";
-				?>
-				{
-					data: d<?php echo $count; ?>,
-					bars: { show: true }//,
-					//label: "<?php #echo get_test_name_by_id($key); ?>"
-				}
-				<?php
-				$count++;
-				$index_count += 2;
-				if($count < count($stat_chunk) + 1)
-				{
-					echo ",";
-					$tick_array .= ",";
-				}
-			}
-			$tick_array .= "]";
-			?>
-		], { xaxis: {ticks: <?php echo $tick_array; ?>}, legend: {container: "#<?php echo $legend_id; ?>"}  });
-		$('#<?php echo $ylabel_id; ?>').flipv_up();
-	});
-	</script>	
-	<?php
-	# End of loop
-	$i++;
-}
-?>
-</div>
-*/
-?>
+
 <div id='stat_table'>
 	<?php $page_elems->getTestsDoneStatsTable($stat_list); ?>
 </div>

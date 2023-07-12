@@ -2498,5 +2498,129 @@ $query_string=$query_string." and sp.site_id in (".$site_list.")";
 		}
 		return $retval;
 	}
+	/*-- Manav Kumar - Test Range Statistics */
+	public static function gettestRangeStats($lab_config, $date_from, $date_to,$test_id,$lower_range,$upper_range,$sex)
+    {
+		
+		# Count number of tests performed for each type
+		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
+		/*
+		echo "lower range : ".$lower_range, "\n";
+		echo "upper range : ".$upper_range, "\n"; 
+		echo "From Date: ".$date_from, "\n", "\n";
+		echo "To Date: ".$date_to, "\n";
+		echo "sex: ".$sex, "\n";
+		*/
+		if($sex !=null || $sex !='')
+		{
+			$query_string2= " AND c.sex = '$sex'  ";
+		}
+
+		//echo "query2: ".$query_string2, "\n";
+
+        $query_string1 =	
+				" SELECT  BELOW_LOWER_RANGE,IN_RANGE, ABOVE_HIGH_RANGE, f1.TEST_TYPE AS TEST_TYPE FROM ".
+				" ( Select count(1) AS BELOW_LOWER_RANGE, f.name as TEST_TYPE FROM ".
+				" ( select substring_index(a.result,',',1) AS RESULT, ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob,a.ts, t.name as name ".
+				" FROM test a, specimen b, patient c, test_type t ".
+				" where a.specimen_id=b.specimen_id ".
+				" AND b.patient_id = c.patient_id ". 
+				" AND a.test_type_id=t.test_type_id ";
+		$query_string3 =	
+				" AND a.test_type_id =$test_id ".
+				" AND a.result !='' ".
+				" having(RESULT < $lower_range  AND DATE(a.ts) between '$date_from' and '$date_to')) f group by f.name )f1, ".
+				" ( Select count(1) AS IN_RANGE, d.name as TEST_TYPE FROM ".
+				" ( select  substring_index(a.result,',',1) AS RESULT, ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob, a.ts, t.name as name ".
+				" FROM test a, specimen b, patient c, test_type t ".
+				" where a.specimen_id=b.specimen_id ".
+				" AND b.patient_id = c.patient_id ". 
+				" AND a.test_type_id=t.test_type_id ";
+		$query_string4=		
+				" AND a.test_type_id =$test_id ".
+				" AND a.result !='' ".
+				" having(RESULT BETWEEN $lower_range and $upper_range AND DATE(a.ts) between '$date_from' and '$date_to' )) d group by d.name) d1, ".
+				" ( Select count(1) AS ABOVE_HIGH_RANGE, e.name as TEST_TYPE FROM ".
+				" ( select substring_index(a.result,',',1) AS RESULT, ".
+				" Floor(DATEDIFF(CURRENT_DATE,c.dob)/365) AS AGE, c.sex, c.dob, a.ts,t.name as name ".
+				" FROM test a, specimen b, patient c, test_type t ".
+				" where a.specimen_id=b.specimen_id ".
+				" AND b.patient_id = c.patient_id  ". 
+				" AND a.test_type_id=t.test_type_id ";
+		$query_string5=	" AND a.test_type_id =$test_id  ".
+				" AND a.result !='' ".
+				" having(RESULT > $upper_range AND DATE(a.ts) between '$date_from' and '$date_to' )) e group by e.name)e1 ";
+		//echo "query7: ".$query_string7,"\n";
+
+		if($sex !=null || $sex !='')
+		{
+			$query_string=$query_string1.$query_string2.$query_string3.$query_string2.$query_string4.$query_string2.$query_string5;
+		
+		} else{
+			$query_string=$query_string1.$query_string3.$query_string4.$query_string5;
+		}
+		
+		 //echo "query: ".$query_string, "\n";
+
+		$resultset = query_associative_one($query_string);
+		if(count($resultset) == 0 || $resultset == null)
+		{
+			DbUtil::switchRestore($saved_db);
+			return;
+		}
+        DbUtil::switchRestore($saved_db);
+		return $resultset;
+    }
+
+	function getUpplerLowerRange($lab_config, $test_id)
+    {
+        
+		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
+
+		
+		$query_string = " SELECT range_lower as LOWER_RANGE, range_upper as UPPER_RANGE, a.sex as SEX ".
+		" FROM reference_range a, ".
+		" test_type_measure b,test_type c, test_category d where a.measure_id=b.measure_id ".
+		" and b.test_type_id=c.test_type_id and c.test_category_id = d.test_category_id ".
+		" and b.test_type_id=$test_id";
+
+		//echo "Range query:".$query_string."\n";
+    
+		$resultset = query_associative_all($query_string);
+	/*	
+		$lower_range=$resultset['LOWER_RANGE'];
+		$upper_range=$resultset['UPPER_RANGE'];
+	
+		echo $resultset['LOWER_RANGE']." ";
+		echo $resultset['UPPER_RANGE']." ";
+		echo $resultset['SEX'];
+	*/	
+
+		
+		if(count($resultset) == 0 || $resultset == null)
+		{
+			echo "count is 0";
+			DbUtil::switchRestore($saved_db);
+			return;
+		} 
+		/*
+		else {
+			echo " Else: ";
+
+			foreach($resultset as $record)
+			{
+				echo " lr: ".$record['LOWER_RANGE'];
+				echo " hr: ".$record['UPPER_RANGE'];
+				echo " s:  ".$record['SEX'];
+			}
+		}
+*/
+        DbUtil::switchRestore($saved_db);
+		//echo $lower_range." "  .$upper_range;
+		return $resultset;
+    }
+
 }
 ?>

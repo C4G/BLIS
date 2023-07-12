@@ -39,6 +39,7 @@ $access_rights=array(
 "general_prevalance.php"=>"~CD~SA~A~",
 "getDHIMS2Config.php"=>"~CD~SA~",
 "getEquipmentDetails.php"=>"~CD~SA~",
+"getTestReferenceRange.php"=>"~CD~SA~",
 "getEquipmentProps.php"=>"~CD~A~SA~",
 "getSpecimenBarcode.php"=>"~CD~SA~A~S~",
 "get_result_count.php"=>"~S~A~SA~CD~RP~",

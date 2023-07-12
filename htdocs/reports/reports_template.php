@@ -116,7 +116,7 @@ function print_content(div_id)
 	
 	## Query the DB and fetch data into PHP -- keep unchanged
 	$saved_db = DbUtil::switchToLabConfig($lab_Config_id);
-	$resultset = query_associative_all($query_string)
+	$resultset = query_associative_all($query_string);
 		
 	## Comment out appropriate lines
 	## Array storing list of matched specimens

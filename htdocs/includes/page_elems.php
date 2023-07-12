@@ -10857,13 +10857,27 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 	}
 
 
-	public function getTestTypesByReportingStatusOptions($enabled)
+	public function getTestTypesByReportingStatusOptions()
 	{
-	    $tests = TestType::getByReportingStatus($enabled);
+	    $tests = TestType::getByReportingStatus();
 //echo "<option>".$tests."</option>";
 	    foreach ($tests as $test)
 				echo "<option id='$test->testTypeId' value='$test->testTypeId'>".$test->name."</option>";
 	}
+
+	public function getTestTypewithreferencerangeOptions()
+	{
+	    $tests = TestType::getTestTypewithreferencerange();
+//echo "<option>".$tests."</option>";
+	    foreach ($tests as $test)
+				echo "<option id='$test->testTypeId' value='$test->testTypeId'>".$test->name."</option>";
+	}
+
+	public function getTestreferencerange()
+	{
+	    $tests = TestType::getTestreferencerange();
+	}
+
 
 	//starting point of changes
 	public function getBatchResultsFieldsForm($lab_config_id)
@@ -11658,6 +11672,47 @@ div#rMenu ul li{
 			}
 		}
 
+	}
+
+	
+public function gettestRangeStatsTable($test_range_count)
+	{
+		# Returns HTML table showing number of tests performed
+		# Called from reports_tests_done.php
+		?>
+		<script type='text/javascript'>
+		$(document).ready(function(){
+			$('#testsdone_table').tablesorter();
+		});
+		</script>
+		<table class='tablesorter' id='testsdone_table' style='width:500px'>
+		<thead>
+			<tr>
+				<!--<th><?php echo LangUtil::$generalTerms['TEST_TYPE']; ?></th>-->
+				<th> Test Type </th>
+				<th> Below Lower Range</th>
+				<th> In Range</th>
+				<th> Above Upper Range</th>
+			</tr>
+		</thead>
+		<tbodys>
+			<?php
+			$below_range=$test_range_count['BELOW_LOWER_RANGE'];
+			$in_range = $test_range_count['IN_RANGE'];
+			$above_high_range=$test_range_count['ABOVE_HIGH_RANGE'];
+			$tt= $test_range_count['TEST_TYPE'];
+			?>
+			<tr>
+			<td><?php echo $tt; ?></td>
+			<td><?php echo $below_range; ?></td>
+			<td><?php echo $in_range; ?></td>
+			<td><?php echo $above_high_range; ?></td>
+			</tr>
+			<?php
+		?>
+		</tbody>
+		</table>
+		<?php
 	}
 }
 

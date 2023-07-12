@@ -92,23 +92,16 @@ for($i = 0; $i < count($specimen_id_list); $i++) {
 	$comments = $comments_list[$i];
 	$comments = preg_replace("/[^a-zA-z0-9,.;:_\s]/", "", $comments);
 	# Fetch entry in 'test' table
-	if($test == null)
-	{
+	if($test == null) {
 		# Error: This test type was not scheduled for current specimen ID
 		$status_list[] = "<font color='red'>".LangUtil::$generalTerms['ERROR']."</font>";
-	}
-	else if($test->isPending() == false)
-	{
+	} else if($test->isPending() == false) {
 		# Error: Results already entered
 		$status_list[] = "<font color='red'>".LangUtil::$generalTerms['ERROR']."</font>: ".LangUtil::$pageTerms['MSG_ALREADYENTERED'];		
-	}
-	else if($empty_result_field == true)
-	{
+	} else if($empty_result_field == true) {
 		# Error: Result value missing
 		$status_list[] = "<font color='red'>".LangUtil::$generalTerms['ERROR']."</font>: ".LangUtil::$pageTerms['MSG_RESULTMISSING'];		
-	}
-	else
-	{
+	} else {
 		# Add result values
 		$test_id = $test->testId;
 		$test->result = $result_csv;
@@ -128,13 +121,54 @@ function fetch_specimen3(specimen_id, test_id)
 	window.location = url+"?specimen_id="+specimen_id+"&test_id="+test_id;
 }
 </script>
+<script type="text/javascript">
+
+function selectAll() {
+    $(':checkbox').each(function() {
+        if (this.id != 'select-all') {
+            this.checked = document.getElementById('select-all').checked;
+			const patientId = this.value;
+			// console.log(this.dataset.patient);
+			const patientJson = JSON.parse(this.dataset.patient);
+			updatePatientDict(this, patientId, patientJson);
+        }
+    });
+}
+var patientDict = {};
+
+function updatePatientDict(checkbox, patientId, patientJson) {   
+	if (checkbox.checked) {
+    	patientDict[patientId] = patientJson;
+	} else {
+        delete patientDict[patientId];
+    }
+	document.getElementById("patientDictInput").value = JSON.stringify(patientDict);
+}
+</script>
 <br>
 <b><?php echo LangUtil::$pageTerms['MENU_BATCHRESULTS']; ?></b>: <?php echo $test_name;?>
  | <a href='results_entry.php'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>
-<br><br>
+ <div>
+<?php
+$url = "print_page.php?location=".$_SESSION['lab_config_id'];
+$userDatesDict = [];
+?>
+<form method="post" action="<?php echo $url; ?>" target="_blank">
+	<input type="hidden" name="patientDict" value="" id="patientDictInput">
+    <button type="submit" title='Click to generate printable report'>Print Selected Reports</button>
+</form>
+
+</div>
 <table class='tablesorter' id='status_table'>
 	<thead>
-		<tr>
+	<tr valign='top'>
+		<?php
+			?>
+			<th><center>
+			<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>?<br>
+			<input type='checkbox' id='select-all' title='Tick the box to select all reports to for printing' onClick='javascript:selectAll();'></input>
+			</center></th>
+			
 			<?php
 			if($_SESSION['pid'] != 0)
 			{
@@ -172,6 +206,11 @@ function fetch_specimen3(specimen_id, test_id)
 		$patient = Patient::getById($specimen->patientId);
 		?>
 		<tr>
+			<td>
+			<center>
+			<input type='checkbox' class='print_checkbox' name='print_<?php echo $i; ?>' title='Tick the box to select report for printing' data-patient='<?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>' value='<?php echo $patient->patientId; ?>' onChange='updatePatientDict(this, <?php echo $patient->patientId; ?>, <?php echo htmlspecialchars(json_encode($patient), ENT_QUOTES, "UTF-8"); ?>)'></input>
+			</center>
+			</td>
 			<?php
 			if($_SESSION['pid'] != 0)
 			{
@@ -216,15 +255,19 @@ function fetch_specimen3(specimen_id, test_id)
 				# Form date range from specimen collection date
 				$date_parts = explode("-", $specimen->dateRecvd);
 				$url1 = "reports_testhistory.php?location=".$_SESSION['lab_config_id']."&patient_id=$patient->patientId&yf=".$date_parts[0]."&mf=".$date_parts[1]."&df=".$date_parts[2]."&yt=".$date_parts[0]."&mt=".$date_parts[1]."&dt=".$date_parts[2]."&ip=1";
-				$url2 = "specimen_info.php?sid=$specimen_id";
-				//if(strpos($status, "Error") === false)
-				if(true)
-				{
+				$datesDict = [];
+				$datesDict['yf'] = $date_parts[0];
+				$datesDict['mf'] = $date_parts[1];
+				$datesDict['df'] = $date_parts[2];
+				$datesDict['yt'] = $date_parts[0];
+				$datesDict['mt'] = $date_parts[1];
+				$datesDict['dt'] = $date_parts[2];
+				$datesDict['ip'] = "1";
+				$userDatesDict[$patient->patientId] = $datesDict;
 				?>
 					<a href='<?php echo $url1; ?>' target='_blank' title='Click to generate printable report'><?php echo LangUtil::$generalTerms['CMD_GETREPORT']; ?></a>
 					&nbsp;&nbsp;&nbsp;
 				<?php
-				}
 				?>
 			</td>
 			<td><a href="javascript:fetch_specimen3(<?php echo $specimen->specimenId;?>,<?php echo $test_type_id; ?>)">Related Tests for this specimen</a></td>
@@ -234,4 +277,8 @@ function fetch_specimen3(specimen_id, test_id)
 	?>
 	</tbody>
 </table>
+<?php
+$_SESSION['userDatesDict'] = $userDatesDict;
+?>
+
 <?php include("includes/footer.php"); ?>
