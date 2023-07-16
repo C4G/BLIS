@@ -13,6 +13,8 @@ The Basic Laboratory Information System (BLIS) is a freeware Web-based system th
     * Simple data backup to a zipped file
     * [NEW] BLIS running on a cloud provider
     * [NEW] Manual data backup to a version of BLIS running on a remote server
+    * [NEW] Ability to view statistics for tests reported quantitatively. e.g., how many test results for calcium are in the range of 0.5 to 1
+    * [NEW] Ability to print results in bulk
 
 As with any properly implemented electronic record system, BLIS may be found over time to improve data accuracy and reduce costs in laboratories.
 
