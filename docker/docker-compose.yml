@@ -4,6 +4,8 @@ version: '3'
 # This file is an example docker-compose file for deploying BLIS to a cloud provider
 #
 
+name: 'c4gblis'
+
 services:
   app:
     # This image is automatically built and pushed from the GitHub action in .github/workflows/ folder
