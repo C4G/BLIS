@@ -54,3 +54,6 @@ Thumbs.db
 # with eg. `mkdocs build`
 /site/
 /FirefoxPortable_3/
+
+# Wine prefix folder if using Wine to run the server on Linux with bin/wine-server
+/wine/
