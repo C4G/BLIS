@@ -217,70 +217,49 @@ $lab_config_id = $_SESSION['lab_config_id'];
             get_usernames('location11', 'username11');
             get_test_types_bycat();
             <?php
-            if(isset($_REQUEST['show_d']))
-            {
-            ?>
+            if (isset($_REQUEST['show_d'])) {
+                ?>
             show_disease_form();
             <?php
-            }
-            else if (isset($_REQUEST['show_p']))
-            {
-            ?>
+            } elseif (isset($_REQUEST['show_p'])) {
+                ?>
             show_summary_form();
             <?php
-            }
-            else if (isset($_REQUEST['show_p_agg']))
-            {
-            ?>
+            } elseif (isset($_REQUEST['show_p_agg'])) {
+                ?>
             show_selection("prevalance_aggregate");
             <?php
-            }
-            else if (isset($_REQUEST['show_t']))
-            {
-            ?>
+            } elseif (isset($_REQUEST['show_t'])) {
+                ?>
             show_tat_form();
             <?php
-            }
-            else if (isset($_REQUEST['show_tsr']))
-            {
-            ?>
+            } elseif (isset($_REQUEST['show_tsr'])) {
+                ?>
             show_test_stats_form();
             <?php
-            }
-            else if (isset($_REQUEST['show_c']))
-            {
-            ?>
+            } elseif (isset($_REQUEST['show_c'])) {
+                ?>
             show_specimen_count_form();
             <?php
-            }
-            else if (isset($_REQUEST['show_ust']))
-            {
-            ?>
+            } elseif (isset($_REQUEST['show_ust'])) {
+                ?>
             $('#user_stats_div').show();
             <?php
-            }
-            else if (isset($_REQUEST['show_t_agg']))
-            {
-            ?>
+            } elseif (isset($_REQUEST['show_t_agg'])) {
+                ?>
             show_tat_aggregate_form();
             <?php
-            }
-            else if (isset($_REQUEST['show_agg']))
-            {
-            ?>
+            } elseif (isset($_REQUEST['show_agg'])) {
+                ?>
             show_selection('country_aggregate');
             <?php
-            }
-            else if(isset($_REQUEST['specimen_aggregate_update']))
-            {
-            # Show custom field updated message
-            ?>
+            } elseif (isset($_REQUEST['specimen_aggregate_update'])) {
+                # Show custom field updated message?>
             $('#specimen_aggregate_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('specimen_aggregate_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
             $('#specimen_aggregate_msg').show();
             show_selection("specimen_aggregate_report_config_div");
             <?php
-            }
-            else if (isset($_REQUEST['infrepupdated'])) { ?>
+            } elseif (isset($_REQUEST['infrepupdated'])) { ?>
             $('#report_updated_msg').html("<?php echo LangUtil::$generalTerms['MSG_UPDATED']; ?>&nbsp;&nbsp;&nbsp;<a href=\"javascript:toggle('report_updated_msg');\"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>");
             $('#report_updated_msg').show();
             show_selection("infection_report_settings");
@@ -1499,7 +1478,7 @@ alert(dd_to);
 
         function search_patient_history()
         {
-            var superuser = <?php echo (is_super_admin(get_user_by_id($_SESSION["user_id"])) ? 'true' : 'false'); ?>;
+            var superuser = <?php echo(is_super_admin(get_user_by_id($_SESSION["user_id"])) ? 'true' : 'false'); ?>;
             var location = $("#location8").attr("value");
             var search_attrib = $('#p_attrib').attr("value");
             var condition_attrib = $('#h_attrib').attr("value");
@@ -1943,28 +1922,28 @@ alert(dd_to);
                 <?php
                 $site_list = get_site_list($_SESSION['user_id']);
                 $user = get_user_by_id($_SESSION['user_id']);
-                if ( !is_country_dir($user) ) {
+                if (!is_country_dir($user)) {
                     echo LangUtil::$pageTerms['MENU_DAILY']; ?>
                     <ul>
                         <!--
 				<li class='menu_option' id='patient_report_menu'>
-					<a href='javascript:show_patient_report_form();'><?php #echo LangUtil::$pageTerms['MENU_PATIENT']; ?></a>
+					<a href='javascript:show_patient_report_form();'><?php #echo LangUtil::$pageTerms['MENU_PATIENT'];?></a>
 				</li>
 				-->
                         <li class='menu_option' id='test_history_menu'>
-                            <!--<a href='javascript:show_test_history_form();'><?php #echo LangUtil::$pageTerms['MENU_PHISTORY']; ?></a>-->
+                            <!--<a href='javascript:show_test_history_form();'><?php #echo LangUtil::$pageTerms['MENU_PHISTORY'];?></a>-->
                             <a href='javascript:show_test_history_form();'><?php echo LangUtil::$pageTerms['MENU_PATIENT']; ?></a>
                         </li>
                         <li class='menu_option' id='session_report_menu' <?php
-                        if($SHOW_SPECIMEN_REPORT === false)
+                        if ($SHOW_SPECIMEN_REPORT === false) {
                             echo " style='display:none;' ";
-                        ?>>
+                        } ?>>
                             <a href='javascript:show_session_report_form();'><?php echo LangUtil::$pageTerms['MENU_SPECIMEN']; ?></a>
                         </li>
                         <li class='menu_option' id='print_menu' <?php
-                        if($SHOW_TESTRECORD_REPORT === false)
+                        if ($SHOW_TESTRECORD_REPORT === false) {
                             echo " style='display:none;' ";
-                        ?>>
+                        } ?>>
                             <a href='javascript:show_print_form();'><?php echo LangUtil::$pageTerms['MENU_TESTRECORDS']; ?></a>
                         </li>
 
@@ -1972,9 +1951,9 @@ alert(dd_to);
                             <a href='javascript:show_daily_report_form();'><?php echo LangUtil::$pageTerms['MENU_DAILYLOGS']; ?></a>
                         </li>
                         <li class='menu_option' id='print_menu' <?php
-                        if($SHOW_PENDINGTEST_REPORT === false)
+                        if ($SHOW_PENDINGTEST_REPORT === false) {
                             echo " style='display:none;' ";
-                        ?>>
+                        } ?>>
                             <a href='javascript:show_pending_tests_form();'><?php echo LangUtil::$pageTerms['MENU_PENDINGTESTS']; ?></a>
                         </li>
 
@@ -1989,7 +1968,8 @@ alert(dd_to);
                         ?>
 
                     </ul>
-                <?php } else { ?>
+                <?php
+                } else { ?>
                     <?php echo "Report Settings"; ?>
                     <ul>
                         <li class='menu_option' id='location_settings' >
@@ -2003,7 +1983,7 @@ alert(dd_to);
                 <ul>
                     <?php
                     $site_list = get_site_list($_SESSION['user_id']);
-                    if( is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) ) { ?>
+                    if (is_country_dir(get_user_by_id($_SESSION['user_id']))) { ?>
                         <li class='menu_option' id='country_aggregate_menu'>
                             <a href='javascript:show_selection("prevalance_aggregate");'><?php echo LangUtil::$pageTerms['MENU_INFECTIONSUMMARY']; ?></a>
                         </li>
@@ -2034,8 +2014,7 @@ alert(dd_to);
                         <li class='menu_option' id='disease_report_menu'>
                             <a href='javascript:show_selection("disease_report");'><?php echo LangUtil::$pageTerms['MENU_INFECTIONREPORT']; ?></a>
                         </li>
-                        <?php if(is_admin(get_user_by_id($_SESSION['user_id'])))
-                        { ?>
+                        <?php if (is_admin(get_user_by_id($_SESSION['user_id']))) { ?>
                             <li class='menu_option' id='user_stats_menu'>
                                 <a href='javascript:show_selection("user_stats");'>User Statistics</a>
                             </li>
@@ -2055,16 +2034,16 @@ alert(dd_to);
 
                     <?php } ?>
                     <?php /*
-				if( is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) ) { ?>
-					<li class='menu_option' id='country_aggregate_menu'>
-					<a href='javascript:show_selection("country_aggregate");'>Country Level Aggregation</a>
-					</li>
-				<?php }
-				/*
-				<li class='menu_option' id='control_tests_menu'>
-					<a href='javascript:show_control_test_form();'><?php echo LangUtil::$pageTerms['MENU_CONTROLREPORT']; ?></a>
-				</li>
-				*/
+                if( is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) ) { ?>
+                    <li class='menu_option' id='country_aggregate_menu'>
+                    <a href='javascript:show_selection("country_aggregate");'>Country Level Aggregation</a>
+                    </li>
+                <?php }
+                /*
+                <li class='menu_option' id='control_tests_menu'>
+                    <a href='javascript:show_control_test_form();'><?php echo LangUtil::$pageTerms['MENU_CONTROLREPORT']; ?></a>
+                </li>
+                */
                     # Space for menu entries corresponding to a new aggregate report
                     # PLUG_AGGREGATE_REPORT_ENTRY
                     ?>
@@ -2084,19 +2063,16 @@ alert(dd_to);
                                 <td>
                                     <?php
                                     $site_list = get_site_list($_SESSION['user_id']);
-                                    if(count($site_list) == 1)
-                                    {
-                                        foreach($site_list as $key=>$value)
+                                    if (count($site_list) == 1) {
+                                        foreach ($site_list as $key=>$value) {
                                             echo "<input type='hidden' name='location' id='location' value='$key'></input>";
-                                    }
-                                    else
-                                    {
+                                        }
+                                    } else {
                                         ?>
                                         <select name='location' id='location' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                         <?php
                                     }
@@ -2167,14 +2143,11 @@ alert(dd_to);
                         <table cellpadding="4px">
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location2' value='$key'></input>";
-                            }
-                            else
-                            {
-
+                                }
+                            } else {
                                 ?>
 
                                 <tr class="location_row" id="location_row">
@@ -2183,8 +2156,7 @@ alert(dd_to);
                                         <select name='location' id='location2' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -2214,7 +2186,7 @@ alert(dd_to);
                                 </td>
                             </tr>
                             <?php
-                            if ( count($site_list) > 1 ) { ?>
+                            if (count($site_list) > 1) { ?>
                                 <tr id='testType'>
                                     <td><?php echo LangUtil::$generalTerms['TEST_TYPE']; ?></td>
                                     <td>
@@ -2237,8 +2209,9 @@ alert(dd_to);
                                 </tr>-->
                                 <?php
                             } else {
-                                foreach($site_list as $key=>$value)
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location2' value='$key'></input>";
+                                }
                             }
                             ?>
                             <tr>
@@ -2265,8 +2238,7 @@ alert(dd_to);
                 <div id='pending_tests_div'  style='display:none;' class='reports_subdiv'>
                     <b><?php echo LangUtil::$pageTerms['MENU_PENDINGTESTS']; ?></b>
                     <?php
-                    if($SHOW_TESTRECORD_REPORT === true)
-                    {
+                    if ($SHOW_TESTRECORD_REPORT === true) {
                         ?>
                         |
                         <a href='javascript:show_print_form()'><?php echo LangUtil::$pageTerms['MENU_TESTRECORDS']; ?></a>
@@ -2278,13 +2250,11 @@ alert(dd_to);
                         <table cellpadding="4px">
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location3' value='$key'></input>";
-                            }
-                            else
-                            {
+                                }
+                            } else {
                                 ?>
                                 <tr class="location_row" id="location_row">
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
@@ -2292,8 +2262,7 @@ alert(dd_to);
                                         <select name='location' id='location3' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -2330,14 +2299,11 @@ alert(dd_to);
                         <table cellpadding="4px">
                             <?php
                             $site_list = get_site_list_with_labid($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location8' value='$key'></input>";
-                            }
-
-                            else
-                            {
+                                }
+                            } else {
                                 ?>
                                 <tr>
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
@@ -2345,8 +2311,7 @@ alert(dd_to);
                                         <select name='location' id='location8' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -2397,13 +2362,11 @@ alert(dd_to);
                         <table cellpadding="4px">
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location4' value='$key'></input>";
-                            }
-                            else
-                            {
+                                }
+                            } else {
                                 ?>
                                 <tr>
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
@@ -2411,8 +2374,7 @@ alert(dd_to);
                                         <select name='location' id='location4' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -2463,13 +2425,11 @@ alert(dd_to);
                         <table cellpadding="4px">
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location44' value='$key'></input>";
-                            }
-                            else
-                            {
+                                }
+                            } else {
                                 ?>
                                 <tr>
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
@@ -2477,8 +2437,7 @@ alert(dd_to);
                                         <select name='location' id='location44' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -2529,13 +2488,11 @@ alert(dd_to);
                         <table cellpadding="4px">
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location444' value='$key'></input>";
-                            }
-                            else
-                            {
+                                }
+                            } else {
                                 ?>
                                 <tr>
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
@@ -2543,8 +2500,7 @@ alert(dd_to);
                                         <select name='location' id='location444' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -2595,13 +2551,11 @@ alert(dd_to);
                         <table cellpadding="4px">
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location5' value='$key'></input>";
-                            }
-                            else
-                            {
+                                }
+                            } else {
                                 ?>
                                 <tr>
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
@@ -2609,8 +2563,7 @@ alert(dd_to);
                                         <select name='location' id='location5' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -2956,13 +2909,11 @@ alert(dd_to);
                         <table cellpadding="4px">
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location6' value='$key'></input>";
-                            }
-                            else
-                            {
+                                }
+                            } else {
                                 ?>
                                 <tr class="location_row" id="location_row">
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
@@ -2970,8 +2921,7 @@ alert(dd_to);
                                         <select name='location' id='location6' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -3034,13 +2984,11 @@ alert(dd_to);
                         <table cellpadding="4px">
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location7' value='$key'></input>";
-                            }
-                            else
-                            {
+                                }
+                            } else {
                                 ?>
                                 <tr>
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
@@ -3048,8 +2996,7 @@ alert(dd_to);
                                         <select name='location' id='location7' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -3232,8 +3179,7 @@ alert(dd_to);
                                 <?php
                                 $site_list = get_site_list($_SESSION['user_id']);
                                 //if(count($site_list) == 1)
-                                if(true)
-                                {
+                                if (true) {
                                     //foreach($site_list as $key=>$value)
                                     //echo "<input type='hidden' name='location' id='location7' value='$key'></input>";
                                     $liddd = $_SESSION['lab_config_id'];
@@ -3242,24 +3188,22 @@ alert(dd_to);
                                     $user_ids = array();
                                     array_push($user_ids, $userStats->getAdminUser($lab_config_id));
                                     $user_ids_others =  $userStats->getAllUsers($lab_config_id);
-                                    foreach($user_ids_others as $uids)
+                                    foreach ($user_ids_others as $uids) {
                                         array_push($user_ids, $uids);
-                                    //print_r($user_ids);
-                                    ?>
+                                    }
+                                    //print_r($user_ids);?>
                                     <tr>
                                         <td><?php echo "User"; ?> </td>
                                         <td>
                                             <select name='user_id' id='user_id' class='uniform_width'>
-                                                <?php foreach($user_ids as $uid) {?>
+                                                <?php foreach ($user_ids as $uid) {?>
                                                     <option value='<?php echo $uid; ?>'><?php echo get_username_by_id($uid); ?></option>
                                                 <?php } ?>
                                             </select>
                                         </td>
                                     </tr>
                                     <?php
-                                }
-                                else
-                                {
+                                } else {
                                     ?>
                                     <tr>
                                         <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
@@ -3267,8 +3211,7 @@ alert(dd_to);
                                             <select name='location' id='location7' class='uniform_width'>
                                                 <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                                 <?php
-                                                $page_elems->getSiteOptions();
-                                                ?>
+                                                $page_elems->getSiteOptions(); ?>
                                             </select>
                                         </td>
                                     </tr>
@@ -3465,15 +3408,12 @@ alert(dd_to);
                             $site_list = get_site_list($_SESSION['user_id']);
                             $t = $_SESSION['user_id'];
                             // echo "temp";
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value){
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     // echo "key = '$key', value = '$value";
                                     echo "<input type='hidden' name='location' id='location8' value='$key'></input>";
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 ?>
                                 <tr class="location_row" id="location_row">
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?></td>
@@ -3481,8 +3421,7 @@ alert(dd_to);
                                         <select name='location' id='location8' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -3509,9 +3448,9 @@ alert(dd_to);
                                     <select name='cat_code_patient_report' id='cat_code_patient_report' class='uniform_width'>
                                         <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                         <?php
-                                        if( is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) )
+                                        if (is_country_dir(get_user_by_id($_SESSION['user_id']))) {
                                             $page_elems->getTestCategoryCountrySelect();
-                                        else {
+                                        } else {
                                             $page_elems->getTestCategorySelect();
                                         }
                                         ?>
@@ -3522,19 +3461,17 @@ alert(dd_to);
                                 $current_user_id = $_SESSION['user_id'];
                                 $current_user = get_user_by_id($current_user_id);
                                 if (is_super_admin($current_user)) {
-                                    $labs = get_lab_configs($current_user_id);
-                            ?>
+                                    $labs = get_lab_configs($current_user_id); ?>
                                 <tr>
                                     <td><?php echo LangUtil::$generalTerms['LOCATION']; ?> &nbsp;&nbsp;&nbsp;</td>
                                     <td>
                                         <select name="lab_config_id8" id="lab_config_id8" form="test_history_form" class='uniform_width'>
                                         <?php
-                                            foreach($labs as $lab) {
+                                            foreach ($labs as $lab) {
                                                 $c_lab_id = $lab->id;
                                                 $c_lab_name = $lab->name;
                                                 echo "<option value='$c_lab_id'>$c_lab_name</option>";
-                                            }
-                                        ?>
+                                            } ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -3565,13 +3502,11 @@ alert(dd_to);
                         <table cellpadding='4px'>
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location9' value='$key'></input>";
-                            }
-                            else
-                            {
+                                }
+                            } else {
                                 ?>
                                 <tr class="location_row" id="location_row">
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
@@ -3579,8 +3514,7 @@ alert(dd_to);
                                         <select name='location' id='location9' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -3622,13 +3556,11 @@ alert(dd_to);
                         <table cellpadding='4px'>
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location11' value='$key'></input>";
-                            }
-                            else
-                            {
+                                }
+                            } else {
                                 ?>
                                 <tr class="location_row" id="location_row">
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> </td>
@@ -3636,8 +3568,7 @@ alert(dd_to);
                                         <select name='location' id='location11' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -3682,13 +3613,11 @@ alert(dd_to);
                         $site_list = get_site_list($_SESSION['user_id']);
                         //echo "test ".count($site_list);
                         //print_r($site_list);
-                        if(count($site_list) == 1)
-                        {
-                            foreach($site_list as $key=>$value)
+                        if (count($site_list) == 1) {
+                            foreach ($site_list as $key=>$value) {
                                 echo "<input type='hidden' name='location' id='location13' value='$key'></input>";
-                        }
-                        else
-                        {
+                            }
+                        } else {
                             ?>
                             <tr class="location_row" id="location_row">
                                 <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> &nbsp;&nbsp;&nbsp;</td>
@@ -3696,8 +3625,7 @@ alert(dd_to);
                                     <select name='location' id='location13' class='uniform_width' onchange='handleChange(this)'>
                                         <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                         <?php
-                                        $page_elems->getSiteOptions();
-                                        ?>
+                                        $page_elems->getSiteOptions(); ?>
                                     </select>
                                 </td>
                             </tr>
@@ -3748,9 +3676,9 @@ alert(dd_to);
                                 <select name='cat_code' id='cat_code13' class='uniform_width'>
                                     <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                     <?php
-                                    if( is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) )
+                                    if (is_country_dir(get_user_by_id($_SESSION['user_id']))) {
                                         $page_elems->getTestCategoryCountrySelect();
-                                    else {
+                                    } else {
                                         $page_elems->getTestCategorySelect();
                                     }
                                     ?>
@@ -3783,13 +3711,11 @@ alert(dd_to);
                         <tbody>
                         <?php
                         $site_list = get_site_list($_SESSION['user_id']);
-                        if(count($site_list) == 1)
-                        {
-                            foreach($site_list as $key=>$value)
+                        if (count($site_list) == 1) {
+                            foreach ($site_list as $key=>$value) {
                                 echo "<input type='hidden' name='location' id='location13' value='$key'></input>";
-                        }
-                        else
-                        {
+                            }
+                        } else {
                             ?>
                             <tr class="location_row" id="location_row">
                                 <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> &nbsp;&nbsp;&nbsp;</td>
@@ -3797,8 +3723,7 @@ alert(dd_to);
                                     <select name='location' id='location13' class='uniform_width' onchange='handleChange(this)'>
                                         <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                         <?php
-                                        $page_elems->getSiteOptions();
-                                        ?>
+                                        $page_elems->getSiteOptions(); ?>
                                     </select>
                                 </td>
                             </tr>
@@ -3850,9 +3775,9 @@ alert(dd_to);
                                 <select name='cat_code' id='cat_code13' class='uniform_width'>
                                     <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                     <?php
-                                    if( is_country_dir( get_user_by_id($_SESSION['user_id'] ) ) )
+                                    if (is_country_dir(get_user_by_id($_SESSION['user_id']))) {
                                         $page_elems->getTestCategoryCountrySelect();
-                                    else {
+                                    } else {
                                         $page_elems->getTestCategorySelect();
                                     }
                                     ?>
@@ -3957,12 +3882,12 @@ alert(dd_to);
                                 <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> &nbsp;&nbsp;&nbsp;</td>
                                 <td id='locationAggregation'>
                                     <?php /*
-						<select name='location' id='locationAggregation' class='uniform_width'>
-						<option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
-						<?php
-							$page_elems->getSiteOptions();
-						?>
-						</select> */
+                        <select name='location' id='locationAggregation' class='uniform_width'>
+                        <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
+                        <?php
+                            $page_elems->getSiteOptions();
+                        ?>
+                        </select> */
                                     ?>
                                     <!--<input type='checkbox' name='locationAgg' id='locationAgg' value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></input>-->
                                     <?php
@@ -4102,9 +4027,9 @@ alert(dd_to);
                                         <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                         <?php
                                         $site_list = get_site_list($_SESSION['user_id']);
-                                        if(count($site_list) == 1)
+                                        if (count($site_list) == 1) {
                                             $page_elems->getTestCategorySelect();
-                                        else {
+                                        } else {
                                             $page_elems->getTestCategoryCountrySelect();
                                         }
                                         ?>
@@ -4113,11 +4038,11 @@ alert(dd_to);
                             </tr>
 <!--                            <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1) {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location14' value='$key'></input>";
-                            }
-                            else { ?>
+                                }
+                            } else { ?>
                                 <tr class="location_row" id="location_row">
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> &nbsp;&nbsp;&nbsp;</td>
                                     <td id='locationAggregation'>
@@ -4215,13 +4140,11 @@ alert(dd_to);
                         <table cellpadding='4px'>
                             <?php
                             $site_list = get_site_list($_SESSION['user_id']);
-                            if(count($site_list) == 1)
-                            {
-                                foreach($site_list as $key=>$value)
+                            if (count($site_list) == 1) {
+                                foreach ($site_list as $key=>$value) {
                                     echo "<input type='hidden' name='location' id='location15' value='$key'></input>";
-                            }
-                            else
-                            {
+                                }
+                            } else {
                                 ?>
                                 <tr class="location_row" id="location_row15">
                                     <td><?php echo LangUtil::$generalTerms['FACILITY']; ?></td>
@@ -4229,8 +4152,7 @@ alert(dd_to);
                                         <select name='location' id='location15' class='uniform_width'>
                                             <option value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></option>
                                             <?php
-                                            $page_elems->getSiteOptions();
-                                            ?>
+                                            $page_elems->getSiteOptions(); ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -4278,7 +4200,7 @@ alert(dd_to);
                     </div>
                     <div id='infection_report_settings_form_div' style='display:none;'>
                         <form id='infection_report_settings_preview_form' style='display:none;' name='infection_report_settings_preview_form' action='report_disease_preview.php' method='post' target='_blank'>
-                            <?php # This form is cloned from agg_report_form in javascript:agg_preview() function ?>
+                            <?php # This form is cloned from agg_report_form in javascript:agg_preview() function?>
                         </form>
                         <form id='infection_report_settings_form' name='infection_report_settings_form' action='ajax/infection_report_settings_update.php' method='get'>
                             <?php $page_elems->getInfectionReportConfigureForm(); ?>
