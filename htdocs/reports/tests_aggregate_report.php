@@ -120,8 +120,6 @@ $script_elems->enableFacebox();
     <br>
 
     <?php
-
-
     if ($_REQUEST["locationAgg"] == null) {
         echo "Location not found. Please choose a facility (import and choose if doesn't exist) on previous page.";
         return;
@@ -135,7 +133,6 @@ $script_elems->enableFacebox();
     $byGender = $configArray['group_by_gender'];
     $bySection = $configArray['measure_id'];
     $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending
-    #$combo = 1;
     $age_unit = $configArray['age_unit'];
     if ($byAge == 1) {
         if ($age_unit == 1) {
@@ -188,11 +185,12 @@ $script_elems->enableFacebox();
             } else {
                 echo "<th>"."Count"."</th>";
             }
+
             if ($byAge == 1 && $byGender == 1) {
                 echo "<th>".LangUtil::$pageTerms['TOTAL_MF']."</th>";
-            } ?>
+            }
 
-                    <?php if ($byAge == 1 || $byGender == 1) {
+            if ($byAge == 1 || $byGender == 1) {
                 echo "<th>".LangUtil::$pageTerms['TOTAL_TESTS']."</th>";
             } ?>
 
@@ -228,22 +226,14 @@ $script_elems->enableFacebox();
                 </thead>
                 <tbody>
 
-                <?php
-                $test_type_list = get_lab_config_test_types($location[0]); // to get test type ids
-            /*$cat_test_types = TestType::getByCategory($cat_codes[$cc]);
-            $cat_test_ids = array();
-            $selected_test_ids = $lab_config->getTestTypeIds();
-
-            foreach($cat_test_types as $test_type)
-                $cat_test_ids[] = $test_type->testTypeId;
-            $matched_test_ids = array_intersect($cat_test_ids, $selected_test_ids);
-            $selected_test_ids = array_values($matched_test_ids);
-            $test_type_list = $selected_test_ids;
-            */
+            <?php
+            
+            $test_type_list = get_lab_config_test_types($location[0]); // to get test type ids
             $saved_db = DbUtil::switchToLabConfig($location[0]);
             $tests_done_list = array();
-            $tests_list=array();
+            $tests_list = array();
             $summ = 0;
+
             foreach ($test_type_list as $test_type_id) {
                 if (!isset($tests[$test_type_id])) {
                     $tests[$test_type_id] = 0;
