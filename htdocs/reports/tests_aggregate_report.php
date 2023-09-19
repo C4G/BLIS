@@ -130,8 +130,6 @@ $script_elems->enableFacebox();
         return;
     }
 
-    $age_unit_flag = 0;
-
     $location = explode(":", $value); //location array is of the format [<Facility_id>, <Facility_name>, <Facility_location>]
     $lab_id_revamp = 0; //lab id for revamp is 0.
     $configArray = getTestCountGroupedConfigCountryDir($lab_id_revamp);
@@ -142,9 +140,8 @@ $script_elems->enableFacebox();
     $combo = $configArray['test_type_id']; // 1 - registered, 2 - completed, 3 - completed / pending
     #$combo = 1;
     $age_unit = $configArray['age_unit'];
-    if($byAge == 1 && $age_unit_flag == 0)
+    if($byAge == 1)
     {
-
         if($age_unit == 1)
             echo "Age Unit: "."Years";
         else if($age_unit == 2)
@@ -153,17 +150,13 @@ $script_elems->enableFacebox();
             echo "Age Unit: "."Weeks";
         else if($age_unit == 4)
             echo "Age Unit: "."Days";
-        $age_unit_flag = 1;
     }
-
 
     $aggregate = array();
     $tests = array();
 
-
     foreach($_REQUEST["locationAgg"] as $value)
     {
-        //echo "value: ". $value;
         $location = explode(":", $value); //location array is of the format [<Facility_id>, <Facility_name>, <Facility_location>]
 
         ?>
@@ -174,9 +167,9 @@ $script_elems->enableFacebox();
             <tbody>
             <hr>
             <tr>
-                <td><b><font size="4"><?php echo LangUtil::$generalTerms['FACILITY']; ?></b></td>
-                <td><font size="4"><?php echo ":&nbsp;"?></td>
-                <td><font size="4"><?php echo $location[1]." - ".$location[2]; ?></td>
+                <td><b><font size="4"><?php echo LangUtil::$generalTerms['FACILITY']; ?></font></b></td>
+                <td><font size="4"><?php echo ":&nbsp;"?></font></td>
+                <td><font size="4"><?php echo $location[1]." - ".$location[2]; ?></font></td>
             </tr>
             </tbody>
         </table>
@@ -194,26 +187,25 @@ $script_elems->enableFacebox();
                     <?php
                     if($byGender == 1)
                     {
-                        echo "<th >".LangUtil::$generalTerms['GENDER']."</th>";
+                        echo "<th>".LangUtil::$generalTerms['GENDER']."</th>";
                     }
                     if($byAge == 1)
                     {
-                        echo "<th >".LangUtil::$pageTerms['RANGE_AGE']."</th>";
+                        echo "<th>".LangUtil::$pageTerms['RANGE_AGE']."</th>";
                         for($i = 1; $i < count($age_group_list); $i++)
                         {
-                            echo "<th >".LangUtil::$pageTerms['RANGE_AGE']."</th>";
+                            echo "<th>".LangUtil::$pageTerms['RANGE_AGE']."</th>";
                         }
                     }
                     else
                     {
-                        echo "<th >"."Count"."</th>";
+                        echo "<th>"."Count"."</th>";
                     }
                     if($byAge == 1 && $byGender == 1)
                     {
-                        echo "<th >".LangUtil::$pageTerms['TOTAL_MF']."</th>";
+                        echo "<th>".LangUtil::$pageTerms['TOTAL_MF']."</th>";
                     }
                     ?>
-
 
                     <?php if($byAge == 1 || $byGender == 1)
                     {
@@ -223,11 +215,11 @@ $script_elems->enableFacebox();
 
                 </tr>
                 <tr>
-                    <th ></th>
+                    <th></th>
                     <?php
                     if($byGender == 1)
                     {
-                        echo "<th ></th>";
+                        echo "<th></th>";
                     }
 
                     if($byAge == 1)
@@ -246,15 +238,15 @@ $script_elems->enableFacebox();
                     }
                     else
                     {
-                        echo "<th ></th>";
+                        echo "<th></th>";
                     }
                     if($byAge == 1 && $byGender == 1)
                     {
-                        echo "<th ></th>";
+                        echo "<th></th>";
                     }
 
                     if($byAge == 1 || $byGender == 1)
-                        echo "<th ></th>";
+                        echo "<th></th>";
                     ?>
                 </tr>
                 </thead>
@@ -743,25 +735,25 @@ $script_elems->enableFacebox();
                         <?php
                         if($byGender == 1)
                         {
-                            echo "<th >".LangUtil::$generalTerms['GENDER']."</th>";
+                            echo "<th>".LangUtil::$generalTerms['GENDER']."</th>";
                         }
                         if($byAge == 1)
                         {
                             $age_group_list = decodeAgeGroups($configArray['age_groups']);
 
-                            echo "<th >".LangUtil::$pageTerms['RANGE_AGE']."</th>";
+                            echo "<th>".LangUtil::$pageTerms['RANGE_AGE']."</th>";
                             for($i = 1; $i < count($age_group_list); $i++)
                             {
-                                echo "<th >".LangUtil::$pageTerms['RANGE_AGE']."</th>";
+                                echo "<th>".LangUtil::$pageTerms['RANGE_AGE']."</th>";
                             }
                         }
                         else
                         {
-                            echo "<th >"."Count"."</th>";
+                            echo "<th>"."Count"."</th>";
                         }
                         if($byAge == 1 && $byGender == 1)
                         {
-                            echo "<th >".LangUtil::$pageTerms['TOTAL_MF']."</th>";
+                            echo "<th>".LangUtil::$pageTerms['TOTAL_MF']."</th>";
                         }
                         ?>
 
@@ -775,11 +767,11 @@ $script_elems->enableFacebox();
                     </tr>
 
                     <tr>
-                        <th ></th>
+                        <th></th>
                         <?php
                         if($byGender == 1)
                         {
-                            echo "<th ></th>";
+                            echo "<th></th>";
                         }
 
                         if($byAge == 1)
@@ -798,15 +790,15 @@ $script_elems->enableFacebox();
                         }
                         else
                         {
-                            echo "<th ></th>";
+                            echo "<th></th>";
                         }
                         if($byAge == 1 && $byGender == 1)
                         {
-                            echo "<th ></th>";
+                            echo "<th></th>";
                         }
 
                         if($byAge == 1 || $byGender == 1)
-                            echo "<th ></th>";
+                            echo "<th></th>";
                         ?>
                     </tr>
                     </thead>
@@ -1187,23 +1179,23 @@ $script_elems->enableFacebox();
                     <?php
                     if($byGender == 1)
                     {
-                        echo "<th >".LangUtil::$generalTerms['GENDER']."</th>";
+                        echo "<th>".LangUtil::$generalTerms['GENDER']."</th>";
                     }
                     if($byAge == 1)
                     {
-                        echo "<th >".LangUtil::$pageTerms['RANGE_AGE']."</th>";
+                        echo "<th>".LangUtil::$pageTerms['RANGE_AGE']."</th>";
                         for($i = 1; $i < count($age_group_list); $i++)
                         {
-                            echo "<th >".LangUtil::$pageTerms['RANGE_AGE']."</th>";
+                            echo "<th>".LangUtil::$pageTerms['RANGE_AGE']."</th>";
                         }
                     }
                     else
                     {
-                        echo "<th >"."Count"."</th>";
+                        echo "<th>"."Count"."</th>";
                     }
                     if($byAge == 1 && $byGender == 1)
                     {
-                        echo "<th >".LangUtil::$pageTerms['TOTAL_MF']."</th>";
+                        echo "<th>".LangUtil::$pageTerms['TOTAL_MF']."</th>";
                     }
                     ?>
 
@@ -1216,11 +1208,11 @@ $script_elems->enableFacebox();
 
                 </tr>
                 <tr>
-                    <th ></th>
+                    <th></th>
                     <?php
                     if($byGender == 1)
                     {
-                        echo "<th ></th>";
+                        echo "<th></th>";
                     }
 
                     if($byAge == 1)
@@ -1239,15 +1231,15 @@ $script_elems->enableFacebox();
                     }
                     else
                     {
-                        echo "<th ></th>";
+                        echo "<th></th>";
                     }
                     if($byAge == 1 && $byGender == 1)
                     {
-                        echo "<th ></th>";
+                        echo "<th></th>";
                     }
 
                     if($byAge == 1 || $byGender == 1)
-                        echo "<th ></th>";
+                        echo "<th></th>";
                     ?>
                 </tr>
                 </thead>
@@ -1635,25 +1627,25 @@ $script_elems->enableFacebox();
                         <?php
                         if($byGender == 1)
                         {
-                            echo "<th >".LangUtil::$generalTerms['GENDER']."</th>";
+                            echo "<th>".LangUtil::$generalTerms['GENDER']."</th>";
                         }
                         if($byAge == 1)
                         {
                             $age_group_list = decodeAgeGroups($configArray['age_groups']);
 
-                            echo "<th >".LangUtil::$pageTerms['RANGE_AGE']."</th>";
+                            echo "<th>".LangUtil::$pageTerms['RANGE_AGE']."</th>";
                             for($i = 1; $i < count($age_group_list); $i++)
                             {
-                                echo "<th >".LangUtil::$pageTerms['RANGE_AGE']."</th>";
+                                echo "<th>".LangUtil::$pageTerms['RANGE_AGE']."</th>";
                             }
                         }
                         else
                         {
-                            echo "<th >"."Count"."</th>";
+                            echo "<th>"."Count"."</th>";
                         }
                         if($byAge == 1 && $byGender == 1)
                         {
-                            echo "<th >".LangUtil::$pageTerms['TOTAL_MF']."</th>";
+                            echo "<th>".LangUtil::$pageTerms['TOTAL_MF']."</th>";
                         }
                         ?>
 
@@ -1667,11 +1659,11 @@ $script_elems->enableFacebox();
                     </tr>
 
                     <tr>
-                        <th ></th>
+                        <th></th>
                         <?php
                         if($byGender == 1)
                         {
-                            echo "<th ></th>";
+                            echo "<th></th>";
                         }
 
                         if($byAge == 1)
@@ -1690,15 +1682,15 @@ $script_elems->enableFacebox();
                         }
                         else
                         {
-                            echo "<th ></th>";
+                            echo "<th></th>";
                         }
                         if($byAge == 1 && $byGender == 1)
                         {
-                            echo "<th ></th>";
+                            echo "<th></th>";
                         }
 
                         if($byAge == 1 || $byGender == 1)
-                            echo "<th ></th>";
+                            echo "<th></th>";
                         ?>
                     </tr>
                     </thead>
