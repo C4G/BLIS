@@ -1996,6 +1996,9 @@ alert(dd_to);
                         <li class='menu_option' id='test_aggregate_reports_form_menu'>
                             <a href='javascript:show_selection("test_aggregate_report_form");'><?php echo LangUtil::$pageTerms['MENU_TEST_AGGREGATE_REPORT_FORM']; ?></a>
                         </li>
+                        <li class='menu_option' id='export_to_excel_menu'>
+                            <a href='javascript:show_selection("export_to_excel");'><?php echo "Export to Excel" ?></a>
+                        </li>
 
 
                         <!--<li class='menu_option' id='disease_report_menu'>
@@ -2806,6 +2809,7 @@ alert(dd_to);
                                 <td>
                                     <br>
                                     <input type='button' id='test_aggregate_report_submit_button' value='<?php echo LangUtil::$generalTerms['CMD_GET_TEST_REPORT']; ?>' onclick="javascript:submit_test_aggregate_report_form();"></input>
+                                    <input type='button' id='test_aggregate_report_submit_button' value='Export to Excel' onclick="javascript:alert('hello');"></input>
 
                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                     <span id='test_aggregate_report_form_progress_spinner' style='display:none;'>
@@ -2885,6 +2889,135 @@ alert(dd_to);
                     <!---------------->
 
                 </div>
+
+                <div id='export_to_excel_div' style='display:none;' class='reports_subdiv'>
+                    <h4>Export to Excel</h4>
+
+                    <form name="export_to_excel_form" id="export_to_excel_form" action="export_to_excel.php" method='post'>
+                        <table cellpadding="4px">
+                            <tr valign='top'>
+                                <td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?> </td>
+                                <td>
+                                    <?php
+                                    $name_list = array("yyyy_from", "mm_from", "dd_from");
+                                    $id_list = array("yyyy_from_labs", "mm_from_labs", "dd_from_labs");
+                                    $value_list = $monthago_array;
+                                    $page_elems->getDatePicker($name_list, $id_list, $value_list);
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr valign='top'>
+                                <td><?php echo LangUtil::$generalTerms['TO_DATE']; ?> </td>
+                                <td>
+                                    <?php
+                                    $name_list = array("yyyy_to", "mm_to", "dd_to");
+                                    $id_list = array("yyyy_to_labs", "mm_to_labs", "dd_to_labs");
+                                    $value_list = $today_array;
+                                    $page_elems->getDatePicker($name_list, $id_list, $value_list);
+                                    ?>
+                                </td>
+                            </tr>
+
+                            <tr class="location_row_aggregate" id="location_row_aggregate">
+                                <td><?php echo LangUtil::$generalTerms['FACILITY']; ?> &nbsp;&nbsp;&nbsp;</td>
+                                <td id='locationAggregation'>
+                                    <!--<input type='checkbox' name='locationAgg' id='locationAgg' value='0'><?php echo LangUtil::$generalTerms['ALL']; ?></input>-->
+                                    <?php
+                                    $page_elems->getSiteOptionsCheckBoxesCountryDir("locationAgg[]");
+                                    ?>
+                                </td>
+                            </tr>
+
+                            <tr class="results_aggregate" id="results_aggregate">
+                                <td>Aggregate by<?php echo LangUtil::$generalTerms['AGGREGATION_BY']; ?> &nbsp;&nbsp;&nbsp;</td>
+                                <td id='resultsAggregation'>
+                                    <input type="radio" name="resultAgg" value="common"> Common Tests<br>
+                                    <input type="radio" name="resultAgg" value="all"> All Tests
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <br>
+                                    <input type='button' id='test_aggregate_report_submit_button' value='Export to Excel' onclick="javascript:alert('hello');"></input>
+                                    <span id='test_aggregate_report_form_progress_spinner' style='display:none;'>
+							        <?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
+						            </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    </div>
+
+                    <!---------------->
+                    <div id="site_aggregate_report_div" style="display:none">
+                    <b><?php echo "Site-wise Report"/*echo LangUtil::$pageTerms['MENU_TESTWISE_REPORTS']; */?></b>
+                    <br><br>
+                    <form name="site_agg_reports_form" id="site_agg_reports_form"
+                          action="reports/site_aggregate_report.php" method="post">
+                        <input type="hidden" id="lab_config_id" value="<?php echo $lab_config_id; ?>">
+                        <table cellpadding="4px">
+                            <tr valign="top">
+                                <td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?></td>
+                                <td>
+                                    <?php
+                                    $name_list = array('yyyy_from', 'mm_from', 'dd_from');
+                                    $id_list = array('yyyy_from_site', 'mm_from_site', 'dd_from_site');
+                                    $value_list = $monthago_array;
+                                    $page_elems->getDatePicker($name_list, $id_list, $value_list);
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td><?php echo LangUtil::$generalTerms['TO_DATE']; ?></td>
+                                <td>
+                                    <?php
+                                    $name_list = array('yyyy_to', 'mm_to', 'dd_to');
+                                    $id_list = array('yyyy_to_site', 'mm_to_site', 'dd_to_site');
+                                    $value_list = $today_array;
+                                    $page_elems->getDatePicker($name_list, $id_list, $value_list);
+                                    ?>
+                                </td>
+                            </tr>
+
+                            <tr valign="top">
+                                <td><?php echo LangUtil::$pageTerms['SITE']; ?></td>
+                                <td>
+
+                                    <?php $page_elems->getCollectionSitesOptions2($lab_config_id); ?>
+
+                                </td>
+                            </tr>
+                            <tr class=results_aggregate" id="results_aggregate">
+                                <td>Aggregate by<?php echo LangUtil::$generalTerms['AGGREGATION_BY']; ?> &nbsp;&nbsp;&nbsp;</td>
+                                <td id='resultsAggregation'>
+                                    <input type="radio" name="resultAgg" value="common"> Common Tests<br>
+                                    <input type="radio" name="resultAgg" value="all"> All Tests
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <br>
+                                    <input type="button" id="test_agg_reports_form_submit"
+                                           value="<?php echo LangUtil::$generalTerms['CMD_GETREPORT']; ?>"
+                                           onclick="submit_site_agg_report_form();">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span id="test_agg_report_spinner" style="display: none;">
+								<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
+							</span>
+                                </td>
+                            </tr>
+
+
+                        </table>
+                    </form>
+
+                    </div>
+                </div>
+
                 <div id='specimen_aggregate_report_config_div' style='display:none;' class='reports_subdiv'>
                     <p style="text-align: right;"><a rel='facebox' href='#IR_rc'>Page Help</a></p>
                     <b><?php echo "Test/Specimen Count Grouped Reports"; ?></b>
