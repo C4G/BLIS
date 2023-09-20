@@ -3,8 +3,8 @@
 # Main page for showing patient profile, test history,
 # and options like updating profile, registering new specimen
 #
-include("redirect.php");
-include("includes/header.php");
+require_once("redirect.php");
+require_once("includes/header.php");
 LangUtil::setPageId("patient_profile");
 
 $pid = $_REQUEST['pid'];
@@ -13,19 +13,19 @@ $script_elems->enableDatePicker();
 $script_elems->enableTableSorter();
 $script_elems->enableLatencyRecord();
 $admin = 0;
-if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
-     $admin = 1;}
+if (is_admin_check(get_user_by_id($_SESSION['user_id']))) {
+    $admin = 1;
+}
 $rem_recs = get_removed_specimens($_SESSION['lab_config_id'], "test");
-foreach($rem_recs as $rem_rec)
-{
+foreach ($rem_recs as $rem_rec) {
     $rem_specs[] = $rem_rec['r_id'];
     $rem_remarks[] = $rem_rec['remarks'];
 }
 
-		$labsection = 0;
-		if(isset($_REQUEST['labsection'])){
-			$labsection = $_REQUEST['labsection'];
-		}
+        $labsection = 0;
+        if (isset($_REQUEST['labsection'])) {
+            $labsection = $_REQUEST['labsection'];
+        }
 
 //print_r($rem_specs);
 ?>
@@ -178,7 +178,7 @@ var url_string = "retrieve_specimens.php?specimen_array="+txt+"&pid="+pid;
 <p align="right">
 <?php $page_elems->getPatientSelectReport($pid); ?>
 </p>
-<?php if($admin == 1){ ?>
+<?php if ($admin == 1) { ?>
 <p align="right">
 <?php $page_elems->getDeleteOptions($pid); ?>
 </p>
