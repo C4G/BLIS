@@ -2893,7 +2893,7 @@ alert(dd_to);
                 <div id='export_to_excel_div' style='display:none;' class='reports_subdiv'>
                     <h4>Export to Excel</h4>
 
-                    <form name="export_to_excel_form" id="export_to_excel_form" action="export_to_excel.php" method='post'>
+                    <form name="export_to_excel_form" id="export_to_excel_form" action="export_to_excel.php" method='get'>
                         <table cellpadding="4px">
                             <tr valign='top'>
                                 <td><?php echo LangUtil::$generalTerms['FROM_DATE']; ?> </td>
@@ -2941,7 +2941,7 @@ alert(dd_to);
                                 <td></td>
                                 <td>
                                     <br>
-                                    <input type='button' id='test_aggregate_report_submit_button' value='Export to Excel' onclick="javascript:alert('hello');"></input>
+                                    <input type='submit' id='test_aggregate_report_submit_button' value="Export to Excel"></input>
                                     <span id='test_aggregate_report_form_progress_spinner' style='display:none;'>
 							        <?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
 						            </span>
