@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 #
 # (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
 # This file contains entity classes and functions for DB queries
@@ -16428,7 +16428,7 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
 		//print_r($results);
 	}
 
-}  
+}
 
 
 	function getEquipmentList()
@@ -16497,7 +16497,7 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
         $date_to_ts=mktime(0, 0, 0, $date_to_parts[1], $date_to_parts[2], $date_to_parts[0]);
         $date_to_ts = date( 'Y-m-d H:i:s', $date_to_ts );
 
-        $query_string =	
+        $query_string =
 				" SELECT  BELOW_LOWER_RANGE,IN_RANGE, ABOVE_HIGH_RANGE FROM ".
 				" (Select count(1) AS BELOW_LOWER_RANGE FROM ".
 				" (select substring_index(a.result,',',1) AS RESULT, ".
