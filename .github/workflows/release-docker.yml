@@ -10,6 +10,13 @@ jobs:
   ghcr_io:
     runs-on: ubuntu-latest
     steps:
+      - id: repoName
+        run: echo "::set-output name=lowerCase::${REPO_NAME,,}"
+        env:
+          REPO_NAME: ${{ github.repository }}
+    
+      - run: echo 
+    
       - name: Checkout
         uses: actions/checkout@v2
         
@@ -31,5 +38,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ github.event.repository.name }}:latest
+            ghcr.io/${{steps.repoName.outputs.lowerCase}}:latest
 
