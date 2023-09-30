@@ -2928,15 +2928,6 @@ alert(dd_to);
                                 </td>
                             </tr>
 
-                            <tr class="results_aggregate" id="results_aggregate">
-                                <td>Aggregate by<?php echo LangUtil::$generalTerms['AGGREGATION_BY']; ?> &nbsp;&nbsp;&nbsp;</td>
-                                <td id='resultsAggregation'>
-                                    <input type="radio" name="resultAgg" value="common"> Common Tests<br>
-                                    <input type="radio" name="resultAgg" value="all"> All Tests
-                                </td>
-                            </tr>
-
-
                             <tr>
                                 <td></td>
                                 <td>

@@ -8,6 +8,7 @@
 # since that also counts. They should be "UTF-8".
 require_once("../includes/composer.php");
 require_once("../includes/db_lib.php");
+require_once("../includes/db_util.php");
 require_once("../includes/user_lib.php");
 
 $current_user_id = $_SESSION['user_id'];
@@ -26,11 +27,35 @@ header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetm
 header('Content-Disposition: attachment;filename="report.xlsx"');
 header('Cache-Control: max-age=0');
 
-$labs = get_lab_configs($current_user_id);
+$lab_ids = array();
+foreach($_REQUEST['locationAgg'] as $idx => $location) {
+    $split = explode(":", $location);
+    $lab_ids[] = intval($split[0]);
+}
+
+DbUtil::switchToGlobal();
+
+$lab_id_list = implode(", ", $lab_ids);
+$lab_db_name_query = <<<EOQ
+    SELECT lab_config_id, name, db_name FROM lab_config WHERE lab_config_id IN ( $lab_id_list );
+EOQ;
+$labs_with_db_names = query_associative_all($lab_db_name_query);
+
+$labs = array();
+foreach($labs_with_db_names as $idx => $row) {
+    $lid = $row['lab_config_id'];
+    $dbn = $row['db_name'];
+    $nm = $row['name'];
+    $labs[$lid] = array();
+    $labs[$lid] = $row;
+}
+
+$start_date = intval($_REQUEST['yyyy_from'])."-".intval($_REQUEST['mm_from'])."-".intval($_REQUEST['dd_from']);
+$end_date = intval($_REQUEST['yyyy_to'])."-".intval($_REQUEST['mm_to'])."-".intval($_REQUEST['dd_to']);
 
 // The headers for the spreadsheet must match the columns in the query below
 $headers = array("Patient Name", "Sex", "Date of Birth", "Specimen Type", "Date Collected", "Test Result");
-$query = <<<'EOQ'
+$query = <<<EOQ
     SELECT
         p.name AS patient_name, p.sex, p.dob as patient_dob,
         st.name AS specimen_type, s.date_collected AS specimen_collected,
@@ -38,30 +63,35 @@ $query = <<<'EOQ'
     FROM specimen AS s
     INNER JOIN specimen_type AS st ON s.specimen_type_id = st.specimen_type_id
     INNER JOIN test AS t ON s.specimen_id = t.specimen_id
-    INNER JOIN patient AS p ON s.patient_id = p.patient_id;
+    INNER JOIN patient AS p ON s.patient_id = p.patient_id
+    WHERE s.date_collected BETWEEN '$start_date' AND '$end_date';
 EOQ;
-
-# TODO - make this dynamic
-db_change("blis_127");
-
-$results = query_associative_all($query);
 
 $objPHPExcel = new PHPExcel();
 
-$sheet = $objPHPExcel->getSheet(0);
-$sheet->setTitle("Patient Test Results");
+foreach($labs as $lab_id => $lab) {
+    $sheet = $objPHPExcel->createSheet();
 
-foreach($headers as $index => $header) {
-    $sheet->setCellValueByColumnAndRow($index, 1, $header);
-}
+    // Maximum 31 characters allowed for sheet title
+    $sheet->setTitle(substr($lab['name'], 0, 31));
 
-foreach($results as $row_index => $row) {
-    $col = 0;
-    foreach($row as $col_name => $value) {
-        $sheet->setCellValueByColumnAndRow($col, $row_index + 2, $value);
-        $col = $col + 1;
+    db_change($lab['db_name']);
+    $results = query_associative_all($query);
+
+    foreach($headers as $index => $header) {
+        $sheet->setCellValueByColumnAndRow($index, 1, $header);
+    }
+    
+    foreach($results as $row_index => $row) {
+        $col = 0;
+        foreach($row as $col_name => $value) {
+            $sheet->setCellValueByColumnAndRow($col, $row_index + 2, $value);
+            $col = $col + 1;
+        }
     }
 }
+
+$objPHPExcel->removeSheetByIndex(0);
 
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save("php://output");
