@@ -53,6 +53,23 @@ if ($file_name_and_extension[1]=="zip") {
         $langFile="";
         $sqlFolder="";
         $keyFile="";
+
+        // Kind of a hack
+        // Sometimes the backup is "double-zipped" with a folder being located
+        // in the extracted path. If there is only one folder in the folder
+        // we unzipped, use that.
+        $extracted_files = scandir($extractPath);
+        // Strip '.' and '..' from the file list if present.
+        for($_x = 0; $_x < 2; $_x++) {
+            if (count($extracted_files) > 0 && ($extracted_files[0] == "." || $extracted_files[0] == "..")) {
+                array_splice($extracted_files, 0, 1);
+            }
+        }
+        if (count($extracted_files) == 1 && is_dir($extractPath."/".$extracted_files[0])) {
+            $extractPath = $extractPath."/".$extracted_files[0];
+            $log->info("Import path set to: ".$extractPath);
+        }
+
         foreach (new DirectoryIterator($extractPath) as $fileInfo) {
             if ($fileInfo->isDot()||$fileInfo->isFile()) {
                 continue;
@@ -179,6 +196,12 @@ if ($file_name_and_extension[1]=="zip") {
         try{
             $fileName = $extractPath."/".$revampFile;
             $fileHandle = fopen($fileName, "r");
+
+            if (!$fileHandle) {
+                $log->error("Could not open file: ".$fileName);
+                return;
+            }
+
             while (!feof($fileHandle)) {
                 $line = fgets($fileHandle);
                 if(strstr($line, "INSERT INTO `lab_config` VALUES")) {
