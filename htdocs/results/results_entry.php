@@ -48,20 +48,20 @@ $(document).ready(function(){
 	$("#worksheet_results").hide();
 	$('.results_subdiv').hide();
 
-	<?php 
+	<?php
 	global $LIS_VERIFIER;
 	if($user_level == $LIS_VERIFIER){
 		//right_load("specimen_results");
 		?>
-		right_load('verify_results'); 
+		right_load('verify_results');
 		<?php }
-	else {	
+	else {
 	?>
 
-	
+
 	right_load("specimen_results");
 	<?php
-	} 
+	}
 	if(isset($_REQUEST['ajax_response']))
 	{
 		#Rendering after Ajax response (workaround for dynamically loading JS via Ajax)
@@ -174,12 +174,12 @@ function hide_result_form(specimen_id)
 function fetch_specimen()
 {
 	var labsection = document.getElementById('cat_code_labsection_specimen').value;
-	
+
 	var specimen_id = $('#specimen_id').attr("value");
 	specimen_id = specimen_id.replace(/[^a-z0-9 ]/gi,'');
 	$('#fetch_progress_bar').show();
-	<?php 
-	#Used when Ajax response did not have JavaScript code included 
+	<?php
+	#Used when Ajax response did not have JavaScript code included
 	?>
 	var attrib = $('#resultfetch_attrib').attr("value");
 	var condition_attrib = $('#h_attrib').attr("value");
@@ -191,10 +191,10 @@ function fetch_specimen()
 	}
 	var url = 'ajax/result_entry_patient_dyn.php';
 
-	
-	$("#fetched_patient_entry").load(url, 
-		{a: attrib, t: specimen_id, labsec: labsection, c: condition_attrib }, 
-		function() 
+
+	$("#fetched_patient_entry").load(url,
+		{a: attrib, t: specimen_id, labsec: labsection, c: condition_attrib },
+		function()
 		{
 			$('#fetch_progress_bar').hide();
 			$("#fetched_specimen").show();
@@ -211,9 +211,9 @@ function fetch_specimen_by_lab_section()
 	var lab_section_id = $('#cat_code_labsection').attr("value");
 	//alert(lab_section_id);
 	var url = 'ajax/result_entry_patient_lab_section.php';
-	$("#labsection_results_div").load(url, 
-		{labSectionId: lab_section_id}, 
-		function() 
+	$("#labsection_results_div").load(url,
+		{labSectionId: lab_section_id},
+		function()
 		{
 			$('#fetch_progress_bar_labsection').hide();
 			$("#fetched_specimen_labsetion").show();
@@ -231,14 +231,14 @@ var pg=2;
 	//var target_div = "fetch_specimen";
 	$('.result_form_pane_patient_').html("Patient Id - "+patientId+" SpecimenID - "+specimenId);
 	/* var target_div = "result_form_pane_patient_"+specimen_id;
-	$("#"+target_div).load(url, 
-		{sid: specimen_id , page_id:pg}, 
-		function() 
+	$("#"+target_div).load(url,
+		{sid: specimen_id , page_id:pg},
+		function()
 		{
 			$('#fetch_progress_bar').hide();
 			$("#fetched_specimen").show();
 		}
-	); 
+	);
 } */
 
 
@@ -265,7 +265,7 @@ function fetch_specimen2(specimen_id)
 						var r = confirm(content);
 						if (r == false) {
 							return;
-						} 				
+						}
 					}
 					var pg=2;
 					$('#fetch_progress_bar').show();
@@ -273,9 +273,9 @@ function fetch_specimen2(specimen_id)
 					//var target_div = "fetch_specimen";
 					$('.result_form_pane').html("");
 					var target_div = "result_form_pane_"+specimen_id;
-					$("#"+target_div).load(url, 
-						{sid: specimen_id , page_id:pg}, 
-						function() 
+					$("#"+target_div).load(url,
+						{sid: specimen_id , page_id:pg},
+						function()
 						{
 							$('#fetch_progress_bar').hide();
 							$("#fetched_specimen").show();
@@ -312,13 +312,13 @@ function verify_control_selection() {
 	alert(result);
 	//alert(testName);
 	if(test_type_id == "")
-	{	
+	{
 		$('#control_testing_error').show();
 		return;
 	}
-	
+
 	$('#control_result_done').show();
-	
+
 	//$('#control_testing_form').submit();
 }
 
@@ -370,11 +370,11 @@ function submit_forms(specimen_id)
 			var count = 0;
 			for(var i = 0; i < form_id_list.length; i++)
 			{
-				
+
 					if($('#'+form_id_list[i]+'_skip').is(':checked'))
 					{
 						var params = $('#'+form_id_list[i]).formSerialize();
-						
+
 						 $.ajax({
 							type: "POST",
 							url: "ajax/result_add.php",
@@ -382,7 +382,7 @@ function submit_forms(specimen_id)
 							success: function(msg) {
 								$("#"+target_div_id).html(msg);
 							}
-						}); 
+						});
 					} else {
 						count++;
 						if(form_id_list.length == count){
@@ -399,7 +399,7 @@ function submit_forms(specimen_id)
 				type : 'POST',
 				url : 'ajax/addUserLog.php',
 				data: data_string
-			});	
+			});
 			$('.result_progress_spinner').hide();
 		}
 	});
@@ -415,15 +415,15 @@ function get_batch_form()
 	var date_from_array=$('#yyyy_from').attr("value")+"-"+$('#mm_from').attr("value")+"-"+$('#dd_from').attr("value");
 	var table_id = 'batch_result_table';
 	if(test_type_id == "")
-	{	
+	{
 		$('#batch_result_error').show();
 		$('#batch_form_div').html("");
 		return;
 	}
 	$('#batch_progress_form').show();
 	$('#batch_form_div').load(
-		"ajax/batch_results_form_fetch.php", 
-		{ 
+		"ajax/batch_results_form_fetch.php",
+		{
 			t_type: test_type_id,
 			date_to:date_to_array,
 			date_from:date_from_array
@@ -439,7 +439,7 @@ function get_batch_form()
 	$.ajax({
 		type: "GET",
 		url: "ajax/batch_results_form_row.php",
-		data: "t_type="+test_type_id+"date_to="+date_to_array+"date_from="+date_from_array, 
+		data: "t_type="+test_type_id+"&date_to="+date_to_array+"&date_from="+date_from_array,
 		success : function(msg) {
             tableml = msg;
 			$('#batch_progress_form').hide();
@@ -452,7 +452,7 @@ function get_verification_form()
 	$('#verify_result_error').hide();
 	var test_type_id = $('#verify_test_type').attr("value");
 	if(test_type_id == "")
-	{	
+	{
 		$('#verify_result_error').show();
 		return;
 	}
@@ -471,7 +471,7 @@ function get_worksheet()
 	var worksheet_id = $('#worksheet_custom_type').attr("value")
 	var test_type_id = $('#worksheet_test_type').attr("value");
 	if(worksheet_id == "" && test_type_id == "")
-	{	
+	{
 		$('#worksheet_error').show();
 		return;
 	}
@@ -532,7 +532,7 @@ function hide_result_confirmation(specimen_id)
 }
 function update_numeric_remarks(test_type_id, count, patient_age, patient_sex)
 {
-	
+
  <?php # See ajax/specimen_form_fetch.php for field names ?>
 	 var values_csv = "";
 	 var remarks_input_id = "test_"+test_type_id+"_comments";
@@ -593,10 +593,10 @@ function hideCondition(p_attrib)
 	<tr valign='top'>
 	<td id="left_pane" class="left_menu" valign="top" width='180px'>
 
-	<?php  
+	<?php
 	global $LIS_VERIFIER;
 	if($user_level != $LIS_VERIFIER){?>
-		<a href="javascript:right_load('specimen_results');" title='Enter Test Results for a Single Specimen' 
+		<a href="javascript:right_load('specimen_results');" title='Enter Test Results for a Single Specimen'
 			class='menu_option' id='specimen_results_menu'
 		>
 			<?php echo LangUtil::$pageTerms['MENU_SINGLESPECIMEN']; ?>
@@ -618,7 +618,7 @@ function hideCondition(p_attrib)
 		>
 			<?php echo LangUtil::$pageTerms['MENU_VERIFYRESULTS']; ?>
 		</a><br><br>
-		
+
 		<?php /* Uncomment when Control Testing is finalized
 		<a href="javascript:right_load('control_testing');" title='Enter Control Testing Results'
 			class='menu_option' id='control_testing_menu'
@@ -626,7 +626,7 @@ function hideCondition(p_attrib)
 			<?php echo LangUtil::$pageTerms['CONTROL_TESTING_RESULTS']; ?>
 		</a><br><br>
 		*/ ?>
-		
+
 		<?php
 		if($SHOW_REPORT_RESULTS === true)
 		{
@@ -644,22 +644,22 @@ function hideCondition(p_attrib)
 		>
 			<?php echo LangUtil::$pageTerms['MENU_WORKSHEET']; ?>
 		</a><br><br>
-		
-		
+
+
 		<a href="javascript:right_load('labsection_div');"  title='Enter Results by Lab Sections'
 			class='menu_option' id='labsection_div_menu'
 		> <?php echo LangUtil::$pageTerms['MENU_LABSECTION']; ?></a>
-		
-		
-			
+
+
+
 		<p>&nbsp;</p>
 		<p><div id="worksheet_link"></div></p><br><br>
-		
-		
+
+
 	</td>
-	
+
 	<td id="right_pane" class="right_pane" valign="top" >
-	
+
 		<div id="worksheet_results" class='results_subdiv' style='display:none;'>
 			<form name="fetch_worksheet" id="fetch_worksheet">
 				<b>Worksheet Results</b>
@@ -671,7 +671,7 @@ function hideCondition(p_attrib)
 			<div id="worksheet">
 			</div>
 		</div>
-		
+
 		<div id="specimen_results" class='results_subdiv' style='display:none;'>
 			<form name="fetch_specimen_form" id="fetch_specimen_form">
 				<b><?php echo LangUtil::$pageTerms['MENU_SINGLESPECIMEN']; ?></b>
@@ -695,12 +695,12 @@ function hideCondition(p_attrib)
 					?>
 				</select><select name='h_attrib' id='h_attrib' style='font-family:Tahoma;'>
 		<?php $page_elems->getPatientSearchCondition(); ?>
-        
+
 	</select>
 				&nbsp;&nbsp;
 				<input type="text" name="specimen_id" id="specimen_id" class='uniform_width' />
 				<br/> <br/>
-				
+
 				<table cellspacing='4px'>
 					<tbody>
 					<tr valign='top'>
@@ -712,14 +712,14 @@ function hideCondition(p_attrib)
 							</select>
 						</td>
 					</tr>
-					
+
 				</table>
 				<br/>
 				<input type="button" id='fetch_specimen_button' onclick="fetch_specimen();" value="<?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?>" />
 				&nbsp;&nbsp; <br/>
 				<span id='fetch_progress_bar' style='display:none;'>
 					<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SEARCHING']); ?>
-				</span>	
+				</span>
 			</form>
 			<br>
 			<div id='fetched_patient_entry'>
@@ -753,7 +753,7 @@ function hideCondition(p_attrib)
 				</table>
 			</form>
 		</div>
-		
+
 		<div id='batch_results' class='results_subdiv' style='display:none;'>
 			<b><?php echo LangUtil::$pageTerms['MENU_BATCHRESULTS']; ?></b>
 			<br>
@@ -812,7 +812,7 @@ function hideCondition(p_attrib)
 			<div id='batch_form_div'>
 			</div>
 		</div>
-		
+
 		<div id='verify_results' class='results_subdiv' style='display:none;'>
 			<b><?php echo LangUtil::$pageTerms['MENU_VERIFYRESULTS']; ?></b>
 			<br>
@@ -820,7 +820,7 @@ function hideCondition(p_attrib)
 			<form name='verify_results_form' id='verify_results_form' action='results_verify.php' method='post'>
 				<?php echo LangUtil::$generalTerms['TEST_TYPE']; ?>
 				&nbsp;&nbsp;&nbsp;
-				
+
 				<select id='verify_test_type' name='t_type' class='uniform_width'>
 					<option value=""><?php echo LangUtil::$generalTerms['SELECT_ONE']; ?>..</option>
 					<?php $page_elems->getTestTypesSelect($_SESSION['lab_config_id']); ?>
@@ -839,7 +839,7 @@ function hideCondition(p_attrib)
 			<div id='verify_form_div'>
 			</div>
 		</div>
-		
+
 		<div id='control_testing' class='results_subdiv' style='display:none;'>
 			<b><?php echo LangUtil::$generalTerms['CONTROL_TESTING_RESULTS']; ?></b>
 			<br>
@@ -863,7 +863,7 @@ function hideCondition(p_attrib)
 					<tr valign='top'>
 						<td>Result</td>
 						<td>
-							<input type="radio" name="controlTesting" id="controlTesting" value="Pass" checked> Pass 
+							<input type="radio" name="controlTesting" id="controlTesting" value="Pass" checked> Pass
 							<input type="radio" name="controlTesting" id="controlTesting" value="Fail"> Fail
 							<br>
 						</td>
@@ -880,10 +880,10 @@ function hideCondition(p_attrib)
 			<div id='control_testing_div'>
 			</div>
 			<div class='clean-orange' id='control_result_done' style='width:300px' style='display:none;'>
-						
+
 			</div>
 		</div>
-		
+
 		<div id='worksheet_div' class='results_subdiv' style='display:none;'>
 			<b><?php echo LangUtil::$pageTerms['MENU_WORKSHEET']; ?></b>
 			<br>
@@ -913,9 +913,9 @@ function hideCondition(p_attrib)
 						<td>
 							<select id='worksheet_custom_type' name='w_type' class='uniform_width'>
 								<option value=""><?php echo LangUtil::$generalTerms['SELECT_ONE']; ?></option>
-								<?php 
+								<?php
 								$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
-								$page_elems->getCustomWorksheetSelect($lab_config); 
+								$page_elems->getCustomWorksheetSelect($lab_config);
 								?>
 							</select>
 						</td>
@@ -949,9 +949,9 @@ function hideCondition(p_attrib)
 				</table>
 			</form>
 		</div>
-		
-		
-		
+
+
+
 		<div id='labsection_div' class='results_subdiv' style='display:none;'>
 			<b><?php echo LangUtil::$pageTerms['MENU_LABSECTION']; ?></b>
 			<br>
@@ -970,11 +970,11 @@ function hideCondition(p_attrib)
 						  	<input type="button" value="submit" onclick="fetch_specimen_by_lab_section()" />
 						</td>
 					</tr>
-					
+
 				</table>
 				<span id='fetch_progress_bar_labsection' style='display:none;'>
 					<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SEARCHING']); ?>
-				</span>	
+				</span>
 			</form>
 			<br><br>
 			<div id='labsection_results_div'>
@@ -986,10 +986,10 @@ function hideCondition(p_attrib)
 			?>
 			</div>
 		</div>
-		
-		
-		
-			
+
+
+
+
 		<?php
 		if($SHOW_REPORT_RESULTS === true)
 		{
@@ -1005,10 +1005,10 @@ function hideCondition(p_attrib)
 			<br>
 			<br>
 			<div id='report_results_container'>
-			
-			<?php 
+
+			<?php
 			/*
-			
+
 			*/
 			?>
 			</div>
