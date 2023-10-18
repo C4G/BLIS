@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [[ -z "$(which wine)" ]]; then
+    echo "You must have wine installed to use this."
+    exit 1
+fi
+
+if [[ ! -f BLIS.exe ]]; then
+    echo "Please download BLISRuntime and place the files in this directory."
+    exit 1
+fi
+
+WINEPREFIX="$(realpath "$(dirname "$0")/../wine/")"
+export WINEPREFIX
+
+cd "$WINEPREFIX/.." || exit 1
+
+echo -e "http://192.168.1.16:4001/login.php"
+
+wine BLIS.exe
