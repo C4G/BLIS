@@ -11,14 +11,16 @@ The BLIS Cloud CLI is an experimental way to install and manage BLIS on cloud-ba
 The tool is intended to be used on **Ubuntu** installations only. In order to install the tool, you must first install the prerequisites:
 
 ```bash
+sudo apt-get update
 sudo apt-get install -y python3-pip
 echo "export PATH=\"\$HOME/.local/bin:\$PATH\"" | tee -a ~/.bashrc
+source ~/.bashrc
 ```
 
 Then you can install the tool with:
 
 ```bash
-pip3 install git+https://github.com/mrysav/blis-cloud-cli.git
+pip3 install -U git+https://github.com/mrysav/blis-cloud-cli.git
 ```
 
 ## Usage
