@@ -144,4 +144,4 @@ Clicking **Generate Barcodes** allows the Technician to generate a unique barcod
 The Backup Page is similarly designed to the Backup Data feature available for Lab Managers.
 
 !!! tip "See Also"
-    The Backup Data functionality can be found in the [Lab Manager section on Backup Data.](../30_manager_overview/#backup-data)
+    The Backup Data functionality can be found in the [Lab Manager section on Backup Data.](30_manager_overview.md#backup-data)
