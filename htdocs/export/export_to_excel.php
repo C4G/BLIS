@@ -68,7 +68,7 @@ foreach($labs_with_db_names as $idx => $row) {
 $start_date = intval($_REQUEST['yyyy_from'])."-".intval($_REQUEST['mm_from'])."-".intval($_REQUEST['dd_from']);
 $end_date = intval($_REQUEST['yyyy_to'])."-".intval($_REQUEST['mm_to'])."-".intval($_REQUEST['dd_to']);
 
-$test_type_id = $_REQUEST['test_type'];
+$test_type_ids = $_REQUEST['test_types'];
 
 $include_name = ($_REQUEST["include_patient_name"] == "true");
 $include_sex = ($_REQUEST["include_patient_sex"] == "true");
@@ -104,83 +104,95 @@ array_push($fields, "t.result AS test_result");
 
 $fields_sql = implode(", ", $fields);
 
-$query = <<<EOQ
-    SELECT $fields_sql
-    FROM specimen AS s
-    INNER JOIN specimen_type AS st ON s.specimen_type_id = st.specimen_type_id
-    INNER JOIN test AS t ON s.specimen_id = t.specimen_id
-    INNER JOIN patient AS p ON s.patient_id = p.patient_id
-    WHERE s.date_collected BETWEEN '$start_date' AND '$end_date'
-    AND t.test_type_id = '$test_type_id';
-EOQ;
-
 $objPHPExcel = new PHPExcel();
 
 foreach($labs as $lab_id => $lab) {
-    $sheet = $objPHPExcel->createSheet();
+    foreach($test_type_ids as $tt_idx => $test_type_id) {
+        
+        // Ignore the weird indentation... that is because this is a multiline string
+        // It will break if not indented this way I think...
+        $query = <<<EOQ
+            SELECT $fields_sql
+            FROM specimen AS s
+            INNER JOIN specimen_type AS st ON s.specimen_type_id = st.specimen_type_id
+            INNER JOIN test AS t ON s.specimen_id = t.specimen_id
+            INNER JOIN patient AS p ON s.patient_id = p.patient_id
+            WHERE s.date_collected BETWEEN '$start_date' AND '$end_date'
+            AND t.test_type_id = '$test_type_id';
+EOQ;
 
-    // Maximum 31 characters allowed for sheet title
-    $sheet->setTitle(substr($lab['name'], 0, 31));
+        
+        $sheet = $objPHPExcel->createSheet();
 
-    db_change($lab['db_name']);
+        db_change($lab['db_name']);
 
-    // Grab all the measures for this test type from the database.
-    $test_type = TestType::getById($test_type_id, $lab['lab_config_id']);
-    $measure_list = array();
-    $measure_headers = array();
+        // Grab all the measures for this test type from the database.
+        $test_type = TestType::getById($test_type_id, $lab['lab_config_id']);
+        
+        $sheet_name = $test_type->name;
+        // Replace invalid characters with a space
+        // https://github.com/PHPOffice/PHPExcel/blob/39534e3dd376041d0d50a4714e73375bf45b692b/Classes/PHPExcel/Worksheet.php#L45C41-L45C83
+        $sheet_name = str_replace(array('*', ':', '/', '\\', '?', '[', ']'), ' ', $sheet_name);
+        // Sheet names can only be 31 characters max
+        $sheet_name = substr($sheet_name, 0, 31);
+        $sheet->setTitle($sheet_name);
 
-    $db_measure_list = $test_type->getMeasures($lab['lab_config_id']);
-    foreach($db_measure_list as $measure) {
-        if($measure->checkIfSubmeasure() == 1) {
-            continue;
-        }
+        $measure_list = array();
+        $measure_headers = array();
 
-        $measure_list[] = $measure;
-
-        $submeasure_list = $measure->getSubmeasuresAsObj($lab['lab_config_id']);
-        if(count($submeasure_list) > 0) {
-            foreach($submeasure_list as $submeasure) {
-                $measure_list[] = $submeasure;
-            }
-        }
-    }
-    foreach($measure_list as $measure) {
-        $hname = $measure->name;
-        if (strlen($measure->unit) > 0) {
-            $hname = $hname . "(" . $measure->unit . ")";
-        }
-        $measure_headers[] = $hname;
-    }
-
-    $results = query_associative_all($query);
-
-    foreach($headers as $index => $header) {
-        $sheet->setCellValueByColumnAndRow($index, 1, $header);
-    }
-
-    foreach($measure_headers as $index => $header) {
-        $sheet->setCellValueByColumnAndRow(count($headers) + $index, 1, $header);
-    }
-
-    $total_columns = count($headers) + count($measure_headers);
-
-    foreach($results as $row_index => $row) {
-        $col = 0;
-        $test_result = "";
-        foreach($row as $col_name => $value) {
-            if ($col_name == "test_result") {
-                $test_result = $value;
-                break;
+        $db_measure_list = $test_type->getMeasures($lab['lab_config_id']);
+        foreach($db_measure_list as $measure) {
+            if($measure->checkIfSubmeasure() == 1) {
+                continue;
             }
 
-            $sheet->setCellValueByColumnAndRow($col, $row_index + 2, $value);
-            $col = $col + 1;
+            $measure_list[] = $measure;
+
+            $submeasure_list = $measure->getSubmeasuresAsObj($lab['lab_config_id']);
+            if(count($submeasure_list) > 0) {
+                foreach($submeasure_list as $submeasure) {
+                    $measure_list[] = $submeasure;
+                }
+            }
         }
-        $test_result_split = explode(",", $test_result);
-        foreach($test_result_split as $result) {
-            $sheet->setCellValueByColumnAndRow($col, $row_index + 2, $result);
-            $col = $col + 1;
-            if ($col >= $total_columns) break;
+        foreach($measure_list as $measure) {
+            $hname = $measure->name;
+            if (strlen($measure->unit) > 0) {
+                $hname = $hname . "(" . $measure->unit . ")";
+            }
+            $measure_headers[] = $hname;
+        }
+
+        $results = query_associative_all($query);
+
+        foreach($headers as $index => $header) {
+            $sheet->setCellValueByColumnAndRow($index, 1, $header);
+        }
+
+        foreach($measure_headers as $index => $header) {
+            $sheet->setCellValueByColumnAndRow(count($headers) + $index, 1, $header);
+        }
+
+        $total_columns = count($headers) + count($measure_headers);
+
+        foreach($results as $row_index => $row) {
+            $col = 0;
+            $test_result = "";
+            foreach($row as $col_name => $value) {
+                if ($col_name == "test_result") {
+                    $test_result = $value;
+                    break;
+                }
+
+                $sheet->setCellValueByColumnAndRow($col, $row_index + 2, $value);
+                $col = $col + 1;
+            }
+            $test_result_split = explode(",", $test_result);
+            foreach($test_result_split as $result) {
+                $sheet->setCellValueByColumnAndRow($col, $row_index + 2, $result);
+                $col = $col + 1;
+                if ($col >= $total_columns) break;
+            }
         }
     }
 }

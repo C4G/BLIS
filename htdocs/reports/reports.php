@@ -2981,9 +2981,9 @@ alert(dd_to);
                             </tr>
                                                        
                             <tr style="border-bottom: 1px solid black" valign="top">
-                                <td style="padding: 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['TEST_TYPE']; ?></td>
+                                <td style="padding: 5rem 1rem 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['TEST_TYPE']; ?></td>
                                 <td style="padding: 1rem 0">
-                                    <select name="test_type" id="test_type" class="uniform_width">
+                                    <select name="test_types[]" id="test_type" class="uniform_width" style="font-size: medium; border: 1px solid darkgrey; min-height: 10rem; width: 100%;" multiple="">
                                         <?php
                                         if (!is_super_admin($current_user) && !is_country_dir($current_user)) {
                                             // If we are not the superuser or country director, we know what site we are looking at
@@ -2992,6 +2992,7 @@ alert(dd_to);
                                         }
                                         ?>
                                     </select>
+                                    <div>Press and hold the "Ctrl" key to select multiple tests.</div>
                                 </td>
                             </tr>
                             
