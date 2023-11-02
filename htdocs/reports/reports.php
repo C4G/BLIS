@@ -2941,7 +2941,7 @@ alert(dd_to);
                             
                             <script type="text/javascript">
                                 function exportExcel_updateTestTypes() {
-                                    selectEl = $("#export_to_excel_form select#locationAgg\\[\\]");
+                                    selectEl = $("#export_to_excel_form select#locationAgg");
                                     if (selectEl.val() === -1) {
                                         return;
                                     }
@@ -2962,7 +2962,7 @@ alert(dd_to);
                                 <td style="padding: 1rem 0" id='locationAggregation'>
                                 <?php
                                 if (is_super_admin($current_user) || is_country_dir($current_user)) {
-                                    echo '<select name="locationAgg[]" id="locationAgg[]" onchange="exportExcel_updateTestTypes()">';
+                                    echo '<select name="locationAgg" id="locationAgg" onchange="exportExcel_updateTestTypes()">';
                                     echo '<option value="-1"></option>';
                                     
                                     $lab_config_list_imported = get_lab_configs_imported();
@@ -2973,7 +2973,7 @@ alert(dd_to);
                                 } else {
                                     echo $lab_config->name 
                                 ?>
-                                    <input type="hidden" name="locationAgg[]" id="locationAgg[]" value="<?php echo $lab_config->id .":". $lab_config->name .":". $lab_config->location ?>">
+                                    <input type="hidden" name="locationAgg" id="locationAgg" value="<?php echo $lab_config->id .":". $lab_config->name .":". $lab_config->location ?>">
                                 <?php
                                 }
                                 ?>
