@@ -28,7 +28,7 @@ if (is_super_admin($current_user) || is_country_dir($current_user)) {
 if ($unauthorized) {
     // If the user is not a super admin or country director, they should only
     // be able to access data for their own lab, and only if they are an admin.
-    if (count($lab_ids) == 1 && $lab_ids[0] == $current_user->labConfigId && is_admin($current_user)) {
+    if ($lab_id == $current_user->labConfigId && is_admin($current_user)) {
         $unauthorized = false;
     }
 }
@@ -81,14 +81,14 @@ if ($include_dob) {
     $fields[] = "p.dob AS patient_dob";
 }
 
-array_push($headers, 
-    "Specimen Type", 
-    "Date Collected", 
-    "Date Received", 
+array_push($headers,
+    "Specimen Type",
+    "Date Collected",
+    "Date Received",
     "Result Entry Date"
 );
-array_push($fields, 
-    "st.name AS specimen_type", 
+array_push($fields,
+    "st.name AS specimen_type",
     "s.date_collected AS specimen_collected",
     "s.date_recvd AS specimen_date_received",
     "t.ts AS test_timestamp"
@@ -103,7 +103,7 @@ $fields_sql = implode(", ", $fields);
 $objPHPExcel = new PHPExcel();
 
 foreach($test_type_ids as $tt_idx => $test_type_id) {
-    
+
     // Ignore the weird indentation... that is because this is a multiline string
     // It will break if not indented this way I think...
     $query = <<<EOQ
@@ -116,14 +116,14 @@ foreach($test_type_ids as $tt_idx => $test_type_id) {
         AND t.test_type_id = '$test_type_id';
 EOQ;
 
-    
+
     $sheet = $objPHPExcel->createSheet();
 
     db_change($lab['db_name']);
 
     // Grab all the measures for this test type from the database.
     $test_type = TestType::getById($test_type_id, $lab['lab_config_id']);
-    
+
     $sheet_name = $test_type->name;
     // Replace invalid characters with a space
     // https://github.com/PHPOffice/PHPExcel/blob/39534e3dd376041d0d50a4714e73375bf45b692b/Classes/PHPExcel/Worksheet.php#L45C41-L45C83
