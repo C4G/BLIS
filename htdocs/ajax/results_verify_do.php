@@ -29,6 +29,7 @@ function verify_and_update($test_type_id, $verified_entry, $hash_value)
 		$query_verify = 
 			"UPDATE test ".
 			"SET verified_by=$verified_entry->verifiedBy, ".
+			"signed_by=$verified_entry->signedBy, ".
 			"date_verified='$verified_entry->dateVerified' ".
 			"WHERE test_id=$test_id";
 	}
@@ -40,6 +41,7 @@ function verify_and_update($test_type_id, $verified_entry, $hash_value)
 			"SET result='$verified_result_value', ".
 			"comments='$verified_entry->comments', ".
 			"verified_by=$verified_entry->verifiedBy, ".
+			"signed_by=$verified_entry->signedBy, ".
 			"date_verified='$verified_entry->dateVerified' ".
 			"WHERE test_id=$test_id";
 	}
@@ -76,6 +78,7 @@ for($i = 0; $i < count($specimen_id_list); $i++)
 	$test_entry->result = implode(",", $result_values).",";
 	$test_entry->comments = $comments_list[$i];
 	$test_entry->verifiedBy = $_SESSION['user_id'];
+	$test_entry->signedBy=$_SESSION['user_id'];
 	$test_entry->dateVerified = date("Y-m-d H:i:s");
 	# TODO: Add checking of valid ranges before committing verification
 	verify_and_update($test_type_id, $test_entry, $patient->getHashValue());

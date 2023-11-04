@@ -146,6 +146,7 @@ $LANG_ARRAY = array (
 		"NOTKNOWN" => "Not Known", 
 		"REGD_BY" => "Registered By", 
 		"ENTERED_BY" => "Entered By", 
+		"SIGNED_BY" => "Signed By", 
 		"VERIFIED_BY" => "Verified By", 
 		"ACTION" => "Action", 
 		"RECORDS" => "Records", 

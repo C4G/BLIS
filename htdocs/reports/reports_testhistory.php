@@ -56,6 +56,11 @@ else {
 $uiinfo = "from=".$date_from."&to=".$date_to."&ip=".$_REQUEST['ip']."&viz=".$_REQUEST['viz'];
 putUILog('reports_testhistory', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
+function get_signed_by_user(){
+	
+}
+
+
 // function to draw vis
 function draw_visualization($cleaned_result, $cleaned_range){
 
@@ -427,10 +432,13 @@ function is_result_parsable($cleaned_result){
 	return false;
 }
 
+
+
 # Helper function to fetch test history records
 function get_records_to_print($lab_config, $patient_id) {
 	global $date_from, $date_to;
 	$retval = array();
+	#echo "ip->".$_REQUEST['ip'];
 	if(!isset($_REQUEST['ip']) or $_REQUEST['ip'] == 0) {
 		# Do not include pending tests
 		$labsection = 0;
@@ -481,13 +489,15 @@ function get_records_to_print($lab_config, $patient_id) {
 	
 	}
 	
+	#echo "492".$query_string;
 	$resultset = query_associative_all($query_string);
-	//echo count($resultset);
+	#echo "494 count".count($resultset);
 	if(count($resultset) == 0 || $resultset == null)
 		return $retval;
 	
 	foreach($resultset as $record) {
 		$test = Test::getObject($record);
+		#echo "500->".$test->signedBy;
 		$hide_patient_name = TestType::toHidePatientName($test->testTypeId);
 		
 		if( $hide_patient_name == 1 )
@@ -508,6 +518,7 @@ $report_id = $REPORT_ID_ARRAY['reports_testhistory.php'];
 $report_config = $lab_config->getReportConfig($report_id);
 $margin_list = $report_config->margins;
 $userrr = get_user_by_id($_SESSION['user_id']);
+
 if(is_country_dir($userrr) || is_super_admin($userrr))
 {
 $code_type = 0;
@@ -978,7 +989,7 @@ if($patient == null)
 else
 {
 	# Fetch test entries to print in report
-	$record_list = get_records_to_print($lab_config, $patient_id); 
+	$record_list = get_records_to_print($lab_config, $patient_id);
 	# If single date supplied, check if-
 	# 1. Physician name is the same for all
 	# 2. Patient daily number is the same for all
@@ -986,6 +997,7 @@ else
 	$physician_same = false;
 	$daily_number_same = false;
 	$all_tests_completed = false;
+	$signature;
 	if($date_from == $date_to) {
 		$physician_same = true;
 		$daily_number_same = true;
@@ -994,10 +1006,13 @@ else
 		$previous_physician = "";
 		$previous_daily_num = "";
 		$count_list= count($record_list);
-		
+		#echo "count->".$count_list;
 		foreach($record_list as $record_set) {
 			$value = $record_set;
 			$test = $value[0];
+			$signature=$test->signedBy;
+
+			
 			//check for test_id if its in the array
 			//http://www.w3schools.com/php/func_array_in_array.asp
 			$specimen = $value[1];
@@ -1750,6 +1765,8 @@ else
 	} else {
 			if(isset($_REQUEST['sid'])) {
 				# Called after result entry for a single specimen
+				echo $_REQUEST['sid'];
+				echo $_REQUEST['tid'];
 				$value = array($_REQUEST['sid'], $_REQUEST['tid']);
 				$record_list = array();
 				$record_list[] = $value;
@@ -2062,14 +2079,15 @@ if(count($record_list) != 0)
 	}
 }
 ?>
-<div class='editable' title='Click to Edit'>
+<div>
+Signed by:
+<label>
+	<?php $user = get_user_by_id($signature);
+	echo $user->actualName; ?></label>
 </div>
-<div class='editable' title='Click to Edit'>
-</div>
-<div class='editable' title='Click to Edit'>
-</div>
-<!--p class="main">
-............................................-->
+
+
+
 <?php 
 //$new_footer_part="............................................";
 $footerText=explode(";" ,$report_config->footerText);

@@ -137,8 +137,11 @@ if(count($test_list) == 0)
 			?>
 			<th><?php echo LangUtil::$generalTerms['RESULT_COMMENTS']; ?> (<?php echo LangUtil::$generalTerms['OPTIONAL']; ?>)</th>
 			<th><?php echo LangUtil::$generalTerms['ENTERED_BY']; ?></th>
+			<th><?php echo LangUtil::$generalTerms['SIGNED_BY']; ?></th>
+
+
 			<th>
-			<?php echo LangUtil::$generalTerms['CMD_VERIFY']; ?>?
+			<?php echo LangUtil::$generalTerms['CMD_VERIFY']; ?>
 			<input type='checkbox' name='check_all' id='check_all' checked onchange='javascript:checkoruncheckall();'>
 			</input>
 			</th>
@@ -227,7 +230,10 @@ if(count($test_list) == 0)
 			}
 			?>
 			<td><input name='comments[]' type='text' value='<?php echo $test_entry->comments; ?>'></input></td>
+		
 			<td><?php echo get_username_by_id($test_entry->userId); ?></td>
+			<td><?php echo get_actualname_by_id($curr_user_id); ?></td>
+			
 			<td>
 				<center>
 					<input type='checkbox' class='verify_flag' name='verify_flag_<?php echo $i; ?>' onchange='javascript:toggle_verify(<?php echo $i; ?>);' checked></input>

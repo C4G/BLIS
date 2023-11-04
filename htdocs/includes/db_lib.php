@@ -2806,6 +2806,7 @@ class Test
 	public $comments;
 	public $userId;
 	public $verifiedBy;
+	public $signedBy;
 	public $dateVerified;
 	public $timestamp;
 	public $ts;
@@ -2852,6 +2853,11 @@ class Test
 		else
 			$test->verifiedBy = null;
 
+		if(isset($record['signed_by']))
+			$test->signedBy = $record['signed_by'];
+		else
+			$test->signedBy = null;
+
 		if(isset($record['date_verified']))
 			$test->dateVerified = $record['date_verified'];
 		else
@@ -2882,6 +2888,7 @@ class Test
 	public static function getAllTestsBySpecimenId($id)
     {
         $query = "SELECT * FROM test WHERE specimen_id='$id'";
+		echo "get al ltest by sid".$query;
         $results = query_associative_all($query);
         if ($results == null)
             return null;
@@ -2922,6 +2929,14 @@ class Test
 		return true;
 	}
 
+	public function isSigned()
+	{
+		# Checks if test results have been verified by a second technician
+		if($this->signeddBy == null || $this->signedBy == 0)
+			return false;
+		return true;
+	}
+
 	public function isReported()
 	{
 		# TODO:
@@ -2948,6 +2963,14 @@ class Test
 			return get_username_by_id($this->verifiedBy);
 		return LangUtil::$generalTerms['PENDING_VER'];
 	}
+	public function getSignedBy()
+	{
+		# Returns username of the technician who verified results
+		# Or, "Not verified" if results are pending verification
+		if($this->isSigned())
+			return get_username_by_id($this->signedBy);
+		return LangUtil::$generalTerms['SIGNATURE'];
+	}
 
 	public function getVerifierPosition()
 	{
@@ -2965,6 +2988,17 @@ class Test
 		$verified_by = mysql_real_escape_string($verified_by, $con);
 		$query_string =
 			"UPDATE test SET verified_by=$verified_by WHERE test_id=".$this->testId;
+		query_blind($query_string);
+	}
+
+	public function setSignedBy($signed_by)
+	{
+		# Sets verified by flag for given test
+		global $con;
+		$verified_by = mysql_real_escape_string($signed_by, $con);
+		$query_string =
+			"UPDATE test SET signed_by=$signed_by WHERE test_id=".$this->testId;
+		echo "set signed by ->".$query_string;
 		query_blind($query_string);
 	}
 
@@ -6225,6 +6259,22 @@ function get_username_by_id($user_id)
 	else
 		return $record['username'];
 }
+
+function get_actualname_by_id($user_id)
+{
+	# Returns username as string
+	global $con;
+	$user_id = mysql_real_escape_string($user_id, $con);
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string = "SELECT actualname FROM user WHERE user_id=$user_id";
+	$record = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
+	if($record == null)
+		return LangUtil::$generalTerms['NOT KNOWN'];
+	else
+		return $record['actualname'];
+}
+
 
 function get_user_position_by_id($user_id)
 {
@@ -15618,7 +15668,7 @@ class API
 	$_SESSION['user_id'] = $user->userId;
 	$_SESSION['user_actualname'] = $user->actualName;
 	$_SESSION['user_level'] = $user->level;
-        $_SESSION['level'] = $user->level;
+    $_SESSION['level'] = $user->level;
 	$_SESSION['locale'] = $user->langId;
 	if($user->level==17) {
 		$combinedString = $user->rwoptions;
