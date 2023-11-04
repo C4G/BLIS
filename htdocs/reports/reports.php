@@ -2068,10 +2068,10 @@ alert(dd_to);
 
                 </ul>
 
-                Export
+                <?php echo LangUtil::$generalTerms['EXPORT']; ?>
                 <ul>
                     <li class='menu_option' id='export_to_excel_menu'>
-                        <a href='javascript:show_selection("export_to_excel");'><?php echo "Export to Excel" ?></a>
+                        <a href='javascript:show_selection("export_to_excel");'><?php echo LangUtil::$generalTerms['CMD_EXPORTEXCEL']; ?></a>
                     </li>
                 </ul>
             </td>
@@ -2910,8 +2910,8 @@ alert(dd_to);
 
                 </div>
 
-                <div id='export_to_excel_div' style='display:none;' class='reports_subdiv'>                    
-                    <h4>Export to Excel</h4>
+                <div id='export_to_excel_div' style='display:none;' class='reports_subdiv'>
+                    <h4><?php echo LangUtil::$generalTerms['CMD_EXPORTEXCEL']; ?></h4>
 
                     <form name="export_to_excel_form" id="export_to_excel_form" action="export_to_excel.php" method='get'>
                         <table cellpadding="4px" style="border-collapse: collapse">
@@ -2926,7 +2926,7 @@ alert(dd_to);
                                     ?>
                                 </td>
                             </tr>
-                            
+
                             <tr valign='top' style="border-bottom: 1px solid black">
                                 <td><?php echo LangUtil::$generalTerms['TO_DATE']; ?> </td>
                                 <td>
@@ -2938,14 +2938,14 @@ alert(dd_to);
                                     ?>
                                 </td>
                             </tr>
-                            
+
                             <script type="text/javascript">
                                 function exportExcel_updateTestTypes() {
                                     selectEl = $("#export_to_excel_form select#locationAgg");
                                     if (selectEl.val() === -1) {
                                         return;
                                     }
-                                    
+
                                     $.getJSON("export_to_excel_get_test_types.php",{lab_config_id: selectEl.val()}, function(j){
                                         var options = '';
                                         for (var i = 0; i < j.length; i++) {
@@ -2956,7 +2956,7 @@ alert(dd_to);
                                     })
                                 }
                             </script>
-                            
+
                             <tr id="location_row_aggregate" style="border-bottom: 1px solid black" valign="top">
                                 <td style="padding: 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['FACILITY']; ?></td>
                                 <td style="padding: 1rem 0" id='locationAggregation'>
@@ -2964,14 +2964,14 @@ alert(dd_to);
                                 if (is_super_admin($current_user) || is_country_dir($current_user)) {
                                     echo '<select name="locationAgg" id="locationAgg" onchange="exportExcel_updateTestTypes()">';
                                     echo '<option value="-1"></option>';
-                                    
+
                                     $lab_config_list_imported = get_lab_configs_imported();
                                     foreach($lab_config_list_imported as $lc) {
                                         echo "<option value=\"$lc->id\">$lc->name</option>";
                                     }
                                     echo '</select>';
                                 } else {
-                                    echo $lab_config->name 
+                                    echo $lab_config->name
                                 ?>
                                     <input type="hidden" name="locationAgg" id="locationAgg" value="<?php echo $lab_config->id .":". $lab_config->name .":". $lab_config->location ?>">
                                 <?php
@@ -2979,7 +2979,7 @@ alert(dd_to);
                                 ?>
                                 </td>
                             </tr>
-                                                       
+
                             <tr style="border-bottom: 1px solid black" valign="top">
                                 <td style="padding: 5rem 1rem 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['TEST_TYPE']; ?></td>
                                 <td style="padding: 1rem 0">
@@ -2992,16 +2992,16 @@ alert(dd_to);
                                         }
                                         ?>
                                     </select>
-                                    <div>Press and hold the "Ctrl" key to select multiple tests.</div>
+                                    <div><?php echo LangUtil::$pageTerms['TIPS_HOLD_CTRL']; ?></div>
                                 </td>
                             </tr>
-                            
+
                             <tr>
                                 <td style="padding: 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['OPTIONS']; ?></td>
                                 <td style="padding: 1rem 0">
-                                    <input type="checkbox" name="include_patient_name" id="include_patient_name" value="true" checked>Include Patient Name</input><br/>
-                                    <input type="checkbox" name="include_patient_birthday" id="include_patient_birthday" value="true" checked>Include Patient Birthday</input><br/>
-                                    <input type="checkbox" name="include_patient_sex" id="include_patient_sex" value="true" checked>Include Patient Sex</input><br/>                        
+                                    <input type="checkbox" name="include_patient_name" id="include_patient_name" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_NAME']; ?></input><br/>
+                                    <input type="checkbox" name="include_patient_birthday" id="include_patient_birthday" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_BIRTHDATE']; ?></input><br/>
+                                    <input type="checkbox" name="include_patient_sex" id="include_patient_sex" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_SEX']; ?></input><br/>
                                 </td>
                             </tr>
 
@@ -3009,10 +3009,7 @@ alert(dd_to);
                                 <td></td>
                                 <td>
                                     <br>
-                                    <input type='submit' id='test_aggregate_report_submit_button' value="Export to Excel"></input>
-                                    <span id='test_aggregate_report_form_progress_spinner' style='display:none;'>
-							        <?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_FETCHING']); ?>
-						            </span>
+                                    <input type='submit' id='test_aggregate_report_submit_button' value="<?php echo LangUtil::$generalTerms['CMD_EXPORT']; ?>"></input>
                                 </td>
                             </tr>
                         </table>
