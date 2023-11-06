@@ -960,8 +960,8 @@ else if(file_exists($logo_path) === true)
 
 <br/><br/>
 <?php $align=$report_config->alignment_header;?>
-<h3 align="<?php echo $align; ?>"><?php echo $report_config->headerText; ?><?php #echo LangUtil::$pageTerms['MENU_PHISTORY']; ?></h3>
-<h4 align="<?php echo $align; ?>"><?php echo $report_config->titleText; ?></h4>
+<h3 id="lab_header" align="<?php echo $align; ?>"><?php echo $report_config->headerText; ?><?php #echo LangUtil::$pageTerms['MENU_PHISTORY']; ?></h3>
+<h4 id="report_header" align="<?php echo $align; ?>"><?php echo $report_config->titleText; ?></h4>
 
 <?php
 if(isset($_REQUEST['yf']))
@@ -1067,7 +1067,7 @@ else
 			?>
 	</div>
 	
-<table class='print_entry_border <?php if( $report_config->showBorder) echo "tblborder"; else echo "tblnoborder" ?>'>
+<table id="patient_info_header" class='print_entry_border <?php if( $report_config->showBorder) echo "tblborder"; else echo "tblnoborder" ?>'>
 		<tbody>
 		<?php
 			 $combined_fields =$SYSTEM_PATIENT_FIELDS;
@@ -1169,6 +1169,7 @@ else
 	</tbody>
 </table>
 <br>
+<p id="tests_complete_or_not">
 <?php 
 if($all_tests_completed === true && count($record_list) != 0) 
 {
@@ -1182,6 +1183,7 @@ else
 	<?php
 }
 ?>
+</p>
 <?php 
 if(count($record_list) == 0) 
 {
@@ -1204,7 +1206,7 @@ else
 		</style>
 		<div id="myNicPanel"  style="width: 525px;" ></div>
 		<div id="patient_table" >
-		<table class='print_entry_border draggable' id='report_content_table1' >
+		<table class='print_entry_border draggable' id='report_content_table1' > <!--BLIS - report table-->
 		<thead>
 		<tr valign='top'>
 		<?php 
@@ -2079,7 +2081,7 @@ if(count($record_list) != 0)
 	}
 }
 ?>
-<div>
+<div id="signature">
 Signed by:
 <label>
 	<?php $user = get_user_by_id($signature);
