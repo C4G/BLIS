@@ -789,11 +789,14 @@ $monthago_array = explode("-", $monthago_date);
 	&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type='button' onClick="javascript:print_content('report_content');" value='<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>'></input>
 			<div id="dialog" title="Basic dialog"></div>
+			
 	</td>
 	<td>
 		<table class='no border'>
 	<tr valign='top'>
-		
+	<td>
+		<input type="checkbox" id="page-break" name="page-break" value="page-break"><label for="vehicle1">1 Test Per Page</label>
+	</td>
 	<td>
 	<input type='radio' name='do_landscape' value='N'<?php
 			//if($report_config->landscape == false) echo " checked ";
@@ -902,18 +905,35 @@ td{
     padding:5px;
 }
 
+.hidden {
+    display: none; 
+}
+
 @media all
 {
  .page-break { display:none; }
 }
-@media print
-{
-	#options_header { display:none; }
-	/* div#printhead {	display: block;
- } */
- div#docbody {
-  margin-top: 5em;
- }
+@media print {
+
+    #options_header { 
+        display:none; 
+    }
+
+    .printable {
+        display: block !important;
+    }
+
+    .hidden_print {
+        display: none;
+    }
+    
+    div#docbody {
+        margin-top: 5em;
+    }
+
+    .print_break {
+        page-break-after: always;
+    }
 }
 .landscape_content {-moz-transform: rotate(90deg) translate(300px); }
 .portrait_content {-moz-transform: translate(1px); rotate(-90deg) }
@@ -1208,7 +1228,7 @@ else
 		<div id="patient_table" >
 		<table class='print_entry_border draggable' id='report_content_table1' > <!--BLIS - report table-->
 		<thead>
-		<tr valign='top'>
+		<tr class="table_top_row" valign='top'>
 		<?php 
 		if($report_config->useSpecimenAddlId != 0) {
 		echo "<th>".LangUtil::$generalTerms['SPECIMEN_ID']."</th>";
@@ -1303,7 +1323,7 @@ else
 	$id=$test->testTypeId;
 	$clinical_data=get_clinical_data_by_id($test->testTypeId)
 	?>
-	<tr valign='top'>
+	<tr class='table-row' valign='top'>
 	<?php
 	if($report_config->useSpecimenAddlId != 0)
 	{
@@ -2088,6 +2108,57 @@ Signed by:
 	echo $user->actualName; ?></label>
 </div>
 
+<div id="print_div" class="hidden"></div> <!--Content when the 1 test per page checkmark is checked is moved here-->
+
+<script>
+		const reportTable = "#patient_table";
+		const copiedElements = ["#lab_logo", "#lab_header", "#report_header", "#patient_info_header"]
+		const printDiv = '#print_div';
+		const setupPrint = () => {
+			$(printDiv).addClass("printable");
+			$(reportTable).addClass("hidden_print");
+			$("#tests_complete_or_not").addClass("hidden_print")
+			const top = $(".table_top_row")
+			$(".table-row").each(function(index) {
+				for (var i = 0; i < copiedElements.length; i++) {
+					var copyName = copiedElements[i];
+					$(copyName).clone().removeAttr('id').appendTo(printDiv);
+				}
+				$(printDiv).append('<table id="table_' + index + '"></table>');
+				const table = $('#table_' + index);
+				table.addClass("print_table");
+				top.clone().appendTo(table);
+				$(this).clone().removeClass("table-row").appendTo(table);
+				//Copy signature and add print break to it
+				$('#signature').clone().removeAttr('id').addClass("print_break").appendTo(printDiv);
+			});
+			//Make signature hidden
+			$('#signature').addClass("hidden_print");
+			//Make header hidden after copying data
+			for (var i = 0; i < copiedElements.length; i++) {
+				var copyName = copiedElements[i];
+				$(copyName).addClass("hidden_print");
+			}
+			//$('.print_break').last().removeClass("print_break");
+		};
+		
+		const teardownPrint = () => {
+			$("printDiv").removeClass("printable");
+			$('.hidden_print').removeClass("hidden_print");
+			$(printDiv).empty();
+		}
+
+		$("#page-break").change(function() {
+			if (this.checked) {
+				setupPrint();
+			} else {
+				teardownPrint();
+			}
+		});
+		if ($("#page-break").is(':checked')) {
+			setupPrint();
+		}
+</script>
 
 
 <?php 
