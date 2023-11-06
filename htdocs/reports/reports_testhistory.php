@@ -2139,7 +2139,13 @@ Signed by:
 				var copyName = copiedElements[i];
 				$(copyName).addClass("hidden_print");
 			}
-			//$('.print_break').last().removeClass("print_break");
+			var lastBreak = undefined;
+			$('.print_break').each(function() {
+				lastBreak = this;
+			});
+			if (lastBreak != undefined){
+				$(lastBreak).removeClass("print_break");
+			}
 		};
 		
 		const teardownPrint = () => {
