@@ -2112,7 +2112,7 @@ Signed by:
 
 <script>
 		const reportTable = "#patient_table";
-		const copiedElements = ["#lab_logo", "#lab_header", "#report_header", "#patient_info_header"]
+		const copiedElements = ["#logo", "#lab_header", "#report_header", "#patient_info_header"]
 		const printDiv = '#print_div';
 		const setupPrint = () => {
 			$(printDiv).addClass("printable");
