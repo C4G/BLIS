@@ -2,6 +2,10 @@
 <pages lang="default" descr="Default" version="0.8.4">
     <page id="general" descr="General Terms">
         <term>
+            <key>ONE_TEST_PER_PAGE</key>
+            <value>1 Test Per Page</value>
+        </term>
+        <term>
             <key>TIPS</key>
             <value>Tips</value>
         </term>

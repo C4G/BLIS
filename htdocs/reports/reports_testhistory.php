@@ -795,7 +795,7 @@ $monthago_array = explode("-", $monthago_date);
 		<table class='no border'>
 	<tr valign='top'>
 	<td>
-		<input type="checkbox" id="page-break" name="page-break" value="page-break"><label for="vehicle1">1 Test Per Page</label>
+		<input type="checkbox" id="page-break" name="page-break" value="page-break"><label for="vehicle1"><?php echo LangUtil::$generalTerms['ONE_TEST_PER_PAGE']; ?></label>
 	</td>
 	<td>
 	<input type='radio' name='do_landscape' value='N'<?php

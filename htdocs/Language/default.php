@@ -1,6 +1,7 @@
 <?php
 $LANG_ARRAY = array (
 	"general" => array ( 
+		"ONE_TEST_PER_PAGE" => "1 Test Per Page", 
 		"TIPS" => "Tips", 
 		"USERNAME" => "Username", 
 		"PWD" => "Password", 

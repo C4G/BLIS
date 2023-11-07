@@ -1,6 +1,7 @@
 <?php
 $LANG_ARRAY = array (
 	"general" => array ( 
+		"ONE_TEST_PER_PAGE" => "1 Test Per Page", 
 		"TIPS" => "Tips", 
 		"USERNAME" => "Username", 
 		"PWD" => "Password", 
@@ -132,7 +133,6 @@ $LANG_ARRAY = array (
 		"REF_OUT" => "Referred Out", 
 		"PENDING_RESULTS" => "Results Pending", 
 		"PENDING_VER" => "Verification Pending", 
-		"SIGNATURE" => "Signature", 
 		"DONE" => "Completed", 
 		"REF_RETURNED" => "Referred out and Returned", 
 		"MEASURES" => "Measures", 
@@ -148,8 +148,7 @@ $LANG_ARRAY = array (
 		"INVALID" => "Invalid", 
 		"NOTKNOWN" => "Not Known", 
 		"REGD_BY" => "Registered By", 
-		"ENTERED_BY" => "Entered By",
-		"SIGNED_BY" => "Signed By", 
+		"ENTERED_BY" => "Entered By", 
 		"VERIFIED_BY" => "Verified By", 
 		"ACTION" => "Action", 
 		"RECORDS" => "Records", 
