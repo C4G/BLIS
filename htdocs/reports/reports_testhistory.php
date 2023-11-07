@@ -915,6 +915,11 @@ td{
 }
 @media print {
 
+	td { 
+		padding: .3em;  
+		border: 1px <?php if( $report_config->showResultBorder) echo "black"; else echo "white" ?> solid;
+	}
+
     #options_header { 
         display:none; 
     }
@@ -2122,7 +2127,7 @@ Signed by:
 			$(".table-row").each(function(index) {
 				for (var i = 0; i < copiedElements.length; i++) {
 					var copyName = copiedElements[i];
-					$(copyName).clone().removeAttr('id').appendTo(printDiv);
+					$(copyName).clone().appendTo(printDiv);
 				}
 				$(printDiv).append('<table id="table_' + index + '"></table>');
 				const table = $('#table_' + index);
@@ -2130,7 +2135,7 @@ Signed by:
 				top.clone().appendTo(table);
 				$(this).clone().removeClass("table-row").appendTo(table);
 				//Copy signature and add print break to it
-				$('#signature').clone().removeAttr('id').addClass("print_break").appendTo(printDiv);
+				$('#signature').clone().addClass("print_break").appendTo(printDiv);
 			});
 			//Make signature hidden
 			$('#signature').addClass("hidden_print");
