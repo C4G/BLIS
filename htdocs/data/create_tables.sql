@@ -397,6 +397,7 @@ CREATE TABLE IF NOT EXISTS `test` (
   `comments` varchar(200) default NULL,
   `user_id` int(11) unsigned default NULL,
   `verified_by` int(11) unsigned default NULL,
+  `signed_by` int(11) unsigned default NULL,
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `specimen_id` int(11) unsigned default NULL,
   `date_verified` datetime default NULL,
