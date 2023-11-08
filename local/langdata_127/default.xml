@@ -594,6 +594,14 @@
             <value>Verified By</value>
         </term>
         <term>
+            <key>SIGNED_BY</key>
+            <value>Signed By</value>
+        </term>
+        <term>
+            <key>SIGNATURE</key>
+            <value>Signature</value>
+        </term>
+        <term>
             <key>ACTION</key>
             <value>Action</value>
         </term>

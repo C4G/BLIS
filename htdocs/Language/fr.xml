@@ -587,8 +587,16 @@
 		</term>
 		<term>
 			<key>VERIFIED_BY</key>
-			<value>V�rifi� par:</value>
+			<value>Vérifié par:</value>
 		</term>
+        <term>
+            <key>SIGNED_BY</key>
+            <value>Signé par:</value>
+        </term>
+        <term>
+            <key>SIGNATURE</key>
+            <value>Signature</value>
+        </term>
 		<term>
 			<key>ACTION</key>
 			<value>Actes</value>
