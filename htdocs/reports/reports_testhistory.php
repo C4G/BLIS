@@ -2119,21 +2119,21 @@ Signed by:
 ?>
 
 <script>
-		const reportTable = "#patient_table";
-		const copiedElements = ["#logo", "#lab_header", "#report_header", "#patient_info_header"]
-		const printDiv = '#print_div';
-		const setupPrint = () => {
+		var reportTable = "#patient_table";
+		var copiedElements = ["#logo", "#lab_header", "#report_header", "#patient_info_header"]
+		var printDiv = '#print_div';
+		function setupPrint() {
 			$(printDiv).addClass("printable");
 			$(reportTable).addClass("hidden_print");
 			$("#tests_complete_or_not").addClass("hidden_print")
-			const top = $(".table_top_row")
+			var top = $(".table_top_row")
 			$(".table-row").each(function(index) {
 				for (var i = 0; i < copiedElements.length; i++) {
 					var copyName = copiedElements[i];
 					$(copyName).clone().appendTo(printDiv);
 				}
 				$(printDiv).append('<table id="table_' + index + '"></table>');
-				const table = $('#table_' + index);
+				var table = $('#table_' + index);
 				table.addClass("print_table");
 				top.clone().appendTo(table);
 				$(this).clone().removeClass("table-row").appendTo(table);
@@ -2156,7 +2156,7 @@ Signed by:
 			}
 		};
 		
-		const teardownPrint = () => {
+		function teardownPrint() {
 			$("printDiv").removeClass("printable");
 			$('.hidden_print').removeClass("hidden_print");
 			$(printDiv).empty();
