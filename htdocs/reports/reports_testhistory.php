@@ -985,7 +985,7 @@ else if(file_exists($logo_path) === true)
 
 <br/><br/>
 <?php $align=$report_config->alignment_header;?>
-<h3 id="lab_header" align="<?php echo $align; ?>"><?php echo $report_config->headerText; ?><?php #echo LangUtil::$pageTerms['MENU_PHISTORY']; ?></h3>
+<h3 id="lab_header" align="<?php echo $align; ?>"><?php echo $report_config->headerText; ?></h3>
 <h4 id="report_header" align="<?php echo $align; ?>"><?php echo $report_config->titleText; ?></h4>
 
 <?php
