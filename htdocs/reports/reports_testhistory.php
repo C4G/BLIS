@@ -2113,7 +2113,10 @@ Signed by:
 	echo $user->actualName; ?></label>
 </div>
 
-<div id="print_div" class="hidden"></div> <!--Content when the 1 test per page checkmark is checked is moved here-->
+<div id="print_div" class="hidden"></div>
+<?php
+  # Content when the 1 test per page checkmark is checked is moved here
+?>
 
 <script>
 		const reportTable = "#patient_table";
