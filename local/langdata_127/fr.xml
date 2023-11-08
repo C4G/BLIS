@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <pages lang="fr" descr="Francais" version="0.8.4">
 	<page id="general" descr="General Terms">
+        <term>
+            <key>ONE_TEST_PER_PAGE</key>
+            <value>1 Test Par Page</value>
+        </term>    	
 		<term>
 			<key>TIPS</key>
 			<value>Conseils</value>
