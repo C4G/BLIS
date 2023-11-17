@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 if ! command -v apt-get >/dev/null; then
     echo "Could not find apt-get... are you running Ubuntu?"
     exit 1
@@ -12,51 +14,60 @@ fi
 
 export DEBIAN_FRONTEND=noninteractive
 
-echo "--> Removing old versions of Docker..."
-sudo apt-get remove -q docker docker-engine docker.io containerd runc
+sudo apt-get update
+sudo apt-get install -y python3-pip
 
-echo -e "\n--> Installing prerequisites..."
-sudo apt-get update -q
-sudo apt-get install -q -y ca-certificates curl gnupg lsb-release jq
+MUST_RELOGIN=""
 
-echo -e "\n--> Downloading Docker repository key..."
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o - | sudo tee /etc/apt/keyrings/docker.gpg >/dev/null
-
-echo -e "--> Adding Docker repository..."
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-echo -e "--> Installing Docker..."
-sudo apt-get update -q
-sudo apt-get install -q -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-
-echo -e "\n--> Docker installation completed!"
-echo -e "--> Downloading BLIS support files..."
-
-SETUP_DIR="$HOME/blis"
-if [[ ! -d "$SETUP_DIR" ]]; then
-    mkdir "$SETUP_DIR"
+# Check if the user is root and they do not have their local bin/
+# in their PATH (if they are root, they do not need this)
+if [[ "$EUID" != "0" && "$PATH" != *"$HOME/.local/bin" ]]; then
+    echo "export PATH=\"$HOME/.local/bin:\$PATH\"" | tee -a ~/.bashrc
+    source ~/.bashrc
+    MUST_RELOGIN="true"
 fi
-cd "$SETUP_DIR" || exit 1
 
-echo -e "--> Downloading docker-compose.yml..."
-curl -s "https://raw.githubusercontent.com/C4G/BLIS/master/docker/docker-compose.yml" > docker-compose.yml
+if ! command -v docker; then
+    echo "--> Removing old versions of Docker..."
+    # Use set +e to enable proceeding on an error.
+    # This command might fail, if the packages aren't installed...
+    # And that's OK!
 
-echo -e "--> Downloading database seed files..."
-if [[ ! -d database ]]; then
-    mkdir database
-fi
-cd database || exit 1
-curl -s https://api.github.com/repos/c4g/blis/contents/docker/database | jq '.[] | .["download_url"]' | xargs wget -N -nv {} \;
+    set +e
+    sudo apt-get remove -q docker docker-engine docker.io containerd runc
+    set -e
 
-cd "$SETUP_DIR" || exit 1
+    echo -e "\n--> Installing prerequisites..."
+    sudo apt-get update -q
+    sudo apt-get install -q -y ca-certificates curl gnupg lsb-release jq
 
-echo -e "\n--> Done downloading BLIS!"
+    echo -e "\n--> Downloading Docker repository key..."
+    sudo mkdir -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o - | sudo tee /etc/apt/keyrings/docker.gpg >/dev/null
 
-if [[ "$USER" != "root" ]]; then
-    echo -e "--> Adding $USER to docker group..."
+    echo -e "--> Adding Docker repository..."
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    echo -e "--> Installing Docker..."
+    sudo apt-get update -q
+    sudo apt-get install -q -y docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-buildx-plugin
+
+    sudo systemctl enable docker.service
+    sudo systemctl start docker.service
+
     sudo usermod -aG docker "$USER"
-    echo -e "\n--> Please log out and log back in to this server to continue."
+    MUST_RELOGIN="true"
+
+    echo -e "\n--> Docker installation completed!"
 fi
 
+sudo pip3 install --force-reinstall git+https://github.com/mrysav/blis-cloud-cli.git
 
+if [[ -n "$MUST_RELOGIN" ]]; then
+    echo "You must log out and log back in to begin using BLIS."
+    echo "After you log in, run:"
+    echo "  blis install"
+else
+    # If we don't have to relogin, and blis was installed, we should be on our way...
+    blis install
+fi
