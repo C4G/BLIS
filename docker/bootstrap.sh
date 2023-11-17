@@ -12,10 +12,8 @@ if [[ -z "$(sudo echo hello)" ]]; then
     exit 1
 fi
 
-export DEBIAN_FRONTEND=noninteractive
-
-sudo apt-get update
-sudo apt-get install -y python3-pip
+sudo DEBIAN_FRONTEND=noninteractive apt-get update
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3-pip
 
 MUST_RELOGIN=""
 
@@ -34,12 +32,12 @@ if ! command -v docker; then
     # And that's OK!
 
     set +e
-    sudo apt-get remove -q docker docker-engine docker.io containerd runc
+    sudo DEBIAN_FRONTEND=noninteractive apt-get remove -q docker docker-engine docker.io containerd runc
     set -e
 
     echo -e "\n--> Installing prerequisites..."
-    sudo apt-get update -q
-    sudo apt-get install -q -y ca-certificates curl gnupg lsb-release jq
+    sudo DEBIAN_FRONTEND=noninteractive apt-get update -q
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -q -y ca-certificates curl gnupg lsb-release jq
 
     echo -e "\n--> Downloading Docker repository key..."
     sudo mkdir -p /etc/apt/keyrings
@@ -49,8 +47,8 @@ if ! command -v docker; then
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     echo -e "--> Installing Docker..."
-    sudo apt-get update -q
-    sudo apt-get install -q -y docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-buildx-plugin
+    sudo DEBIAN_FRONTEND=noninteractive apt-get update -q
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -q -y docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-buildx-plugin
 
     sudo systemctl enable docker.service
     sudo systemctl start docker.service
