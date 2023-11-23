@@ -293,7 +293,7 @@ Additionally, the user can edit the report to show activity within a date range,
 </p>
 
 ##### Daily Log
-The **Daily Log** creats a report of the day's activity.
+The **Daily Log** creates a report of the day's activity.
 
 Set the date range to reflect the log to print. The Lab Manager can run a report of the day’s activity by patients seen (by clicking **Patient Records**), or by tests run (by clicking **Test Records**). If **Test Records** is selected, logs can be generated for one lab section or for one type of test. The default settings are test records, all sections, and all tests. The report opens in a new browser tab and has **Print** and **Export** controls at the top of the page.
 
@@ -312,6 +312,15 @@ Aggregate Reports generates reports for specific data selected by the user. Ther
 4. **Infection Report** which opens an Infection Report for a specified laboratory. It generates reports of infections by patient age and gender.
 5. **User Statistics** which displays user specific statistics and user activity logs.
 6. **Test Specific Reports** which provides information on specific tests, and can be specified to an individual site.
+
+#### Export to Excel
+
+The Export to Excel feature allows the lab manager to export the results of tests across the whole lab for a given
+date range. The user can select to exclude patient data from the final report.
+
+<p align="center">
+<img src="../../images/user_guide/export_to_excel_admin.png" width="100%"/>
+</p>
 
 ### Backup Data
 The **Backup Data** feature was created for two reasons - to revert to a previously backed-up copy in cases of system failure, but also to create a backup file of the current laboratory patient data for uploading to a **BLIS on Cloud** version.

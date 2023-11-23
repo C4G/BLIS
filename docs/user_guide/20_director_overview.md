@@ -38,3 +38,12 @@ The **Test Catalog** tab allows the Director to add country-wide specimens and t
 
 ### Reports
 The **Reports** tab allows the Director to build reports for some or all of the labs that are under the country's management. The aggregate reports work much as the aggegrate reports do within the Manager view, with two additional options to select a specific test and select which facilities should be included in the report. There is also a menu option to configure some of the aggregation settings (e.g. age ranges) for the reports.
+
+#### Export to Excel
+
+The process for exporting to and Excel spreadsheet is identical for the director as it is for a lab manager,
+however, the director can select which lab among those they have access to thatthey want to generate the report for.
+
+<p align="center">
+<img src="../../images/user_guide/export_to_excel_director.png" width="100%"/>
+</p>
