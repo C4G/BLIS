@@ -42,16 +42,6 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: |
-            ghcr.io/${{steps.repoName.outputs.lowerCase}}:latest
-
-      - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
