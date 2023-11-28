@@ -31,7 +31,7 @@ If you need additional help or feel like something is missing you may want to lo
 
 ![droplet region](../images/cloud_guide/droplet_region.png)
 
-3. Select the latest version of Ubuntu
+3. Select the latest **LTS version** of Ubuntu (20.04 LTS, 22.04 LTS, etc)
 
 ![droplet distro](../images/cloud_guide/droplet_distro.png)
 
@@ -72,6 +72,7 @@ If you need additional help or feel like something is missing you may want to lo
 ```bash
 curl https://raw.githubusercontent.com/C4G/BLIS/master/docker/bootstrap.sh |bash
 ```
+
 3. Check if `docker-compose` is installed. You can check this by running `docker-compose` if it is **not installed** you should see something like this
 
 ![droplet docker compose](../images/cloud_guide/droplet_docker_compose.png)
@@ -91,32 +92,43 @@ Now you're ready to run BLIS!
 
 ### Running BLIS
 
-1. In the DigitalOcean Droplet via console or SSH, clone the BLIS repository:
+1. Install `python3-pip`:
 
     ```bash
-    $ git clone https://github.com/C4G/BLIS.git
+    $ sudo apt-get install -y python3-pip
     ```
 
-![BLIS git clone](../images/cloud_guide/blis_git_clone.png)
+1. Install the [BLIS Cloud CLI](https://github.com/C4G/blis-cloud-cli)
 
-2. Change to the BLIS Docker directory
+    ```
+    $ pip3 install git+https://github.com/C4G/blis-cloud-cli.git
+    ```
+    
+1. Ensure Docker is installed correctly:
 
     ```bash
-    $ cd BLIS/docker
+    blis docker status
     ```
+    
+    You should get something like this:
+    
+    ```bash
+    root@ubuntu-s-1vcpu-1gb-nyc0-00:~# blis docker status
+    Docker is accessible? Yes
+    Docker Compose is installed? v2
 
-3. Initialize BLIS!
+    ```
+    
+1. Install BLIS:
 
     ```bash
-    $ docker-compose up -d
+    blis install
     ```
-
-![BLIS docker compose](../images/cloud_guide/blis_docker_compose.png)
 
 These commands will set up two containers:
 
 1. The `app` container: This contains all of the BLIS source code, as well as the Apache2 web server and PHP 5.6 runtime.
-1. The `db` container: This contains the MySQL 5.7 database. The files inside the `docker/database/` folder are executed when the container is created, providing the seed data that the BLIS database needs to start.
+1. The `db` container: This contains the MySQL 5.7 database.
 
 ## Accessing BLIS
 
@@ -132,12 +144,11 @@ Substitute your droplet IP address above, you should have this from your console
 
 ## Upgrading BLIS
 
-When you want to upgrade BLIS, you can follow these commands to pull the latest version of the Docker image and restart the containers:
+When you want to upgrade BLIS, you can follow these commands to 
+pull the latest version of the Docker image and restart the containers:
 
 ```bash
-$ docker-compose down
-$ docker-compose pull app
-$ docker-compose up -d
+blis update
 ```
 
 And that's it!
