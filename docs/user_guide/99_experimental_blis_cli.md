@@ -20,7 +20,7 @@ source ~/.bashrc
 Then you can install the tool with:
 
 ```bash
-pip3 install -U git+https://github.com/mrysav/blis-cloud-cli.git
+pip3 install -U git+https://github.com/C4G/blis-cloud-cli.git
 ```
 
 ## Usage

@@ -59,7 +59,7 @@ if ! command -v docker; then
     echo -e "\n--> Docker installation completed!"
 fi
 
-sudo pip3 install --force-reinstall git+https://github.com/mrysav/blis-cloud-cli.git
+sudo pip3 install --force-reinstall git+https://github.com/C4G/blis-cloud-cli.git
 
 if [[ -n "$MUST_RELOGIN" ]]; then
     echo "You must log out and log back in to begin using BLIS."
