@@ -286,7 +286,7 @@ The **Patient Reports** page generates reports for each searchable patient.
 
 Search for the patient by Patient Name, Patient Number, or Patient ID and Lab Section to which the patients' specimen are registered against. Click the **Search** button to start search. Select the desired patient from the list if more than one patient matches the search criteria. Click **View Report** to see all data for that patient, or **Select Tests** to see tests ordered and the results for that patient.
 
-Additionally, the user can edit the report to show activity within a date range, include pending tests for which results are not available, set printing information, or export to Word using the controls at the top of the page.
+Additionally, the user can edit the report to show activity within a date range, include pending tests for which results are not available, set printing information, set tests to print 1 per page, or export to Word using the controls at the top of the page.
 
 <p align="center">
 <img src="../../images/user_guide/patient_report.png" width="100%"/>
