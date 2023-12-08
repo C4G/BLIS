@@ -56,6 +56,11 @@ else {
 $uiinfo = "from=".$date_from."&to=".$date_to."&ip=".$_REQUEST['ip']."&viz=".$_REQUEST['viz'];
 putUILog('reports_testhistory', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
+function get_signed_by_user(){
+	
+}
+
+
 // function to draw vis
 function draw_visualization($cleaned_result, $cleaned_range){
 
@@ -427,10 +432,13 @@ function is_result_parsable($cleaned_result){
 	return false;
 }
 
+
+
 # Helper function to fetch test history records
 function get_records_to_print($lab_config, $patient_id) {
 	global $date_from, $date_to;
 	$retval = array();
+	#echo "ip->".$_REQUEST['ip'];
 	if(!isset($_REQUEST['ip']) or $_REQUEST['ip'] == 0) {
 		# Do not include pending tests
 		$labsection = 0;
@@ -481,13 +489,15 @@ function get_records_to_print($lab_config, $patient_id) {
 	
 	}
 	
+	#echo "492".$query_string;
 	$resultset = query_associative_all($query_string);
-	//echo count($resultset);
+	#echo "494 count".count($resultset);
 	if(count($resultset) == 0 || $resultset == null)
 		return $retval;
 	
 	foreach($resultset as $record) {
 		$test = Test::getObject($record);
+		#echo "500->".$test->signedBy;
 		$hide_patient_name = TestType::toHidePatientName($test->testTypeId);
 		
 		if( $hide_patient_name == 1 )
@@ -508,6 +518,7 @@ $report_id = $REPORT_ID_ARRAY['reports_testhistory.php'];
 $report_config = $lab_config->getReportConfig($report_id);
 $margin_list = $report_config->margins;
 $userrr = get_user_by_id($_SESSION['user_id']);
+
 if(is_country_dir($userrr) || is_super_admin($userrr))
 {
 $code_type = 0;
@@ -778,11 +789,14 @@ $monthago_array = explode("-", $monthago_date);
 	&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type='button' onClick="javascript:print_content('report_content');" value='<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>'></input>
 			<div id="dialog" title="Basic dialog"></div>
+			
 	</td>
 	<td>
 		<table class='no border'>
 	<tr valign='top'>
-		
+	<td>
+		<input type="checkbox" id="page-break" name="page-break" value="page-break"><label><?php echo LangUtil::$generalTerms['ONE_TEST_PER_PAGE']; ?></label>
+	</td>
 	<td>
 	<input type='radio' name='do_landscape' value='N'<?php
 			//if($report_config->landscape == false) echo " checked ";
@@ -891,18 +905,40 @@ td{
     padding:5px;
 }
 
+.hidden {
+    display: none; 
+}
+
 @media all
 {
  .page-break { display:none; }
 }
-@media print
-{
-	#options_header { display:none; }
-	/* div#printhead {	display: block;
- } */
- div#docbody {
-  margin-top: 5em;
- }
+@media print {
+
+	td { 
+		padding: .3em;  
+		border: 1px <?php if( $report_config->showResultBorder) echo "black"; else echo "white" ?> solid;
+	}
+
+    #options_header { 
+        display:none; 
+    }
+
+    .printable {
+        display: block !important;
+    }
+
+    .hidden_print {
+        display: none;
+    }
+    
+    div#docbody {
+        margin-top: 5em;
+    }
+
+    .print_break {
+        page-break-after: always;
+    }
 }
 .landscape_content {-moz-transform: rotate(90deg) translate(300px); }
 .portrait_content {-moz-transform: translate(1px); rotate(-90deg) }
@@ -949,8 +985,8 @@ else if(file_exists($logo_path) === true)
 
 <br/><br/>
 <?php $align=$report_config->alignment_header;?>
-<h3 align="<?php echo $align; ?>"><?php echo $report_config->headerText; ?><?php #echo LangUtil::$pageTerms['MENU_PHISTORY']; ?></h3>
-<h4 align="<?php echo $align; ?>"><?php echo $report_config->titleText; ?></h4>
+<h3 id="lab_header" align="<?php echo $align; ?>"><?php echo $report_config->headerText; ?></h3>
+<h4 id="report_header" align="<?php echo $align; ?>"><?php echo $report_config->titleText; ?></h4>
 
 <?php
 if(isset($_REQUEST['yf']))
@@ -978,7 +1014,7 @@ if($patient == null)
 else
 {
 	# Fetch test entries to print in report
-	$record_list = get_records_to_print($lab_config, $patient_id); 
+	$record_list = get_records_to_print($lab_config, $patient_id);
 	# If single date supplied, check if-
 	# 1. Physician name is the same for all
 	# 2. Patient daily number is the same for all
@@ -986,6 +1022,7 @@ else
 	$physician_same = false;
 	$daily_number_same = false;
 	$all_tests_completed = false;
+	$signature;
 	if($date_from == $date_to) {
 		$physician_same = true;
 		$daily_number_same = true;
@@ -994,10 +1031,13 @@ else
 		$previous_physician = "";
 		$previous_daily_num = "";
 		$count_list= count($record_list);
-		
+		#echo "count->".$count_list;
 		foreach($record_list as $record_set) {
 			$value = $record_set;
 			$test = $value[0];
+			$signature=$test->signedBy;
+
+			
 			//check for test_id if its in the array
 			//http://www.w3schools.com/php/func_array_in_array.asp
 			$specimen = $value[1];
@@ -1052,7 +1092,7 @@ else
 			?>
 	</div>
 	
-<table class='print_entry_border <?php if( $report_config->showBorder) echo "tblborder"; else echo "tblnoborder" ?>'>
+<table id="patient_info_header" class='print_entry_border <?php if( $report_config->showBorder) echo "tblborder"; else echo "tblnoborder" ?>'>
 		<tbody>
 		<?php
 			 $combined_fields =$SYSTEM_PATIENT_FIELDS;
@@ -1154,6 +1194,7 @@ else
 	</tbody>
 </table>
 <br>
+<p id="tests_complete_or_not">
 <?php 
 if($all_tests_completed === true && count($record_list) != 0) 
 {
@@ -1167,6 +1208,7 @@ else
 	<?php
 }
 ?>
+</p>
 <?php 
 if(count($record_list) == 0) 
 {
@@ -1189,9 +1231,9 @@ else
 		</style>
 		<div id="myNicPanel"  style="width: 525px;" ></div>
 		<div id="patient_table" >
-		<table class='print_entry_border draggable' id='report_content_table1' >
+		<table class='print_entry_border draggable' id='report_content_table1' > <!--BLIS - report table-->
 		<thead>
-		<tr valign='top'>
+		<tr class="table_top_row" valign='top'>
 		<?php 
 		if($report_config->useSpecimenAddlId != 0) {
 		echo "<th>".LangUtil::$generalTerms['SPECIMEN_ID']."</th>";
@@ -1286,7 +1328,7 @@ else
 	$id=$test->testTypeId;
 	$clinical_data=get_clinical_data_by_id($test->testTypeId)
 	?>
-	<tr valign='top'>
+	<tr class='table-row' valign='top'>
 	<?php
 	if($report_config->useSpecimenAddlId != 0)
 	{
@@ -1750,6 +1792,8 @@ else
 	} else {
 			if(isset($_REQUEST['sid'])) {
 				# Called after result entry for a single specimen
+				echo $_REQUEST['sid'];
+				echo $_REQUEST['tid'];
 				$value = array($_REQUEST['sid'], $_REQUEST['tid']);
 				$record_list = array();
 				$record_list[] = $value;
@@ -2062,14 +2106,75 @@ if(count($record_list) != 0)
 	}
 }
 ?>
-<div class='editable' title='Click to Edit'>
+<div id="signature">
+Signed by:
+<label>
+	<?php $user = get_user_by_id($signature);
+	echo $user->actualName; ?></label>
 </div>
-<div class='editable' title='Click to Edit'>
-</div>
-<div class='editable' title='Click to Edit'>
-</div>
-<!--p class="main">
-............................................-->
+
+<div id="print_div" class="hidden"></div>
+<?php
+  # Content when the 1 test per page checkmark is checked is moved here
+?>
+
+<script>
+		var reportTable = "#patient_table";
+		var copiedElements = ["#logo", "#lab_header", "#report_header", "#patient_info_header"]
+		var printDiv = '#print_div';
+		function setupPrint() {
+			$(printDiv).addClass("printable");
+			$(reportTable).addClass("hidden_print");
+			$("#tests_complete_or_not").addClass("hidden_print")
+			var top = $(".table_top_row")
+			$(".table-row").each(function(index) {
+				for (var i = 0; i < copiedElements.length; i++) {
+					var copyName = copiedElements[i];
+					$(copyName).clone().appendTo(printDiv);
+				}
+				$(printDiv).append('<table id="table_' + index + '"></table>');
+				var table = $('#table_' + index);
+				table.addClass("print_table");
+				top.clone().appendTo(table);
+				$(this).clone().removeClass("table-row").appendTo(table);
+				//Copy signature and add print break to it
+				$('#signature').clone().addClass("print_break").appendTo(printDiv);
+			});
+			//Make signature hidden
+			$('#signature').addClass("hidden_print");
+			//Make header hidden after copying data
+			for (var i = 0; i < copiedElements.length; i++) {
+				var copyName = copiedElements[i];
+				$(copyName).addClass("hidden_print");
+			}
+			var lastBreak = undefined;
+			$('.print_break').each(function() {
+				lastBreak = this;
+			});
+			if (lastBreak != undefined){
+				$(lastBreak).removeClass("print_break");
+			}
+		};
+		
+		function teardownPrint() {
+			$("printDiv").removeClass("printable");
+			$('.hidden_print').removeClass("hidden_print");
+			$(printDiv).empty();
+		}
+
+		$("#page-break").change(function() {
+			if (this.checked) {
+				setupPrint();
+			} else {
+				teardownPrint();
+			}
+		});
+		if ($("#page-break").is(':checked')) {
+			setupPrint();
+		}
+</script>
+
+
 <?php 
 //$new_footer_part="............................................";
 $footerText=explode(";" ,$report_config->footerText);
