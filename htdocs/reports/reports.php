@@ -3002,6 +3002,7 @@ alert(dd_to);
                                     <input type="checkbox" name="include_patient_name" id="include_patient_name" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_NAME']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_birthday" id="include_patient_birthday" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_BIRTHDATE']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_sex" id="include_patient_sex" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_SEX']; ?></input><br/>
+                                    <input type="checkbox" name="include_patient_id" id="include_patient_id" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_ID']; ?></input><br/>
                                 </td>
                             </tr>
 

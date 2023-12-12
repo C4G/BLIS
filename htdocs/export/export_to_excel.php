@@ -59,6 +59,7 @@ $test_type_ids = $_REQUEST['test_types'];
 $include_name = ($_REQUEST["include_patient_name"] == "true");
 $include_sex = ($_REQUEST["include_patient_sex"] == "true");
 $include_dob = ($_REQUEST["include_patient_birthday"] == "true");
+$include_pid = ($_REQUEST["include_patient_id"] == "true");
 
 // Okay... let's build the SQL query
 
@@ -79,6 +80,11 @@ if ($include_sex) {
 if ($include_dob) {
     $headers[] = "Date of Birth";
     $fields[] = "p.dob AS patient_dob";
+}
+
+if ($include_pid) {
+    $headers[] = "Patient ID";
+    $fields[] = "p.surr_id";
 }
 
 array_push($headers,
