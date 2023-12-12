@@ -4,7 +4,7 @@
         <term>
             <key>ONE_TEST_PER_PAGE</key>
             <value>1 Test Par Page</value>
-        </term>    	
+        </term>
 		<term>
 			<key>TIPS</key>
 			<value>Conseils</value>
@@ -2203,6 +2203,10 @@
         <term>
             <key>INCLUDE_PATIENT_SEX</key>
             <value>Inclure le sexe du patient</value>
+        </term>
+        <term>
+            <key>INCLUDE_PATIENT_ID</key>
+            <value>Inclure le ID du patient</value>
         </term>
 
 		<term>

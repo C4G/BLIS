@@ -2362,6 +2362,10 @@
             <key>INCLUDE_PATIENT_SEX</key>
             <value>Include patient sex</value>
         </term>
+        <term>
+            <key>INCLUDE_PATIENT_ID</key>
+            <value>Include patient ID</value>
+        </term>
     </page>
     <page id="edit_profile" descr="Edit Profile Page">
         <term>
