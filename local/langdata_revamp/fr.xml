@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <pages lang="fr" descr="Francais" version="0.8.4">
 	<page id="general" descr="General Terms">
+        <term>
+            <key>ONE_TEST_PER_PAGE</key>
+            <value>1 Test Par Page</value>
+        </term>
 		<term>
 			<key>TIPS</key>
 			<value>Conseils</value>
@@ -177,6 +181,14 @@
 			<key>CMD_EXPORTPDF</key>
 			<value>Exporter comme un Doc PDF</value>
 		</term>
+        <term>
+			<key>CMD_EXPORTEXCEL</key>
+			<value>Exporter comme un document Excel</value>
+		</term>
+        <term>
+			<key>CMD_EXPORT</key>
+			<value>Exporter</value>
+		</term>
 		<term>
 			<key>CMD_SELECT</key>
 			<value>Selectionner</value>
@@ -272,7 +284,7 @@
 		<term>
 			<key>DOCTOR</key>
 			<value>M�decin/Infirmier</value>
-		</term>		
+		</term>
 		<term>
 			<key>PATIENT</key>
 			<value>Patient</value>
@@ -320,7 +332,7 @@
 		<term>
 			<key>PATIENT_DAILYNUM</key>
 			<value>Patient Number</value>
-		</term>		
+		</term>
 		<term>
 			<key>AGE</key>
 			<value>Age</value>
@@ -424,7 +436,7 @@
 		<term>
 			<key>CONTROL_TESTING_RESULTS</key>
 			<value>Control Results</value>
-		</term>		
+		</term>
 		<term>
 			<key>DATE</key>
 			<value>Date</value>
@@ -579,8 +591,16 @@
 		</term>
 		<term>
 			<key>VERIFIED_BY</key>
-			<value>V�rifi� par:</value>
+			<value>Vérifié par:</value>
 		</term>
+        <term>
+            <key>SIGNED_BY</key>
+            <value>Signé par:</value>
+        </term>
+        <term>
+            <key>SIGNATURE</key>
+            <value>Signature</value>
+        </term>
 		<term>
 			<key>ACTION</key>
 			<value>Actes</value>
@@ -900,8 +920,8 @@
 			<key>TIPS_PWD</key>
 			<value>Vous pouver mettre � jour votre profile en cliquant sur Modifier votre profile.</value>
 		</term>
-		
-	</page>	
+
+	</page>
 	<page id="regn" descr="Main Registration Page">
 		<term>
 			<key>TITLE</key>
@@ -1036,11 +1056,11 @@
 		<term>
 			<key>MSG_NOTESTMATCH</key>
 			<value>Aucun examen incompatible</value>
-		</term>	
+		</term>
 		<term>
 			<key>TIPS_SURETOABORT</key>
 			<value>Etes vous sue de vouloir intrrumpre cette enregistrement?</value>
-		</term>	
+		</term>
 		<term>
 			<key>TIPS_REGISTRATION_SPECIMEN</key>
 			<value>S'il vous pla�t s�lectionner un type d'�chantillon pour voir les essais de ce sp�cimen.</value>
@@ -1238,7 +1258,7 @@
 		<term>
 			<key>TIPS_ENTRY</key>
 			<value>Enter results for this specimen and make corrections to already existing results if any</value>
-		</term>		
+		</term>
 	</page>
 	<page id="lab_configs" descr="Lab Configurations List">
 		<term>
@@ -1594,7 +1614,7 @@
 		<term>
 			<key>USE_PNAME_RESULTS</key>
 			<value>Display Name at Results Entry</value>
-		</term>	
+		</term>
 		<term>
 			<key>CUSTOM_WORKSHEETS</key>
 			<value>Custom Worksheets</value>
@@ -1626,7 +1646,7 @@
 		<term>
 			<key>TIPS_REVERTDONE</key>
 			<value>La Sauvegarde a r�ussite. Pri�re de redemarer pour achener le proced� inverse.</value>
-		</term>	
+		</term>
 		<term>
 			<key>TIPS_SETUPNETWORK_3</key>
 			<value>Vous allez maintenant �tre en mesure d\'acc�der en cliquant sur ??BLIS BlisSetup.html et en entrant votre nom d\'utilisateur et mot de passe.</value>
@@ -1985,15 +2005,15 @@
 		<term>
 			<key>TIPS_INFECTIONREPORT</key>
 			<value>S�lectionner le type d\'examen pour gen�rer la pr�valence en fonction de qge et du sexe.</value>
-		</term>	
+		</term>
 		<term>
 			<key>TIPS_GETACCESSIONREPORT</key>
 			<value>Obtenir le bilan entier.</value>
-		</term>	
+		</term>
 		<term>
 			<key>RANGE_NORMAL</key>
 			<value>Valeur Normale</value>
-		</term>	
+		</term>
 		<term>
 			<key>REPORT_SAMPLE</key>
 			<value>Complete Sample Report</value>
@@ -2109,7 +2129,7 @@
 		<term>
 			<key>TIPS_NOMATCHSPECIMENS</key>
 			<value>Aucun �chantillon retrouv�.</value>
-		</term>	
+		</term>
 		<term>
 			<key>TIPS_MULTPATIENTS</key>
 			<value>S�lectionner les �chantillons pour diff�rents patients. Pri�re de recommencer.</value>
@@ -2168,6 +2188,26 @@
 			<value>Interprétation</value>
 		</term>
 
+        <term>
+            <key>TIPS_HOLD_CTRL</key>
+            <value>Appuyez et maintenez la touche \"Ctrl\" pour sélectionner plusieurs tests.</value>
+        </term>
+        <term>
+            <key>INCLUDE_PATIENT_NAME</key>
+            <value>Inclure le nom du patient</value>
+        </term>
+        <term>
+            <key>INCLUDE_PATIENT_BIRTHDATE</key>
+            <value>Inclure la date de naissance du patient</value>
+        </term>
+        <term>
+            <key>INCLUDE_PATIENT_SEX</key>
+            <value>Inclure le sexe du patient</value>
+        </term>
+        <term>
+            <key>INCLUDE_PATIENT_ID</key>
+            <value>Inclure le ID du patient</value>
+        </term>
 		<term>
 			<key>MODIFY_SITE</key>
 			<value>Modifier les sites</value>
@@ -2485,7 +2525,7 @@
 		<term>
 			<key>TIPS_SETUPNETWORK_4</key>
 			<value>Dans le cas d'un red�marrage de l'ordinateur ou cliquez sur une d�faillance du r�seau d'installation de r�seau option � nouveau.</value>
-		</term>		
+		</term>
 		<term>
 			<key>MENU_EXPORTCONFIG</key>
 			<value>Exporter la configuration</value>
