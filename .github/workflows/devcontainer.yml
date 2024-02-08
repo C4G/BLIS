@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: repoName
-        run: echo "::set-output name=lowerCase::${REPO_NAME,,}"
+        run: echo "lowerCase=${REPO_NAME,,}" >> "$GITHUB_OUTPUT"
         env:
           REPO_NAME: ${{ github.repository }}
 
