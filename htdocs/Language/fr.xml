@@ -795,7 +795,7 @@
 		</term>
 		<term>
 			<key>TIPS_PATIENTID_EXISTS</key>
-			<value>Patient ID existe d�j�. S\\\'il vous pla�t v�rifier et essayer � nouveau.</value>
+			<value>Patient ID existent déjà. Consulter pour le patient pour confirmer et enregistrer spécimen</value>
 		</term>
 		<term>
 			<key>LAB_STAFF</key>
@@ -967,7 +967,7 @@
 		</term>
 		<term>
 			<key>CMD_UPDPROFILE</key>
-			<value>Mettre � jour le profil</value>
+			<value>Mettre à jour le profil</value>
 		</term>
 	</page>
 	<page id="new_patient" descr="Patient Registration Page">
@@ -1103,11 +1103,11 @@
 		</term>
 		<term>
 			<key>RELATED_RESULTS</key>
-			<value>Test Résultats connexe Entr�e</value>
+			<value>Test Résultats connexe Entrée</value>
 		</term>
 		<term>
 			<key>RELATED_RESULTS_EMPTY</key>
-			<value>Pas de tests li�s � ce sp�cimen</value>
+			<value>Pas de tests liés à ce spécimen</value>
 		</term>
 		<term>
 			<key>CONTROL_TESTING_RESULTS</key>
@@ -1287,7 +1287,7 @@
 		</term>
 		<term>
 			<key>TIPS_CUSTOM</key>
-			<value>N.B: Un champs commercial peut �tre ajouter apr�s la configuration du Laboratoire, utiliser option de configuration de l\\\'administrateur.</value>
+			<value>N.B: Un champs commercial peut ttre ajouter aprés la configuration du Laboratoire, utiliser option de configuration de l\\\'administrateur.</value>
 		</term>
 		<term>
 			<key>TIPS_CONFIRMNEWLAB</key>
@@ -1329,7 +1329,7 @@
 		</term>
 		<term>
 			<key>TIPS_SUMMARY_1</key>
-			<value>Donne un r�sum� de l\'installation de laboratoire, y compris les comptes personnel de laboratoire, les essais et les types d\'�chantillons.</value>
+			<value>Donne un résumé de l\'installation de laboratoire, y compris les comptes personnel de laboratoire, les essais et les types d'échantillons.</value>
 		</term>
 		<term>
 			<key>TIPS_SUMMARY_2</key>
@@ -1349,7 +1349,7 @@
 		</term>
 		<term>
 			<key>TIPS_REVERT</key>
-			<value>En cas de d�faillance du syst�me, si nous voulons revenir � une copie pr�c�demment sauvegard� des donn�es, nous pouvons utiliser cette option. Vous pouvez choisir la version actuelle de sauvegarde avant de faire cela. Vous pouvez �galement choisir d\'inclure de revenir les param�tres de langue.</value>
+			<value>En cas de défaillance du système, si nous voulons revenir à une copie précédemment sauvegarde des données, nous pouvons utiliser cette option. Vous pouvez choisir la version actuelle de sauvegarde avant de faire cela. Vous pouvez également choisir d\'inclure de revenir les paramètres de langue.</value>
 		</term>
 		<term>
 			<key>BACKUP_LOCATION</key>
@@ -1369,11 +1369,11 @@
 		</term>
 		<term>
 			<key>TIPS_TARGETTAT</key>
-			<value>Cible TAT - Cette liste d\'options le d�lai d\'ex�cution pour chaque type de test. Nous pouvons modifier le TAT en utilisant l\'option Modifier et modifier la valeur.</value>
+			<value>Cible TAT - Cette liste d\'options le délai d'exécution pour chaque type de test. Nous pouvons modifier le TAT en utilisant l\'option Modifier et modifier la valeur.</value>
 		</term>
 		<term>
 			<key>TIPS_RESULTINTERPRETATION</key>
-			<value>Interpr�tation des r�sultats - Cette option nous permet de pr�ciser l\'interpr�tation de plusieurs plages de valeurs pour chaque type de test.</value>
+			<value>Interprétation des résultats - Cette option nous permet de préciser l'interprétation de plusieurs plages de valeurs pour chaque type de test.</value>
 		</term>
 		<term>
 			<key>MENU_USERS</key>
@@ -1393,7 +1393,7 @@
 		</term>
 		<term>
 			<key>TIPS_USERACCOUNTS_3</key>
-			<value>Il permet de modifier les param�tres du compte, supprimer des comptes et de surveiller l\'activit� du compte.</value>
+			<value>Il permet de modifier les paramètres du compte, supprimer des comptes et de surveiller l'activité du compte.</value>
 		</term>
 		<term>
 			<key>MENU_CUSTOM</key>
@@ -1401,11 +1401,11 @@
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_1</key>
-			<value>Cette page permet la configuration de la page d\'inscription des patients. Il permet de cr�er des champs obligatoires et cache certains domaines si elles ne sont pas souhait�s � pourvoir.</value>
+			<value>Cette page permet la configuration de la page d\'inscription des patients. Il permet de créer des champs obligatoires et cache certains domaines si elles ne sont pas souhaités à pourvoir.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_2</key>
-			<value>Il permet aussi la cr�ation de certains des champs personnalis�s pour l\'enregistrement des patients et de nouveaux addition de l\'�chantillon qui peut �tre requis par certains laboratoires seulement.</value>
+			<value>Il permet aussi la création de certains des champs personnalisés pour l\'enregistrement des patients et de nouveaux addition de l'échantillon qui peut ttre requis par certains laboratoires seulement.</value>
 		</term>
 		<term>
 			<key>TIPS_REGISTRATIONFIELDS_3</key>
@@ -1421,7 +1421,7 @@
 		</term>
 		<term>
 			<key>TIPS_INFECTIONREPORT</key>
-			<value>Ceci est une page modifiable pour le r�glage des diff�rents param�tres associaated chaque type d\'�preuve individuelle.</value>
+			<value>Ceci est une page modifiable pour le réglage des différents paramètres associaated chaque type d'épreuve individuelle.</value>
 		</term>
 		<term>
 			<key>MENU_GENERAL</key>
@@ -1649,11 +1649,11 @@
 		</term>
 		<term>
 			<key>TIPS_SETUPNETWORK_3</key>
-			<value>Vous allez maintenant �tre en mesure d\'acc�der en cliquant sur ??BLIS BlisSetup.html et en entrant votre nom d\'utilisateur et mot de passe.</value>
+			<value>Vous allez maintenant ttre en mesure d'accéder en cliquant sur ??BLIS BlisSetup.html et en entrant votre nom d\'utilisateur et mot de passe.</value>
 		</term>
 		<term>
 			<key>TIPS_SETUPNETWORK_4</key>
-			<value>Dans le cas d\'un red�marrage de l\'ordinateur ou cliquez sur une d�faillance du r�seau d\'installation de r�seau option � nouveau.</value>
+			<value>Dans le cas d\'un redémarrage de l\'ordinateur ou cliquez sur une défaillance du réseau d\'installation de réseau option à nouveau.</value>
 		</term>
 		<term>
 			<key>MENU_TOGGLE_TEST_REPORTS</key>
@@ -1669,7 +1669,7 @@
 		</term>
 		<term>
 			<key>TIPS_TESTREPORTCONFIGURATION</key>
-			<value>Configurez les diff�rents champs dans un rapport d\'essai</value>
+			<value>Configurez les différents champs dans un rapport d\'essai</value>
 		</term>
 		<term>
 			<key>MENU_TEST_TYPES</key>
@@ -2004,7 +2004,7 @@
 		</term>
 		<term>
 			<key>TIPS_INFECTIONREPORT</key>
-			<value>S�lectionner le type d\'examen pour gen�rer la pr�valence en fonction de qge et du sexe.</value>
+			<value>Selectionner le type d\'examen pour genérer la prévalence en fonction de qge et du sexe.</value>
 		</term>
 		<term>
 			<key>TIPS_GETACCESSIONREPORT</key>
@@ -2360,7 +2360,7 @@
 		</term>
 		<term>
 			<key>Total_Quantity</key>
-			<value>Au total quantit�</value>
+			<value>Au total quantité</value>
 		</term>
 		<term>
 			<key>Quantity_In_Stock</key>
@@ -2644,7 +2644,7 @@
 		</term>
 		<term>
 			<key>TIPS_R_WORKSHEET_1</key>
-			<value>Cette option g�n�re une feuille de calcul bas�e sur la section de laboratoire et d'essai de type. Vous pouvez �galement utiliser une feuille de calcul personnalis� qui peut �tre cr�� par les Admins en utilisant Lab Configuration&gt; Tests&gt; Rapports&gt; Feuille de travail.</value>
+			<value>Cette option génére une feuille de calcul basée sur la section de laboratoire et d'essai de type. Vous pouvez également utiliser une feuille de calcul personnalisé qui peut ttre crip par les Admins en utilisant Lab Configuration&gt; Tests&gt; Rapports&gt; Feuille de travail.</value>
 		</term>
 		<term>
 			<key>TIPS_R_WORKSHEET_2</key>
