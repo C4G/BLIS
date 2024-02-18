@@ -16,12 +16,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mysql-client \
         p7zip \
         python3-pip \
-        rubocop \
-        ruby \
-        ruby-dev \
-        ruby-bundler \
-        ruby-byebug \
-        ruby-graphviz \
         shellcheck \
         software-properties-common \
         sudo \
@@ -42,6 +36,13 @@ RUN add-apt-repository ppa:ondrej/php && apt-get update && \
         php5.6-zip \
         php5.6-mbstring \
         php5.6-xml
+
+# Install the GitHub CLI
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && sudo apt update \
+    && sudo apt install gh -y
 
 RUN pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin mkdocs-with-pdf
 
