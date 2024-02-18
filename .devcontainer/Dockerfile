@@ -43,7 +43,7 @@ RUN add-apt-repository ppa:ondrej/php && apt-get update && \
         php5.6-mbstring \
         php5.6-xml
 
-RUN pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin
+RUN pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin mkdocs-with-pdf
 
 RUN echo "column-statistics = 0" | tee -a /etc/mysql/conf.d/mysqldump.cnf
 
