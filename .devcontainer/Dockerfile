@@ -16,6 +16,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mysql-client \
         p7zip \
         python3-pip \
+        ripgrep \
         shellcheck \
         software-properties-common \
         sudo \
