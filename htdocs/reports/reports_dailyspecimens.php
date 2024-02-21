@@ -2,10 +2,11 @@
 #
 # Main page for printing daily specimen records
 #
-include("redirect.php");
-include("includes/db_lib.php");
-include("includes/script_elems.php");
-include("includes/page_elems.php");
+require_once("redirect.php");
+require_once("includes/composer.php");
+require_once("includes/db_lib.php");
+require_once("includes/script_elems.php");
+require_once("includes/page_elems.php");
 LangUtil::setPageId("reports");
 
 # Utility function
@@ -69,13 +70,21 @@ $script_elems->enableJQuery();
 $script_elems->enableTableSorter();
 $script_elems->enableDragTable();
 
-$date_from = $_REQUEST['yf']."-".$_REQUEST['mf']."-".$_REQUEST['df'];
-$date_to = $_REQUEST['yt']."-".$_REQUEST['mt']."-".$_REQUEST['dt'];
-//AS Fixing error of invalid lab config id
-	session_start();
-$user = get_user_by_name($_SESSION['username']);
+$current_user_id = $_SESSION['user_id'];
+$user = get_user_by_id($current_user_id);
+
+if (!$user) {
+	// If, for some reason, we don't have a user ID in the session,
+	// maybe we have a username
+	$user = get_user_by_name($_SESSION['username']);
+}
+
 $lab_config_id = $user->labConfigId;
 //$lab_config_id = $_REQUEST['l'];
+
+$date_from = $_REQUEST['yf']."-".$_REQUEST['mf']."-".$_REQUEST['df'];
+$date_to = $_REQUEST['yt']."-".$_REQUEST['mt']."-".$_REQUEST['dt'];
+
 $cat_code = $_REQUEST['c'];
 $ttype = $_REQUEST['t'];
 
