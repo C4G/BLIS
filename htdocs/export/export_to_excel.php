@@ -55,50 +55,51 @@ $start_date = intval($_REQUEST['yyyy_from'])."-".intval($_REQUEST['mm_from'])."-
 $end_date = intval($_REQUEST['yyyy_to'])."-".intval($_REQUEST['mm_to'])."-".intval($_REQUEST['dd_to']);
 
 $test_type_ids = $_REQUEST['test_types'];
+$output_fields = $_REQUEST['output_fields'];
 
-$include_name = ($_REQUEST["include_patient_name"] == "true");
-$include_sex = ($_REQUEST["include_patient_sex"] == "true");
-$include_dob = ($_REQUEST["include_patient_birthday"] == "true");
-$include_pid = ($_REQUEST["include_patient_id"] == "true");
+// $include_name = ($_REQUEST["include_patient_name"] == "true");
+// $include_sex = ($_REQUEST["include_patient_sex"] == "true");
+// $include_dob = ($_REQUEST["include_patient_birthday"] == "true");
+// $include_pid = ($_REQUEST["include_patient_id"] == "true");
 
 // Okay... let's build the SQL query
 
 // The headers for the spreadsheet must match the order of the columns/fields
-$headers = array();
-$fields = array();
+$headers = $output_fields;
+$fields = $output_fields;
 
-if ($include_name) {
-    $headers[] = "Patient Name";
-    $fields[] = "p.name AS patient_name";
-}
+// if ($include_name) {
+//     $headers[] = "Patient Name";
+//     $fields[] = "p.name AS patient_name";
+// }
 
-if ($include_sex) {
-    $headers[] = "Sex";
-    $fields[] = "p.sex";
-}
+// if ($include_sex) {
+//     $headers[] = "Sex";
+//     $fields[] = "p.sex";
+// }
 
-if ($include_dob) {
-    $headers[] = "Date of Birth";
-    $fields[] = "p.dob AS patient_dob";
-}
+// if ($include_dob) {
+//     $headers[] = "Date of Birth";
+//     $fields[] = "p.dob AS patient_dob";
+// }
 
-if ($include_pid) {
-    $headers[] = "Patient ID";
-    $fields[] = "p.surr_id";
-}
+// if ($include_pid) {
+//     $headers[] = "Patient ID";
+//     $fields[] = "p.surr_id";
+// }
 
-array_push($headers,
-    "Specimen Type",
-    "Date Collected",
-    "Date Received",
-    "Result Entry Date"
-);
-array_push($fields,
-    "st.name AS specimen_type",
-    "s.date_collected AS specimen_collected",
-    "s.date_recvd AS specimen_date_received",
-    "t.ts AS test_timestamp"
-);
+// array_push($headers,
+//     "Specimen Type",
+//     "Date Collected",
+//     "Date Received",
+//     "Result Entry Date"
+// );
+// array_push($fields,
+//     "st.name AS specimen_type",
+//     "s.date_collected AS specimen_collected",
+//     "s.date_recvd AS specimen_date_received",
+//     "t.ts AS test_timestamp"
+// );
 
 // Push additional field for test result - the headers for this will be generated separately
 // Must be the last field! There is logic in the loop below that depends on it.
@@ -114,11 +115,11 @@ foreach($test_type_ids as $tt_idx => $test_type_id) {
     // It will break if not indented this way I think...
     $query = <<<EOQ
         SELECT $fields_sql
-        FROM specimen AS s
-        INNER JOIN specimen_type AS st ON s.specimen_type_id = st.specimen_type_id
-        INNER JOIN test AS t ON s.specimen_id = t.specimen_id
-        INNER JOIN patient AS p ON s.patient_id = p.patient_id
-        WHERE s.date_collected BETWEEN '$start_date' AND '$end_date'
+        FROM specimen
+        INNER JOIN specimen_type ON specimen.specimen_type_id = specimen_type.specimen_type_id
+        INNER JOIN test AS t ON specimen.specimen_id = t.specimen_id
+        INNER JOIN patient ON specimen.patient_id = patient.patient_id
+        WHERE specimen.date_collected BETWEEN '$start_date' AND '$end_date'
         AND t.test_type_id = '$test_type_id';
 EOQ;
 

@@ -2940,7 +2940,7 @@ alert(dd_to);
                             </tr>
 
                             <script type="text/javascript">
-                                function exportExcel_updateTestTypes() {
+                                function exportExcel_updateTestTypesAndFieldNames() {
                                     selectEl = $("#export_to_excel_form select#locationAgg");
                                     if (selectEl.val() === -1) {
                                         return;
@@ -2954,6 +2954,15 @@ alert(dd_to);
                                         var tt_select = $("#export_to_excel_form select#test_type");
                                         tt_select.html(options);
                                     })
+
+                                    $.getJSON("export_to_excel_get_output_fields.php",{lab_config_id: selectEl.val()}, function(j){
+                                        var options = '';
+                                        for (var i = 0; i < j.length; i++) {
+                                            options += '<option value="' + j[i].field + '">' + j[i].field + '</option>';
+                                        }
+                                        var fn_select = $("#export_to_excel_form select#output_field");
+                                        fn_select.html(options);
+                                    })
                                 }
                             </script>
 
@@ -2962,7 +2971,7 @@ alert(dd_to);
                                 <td style="padding: 1rem 0" id='locationAggregation'>
                                 <?php
                                 if (is_super_admin($current_user) || is_country_dir($current_user)) {
-                                    echo '<select name="locationAgg" id="locationAgg" onchange="exportExcel_updateTestTypes()">';
+                                    echo '<select name="locationAgg" id="locationAgg" onchange="exportExcel_updateTestTypesAndFieldNames()">';
                                     echo '<option value="-1"></option>';
 
                                     $lab_config_list_imported = get_lab_configs_imported();
@@ -2996,15 +3005,32 @@ alert(dd_to);
                                 </td>
                             </tr>
 
-                            <tr>
+                            <tr style="border-bottom: 1px solid black" valign="top">
+                                <td style="padding: 5rem 1rem 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['OPTIONS']; ?></td>
+                                <td style="padding: 1rem 0">
+                                    <select name="output_fields[]" id="output_field" class="uniform_width" style="font-size: medium; border: 1px solid darkgrey; min-height: 10rem; width: 100%;" multiple="">
+                                        <?php
+                                        if (!is_super_admin($current_user) && !is_country_dir($current_user)) {
+                                            // If we are not the superuser or country director, we know what site we are looking at
+                                            // so we can render the test types
+                                            $page_elems->getOutputFieldOptions();
+                                        }
+                                        ?>
+                                    </select>
+                                    <div><?php echo LangUtil::$pageTerms['TIPS_HOLD_CTRL']; ?></div>
+                                </td>
+                            </tr>
+
+                            <!-- <tr>
                                 <td style="padding: 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['OPTIONS']; ?></td>
                                 <td style="padding: 1rem 0">
                                     <input type="checkbox" name="include_patient_name" id="include_patient_name" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_NAME']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_birthday" id="include_patient_birthday" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_BIRTHDATE']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_sex" id="include_patient_sex" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_SEX']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_id" id="include_patient_id" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_ID']; ?></input><br/>
+                                    <input type="checkbox" name="include_recipient_name" id="include_recipient_name" value="false"><?php echo LangUtil::$pageTerms['INCLUDE_RECIPIENT_NAME']; ?></input><br/>
                                 </td>
-                            </tr>
+                            </tr> -->
 
                             <tr>
                                 <td></td>

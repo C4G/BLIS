@@ -797,6 +797,42 @@ echo "</td>";
 
 	}
 
+	public function getOutputFieldOptions()
+	{
+		# Returns accessible sites for drop down <select> boxes
+		# TODO: Link the hard-coded values below to includes/user_lib.php
+
+
+		$saved_db = DbUtil::switchToGlobal();
+		// $query = "(SELECT CONCAT(table_name, ':', column_name) as field_name FROM 
+		// Information_schema.columns where table_name = 'patient') UNION
+		// SELECT CONCAT(table_name, ':', column_name) as field_name FROM 
+		// Information_schema.columns where table_name = 'specimen') UNION 
+		// (SELECT CONCAT(table_name, ':', column_name) as field_name FROM 
+		// Information_schema.columns where table_name = 'specimen_type');";
+		$query = "(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location FROM 
+		information_schema.columns WHERE table_name = 'patient') UNION 
+		(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location 
+		FROM information_schema.columns WHERE table_name = 'specimen') UNION 
+		(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location FROM 
+		information_schema.columns WHERE table_name = 'specimen_type');";
+		$resultset = query_associative_all($query, $count);
+
+		if( count($resultset) > 0 ) { ?>
+			<?php
+				foreach($resultset as $record) {
+					echo "<option value='".$record['location']."'";
+					if($selected_value == $record['field_name'])
+						echo " selected ";
+					echo ">". $record['field_name']."</option>";
+				}
+			?>s
+		<?php }
+
+		DbUtil::switchRestore($saved_db);
+
+	}
+
 	public function getSpecimenTypesSelect($lab_config_id)
 	{
 
