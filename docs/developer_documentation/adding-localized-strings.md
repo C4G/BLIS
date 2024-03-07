@@ -87,6 +87,7 @@ Here is the process for adding or changing a string:
         Calling: lang_xml2php("en", "/workspace/htdocs/Language/")
         Calling: require_once("/workspace/htdocs/Language/en.php") to ensure valid PHP syntax...
         ```
+
     - **If you are on Windows:** You can run:
         ```cmd
         C:\Users\c4g\BLIS>server\php\php.exe bin\update-lang.php htdocs\Language\en.xml
@@ -94,7 +95,7 @@ Here is the process for adding or changing a string:
         From XML file:       /workspace/htdocs/Language/en.xml
         Calling: lang_xml2php("en", "/workspace/htdocs/Language/")
         Calling: require_once("/workspace/htdocs/Language/en.php") to ensure valid PHP syntax...
-         ```
+        ```
 1. Copy all your changes from the `htdocs/Language` folder to the `local/langdata_` folders.
     ```bash
     $ cp htdocs/Language/en.* local/langdata_127/
