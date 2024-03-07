@@ -13,6 +13,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         git \
         gpg \
         htop \
+        libpango-1.0-0 \
+        libpangoft2-1.0-0 \
         mysql-client \
         p7zip \
         python3-pip \
