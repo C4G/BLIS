@@ -48,9 +48,12 @@ $db_name = $db_name_res['db_name'];
 
 db_change($db_name);
 
-$output_fields_query = "(SELECT column_name FROM Information_schema.columns WHERE 
-table_name = 'patient') UNION (SELECT column_name 
-FROM Information_schema.columns WHERE table_name = 'specimen');";
+$output_fields_query = "(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location FROM 
+information_schema.columns WHERE table_name = 'patient') UNION 
+(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location 
+FROM information_schema.columns WHERE table_name = 'specimen') UNION 
+(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location FROM 
+information_schema.columns WHERE table_name = 'specimen_type');";
 $output_fields = query_associative_all($output_fields_query);
 
 // Send the resulting JSON directly to the browser
@@ -61,8 +64,8 @@ header('Content-Type: application/json');
 echo "[\n";
 
 foreach($output_fields as $idx => $row) {
-    echo '{ "field": "'.$row['column_name'].'" }';
-    if ($idx < count($test_types) - 1) {
+    echo '{ "location": '.$row['location'].', "field_name": "'.$row['field_name'].'" }';
+    if ($idx < count($output_fields) - 1) {
         echo ",\n";
     }
 }
