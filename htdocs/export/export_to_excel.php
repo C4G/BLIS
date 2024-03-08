@@ -56,7 +56,7 @@ $end_date = intval($_REQUEST['yyyy_to'])."-".intval($_REQUEST['mm_to'])."-".intv
 
 $test_type_ids = $_REQUEST['test_types'];
 $patient_custom_fields = $_REQUEST['patient_custom_fields'];
-$specimen_custom_fields = $_REQUEST['patient_custom_fields'];
+$specimen_custom_fields = $_REQUEST['specimen_custom_fields'];
 
 $include_name = ($_REQUEST["include_patient_name"] == "true");
 $include_sex = ($_REQUEST["include_patient_sex"] == "true");
@@ -102,13 +102,18 @@ array_push($fields,
     "t.ts AS test_timestamp"
 );
 
+db_change($lab['db_name']);
+
 foreach($patient_custom_fields as $patient_custom_field_id) {
-    $query_string =
-		"SELECT field_name FROM patient_custom_field ".
-		"WHERE id='$patient_custom_field_id' LIMIT 1";
-    $record = query_associative_one($query_string);
-    array_push($headers, $record['field_name']);
+    $field_name = get_custom_field_name_patient($patient_custom_field_id);
+    array_push($headers, $field_name);
     array_push($fields, "pcd.field_value");
+}
+
+foreach($specimen_custom_fields as $specimen_custom_field_id) {
+    $field_name = get_custom_field_name_specimen($specimen_custom_field_id);
+    array_push($headers, $field_name);
+    array_push($fields, "scd.field_value");
 }
 
 // Push additional field for test result - the headers for this will be generated separately
@@ -137,8 +142,6 @@ EOQ;
 
 
     $sheet = $objPHPExcel->createSheet();
-
-    db_change($lab['db_name']);
 
     // Grab all the measures for this test type from the database.
     $test_type = TestType::getById($test_type_id, $lab['lab_config_id']);
