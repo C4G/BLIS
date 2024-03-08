@@ -3021,16 +3021,15 @@ alert(dd_to);
                                 </td>
                             </tr>
 
-                            <!-- <tr>
+                            <tr>
                                 <td style="padding: 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['OPTIONS']; ?></td>
                                 <td style="padding: 1rem 0">
                                     <input type="checkbox" name="include_patient_name" id="include_patient_name" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_NAME']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_birthday" id="include_patient_birthday" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_BIRTHDATE']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_sex" id="include_patient_sex" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_SEX']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_id" id="include_patient_id" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_ID']; ?></input><br/>
-                                    <input type="checkbox" name="include_recipient_name" id="include_recipient_name" value="false"><?php echo LangUtil::$pageTerms['INCLUDE_RECIPIENT_NAME']; ?></input><br/>
                                 </td>
-                            </tr> -->
+                            </tr>
 
                             <tr>
                                 <td></td>
