@@ -62,7 +62,7 @@ $include_name = ($_REQUEST["include_patient_name"] == "true");
 $include_sex = ($_REQUEST["include_patient_sex"] == "true");
 $include_dob = ($_REQUEST["include_patient_birthday"] == "true");
 $include_pid = ($_REQUEST["include_patient_id"] == "true");
-
+$arr = array();
 // Okay... let's build the SQL query
 
 // The headers for the spreadsheet must match the order of the columns/fields
@@ -101,7 +101,16 @@ array_push($fields,
     "s.date_recvd AS specimen_date_received",
     "t.ts AS test_timestamp"
 );
-
+foreach($patient_custom_fields as $custom_field)
+{
+    $field_name = $custom_field;
+    array_push($headers,$field_name);
+}
+foreach($specimen_custom_fields as $custom_field)
+{
+    $field_name = $custom_field;
+    array_push($headers,$field_name);
+}
 // Push additional field for test result - the headers for this will be generated separately
 // Must be the last field! There is logic in the loop below that depends on it.
 array_push($fields, "t.result AS test_result");
