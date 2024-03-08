@@ -102,6 +102,15 @@ array_push($fields,
     "t.ts AS test_timestamp"
 );
 
+foreach($patient_custom_fields as $patient_custom_field_id) {
+    $query_string =
+		"SELECT field_name FROM patient_custom_field ".
+		"WHERE id='$patient_custom_field_id' LIMIT 1";
+    $record = query_associative_one($query_string);
+    array_push($headers, $record['field_name']);
+    array_push($fields, "pcd.field_value");
+}
+
 // Push additional field for test result - the headers for this will be generated separately
 // Must be the last field! There is logic in the loop below that depends on it.
 array_push($fields, "t.result AS test_result");
@@ -120,6 +129,8 @@ foreach($test_type_ids as $tt_idx => $test_type_id) {
         INNER JOIN specimen_type AS st ON s.specimen_type_id = st.specimen_type_id
         INNER JOIN test AS t ON s.specimen_id = t.specimen_id
         INNER JOIN patient AS p ON s.patient_id = p.patient_id
+        INNER JOIN patient_custom_data AS pcd on p.patient_id = pcd.patient_id
+        INNER JOIN specimen_custom_data as scd on s.specimen_id = scd.specimen_id
         WHERE s.date_collected BETWEEN '$start_date' AND '$end_date'
         AND t.test_type_id = '$test_type_id';
 EOQ;
