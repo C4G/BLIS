@@ -2940,7 +2940,7 @@ alert(dd_to);
                             </tr>
 
                             <script type="text/javascript">
-                                function exportExcel_updateTestTypesAndFieldNames() {
+                                function exportExcel_updateTestTypesAndCustomFields() {
                                     selectEl = $("#export_to_excel_form select#locationAgg");
                                     if (selectEl.val() === -1) {
                                         return;
@@ -2955,13 +2955,22 @@ alert(dd_to);
                                         tt_select.html(options);
                                     })
 
-                                    $.getJSON("export_to_excel_get_output_fields.php",{lab_config_id: selectEl.val()}, function(j){
+                                    $.getJSON("export_to_excel_get_custom_patient_fields.php",{lab_config_id: selectEl.val()}, function(j){
                                         var options = '';
                                         for (var i = 0; i < j.length; i++) {
-                                            options += '<option value="' + j[i].field + '">' + j[i].field + '</option>';
+                                            options += '<option value="' + j[i].id + '">' + j[i].fieldName + '</option>';
                                         }
-                                        var fn_select = $("#export_to_excel_form select#output_field");
-                                        fn_select.html(options);
+                                        var pf_select = $("#export_to_excel_form select#patient_field");
+                                        pf_select.html(options);
+                                    })
+
+                                    $.getJSON("export_to_excel_get_custom_specimen_fields.php",{lab_config_id: selectEl.val()}, function(j){
+                                        var options = '';
+                                        for (var i = 0; i < j.length; i++) {
+                                            options += '<option value="' + j[i].id + '">' + j[i].fieldName + '</option>';
+                                        }
+                                        var pf_select = $("#export_to_excel_form select#specimen_field");
+                                        pf_select.html(options);
                                     })
                                 }
                             </script>
@@ -2971,7 +2980,7 @@ alert(dd_to);
                                 <td style="padding: 1rem 0" id='locationAggregation'>
                                 <?php
                                 if (is_super_admin($current_user) || is_country_dir($current_user)) {
-                                    echo '<select name="locationAgg" id="locationAgg" onchange="exportExcel_updateTestTypesAndFieldNames()">';
+                                    echo '<select name="locationAgg" id="locationAgg" onchange="exportExcel_updateTestTypesAndCustomFields()">';
                                     echo '<option value="-1"></option>';
 
                                     $lab_config_list_imported = get_lab_configs_imported();
@@ -3008,12 +3017,28 @@ alert(dd_to);
                             <tr style="border-bottom: 1px solid black" valign="top">
                                 <td style="padding: 5rem 1rem 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['PATIENT_CUSTOM_FIELDS']; ?></td>
                                 <td style="padding: 1rem 0">
-                                    <select name="patient_custom_fields[]" id="patient_fields" class="uniform_width" style="font-size: medium; border: 1px solid darkgrey; min-height: 10rem; width: 100%;" multiple="">
+                                    <select name="patient_custom_fields[]" id="patient_field" class="uniform_width" style="font-size: medium; border: 1px solid darkgrey; min-height: 10rem; width: 100%;" multiple="">
                                         <?php
                                         if (!is_super_admin($current_user) && !is_country_dir($current_user)) {
                                             // If we are not the superuser or country director, we know what site we are looking at
                                             // so we can render the test types
                                             $page_elems->getCustomPatientFieldOptions();
+                                        }
+                                        ?>
+                                    </select>
+                                    <div><?php echo LangUtil::$pageTerms['TIPS_HOLD_CTRL']; ?></div>
+                                </td>
+                            </tr>
+
+                            <tr style="border-bottom: 1px solid black" valign="top">
+                                <td style="padding: 5rem 1rem 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['SPECIMEN_CUSTOM_FIELDS']; ?></td>
+                                <td style="padding: 1rem 0">
+                                    <select name="specimen_custom_fields[]" id="specimen_field" class="uniform_width" style="font-size: medium; border: 1px solid darkgrey; min-height: 10rem; width: 100%;" multiple="">
+                                        <?php
+                                        if (!is_super_admin($current_user) && !is_country_dir($current_user)) {
+                                            // If we are not the superuser or country director, we know what site we are looking at
+                                            // so we can render the test types
+                                            $page_elems->getCustomSpecimenFieldOptions();
                                         }
                                         ?>
                                     </select>

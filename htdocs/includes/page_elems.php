@@ -854,6 +854,26 @@ echo "</td>";
 
 	}
 
+	public function getCustomSpecimenFieldOptions()
+	{
+		# Returns accessible sites for drop down <select> boxes
+		# TODO: Link the hard-coded values below to includes/user_lib.php
+		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
+		$custom_field_list = $lab_config->getSpecimenCustomFields();
+
+		if ( $lab_config ) { ?>
+			<?php
+				foreach($custom_field_list as $custom_field) {
+					echo "<option value='".$custom_field->id."'";
+					if($selected_value == $custom_field->id)
+						echo " selected ";
+					echo ">". $custom_field->fieldName."</option>";
+				}
+			?>s
+		<?php }
+
+	}
+
 	public function getSpecimenTypesSelect($lab_config_id)
 	{
 

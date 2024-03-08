@@ -56,6 +56,7 @@ $end_date = intval($_REQUEST['yyyy_to'])."-".intval($_REQUEST['mm_to'])."-".intv
 
 $test_type_ids = $_REQUEST['test_types'];
 $patient_custom_fields = $_REQUEST['patient_custom_fields'];
+$specimen_custom_fields = $_REQUEST['patient_custom_fields'];
 
 $include_name = ($_REQUEST["include_patient_name"] == "true");
 $include_sex = ($_REQUEST["include_patient_sex"] == "true");

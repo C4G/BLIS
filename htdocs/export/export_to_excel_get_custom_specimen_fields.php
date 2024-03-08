@@ -41,30 +41,12 @@ if ($unauthorized) {
     exit;
 }
 
-DbUtil::switchToGlobal();
-$lab_db_name_query = "SELECT db_name FROM lab_config WHERE lab_config_id = $lab_id";
-$db_name_res = query_associative_one($lab_db_name_query);
-$db_name = $db_name_res['db_name'];
 
-db_change($db_name);
+$lab_config = LabConfig::getById($_REQUEST['lab_config_id']);
+$custom_field_list = $lab_config->getSpecimenCustomFields();
 
-$output_fields_query = "(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location FROM 
-information_schema.columns WHERE table_name = 'patient') UNION 
-(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location 
-FROM information_schema.columns WHERE table_name = 'specimen') UNION 
-(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location FROM 
-information_schema.columns WHERE table_name = 'specimen_type');";
-$output_fields = query_associative_all($output_fields_query);
-
-// Send the resulting JSON directly to the browser
-// Do not echo() or output anything else below this line!
-
-header('Content-Type: application/json');
-
-echo "[\n";
-
-foreach($output_fields as $idx => $row) {
-    echo '{ "location": '.$row['location'].', "field_name": "'.$row['field_name'].'" }';
+foreach($custom_field_list as $idx => $custom_field) {
+    echo '{ "id": '.$custom_field->id.', "fieldName": "'.$custom_field->fieldName.'" }';
     if ($idx < count($output_fields) - 1) {
         echo ",\n";
     }
