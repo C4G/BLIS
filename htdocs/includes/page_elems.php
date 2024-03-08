@@ -833,6 +833,27 @@ echo "</td>";
 
 	}
 
+
+	public function getCustomPatientFieldOptions($lab_config_id)
+	{
+		# Returns accessible sites for drop down <select> boxes
+		# TODO: Link the hard-coded values below to includes/user_lib.php
+		$lab_config = LabConfig::getById($report_config->labConfigId);
+
+		if ( $lab_config ) { ?>
+			<?php
+				$custom_field_list = $lab_config->getPatientCustomFields();
+				foreach($custom_field_list as $custom_field) {
+					echo "<option value='".$custom_field->id."'";
+					if($selected_value == $custom_field->id)
+						echo " selected ";
+					echo ">". $custom_field->id."</option>";
+				}
+			?>s
+		<?php }
+
+	}
+
 	public function getSpecimenTypesSelect($lab_config_id)
 	{
 

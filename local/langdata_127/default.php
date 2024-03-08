@@ -217,7 +217,9 @@ $LANG_ARRAY = array (
 		"HEIGHT" => "Height",
 		"FONT_SIZE" => "Font Size",
 		"COL_COUNT" => "Column-Count",
-		"CMD_REFRESH" => "Refresh"
+		"CMD_REFRESH" => "Refresh",
+		"SPECIMEN_CUSTOM_FIELDS" => "Specimen Custom Fields",
+		"PATIENT_CUSTOM_FIELDS" => "Patient Custom Fields"
 	) ,
 	"header" => array (
 		"TITLE" => "",

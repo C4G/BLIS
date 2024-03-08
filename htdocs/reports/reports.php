@@ -3006,14 +3006,14 @@ alert(dd_to);
                             </tr>
 
                             <tr style="border-bottom: 1px solid black" valign="top">
-                                <td style="padding: 5rem 1rem 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['OPTIONS']; ?></td>
+                                <td style="padding: 5rem 1rem 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['PATIENT_CUSTOM_FIELDS']; ?></td>
                                 <td style="padding: 1rem 0">
-                                    <select name="output_fields[]" id="output_field" class="uniform_width" style="font-size: medium; border: 1px solid darkgrey; min-height: 10rem; width: 100%;" multiple="">
+                                    <select name="patient_custom_fields[]" id="patient_fields" class="uniform_width" style="font-size: medium; border: 1px solid darkgrey; min-height: 10rem; width: 100%;" multiple="">
                                         <?php
                                         if (!is_super_admin($current_user) && !is_country_dir($current_user)) {
                                             // If we are not the superuser or country director, we know what site we are looking at
                                             // so we can render the test types
-                                            $page_elems->getOutputFieldOptions();
+                                            $page_elems->getCustomPatientFieldOptions($lab_config_id);
                                         }
                                         ?>
                                     </select>
