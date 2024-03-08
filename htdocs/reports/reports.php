@@ -3013,7 +3013,7 @@ alert(dd_to);
                                         if (!is_super_admin($current_user) && !is_country_dir($current_user)) {
                                             // If we are not the superuser or country director, we know what site we are looking at
                                             // so we can render the test types
-                                            $page_elems->getCustomPatientFieldOptions($lab_config_id);
+                                            $page_elems->getCustomPatientFieldOptions();
                                         }
                                         ?>
                                     </select>
