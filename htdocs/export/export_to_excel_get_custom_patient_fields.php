@@ -1,11 +1,5 @@
 <?php
 
-# TAKE NOTE!
-# For this to work properly, you need to make sure that _all_ of these
-# required files are not outputting anything to the browser.
-# https://github.com/PHPOffice/PHPExcel/blob/1.8/Documentation/markdown/Overview/08-Recipes.md#http-headers
-# Ensure that these files are _not_ encoded as "UTF-8 with BOM" (Byte Order Mark)
-# since that also counts. They should be "UTF-8".
 require_once("../includes/composer.php");
 require_once("../includes/db_lib.php");
 require_once("../includes/db_util.php");
