@@ -24,7 +24,7 @@ if (is_super_admin($current_user) || is_country_dir($current_user)) {
 if ($unauthorized) {
     // If the user is not a super admin or country director, they should only
     // be able to access data for their own lab, and only if they are an admin.
-    if (count($lab_ids) == 1 && $lab_ids[0] == $current_user->labConfigId && is_admin($current_user)) {
+    if ($lab_id == $current_user->labConfigId && is_admin($current_user)) {
         $unauthorized = false;
     }
 }
