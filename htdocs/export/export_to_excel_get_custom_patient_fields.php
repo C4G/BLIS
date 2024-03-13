@@ -36,7 +36,7 @@ if ($unauthorized) {
 }
 
 
-$lab_config = LabConfig::getById($_REQUEST['lab_config_id']);
+$lab_config = LabConfig::getById($lab_id);
 $custom_field_list = $lab_config->getPatientCustomFields();
 
 foreach($custom_field_list as $idx => $custom_field) {
