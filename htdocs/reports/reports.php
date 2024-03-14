@@ -176,6 +176,13 @@ $lab_config_id = $lab_config->id;
         $page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
         ?>
     </div>
+    <div class='reports_subdiv_help' id='export_to_excel_div_help' style='display:none'>
+        <?php
+        $tips_string = LangUtil::$pageTerms['TIPS_HOLD_CTRL'];
+        $page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
+        ?>
+    </div>
+    
 
     <style type="text/css">
         .ustats_link_v
@@ -3010,7 +3017,6 @@ alert(dd_to);
                                         }
                                         ?>
                                     </select>
-                                    <div><?php echo LangUtil::$pageTerms['TIPS_HOLD_CTRL']; ?></div>
                                 </td>
                             </tr>
 
