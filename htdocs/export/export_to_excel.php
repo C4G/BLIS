@@ -107,13 +107,13 @@ db_change($lab['db_name']);
 foreach($patient_custom_fields as $patient_custom_field_id) {
     $field_name = get_custom_field_name_patient($patient_custom_field_id);
     array_push($headers, $field_name);
-    array_push($fields, "p.patient_id");
+    array_push($fields, "pcd.field_value");
 }
 
 foreach($specimen_custom_fields as $specimen_custom_field_id) {
     $field_name = get_custom_field_name_specimen($specimen_custom_field_id);
     array_push($headers, $field_name);
-    array_push($fields, "p.patient_id");
+    array_push($fields, "scd.field_value");
 }
 
 // Push additional field for test result - the headers for this will be generated separately
@@ -134,6 +134,8 @@ foreach($test_type_ids as $tt_idx => $test_type_id) {
         INNER JOIN specimen_type AS st ON s.specimen_type_id = st.specimen_type_id
         INNER JOIN test AS t ON s.specimen_id = t.specimen_id
         INNER JOIN patient AS p ON s.patient_id = p.patient_id
+        LEFT JOIN patient_custom_data AS pcd ON p.patient_id = pcd.patient_id
+        LEFT JOIN specimen_custom_data AS scd ON s.specimen_id = scd.specimen_id
         WHERE s.date_collected BETWEEN '$start_date' AND '$end_date'
         AND t.test_type_id = '$test_type_id';
 EOQ;

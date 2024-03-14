@@ -797,81 +797,34 @@ echo "</td>";
 
 	}
 
-	public function getOutputFieldOptions()
+	public function getCustomPatientFieldCheckBoxes()
 	{
-		# Returns accessible sites for drop down <select> boxes
-		# TODO: Link the hard-coded values below to includes/user_lib.php
-
-
-		$saved_db = DbUtil::switchToGlobal();
-		// $query = "(SELECT CONCAT(table_name, ':', column_name) as field_name FROM 
-		// Information_schema.columns where table_name = 'patient') UNION
-		// SELECT CONCAT(table_name, ':', column_name) as field_name FROM 
-		// Information_schema.columns where table_name = 'specimen') UNION 
-		// (SELECT CONCAT(table_name, ':', column_name) as field_name FROM 
-		// Information_schema.columns where table_name = 'specimen_type');";
-		$query = "(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location FROM 
-		information_schema.columns WHERE table_name = 'patient') UNION 
-		(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location 
-		FROM information_schema.columns WHERE table_name = 'specimen') UNION 
-		(SELECT CONCAT(table_name, ':', column_name) as field_name, CONCAT(table_name, '.', column_name) as location FROM 
-		information_schema.columns WHERE table_name = 'specimen_type');";
-		$resultset = query_associative_all($query, $count);
-
-		if( count($resultset) > 0 ) { ?>
-			<?php
-				foreach($resultset as $record) {
-					echo "<option value='".$record['location']."'";
-					if($selected_value == $record['field_name'])
-						echo " selected ";
-					echo ">". $record['field_name']."</option>";
-				}
-			?>s
-		<?php }
-
-		DbUtil::switchRestore($saved_db);
-
-	}
-
-
-	public function getCustomPatientFieldOptions()
-	{
-		# Returns accessible sites for drop down <select> boxes
-		# TODO: Link the hard-coded values below to includes/user_lib.php
 		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
 		$custom_field_list = $lab_config->getPatientCustomFields();
 
 		if ( $lab_config ) { ?>
 			<?php
 				foreach($custom_field_list as $custom_field) {
-					echo "<option value='".$custom_field->id."'";
-					if($selected_value == $custom_field->id)
-						echo " selected ";
-					echo ">". $custom_field->fieldName."</option>";
+					echo '<input type="checkbox" name="patient_custom_fields[]" id='.$custom_field->id.' value='.$custom_field->id.' checked';
+					echo ">Include ". $custom_field->fieldName."</input><br/>";
 				}
-			?>s
+			?>
 		<?php }
-
 	}
 
-	public function getCustomSpecimenFieldOptions()
+	public function getCustomSpecimenFieldCheckBoxes()
 	{
-		# Returns accessible sites for drop down <select> boxes
-		# TODO: Link the hard-coded values below to includes/user_lib.php
 		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
 		$custom_field_list = $lab_config->getSpecimenCustomFields();
 
 		if ( $lab_config ) { ?>
 			<?php
 				foreach($custom_field_list as $custom_field) {
-					echo "<option value='".$custom_field->id."'";
-					if($selected_value == $custom_field->id)
-						echo " selected ";
-					echo ">". $custom_field->fieldName."</option>";
+					echo '<input type="checkbox" name="specimen_custom_fields[]" id='.$custom_field->id.' value='.$custom_field->id.' checked';
+					echo ">Include ". $custom_field->fieldName."</input><br/>";
 				}
-			?>s
+			?>
 		<?php }
-
 	}
 
 	public function getSpecimenTypesSelect($lab_config_id)

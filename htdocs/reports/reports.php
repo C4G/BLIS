@@ -3014,38 +3014,6 @@ alert(dd_to);
                                 </td>
                             </tr>
 
-                            <tr style="border-bottom: 1px solid black" valign="top">
-                                <td style="padding: 5rem 1rem 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['PATIENT_CUSTOM_FIELDS']; ?></td>
-                                <td style="padding: 1rem 0">
-                                    <select name="patient_custom_fields[]" id="patient_field" class="uniform_width" style="font-size: medium; border: 1px solid darkgrey; min-height: 10rem; width: 100%;" multiple="">
-                                        <?php
-                                        if (!is_super_admin($current_user) && !is_country_dir($current_user)) {
-                                            // If we are not the superuser or country director, we know what site we are looking at
-                                            // so we can render the test types
-                                            $page_elems->getCustomPatientFieldOptions();
-                                        }
-                                        ?>
-                                    </select>
-                                    <div><?php echo LangUtil::$pageTerms['TIPS_HOLD_CTRL']; ?></div>
-                                </td>
-                            </tr>
-
-                            <tr style="border-bottom: 1px solid black" valign="top">
-                                <td style="padding: 5rem 1rem 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['SPECIMEN_CUSTOM_FIELDS']; ?></td>
-                                <td style="padding: 1rem 0">
-                                    <select name="specimen_custom_fields[]" id="specimen_field" class="uniform_width" style="font-size: medium; border: 1px solid darkgrey; min-height: 10rem; width: 100%;" multiple="">
-                                        <?php
-                                        if (!is_super_admin($current_user) && !is_country_dir($current_user)) {
-                                            // If we are not the superuser or country director, we know what site we are looking at
-                                            // so we can render the test types
-                                            $page_elems->getCustomSpecimenFieldOptions();
-                                        }
-                                        ?>
-                                    </select>
-                                    <div><?php echo LangUtil::$pageTerms['TIPS_HOLD_CTRL']; ?></div>
-                                </td>
-                            </tr>
-
                             <tr>
                                 <td style="padding: 1rem 1rem; text-align: right"><?php echo LangUtil::$generalTerms['OPTIONS']; ?></td>
                                 <td style="padding: 1rem 0">
@@ -3053,6 +3021,14 @@ alert(dd_to);
                                     <input type="checkbox" name="include_patient_birthday" id="include_patient_birthday" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_BIRTHDATE']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_sex" id="include_patient_sex" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_SEX']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_id" id="include_patient_id" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_ID']; ?></input><br/>
+                                    <?php
+                                        if (!is_super_admin($current_user) && !is_country_dir($current_user)) {
+                                            // If we are not the superuser or country director, we know what site we are looking at
+                                            // so we can render the test types
+                                            $page_elems->getCustomPatientFieldCheckBoxes();
+                                            $page_elems->getCustomSpecimenFieldCheckBoxes();
+                                        }
+                                        ?>
                                 </td>
                             </tr>
 
