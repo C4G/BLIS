@@ -1681,13 +1681,13 @@ alert(dd_to);
 
         function print_daily_patientBarcodes()
         {
-            var l = $("#location13").attr("value");
-            var yf = $("#daily_yyyy").attr("value");
-            var mf = $("#daily_mm").attr("value");
-            var df = $("#daily_dd").attr("value");
-            var yt = $("#daily_yyyy_to").attr("value");
-            var mt = $("#daily_mm_to").attr("value");
-            var dt = $("#daily_dd_to").attr("value");
+            var l = $("#daily_report_div #location13").attr("value");
+            var yf = $("#daily_report_div #daily_yyyy").attr("value");
+            var mf = $("#daily_report_div #daily_mm").attr("value");
+            var df = $("#daily_report_div #daily_dd").attr("value");
+            var yt = $("#daily_report_div #daily_yyyy_to").attr("value");
+            var mt = $("#daily_report_div #daily_mm_to").attr("value");
+            var dt = $("#daily_report_div #daily_dd_to").attr("value");
 
             if(checkDate(yt, mt, dt) == false || checkDate(yf, mf, df) == false)
             {
@@ -1700,13 +1700,13 @@ alert(dd_to);
 
         function print_daily_patients()
         {
-            var l = $("#location13").attr("value");
-            var yf = $("#daily_yyyy").attr("value");
-            var mf = $("#daily_mm").attr("value");
-            var df = $("#daily_dd").attr("value");
-            var yt = $("#daily_yyyy_to").attr("value");
-            var mt = $("#daily_mm_to").attr("value");
-            var dt = $("#daily_dd_to").attr("value");
+            var l = $("#daily_report_div #location13").attr("value");
+            var yf = $("#daily_report_div #daily_yyyy").attr("value");
+            var mf = $("#daily_report_div #daily_mm").attr("value");
+            var df = $("#daily_report_div #daily_dd").attr("value");
+            var yt = $("#daily_report_div #daily_yyyy_to").attr("value");
+            var mt = $("#daily_report_div #daily_mm_to").attr("value");
+            var dt = $("#daily_report_div #daily_dd_to").attr("value");
 
             var cat_code = $('#cat_code13').attr("value");
 
@@ -1722,12 +1722,12 @@ alert(dd_to);
         function print_daily_specimens()
         {
             var l = $("#daily_report_div #location13").attr("value");
-            var yf = $("#daily_report_div #daily_yyyy").val();
-            var mf = $("#daily_report_div #daily_mm").val();
-            var df = $("#daily_report_div #daily_dd").val();
-            var yt = $("#daily_report_div #daily_yyyy_to").val();
-            var mt = $("#daily_report_div #daily_mm_to").val();
-            var dt = $("#daily_report_div #daily_dd_to").val();
+            var yf = $("#daily_report_div #daily_yyyy").attr("value");
+            var mf = $("#daily_report_div #daily_mm").attr("value");
+            var df = $("#daily_report_div #daily_dd").attr("value");
+            var yt = $("#daily_report_div #daily_yyyy_to").attr("value");
+            var mt = $("#daily_report_div #daily_mm_to").attr("value");
+            var dt = $("#daily_report_div #daily_dd_to").attr("value");
 
             if(checkDate(yt, mt, dt) == false || checkDate(yf, mf, df) == false)
             {
