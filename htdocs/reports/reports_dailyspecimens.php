@@ -140,7 +140,7 @@ function export_as_excel(div_id)
 
 	$("#report_content_table4").table2excel({
 		// exclude: ".excludeThisClass",
-		name: "Daily Log - Specimens",
+		name: "LangUtil::$generalTerms['SPECIMEN_DAILY_LOG_SHEET_NAME']",
 		filename: fileName, // do include extension
 		preserveColors: false // set to true if you want background colors and font colors preserved
 	});
