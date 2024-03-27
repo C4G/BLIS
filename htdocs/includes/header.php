@@ -113,23 +113,47 @@ if (strpos($_SERVER['PHP_SELF'], 'login.php') === false) {
     if (isset($top_menu_options)) {
         foreach ($top_menu_options as $key => $value) {
             //echo "hello "."<br/>";
-
-            echo "<li ";
-            echo "><a href='".$value."' ";
-            if (
-                (strpos($_SERVER['PHP_SELF'], $value) !== false)
-                && !(strpos($_SERVER['PHP_SELF'], "_home.php") !== false && $value == "home.php")
-            ) {
-                # Highlight current page tab
-                echo " class='here' ";
+            if($_SESSION['user_level'] == $READONLYMODE){
+                if ($value == 'home.php' || $value == 'reports.php')
+                {
+                    echo "<li ";
+                    echo "><a href='".$value."' ";
+                    if (
+                        (strpos($_SERVER['PHP_SELF'], $value) !== false)
+                        && !(strpos($_SERVER['PHP_SELF'], "_home.php") !== false && $value == "home.php")
+                    ) {
+                        # Highlight current page tab
+                        echo " class='here' ";
+                    }
+                    if (strpos($key, LangUtil::$pageTerms['MENU_BACKUP']) !== false) {
+                        //				echo " target='_blank' ";
+                    }
+                    if (strpos($_SERVER['PHP_SELF'], "_home.php") !== false && strpos($value, "lab_configs.php") !== false) {
+                        echo " class='here' ";
+                    }
+                    echo ">".$key."</a></li>";
+                }
+                
             }
-            if (strpos($key, LangUtil::$pageTerms['MENU_BACKUP']) !== false) {
-                //				echo " target='_blank' ";
+            else{
+                echo "<li ";
+                    echo "><a href='".$value."' ";
+                    if (
+                        (strpos($_SERVER['PHP_SELF'], $value) !== false)
+                        && !(strpos($_SERVER['PHP_SELF'], "_home.php") !== false && $value == "home.php")
+                    ) {
+                        # Highlight current page tab
+                        echo " class='here' ";
+                    }
+                    if (strpos($key, LangUtil::$pageTerms['MENU_BACKUP']) !== false) {
+                        //				echo " target='_blank' ";
+                    }
+                    if (strpos($_SERVER['PHP_SELF'], "_home.php") !== false && strpos($value, "lab_configs.php") !== false) {
+                        echo " class='here' ";
+                    }
+                    echo ">".$key."</a></li>"; 
             }
-            if (strpos($_SERVER['PHP_SELF'], "_home.php") !== false && strpos($value, "lab_configs.php") !== false) {
-                echo " class='here' ";
-            }
-            echo ">".$key."</a></li>";
+            
         }
     } ?>
     <span id='backup_div' style='float:right;margin-right:15px;'>
