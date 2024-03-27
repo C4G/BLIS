@@ -55,6 +55,8 @@ $start_date = intval($_REQUEST['yyyy_from'])."-".intval($_REQUEST['mm_from'])."-
 $end_date = intval($_REQUEST['yyyy_to'])."-".intval($_REQUEST['mm_to'])."-".intval($_REQUEST['dd_to']);
 
 $test_type_ids = $_REQUEST['test_types'];
+$patient_custom_fields = $_REQUEST['patient_custom_fields'];
+$specimen_custom_fields = $_REQUEST['specimen_custom_fields'];
 
 $include_name = ($_REQUEST["include_patient_name"] == "true");
 $include_sex = ($_REQUEST["include_patient_sex"] == "true");
@@ -100,6 +102,20 @@ array_push($fields,
     "t.ts AS test_timestamp"
 );
 
+db_change($lab['db_name']);
+
+foreach($patient_custom_fields as $patient_custom_field_id) {
+    $field_name = get_custom_field_name_patient($patient_custom_field_id);
+    array_push($headers, $field_name);
+    array_push($fields, "pcd.field_value");
+}
+
+foreach($specimen_custom_fields as $specimen_custom_field_id) {
+    $field_name = get_custom_field_name_specimen($specimen_custom_field_id);
+    array_push($headers, $field_name);
+    array_push($fields, "scd.field_value");
+}
+
 // Push additional field for test result - the headers for this will be generated separately
 // Must be the last field! There is logic in the loop below that depends on it.
 array_push($fields, "t.result AS test_result");
@@ -118,14 +134,14 @@ foreach($test_type_ids as $tt_idx => $test_type_id) {
         INNER JOIN specimen_type AS st ON s.specimen_type_id = st.specimen_type_id
         INNER JOIN test AS t ON s.specimen_id = t.specimen_id
         INNER JOIN patient AS p ON s.patient_id = p.patient_id
+        LEFT JOIN patient_custom_data AS pcd ON p.patient_id = pcd.patient_id
+        LEFT JOIN specimen_custom_data AS scd ON s.specimen_id = scd.specimen_id
         WHERE s.date_collected BETWEEN '$start_date' AND '$end_date'
         AND t.test_type_id = '$test_type_id';
 EOQ;
 
 
     $sheet = $objPHPExcel->createSheet();
-
-    db_change($lab['db_name']);
 
     // Grab all the measures for this test type from the database.
     $test_type = TestType::getById($test_type_id, $lab['lab_config_id']);

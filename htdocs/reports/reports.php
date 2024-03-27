@@ -176,6 +176,13 @@ $lab_config_id = $lab_config->id;
         $page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
         ?>
     </div>
+    <div class='reports_subdiv_help' id='export_to_excel_div_help' style='display:none'>
+        <?php
+        $tips_string = LangUtil::$pageTerms['TIPS_HOLD_CTRL'];
+        $page_elems->getSideTip(LangUtil::$generalTerms['TIPS'], $tips_string);
+        ?>
+    </div>
+    
 
     <style type="text/css">
         .ustats_link_v
@@ -1674,13 +1681,13 @@ alert(dd_to);
 
         function print_daily_patientBarcodes()
         {
-            var l = $("#location13").attr("value");
-            var yf = $("#daily_yyyy").attr("value");
-            var mf = $("#daily_mm").attr("value");
-            var df = $("#daily_dd").attr("value");
-            var yt = $("#daily_yyyy_to").attr("value");
-            var mt = $("#daily_mm_to").attr("value");
-            var dt = $("#daily_dd_to").attr("value");
+            var l = $("#daily_report_div #location13").attr("value");
+            var yf = $("#daily_report_div #daily_yyyy").attr("value");
+            var mf = $("#daily_report_div #daily_mm").attr("value");
+            var df = $("#daily_report_div #daily_dd").attr("value");
+            var yt = $("#daily_report_div #daily_yyyy_to").attr("value");
+            var mt = $("#daily_report_div #daily_mm_to").attr("value");
+            var dt = $("#daily_report_div #daily_dd_to").attr("value");
 
             if(checkDate(yt, mt, dt) == false || checkDate(yf, mf, df) == false)
             {
@@ -1693,13 +1700,13 @@ alert(dd_to);
 
         function print_daily_patients()
         {
-            var l = $("#location13").attr("value");
-            var yf = $("#daily_yyyy").attr("value");
-            var mf = $("#daily_mm").attr("value");
-            var df = $("#daily_dd").attr("value");
-            var yt = $("#daily_yyyy_to").attr("value");
-            var mt = $("#daily_mm_to").attr("value");
-            var dt = $("#daily_dd_to").attr("value");
+            var l = $("#daily_report_div #location13").attr("value");
+            var yf = $("#daily_report_div #daily_yyyy").attr("value");
+            var mf = $("#daily_report_div #daily_mm").attr("value");
+            var df = $("#daily_report_div #daily_dd").attr("value");
+            var yt = $("#daily_report_div #daily_yyyy_to").attr("value");
+            var mt = $("#daily_report_div #daily_mm_to").attr("value");
+            var dt = $("#daily_report_div #daily_dd_to").attr("value");
 
             var cat_code = $('#cat_code13').attr("value");
 
@@ -1715,12 +1722,12 @@ alert(dd_to);
         function print_daily_specimens()
         {
             var l = $("#daily_report_div #location13").attr("value");
-            var yf = $("#daily_report_div #daily_yyyy").val();
-            var mf = $("#daily_report_div #daily_mm").val();
-            var df = $("#daily_report_div #daily_dd").val();
-            var yt = $("#daily_report_div #daily_yyyy_to").val();
-            var mt = $("#daily_report_div #daily_mm_to").val();
-            var dt = $("#daily_report_div #daily_dd_to").val();
+            var yf = $("#daily_report_div #daily_yyyy").attr("value");
+            var mf = $("#daily_report_div #daily_mm").attr("value");
+            var df = $("#daily_report_div #daily_dd").attr("value");
+            var yt = $("#daily_report_div #daily_yyyy_to").attr("value");
+            var mt = $("#daily_report_div #daily_mm_to").attr("value");
+            var dt = $("#daily_report_div #daily_dd_to").attr("value");
 
             if(checkDate(yt, mt, dt) == false || checkDate(yf, mf, df) == false)
             {
@@ -2940,7 +2947,7 @@ alert(dd_to);
                             </tr>
 
                             <script type="text/javascript">
-                                function exportExcel_updateTestTypes() {
+                                function exportExcel_updateTestTypesAndCustomFields() {
                                     selectEl = $("#export_to_excel_form select#locationAgg");
                                     if (selectEl.val() === -1) {
                                         return;
@@ -2954,6 +2961,24 @@ alert(dd_to);
                                         var tt_select = $("#export_to_excel_form select#test_type");
                                         tt_select.html(options);
                                     })
+
+                                    $.getJSON("export_to_excel_get_custom_patient_fields.php",{lab_config_id: selectEl.val()}, function(j){
+                                        var options = '';
+                                        for (var i = 0; i < j.length; i++) {
+                                            options += '<option value="' + j[i].id + '">' + j[i].fieldName + '</option>';
+                                        }
+                                        var pf_select = $("#export_to_excel_form select#patient_field");
+                                        pf_select.html(options);
+                                    })
+
+                                    $.getJSON("export_to_excel_get_custom_specimen_fields.php",{lab_config_id: selectEl.val()}, function(j){
+                                        var options = '';
+                                        for (var i = 0; i < j.length; i++) {
+                                            options += '<option value="' + j[i].id + '">' + j[i].fieldName + '</option>';
+                                        }
+                                        var pf_select = $("#export_to_excel_form select#specimen_field");
+                                        pf_select.html(options);
+                                    })
                                 }
                             </script>
 
@@ -2962,7 +2987,7 @@ alert(dd_to);
                                 <td style="padding: 1rem 0" id='locationAggregation'>
                                 <?php
                                 if (is_super_admin($current_user) || is_country_dir($current_user)) {
-                                    echo '<select name="locationAgg" id="locationAgg" onchange="exportExcel_updateTestTypes()">';
+                                    echo '<select name="locationAgg" id="locationAgg" onchange="exportExcel_updateTestTypesAndCustomFields()">';
                                     echo '<option value="-1"></option>';
 
                                     $lab_config_list_imported = get_lab_configs_imported();
@@ -2992,7 +3017,6 @@ alert(dd_to);
                                         }
                                         ?>
                                     </select>
-                                    <div><?php echo LangUtil::$pageTerms['TIPS_HOLD_CTRL']; ?></div>
                                 </td>
                             </tr>
 
@@ -3003,6 +3027,14 @@ alert(dd_to);
                                     <input type="checkbox" name="include_patient_birthday" id="include_patient_birthday" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_BIRTHDATE']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_sex" id="include_patient_sex" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_SEX']; ?></input><br/>
                                     <input type="checkbox" name="include_patient_id" id="include_patient_id" value="true" checked><?php echo LangUtil::$pageTerms['INCLUDE_PATIENT_ID']; ?></input><br/>
+                                    <?php
+                                        if (!is_super_admin($current_user) && !is_country_dir($current_user)) {
+                                            // If we are not the superuser or country director, we know what site we are looking at
+                                            // so we can render the test types
+                                            $page_elems->getCustomPatientFieldCheckBoxes();
+                                            $page_elems->getCustomSpecimenFieldCheckBoxes();
+                                        }
+                                        ?>
                                 </td>
                             </tr>
 
