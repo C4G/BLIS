@@ -10649,6 +10649,35 @@ function get_custom_data_patient_bytype($patient_id, $field_id)
 	return $retval;
 }
 
+function get_custom_data_patient_fieldvalue($patient_id, $field_id)
+{
+	global $con;
+	$patient_id = mysql_real_escape_string($patient_id, $con);
+	$field_id = mysql_real_escape_string($field_id, $con);
+	$query_string =
+		"SELECT field_value FROM patient_custom_data ".
+		"WHERE patient_id=$patient_id AND field_id=$field_id LIMIT 1";
+	$record = query_associative_one($query_string);
+	if($record != null)
+		$retval = $record['field_value'];
+	return $retval;
+}
+
+function get_custom_data_specimen_fieldvalue($specimen_id, $field_id)
+{
+	global $con;
+	$patient_id = mysql_real_escape_string($patient_id, $con);
+	$field_id = mysql_real_escape_string($field_id, $con);
+	$query_string =
+		"SELECT field_value FROM specimen_custom_data ".
+		"WHERE specimen_id=$specimen_id AND field_id=$field_id LIMIT 1";
+	$record = query_associative_one($query_string);
+	if($record != null)
+		$retval = $record['field_value'];
+	return $retval;
+}
+
+
 function get_lab_config_specimen_custom_fields($lab_config_id)
 {
 	# Returns list of specimen custom fields for a lab configuration
