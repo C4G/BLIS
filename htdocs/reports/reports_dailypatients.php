@@ -53,8 +53,8 @@ for($i = 0; $i < count($margin_list); $i++)
 	$margin_list[$i] = ($SCREEN_WIDTH * $margin_list[$i] / 100);
 }
 ?>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.table2excel.js"></script>
 <script type='text/javascript'>
 function export_as_word(div_id)
 {

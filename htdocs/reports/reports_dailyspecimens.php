@@ -120,8 +120,8 @@ else if($cat_code != 0)
 	$test_types = array_values($matched_test_ids);
 }
 ?>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.table2excel.js"></script>
 <script type='text/javascript'>
 function export_as_word(div_id)
 {

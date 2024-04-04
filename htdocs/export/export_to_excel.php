@@ -39,13 +39,6 @@ if ($unauthorized) {
     exit;
 }
 
-// Send the spreadsheet directly to the browser
-// Do not echo() or output anything else below this line!
-
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="report.xlsx"');
-header('Cache-Control: max-age=0');
-
 DbUtil::switchToGlobal();
 
 $lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE lab_config_id = '$lab_id';";
@@ -138,6 +131,20 @@ foreach($test_type_ids as $tt_idx => $test_type_id) {
         AND t.test_type_id = '$test_type_id';
 EOQ;
 
+    $results = query_associative_all($query);
+
+    if(count($results) == 0) {
+        header('HTTP/1.1 404 Not Found', true, 404);
+        echo "No data to report in the chosen date range";
+        exit;
+    }
+
+    // Send the spreadsheet directly to the browser
+    // Do not echo() or output anything else below this line!
+
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="report.xlsx"');
+    header('Cache-Control: max-age=0');
 
     $sheet = $objPHPExcel->createSheet();
 
@@ -177,8 +184,6 @@ EOQ;
         }
         $measure_headers[] = $hname;
     }
-
-    $results = query_associative_all($query);
 
     foreach($headers as $index => $header) {
         $sheet->setCellValueByColumnAndRow($index, 1, $header);
