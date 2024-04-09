@@ -8993,7 +8993,7 @@ function get_satellite_labs_by_site($lab_config_id="")
 	if($lab_config_id == "")
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 	else
-		$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
+		$saved_db = DbUtil::switchToLabConfigRevamp();
 	$retval = array();
 	if($lab_config_id === "")
 		$query_string = "SELECT * FROM user_type WHERE level > 17";
