@@ -809,6 +809,18 @@ echo "</td>";
 		}
 	}
 
+	public function getSatelliteLabsSelect($lab_config_id)
+	{
+
+		# Returns specimen types used at a site for drop down <select> boxes
+		$satellite_lab_list = get_satellite_labs_by_site($lab_config_id);
+
+		foreach($satellite_lab_list as $satellite_lab)
+		{
+			echo "<option value='$satellite_lab->level'>".$satellite_lab->name."</option>";
+		}
+	}
+
 	public function getTestTypesSelect($lab_config_id)
 	{
 		# Returns test types used at a site for drop down <select> boxes
@@ -4577,6 +4589,26 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 
 	}
 
+	function generate_satellite_lab($testbox_id){
+		echo "<tr valign='top'><td><label for='stype'>".LangUtil::$generalTerms['SATELLITE_LAB'];
+		echo "</label></td><td></td><td>";
+
+
+		echo "<select name='slab'
+						id='satellite_lab'
+						class='uniform_width'
+					>
+						<option value=\"\">-".LangUtil::$generalTerms['CMD_SELECT']."-</option>
+						";
+		echo $this->getSatelliteLabsSelect($_SESSION['lab_config_id']);
+		echo "</select>";
+
+		echo "</td></tr>";
+
+
+
+	}
+
 	function generate_test($testbox_id){
 		echo "<tr valign='top'><td><label for='tests'>".
 		      LangUtil::$generalTerms['TESTS'];
@@ -4835,6 +4867,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					}
 			$this->generate_sites($lab_config, $lab_config->site_choice_enabled);
 				?>
+			<?php $this->generate_satellite_lab($testbox_id);?>
 
 
 

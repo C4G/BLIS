@@ -217,7 +217,8 @@ $LANG_ARRAY = array (
 		"HEIGHT" => "Height",
 		"FONT_SIZE" => "Font Size",
 		"COL_COUNT" => "Column-Count",
-		"CMD_REFRESH" => "Refresh"
+		"CMD_REFRESH" => "Refresh",
+		"SATELLITE_LAB" => "Satellite Lab"
 	) ,
 	"header" => array (
 		"TITLE" => "",
