@@ -73,7 +73,8 @@ function export_as_excel(div_id)
 
 	$("#report_content_table5").table2excel({
 		// exclude: ".excludeThisClass",
-		name: "LangUtil::$generalTerms['PATIENT_DAILY_LOG_SHEET_NAME']",
+		name: "<?php echo(LangUtil::$generalTerms['PATIENT_DAILY_LOG_SHEET_NAME']) ?>",
+
 		filename: fileName, // do include extension
 		preserveColors: false // set to true if you want background colors and font colors preserved
 	});
