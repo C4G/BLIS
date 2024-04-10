@@ -72,7 +72,6 @@ function export_as_excel(div_id)
 	var fileName = `blisreport_${formattedDate}.xls`;
 
 	$("#report_content_table5").table2excel({
-		// exclude: ".excludeThisClass",
 		name: "<?php echo(LangUtil::$generalTerms['PATIENT_DAILY_LOG_SHEET_NAME']) ?>",
 
 		filename: fileName, // do include extension
