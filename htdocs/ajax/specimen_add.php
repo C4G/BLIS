@@ -58,6 +58,7 @@ $doctor = preg_replace("/[^a-zA-Z\s]/", "", $doctor);
 $title=$_REQUEST['title'];
 $tests_list = $_REQUEST['t_type_list'];
 $site_id = $_REQUEST['collection_sites'];
+$satellite_lab_id = $_REQUEST['slab'];
 
 putUILog('specimen_add', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
@@ -76,6 +77,7 @@ $specimen->comments = $comments;
 $specimen->userId = $_SESSION['user_id'];
 $specimen->statusCodeId = Specimen::$STATUS_PENDING;
 $specimen->dailyNum = $prefixed_dnum;
+$specimen->satellite_lab_id = $satellite_lab_id;
 # If marked for referral, set appropriate status and store hospital/lab name
 if(isset($_REQUEST['ref_out']) && $_REQUEST['ref_out'] == "Y")
 {

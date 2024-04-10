@@ -2485,6 +2485,7 @@ class Specimen
     public $site_id;
 
 	public $referredFromName;
+	public $satellite_lab_id;
 
 	public static $STATUS_PENDING = 0;
 	public static $STATUS_DONE = 1;
@@ -2568,6 +2569,10 @@ class Specimen
             $lab_config = LabConfig::getById($_SESSION['lab_config_id']);
             $specimen->site_id = Sites::getDefaultSite($lab_config)->id;
         }
+		if(isset($record['satellite_lab_id']))
+			$specimen->satellite_lab_id = $record['satellite_lab_id'];
+		else
+			$specimen->satellite_lab_id = null;
 		return $specimen;
 	}
 
@@ -7500,9 +7505,9 @@ function add_specimen($specimen)
 	# Adds a new specimen record in DB
 	$query_string =
 		"INSERT INTO `specimen` ( specimen_id, patient_id, specimen_type_id, date_collected, date_recvd, user_id, status_code_id, referred_to, comments, aux_id, ".
-		"session_num, time_collected, report_to, doctor, referred_to_name, referred_from_name, daily_num, site_id) VALUES ( $specimen->specimenId, $specimen->patientId, $specimen->specimenTypeId, ".
+		"session_num, time_collected, report_to, doctor, referred_to_name, referred_from_name, daily_num, site_id, satellite_lab_id) VALUES ( $specimen->specimenId, $specimen->patientId, $specimen->specimenTypeId, ".
 		"'$specimen->dateCollected', '$specimen->dateRecvd', $specimen->userId, $specimen->statusCodeId, $specimen->referredTo, '$specimen->comments', ".
-		"'$specimen->auxId', '$specimen->sessionNum', '$specimen->timeCollected', $specimen->reportTo, '$specimen->doctor', '$specimen->referredToName', '$specimen->referredFromName',  '$specimen->dailyNum', '$specimen->site_id' )";
+		"'$specimen->auxId', '$specimen->sessionNum', '$specimen->timeCollected', $specimen->reportTo, '$specimen->doctor', '$specimen->referredToName', '$specimen->referredFromName',  '$specimen->dailyNum', '$specimen->site_id' , '$specimen->satellite_lab_id' )";
 	//;
 	query_insert_one($query_string);
 	return $specimen->specimenId;
