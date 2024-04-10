@@ -8984,33 +8984,21 @@ function get_specimen_types_by_site($lab_config_id="")
 	return $retval;
 }
 
-function get_satellite_labs_by_site($lab_config_id="")
+function get_satellite_labs_by_site()
 {
 	global $con;
 	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
-	# Returns a list of satellite labs configured for a particular site
-	$saved_db = "";
-	if($lab_config_id == "")
-		$saved_db = DbUtil::switchToLabConfigRevamp();
-	else
-		$saved_db = DbUtil::switchToLabConfigRevamp();
+	DbUtil::switchRestore('blis_revamp');
 	$retval = array();
 	if($lab_config_id === "")
 		$query_string = "SELECT * FROM user_type WHERE level > 17";
 	else
-		/*
-		$query_string =
-			"SELECT st.* FROM specimen_type st, lab_config_specimen_type lcst ".
-			"WHERE st.disabled=0  AND st.specimen_type_id=lcst.specimen_type_id ".
-			"AND lcst.lab_config_id=$lab_config_id ORDER BY st.name";
-		*/
 		$query_string = "SELECT * FROM user_type WHERE level > 17";
 	$resultset = query_associative_all($query_string);
 	if($resultset) {
 		foreach($resultset as $record)
 			$retval[] = UserType::getObject($record);
 	}
-	DbUtil::switchRestore($saved_db);
 	return $retval;
 }
 

@@ -809,11 +809,11 @@ echo "</td>";
 		}
 	}
 
-	public function getSatelliteLabsSelect($lab_config_id)
+	public function getSatelliteLabsSelect()
 	{
 
 		# Returns specimen types used at a site for drop down <select> boxes
-		$satellite_lab_list = get_satellite_labs_by_site($lab_config_id);
+		$satellite_lab_list = get_satellite_labs_by_site();
 
 		foreach($satellite_lab_list as $satellite_lab)
 		{
@@ -4600,7 +4600,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 					>
 						<option value=\"\">-".LangUtil::$generalTerms['CMD_SELECT']."-</option>
 						";
-		echo $this->getSatelliteLabsSelect($_SESSION['lab_config_id']);
+		echo $this->getSatelliteLabsSelect();
 		echo "</select>";
 
 		echo "</td></tr>";
