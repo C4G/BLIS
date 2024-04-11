@@ -120,12 +120,30 @@ else if($cat_code != 0)
 	$test_types = array_values($matched_test_ids);
 }
 ?>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.table2excel.js"></script>
 <script type='text/javascript'>
 function export_as_word(div_id)
 {
 	var content = $('#'+div_id).html();
 	$('#word_data').attr("value", content);
 	$('#word_format_form').submit();
+}
+function export_as_excel(div_id)
+{
+	var content = $('#'+div_id).html();
+
+	const date = new Date();
+	const formattedDate = `${date.getFullYear()}${("0" + (date.getMonth()+1)).slice(-2)}${("0" + (date.getDate())).slice(-2)}${date.getHours()}${date.getMinutes()}`;
+
+	var fileName = `blisreport_${formattedDate}.xls`;
+
+	$("#report_content_table4").table2excel({
+		name: "<?php echo(LangUtil::$generalTerms['SPECIMEN_DAILY_LOG_SHEET_NAME']) ?>",
+
+		filename: fileName, // do include extension
+		preserveColors: false // set to true if you want background colors and font colors preserved
+	});
 }
 
 function report_fetch()
@@ -180,6 +198,8 @@ $(document).ready(function(){
 <input type='button' onclick="javascript:print_content('export_content');" value='<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>'></input>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <input type='button' onclick="javascript:export_as_word('export_content');" value='<?php echo LangUtil::$generalTerms['CMD_EXPORTWORD']; ?>'></input>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<input type='button' onclick="javascript:export_as_excel('export_content');" value='<?php echo LangUtil::$generalTerms['CMD_EXPORTEXCEL']; ?>'></input>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <?php if($_REQUEST['ip']==1){?><input type='checkbox' name='ip' id='ip' checked ></input> <?php echo "All Tests"; ?>
 <?php } else{?><input type='checkbox' name='ip' id='ip'></input> <?php echo "All Tests"; }?>

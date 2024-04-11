@@ -797,6 +797,36 @@ echo "</td>";
 
 	}
 
+	public function getCustomPatientFieldCheckBoxes()
+	{
+		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
+
+		if ( $lab_config ) { ?>
+			<?php
+				$custom_field_list = $lab_config->getPatientCustomFields();
+				foreach($custom_field_list as $custom_field) {
+					echo '<input type="checkbox" name="patient_custom_fields[]" id='.$custom_field->id.' value='.$custom_field->id.' checked';
+					echo ">Include ". $custom_field->fieldName."</input><br/>";
+				}
+			?>
+		<?php }
+	}
+
+	public function getCustomSpecimenFieldCheckBoxes()
+	{
+		$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
+
+		if ( $lab_config ) { ?>
+			<?php
+				$custom_field_list = $lab_config->getSpecimenCustomFields();
+				foreach($custom_field_list as $custom_field) {
+					echo '<input type="checkbox" name="specimen_custom_fields[]" id='.$custom_field->id.' value='.$custom_field->id.' checked';
+					echo ">Include ". $custom_field->fieldName."</input><br/>";
+				}
+			?>
+		<?php }
+	}
+
 	public function getSpecimenTypesSelect($lab_config_id)
 	{
 

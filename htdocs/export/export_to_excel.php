@@ -39,13 +39,6 @@ if ($unauthorized) {
     exit;
 }
 
-// Send the spreadsheet directly to the browser
-// Do not echo() or output anything else below this line!
-
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="report.xlsx"');
-header('Cache-Control: max-age=0');
-
 DbUtil::switchToGlobal();
 
 $lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE lab_config_id = '$lab_id';";
@@ -55,6 +48,8 @@ $start_date = intval($_REQUEST['yyyy_from'])."-".intval($_REQUEST['mm_from'])."-
 $end_date = intval($_REQUEST['yyyy_to'])."-".intval($_REQUEST['mm_to'])."-".intval($_REQUEST['dd_to']);
 
 $test_type_ids = $_REQUEST['test_types'];
+$patient_custom_fields = $_REQUEST['patient_custom_fields'];
+$specimen_custom_fields = $_REQUEST['specimen_custom_fields'];
 
 $include_name = ($_REQUEST["include_patient_name"] == "true");
 $include_sex = ($_REQUEST["include_patient_sex"] == "true");
@@ -100,6 +95,20 @@ array_push($fields,
     "t.ts AS test_timestamp"
 );
 
+db_change($lab['db_name']);
+
+foreach($patient_custom_fields as $patient_custom_field_id) {
+    $field_name = get_custom_field_name_patient($patient_custom_field_id);
+    array_push($headers, $field_name);
+    array_push($fields, "p.patient_id as pcd_".$patient_custom_field_id);
+}
+
+foreach($specimen_custom_fields as $specimen_custom_field_id) {
+    $field_name = get_custom_field_name_specimen($specimen_custom_field_id);
+    array_push($headers, $field_name);
+    array_push($fields, "s.specimen_id as scd_".$specimen_custom_field_id);
+}
+
 // Push additional field for test result - the headers for this will be generated separately
 // Must be the last field! There is logic in the loop below that depends on it.
 array_push($fields, "t.result AS test_result");
@@ -122,10 +131,22 @@ foreach($test_type_ids as $tt_idx => $test_type_id) {
         AND t.test_type_id = '$test_type_id';
 EOQ;
 
+    $results = query_associative_all($query);
+
+    if(count($results) == 0) {
+        header('HTTP/1.1 404 Not Found', true, 404);
+        echo "No data to report in the chosen date range";
+        exit;
+    }
+
+    // Send the spreadsheet directly to the browser
+    // Do not echo() or output anything else below this line!
+
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="report.xlsx"');
+    header('Cache-Control: max-age=0');
 
     $sheet = $objPHPExcel->createSheet();
-
-    db_change($lab['db_name']);
 
     // Grab all the measures for this test type from the database.
     $test_type = TestType::getById($test_type_id, $lab['lab_config_id']);
@@ -164,8 +185,6 @@ EOQ;
         $measure_headers[] = $hname;
     }
 
-    $results = query_associative_all($query);
-
     foreach($headers as $index => $header) {
         $sheet->setCellValueByColumnAndRow($index, 1, $header);
     }
@@ -183,6 +202,14 @@ EOQ;
             if ($col_name == "test_result") {
                 $test_result = $value;
                 break;
+            }
+            if(substr($col_name, 0, 3) == "pcd") {
+                $input_field_value = explode("_", $col_name)[1];
+                $value = get_custom_data_patient_fieldvalue($value, $input_field_value);
+            }
+            if(substr($col_name, 0, 3) == "scd") {
+                $input_field_value = explode("_", $col_name)[1];
+                $value = get_custom_data_specimen_fieldvalue($value, $input_field_value);
             }
 
             $sheet->setCellValueByColumnAndRow($col, $row_index + 2, $value);

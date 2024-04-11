@@ -869,6 +869,14 @@
             <key>CMD_REFRESH</key>
             <value>Refresh</value>
         </term>
+        <term>
+            <key>SPECIMEN_CUSTOM_FIELDS</key>
+            <value>Specimen Custom Fields</key>
+        </term>
+        <term>
+            <key>PATIENT_CUSTOM_FIELDS</key>
+            <value>Patient Custom Fields</key>
+        </term>
     </page>
     <page id="header" descr="Page Header">
         <term>

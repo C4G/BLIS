@@ -53,12 +53,30 @@ for($i = 0; $i < count($margin_list); $i++)
 	$margin_list[$i] = ($SCREEN_WIDTH * $margin_list[$i] / 100);
 }
 ?>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.table2excel.js"></script>
 <script type='text/javascript'>
 function export_as_word(div_id)
 {
 	var content = $('#'+div_id).html();
 	$('#word_data').attr("value", content);
 	$('#word_format_form').submit();
+}
+function export_as_excel(div_id)
+{
+	var content = $('#'+div_id).html();
+
+	const date = new Date();
+	const formattedDate = `${date.getFullYear()}${("0" + (date.getMonth()+1)).slice(-2)}${("0" + (date.getDate())).slice(-2)}${date.getHours()}${date.getMinutes()}`;
+
+	var fileName = `blisreport_${formattedDate}.xls`;
+
+	$("#report_content_table5").table2excel({
+		name: "<?php echo(LangUtil::$generalTerms['PATIENT_DAILY_LOG_SHEET_NAME']) ?>",
+
+		filename: fileName, // do include extension
+		preserveColors: false // set to true if you want background colors and font colors preserved
+	});
 }
 
 function print_content(div_id)
@@ -94,6 +112,8 @@ $(document).ready(function(){
 <input type='button' onclick="javascript:print_content('export_content');" value='<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>'></input>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <input type='button' onclick="javascript:export_as_word('export_content');" value='<?php echo LangUtil::$generalTerms['CMD_EXPORTWORD']; ?>'></input>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<input type='button' onclick="javascript:export_as_excel('export_content');" value='<?php echo LangUtil::$generalTerms['CMD_EXPORTEXCEL']; ?>'></input>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <input type='button' onclick="javascript:window.close();" value='<?php echo LangUtil::$generalTerms['CMD_CLOSEPAGE']; ?>'></input>
 &nbsp;&nbsp;&nbsp;&nbsp;
