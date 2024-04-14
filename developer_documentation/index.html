@@ -1,0 +1,1497 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../faq/">
+      
+      
+        <link rel="next" href="adding-localized-strings/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
+    
+    
+      
+        <title>C4G BLIS Developer Guide - C4G BLIS Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.bcfcd587.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#c4g-blis-developer-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="C4G BLIS Documentation" class="md-header__button md-logo" aria-label="C4G BLIS Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            C4G BLIS Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              C4G BLIS Developer Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/C4G/BLIS" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="C4G BLIS Documentation" class="md-nav__button md-logo" aria-label="C4G BLIS Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    C4G BLIS Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/C4G/BLIS" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    C4G BLIS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Frequently Asked Questions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Developer documentation
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Developer documentation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    C4G BLIS Developer Guide
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    C4G BLIS Developer Guide
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#welcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      Welcome
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-up-the-dev-envs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set up the dev envs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Set up the dev envs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tools
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-the-envs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test the envs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smoke-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Smoke tests
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running environment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running environment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-on-devcontainer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running on devcontainer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-on-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running on Windows
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-directory-and-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code directory and organization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Code directory and organization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#developer-tools-directories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Developer tools directories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Developer tools directories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-related" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker related
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-related" class="md-nav__link">
+    <span class="md-ellipsis">
+      Github related
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composer-related" class="md-nav__link">
+    <span class="md-ellipsis">
+      Composer Related
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source-code-directories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Source code directories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Source code directories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backup-data-and-cloud-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Backup Data and Cloud Backup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      UI changes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployment-video" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Video
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adding-localized-strings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adding Localized Strings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="data-structure/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Database & Backup Structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    User guide
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            User guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user_guide/00_introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user_guide/10_getting_started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user_guide/11_blis_cloud/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Running BLIS on a Cloud Provider
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user_guide/12_lab_migration_cloud/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Migrating labs to Cloud
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user_guide/20_director_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Director Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user_guide/30_manager_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Manager Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user_guide/40_technician_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Technician Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user_guide/50_glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user_guide/99_experimental_blis_cli/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Experimental: BLIS Cloud Command-Line Interface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Work in progress
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Work in progress
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../work_in_progress/reference-satellite-labs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reference & Satellite Labs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#welcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      Welcome
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-up-the-dev-envs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set up the dev envs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Set up the dev envs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tools
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-the-envs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test the envs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smoke-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Smoke tests
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running environment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running environment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-on-devcontainer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running on devcontainer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-on-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running on Windows
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-directory-and-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code directory and organization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Code directory and organization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#developer-tools-directories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Developer tools directories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Developer tools directories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-related" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker related
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-related" class="md-nav__link">
+    <span class="md-ellipsis">
+      Github related
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composer-related" class="md-nav__link">
+    <span class="md-ellipsis">
+      Composer Related
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source-code-directories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Source code directories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Source code directories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backup-data-and-cloud-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Backup Data and Cloud Backup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      UI changes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployment-video" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Video
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="c4g-blis-developer-guide">C4G BLIS Developer Guide<a class="headerlink" href="#c4g-blis-developer-guide" title="Permanent link">&para;</a></h1>
+<p>C4G Basic Laboratory Information System is a collaboration between Computing-for-Good (C4G) at Georgia Tech, the CDC, and participating PEPFAR countries. This doc will works as a supplement to <code>BLIS_User_Guide.pdf</code>, mainly to help developers quick ramp up on this repo and list out tips when contribute to this project.</p>
+<ul>
+<li><a href="#c4g-blis-developer-guide">C4G BLIS Developer Guide</a></li>
+<li><a href="#welcome">Welcome</a></li>
+<li><a href="#set-up-the-dev-envs">Set up the dev envs</a><ul>
+<li><a href="#tools">Tools</a></li>
+<li><a href="#test-the-envs">Test the envs</a></li>
+<li><a href="#smoke-tests">Smoke tests</a></li>
+</ul>
+</li>
+<li><a href="#running-environment">Running environment</a><ul>
+<li><a href="#running-on-devcontainer">Running on <code>devcontainer</code></a></li>
+<li><a href="#running-on-windows">Running on Windows</a></li>
+</ul>
+</li>
+<li><a href="#code-directory-and-organization">Code directory and organization</a><ul>
+<li><a href="#developer-tools-directories">Developer tools directories</a></li>
+<li><a href="#docker-related">Docker related</a></li>
+<li><a href="#github-related">Github related</a></li>
+<li><a href="#composer-related">Composer Related</a></li>
+<li><a href="#source-code-directories">Source code directories</a></li>
+<li><a href="#backup-data-and-cloud-backup">Backup Data and Cloud Backup</a></li>
+<li><a href="#ui-changes">UI changes</a></li>
+</ul>
+</li>
+<li><a href="#deployment">Deployment</a><ul>
+<li><a href="#deployment-video">Deployment video</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="welcome">Welcome<a class="headerlink" href="#welcome" title="Permanent link">&para;</a></h2>
+<p>So welcome to this project! In this guide, we are going to go through the recommended tools, workflows and debug tips.</p>
+<h2 id="set-up-the-dev-envs">Set up the dev envs<a class="headerlink" href="#set-up-the-dev-envs" title="Permanent link">&para;</a></h2>
+<h3 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h3>
+<ol>
+<li>git
+Depending on your computer OS, there will be different step to setup git. You can refer to the official manual for <a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git">git installation</a>.</li>
+</ol>
+<details class="tip">
+<summary>Tips on install git</summary>
+<p>On Windows, installing command-line tools can be done with a Windows package manager such as <a href="https://scoop.sh/">Scoop</a>.
+On MacOS or Linux systems, installing tools can be done with package manager <a href="https://brew.sh/">brew</a>.</p>
+</details>
+<ol>
+<li>
+<p>VScode
+For IDE, we recommended using <a href="https://code.visualstudio.com/docs/setup/setup-overview">VSCode</a>, which is a lightweight, opensource IDE.
+VSCode-Extension recommended to install:</p>
+<ul>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers">Remote-Containers</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl">Remote-WSL</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker">Docker</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=p1c2u.docker-compose">Docker-compose</a></li>
+</ul>
+</li>
+<li>
+<p>Docker
+We will need <a href="https://www.docker.com/">Docker</a> as the major tool in the development cycle.</p>
+</li>
+</ol>
+<p>With the Docker application running, after installing the <code>Remote-Containers</code> and related extensions, we will be able to start the <a href="https://code.visualstudio.com/docs/remote/create-dev-container">devcontainer</a> which has been setup under <code>/root/.devcontainer</code> directory.</p>
+<details class="question">
+<summary>What's devcontainer and why do we use it here?</summary>
+<p>Devcontainers are a feature of Visual Studio Code that allow you to specify your development environment as a Docker container develop inside of it as if you were running the tools on your computer directly.</p>
+<p>The <code>c4g-blis-spr22/BLIS</code> repository has a <code>.devcontainer</code> configuration already specified, so you can develop BLIS on any computer that can run Docker and Visual Studio Code.</p>
+</details>
+<h3 id="test-the-envs">Test the envs<a class="headerlink" href="#test-the-envs" title="Permanent link">&para;</a></h3>
+<p>A quick way to test the dependencies installed correctly is:
+1. Clone the BLIS repository to your computer:
+    <div class="highlight"><pre><span></span><code>$ git clone https://github.com/C4G/BLIS.git
+</code></pre></div>
+    <!---
+    TODO: get the link up-to-date after the end of this semester.
+    --></p>
+<ol>
+<li>
+<p>Open the folder in Visual Studio Code</p>
+</li>
+<li>
+<p>A pop-up that says something like "This folder contains a devcontainer configuration" will appear. Click the button to open the folder in a container.</p>
+</li>
+<li>
+<p>If that does not appear, open the command palette (Ctrl-Shift-P or Cmd-Shift-P) and find "Open folder in container" and select the BLIS folder.
+    <img src="../images/dev_guide/remote-containers-step1.png" width="100%"/></p>
+</li>
+<li>
+<p>Once the container is started, the ports should forward automatically. You can see apache2 running if you click the "Ports" tab on the bottom (if the bottom panel is not open, use Ctrl-` (backtick) to open it)</p>
+<p>In this plot, you can see the terminal output, where the apache servers starts.
+<img src="../images/dev_guide/container-terminal.png" width="100%"/></p>
+<p>In this plot, you can see the port, click the little earth button and then it will take you to the local hosted BLIS instance.
+<img src="../images/dev_guide/remote-container-ports.png" width="100%"/></p>
+</li>
+<li>
+<p>You can then browse BLIS in your normal browser by visiting http://localhost:80 (substituting 80 for another port, depending on what port VS Code has mapped to apache2.)</p>
+</li>
+<li>
+<p>Log into the BLIS and start your exploration.</p>
+</li>
+</ol>
+<details class="tip">
+<summary>Read the <a href="data-structure/">data structures site</a> for (username, password) pairs, as well as data structures stored in database before diving in</summary>
+</details>
+<h3 id="smoke-tests">Smoke tests<a class="headerlink" href="#smoke-tests" title="Permanent link">&para;</a></h3>
+<p>If you want to run smoke tests on BLIS you can find them in the <a href="https://github.com/C4G/BLIS/tree/master/smoke_tests">smoke_tests folder</a> on the C4G BLIS Github. Below are the tests that are implemented and instructions for running the smoke tests.</p>
+<p>Tests
+1. Login</p>
+<ol>
+<li>
+<p>Specimen test</p>
+</li>
+<li>
+<p>Registering a patient</p>
+</li>
+<li>
+<p>Registering a specimen</p>
+</li>
+</ol>
+<p>Running Instructions
+1. You will need python 3 installed, the latest is preferred</p>
+<ol>
+<li>
+<p>You will need to pip install selenium, if pip is not on your command line you can do python -m pip install selenium</p>
+</li>
+<li>
+<p>Create a folder called test or something of that variety to extract your smoke test zip file to</p>
+</li>
+<li>
+<p>Extract the zip to that folder</p>
+</li>
+<li>
+<p>Ensure you have Firefox installed on the local machine, you will need to also get the gecko driver</p>
+</li>
+<li>
+<p>Get the gecko driver from here for your platform you are running the tests on https://github.com/mozilla/geckodriver/releases</p>
+</li>
+<li>
+<p>Put the gecko driver into the folder where your tests are running</p>
+</li>
+<li>
+<p>Either run BLIS locally or have it installed on digital ocean</p>
+</li>
+<li>
+<p>Get the address for your BLIS installation, this is what you put in the address bar in your browser to access BLIS </p>
+</li>
+<li>
+<p>Edit the BLIS_URL in test.py with your address from step 9, so if your address was http://172.24.80.1:4001 that line should now be blis_url = "http://172.24.80.1:4001"</p>
+</li>
+<li>
+<p>Open up command prompt or terminal</p>
+</li>
+<li>
+<p>Navigate to the directory with cd</p>
+</li>
+<li>
+<p>Run python main.py in your terminal or command prompt</p>
+</li>
+<li>
+<p>The testing platform will run and will report back if any tests failed and with any errors or if all the tests ran successfully</p>
+</li>
+</ol>
+<h2 id="running-environment">Running environment<a class="headerlink" href="#running-environment" title="Permanent link">&para;</a></h2>
+<h3 id="running-on-devcontainer">Running on <code>devcontainer</code><a class="headerlink" href="#running-on-devcontainer" title="Permanent link">&para;</a></h3>
+<p>You can see more details on the <a href="#test-the-envs">Test the envs</a> section.</p>
+<h3 id="running-on-windows">Running on Windows<a class="headerlink" href="#running-on-windows" title="Permanent link">&para;</a></h3>
+<p>Aside by running BLIS on <code>devcontainer</code>, you can also try with running BLIS on Windows, where the BLIS was originally designed and developed on). This process will only require <code>git</code> to pull the code from github.</p>
+<p>BLIS was originally developed to run on Windows using a discontinued project called Server2Go. This packages Apache2, MySQL, PHP, and Firefox together into a package that can be run all at once on a desktop computer.</p>
+<div class="admonition info">
+<p class="admonition-title">See Also</p>
+<ul>
+<li><a href="https://smartech.gatech.edu/bitstream/handle/1853/34792/monu_ruban_201005_mast.pdf">Design and Implementation of a Basic Laboratory Information System for Resource-Limited Settings</a></li>
+<li><a href="https://pendriveapps.com/server2go-portable-webserver/">Server2Go - Portable Web Server</a></li>
+</ul>
+</div>
+<p>This is the primary way that end-users are still using BLIS. You can still run BLIS this way to develop it.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>These instructions are subject to change.</p>
+</div>
+<ol>
+<li>
+<p>Clone the BLIS repository to your computer:</p>
+<div class="highlight"><pre><span></span><code>$ git clone https://github.com/C4G/BLIS.git
+</code></pre></div>
+</li>
+<li>
+<p>Download the latest version of <a href="https://github.com/C4G/BLISRuntime/archive/refs/heads/main.zip">BLISRuntime.zip</a> archive</p>
+</li>
+<li>Unzip BLISRuntime.zip into the BLIS repository directory</li>
+<li>Run <code>BLIS.exe</code></li>
+</ol>
+<p>The bundled Firefox will start and you can use BLIS normally, or make changes to files in the <code>htdocs/</code> directory.</p>
+<h2 id="code-directory-and-organization">Code directory and organization<a class="headerlink" href="#code-directory-and-organization" title="Permanent link">&para;</a></h2>
+<p>As you can see <a href="https://github.com/C4G/BLIS">in the directory</a>, there is the first level file tree directory. And in the following sections, we will cover the some of important file/directory for your faster &amp; better understanding about the BLIS code organization.</p>
+<div class="highlight"><pre><span></span><code>├──<span class="w"> </span>.devcontainer
+├──<span class="w"> </span>.github
+├──<span class="w"> </span>.editorconfig
+├──<span class="w"> </span>.gitignore
+├──<span class="w"> </span>API_documentation.txt
+├──<span class="w"> </span>Dockerfile
+├──<span class="w"> </span>README.md
+├──<span class="w"> </span>Update_Instructions.txt
+├──<span class="w"> </span>bin
+├──<span class="w"> </span>composer.json
+├──<span class="w"> </span>composer.lock
+├──<span class="w"> </span>docker
+├──<span class="w"> </span>files
+├──<span class="w"> </span>htdocs
+├──<span class="w"> </span><span class="nb">local</span>
+├──<span class="w"> </span>log
+├──<span class="w"> </span>splash.png
+├──<span class="w"> </span>tools
+├──<span class="w"> </span>update_C4GBLIS_v3.3.bat
+└──<span class="w"> </span>vendor
+</code></pre></div>
+<details class="tips">
+<summary>Tips about file structure</summary>
+<p>The above tree structure can be generated via the <code>tree</code> command. For more details, <a href="https://linux.die.net/man/1/tree">read this doc</a>.</p>
+</details>
+<h3 id="developer-tools-directories">Developer tools directories<a class="headerlink" href="#developer-tools-directories" title="Permanent link">&para;</a></h3>
+<h4 id="docker-related">Docker related<a class="headerlink" href="#docker-related" title="Permanent link">&para;</a></h4>
+<p><div class="highlight"><pre><span></span><code>├──<span class="w"> </span>Dockerfile
+├──<span class="w"> </span>docker
+├──<span class="w"> </span>.devcontainer
+</code></pre></div>
+The above files are mostly for development usage. As mentioned above, we use docker to containize the application and make it easily deployable in Linux platforms. <code>.devcontainer</code> contain the setup for docker setup locally when running in devcontainer; <code>Dockerfile</code> contains the details for pushing image to <code>ghcr.io</code> in the CI/CD stage (Also mentioned in the below <strong>Github related</strong> section). And <code>docker/</code> directory contains the <code>docker-compose</code> file, bash files for deployment at Linux machine. More details can be seen in the <a href="#deployment">Deployment</a> section below.</p>
+<h4 id="github-related">Github related<a class="headerlink" href="#github-related" title="Permanent link">&para;</a></h4>
+<p><div class="highlight"><pre><span></span><code>├──<span class="w"> </span>README.md
+├──<span class="w"> </span>files
+├──<span class="w"> </span>log
+├──<span class="w"> </span>.github
+├──<span class="w"> </span>splash.png
+</code></pre></div>
+You will find mostly directory empty (As of April, 2022). And in the <code>.github/</code> directory, there is a CI/CD step: releasing latest changes to the <a href="https://docs.github.com/en/packages/quickstart"><code>ghcr.io</code></a>, thus we can easily deploy the latest changes when needed. You can see more details in <code>release-docker.yml</code>.</p>
+<h4 id="composer-related">Composer Related<a class="headerlink" href="#composer-related" title="Permanent link">&para;</a></h4>
+<p><div class="highlight"><pre><span></span><code>├──<span class="w"> </span>composer.json
+├──<span class="w"> </span>composer.lock
+├──<span class="w"> </span>tools
+├──<span class="w"> </span>vendor
+</code></pre></div>
+Start from Version [TODO], we introduced <a href="https://getcomposer.org/"><code>Composer</code></a> as the php package manager for BLIS. You will need to set it up before using it, <a href="https://getcomposer.org/doc/00-intro.md">see more details here</a>. But this is not necessary till you want to make changes to the BLIS dependencies.</p>
+<p>As for the <code>composer.json</code> and <code>composer.lock</code> file, you can refer to <a href="https://getcomposer.org/doc/02-libraries.md#lock-file">this documentation</a> to understand how they work. <code>composer.lock</code> records the exact versions that are installed. So that you are in the same versions with your co-workers. And <code>composer.json</code> records the packages you specify and want to use in the project.</p>
+<p>And the <code>vendor</code> directory is where the specified packages installed.</p>
+<h3 id="source-code-directories">Source code directories<a class="headerlink" href="#source-code-directories" title="Permanent link">&para;</a></h3>
+<p>After going through the developer tools directories, you will find one few files/directories left.
+<div class="highlight"><pre><span></span><code>├──<span class="w"> </span>API_documentation.txt
+├──<span class="w"> </span>Update_Instructions.txt
+├──<span class="w"> </span>bin
+├──<span class="w"> </span>htdocs
+├──<span class="w"> </span><span class="nb">local</span>
+├──<span class="w"> </span>update_C4GBLIS_v3.3.bat
+</code></pre></div>
+And among those, the most important two directories are <code>htdocs</code> and <code>local</code>. The <code>htdocs</code> contains almost all the modules in BLIS. And <code>local</code> directory contains the localization versions' settings of phrases, tips, UI appearance. Due to the complexity of this section, few features will be focused for illustration, feel free to add your findings when working on some features. <img alt="😄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/1f604.svg" title=":smile:" /></p>
+<h4 id="backup-data-and-cloud-backup">Backup Data and Cloud Backup<a class="headerlink" href="#backup-data-and-cloud-backup" title="Permanent link">&para;</a></h4>
+<p>Cloud backup means you can specify the IP Address and then send backup to the BLIS instance hosted on that IP Address. (More details of UI can be found in User Guide -&gt; Backup Data section).</p>
+<p>This functionality mainly lives in <code>./htdocs/export</code>. The latest changes mainly live in <code>backupData.php</code> and <code>backupDataUI.php</code>. We can refer to specific git commits for better understanding.</p>
+<h4 id="ui-changes">UI changes<a class="headerlink" href="#ui-changes" title="Permanent link">&para;</a></h4>
+<p>UI and tips have been refactored in the version [TODO], and we found out that the UI settings is reflected in both <code>./htdocs/Language</code> and <code>local/lab_id</code> directory. Changes in <code>./htdocs</code> don't necessary propogate to the local labs. So if you want to your changes to be reflected in both new labs and old existed labs, you will need to change the files in <code>./local/lab_id</code> accordlingly.</p>
+<p>There may be some confusion on <code>default</code>, <code>en</code>, <code>fr</code> versions across the repo. TLDR is <code>default</code> is the version will be setup by your country directory when setting up the lab, and can be <code>en</code> or <code>fr</code>. To better understand this scenario, let's imagine we are going to change the tips for english version, then potentially, we will make 4 changes (2 for <code>default</code> and <code>en</code>, 2 for <code>local_lib</code> and <code>htdocs</code>)</p>
+<h2 id="deployment">Deployment<a class="headerlink" href="#deployment" title="Permanent link">&para;</a></h2>
+<p>After you are satisfied with your new changes and want to deploy a newer version BLIS on cloud. In this doc, we will use <a href="https://www.digitalocean.com/">DigitalOcean</a> for the deployment platform as example. You will go through two main steps:</p>
+<ol>
+<li>Push &amp; merge your changes to github repo. Based on <code>./github/workflows/release-docker.yml</code>, the newest change will reflect in the <code>ghcr.io/C4G/blis:latest</code> docker repo.</li>
+<li>Use the docker image to deploy BLIS service as well as database service. An step-by-step detailed instruction can be seen <a href="../user_guide/11_blis_cloud/">in this site</a></li>
+</ol>
+<!-- TODO, change the workflow file hyperlink after merging into the main -->
+<h3 id="deployment-video">Deployment Video<a class="headerlink" href="#deployment-video" title="Permanent link">&para;</a></h3>
+<p>Video showing how to deploy the BLIS cloud version, upgrade script and collected survey from the BLIS online team in Spring of 2023</p>
+<p><a href="https://www.youtube.com/watch?v=mQFPkyUIiXg"><img alt="BLIS DEPLOYMENT" src="https://i.ytimg.com/vi/mQFPkyUIiXg/maxresdefault.jpg" /></a></p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    2024-04-13
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["search.suggest"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.1e8ae164.min.js"></script>
+      
+    
+  </body>
+</html>
