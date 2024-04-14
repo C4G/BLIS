@@ -47,8 +47,6 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | s
     && sudo apt update \
     && sudo apt install gh -y
 
-RUN pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin mkdocs-with-pdf
-
 RUN echo "column-statistics = 0" | tee -a /etc/mysql/conf.d/mysqldump.cnf
 
 # Copy the custom Apache2 config (blis.conf) into the

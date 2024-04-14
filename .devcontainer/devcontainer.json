@@ -1,17 +1,29 @@
 {
     "dockerComposeFile": "docker-compose.yml",
-    "extensions": [
-        "eamodio.gitlens",
-        "timonwong.shellcheck"
-    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "eamodio.gitlens",
+                "timonwong.shellcheck"
+            ]
+        }
+    },
     "portsAttributes": {
         "80": {
             "label": "apache2",
             "onAutoForward": "notify"
+        },
+        "8000": {
+            "label": "mkdocs",
+            "onAutoForward": "notify"
         }
     },
-    "forwardPorts": [80],
+    "forwardPorts": [
+        80,
+        8000
+    ],
     "service": "app",
     "workspaceFolder": "/workspace",
+    "postCreateCommand": ".devcontainer/post-create-command.sh",
     "postAttachCommand": "start-blis.sh"
 }

@@ -2,20 +2,49 @@ name: Build Documentation
 
 on:
   push:
-    branches:
-      - master
+    branches: ["master"]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
+  # Single deploy job since we're just deploying
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+
+      - run: sudo DEBIAN_FRONTEND=noninteractive apt install -y weasyprint
+
+      - uses: actions/setup-python@v5
         with:
           python-version: 3.x
-      - run: sudo apt-get install -y weasyprint
-      - run: pip install mkdocs-material mkdocs-git-revision-date-plugin mkdocs-with-pdf
-      - run: mkdocs gh-deploy --force
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r requirements.txt
+
+      - run: mkdocs build -d _docs/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '_docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
