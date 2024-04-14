@@ -26,7 +26,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: sudo DEBIAN_FRONTEND=noninteractive apt install -y weasyprint
+      # Need to install prereqs for Weasyprint
+      - run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0
 
       - uses: actions/setup-python@v5
         with:
