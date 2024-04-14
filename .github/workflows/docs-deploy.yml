@@ -24,26 +24,30 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       # Need to install prereqs for Weasyprint
-      - run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0
+      - name: Install Prerequisites
+        run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python and Dependencies
+        uses: actions/setup-python@v5
         with:
           python-version: 3.x
           cache: 'pip' # caching pip dependencies
       - run: pip install -r requirements.txt
 
-      - run: mkdocs build -d _docs/
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+      - name: Build site
+        run: mkdocs build -d _docs/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
+          # Upload directory generated above
           path: '_docs'
 
       - name: Deploy to GitHub Pages
