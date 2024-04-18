@@ -1,25 +1,11 @@
 <?php
 
-require_once("../includes/composer.php");
-require_once("../includes/db_lib.php");
-require_once("../includes/user_lib.php");
+require_once(__DIR__."/util.php");
 
-$current_user_id = $_SESSION['user_id'];
-$current_user = get_user_by_id($current_user_id);
+require_admin_or_401();
 
-$unauthorized = true;
-
-if (is_super_admin($current_user) || is_country_dir($current_user)) {
-    $unauthorized = false;
-}
-
-if ($unauthorized) {
-    header('HTTP/1.1 401 Unauthorized', true, 401);
-    echo "You do not have permission to view this page.";
-    exit;
-}
-
-$LOG_TYPES = array('application', 'php_error', 'apache2_access', 'apache2_error', 'database');
+$log_files = available_log_files();
+$LOG_TYPES = array_keys($log_files);
 $type = $_GET['name'];
 
 if (!in_array($type, $LOG_TYPES, true)) {
@@ -28,8 +14,7 @@ if (!in_array($type, $LOG_TYPES, true)) {
     exit;
 }
 
-$filename = "$type.log";
 header("Content-Type: text/plain", true, 200);
-header("Content-disposition: attachment;filename=$filename");
+header("Content-disposition: attachment;filename=$type");
 
-readfile(__DIR__."/../../log/".$filename);
+readfile($log_files[$type]);

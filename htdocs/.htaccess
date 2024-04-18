@@ -269,3 +269,6 @@ RewriteRule ^print_page\.php$ bulk_print/print_page.php
 RewriteRule ^report_content\.php$ bulk_print/report_content.php
 RewriteRule ^print_functions\.php$ bulk_print/print_functions.php
 RewriteRule ^report_word_content\.php$ bulk_print/report_word_content.php
+
+## Debug tooling
+RewriteRule ^debug\.php$ debug/debug.php
