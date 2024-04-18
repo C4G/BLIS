@@ -1,13 +1,30 @@
 #!/bin/bash
 
-DIR="$(dirname "$0")"
-cd "$DIR" || exit
+set -euo pipefail
 
-mkdir ../dist/Build-BLIS
-cd ../dist/Build-BLIS || exit
- 
-curl -L "https://github.com/C4G/BLISRuntime/archive/refs/heads/main.zip" > BLISRuntime.zip &
-curl -L "https://github.com/C4G/BLIS/archive/refs/heads/master.zip" > BLISCode.zip &
+if ! command -v curl >/dev/null; then
+    echo "You must have curl installed to continue."
+    exit 1
+fi
+
+if ! command -v unzip >/dev/null || ! command -v zip >/dev/null; then
+    echo "You must have zip & unzip installed to continue."
+    exit 1
+fi
+
+echo -e "Creating $(pwd)/dist/ and downloading BLIS release files."
+echo "Press Ctrl-C to stop, or any key to continue."
+
+read -rn1
+echo ""
+
+mkdir -p dist/Build-BLIS || exit 1
+cd dist/Build-BLIS || exit 1
+
+echo "Downloading C4G/BLISRuntime..."
+curl --silent -L "https://github.com/C4G/BLISRuntime/archive/refs/heads/main.zip" > BLISRuntime.zip &
+echo "Downloading C4G/BLIS..."
+curl --silent -L "https://github.com/C4G/BLIS/archive/refs/heads/master.zip" > BLISCode.zip &
 
 wait
 
@@ -42,3 +59,6 @@ rm -rf BLIS-Standalone/
 rm -rf BLIS-Upgrade/
 
 mv BLIS-*.zip ../
+
+cd .. || exit 1
+rm -rf Build-BLIS/
