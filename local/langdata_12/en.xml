@@ -178,6 +178,10 @@
             <value>Export as PDF</value>
         </term>
         <term>
+            <key>CMD_EXPORTEXCEL</key>
+            <value>Export to Excel</value>
+        </term>
+        <term>
             <key>CMD_SELECT</key>
             <value>Select</value>
         </term>
