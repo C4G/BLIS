@@ -47,7 +47,15 @@ COPY docker/bin/start-blis.sh /usr/bin/
 # Copy all of the BLIS files into the container
 RUN mkdir /var/www/blis
 COPY . /var/www/blis
-RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www && \
+    chmod +x /var/log/apache2 && \
+    chmod +r /var/log/apache2/*
+
+# Inject the current git commit SHA as a build parameter
+# This isn't foolproof, but will help when someone is using the
+# distributed Docker container, so we can see this and know what version it is.
+ARG GIT_COMMIT_SHA=""
+RUN echo "${GIT_COMMIT_SHA}" | tee /etc/blis_git_commit_sha
 
 # Expose port 80 for HTTP, 443 for HTTPS (optionally)
 EXPOSE 80

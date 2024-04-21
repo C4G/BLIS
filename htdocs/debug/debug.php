@@ -29,6 +29,20 @@ require_once(__DIR__."/../includes/header.php");
     }
 ?>
 
+<?php
+    $commit_sha = getenv('GIT_COMMIT_SHA');
+
+    if (!!$commit_sha) {
+        $github_link = "https://github.com/C4G/BLIS/tree/$commit_sha";
+    } else {
+        $github_link = "https://github.com/C4G/BLIS";
+    }
+?>
+
+<p>
+    <b>Git commit SHA:</b> <code><?php echo($commit_sha); ?></code> <i>(<a href="<?php echo($github_link); ?>">browse source code</a>)</i>
+</p>
+
 <h3>Available Log Files</h3>
 
 <ul>
