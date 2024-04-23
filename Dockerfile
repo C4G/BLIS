@@ -10,7 +10,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         software-properties-common \
         certbot \
         python3-certbot-apache \
-        sudo
+        sudo \
+        && rm -rf /var/lib/apt/lists/*
 
 # PPAs - additional software from questionable sources go here...
 # Namely, pulling in PHP 5.6 here from a repo
@@ -23,7 +24,8 @@ RUN add-apt-repository ppa:ondrej/php && apt-get update && \
         php5.6-mysql \
         php5.6-zip \
         php5.6-mbstring \
-        php5.6-xml
+        php5.6-xml \
+        && rm -rf /var/lib/apt/lists/*
 
 # This is a mysqldump configuration option required in this environment to
 # preserve backwards compatibility with earlier versions of mysqldump
