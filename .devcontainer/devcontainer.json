@@ -3,10 +3,16 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "eamodio.gitlens",
+                "EditorConfig.EditorConfig",
+                "github.vscode-github-actions",
+                "ms-azuretools.vscode-docker",
                 "timonwong.shellcheck"
             ]
         }
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/sshd:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {}
     },
     "portsAttributes": {
         "80": {

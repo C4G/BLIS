@@ -5,14 +5,17 @@ FROM ubuntu:focal
 # See the documentation here to see why devcontainers are awesome:
 # https://code.visualstudio.com/docs/remote/containers
 
-# Install a bunch of stuff from the standard repositories
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+# Install a bunch of stuff from the standard repositories and a custom PHP repository
+# Namely, PHP 5.6
+RUN apt-get update && apt-get install -y software-properties-common && \
+    add-apt-repository ppa:ondrej/php && apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apache2 \
-        bash-completion \
         curl \
         git \
         gpg \
         htop \
+        libharfbuzz0b \
         libpango-1.0-0 \
         libpangoft2-1.0-0 \
         mysql-client \
@@ -24,14 +27,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         sudo \
         tmux \
         unzip \
-        vim \
         zip \
-        libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0
-
-# PPAs - additional software from questionable sources go here...
-# Namely, pulling in PHP 5.6 here from a repo
-RUN add-apt-repository ppa:ondrej/php && apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
         php5.6 \
         php5.6-bcmath \
         php5.6-curl \
@@ -39,14 +35,8 @@ RUN add-apt-repository ppa:ondrej/php && apt-get update && \
         php5.6-mysql \
         php5.6-zip \
         php5.6-mbstring \
-        php5.6-xml
-
-# Install the GitHub CLI
-RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-    && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-    && sudo apt update \
-    && sudo apt install gh -y
+        php5.6-xml \
+        && rm -rf /var/lib/apt/lists/*
 
 RUN echo "column-statistics = 0" | tee -a /etc/mysql/conf.d/mysqldump.cnf
 
@@ -75,5 +65,6 @@ RUN groupadd vscode && \
     # add www-data to vscode group so it can edit files (write logs, files)
     usermod -aG vscode www-data && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
 USER vscode
 WORKDIR /workspace

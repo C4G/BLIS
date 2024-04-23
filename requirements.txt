@@ -1,4 +1,5 @@
-mkdocs == 1.*
+# We don't need mkdocs directly as it is depended on by mkdocs-material
+# mkdocs == 1.*
 mkdocs-material == 9.*
 mkdocs-git-revision-date-plugin >= 0.3.2
 mkdocs-with-pdf >= 0.9.3
