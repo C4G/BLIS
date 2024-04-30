@@ -204,11 +204,13 @@ EOQ;
                 break;
             }
             if(substr($col_name, 0, 3) == "pcd") {
-                $input_field_value = explode("_", $col_name)[1];
+                $exploded_fields = explode("_", $col_name);
+                $input_field_value = $exploded_fields[1];
                 $value = get_custom_data_patient_fieldvalue($value, $input_field_value);
             }
             if(substr($col_name, 0, 3) == "scd") {
-                $input_field_value = explode("_", $col_name)[1];
+                $exploded_fields = explode("_", $col_name);
+                $input_field_value = $exploded_fields[1];
                 $value = get_custom_data_specimen_fieldvalue($value, $input_field_value);
             }
 

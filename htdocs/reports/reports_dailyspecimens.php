@@ -132,18 +132,8 @@ function export_as_word(div_id)
 function export_as_excel(div_id)
 {
 	var content = $('#'+div_id).html();
-
-	const date = new Date();
-	const formattedDate = `${date.getFullYear()}${("0" + (date.getMonth()+1)).slice(-2)}${("0" + (date.getDate())).slice(-2)}${date.getHours()}${date.getMinutes()}`;
-
-	var fileName = `blisreport_${formattedDate}.xls`;
-
-	$("#report_content_table4").table2excel({
-		name: "<?php echo(LangUtil::$generalTerms['SPECIMEN_DAILY_LOG_SHEET_NAME']) ?>",
-
-		filename: fileName, // do include extension
-		preserveColors: false // set to true if you want background colors and font colors preserved
-	});
+	$('#excel_data').attr("value", content);
+	$('#excel_format_form').submit();
 }
 
 function report_fetch()
@@ -187,6 +177,9 @@ $(document).ready(function(){
 </script>
 <form name='word_format_form' id='word_format_form' action='export_word.php' method='post' target='_blank'>
 	<input type='hidden' name='data' value='' id='word_data' />
+</form>
+<form name='excel_format_form' id='excel_format_form' action='export_excel_dailylog.php' method='post' target='_blank'>
+	<input type='hidden' name='data' value='' id='excel_data' />
 </form>
 		<input type='radio' name='do_landscape' value='N'<?php
 		if($report_config->landscape == false) echo " checked ";
