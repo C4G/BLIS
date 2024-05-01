@@ -121,7 +121,6 @@ else if($cat_code != 0)
 }
 ?>
 <script src="js/jquery.min.js"></script>
-<script src="js/jquery.table2excel.js"></script>
 <script type='text/javascript'>
 function export_as_word(div_id)
 {

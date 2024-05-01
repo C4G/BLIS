@@ -54,7 +54,6 @@ for($i = 0; $i < count($margin_list); $i++)
 }
 ?>
 <script src="js/jquery.min.js"></script>
-<script src="js/jquery.table2excel.js"></script>
 <script type='text/javascript'>
 function export_as_word(div_id)
 {
@@ -106,7 +105,7 @@ $(document).ready(function(){
 &nbsp;&nbsp;&nbsp;&nbsp;
 <input type='button' onclick="javascript:export_as_word('export_content');" value='<?php echo LangUtil::$generalTerms['CMD_EXPORTWORD']; ?>'></input>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<input type='button' onclick="javascript:export_as_excel('report_content_table5');" value='<?php echo LangUtil::$generalTerms['CMD_EXPORTEXCEL']; ?>'></input>
+<input type='button' onclick="javascript:export_as_excel('export_content');" value='<?php echo LangUtil::$generalTerms['CMD_EXPORTEXCEL']; ?>'></input>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <input type='button' onclick="javascript:window.close();" value='<?php echo LangUtil::$generalTerms['CMD_CLOSEPAGE']; ?>'></input>
 &nbsp;&nbsp;&nbsp;&nbsp;
