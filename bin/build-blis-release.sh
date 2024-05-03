@@ -13,9 +13,9 @@ if ! command -v unzip >/dev/null || ! command -v zip >/dev/null; then
 fi
 
 echo -e "Creating $(pwd)/dist/ and downloading BLIS release files."
-echo "Press Ctrl-C to stop, or any key to continue."
 
-read -rn1
+read -n 1 -s -r -p "Press any key to continue "
+
 echo ""
 
 mkdir -p dist/Build-BLIS || exit 1
