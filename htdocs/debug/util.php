@@ -54,7 +54,6 @@ function available_log_files() {
 
     $apache2_docker_error = "/var/log/apache2/error.log";
     if (file_exists($apache2_docker_error)) {
-        $log->error("it do exist");
         $log_files["apache2_var_log_error.log"] = $apache2_docker_error;
     }
 
