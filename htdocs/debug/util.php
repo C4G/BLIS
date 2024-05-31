@@ -53,7 +53,6 @@ function available_log_files() {
     }
 
     $apache2_docker_error = "/var/log/apache2/error.log";
-    $log->error("testing");
     if (file_exists($apache2_docker_error)) {
         $log->error("it do exist");
         $log_files["apache2_var_log_error.log"] = $apache2_docker_error;
@@ -65,4 +64,22 @@ function available_log_files() {
     }
 
     return $log_files;
+}
+
+function list_files_like($directory, $pattern) {
+    $listing = scandir($directory);
+    $results = array();
+
+    if (!$listing) {
+        return $results;
+    }
+
+    foreach($listing as $filename) {
+        $matches = null;
+        if (preg_match($pattern, $filename, $matches) == 1) {
+            array_push($results, $filename);
+        }
+    }
+
+    return $results;
 }
