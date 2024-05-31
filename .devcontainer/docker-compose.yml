@@ -3,11 +3,6 @@ version: '3'
 services:
   app:
     image: ghcr.io/c4g/blis-devcontainer:latest
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
-      cache_from:
-        - ghcr.io/c4g/blis-devcontainer:latest
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
     # Runs app on the same network as the database container,
