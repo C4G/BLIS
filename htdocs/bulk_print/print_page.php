@@ -1,13 +1,9 @@
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <?php
 
 include("../reports/redirect.php");
 include("includes/db_lib.php");
 include("includes/script_elems.php");
 include("includes/page_elems.php");
-include("barcode/barcode_lib.php");
 require_once("includes/user_lib.php");
 
 LangUtil::setPageId("reports");
@@ -28,7 +24,7 @@ $rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
                     $rem_specs[] = $rem_rec['r_id'];
                     $rem_remarks[] = $rem_rec['remarks'];
                 }
-                
+
 // visualization parameters
 $chart_column_width = 360;
 $labsection = 0;
@@ -55,7 +51,7 @@ putUILog('print_page', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 
 function draw_visualization($cleaned_result, $cleaned_range){
 
 	global $chart_column_width;
-	
+
 	// start drawing the svgs
 	$visual_content = "";
 	$visual_content .= "<div><svg width=\"360\" height=\"20\">";
@@ -66,39 +62,39 @@ function draw_visualization($cleaned_result, $cleaned_range){
 		// draw two part result range
 		$visual_content .= "<rect width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.3; \"></rect>";
 		$visual_content .= "<rect x=\"180\"  width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.15; \"></rect>";
-		
+
 		// marker for result
 		$marker_location = parse_result_x($cleaned_result, $cleaned_range);
-		
+
 		if($marker_location==0){
 			$marker_width = $chart_column_width/2;
 		}
-		
+
 	} else if(strpos($cleaned_range, ">")===0){
 		// draw two part result range
 		$visual_content .= "<rect width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.15; \"></rect>";
 		$visual_content .= "<rect x=\"180\"  width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.3; \"></rect>";
-		
+
 		// marker for result
 		$marker_location = parse_result_x($cleaned_result, $cleaned_range);
-		
+
 		if($marker_location==$chart_column_width/2){
 			$marker_width = $chart_column_width/2;
 		}
-		
+
 	} else {
 		// draw three part result range
 		$visual_content .= "<rect width=\"90\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.2; \"></rect>";
 		$visual_content .= "<rect x=\"90\" width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.3; \"></rect>";
 		$visual_content .= "<rect x=\"270\"  width=\"90\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.2; \"></rect>";
-		
+
 		// marker for result
 		$marker_location = parse_result_x($cleaned_result, $cleaned_range);
 	}
-	
+
 	$visual_content .= "<rect x=\"".$marker_location."\" width=\"".$marker_width."\" height=\"20\" fill=\"#000000\"></rect>";
-	
-	
+
+
 	$visual_content .= "</svg></div>";
 
 	return $visual_content;
@@ -180,25 +176,25 @@ function out_of_range($cleaned_result, $cleaned_range){
 function parse_result_x($cleaned_result, $cleaned_range){
 	$chart_location = 0;
 	global $chart_column_width;
-	
+
 	$cleaned_result_split = explode(": ", $cleaned_result);
-	
+
 	// remove labels for results
 	if (count($cleaned_result_split)==1){
 		$cleaned_result = $cleaned_result_split[0];
 	 }else {
 		$cleaned_result = $cleaned_result_split[1];
 	}
-	
+
 	if(preg_match("/[0-9]+min [0-9]+sec/", $cleaned_result)){
-	
+
 		//result
 		$split_min = explode("min ", $cleaned_result);
 		$min = $split_min[0];
 		$split_sec = explode("sec", $split_min[1]);
 		$sec = $split_sec[0];
 		$total_seconds = $min*60 + intval($sec);
-		
+
 		//range
 		$split_range = explode(" min", $cleaned_range);
 		$split_range_2 = explode("-", $split_range);
@@ -208,11 +204,11 @@ function parse_result_x($cleaned_result, $cleaned_range){
 		$seconds_offset = $total_seconds - $low_range*60;
 
 		$chart_location = ($chart_column_width/4) + ($chart_column_width/2)*($seconds_offset/$full_range);
-		
+
 	} else if (preg_match("/[-+]?[0-9]*\.?[0-9]+/", $cleaned_result) && (strpos($cleaned_range, "<")===0 || strpos($cleaned_range, ">")===0)){
 		// have one-sided range, format < 6-, <6-
 		$split_range = explode(" ", $cleaned_range);
-		
+
 		// < 6-
 		$numeric_part = "";
 		if (strpos($split_range[1], "-")!==false){
@@ -221,29 +217,29 @@ function parse_result_x($cleaned_result, $cleaned_range){
 			$split_range_2 = explode("<", $split_range[0]);
 			$numeric_part = $split_range_2[1];
 		}
-		
+
 		// 6-
 		$full_range_split = explode("-", $numeric_part);
 		$full_range = $full_range_split[0];
-		
+
 		// check result format, could be a number, <6, or < 6
 		$result_offset = 0;
 		if(strpos($cleaned_result, "<")===0 || strpos($cleaned_result, ">")===0){
 			// format <6 or < 6
 			$result_number_split = explode("<", $cleaned_result);
 			$result_number = floatval($result_number_split[1]);
-			
+
 			// just place it to 0, when the result is < something, it is in the normal range
 			$result_offset = 0;
 		} else {
 			$result_offset = floatval($cleaned_result);
 		}
-		
+
         if ($full_range == 0) {
 		    $full_range = 0.00001;
         }
 		$chart_location = ($chart_column_width/2)*($result_offset/$full_range);
-		
+
 	} else if (preg_match("/[-+]?[0-9]*\.?[0-9]+/", $cleaned_result)) {
 
 		// numeric results with a specified range
@@ -261,7 +257,7 @@ function parse_result_x($cleaned_result, $cleaned_range){
 
 		$chart_location =($chart_column_width/4) + ($chart_column_width/2)*($result_offset/$full_range);
 	}
-	
+
 	// to deal with double not being accurate
 	$chart_location_2 = round($chart_location);
 	if ($chart_location<0) {
@@ -269,7 +265,7 @@ function parse_result_x($cleaned_result, $cleaned_range){
 	} else if ($chart_location_2 >= $chart_column_width) {
 		$chart_location = $chart_column_width-5;
 	}
-	
+
 	return $chart_location;
 }
 
@@ -310,7 +306,7 @@ function clean_result($test, $report_config,$show_units){
 		$result = $test->decodeResultWithoutMeasures();
 	else
 		$result = $test->decodeResult(false,$show_units);
-	
+
 	// cleaning up results
 	$result = str_replace("&nbsp;", " ", $result);
 	$result = str_replace("<br><br>", ", ", $result);
@@ -318,17 +314,17 @@ function clean_result($test, $report_config,$show_units){
 	$result = str_replace("<b>", "", $result);
 	$result = str_replace("</b>", "", $result);
 	$result = str_replace(" ,", ",", $result);
-	
+
 	// if $result starts with ", ", remove it
 	if(substr($result, 0, 2) === ", "){
 		$result = substr($result, 2);
 	}
-	
+
 	// if $result ends with ", ", remove it
 	if(substr($result, -2) === ", "){
 		$result = substr($result, 0, -2);
-	}	
-	
+	}
+
 	// populated each measure into an array
 	$result_array = explode(", ", $result);
 	return $result_array;
@@ -338,9 +334,9 @@ function clean_result($test, $report_config,$show_units){
 function clean_range($test, $report_config, $patient){
 	$test_type = TestType::getById($test->testTypeId);
 	$measure_list = $test_type->getMeasures();
-	
+
 	$range_output = '';
-	
+
 	$loop_count = 0;
 	foreach($measure_list as $measure) {
 		$type=$measure->getRangeType();
@@ -353,13 +349,13 @@ function clean_range($test, $report_config, $patient){
 				$units=explode(",",$unit);
 				$lower_parts=explode(".",$lower);
 				$upper_parts=explode(".",$upper);
-				
+
 
 				if($lower_parts[0]!=0) {
 					$range_output .= $lower_parts[0];
 					$range_output .= $units[0];
 				}
-				
+
 				if($lower_parts[1]!=0) {
 					$range_output .= $lower_parts[1];
 					$range_output .= $units[1];
@@ -370,7 +366,7 @@ function clean_range($test, $report_config, $patient){
 					$range_output .= $upper_parts[0];
 					$range_output .= $units[0];
 				}
-				
+
 				if($upper_parts[1]!=0) {
 					$range_output .= $upper_parts[1];
 					$range_output .= $units[1];
@@ -382,8 +378,8 @@ function clean_range($test, $report_config, $patient){
 				$range_output .= $upper;
 				$range_output .= $units[0];
 				$range_output .= " ".$units[1];
-			} else {		
-				$range_output .= $lower."-". $upper; 
+			} else {
+				$range_output .= $lower."-". $upper;
 				$range_output .= " ".$measure->unit;
 			}
 		} else {
@@ -393,10 +389,10 @@ function clean_range($test, $report_config, $patient){
 		if($loop_count < count($measure_list)-1){
 			$range_output .= ", ";
 		}
-		
+
 		$loop_count++;
 	}
-	
+
 	// put ranges into an array
 	$range_output_array = explode(", ", $range_output);
 	return $range_output_array;
@@ -420,7 +416,7 @@ function get_records_to_print($patient_id) {
 		if(isset($_REQUEST['labsection'])){
 			$labsection = $_REQUEST['labsection'];
 		}
-		
+
 		if($labsection == 0){
 			$query_string =
 			"SELECT t.* FROM test t, specimen sp ".
@@ -457,30 +453,30 @@ function get_records_to_print($patient_id) {
 			"AND t.test_type_id = tt.test_type_id ".
 			"AND tt.test_type_id in (select test_type_id from test_type where test_category_id = $labsection)";
 		}
-				
+
 		if(isset($_SESSION['userDatesDict'])) {
 			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
 		}
-			$query_string .= "ORDER BY sp.date_collected DESC";		
-	
+			$query_string .= "ORDER BY sp.date_collected DESC";
+
 	}
-	
+
 	$resultset = query_associative_all($query_string);
 	if(count($resultset) == 0 || $resultset == null)
 		return $retval;
-	
+
 	foreach($resultset as $record) {
 		$test = Test::getObject($record);
 		$testType = new TestType;
 		$hide_patient_name = $testType->toHidePatientName($test->testTypeId);
-		
+
 		if( $hide_patient_name == 1 )
 					$hidePatientName = 1;
-		
+
 		$specimen = get_specimen_by_id($test->specimenId);
-		$retval[] = array($test, $specimen, $hide_patient_name);		
+		$retval[] = array($test, $specimen, $hide_patient_name);
 	}
-	
+
 	return $retval;
 }
 
@@ -513,20 +509,25 @@ for ($i = 0; $i < count($margin_list); $i++) {
 <html>
 <head>
 
-<style type="text/css" media="print"> 
+<style type="text/css" media="print">
 	.btn {
-		color:white; 
-		background-color:#9fc748;/*#3B5998;*/ 
-		border-style:none; 
-		font-weight:bold; 
-		font-size:14px; 
-		height:25px; 
+		color:white;
+		background-color:#9fc748;/*#3B5998;*/
+		border-style:none;
+		font-weight:bold;
+		font-size:14px;
+		height:25px;
 		/*width:60px;*/
 		cursor:pointer;
 	}
-</style> 
+</style>
+
+<link rel="stylesheet" href="js/jquery-ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="js/jquery-1.10.2.js"></script>
+<script src="js/jquery-ui/1.11.4/jquery-ui.js"></script>
 
 <?php
+include("barcode/barcode_lib.php");
 $script_elems = new ScriptElems();
 $script_elems->enableJQuery();
 $script_elems->enableTableSorter();
@@ -537,7 +538,7 @@ $page_elems = new PageElems();
 ?>
 
 <script type="text/javascript" src="../js/nicEdit.js"></script>
-<script type="text/javascript" src="../js/jquery-barcode-2.0.2.js"></script>  
+<script type="text/javascript" src="../js/jquery-barcode-2.0.2.js"></script>
 <script type='text/javascript'>
 
 var curr_orientation = 0;
@@ -573,15 +574,15 @@ function print_content(div_id) {
 		data: "&log_type=PRINT",
 		success : function (data) {
 			if ( data != "false" ) {
-					
+
 				var content = "The results for this patient have been printed already by the following users.";
 				content+= "\n\n"+data+"\n\n";
 				content += "\nDo you wish to print again?";
 				var r = confirm(content);
 				if (r == false) {
 					return;
-				} 
-				
+				}
+
 			}
 			$("#myNicPanel").hide();
 			javascript:window.print();
@@ -590,7 +591,7 @@ function print_content(div_id) {
 				type : 'POST',
 				url : 'ajax/addUserLog.php',
 				data: data_string
-			});	
+			});
 		}
 	});
 }
@@ -605,7 +606,7 @@ function fetch_report() {
 	$ip = 0;
 	if($('#ip').is(":checked"))
 		$ip = 1;
-            
+
     if($('#viz').is(":checked"))
 		$viz = 1;
 	$('#fetch_progress').show();
@@ -635,7 +636,7 @@ $(document).ready(function() {
 	$('#report_content_table1').tablesorter();
 	$('.editable').editInPlace({
 		callback: function(unused, enteredText) {
-			return enteredText; 
+			return enteredText;
 		},
 		show_buttons: false,
 		bg_over: "FFCC66",
@@ -671,7 +672,7 @@ $(document).ready(function(){
 	$('#report_content table th').css('font-size', newFontSize);
 	return false;
   });
-  
+
    $(".bold").click(function(){
   	 var selObj = window.getSelection();
 		alert(selObj);
@@ -714,11 +715,11 @@ p.main {text-align:justify;}
 		} else {
 			$value_list = array($_REQUEST['yf'], $_REQUEST['mf'], $_REQUEST['df']);
 		}
-		$page_elems->getDatePickerPlain($name_list, $id_list, $value_list); 
+		$page_elems->getDatePickerPlain($name_list, $id_list, $value_list);
 		?>
 	</td>
 	<td>
-		<input type='checkbox' name='ip' id='ip' value='1' checked></input> 
+		<input type='checkbox' name='ip' id='ip' value='1' checked></input>
 		<?php echo LangUtil::$pageTerms['MSG_INCLUDEPENDING']; ?>
 			<br>
 			<!-- Disabling 'viz' option until the functionality has been added -->
