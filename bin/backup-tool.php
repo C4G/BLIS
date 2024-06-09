@@ -44,16 +44,12 @@ $lab_sql_log = null;
 $whole_database_log = null;
 $language_folder = null;
 
-$path_offset = 0;
 for ($i = 0; $i < $zip->numFiles; $i++) {
     $path = $zip->getNameIndex($i);
 
-    if ($i == 0 && (endsWith($path, "/") || endsWith($path, "\\"))) {
-        $path_offset = strlen($path);
-    }
-
     $fullpath = $path;
-    $path = substr($path, $path_offset);
+
+    echo("$path\n");
 
     if (!$incorrect_backslashes && strstr($path, "\\")) {
         $incorrect_backslashes = true;
@@ -61,27 +57,27 @@ for ($i = 0; $i < $zip->numFiles; $i++) {
 
     $matches = null;
 
-    if (preg_match('/^langdata_([0-9]+)/', $path) == 1) {
+    if (preg_match('/langdata_([0-9]+)/', $path) == 1) {
         $language_folder = $fullpath;
     }
 
-    if (preg_match('/^blis_([0-9]+)[\/\\]blis_[0-9]+_backup\.sql/', $path, $matches) == 1) {
+    if (preg_match('/blis_([0-9]+)[\/\\]blis_[0-9]+_backup\.sql/', $path, $matches) == 1) {
         $lab_backup = $fullpath;
         $lab_id = $matches[1];
     }
 
-    if (preg_match('/^blis_revamp[\/\\]]blis_revamp_backup\.sql/', $path, $matches) == 1) {
+    if (preg_match('/blis_revamp[\/\\]]blis_revamp_backup\.sql/', $path, $matches) == 1) {
         echo("blis_revamp backup present.\n");
         $revamp_backup = $fullpath;
     }
 
-    if (preg_match("/^log_([0-9]+).txt/", $path, $matches) == 1) {
+    if (preg_match("/log_([0-9]+).txt/", $path, $matches) == 1) {
         $lab_id = $matches[1];
         echo("log_$lab_id.txt present.\n");
         $lab_sql_log = $fullpath;
     }
 
-    if (preg_match("/^database.log/", $path, $matches) == 1) {
+    if (preg_match("/database.log/", $path, $matches) == 1) {
         echo("database.log present.\n");
         $whole_database_log = $fullpath;
     }
