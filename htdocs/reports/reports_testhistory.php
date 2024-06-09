@@ -1,22 +1,19 @@
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<!DOCTYPE html>
 <?php
 #
 # Lists patient test history in printable format
 #
 /*
-$load_time = microtime(); 
-$load_time = explode(' ',$load_time); 
-$load_time = $load_time[1] + $load_time[0]; 
-$page_start = $load_time; 
+$load_time = microtime();
+$load_time = explode(' ',$load_time);
+$load_time = $load_time[1] + $load_time[0];
+$page_start = $load_time;
 */
 
 include("redirect.php");
 include("includes/db_lib.php");
 include("includes/script_elems.php");
 include("includes/page_elems.php");
-include("barcode/barcode_lib.php");
 require_once("includes/user_lib.php");
 
 LangUtil::setPageId("reports");
@@ -37,7 +34,7 @@ $rem_recs = get_removed_specimens($_SESSION['lab_config_id']);
                     $rem_specs[] = $rem_rec['r_id'];
                     $rem_remarks[] = $rem_rec['remarks'];
                 }
-                
+
 // visualization parameters
 $chart_column_width = 360;
 $labsection = 0;
@@ -57,7 +54,7 @@ $uiinfo = "from=".$date_from."&to=".$date_to."&ip=".$_REQUEST['ip']."&viz=".$_RE
 putUILog('reports_testhistory', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
 function get_signed_by_user(){
-	
+
 }
 
 
@@ -65,7 +62,7 @@ function get_signed_by_user(){
 function draw_visualization($cleaned_result, $cleaned_range){
 
 	global $chart_column_width;
-	
+
 	// start drawing the svgs
 	$visual_content = "";
 	$visual_content .= "<div><svg width=\"360\" height=\"20\">";
@@ -77,45 +74,45 @@ function draw_visualization($cleaned_result, $cleaned_range){
     {
        //echo "(NORMAL)";
     }
-	
+
 	// use two or three part visualization format
 	if(strpos($cleaned_range, "<")===0){
 		// draw two part result range
 		$visual_content .= "<rect width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.3; \"></rect>";
 		$visual_content .= "<rect x=\"180\"  width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.15; \"></rect>";
-		
+
 		// marker for result
 		$marker_location = parse_result_x($cleaned_result, $cleaned_range);
-		
+
 		if($marker_location==0){
 			$marker_width = $chart_column_width/2;
 		}
-		
+
 	}else if(strpos($cleaned_range, ">")===0){
 		// draw two part result range
 		$visual_content .= "<rect width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.15; \"></rect>";
 		$visual_content .= "<rect x=\"180\"  width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.3; \"></rect>";
-		
+
 		// marker for result
 		$marker_location = parse_result_x($cleaned_result, $cleaned_range);
-		
+
 		if($marker_location==$chart_column_width/2){
 			$marker_width = $chart_column_width/2;
 		}
-		
+
 	}else{
 		// draw three part result range
 		$visual_content .= "<rect width=\"90\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.2; \"></rect>";
 		$visual_content .= "<rect x=\"90\" width=\"180\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.3; \"></rect>";
 		$visual_content .= "<rect x=\"270\"  width=\"90\" height=\"20\" fill=\"#000000\" style=\"opacity: 0.2; \"></rect>";
-		
+
 		// marker for result
 		$marker_location = parse_result_x($cleaned_result, $cleaned_range);
 	}
-	
+
 	$visual_content .= "<rect x=\"".$marker_location."\" width=\"".$marker_width."\" height=\"20\" fill=\"#000000\"></rect>";
-	
-	
+
+
 	$visual_content .= "</svg></div>";
 
 	return $visual_content;
@@ -202,25 +199,25 @@ function out_of_range($cleaned_result, $cleaned_range){
 function parse_result_x($cleaned_result, $cleaned_range){
 	$chart_location = 0;
 	global $chart_column_width;
-	
+
 	$cleaned_result_split = explode(": ", $cleaned_result);
-	
+
 	// remove labels for results
 	if(count($cleaned_result_split)==1){
 		$cleaned_result = $cleaned_result_split[0];
 	}else{
 		$cleaned_result = $cleaned_result_split[1];
 	}
-	
+
 	if(preg_match("/[0-9]+min [0-9]+sec/", $cleaned_result)){
-	
+
 		//result
 		$split_min = explode("min ", $cleaned_result);
 		$min = $split_time[0];
 		$split_sec = explode("sec", $split_time[1]);
 		$sec = $split_sec[0];
 		$total_seconds = $min*60 + intval($sec);
-		
+
 		//range
 		$split_range = explode(" min", $cleaned_range);
 		$split_range_2 = explode("-", $split_range);
@@ -230,11 +227,11 @@ function parse_result_x($cleaned_result, $cleaned_range){
 		$seconds_offset = $total_seconds - $low_range*60;
 
 		$chart_location = ($chart_column_width/4) + ($chart_column_width/2)*($seconds_offset/$full_range);
-		
+
 	}else if(preg_match("/[-+]?[0-9]*\.?[0-9]+/", $cleaned_result) && (strpos($cleaned_range, "<")===0 || strpos($cleaned_range, ">")===0)){
 		// have one-sided range, format < 6-, <6-
 		$split_range = explode(" ", $cleaned_range);
-		
+
 		// < 6-
 		$numeric_part = "";
 		if(strpos($split_range[1], "-")!==false){
@@ -243,29 +240,29 @@ function parse_result_x($cleaned_result, $cleaned_range){
 			$split_range_2 = explode("<", $split_range[0]);
 			$numeric_part = $split_range_2[1];
 		}
-		
+
 		// 6-
 		$full_range_split = explode("-", $numeric_part);
 		$full_range = $full_range_split[0];
-		
+
 		// check result format, could be a number, <6, or < 6
 		$result_offset = 0;
 		if(strpos($cleaned_result, "<")===0 || strpos($cleaned_result, ">")===0){
 			// format <6 or < 6
 			$result_number_split = explode("<", $cleaned_result);
 			$result_number = floatval($result_number_split[1]);
-			
+
 			// just place it to 0, when the result is < something, it is in the normal range
 			$result_offset = 0;
 		}else{
 			$result_offset = floatval($cleaned_result);
 		}
-		
+
         if($full_range == 0){
 		    $full_range = 0.00001;
         }
 		$chart_location = ($chart_column_width/2)*($result_offset/$full_range);
-		
+
 	}else if(preg_match("/[-+]?[0-9]*\.?[0-9]+/", $cleaned_result)){
 
 		// numeric results with a specified range
@@ -283,7 +280,7 @@ function parse_result_x($cleaned_result, $cleaned_range){
 
 		$chart_location =($chart_column_width/4) + ($chart_column_width/2)*($result_offset/$full_range);
 	}
-	
+
 	// to deal with double not being accurate
 	$chart_location_2 = round($chart_location);
 	if($chart_location<0){
@@ -291,7 +288,7 @@ function parse_result_x($cleaned_result, $cleaned_range){
 	}else if($chart_location_2 >= $chart_column_width){
 		$chart_location = $chart_column_width-5;
 	}
-	
+
 	return $chart_location;
 }
 
@@ -331,7 +328,7 @@ function clean_result($test, $report_config,$show_units){
 		$result = $test->decodeResultWithoutMeasures();
 	else
 		$result = $test->decodeResult(false,$show_units);
-	
+
 	// cleaning up results
 	$result = str_replace("&nbsp;", " ", $result);
 	$result = str_replace("<br><br>", ", ", $result);
@@ -339,17 +336,17 @@ function clean_result($test, $report_config,$show_units){
 	$result = str_replace("<b>", "", $result);
 	$result = str_replace("</b>", "", $result);
 	$result = str_replace(" ,", ",", $result);
-	
+
 	// if $result starts with ", ", remove it
 	if(substr($result, 0, 2) === ", "){
 		$result = substr($result, 2);
 	}
-	
+
 	// if $result ends with ", ", remove it
 	if(substr($result, -2) === ", "){
 		$result = substr($result, 0, -2);
-	}	
-	
+	}
+
 	// populated each measure into an array
 	$result_array = explode(", ", $result);
 	return $result_array;
@@ -359,9 +356,9 @@ function clean_result($test, $report_config,$show_units){
 function clean_range($test, $report_config, $patient){
 	$test_type = TestType::getById($test->testTypeId);
 	$measure_list = $test_type->getMeasures();
-	
+
 	$range_output = '';
-	
+
 	$loop_count = 0;
 	foreach($measure_list as $measure) {
 		$type=$measure->getRangeType();
@@ -375,13 +372,13 @@ function clean_range($test, $report_config, $patient){
 				$units=explode(",",$unit);
 				$lower_parts=explode(".",$lower);
 				$upper_parts=explode(".",$upper);
-				
+
 
 				if($lower_parts[0]!=0) {
 					$range_output .= $lower_parts[0];
 					$range_output .= $units[0];
 				}
-				
+
 				if($lower_parts[1]!=0) {
 					$range_output .= $lower_parts[1];
 					$range_output .= $units[1];
@@ -392,7 +389,7 @@ function clean_range($test, $report_config, $patient){
 					$range_output .= $upper_parts[0];
 					$range_output .= $units[0];
 				}
-				
+
 				if($upper_parts[1]!=0) {
 					$range_output .= $upper_parts[1];
 					$range_output .= $units[1];
@@ -404,8 +401,8 @@ function clean_range($test, $report_config, $patient){
 				$range_output .= $upper;
 				$range_output .= $units[0];
 				$range_output .= " ".$units[1];
-			} else {		
-				$range_output .= $lower."-". $upper; 
+			} else {
+				$range_output .= $lower."-". $upper;
 				$range_output .= " ".$measure->unit;
 			}
 		} else {
@@ -415,10 +412,10 @@ function clean_range($test, $report_config, $patient){
 		if($loop_count < count($measure_list)-1){
 			$range_output .= ", ";
 		}
-		
+
 		$loop_count++;
 	}
-	
+
 	// put ranges into an array
 	$range_output_array = explode(", ", $range_output);
 	return $range_output_array;
@@ -445,7 +442,7 @@ function get_records_to_print($lab_config, $patient_id) {
 		if(isset($_REQUEST['labsection'])){
 			$labsection = $_REQUEST['labsection'];
 		}
-		
+
 		if($labsection == 0){
 			$query_string =
 			"SELECT t.* FROM test t, specimen sp ".
@@ -482,31 +479,31 @@ function get_records_to_print($lab_config, $patient_id) {
 			"AND t.test_type_id = tt.test_type_id ".
 			"AND tt.test_type_id in (select test_type_id from test_type where test_category_id = $labsection)";
 		}
-				
+
 		if(isset($_REQUEST['yf']))
 			$query_string .= "AND (sp.date_collected BETWEEN '$date_from' AND '$date_to') ";
-		$query_string .= "ORDER BY sp.date_collected DESC";		
-	
+		$query_string .= "ORDER BY sp.date_collected DESC";
+
 	}
-	
+
 	#echo "492".$query_string;
 	$resultset = query_associative_all($query_string);
 	#echo "494 count".count($resultset);
 	if(count($resultset) == 0 || $resultset == null)
 		return $retval;
-	
+
 	foreach($resultset as $record) {
 		$test = Test::getObject($record);
 		#echo "500->".$test->signedBy;
 		$hide_patient_name = TestType::toHidePatientName($test->testTypeId);
-		
+
 		if( $hide_patient_name == 1 )
 					$hidePatientName = 1;
-		
+
 		$specimen = get_specimen_by_id($test->specimenId);
-		$retval[] = array($test, $specimen, $hide_patient_name);		
+		$retval[] = array($test, $specimen, $hide_patient_name);
 	}
-	
+
 	return $retval;
 }
 
@@ -544,20 +541,26 @@ for($i = 0; $i < count($margin_list); $i++) {
 <html>
 <head>
 
-<style type="text/css" media="print"> 
+<style type="text/css" media="print">
 	.btn {
-		color:white; 
-		background-color:#9fc748;/*#3B5998;*/ 
-		border-style:none; 
-		font-weight:bold; 
-		font-size:14px; 
-		height:25px; 
+		color:white;
+		background-color:#9fc748;/*#3B5998;*/
+		border-style:none;
+		font-weight:bold;
+		font-size:14px;
+		height:25px;
 		/*width:60px;*/
 		cursor:pointer;
 	}
-</style> 
+</style>
+
+
+<link rel="stylesheet" href="js/jquery-ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="js/jquery-1.10.2.js"></script>
+<script src="js/jquery-ui/1.11.4/jquery-ui.js"></script>
 
 <?php
+include("barcode/barcode_lib.php");
 $script_elems = new ScriptElems();
 $script_elems->enableJQuery();
 $script_elems->enableTableSorter();
@@ -568,7 +571,7 @@ $page_elems = new PageElems();
 ?>
 
 <script type="text/javascript" src="../js/nicEdit.js"></script>
-<script type="text/javascript" src="../js/jquery-barcode-2.0.2.js"></script>  
+<script type="text/javascript" src="../js/jquery-barcode-2.0.2.js"></script>
 <script type='text/javascript'>
 
 var curr_orientation = 0;
@@ -618,7 +621,7 @@ function print_content(div_id) {
 		data: "p_id="+p_id+"&log_type=PRINT",
 		success : function (data) {
 			if ( data != "false" ) {
-					
+
 				var content = "The results for this patient have been printed already by the following users.";
 				content+= "\n\n"+data+"\n\n";
 				content += "\nDo you wish to print again?";
@@ -629,8 +632,8 @@ function print_content(div_id) {
 				var r = confirm(content);
 				if (r == false) {
 					return;
-				} 
-				
+				}
+
 			}
 			$("#myNicPanel").hide();
 			javascript:window.print();
@@ -639,7 +642,7 @@ function print_content(div_id) {
 				type : 'POST',
 				url : 'ajax/addUserLog.php',
 				data: data_string
-			});	
+			});
 		}
 	});
 }
@@ -654,7 +657,7 @@ function fetch_report() {
 	var ip = 0;
 	if($('#ip').is(":checked"))
 		ip = 1;
-            
+
         if($('#viz').is(":checked"))
 		viz = 1;
 	$('#fetch_progress').show();
@@ -683,7 +686,7 @@ $(document).ready(function() {
 	$('#report_content_table1').tablesorter();
 	$('.editable').editInPlace({
 		callback: function(unused, enteredText) {
-			return enteredText; 
+			return enteredText;
 		},
 		show_buttons: false,
 		bg_over: "FFCC66",
@@ -739,7 +742,7 @@ $(document).ready(function(){
 	$('#report_content table th').css('font-size', newFontSize);
 	return false;
   });
-  
+
    $(".bold").click(function(){
   	 var selObj = window.getSelection();
 		alert(selObj);
@@ -782,14 +785,14 @@ $monthago_array = explode("-", $monthago_date);
 			else {
 				$value_list = array($_REQUEST['yf'], $_REQUEST['mf'], $_REQUEST['df']);
 			}
-			$page_elems->getDatePickerPlain($name_list, $id_list, $value_list); 
+			$page_elems->getDatePickerPlain($name_list, $id_list, $value_list);
 			?>
 	</td>
 	<td>
 	&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type='button' onClick="javascript:print_content('report_content');" value='<?php echo LangUtil::$generalTerms['CMD_PRINT']; ?>'></input>
 			<div id="dialog" title="Basic dialog"></div>
-			
+
 	</td>
 	<td>
 		<table class='no border'>
@@ -811,12 +814,12 @@ $monthago_array = explode("-", $monthago_date);
 	</tr>
 	</table>
 	</td>
-	
+
 	<td>
-		<input type='checkbox' name='ip' id='ip'></input> 
+		<input type='checkbox' name='ip' id='ip'></input>
 		<?php echo LangUtil::$pageTerms['MSG_INCLUDEPENDING']; ?>
                 <br>
-                <input type='checkbox' name='viz' id='viz'></input> 
+                <input type='checkbox' name='viz' id='viz'></input>
 		<?php echo "Include Range Visualization"; ?>
 	</td>
 	<td>
@@ -857,7 +860,7 @@ $monthago_array = explode("-", $monthago_date);
 	<td>
 	<input type='button' class="decreaseFont" value='Decrease' title="Decrease Font-size"></input> <br>
 	<!--<input type='button' class="bold" value='Bold' title="Bold"></input> <br>-->
-	
+
 	</td>
 	</tr>
 	</table>
@@ -867,13 +870,13 @@ $monthago_array = explode("-", $monthago_date);
 	<input type='button' onClick="javascript:export_as_word('report_word_content');" value='Export Word Document' title='<?php echo LangUtil::$generalTerms['CMD_EXPORTWORD']; ?>'></input>
         <input type='button' onClick="javascript:export_as_pdf('report_word_content');" value='Export PDF Document ' title='<?php echo LangUtil::$generalTerms['CMD_EXPORTWORD']; ?>'></input>
         <br/><small>(Export PDF requires Word 2010 or newer)</small>
-        
+
 	</td>
 	<td>
 	&nbsp;&nbsp;
 	<input type='button' onClick="javascript:window.close();" value='Close' title='<?php echo LangUtil::$generalTerms['CMD_CLOSEPAGE']; ?>'></input>
 	</td>
-	
+
 	</tr>
 </table>
 <hr>
@@ -881,7 +884,7 @@ $monthago_array = explode("-", $monthago_date);
 <div id='report_content'>
 <link rel='stylesheet' type='text/css' href='css/table_print.css' />
 <style type='text/css'>
-tbody td, thead th { padding: .3em;} 
+tbody td, thead th { padding: .3em;}
 div.editable {
 	/*padding: 2px 2px 2px 2px;*/
 	margin-top: 2px;
@@ -906,7 +909,7 @@ td{
 }
 
 .hidden {
-    display: none; 
+    display: none;
 }
 
 @media all
@@ -915,13 +918,13 @@ td{
 }
 @media print {
 
-	td { 
-		padding: .3em;  
+	td {
+		padding: .3em;
 		border: 1px <?php if( $report_config->showResultBorder) echo "black"; else echo "white" ?> solid;
 	}
 
-    #options_header { 
-        display:none; 
+    #options_header {
+        display:none;
     }
 
     .printable {
@@ -931,7 +934,7 @@ td{
     .hidden_print {
         display: none;
     }
-    
+
     div#docbody {
         margin-top: 5em;
     }
@@ -995,7 +998,7 @@ if(isset($_REQUEST['yf']))
 	if($date_from == $date_to) {
 		echo LangUtil::$generalTerms['DATE'].": ".DateLib::mysqlToString($date_from);
 	}
-	else {	
+	else {
 		echo LangUtil::$generalTerms['FROM_DATE'].": ".DateLib::mysqlToString($date_from);
 		echo " | ";
 		echo LangUtil::$generalTerms['TO_DATE'].": ".DateLib::mysqlToString($date_to);
@@ -1037,18 +1040,18 @@ else
 			$test = $value[0];
 			$signature=$test->signedBy;
 
-			
+
 			//check for test_id if its in the array
 			//http://www.w3schools.com/php/func_array_in_array.asp
 			$specimen = $value[1];
-                        
+
                          if(in_array($test->specimenId, $rem_specs))
                          {
                                    continue;
                          }
-			if( $hidePatientName == 0) 
+			if( $hidePatientName == 0)
 				$hidePatientName = $value[2];
-				
+
 			if($record_count != 0) {
 				if(strcasecmp($previous_physician, $specimen->getDoctor()) != 0) {
 					$physician_same = false;
@@ -1071,43 +1074,43 @@ else
 	<div id="printhead" name="printhead">
 		<?php
 			if($report_config->usePatientName == 1) {
-				echo $patient->name; 
+				echo $patient->name;
 				echo "\n";?><br><?php
 			}
 			if($report_config->useAge == 1) {
-				echo $patient->getAge(); 
+				echo $patient->getAge();
 				echo "\n";?><br><?php
 			}
 			if($report_config->useGender == 1) {
-				echo $patient->sex; 
+				echo $patient->sex;
 				echo "\n";?><br><?php
 			}
-                        
+
                         /*if($printPatientBarcode == 1) {
-				echo "Barcode"; 
+				echo "Barcode";
 				echo "\n";?><br><?php
 			}*/
-                        
-                       
+
+
 			?>
 	</div>
-	
+
 <table id="patient_info_header" class='print_entry_border <?php if( $report_config->showBorder) echo "tblborder"; else echo "tblnoborder" ?>'>
 		<tbody>
 		<?php
 			 $combined_fields =$SYSTEM_PATIENT_FIELDS;
-				$lab_config = LabConfig::getById($_SESSION['lab_config_id']);				
-				if( $lab_config ) 
+				$lab_config = LabConfig::getById($_SESSION['lab_config_id']);
+				if( $lab_config )
 				{
 					$custom_field_list = $lab_config->getPatientCustomFields();
 					foreach($custom_field_list as $custom_field)
 					{
 						 $custom_array = array ("p_custom_$custom_field->id" => $custom_field->fieldName);
 						 $combined_fields = array_merge($combined_fields,$custom_array);
-					
+
 					}
 				}
-				
+
 		$ordered_fields=Patient::getReportfieldsOrder();
 		$column_size=$report_config->rowItems;
 		$ordered=explode(",",$ordered_fields['o_fields']);
@@ -1115,34 +1118,34 @@ else
 		if((!is_array($ordered_fields)) or (is_array($ordered_fields) and (strlen(trim($ordered_fields["o_fields"])) ==0)))
 		{
 			$final_fields=array_keys($combined_fields);
-		}	
+		}
 		else
 			$final_fields=array_merge($ordered, array_diff(array_keys($combined_fields), $ordered));
-		$c=0;				
+		$c=0;
 		foreach($final_fields as $field)
 		{
-			if($c == 0) 
-				echo "<tr valign='top'>";					
+			if($c == 0)
+				echo "<tr valign='top'>";
 			$c++;
 			$pid=explode("_",$field);
 			if(!stristr($field,"custom"))
-			{					
+			{
 				if($pfields[$pid[2]]== 1)
 				{
 					?>
-                    <td class="heading "><?php  echo LangUtil::$generalTerms[$combined_fields[$field]]?></td>                        
+                    <td class="heading "><?php  echo LangUtil::$generalTerms[$combined_fields[$field]]?></td>
                     <td>
                     	<?php
-                    		$field_value = getFieldValue($pid[2],$previous_daily_num); 
+                    		$field_value = getFieldValue($pid[2],$previous_daily_num);
                     		if($field_value==null or trim($field_value)=="")
                     			echo "-";
                     		else
                     			echo $field_value;
                     	?>
-                    </td><td width="15px" style="border:none"></td>                      
+                    </td><td width="15px" style="border:none"></td>
 					<?php
 				}
-				else 
+				else
 					$c--;
 			}
 			else
@@ -1150,57 +1153,57 @@ else
 				if(in_array($pid[2], $report_config->patientCustomFields))
 				{
 					?>
-                    <td class="heading"><?php echo $combined_fields[$field];?></td>                        
-                    <td><?php 
+                    <td class="heading"><?php echo $combined_fields[$field];?></td>
+                    <td><?php
 					$custom_data = get_custom_data_patient_bytype($patient->patientId, $pid[2]);
-					if($custom_data == null) 
+					if($custom_data == null)
 					{
 						echo "-";
 					}
-					else 
+					else
 					{
 						$field_value = $custom_data->getFieldValueString($lab_config->id, 2);
 						if(trim($field_value) == "")
 							$field_value = "-";
 						echo $field_value;
 					}
-			        ?></td><td width="15px" style="border:none"></td>  
+			        ?></td><td width="15px" style="border:none"></td>
 					<?php
 				}
-				else 
+				else
 					$c--;
 			}
-					
+
 					if($c >=  $column_size &&  $column_size != 0)
 					{
 						echo "</tr>";
 						$c=0;
 					}
-					
-		}		
-		?>		
+
+		}
+		?>
 	<?php
 	}
-	if($report_config->useDoctor == 1 && $physician_same === true) 
+	if($report_config->useDoctor == 1 && $physician_same === true)
 	{
 		?>
 		<tr valign='top'>
-			<td class="heading"><?php echo LangUtil::$generalTerms['DOCTOR'];?></td>                        
+			<td class="heading"><?php echo LangUtil::$generalTerms['DOCTOR'];?></td>
 			<td><?php echo $previous_physician; ?></td>
 		</tr>
-		<?php 
+		<?php
 	}
 	?>
 	</tbody>
 </table>
 <br>
 <p id="tests_complete_or_not">
-<?php 
-if($all_tests_completed === true && count($record_list) != 0) 
+<?php
+if($all_tests_completed === true && count($record_list) != 0)
 {
-	echo LangUtil::$pageTerms['MSG_ALLTESTSCOMPLETED']; 
+	echo LangUtil::$pageTerms['MSG_ALLTESTSCOMPLETED'];
 }
-else 
+else
 {
 	?>
 	<span style="font-weight:bold"><?php echo LangUtil::$generalTerms['TESTS']; ?></span>
@@ -1209,23 +1212,23 @@ else
 }
 ?>
 </p>
-<?php 
-if(count($record_list) == 0) 
+<?php
+if(count($record_list) == 0)
 {
 	echo LangUtil::$generalTerms['MSG_NOTFOUND'];
 }
-else 
-{ 
-	if(1) 
-	{ 
+else
+{
+	if(1)
+	{
     	?>
 		<style type='text/css'>
-			tbody td, thead th { padding: .3em;  border: 1px <?php if( $report_config->showResultBorder) echo "black"; else echo "white" ?> solid;} 
-			.rstyle 
+			tbody td, thead th { padding: .3em;  border: 1px <?php if( $report_config->showResultBorder) echo "black"; else echo "white" ?> solid;}
+			.rstyle
 			{
 				border-top-style: <?php if( $report_config->resultborderHorizontal == 1) echo "solid"; else echo "none"?>;
 				border-bottom-style: <?php if( $report_config->resultborderHorizontal == 1) echo "solid"; else echo "none"?>;
-				border-right-style: <?php if( $report_config->resultborderVertical == 1) echo "solid"; else echo "none"?>;		
+				border-right-style: <?php if( $report_config->resultborderVertical == 1) echo "solid"; else echo "none"?>;
 				border-left-style: <?php if( $report_config->resultborderVertical == 1) echo "solid"; else echo "none"?>;
 			}
 		</style>
@@ -1234,7 +1237,7 @@ else
 		<table class='print_entry_border draggable' id='report_content_table1' > <!--BLIS - report table-->
 		<thead>
 		<tr class="table_top_row" valign='top'>
-		<?php 
+		<?php
 		if($report_config->useSpecimenAddlId != 0) {
 		echo "<th>".LangUtil::$generalTerms['SPECIMEN_ID']."</th>";
 		}
@@ -1367,9 +1370,9 @@ else
 			else
 				{
 					$field_value = $custom_data->getFieldValueString($lab_config->id, 1);
-					if($field_value == "" or $field_value == null) 
+					if($field_value == "" or $field_value == null)
 						$field_value = "-";
-					echo $field_value; 
+					echo $field_value;
 				}
 			echo "</td>";
 		}
@@ -1439,7 +1442,7 @@ else
 
 		echo "</td>";
 	}
-			
+
 				if($report_config->useRange == 1)
 				{
 					echo "<td class='rstyle'>";
@@ -1449,11 +1452,11 @@ else
 					{
 						$test_type = TestType::getById($test->testTypeId);
 						$measure_list = $test_type->getMeasures();
-						
+
                                                 $submeasure_list = array();
                 $comb_measure_list = array();
                // print_r($measure_list);
-                
+
                 foreach($measure_list as $measure)
                 {
 
@@ -1461,12 +1464,12 @@ else
                     //echo "<br>".count($submeasure_list);
                     //print_r($submeasure_list);
                     $submeasure_count = count($submeasure_list);
-                    
+
                     if($measure->checkIfSubmeasure() == 1)
                     {
                         continue;
                     }
-                        
+
                     if($submeasure_count == 0)
                     {
                         array_push($comb_measure_list, $measure);
@@ -1475,11 +1478,11 @@ else
                     {
                         array_push($comb_measure_list, $measure);
                         foreach($submeasure_list as $submeasure)
-                           array_push($comb_measure_list, $submeasure); 
+                           array_push($comb_measure_list, $submeasure);
                     }
                 }
                 $measure_list = $comb_measure_list;
-                                                
+
 						foreach($measure_list as $measure){
 							echo "<br>";
 							$type=$measure->getRangeType();
@@ -1488,28 +1491,28 @@ else
 								$lower=$range_list_array[0];
 								$upper=$range_list_array[1];
 								$unit=$measure->unit;
-								if(stripos($unit,",")!=false) {	
+								if(stripos($unit,",")!=false) {
 									echo "(";
 									$units=explode(",",$unit);
 									$lower_parts=explode(".",$lower);
 									$upper_parts=explode(".",$upper);
-				
+
 									if($lower_parts[0]!=0) {
 										echo $lower_parts[0];
 										echo $units[0];
 									}
-									
+
 									if($lower_parts[1]!=0) {
 										echo $lower_parts[1];
 										echo $units[1];
 									}
 									echo " - ";
-				
+
 									if($upper_parts[0]!=0) {
 										echo $upper_parts[0];
 										echo $units[0];
 									}
-									
+
 									if($upper_parts[1]!=0) {
 										echo $upper_parts[1];
 										echo $units[1];
@@ -1517,18 +1520,18 @@ else
 									echo ")";
 								} else if(stripos($unit,":")!=false) {
 									$units=explode(":",$unit);
-									echo "(";	
+									echo "(";
 									echo $lower;
-									?><sup><?php echo $units[0]; ?></sup> - 
+									?><sup><?php echo $units[0]; ?></sup> -
 									<?php echo $upper;?> <sup> <?php echo $units[0]; ?> </sup>
 									<?php
 									echo " ".$units[1].")";
-								} else {	
-									echo "(";		
-									echo $lower; ?>-<?php echo $upper.")"; 
+								} else {
+									echo "(";
+									echo $lower; ?>-<?php echo $upper.")";
 									echo " ".$measure->unit;
 								}?>
-								&nbsp;&nbsp;	
+								&nbsp;&nbsp;
 								<?php
 							} else {
 								if($measure->unit=="")
@@ -1541,11 +1544,11 @@ else
 
 					echo "</td>";
 				}
-				
+
 				if($report_config->useEntryDate == 1)
 				{
 					echo "<td class='rstyle'>";
-				
+
 					if(trim($test->result) == "")
 						echo "-";
 					else {
@@ -1554,7 +1557,7 @@ else
 					}
 					echo "</td>";
 				}
-				
+
 				if($report_config->useRemarks == 1) {
 					//echo "<td class='rstyle'>".$test->getComments()."</td>";
                     $cleaned_range_array = clean_range($test, $report_config, $patient);
@@ -1613,7 +1616,7 @@ else
 				if($report_config->useVerifiedBy == 1) {
 					echo "<td>".$test->getVerifiedBy()." / ".$test->getVerifierPosition()."</td>";
 				}
-				
+
 				if($report_config->useStatus == 1 && $all_tests_completed === false) {
 					echo "<td class='rstyle'>".$test->getStatus()."</td>";
 				}
@@ -1674,15 +1677,15 @@ else
 	</table>
 </div>
 <br><br>
-<?php if($report_config->useClinicalData == 1) 
-{		
-	if(count($data_list)==1&&count($record_list)==1) 
+<?php if($report_config->useClinicalData == 1)
+{
+	if(count($data_list)==1&&count($record_list)==1)
 	{
 		?>
 		<b>
 			Clinical Data:
 		</b>
-		<?php  
+		<?php
 		foreach($data_list as $key=>$value) {
 			if(stripos($value,"!#!")===0) {
 				$data=substr($value,3);
@@ -1698,10 +1701,10 @@ else
 				$text=$value;//substr($value,3);
 				$table="";
 			}
-			
+
 			if($text!="")
 				echo $text;
-				
+
 			if($table!="") {
 				$contents=explode("###",$table);
 				$name_array=$contents[0];
@@ -1710,7 +1713,7 @@ else
 				$value=explode(",",$value_array);
 			}
 			?><table>
-			<?php 
+			<?php
 			for($i=0;$i<count($name);$i++) {
 				if($name[$i]!=" ") {
 					?>
@@ -1722,7 +1725,7 @@ else
 							<?php echo $value[$i];?>
 							</td>
 							</tr>
-							<?php 
+							<?php
 						}
 					}
 					?>
@@ -1755,17 +1758,17 @@ else
 						$text=$value;//substr($value,3);
 						$table="";
 					}
-					
+
 				if($text!="")
 					echo $text;
-					
+
 				if($table!=""&&stripos($value,"%%%")!=0) {
 					$contents=explode("###",$table);
 					$name_array=$contents[0];
 					$value_array=$contents[1];
 					$name=explode(",",$name_array);
 					$value=explode(",",$value_array);
-			
+
 					?>
 					<table>
 					<?php for($i=0;$i<count($name);$i++) {
@@ -1779,7 +1782,7 @@ else
 								<?php echo $value[$i];?>
 								</td>
 								</tr>
-								<?php 
+								<?php
 							}
 						}
 					?>
@@ -1799,7 +1802,7 @@ else
 				$record_list[] = $value;
 				$data_list=array();
 			}
-			
+
 			foreach($record_list as $record_set) {
 				$value = $record_set;
 				$test = $value[0];
@@ -1810,27 +1813,27 @@ else
 				$specimen = $value[1];
 				$id=$test->testTypeId;
 				$clinical_data=get_clinical_data_by_id($test->testTypeId);
-				?>	
+				?>
 				<?php
-				
+
 				if($report_config->useSpecimenName == 1) {
 					echo "<h3>";
 					echo LangUtil::$generalTerms['TYPE']."&nbsp;&#45;&nbsp;";
 					echo get_specimen_name_by_id($specimen->specimenTypeId)."</h3>";
 				}
-				
+
 				if($report_config->useTestName == 1) {
 					echo "<h3>";
 					echo LangUtil::$generalTerms['TEST']."&nbsp;&#45;&nbsp;";
 					echo get_test_name_by_id($test->testTypeId)."</h3>";
 				}
-				
+
 				if($report_config->useSpecimenAddlId != 0) {
 					echo LangUtil::$generalTerms['SPECIMEN_ID']."&nbsp;&#45;&nbsp;";
 					echo $specimen->getAuxId();
 					echo "<br>";
 				}
-				
+
 				if($clinical_data!='') {
 					$data_list[$id]=$clinical_data;
 				}
@@ -1863,36 +1866,36 @@ else
 						}
 						else {
 							$field_value = $custom_data->getFieldValueString($lab_config->id, 1);
-							if($field_value == "" or $field_value == null) 
+							if($field_value == "" or $field_value == null)
 							$field_value = "-";
-							echo $field_value; 
+							echo $field_value;
 						}
 						echo "<br>";
 					}
 				}
-				
+
 				if($report_config->useComments == 1) {
 					echo LangUtil::$generalTerms['COMMENTS']."&nbsp;&#45;&nbsp;";
 					echo $specimen->getComments()."<br>";
 				}
-				
+
 				if($report_config->useReferredTo == 1) {
 					echo LangUtil::$generalTerms['REF_TO']."&nbsp;&#45;&nbsp;";
 					echo $specimen->getReferredToName()."<br>";
 				}
-				
+
 				if($report_config->useDoctor == 1 && $physician_same === false) {
 					echo LangUtil::$generalTerms['DOCTOR']."&nbsp;&#45;&nbsp;";
 					$doc=$specimen->getDoctor();
 					echo $doc."<br>";
 				}
-				
+
 				if($report_config->useMeasures == 1)
 					echo LangUtil::$generalTerms['MEASURES']."<br>";
-				
+
 				if($report_config->useResults == 1) {
 					echo LangUtil::$generalTerms['RESULTS']."<br>";
-					
+
 					if(trim($test->result) == "") {
 						echo LangUtil::$generalTerms['PENDING_RESULTS'];
 					}
@@ -1900,59 +1903,59 @@ else
 						echo $test->decodeResultWithoutMeasures();
 					}
 					else
-                                            
+
                                             //NC3065
 						echo $test->decodeResult();
                                                 //echo $test->decodeResults();
                                             //NC3065
 					echo "<br>";
 				}
-				
+
 				if($report_config->useEntryDate == 1) {
 					echo LangUtil::$generalTerms['E_DATE']."&nbsp;&#45;&nbsp;";
-					
+
 					if(trim($test->result) == "")
 						echo "-";
-						
+
 					else {
 						$ts_parts = explode(" ", $test->timestamp);
 						echo DateLib::mysqlToString($ts_parts[0]);
 					}
 					echo "<br>";
 				}
-				
+
 				if($report_config->useRemarks == 1) {
 					echo LangUtil::$generalTerms['RESULT_COMMENTS']."&nbsp;&#45;&nbsp;";
 					echo $test->getComments()."<br>";
 				}
-				
+
 				if($report_config->useEnteredBy == 1) {
 					echo LangUtil::$generalTerms['ENTERED_BY']."&nbsp;&#45;&nbsp;";
 					echo $test->getEnteredBy()."<br>";
 				}
-				
+
 				if($report_config->useVerifiedBy == 1) {
 					echo LangUtil::$generalTerms['VERIFIED_BY']."&nbsp;&#45;&nbsp;";
 					echo $test->getVerifiedBy()."<br>";
 				}
-				
+
 				if($report_config->useStatus == 1 && $all_tests_completed === false) {
 					echo LangUtil::$generalTerms['SP_STATUS']."&nbsp;&#45;&nbsp;";
 					echo $test->getStatus()."<br>";
 				}
-			
+
 			}
 			?>
-		
+
 		<br><br>
-		<?php 
-		if($report_config->useClinicalData == 1) { 		
+		<?php
+		if($report_config->useClinicalData == 1) {
 			if(count($data_list)==1&&count(record_list)==1) {
 				?>
 				<b>
 					Clinical Data:
 					</b>
-					<?php  
+					<?php
 					foreach($data_list as $key=>$value) {
 						if( stripos($value,"!#!")===0 ) {
 							$data=substr($value,3);
@@ -1968,10 +1971,10 @@ else
 							$text=$value;//substr($value,3);
 							$table="";
 						}
-			
+
 						if($text!="")
 							echo $text;
-							
+
 						if($table!="") {
 							$contents=explode("###",$table);
 							$name_array=$contents[0];
@@ -1980,7 +1983,7 @@ else
 							$value=explode(",",$value_array);
 						}
 						?><table>
-						<?php 
+						<?php
 							for($i=0;$i<count($name);$i++) {
 								if($name[$i]!=" ") {
 									?>
@@ -1992,13 +1995,13 @@ else
 									<?php echo $value[$i];?>
 									</td>
 									</tr>
-									<?php 
+									<?php
 								}
 							}
 						?>
 						</table>
 						<?php
-			
+
 					}
 				?>
 				<br><br>
@@ -2026,20 +2029,20 @@ else
 						$text=$value;//substr($value,3);
 						$table="";
 					}
-				
+
 					if($text!="")
 						echo $text;
-			
+
 					if($table!=""&&stripos($value,"%%%")!=0) {
 						$contents=explode("###",$table);
 						$name_array=$contents[0];
 						$value_array=$contents[1];
 						$name=explode(",",$name_array);
 						$value=explode(",",$value_array);
-						
+
 						?>
 						<table>
-						<?php 
+						<?php
 						for($i=0;$i<count($name);$i++) {
 							if($name[$i]!="") {
 								?>
@@ -2051,7 +2054,7 @@ else
 								<?php echo $value[$i];?>
 								</td>
 								</tr>
-								<?php 
+								<?php
 							}
 						}
 						?>
@@ -2088,19 +2091,19 @@ if(count($record_list) != 0)
 			var html_string = "";
 			if(date_from == date_to)
 			{
-				html_string = "<br><?php echo LangUtil::$generalTerms['DATE'].": "; ?>"+date_from;		
+				html_string = "<br><?php echo LangUtil::$generalTerms['DATE'].": "; ?>"+date_from;
 			}
 			else
 			{
 				html_string = "<br><?php echo LangUtil::$generalTerms['FROM_DATE'].": "; ?>"+date_from+" | <?php echo LangUtil::$generalTerms['TO_DATE'].": "; ?>"+date_to;
 			}
-			
+
 			$('#date_section').html(html_string);
 		});
 
 		function change_to_bold() {
 			$("#myPara").css("font-style","bold");
-		} 
+		}
 	</script>
 	<?php
 	}
@@ -2155,7 +2158,7 @@ Signed by:
 				$(lastBreak).removeClass("print_break");
 			}
 		};
-		
+
 		function teardownPrint() {
 			$("printDiv").removeClass("printable");
 			$('.hidden_print').removeClass("hidden_print");
@@ -2175,7 +2178,7 @@ Signed by:
 </script>
 
 
-<?php 
+<?php
 //$new_footer_part="............................................";
 $footerText=explode(";" ,$report_config->footerText);
 $designation=explode(";" ,$report_config->designation);
@@ -2199,23 +2202,23 @@ $lab_config_id=$_SESSION['lab_config_id'];
 <td align="center"<?php if($lab_config_id==234) {?>style="font-size:14pt;"<?php }?> ><?php echo $designation[$j]; ?></td>
 <?php }
 /*
-$load_time = microtime(); 
-$load_time = explode(' ',$load_time); 
-$load_time = $load_time[1] + $load_time[0]; 
-$page_end = $load_time; 
-$final_time = ($page_end - $page_start); 
-$page_load_time = number_format($final_time, 4, '.', ''); 
-echo("Page generated in " . $page_load_time . " seconds"); 
+$load_time = microtime();
+$load_time = explode(' ',$load_time);
+$load_time = $load_time[1] + $load_time[0];
+$page_end = $load_time;
+$final_time = ($page_end - $page_start);
+$page_load_time = number_format($final_time, 4, '.', '');
+echo("Page generated in " . $page_load_time . " seconds");
 */
 function getFieldValue($field_id,$previous_daily_num="")
 {
 		global $patient;
 		$retval="";
-		
+
 		switch ($field_id)
 		{
-			case 0:	
-				$retval=$patient->getSurrogateId();		
+			case 0:
+				$retval=$patient->getSurrogateId();
 			break;
 			case 1:
 				$retval=$previous_daily_num;
@@ -2245,12 +2248,12 @@ function getFieldValue($field_id,$previous_daily_num="")
 			break;
 			case 10:
 			break;
-			
+
 			default:
 			$retval="-";
-			
+
 		}
-		
+
 		return $retval;
 }
 
