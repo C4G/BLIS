@@ -4,6 +4,8 @@
 # This file contains entity classes and functions for DB queries
 #
 
+require_once(__DIR__."/composer.php");
+
 include_once("../lang/lang_util.php");
 require_once('db_util.php');
 require_once('keymgmt.php');
@@ -54,10 +56,6 @@ require_once(dirname(__FILE__)."/$locale_file");
 
 require_once("debug_lib.php");
 require_once("date_lib.php");
-
-// PDF Modules
-require_once(dirname(__FILE__).'/../tcpdf/config/lang/eng.php');
-require_once(dirname(__FILE__).'/../tcpdf/tcpdf.php');
 
 
 #
@@ -3031,9 +3029,10 @@ class Test
 	public function getResultWithoutHash()
 	{
 	    global $PATIENT_HASH_LENGTH;
-		if(trim($this->result) == "")
+		if(trim($this->result) == "") {
 			# Results not yet entered
 			return "";
+        }
 
         #$retval = substr($this->result, 0, -1*$PATIENT_HASH_LENGTH);
 
@@ -13605,25 +13604,6 @@ function is_billing_enabled($lid)
     }
     return false;
 }
-
-/***************************************************
- * PDF Rendering Functions
- **************************************************/
-function render_pdf_from_html($html, $page_title, $page_author)
-{
-    // This currently only renders a one-page document.  Any longer will break it.  TODO: Look into this.
-
-    // Instantiate the pdf
-    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-    // set document information
-    $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetAuthor('BLIS');
-    $pdf->SetTitle($page_title);
-    $pdf->SetSubject($page_title);
-    $pdf->SetKeywords("TCPDF, PDF, example, test, guide, $page_title, BLIS, html");
-}
-
 
 /***************************************************
  * Test Removal Module ENDS

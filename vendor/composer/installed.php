@@ -1,22 +1,22 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '516da400e2a83480edb55a84b3f3722aeaa44285',
+        'reference' => NULL,
         'name' => '__root__',
         'dev' => true,
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '516da400e2a83480edb55a84b3f3722aeaa44285',
+            'reference' => NULL,
             'dev_requirement' => false,
         ),
         'monolog/monolog' => array(
@@ -51,24 +51,6 @@
             'provided' => array(
                 0 => '1.0.0',
             ),
-        ),
-        'spipu/html2pdf' => array(
-            'pretty_version' => 'v4.4.0',
-            'version' => '4.4.0.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../spipu/html2pdf',
-            'aliases' => array(),
-            'reference' => '2b86b570dd9058c1fc2383503d8b8628a977292d',
-            'dev_requirement' => false,
-        ),
-        'tecnickcom/tcpdf' => array(
-            'pretty_version' => '6.0.013',
-            'version' => '6.0.013.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../tecnickcom/tcpdf',
-            'aliases' => array(),
-            'reference' => '5a2f2197e0be3c64ed218eb7d874cb5c96d7cd13',
-            'dev_requirement' => false,
         ),
     ),
 );

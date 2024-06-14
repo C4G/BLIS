@@ -1,8 +1,6 @@
 {
     "require": {
         "monolog/monolog": "^1.25",
-        "phpoffice/phpexcel": "= 1.8.2",
-        "spipu/html2pdf": "= 4.4.0",
-        "tecnickcom/tcpdf": "= 6.0.013"
+        "phpoffice/phpexcel": "= 1.8.2"
     }
 }

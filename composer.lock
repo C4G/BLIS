@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "685cde5e8cde8013f638b512f10d5161",
+    "content-hash": "28354d1d13e43da729e1e7a74044f5bc",
     "packages": [
         {
             "name": "monolog/monolog",
@@ -208,120 +208,6 @@
                 "source": "https://github.com/php-fig/log/tree/1.1.4"
             },
             "time": "2021-05-03T11:20:27+00:00"
-        },
-        {
-            "name": "spipu/html2pdf",
-            "version": "v4.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spipu/html2pdf.git",
-                "reference": "2b86b570dd9058c1fc2383503d8b8628a977292d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spipu/html2pdf/zipball/2b86b570dd9058c1fc2383503d8b8628a977292d",
-                "reference": "2b86b570dd9058c1fc2383503d8b8628a977292d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "html2pdf.class.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL"
-            ],
-            "authors": [
-                {
-                    "name": "Spipu",
-                    "homepage": "https://github.com/spipu",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP library to convert Html into Pdf",
-            "homepage": "http://html2pdf.fr/",
-            "keywords": [
-                "html",
-                "html2pdf",
-                "pdf"
-            ],
-            "support": {
-                "issues": "https://github.com/spipu/html2pdf/issues",
-                "source": "https://github.com/spipu/html2pdf/tree/v4.4.0"
-            },
-            "time": "2015-12-11T10:13:58+00:00"
-        },
-        {
-            "name": "tecnickcom/tcpdf",
-            "version": "6.0.013",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "5a2f2197e0be3c64ed218eb7d874cb5c96d7cd13"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/5a2f2197e0be3c64ed218eb7d874cb5c96d7cd13",
-                "reference": "5a2f2197e0be3c64ed218eb7d874cb5c96d7cd13",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "fonts",
-                    "config/lang",
-                    "config",
-                    "include",
-                    "tcpdf.php",
-                    "tcpdf_parser.php",
-                    "tcpdf_import.php",
-                    "tcpdf_barcodes_1d.php",
-                    "tcpdf_barcodes_2d.php",
-                    "include/tcpdf_colors.php",
-                    "include/tcpdf_filters.php",
-                    "include/tcpdf_font_data.php",
-                    "include/tcpdf_fonts.php",
-                    "include/tcpdf_images.php",
-                    "include/tcpdf_static.php",
-                    "include/barcodes/datamatrix.php",
-                    "include/barcodes/pdf417.php",
-                    "include/barcodes/qrcode.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPLv3"
-            ],
-            "authors": [
-                {
-                    "name": "Nicola Asuni",
-                    "email": "info@tecnick.com",
-                    "homepage": "http://nicolaasuni.tecnick.com"
-                }
-            ],
-            "description": "TCPDF is a PHP class for generating PDF documents.",
-            "homepage": "http://www.tcpdf.org/",
-            "keywords": [
-                "PDFD32000-2008",
-                "TCPDF",
-                "barcodes",
-                "datamatrix",
-                "pdf",
-                "pdf417",
-                "qrcode"
-            ],
-            "support": {
-                "source": "https://github.com/tecnickcom/TCPDF/tree/6.0.013"
-            },
-            "time": "2013-05-10T16:27:34+00:00"
         }
     ],
     "packages-dev": [],
