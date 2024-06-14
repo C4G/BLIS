@@ -87,6 +87,13 @@ if (isset($_SESSION['username'])) {
         <?php
     }
     }
+
+
+    if (intval($_SESSION['user_level']) >= 3) {
+    ?>
+        <a href="/debug.php" class="black">Debug Tools</a> |
+    <?php
+    }
     ?>
     <a rel='facebox' href='user_rating.php' class="black"><?php echo LangUtil::getPageTerm("LOGOUT"); ?></a>
         </div>
