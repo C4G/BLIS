@@ -1,0 +1,39 @@
+#shellcheck shell=bash
+
+export DB_HOST="${DB_HOST:-db}"
+export DB_PORT="${DB_PORT:-3306}"
+export DB_USER="${DB_USER:-root}"
+export DB_PASS="${DB_PASS:-blis123}"
+
+function create_database {
+    local DATABASE_NAME="$1"
+    mysql -h"$DB_HOST" --port "$DB_PORT" -u"$DB_USER" -p"$DB_PASS" -e "CREATE DATABASE $DATABASE_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+}
+export create_database
+
+function drop_database {
+    local DATABASE_NAME="$1"
+    mysql -h"$DB_HOST" --port "$DB_PORT" -u"$DB_USER" -p"$DB_PASS" -e "SET FOREIGN_KEY_CHECKS=0; DROP DATABASE $DATABASE_NAME; SET FOREIGN_KEY_CHECKS=1;"
+    echo -e "Dropped $DATABASE_NAME"
+}
+export drop_database
+
+function execute_sql {
+    local DATABASE_NAME="$1"
+    local SQL_FILE="$2"
+
+    mysql -h"$DB_HOST" --port "$DB_PORT" -u"$DB_USER" -p"$DB_PASS" "$DATABASE_NAME" < "$SQL_FILE"
+}
+export execute_sql
+
+function dump_database {
+    local DATABASE_NAME="$1"
+    local ROOT
+    ROOT="$(dirname "$0")"
+
+    mysqldump -h"$DB_HOST" --port "$DB_PORT" -u"$DB_USER" -p"$DB_PASS" --no-data --no-create-db --skip-add-drop-table "$DATABASE_NAME" > "$ROOT/../structure/$DATABASE_NAME.sql"
+    sed -i "s/CREATE TABLE \`/CREATE TABLE IF NOT EXISTS \`/g" "$ROOT/../structure/$DATABASE_NAME.sql"
+
+    mysqldump -h"$DB_HOST" --port "$DB_PORT" -u"$DB_USER" -p"$DB_PASS" --no-create-info --skip-add-drop-table --skip-extended-insert --compact "$DATABASE_NAME" > "$ROOT/../seed/$DATABASE_NAME.sql"
+}
+export dump_database

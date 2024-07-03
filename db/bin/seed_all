@@ -1,0 +1,11 @@
+#!/bin/bash
+
+ROOT="$(dirname "$0")"
+
+set -a
+source "$ROOT/env"
+set +a
+
+execute_sql blis_revamp "$ROOT/../seed/blis_revamp.sql"
+execute_sql blis_12 "$ROOT/../seed/blis_12.sql"
+execute_sql blis_127 "$ROOT/../seed/blis_127.sql"

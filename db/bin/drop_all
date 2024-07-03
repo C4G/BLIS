@@ -1,0 +1,11 @@
+#!/bin/bash
+
+ROOT="$(dirname "$0")"
+
+set -a
+source "$ROOT/env"
+set +a
+
+drop_database blis_revamp
+drop_database blis_12
+drop_database blis_127
