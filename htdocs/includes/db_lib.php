@@ -6,16 +6,16 @@
 
 require_once(__DIR__."/composer.php");
 
-include_once("../lang/lang_util.php");
-require_once('db_util.php');
-require_once('keymgmt.php');
-require_once('lab_config.php');
+include_once(__DIR__."/../lang/lang_util.php");
+require_once(__DIR__."/db_util.php");
+require_once(__DIR__."/keymgmt.php");
+require_once(__DIR__."/lab_config.php");
 
 # Start session if not already started
 if(session_id() == "")
 	session_start();
 
-require_once("defaults.php");
+require_once(__DIR__."/defaults.php");
 
 // List of known user roles (These could be fetched from DB and populated)
 $LIS_TECH_RW = 0;

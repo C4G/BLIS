@@ -2,9 +2,9 @@
 #
 # Contains commonly used functions for performing backup or reverting to a backup
 #
-require_once("../includes/composer.php");
-require_once("../includes/db_lib.php");
-require_once("../includes/platform_lib.php");
+require_once(__DIR__."/../includes/composer.php");
+require_once(__DIR__."/../includes/db_lib.php");
+require_once(__DIR__."/../includes/platform_lib.php");
 
 class BackupArchive {
     private $file_path;

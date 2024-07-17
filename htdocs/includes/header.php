@@ -6,8 +6,8 @@ $path = "../";
 set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 
 # Include required libraries
-require_once("includes/SessionCheck.php");
-require_once("includes/db_lib.php");
+require_once(__DIR__."/SessionCheck.php");
+require_once(__DIR__."/db_lib.php");
 
 $TRACK_LOADTIME = false;
 $TRACK_LOADTIMEJS = false;
@@ -18,11 +18,11 @@ if ($TRACK_LOADTIME) {
 }
 
 
-require_once("includes/page_elems.php");
-require_once("includes/script_elems.php");
-include_once("../lang/lang_util.php");
+require_once(__DIR__."/page_elems.php");
+require_once(__DIR__."/script_elems.php");
+include_once(__DIR__."/../lang/lang_util.php");
 LangUtil::setPageId("header");
-require_once("includes/perms_check.php");
+require_once(__DIR__."/perms_check.php");
 
 $script_elems = new ScriptElems();
 $page_elems = new PageElems();
@@ -33,7 +33,7 @@ $page_elems = new PageElems();
         <meta charset=UTF-8>
         <title>Basic Laboratory Information System v<?php echo $VERSION; ?></title>
         <?php
-        require_once("styles.php");
+        require_once(__DIR__."/styles.php");
 
         $script_elems->enableJQuery();
         $script_elems->enableTreeView();
@@ -70,20 +70,20 @@ $page_elems = new PageElems();
 if (isset($_SESSION['username'])) {
         ?>
     <?php echo LangUtil::getPageTerm("LOGGEDINAS"); ?>: <?php echo $_SESSION['username']; ?> |
-    <a href='edit_profile.php' class="black"><?php echo LangUtil::$pageTerms['EDITPROFILE']; ?></a> |
+    <a href='/edit_profile.php' class="black"><?php echo LangUtil::$pageTerms['EDITPROFILE']; ?></a> |
     <?php
     //echo "test".$_SESSION['admin_as_tech'];
     if (isset($_SESSION['admin_as_tech']) && $_SESSION['admin_as_tech'] === true) {
         ?>
-        <a href='switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOMGR"); ?></a> |
+        <a href='/switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOMGR"); ?></a> |
         <?php
     } elseif (isset($_SESSION['dir_as_tech']) && $_SESSION['dir_as_tech'] === true) {
         ?>
-        <a href='switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TODIR"); ?></a> |
+        <a href='/switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TODIR"); ?></a> |
         <?php
     } elseif (User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level'])) {
         $lab_config_list = get_lab_configs($_SESSION['user_id']); ?>
-        <a href='switchto_tech.php?id=<?php echo $lab_config_list[0]->id; ?>' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOTECH"); ?></a> |
+        <a href='/switchto_tech.php?id=<?php echo $lab_config_list[0]->id; ?>' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOTECH"); ?></a> |
         <?php
     }
     }
@@ -95,7 +95,7 @@ if (isset($_SESSION['username'])) {
     <?php
     }
     ?>
-    <a rel='facebox' href='user_rating.php' class="black"><?php echo LangUtil::getPageTerm("LOGOUT"); ?></a>
+    <a rel='facebox' href='/user_rating.php' class="black"><?php echo LangUtil::getPageTerm("LOGOUT"); ?></a>
         </div>
         <table cellspacing="10px">
             <tr>
@@ -122,7 +122,7 @@ if (strpos($_SERVER['PHP_SELF'], 'login.php') === false) {
             //echo "hello "."<br/>";
 
             echo "<li ";
-            echo "><a href='".$value."' ";
+            echo "><a href='/".$value."' ";
             if (
                 (strpos($_SERVER['PHP_SELF'], $value) !== false)
                 && !(strpos($_SERVER['PHP_SELF'], "_home.php") !== false && $value == "home.php")

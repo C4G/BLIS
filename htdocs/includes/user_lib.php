@@ -4,7 +4,7 @@
 // Contains functions for managing user roles, privileges and logging
 //
 
-include_once("../lang/lang_util.php");
+require_once(__DIR__."/../lang/lang_util.php");
 
 //list of access rights
 $access_rights=array(

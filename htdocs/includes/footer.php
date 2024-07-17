@@ -23,8 +23,8 @@
 # displays footer so the users know the page is done loading.
 #
 
-include_once("../lang/lang_util.php");
-include("db_close.php");
+include_once(__DIR__."/../lang/lang_util.php");
+include_once(__DIR__."/db_close.php");
 LangUtil::setPageId("footer");
 ?>
 

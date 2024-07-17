@@ -29,37 +29,37 @@ class ScriptElems
 
     //Tree view
     public $enabledTreeView = false;
-	
+
 	public function enableJQuery()
 	{
 		if($this->enabledJQuery === false)
 		{
 		?>
-			
-			<script src="../js/jquery-1.3.2.js"></script>
-			
+
+			<script src="/js/jquery-1.3.2.js"></script>
+
 			<script type='text/javascript'>
-			
+
 				$(document).ready(function() {
 					$("input").attr("autocomplete", "on");
 				});
-				
+
 				String.prototype.trim = function() {
 					return this.replace(/^\s+|\s+$/g,"");
 				}
-				
+
 				String.prototype.contains = function(substr) {
 					if(this.indexOf(substr) >= 0)
 						return true;
 					else
 						return false;
 				}
-				
+
 				function toggle(div_id)
 				{
 					$('#'+div_id).toggle();
 				}
-				
+
 				function checkDateRegex(chkdate)
 				{
 					if(chkdate.match(/^[0-9]{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])/))
@@ -71,7 +71,7 @@ class ScriptElems
 						return false;
 					}
 				}
-	
+
 				function checkDate(y, m, d)
 				{
 
@@ -105,24 +105,24 @@ class ScriptElems
 
 					return checkDateRegex(y+"-"+m+"-"+d);
 				}
-	
+
 				Array.prototype.has=function(v){
 					for (i=0; i<this.length; i++){
 						if (this[i]==v) return i;
 					}
 					return false;
-				} 
+				}
 				if(!String.prototype.startsWith){
 					String.prototype.startsWith = function (str) {
 						return !this.indexOf(str);
 					}
 				}
-				
-				function cUpper(cObj) 
+
+				function cUpper(cObj)
 				{
 					cObj.value=cObj.value.toUpperCase();
 				}
-				
+
 				function validate_custom_numeric(elem, elem_id, range_lower, range_upper)
 				{
 					var value = elem.value;
@@ -136,21 +136,21 @@ class ScriptElems
 						$('#'+error_elem_id).show();
 					}
 				}
-				
+
 			</script>
 		<?php
 		$this->enabledJQuery == true;
 		}
 	}
-	
+
 	public function enableFacebox()
 	{
 		# Enable facebox plugin for overlay dialogs/message boxes
 		if($this->enabledFacebox === false)
 		{
 		?>
-			<link href="facebox/facebox.css" media="screen" rel="stylesheet" type="text/css" />
-			<script src="facebox/facebox.js" type="text/javascript"></script>
+			<link href="/facebox/facebox.css" media="screen" rel="stylesheet" type="text/css" />
+			<script src="/facebox/facebox.js" type="text/javascript"></script>
 			<script type='text/javascript'>
 			$(document).ready(function(){
 				$('a[rel*=facebox]').facebox()
@@ -160,7 +160,7 @@ class ScriptElems
 			$this->enabledFacebox = true;
 		}
 	}
-	
+
 	public function enableDatePicker()
 	{
 		# Enable date picker library
@@ -168,29 +168,29 @@ class ScriptElems
 		{
 		?>
 			<!-- required plugins -->
-			<SCRIPT type="text/javascript" src="js/date.js"></SCRIPT>
-			<!--[if IE]><script type="text/javascript" src="js/jquery.bgiframe.min.js"></script><![endif]-->
+			<SCRIPT type="text/javascript" src="/js/date.js"></SCRIPT>
+			<!--[if IE]><script type="text/javascript" src="/js/jquery.bgiframe.min.js"></script><![endif]-->
 			<!-- jquery.datePicker.js -->
-			<SCRIPT type="text/javascript" src="js/jquery.datePicker.min.js"></SCRIPT>
+			<SCRIPT type="text/javascript" src="/js/jquery.datePicker.min.js"></SCRIPT>
 			<!-- datePicker required styles -->
 			<LINK rel="stylesheet" type="text/css" media="screen" href="css/datePicker.css">
 		<?php
 			$this->enabledDatePicker = true;
 		}
 	}
-	
+
 	public function enableTimePicker()
 	{
 		# Enable time picker library
 		if($this->enabledTimePicker === false)
 		{
 		?>
-			<SCRIPT type="text/javascript" src="js/jquery.timePicker.js"></SCRIPT>
+			<SCRIPT type="text/javascript" src="/js/jquery.timePicker.js"></SCRIPT>
 		<?php
 			$this->enabledTimePicker = true;
 		}
 	}
-	
+
 	public function enablePageloadIndicator()
 	{
 		# Enable page load indicator bar
@@ -219,14 +219,14 @@ class ScriptElems
 			<!-- Loading Div -->
 			<div id="loading">
 			Loading content, please wait..
-			<img src="includes/img/loading.gif" alt="Loading.." />
+			<img src="/includes/img/loading.gif" alt="Loading.." />
 			<br>
 			</div>
 		<?php
 			$this->enabledPageLoadIndicator = true;
 		}
 	}
-	
+
 	public function enableAutoScrollTop()
 	{
 		?>
@@ -249,9 +249,9 @@ class ScriptElems
 	 ?>
   <!--<link rel="stylesheet" href="css/main.css" type="text/css" />-->
   <link rel="stylesheet" href="css/jquery.autocomplete.css" type="text/css" />
-  <script type="text/javascript" src="js/jquery.bgiframe.min.js"></script>
- <script type="text/javascript" src="js/jquery.dimensions.js"></script>
-  <script type="text/javascript" src="js/jquery.autocomplete.js"></script>
+  <script type="text/javascript" src="/js/jquery.bgiframe.min.js"></script>
+ <script type="text/javascript" src="/js/jquery.dimensions.js"></script>
+  <script type="text/javascript" src="/js/jquery.autocomplete.js"></script>
    <link rel="stylesheet" type="text/css" media="screen" href="css/select2.css"></link>
 	<?php
 		 }
@@ -262,89 +262,89 @@ class ScriptElems
 		if($this->enabledTokenInput === false)
 		{
 		?>
-			<script type='text/javascript' src="js/jquery.tokeninput-1.1.js"></script>
+			<script type='text/javascript' src="/js/jquery.tokeninput-1.1.js"></script>
 			<link rel="stylesheet" type="text/css" media="screen" href="css/token-input.css"></link>
 			<link rel="stylesheet" type="text/css" media="screen" href="css/token-input-facebook.css"></link>
 		<?php
 		}
 		$this->enabledTokenInput = true;
 	}
-	
+
 	public function enableJQueryForm()
 	{
 		if($this->enabledJQueryForm === false)
 		{
 		?>
-			<script type='text/javascript' src="js/jquery.form.js"></script>
+			<script type='text/javascript' src="/js/jquery.form.js"></script>
 		<?php
 		}
 		$this->enabledJQueryForm = true;
 	}
-        
+
         public function enableJQueryMask()
 	{
 		if($this->enabledJQueryMask === false)
 		{
 		?>
-                        <script type="text/javascript" src="js/jquery.maskedinput-1.3.js"></script>
+                        <script type="text/javascript" src="/js/jquery.maskedinput-1.3.js"></script>
 		<?php
 		}
 		$this->enabledJQueryMask = true;
 	}
-	
+
 	public function enableJQueryValidate()
 	{
 		if($this->enabledJQueryValidate === false)
 		{
 		?>
-			<script type='text/javascript' src="js/jquery.validate.js"></script>
+			<script type='text/javascript' src="/js/jquery.validate.js"></script>
 		<?php
 		}
 		$this->enabledJQueryValidate = true;
 	}
-	
+
 	public function enableTableSorter($selectedStyle=null)
 	{
 		if($this->enabledTableSorter === false)
 		{
 			?>
-			<script type='text/javascript' src="js/jquery.tablesorter.js"></script>
-			<script type='text/javascript' src="js/jquery.tablesorter.pager.js"></script>
+			<script type='text/javascript' src="/js/jquery.tablesorter.js"></script>
+			<script type='text/javascript' src="/js/jquery.tablesorter.pager.js"></script>
 			<?php
 			if($selectedStyle==null) {
 			?>
 				<link href="css/tablesorter_blue/style.css" media="screen" rel='stylesheet' type='text/css'></link>
-			<?php 
+			<?php
 			}
 		}
 		$this->enabledTableSorter = true;
 	}
-	
+
 	public function enableFlotBasic()
 	{
 		if($this->enabledFlotBasic === false)
 		{
 		?>
-			<!--[if IE]><script language="javascript" type="text/javascript" src="js/excanvas.min.js"></script><![endif]--> 
-			<script language="javascript" type="text/javascript" src="js/jquery.flot.min.js"></script> 
+			<!--[if IE]><script language="javascript" type="text/javascript" src="/js/excanvas.min.js"></script><![endif]-->
+			<script language="javascript" type="text/javascript" src="/js/jquery.flot.min.js"></script>
 		<?php
 		}
 		$this->enabledFlotBasic = true;
 	}
-	
+
 	public function enableMultiSelect()
 	{
 		if($this->enabledMultiSelect === false)
 		{
 		?>
-			<script src="js/jquery.multiselect/jquery.bgiframe.min.js" type="text/javascript"></script> 
-			<script src="js/jquery.multiselect/jquery.multiSelect.js" type="text/javascript"></script> 
- 			<link href="js/jquery.multiselect/jquery.multiSelect.css" rel="stylesheet" type="text/css" /> 
+			<script src="/js/jquery.multiselect/jquery.bgiframe.min.js" type="text/javascript"></script>
+			<script src="/js/jquery.multiselect/jquery.multiSelect.js" type="text/javascript"></script>
+ 			<link href="/js/jquery.multiselect/jquery.multiSelect.css" rel="stylesheet" type="text/css" />
 		<?php
 		}
 		$this->enabledMultiSelect = true;
 	}
-	
+
 	public function enableLatencyRecord()
 	{
 		# Enables recording latency information for page load times
@@ -356,12 +356,12 @@ class ScriptElems
 			}
 			$_SESSION['DELAY_RECORDED'] = false;
 		?>
-			<script language="javascript" type="text/javascript" src="record.js"></script> 
+			<script language="javascript" type="text/javascript" src="record.js"></script>
 		<?php
 		}
 		$this->enabledLatencyRecord = true;
 	}
-	
+
 	public function bindEnterToClick($field_selector, $button_selector)
 	{
 		# Binds an form input field to enable form submit on hitting 'Enter' key
@@ -380,7 +380,7 @@ class ScriptElems
 		</script>
 	<?php
 	}
-	
+
 	public function enableFlipV()
 	{
 		# Enables jquery.flipv plugin for displaying vertical text
@@ -388,14 +388,14 @@ class ScriptElems
 		if($this->enabledFlipV == false)
 		{
 		?>
-			<script type="text/javascript" src="js/cvi_text_lib.js"></script>
-			<script type="text/javascript" src="js/jquery.flipv.js"></script>
-			<script type="text/javascript" src="js/jquery.flipv_up.js"></script>
+			<script type="text/javascript" src="/js/cvi_text_lib.js"></script>
+			<script type="text/javascript" src="/js/jquery.flipv.js"></script>
+			<script type="text/javascript" src="/js/jquery.flipv_up.js"></script>
 		<?php
 		$this->enabledFlipV = true;
 		}
 	}
-	
+
 	public function enableJWizard()
 	{
 		# Enables jquery.jwizard plugin
@@ -403,37 +403,37 @@ class ScriptElems
 		if($this->enabledJWizard == false)
 		{
 		?>
-			<script type="text/javascript" src="js/jquery.jwizard/jquery.jwizard.js"></script>
+			<script type="text/javascript" src="/js/jquery.jwizard/jquery.jwizard.js"></script>
 			<link href="js/jquery.jwizard/jquery.jwizard.css" media="screen" rel='stylesheet' type='text/css'></link>
 		<?php
 		$this->enabledJWizard = true;
 		}
 	}
-	
+
 	public function enableAutoLogout()
 	{
 		# Enables autologout after inactivity for a few seconds on the system
 		if($this->enabledAutoLogout == false)
 		{
 		?>
-			<script type="text/javascript" src="js/auto_logout.js"></script>
+			<script type="text/javascript" src="/js/auto_logout.js"></script>
 		<?php
 		}
 		$this->enabledAutoLogout = true;
 	}
-	
+
 	public function enableAutogrowTextarea()
 	{
 		# Enables jquery.autogrow-textarea plugin
 		if($this->enabledAutogrowTextarea == false)
 		{
 		?>
-			<script type="text/javascript" src="js/jquery.autogrow-textarea.js"></script>
+			<script type="text/javascript" src="/js/jquery.autogrow-textarea.js"></script>
 			<script type='text/javascript'>
 			$(document).ready(function(){
 				$('textarea').autogrow();
 				$('textarea').css("height", "30px");
-				$('textarea').css("line-height", "1");				
+				$('textarea').css("line-height", "1");
 			});
 			</script>
 		<?php
@@ -447,40 +447,40 @@ class ScriptElems
 		if($this->enabledDragTable == false)
 		{
 		?>
-			<script type="text/javascript" src="js/dragtable.js"></script>
+			<script type="text/javascript" src="/js/dragtable.js"></script>
 		<?php
 		}
 		$this->enabledDragTable = true;
 	}
-	
+
 	public function enableEditInPlace()
 	{
 		# Enables autologout after inactivity for a few seconds on the system
 		if($this->enabledEditInPlace == false)
 		{
 		?>
-			<script type="text/javascript" src="js/jquery.ui.js"></script>
-			<script type="text/javascript" src="js/jquery.editinplace.js"></script>
-			<!--<script type="text/javascript" src="js/jquery.ui.js"></script>
-			<script type="text/javascript" src="js/jquery-1.3.2.js"></script>
-			<script type="text/javascript" src="js/jquery.editable.ipweditor-1.2.1.js"></script>
-			<script type="text/javascript" src="js/fckeditor/fckeditor.js"></script>-->
+			<script type="text/javascript" src="/js/jquery.ui.js"></script>
+			<script type="text/javascript" src="/js/jquery.editinplace.js"></script>
+			<!--<script type="text/javascript" src="/js/jquery.ui.js"></script>
+			<script type="text/javascript" src="/js/jquery-1.3.2.js"></script>
+			<script type="text/javascript" src="/js/jquery.editable.ipweditor-1.2.1.js"></script>
+			<script type="text/javascript" src="/js/fckeditor/fckeditor.js"></script>-->
 		<?php
 		}
 		$this->enabledEditInPlace = true;
 	}
-	
+
 	public function enableTreeView()
     {
         # Enables autologout after inactivity for a few seconds on the system
         if($this->enabledTreeView === false)
         {
         ?>
-            <link rel="stylesheet" href="js/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
-            <script type="text/javascript" src="js/ztree/js/jquery-1.4.4.min.js"></script>
-            <script type="text/javascript" src="js/ztree/js/jquery.ztree.core-3.5.js"></script>
-            <script type="text/javascript" src="js/ztree/js/jquery.ztree.excheck-3.5.js"></script>
-            <script type="text/javascript" src="js/ztree/js/jquery.ztree.exhide-3.5.js"></script>
+            <link rel="stylesheet" href="/js/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+            <script type="text/javascript" src="/js/ztree/js/jquery-1.4.4.min.js"></script>
+            <script type="text/javascript" src="/js/ztree/js/jquery.ztree.core-3.5.js"></script>
+            <script type="text/javascript" src="/js/ztree/js/jquery.ztree.excheck-3.5.js"></script>
+            <script type="text/javascript" src="/js/ztree/js/jquery.ztree.exhide-3.5.js"></script>
         <?php
         }
         $this->enabledTreeView = true;

@@ -63,7 +63,7 @@ class DebugLib
 
 		# Adds current query to log
         date_default_timezone_set("UTC");
-		$file_name = "../../local/log_".$_SESSION['lab_config_id'].".txt";
+		$file_name = __DIR__."/../../local/log_".$_SESSION['lab_config_id'].".txt";
 		$file_handle = null;
 		if(file_exists($file_name))
 			$file_handle = fopen($file_name, "a");
@@ -81,8 +81,8 @@ class DebugLib
 	public static function logDBUpdates($query_string, $db_name)
 	{
 		# Adds current query to update log
-		$file_name = "../../local/log_".$_SESSION['lab_config_id']."_updates.sql";
-		$file_name_revamp = "../../local/log_".$_SESSION['lab_config_id']."_revamp_updates.sql";
+		$file_name = __DIR__."/../../local/log_".$_SESSION['lab_config_id']."_updates.sql";
+		$file_name_revamp = __DIR__."/../../local/log_".$_SESSION['lab_config_id']."_revamp_updates.sql";
 		$file_handle = null;
 		$file_handle_revamp = null;
 

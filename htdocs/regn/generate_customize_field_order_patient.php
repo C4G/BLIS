@@ -1,6 +1,6 @@
 <?php
 
-include_once("../lang/lang_util.php");
+include_once(__DIR__."/../lang/lang_util.php");
 
 class CustomFieldOrderGeneration_Patient{
 	public static $page_elems = null;
