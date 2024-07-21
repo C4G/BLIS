@@ -85,7 +85,7 @@ class User
 {
 	public $userId;
 
-public $username;
+    public $username;
 	public $password;
 	public $actualName;
 	public $email;
@@ -6201,8 +6201,8 @@ function get_user_by_id($user_id)
 	$user_id = mysql_real_escape_string($user_id, $con);
 	# Fetches user record by primary key
 	$saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions
-	FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.user_id=$user_id LIMIT 1";
+	$query_string = "SELECT a.user_id, a.username, a.password, a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions
+	FROM user a, user_config b WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.user_id=$user_id LIMIT 1";
 	$record = query_associative_one($query_string);
 	DbUtil::switchRestore($saved_db);
 	return User::getObject($record);
@@ -8575,37 +8575,35 @@ function get_lab_configs($admin_user_id = "")
 	# If admin_user_id not supplied, all stored lab configs are returned
 	$saved_db = DbUtil::switchToGlobal();
 	$user = null;
-	if($admin_user_id != "")
+
+    if($admin_user_id != "") {
 		$user = get_user_by_id($admin_user_id);
-	if($admin_user_id == "" || is_super_admin($user))
-	{
+    }
+
+    if($admin_user_id == "" || is_super_admin($user)) {
 		# Super admin user: Fetch lab configs stored in DB
 		$query_configs = "SELECT * FROM lab_config ORDER BY name";
-	}
-	else if(is_country_dir($user))
-	{
-		# Country director: Fetch lab configs from lab_config_access table
-		$query_configs =
-			"SELECT * from lab_config lc ".
-			"WHERE lc.lab_config_id IN ( ".
-			"SELECT lca.lab_config_id from lab_config_access lca ".
-			"WHERE lca.user_id=$admin_user_id ) ".
-			"ORDER BY lc.name";
-	}
-	else
-	{
-		# Fetch all lab configs
 
-		$query_configs =
-			"SELECT * FROM lab_config ".
-			"WHERE admin_user_id=$admin_user_id ".
-			"OR lab_config_id IN ( ".
-			"	SELECT lab_config_id FROM user ".
-			"	WHERE user_id=$admin_user_id ".
-			") ORDER BY name";
+	} else if(is_country_dir($user)) {
+		# Country director: Fetch lab configs from lab_config_access table
+		$query_configs = "SELECT * from lab_config lc
+                            WHERE lc.lab_config_id IN (
+                                SELECT lca.lab_config_id from lab_config_access lca
+                                WHERE lca.user_id=$admin_user_id
+                            )
+                            ORDER BY lc.name";
+
+    } else {
+		# Fetch all lab configs
+		$query_configs = "SELECT * FROM lab_config
+                            WHERE admin_user_id=$admin_user_id
+                            OR lab_config_id IN (
+                                SELECT lab_config_id FROM user
+                                WHERE user_id=$admin_user_id
+                            ) ORDER BY name";
 	}
 	$retval = array();
-//echo $query_configs;
+
 	$resultset = query_associative_all($query_configs);
 	if($resultset == null)
 	{

@@ -1,10 +1,16 @@
 <?php
 #
 # (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
-# Lists currently accessible lab configurations with options to modify/add 
+# Lists currently accessible lab configurations with options to modify/add
 # Check whether to redirect to lab configuration page
 # Called when the lab admin has only one lab under him/her
 #
+
+# TODO: make a flag here
+if (true) {
+    header("Location: /config/v2/lab_config_index.php");
+    return;
+}
 
 include("../users/accesslist.php");
 include("redirect.php");
@@ -23,7 +29,7 @@ $_SESSION['user_level'];
 
 if(User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level']))
 {
-    
+
 	$lab_config_list = get_lab_configs($_SESSION['user_id']);
     $_SESSION['lab_config_id']=$lab_config_list[0]->id;
 	header("location:lab_config_home.php?id=".$lab_config_list[0]->id);
@@ -47,7 +53,7 @@ $(document).ready(function(){
 		}
 	}
 	?>
-});	
+});
 
 function toggle_div(div_name) {
 	$("#"+div_name).hide();
@@ -108,12 +114,12 @@ function search_labs(view_all)
 			$('#viewall_link').show();
 	}
 	$("#lab_config_list").load(
-		url, 
-		{}, 
+		url,
+		{},
 		function(){
 			$('#lab_search_progress_bar').hide();
 		}
-	);	
+	);
 }
 </script>
 <?php $script_elems->bindEnterToClick("#lab_search_term", "#lab_search_button"); ?>
@@ -151,7 +157,7 @@ if(isset($_REQUEST['msg']))
 		<?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SEARCHING']); ?>
 	</span>
 </p>
-<?php 
+<?php
 $admin_user_id = $_SESSION['user_id'];
 
 $lab_config_list = get_lab_configs($admin_user_id);
@@ -179,7 +185,7 @@ $lab_config_list_imported = get_lab_configs_imported();
 	Update Failed&nbsp;&nbsp;&nbsp;<a href="javascript:toggle_div('update_failure');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?>
 </div>
 <br>
-<small><a href='lab_config_new.php'><?php echo LangUtil::$pageTerms['CMD_ADDNEWLAB']; ?> &raquo;</a> | </small> 
+<small><a href='lab_config_new.php'><?php echo LangUtil::$pageTerms['CMD_ADDNEWLAB']; ?> &raquo;</a> | </small>
 <?php
 /* Need to fix bug
 <small><a href='javascript:update_database_submit();'><?php echo 'Update All Labs Data from Backups'; ?></a> | </small>
