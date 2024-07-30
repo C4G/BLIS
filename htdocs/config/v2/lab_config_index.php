@@ -36,6 +36,10 @@ LangUtil::setPageId("lab_configs");
 .tab-bar {
     padding: 1rem 0;
 }
+
+#lab_config_list td hr {
+    border: 1px solid #ccc;
+}
 </style>
 
 <!-- TODO: Make this use the Session "flash" system -->
@@ -90,8 +94,6 @@ if (isset($_REQUEST['msg'])) {
 </p>
 
 <div id='lab_config_list'>
-    <b>Lab Configurations</b>
-
     <?php
     if (count($lab_config_list) == 0) {
         echo "<div class='sidetip_nopos'>".LangUtil::$generalTerms['MSG_NOTFOUND']."</div>";
@@ -125,7 +127,9 @@ if (isset($_REQUEST['msg'])) {
                     <?php echo $count; ?>.
                 </td>
                 <td>
-                    <a href="/lab_config_home.php?id=<?php echo $lab_config->id; ?>"><?php echo $lab_config->name; ?></a>
+                    <a href="/lab_config_home.php?id=<?php echo $lab_config->id; ?>">
+                        <?php echo $lab_config->name; ?>
+                    </a>
                 </td>
                 <td>
                     <?php echo $lab_config->location; ?>
@@ -134,9 +138,17 @@ if (isset($_REQUEST['msg'])) {
                     <?php echo get_username_by_id($lab_config->adminUserId); ?>
                 </td>
                 <td>
-                    <a href="/exportLabConfiguration.php?id=<?php echo $lab_config->id; ?>">
-                        <?php echo "Export Lab Configuration"; ?>
-                    </a>
+                    <div>
+                        <a href="/config/v2/lab_config_backups.php?id=<?php echo $lab_config->id; ?>">
+                            <?php echo "Manage Lab Backups"; ?>
+                        </a>
+                    </div>
+                    <hr>
+                    <div>
+                        <a href="/exportLabConfiguration.php?id=<?php echo $lab_config->id; ?>">
+                            <?php echo "Export Lab Configuration"; ?>
+                        </a>
+                    </div>
                 </td>
             </tr>
     <?php

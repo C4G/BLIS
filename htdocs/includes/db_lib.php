@@ -431,7 +431,7 @@ class FieldOrdering
 			"INSERT INTO `field_ordering`(`lab_config_id`, `field1`, `field2`, `field3`, `field4`, `field5`, `field6`, `field7`,`field8`,`field9`,`field10`,`field11`,`field12`,`field13`,`field14`,`field15`,`field16`,`form_id`) ".
 			"VALUES ($lab_config_id, '$field1', '$field2', '$field3', '$field4', '$field5', '$field6', '$field7', '$field8', '$field9', '$field10', '$field11', '$field12', '$field13', '$field14', '$field15', '$field16', $form_id)";
 		 */
-		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 
 		$query_string =
 		"INSERT INTO `field_order`(`lab_config_id`, `field_order`,`form_id`) ".
@@ -13640,12 +13640,13 @@ function insert_lab_config_settings_barcode($type, $width, $height, $textsize, $
     return 1;
 }
 
-function get_lab_config_settings_barcode()
+function get_lab_config_settings_barcode($lab_config_id=null)
 {
+    if ($lab_config_id == null) {
+        $lab_config_id = $_SESSION['lab_config_id'];
+    }
     insert_lab_config_settings_barcode('code39', 2, 30, 11, 1);
     $id = 1; // ID for barcode settings
-    $lab_config_id = $_SESSION['lab_config_id'];
-
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
 
     $query_string = "SELECT * from lab_config_settings WHERE id = $id";
