@@ -40,6 +40,11 @@ LangUtil::setPageId("lab_configs");
 #lab_config_list td hr {
     border: 1px solid #ccc;
 }
+
+.hor-minimalist-b td {
+    border-bottom: 1px solid #555;
+}
+
 </style>
 
 <!-- TODO: Make this use the Session "flash" system -->

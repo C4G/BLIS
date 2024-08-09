@@ -59,3 +59,22 @@ function search_labs(view_all) {
         }
     );
 }
+
+function updateKeyForm() {
+    const keyDropdown = document.getElementById('keySelectDropdown');
+
+    const keyFileRow = document.getElementById('keyUploadFileRow');
+    const keyNameRow = document.getElementById('keyUploadNameRow');
+
+    if (keyDropdown.value === "-1") {
+        // "unlisted" is selected
+        keyFileRow.style.display = '';
+        keyNameRow.style.display = '';
+    } else {
+        keyFileRow.style.display = 'none';
+        keyFileRow.querySelector("input[type='file']").value = '';
+        keyNameRow.style.display = 'none';
+        keyNameRow.value = '';
+        keyNameRow.querySelector("input[type='text']").value = '';
+    }
+}

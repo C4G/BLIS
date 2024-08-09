@@ -3,6 +3,7 @@ require_once("./backup_lib.php");
 require_once("../includes/composer.php");
 require_once("../includes/db_lib.php");
 require_once("../includes/platform_lib.php");
+require_once("../includes/user_lib.php");
 require_once("redirect.php");
 
 putUILog('backup_data', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
@@ -14,10 +15,10 @@ if ($SERVER == $ON_ARC) {
 //AS changed lab config fix.
 
 $user = get_user_by_id($_SESSION['user_id']);
-$lab_config_id = $user->labConfigId;
-$request_lab_config_id = $_REQUEST['labConfigId'];
-$log->debug("[Lab config vars] $_SESSION, $_REQUEST");
-if ($lab_config_id != $request_lab_config_id) {
+$user_lab_config_id = $user->labConfigId;
+$lab_config_id = $_REQUEST['labConfigId'];
+
+if ($user_lab_config_id != $lab_config_id && !is_super_admin($user) && !is_country_dir($user)) {
     echo "You do not have permission to back up lab #$request_lab_config_id!";
     return;
 }
@@ -56,4 +57,35 @@ if ($encryption_enabled) {
 }
 
 $backup_path = BackupLib::performBackup($lab_config_id, true, $keyContents);
-echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/backups/".basename($backup_path)."'/>Download Zip</a>";
+
+# TODO: make a flag here
+if (true) {
+
+    require_once(__DIR__."/../config/v2/lib/backup.php");
+    $lab_config_backups_path = "/config/v2/lab_config_backups.php?id=$lab_config_id";
+
+    $base = basename($backup_path);
+    $oldpath = realpath(__DIR__."/../../files/backups/$base");
+    $relpath = "storage/$base";
+    $newpath = __DIR__."/../../files/$relpath";
+
+    if (!rename($oldpath, $newpath)) {
+        $_SESSION["BACKUP_FLASH"] = "Could not move $oldpath to $newpath.";
+        header("Location: $lab_config_backups_path");
+        return;
+    }
+
+    try {
+        DbUtil::switchToLabConfig($lab_config_id);
+        Backup::insert($lab_config_id, $base, $relpath);
+
+        $_SESSION["BACKUP_FLASH"] = "Lab backup completed successfully.";
+    } catch (Exception $e) {
+        $_SESSION["BACKUP_FLASH"] = "Lab backup was unsuccessful: " . $e->getMessage();
+    }
+
+    header("Location: $lab_config_backups_path");
+    return;
+} else {
+    echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/backups/".basename($backup_path)."'/>Download Zip</a>";
+}

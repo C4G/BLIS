@@ -45,36 +45,74 @@ LangUtil::setPageId("lab_configs");
 
 $backups = Backup::for_lab_config_id($lab_config_id);
 
+require_once(__DIR__."/../../includes/keymgmt.php");
+
+// TODO: switch this to its own table, maybe...
+$settings_encryption_enabled = KeyMgmt::read_enc_setting() != "0";
+
 ?>
 
-<script src="/config/v2/js/lab_config.js" type="application/javascript"></script>
+<?php
+$selected_tab = "lab_backups";
+require_once(__DIR__."/lab_config_backup_header.php");
+?>
 
-<style type="text/css">
-.tab-bar {
-    padding: 1rem 0;
-}
+<div id="create-backup" class="section">
+    <h3 class="section-head">Create New Backup</h3>
 
-#backup_list table {
-    width: 100%;
-}
+    <form id='databaseBackupType' name='databaseBackupType' action='/backupData.php' method='post' enctype="multipart/form-data">
+        <input type='hidden' value='<?php echo $lab_config_id; ?>' id='labConfigId' name='labConfigId' />
+        <table>
+            <tr id="keySelectRow" style="<?php echo($settings_encryption_enabled ? '' : 'display: none') ?>">
+                <td style="text-align: right">Backup encryption key: </td>
+                <td>
+                    <select id="keySelectDropdown" name="target" autocomplete="off" onChange="updateKeyForm()">
+                        <option value="0" selected>Current Lab (default key)</option>
+                        <?php
+                        foreach ($target_set as $option)
+                        {
+                            echo "<option value='".$option->ID."'>".$option->LabName."</option>";
+                        }
+                        ?>
+                        <option value="-1">New key...</option>
+                    </select>
+                </td>
+            </tr>
 
-#backup_list table th {
-    font-weight: bold;
-}
+            <tr id="keyUploadNameRow" style="display: none">
+                <td style="text-align: right">Key alias:</td>
+                <td><input type="text" name="pkey_alias" id="pkey_alias" autocomplete="off"/></td>
+            </tr>
 
-.text-right {
-    text-align: right;
-}
-</style>
+            <tr id="keyUploadFileRow" style="display: none">
+                <td style="text-align: right">Choose key file:</td>
+                <td><input type="file" name="pkey" id="pkey" autocomplete="off"/></td>
+            </tr>
 
-<div class="tab-bar">
-    <a href="/lab_config_home.php?id=<?php echo($lab_config_id) ?>"><< Lab Configuration</a>
-    | <b>Lab Backups</b>
-    | <a href='#'>Upload Backup</a>
-    | <a href="#">Connect Lab</a>
+            <tr>
+                <td style="text-align: right">Type of backup:</td>
+                <td>
+                    <input type='radio' id='backupTypeSelectGeneral' name='backupTypeSelect' value='normal' checked>
+                    <label for="backupTypeSelectGeneral">General Backup</label>
+                    <br/>
+                    <input type='radio' id='backupTypeSelectAnon' name='backupTypeSelect' value='anonymized'>
+                    <label for="backupTypeSelectAnon">Anonymized Backup</label>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td>
+                    <input type='submit' value="Backup" id='start_backup_btn' />
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 
-<div id='backup_list'>
+<div id='backup_list' class="section">
+    <h3 class="section-head">Backups</h3>
+
     <?php
     if (count($backups) == 0) {
         echo "<div class='sidetip_nopos'>".LangUtil::$generalTerms['MSG_NOTFOUND']."</div>";
@@ -83,16 +121,16 @@ $backups = Backup::for_lab_config_id($lab_config_id);
     <table class='hor-minimalist-b'>
         <thead>
             <tr valign='top'>
-                <th>
+                <th class="text-right">
                     Date
                 </th>
-                <th>
+                <th class="text-right">
                     Database Name
                 </th>
-                <th>
+                <th class="text-right">
                     BLIS Version
                 </th>
-                <th>
+                <th class="text-center">
                     Filename
                 </th>
                 <th></th>
@@ -119,7 +157,8 @@ $backups = Backup::for_lab_config_id($lab_config_id);
                     <?php echo $backup->filename; ?>
                 </td>
                 <td>
-                    Restore
+                    <div>Restore</div>
+                    <div><a href="download_backup.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>">Download</a></div>
                 </td>
             </tr>
     <?php

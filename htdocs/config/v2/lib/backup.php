@@ -40,8 +40,6 @@ class Backup {
     }
 
     public static function for_lab_config_id($lab_config_id) {
-        global $log;
-
         $escaped_id = db_escape($lab_config_id);
         $query = "SELECT id, lab_config_id, filename, location, ts
                   FROM blis_backups WHERE lab_config_id = '$escaped_id'
@@ -56,6 +54,16 @@ class Backup {
         }
 
         return $backups;
+    }
+
+    public static function find($backup_id) {
+        $escaped_id = db_escape($backup_id);
+        $query = "SELECT id, lab_config_id, filename, location, ts
+                  FROM blis_backups WHERE id = '$backup_id'";
+
+        $result = query_associative_one($query);
+
+        return Backup::from_row($result);
     }
 
     private static function from_row($row) {
