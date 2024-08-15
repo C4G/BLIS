@@ -67,7 +67,7 @@ require_once(__DIR__."/lab_config_backup_header.php");
         <table>
             <?php if ($settings_encryption_enabled) {
             ?>
-            <tr id="keySelectRow" style="<?php echo($settings_encryption_enabled ? '' : 'display: none') ?>">
+            <tr id="keySelectRow">
                 <td style="text-align: right">Backup encryption key: </td>
                 <td>
                     <select id="keySelectDropdown" name="target" autocomplete="off" onChange="updateKeyForm()">
@@ -93,6 +93,7 @@ require_once(__DIR__."/lab_config_backup_header.php");
                 <td style="text-align: right">Choose key file:</td>
                 <td><input type="file" name="pkey" id="pkey" autocomplete="off"/></td>
             </tr>
+
             <?php
             }
             ?>

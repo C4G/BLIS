@@ -2,6 +2,7 @@
 require_once("./backup_lib.php");
 require_once("../includes/composer.php");
 require_once("../includes/db_lib.php");
+require_once("../includes/features.php");
 require_once("../includes/platform_lib.php");
 require_once("../includes/user_lib.php");
 require_once("redirect.php");
@@ -58,8 +59,7 @@ if ($encryption_enabled) {
 
 $backup_path = BackupLib::performBackup($lab_config_id, true, $keyContents);
 
-# TODO: make a flag here
-if (true) {
+if (Features::lab_config_v2_enabled()) {
 
     require_once(__DIR__."/../config/v2/lib/backup.php");
     $lab_config_backups_path = "/config/v2/lab_config_backups.php?id=$lab_config_id";

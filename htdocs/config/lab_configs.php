@@ -6,8 +6,9 @@
 # Called when the lab admin has only one lab under him/her
 #
 
-# TODO: make a flag here
-if (true) {
+require_once(__DIR__."/../includes/features.php");
+
+if (Features::lab_config_v2_enabled()) {
     header("Location: /config/v2/lab_config_index.php");
     return;
 }

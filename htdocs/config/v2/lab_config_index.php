@@ -47,56 +47,11 @@ LangUtil::setPageId("lab_configs");
 
 </style>
 
-<!-- TODO: Make this use the Session "flash" system -->
-<script type='text/javascript'>
-$(document).ready(function(){
-    <?php
-    if (isset($_REQUEST['revert'])) {
-        if ($_REQUEST['revert']==0) { ?>
-            $('#update_failure').show();
-        <?php
-        } else { ?>
-            $('#update_success').show();
-        <?php
-        }
-    }
-    ?>
-});
-</script>
-
-<?php $script_elems->bindEnterToClick("#lab_search_term", "#lab_search_button"); ?>
-
 <div class="tab-bar">
     <b><?php echo LangUtil::getTitle(); ?></b>
     | <a href='/lab_config_new.php'><?php echo LangUtil::$pageTerms['CMD_ADDNEWLAB']; ?></a>
     | <a href="/ajax/download_key.php?role=dir">Download Public Key</a>
 </div>
-
-<?php
-if (isset($_REQUEST['msg'])) {
-        ?>
-
-<div class='clean-orange' id='server_msg' style='top-margin:20px;width:300px;'>
-<?php echo base64_decode($_REQUEST['msg']); ?>
-&nbsp;&nbsp;
-<small><a href="javascript:toggle('server_msg');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a></small>
-</div>
-
-<?php
-    }
-?>
-
-<p>
-    <input type='text' name="lab_search_term" id="lab_search_term" />
-    &nbsp;&nbsp;
-    <input type='button' onclick='javascript:search_labs(0);' name='lab_search_button' id='lab_search_button' value='<?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?>' title='Enter full or partial name of the lab to search' />
-    &nbsp;&nbsp;
-    <a href='javascript:search_labs(1)' id='viewall_link' style='display:none;' title='Click to View All Lab Configurations'><small><?php echo LangUtil::$pageTerms['CMD_VIEWALL']; ?></small></a>
-    &nbsp;&nbsp;
-    <span id='lab_search_progress_bar' style='display:none;'>
-        <?php $page_elems->getProgressSpinner(LangUtil::$generalTerms['CMD_SEARCHING']); ?>
-    </span>
-</p>
 
 <div id='lab_config_list'>
     <?php
