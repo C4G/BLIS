@@ -2,6 +2,7 @@
 
 // Assume authentication + everything has been done outside of this file
 global $lab_config_id;
+global $lab_config_name;
 global $selected_tab;
 
 function render_tab($tab_name, $tab_link, $tab_label) {
@@ -20,7 +21,7 @@ function render_tab($tab_name, $tab_link, $tab_label) {
 
 <style type="text/css">
 .tab-bar {
-    padding: 1rem 0;
+    padding: 1rem 0.5rem;
 }
 
 #backup_list table {
@@ -37,6 +38,14 @@ function render_tab($tab_name, $tab_link, $tab_label) {
 
 .text-center {
     text-align: center;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.text-monospace {
+    font-family: monospace;
 }
 
 #settings {
@@ -69,7 +78,13 @@ function render_tab($tab_name, $tab_link, $tab_label) {
 </style>
 
 <div class="tab-bar">
-    <a href="/lab_config_home.php?id=<?php echo($lab_config_id) ?>"><< Lab Configuration</a>
+    <?php
+        if ($lab_config_name) {
+            echo("<b>$lab_config_name</b>");
+        } else {
+            echo("<b>" . "Lab Backups" . "</b>");
+        }
+    ?>
     | <?php render_tab("lab_backups", "lab_config_backups.php?id=$lab_config_id", "Lab Backups"); ?>
     | <?php render_tab("settings", "lab_config_backup_settings.php?id=$lab_config_id", "Settings"); ?>
     | <?php render_tab("upload", "lab_config_backup_upload.php?id=$lab_config_id", "Upload Backup"); ?>

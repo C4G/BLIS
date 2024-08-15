@@ -80,7 +80,8 @@ class Backup {
 
     public function analyze() {
         if ($this->analyzed == NULL) {
-            $this->analyzed = new AnalyzedBackup($this->lab_config_id, $this->filename, $this->location);
+            $fullpath = __DIR__."/../../../../files/" . $this->location;
+            $this->analyzed = new AnalyzedBackup($this->filename, $fullpath);
         }
 
         return $this->analyzed;

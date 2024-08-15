@@ -20,9 +20,13 @@ $lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE 
 $lab = query_associative_one($lab_db_name_query);
 db_change($lab['db_name']);
 
+$lab_config_name = $lab["name"];
+
+$super_admin_or_country_dir = is_super_admin($current_user) || is_country_dir($current_user);
+
 $unauthorized = true;
 
-if (is_super_admin($current_user) || is_country_dir($current_user)) {
+if ($super_admin_or_country_dir) {
     $unauthorized = false;
 }
 
@@ -57,8 +61,21 @@ require_once(__DIR__."/lab_config_backup_header.php");
 
 <div id="key-management">
     <h3 class="section-head">Key Management</h3>
-    <b><?php echo($lab["name"]); ?></b>:
-    <a href="../../ajax/download_key.php?id=<?php echo($lab_config_id) ?>"><?php echo LangUtil::$pageTerms['download_key']; ?></a>
+
+    <?php
+        if ($super_admin_or_country_dir) {
+    ?>
+    <p>
+        <b>BLIS Cloud Administrator Key</b>:
+        <a href="../../ajax/download_key.php?role=dir">Download Public Key</a>
+    </p>
+    <?php
+        }
+    ?>
+    <p>
+        <b><?php echo($lab["name"]); ?></b>:
+        <a href="../../ajax/download_key.php?id=<?php echo($lab_config_id) ?>"><?php echo LangUtil::$pageTerms['download_key']; ?></a>
+    </p>
 </div>
 
 <div id="settings">

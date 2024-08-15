@@ -7,6 +7,7 @@ class AnalyzedBackupException extends Exception { }
 class AnalyzedBackup {
 
     // The lab config ID associated with this backup.
+    // May be different from the lab config ID that this backup is imported into.
     public $lab_config_id;
 
     // The filename of this backup as it was originally uploaded to the server.
@@ -24,14 +25,13 @@ class AnalyzedBackup {
     // The likely version of BLIS this backup was created with.
     public $version;
 
-    function __construct($lab_config_id, $filename, $location) {
+    function __construct($filename, $location) {
         global $log;
 
-        $this->lab_config_id = $lab_config_id;
         $this->filename = $filename;
         $this->files = array();
 
-        $realpath = realpath(__DIR__."/../../../../files/$location");
+        $realpath = realpath($location);
         $info = pathinfo($realpath);
 
         $likely_encrypted = !!(substr($filename, -strlen("_enc.zip")) === "_enc.zip");
@@ -90,6 +90,7 @@ class AnalyzedBackup {
 
         if ($lab_id != null) {
             $this->database_name = "blis_$lab_id";
+            $this->lab_config_id = $lab_id;
         }
 
         // Ok, we're going to try and divine the version here...

@@ -20,6 +20,8 @@ $lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE 
 $lab = query_associative_one($lab_db_name_query);
 db_change($lab['db_name']);
 
+$lab_config_name = $lab["name"];
+
 $unauthorized = true;
 
 if (is_super_admin($current_user) || is_country_dir($current_user)) {
@@ -63,12 +65,15 @@ require_once(__DIR__."/lab_config_backup_header.php");
     <form id='databaseBackupType' name='databaseBackupType' action='/backupData.php' method='post' enctype="multipart/form-data">
         <input type='hidden' value='<?php echo $lab_config_id; ?>' id='labConfigId' name='labConfigId' />
         <table>
+            <?php if ($settings_encryption_enabled) {
+            ?>
             <tr id="keySelectRow" style="<?php echo($settings_encryption_enabled ? '' : 'display: none') ?>">
                 <td style="text-align: right">Backup encryption key: </td>
                 <td>
                     <select id="keySelectDropdown" name="target" autocomplete="off" onChange="updateKeyForm()">
                         <option value="0" selected>Current Lab (default key)</option>
                         <?php
+                        $target_set=KeyMgmt::getAllKeys();
                         foreach ($target_set as $option)
                         {
                             echo "<option value='".$option->ID."'>".$option->LabName."</option>";
@@ -88,6 +93,9 @@ require_once(__DIR__."/lab_config_backup_header.php");
                 <td style="text-align: right">Choose key file:</td>
                 <td><input type="file" name="pkey" id="pkey" autocomplete="off"/></td>
             </tr>
+            <?php
+            }
+            ?>
 
             <tr>
                 <td style="text-align: right">Type of backup:</td>
@@ -154,11 +162,10 @@ require_once(__DIR__."/lab_config_backup_header.php");
                     <?php echo $analyzed->version; ?>
                 </td>
                 <td>
-                    <?php echo $backup->filename; ?>
+                    <a href="download_backup.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>"><?php echo $backup->filename; ?></a>
                 </td>
                 <td>
                     <div>Restore</div>
-                    <div><a href="download_backup.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>">Download</a></div>
                 </td>
             </tr>
     <?php

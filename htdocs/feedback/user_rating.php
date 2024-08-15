@@ -21,9 +21,9 @@ $script_elems->enableJQueryForm();
 		function submit_rating()
 		{
 			$('#submit_progress').show();
-			$('#rating_form').ajaxSubmit( { success:function() { 
+			$('#rating_form').ajaxSubmit( { success:function() {
 					$('#submit_progress').hide();
-					window.location="logout.php";
+					window.location="/logout.php";
 				}
 			});
 		}
@@ -31,18 +31,18 @@ $script_elems->enableJQueryForm();
 		{
 		document.getElementById("skipped").setAttribute("value","-1");
 			$('#submit_progress').show();
-			$('#rating_form').ajaxSubmit( { success:function() { 
+			$('#rating_form').ajaxSubmit( { success:function() {
 					$('#submit_progress').hide();
-					window.location="logout.php";
+					window.location="/logout.php";
 				}
 			});
 		}
 		</script>
 		<?php include("../includes/styles.php"); ?>
-		
+
 	</head>
 	<body>
-	<form name='rating_form' id='rating_form' action='user_rating_submit.php'>
+	<form name='rating_form' id='rating_form' action='/user_rating_submit.php'>
 	<input type='hidden' name='user_id' value='<?php echo $_SESSION['user_id']; ?>'></input>
 	<input type='hidden' name='skipped' id='skipped' value='0'></input>
 	<?php
