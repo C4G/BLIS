@@ -31,7 +31,6 @@ RewriteRule ^lab_config_home\.php$ config/lab_config_home.php
 RewriteRule ^grouped_report_config\.php$ config/grouped_report_config.php
 RewriteRule ^lab_config_new\.php$ config/lab_config_new.php
 RewriteRule ^lab_config_add\.php$ config/lab_config_add.php
-RewriteRule ^lab_config_addd\.php$ config/lab_config_addd.php
 RewriteRule ^lab_config_added\.php$ config/lab_config_added.php
 RewriteRule ^lab_config_status\.php$ config/lab_config_status.php
 RewriteRule ^cfield_new\.php$ config/cfield_new.php
