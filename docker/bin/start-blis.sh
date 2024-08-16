@@ -1,9 +1,9 @@
 #!/bin/bash
 
 echo "Dumping environment variables to environment file..."
-A2ENVVARS="$(env | grep "DB_" | sed -e 's/^/export /')"
-echo "$A2ENVVARS" | sudo tee /etc/apache2/apache2_blis.env
-GIT_COMMIT_SHA="$(cat /etc/blis_git_commit_sha)"
+A2ENVVARS="$(env | grep -E "(^DB_|^BLIS_)" | sed -e 's/^/export /')"
+echo "$A2ENVVARS" | sudo tee /etc/apache2/apache2_blis.env > /dev/null
+GIT_COMMIT_SHA="$(cat /etc/blis_git_commit_sha 2>/dev/null)"
 if [[ -n "$GIT_COMMIT_SHA" ]]; then
     echo "export GIT_COMMIT_SHA=\"$GIT_COMMIT_SHA\"" | sudo tee -a /etc/apache2/apache2_blis.env
 fi

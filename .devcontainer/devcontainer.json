@@ -1,15 +1,5 @@
 {
     "dockerComposeFile": "docker-compose.yml",
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "EditorConfig.EditorConfig",
-                "github.vscode-github-actions",
-                "ms-azuretools.vscode-docker",
-                "timonwong.shellcheck"
-            ]
-        }
-    },
     "features": {
         "ghcr.io/devcontainers/features/sshd:1": {},
         "ghcr.io/devcontainers/features/github-cli:1": {}
@@ -31,5 +21,9 @@
     "service": "app",
     "workspaceFolder": "/workspace",
     "postCreateCommand": ".devcontainer/post-create-command.sh",
-    "postAttachCommand": "start-blis.sh"
+    "postAttachCommand": "start-blis.sh",
+    "containerEnv": {
+        // These environment variables will only be set in development!
+        "BLIS_LAB_BACKUPS_V2_ENABLED": "1"
+    }
 }

@@ -4,13 +4,11 @@ FROM ubuntu:focal
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apache2 \
         curl \
-        gpg \
-        htop \
         mysql-client \
+        pandoc \
         software-properties-common \
-        certbot \
-        python3-certbot-apache \
         sudo \
+        weasyprint \
         && rm -rf /var/lib/apt/lists/*
 
 # PPAs - additional software from questionable sources go here...
@@ -42,8 +40,6 @@ RUN a2enmod rewrite socache_shmcb ssl && a2dissite 000-default
 COPY docker/config/php.ini /etc/php/5.6/apache2/php.ini
 
 # Copy utility scripts to /usr/bin
-COPY docker/bin/set-apache2-servername.py /usr/bin/
-COPY docker/bin/get-https-cert.sh /usr/bin/
 COPY docker/bin/start-blis.sh /usr/bin/
 
 # Copy all of the BLIS files into the container
@@ -59,8 +55,7 @@ RUN chown -R www-data:www-data /var/www && \
 ARG GIT_COMMIT_SHA=""
 RUN echo "${GIT_COMMIT_SHA}" | tee /etc/blis_git_commit_sha
 
-# Expose port 80 for HTTP, 443 for HTTPS (optionally)
+# Expose port 80 for HTTP
 EXPOSE 80
-EXPOSE 443
 
 CMD start-blis.sh && tail -f /var/log/apache2/error.log
