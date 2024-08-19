@@ -157,15 +157,13 @@ require_once(__DIR__."/lab_config_backup_header.php");
     <?php
         $count = 1;
         foreach ($backups as $backup) {
-            $analyzed = $backup->analyze();
-
             ?>
             <tr valign='top'>
                 <td class="text-right">
                     <?php echo date("F j Y g:i:s", $backup->timestamp); ?>
                 </td>
                 <td class="text-right">
-                    <?php echo $analyzed->version; ?>
+                    <?php echo $backup->version; ?>
                 </td>
                 <td>
                     <a href="download_backup.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>"><?php echo $backup->filename; ?></a>

@@ -14120,11 +14120,11 @@ function checkVersionDataEntryExists($vers)
    $record = query_associative_one($query);
    if(!$record)
    {
-       $code = 0;   #version entry doesnt exist
+       $code = false;   #version entry doesnt exist
    }
    else
    {
-       $code = 1;  #version entry exists implying db update has been completed and update procedure incomplete
+       $code = true;  #version entry exists implying db update has been completed and update procedure incomplete
    }
 
    DbUtil::switchRestore($saved_db);

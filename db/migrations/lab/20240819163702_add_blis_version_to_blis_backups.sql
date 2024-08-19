@@ -1,0 +1,1 @@
+ALTER TABLE `blis_backups` ADD COLUMN `blis_version` VARCHAR(32) DEFAULT NULL;
