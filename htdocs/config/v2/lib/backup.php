@@ -18,6 +18,9 @@ class Backup {
     // The full path, relative to the /files directory, of this backup file.
     public $location;
 
+    // The full path on disk to the backup file.
+    public $full_path;
+
     // The timestamp that this backup file was uploaded.
     public $timestamp;
 
@@ -75,15 +78,29 @@ class Backup {
         $backup->location = $row['location'];
         $backup->timestamp = strtotime($row['ts']);
 
+        $backup->full_path = realpath(__DIR__."/../../../../files/" . $backup->location);
+
         return $backup;
     }
 
     public function analyze() {
         if ($this->analyzed == NULL) {
-            $fullpath = __DIR__."/../../../../files/" . $this->location;
-            $this->analyzed = new AnalyzedBackup($this->filename, $fullpath);
+            $this->analyzed = new AnalyzedBackup($this->filename, $this->full_path);
         }
 
         return $this->analyzed;
+    }
+
+    public function destroy() {
+        global $log;
+
+        $path = $this->full_path;
+        unlink($path);
+
+        $id = $this->id;
+        $query = "DELETE FROM blis_backups WHERE id = '$id' LIMIT 1;";
+        $result = query_associative_one($query);
+
+        $log->info("Deleted backup with ID: $id");
     }
 }

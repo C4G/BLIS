@@ -59,6 +59,16 @@ $selected_tab = "lab_backups";
 require_once(__DIR__."/lab_config_backup_header.php");
 ?>
 
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('a.delete-backup').bind('click', function () {
+            return confirm('Are you sure you want to delete this backup?');
+        });
+
+    });
+</script>
+
 <div id="create-backup" class="section">
     <h3 class="section-head">Create New Backup</h3>
 
@@ -134,14 +144,12 @@ require_once(__DIR__."/lab_config_backup_header.php");
                     Date
                 </th>
                 <th class="text-right">
-                    Database Name
-                </th>
-                <th class="text-right">
                     BLIS Version
                 </th>
                 <th class="text-center">
                     Filename
                 </th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -157,16 +165,16 @@ require_once(__DIR__."/lab_config_backup_header.php");
                     <?php echo date("F j Y g:i:s", $backup->timestamp); ?>
                 </td>
                 <td class="text-right">
-                    <?php echo $analyzed->database_name; ?>
-                </td>
-                <td class="text-right">
                     <?php echo $analyzed->version; ?>
                 </td>
                 <td>
                     <a href="download_backup.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>"><?php echo $backup->filename; ?></a>
                 </td>
                 <td>
-                    <div>Restore</div>
+                    <a href="lab_config_backup_restore.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>">Restore</a>
+                </td>
+                <td>
+                    <a class="delete-backup" href="delete_backup.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>">Delete</a>
                 </td>
             </tr>
     <?php

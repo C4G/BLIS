@@ -121,7 +121,7 @@ if (!move_uploaded_file($tmp_path, $perm_tmp_path)) {
         <table>
             <tr>
                 <td class="text-bold">Lab name</td>
-                <td>TODO</td>
+                <td><?php echo($analyzed_backup->lab_name); ?></td>
             </tr>
             <tr>
                 <td class="text-bold">BLIS Version</td>

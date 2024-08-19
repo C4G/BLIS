@@ -45,19 +45,26 @@ class BackupArchive {
 
 class BackupLib
 {
-    private static function mySqlDump($databaseName, $backupFilename)
+    private static function mySqlDump($databaseName, $backupFilename, $ignoreTables=array())
     {
         global $log, $DB_HOST, $DB_PORT, $DB_USER, $DB_PASS;
 
+        $ignoreTablesString = "";
+        foreach($ignoreTables as $t) {
+            $ignoreTablesString .= " --ignore-table=$t";
+        }
+
         $mysqldumpPath = PlatformLib::mySqlDumpPath();
-        $command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $databaseName -r ".escapeshellarg($backupFilename);
+        $command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $databaseName $ignoreTablesString -r ".escapeshellarg($backupFilename);
+        # this is purely cosmetic and for security... we obviously don't want to dump the database username and password in the logs
+        $sanitzed_command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u ***** -p ***** $databaseName $ignoreTablesString -r ".escapeshellarg($backupFilename);
         $output = system($command, $result);
 
         if ($result == 0) {
-            $log->debug("Successfully dumped MySQL database; command: $command, code $result, output:\n $output");
+            $log->debug("Successfully dumped MySQL database; command: $sanitzed_command, code $result, output:\n $output");
             return $backupFilename;
         } else {
-            $log->error("Could not dump MySQL database; command: $command, err code $result, output:\n $output");
+            $log->error("Could not dump MySQL database; command: $sanitzed_command, err code $result, output:\n $output");
             return false;
         }
     }
@@ -201,8 +208,12 @@ class BackupLib
 
         $plaintext_backup = "$backup_dir/$lab_db/$lab_db"."_backup.sql";
 
+        // Ignore the "backups" table
+        $ignoredTables = array();
+        array_push($ignoredTables, "$lab_db.blis_backups");
+
         // Dump the database
-        self::mySqlDump($lab_db, $plaintext_backup);
+        self::mySqlDump($lab_db, $plaintext_backup, $ignoredTables);
 
         $backupType = $_POST['backupTypeSelect'];
 

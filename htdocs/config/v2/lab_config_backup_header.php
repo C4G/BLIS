@@ -75,6 +75,10 @@ function render_tab($tab_name, $tab_link, $tab_label) {
     font-size: large;
 }
 
+a.delete-backup {
+    color: red;
+}
+
 </style>
 
 <div class="tab-bar">

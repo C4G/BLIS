@@ -25,6 +25,12 @@ class AnalyzedBackup {
     // The likely version of BLIS this backup was created with.
     public $version;
 
+    // The likely name of the lab that this backup has backed up.
+    public $lab_name;
+
+    // The path, within the zip file, to the lab backup SQL file.
+    public $relative_lab_backup_sql_path;
+
     function __construct($filename, $location) {
         global $log;
 
@@ -47,6 +53,7 @@ class AnalyzedBackup {
 
         $lab_id = null;
 
+        $lab_backup = null;
         $revamp_backup = null;
         $lab_sql_log = null;
         $whole_database_log = null;
@@ -141,16 +148,32 @@ class AnalyzedBackup {
             }
         }
 
-        $zip->close();
+        $probable_name = null;
 
-        if ($incorrect_backslashes) {
-            $log->info("$filename [$location] contains '\\' characters as path separators. This should be corrected on import.");
+        global $log;
+
+        if ($revamp_backup != null) {
+            $revamp_backup_contents = $zip->getFromName($revamp_backup);
+            $revamp_lines = explode("\n", $revamp_backup_contents);
+            foreach($revamp_lines as $lineno => $line) {
+                if (preg_match("/^INSERT INTO `lab_config` VALUES (?:\(.+\),)?\($lab_id,'(.+?)',/", $line, $matches) == 1) {
+                    $probable_name = $matches[1];
+                    break;
+                }
+            }
         }
 
-        if ($probable_version != null) {
-            $this->version = $probable_version;
-        } else {
-            $log->warn("Could not detect a version for backup: $filename [$location]");
+        $zip->close();
+
+        $this->lab_name = $probable_name;
+        $this->version = $probable_version;
+
+        if ($lab_backup != null) {
+            if ($incorrect_backslashes) {
+                $this->relative_lab_backup_sql_path = str_replace("\\", "/", $lab_backup);
+            } else {
+                $this->relative_lab_backup_sql_path = $lab_backup;
+            }
         }
     }
 }
