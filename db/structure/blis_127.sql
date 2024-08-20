@@ -59,9 +59,10 @@ CREATE TABLE IF NOT EXISTS `blis_backups` (
   `filename` varchar(100) NOT NULL,
   `location` varchar(100) NOT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `blis_version` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `lab_config_id` (`lab_config_id`),
-  UNIQUE KEY `location` (`location`)
+  UNIQUE KEY `location` (`location`),
+  KEY `lab_config_id` (`lab_config_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -93,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `comment` varchar(150) NOT NULL DEFAULT '',
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -126,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `custom_field_type` (
   `field_type` varchar(100) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -162,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `dhims2_api_config` (
   `gender` varchar(5) DEFAULT NULL,
   `period` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -177,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `field_order` (
   `form_id` int(11) DEFAULT NULL,
   `field_order` varchar(2000) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -278,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `lab_config` (
   `doctor` int(10) unsigned NOT NULL DEFAULT '1',
   `ageLimit` int(11) DEFAULT NULL,
   PRIMARY KEY (`lab_config_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=227 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -355,7 +356,7 @@ CREATE TABLE IF NOT EXISTS `labtitle_custom_field` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `field_type_id` (`field_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -374,7 +375,7 @@ CREATE TABLE IF NOT EXISTS `measure` (
   `unit` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`measure_id`),
   KEY `unit_id` (`unit_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=179 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -424,7 +425,7 @@ CREATE TABLE IF NOT EXISTS `numeric_interpretation` (
   `measure_id` int(10) DEFAULT NULL,
   `id` int(10) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -465,7 +466,7 @@ CREATE TABLE IF NOT EXISTS `patient_custom_data` (
   PRIMARY KEY (`id`),
   KEY `field_id` (`field_id`),
   KEY `patient_id` (`patient_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -482,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `patient_custom_field` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `field_type_id` (`field_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -508,7 +509,7 @@ CREATE TABLE IF NOT EXISTS `patient_report_fields_order` (
   `p_fields` varchar(500) NOT NULL DEFAULT '',
   `o_fields` varchar(500) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -540,7 +541,7 @@ CREATE TABLE IF NOT EXISTS `reference_range` (
   `range_lower` varchar(45) NOT NULL,
   `range_upper` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -560,7 +561,7 @@ CREATE TABLE IF NOT EXISTS `removal_record` (
   `ts` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `category` varchar(20) DEFAULT 'test',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -588,7 +589,7 @@ CREATE TABLE IF NOT EXISTS `report_config` (
   `result_border_horizontal` int(1) unsigned NOT NULL DEFAULT '0',
   `result_border_vertical` int(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`report_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -607,7 +608,7 @@ CREATE TABLE IF NOT EXISTS `report_disease` (
   `lab_config_id` int(10) unsigned NOT NULL,
   `test_type_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1639 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -623,7 +624,7 @@ CREATE TABLE IF NOT EXISTS `sites` (
   `Region` varchar(40) DEFAULT NULL,
   `District` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -677,7 +678,7 @@ CREATE TABLE IF NOT EXISTS `specimen_custom_data` (
   PRIMARY KEY (`id`),
   KEY `field_id` (`field_id`),
   KEY `specimen_id` (`specimen_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -694,7 +695,7 @@ CREATE TABLE IF NOT EXISTS `specimen_custom_field` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `field_type_id` (`field_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -738,7 +739,7 @@ CREATE TABLE IF NOT EXISTS `specimen_type` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `disabled` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`specimen_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -808,7 +809,7 @@ CREATE TABLE IF NOT EXISTS `test` (
   KEY `test_type_id` (`test_type_id`),
   KEY `user_id` (`user_id`),
   KEY `specimen_id` (`specimen_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11311 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -827,7 +828,7 @@ CREATE TABLE IF NOT EXISTS `test_agg_report_config` (
   `age_groups` varchar(255) DEFAULT NULL,
   `report_type` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -842,7 +843,7 @@ CREATE TABLE IF NOT EXISTS `test_category` (
   `description` varchar(100) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`test_category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -866,7 +867,7 @@ CREATE TABLE IF NOT EXISTS `test_type` (
   `is_reporting_enabled` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`test_type_id`),
   KEY `test_category_id` (`test_category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -931,7 +932,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `lang_id` varchar(45) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`user_id`),
   KEY `user_id_index` (`lab_config_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=247 DEFAULT CHARSET=utf8mb4 COMMENT='Users are anybody that works in the lab.';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Users are anybody that works in the lab.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -947,7 +948,7 @@ CREATE TABLE IF NOT EXISTS `user_feedback` (
   `comments` varchar(500) DEFAULT NULL,
   `ts` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1011,7 +1012,7 @@ CREATE TABLE IF NOT EXISTS `worksheet_custom` (
   `id_fields` varchar(45) NOT NULL DEFAULT '0,0,0',
   `landscape` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1040,7 +1041,7 @@ CREATE TABLE IF NOT EXISTS `worksheet_custom_userfield` (
   `width` int(10) unsigned NOT NULL DEFAULT '10',
   `field_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   KEY `Primary Key` (`field_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -1052,4 +1053,4 @@ CREATE TABLE IF NOT EXISTS `worksheet_custom_userfield` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-05 17:49:52
+-- Dump completed on 2024-08-20 14:25:18

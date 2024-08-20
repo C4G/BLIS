@@ -133,11 +133,18 @@ class LabDatabaseMigrator {
     }
 
     private function get_applied_migrations() {
+        global $log;
+        
         db_change($this->lab_db_name);
 
         $query = "SELECT name FROM blis_migrations ORDER BY name ASC;";
 
         $results = query_associative_all($query);
+
+        if (!$results) {
+            $log->warn("Error querying migrations for database " . $this->lab_db_name);
+            return array();
+        }
 
         $migrations = array();
         foreach($results as $result) {

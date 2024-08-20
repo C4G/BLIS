@@ -200,7 +200,7 @@ class BackupLib
         $lab_db = "blis_$lab_config_id";
 
         // Create backup directory structure
-        $backup_dir = "../../files/backups/blis_backup_".date("Ymd-His");
+        $backup_dir = "../../files/backups/blis_backup_" . $lab_db . "_" . date("Ymd-His");
         mkdir($backup_dir, 0700, true);
         mkdir("$backup_dir/$lab_db/", 0700, false);
         mkdir("$backup_dir/blis_revamp/", 0700, false);

@@ -7,16 +7,23 @@
 #
 
 require_once(__DIR__."/../includes/features.php");
+require_once(__DIR__."/../includes/user_lib.php");
+require_once(__DIR__."/../users/accesslist.php");
 
 if (Features::lab_config_v2_enabled()) {
+
+	if(User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level'])) {
+		$lab_config_list = get_lab_configs($_SESSION['user_id']);
+		$_SESSION['lab_config_id']=$lab_config_list[0]->id;
+		header("Location: /lab_config_home.php?id=".$lab_config_list[0]->id);
+		exit;
+	}
+
     header("Location: /config/v2/lab_config_index.php");
     return;
 }
 
-include("../users/accesslist.php");
 include("redirect.php");
-require_once("includes/user_lib.php");
-
 
 if( !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList))
 	&& !(isSuperAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $superAdminPageList))
@@ -25,8 +32,6 @@ if( !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_
 
 get_user_by_id($_SESSION['user_id']);
 $_SESSION['user_level'];
-
-
 
 if(User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level']))
 {

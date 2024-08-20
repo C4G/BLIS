@@ -249,27 +249,7 @@ function get_top_menu_options($user_role, $user_rwoption = "") {
 
 	$rw_option = explode ( ',', $user_rwoption );
 
-	// Write Mode starts
-/*	if ($user_role == $LIS_TECH_RW || $user_role == $LIS_001 ||$user_role == $LIS_010||$user_role == $LIS_011||$user_role == $LIS_100||$user_role==$LIS_TECH_SHOWPNAME||$user_role == $LIS_101||$user_role == $LIS_110||$user_role == $LIS_111|| $user_role == $LIS_VERIFIER) {
-		if (in_array ( "2", $rw_option ))
-			$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
-		if (in_array ( "3", $rw_option ))
-			$page_list [LangUtil::getPageTitle ( "results_entry" )] = "results_entry.php";
-		if (in_array ( "4", $rw_option ))
-			$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
-		if (in_array ( "5", $rw_option ))
-			$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
-		if (in_array ( "6", $rw_option ))
-			$page_list ["Inventory"] = "view_stock.php";
-		if (in_array ( "7", $rw_option ))
-			$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
-	}
-else if ($user_role == $READONLYMODE) {
-				$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
-	}
-		else */
-if($user_role == $LIS_PHYSICIAN) {
-	// echo "lis physician";
+	if($user_role == $LIS_PHYSICIAN) {
 		if (in_array ( "2", $rw_option ))
 			$page_list [LangUtil::getPageTitle ( "regn" )] = "doctor_register.php";
 		if (in_array ( "3", $rw_option ))
@@ -282,39 +262,15 @@ if($user_role == $LIS_PHYSICIAN) {
 			$page_list ["Inventory"] = "view_stock.php";
 		if (in_array ( "7", $rw_option ))
 			$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
-
-		// $page_list [LangUtil::getPageTitle ( "regn" )] = "doctor_register.php";
-		// $page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
 	}
-else if ($user_role == $READONLYMODE) {
-	// echo "readonlymode";
-				$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
+	else if ($user_role == $READONLYMODE) {
+		$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
 	}
-			else if ($user_role == $LIS_CLERK) {
-				echo "lis clerk";
+	else if ($user_role == $LIS_CLERK) {
 		$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
 		$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
 	}
-/*else if ($user_role == $LIS_TECH_RW || $user_role == $LIS_TECH_SHOWPNAME) {
-		$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
-		$page_list [LangUtil::getPageTitle ( "results_entry" )] = "results_entry.php";
-		$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
-		$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
-		$page_list ["Inventory"] = "view_stock.php";
-		$id = get_lab_config_id ( $_SESSION ['user_id'] );
-		if ($id == 0) {
-			$lab_config_list = get_lab_configs ( $_SESSION ['user_id'] );
-			$id = $lab_config_list [0]->id;
-		}
-		$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
-	}
-else if ($user_role == $LIS_TECH_RO || $user_role == $LIS_TECH_SHOWPNAME) {
-		$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
-		$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
-	} */
-else if ($user_role == $LIS_ADMIN) {
-		// echo "lis admin";
-		// ...
+	else if ($user_role == $LIS_ADMIN) {
 		$page_list [LangUtil::getPageTitle ( "lab_config_home" )] = "lab_configs.php";
 		$page_list [LangUtil::getPageTitle ( "catalog" )] = "catalog.php";
 		$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
@@ -325,21 +281,16 @@ else if ($user_role == $LIS_ADMIN) {
 				$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $lab_config_list [0]->id;
 			}
 		}
-		// $page_list["Inventory"]="stock_add.php";
-		// ...
 	} else if ($user_role == $LIS_SUPERADMIN || $user_role == $LIS_COUNTRYDIR) {
-		// echo "superadmin or countrydir";
 		$page_list [LangUtil::getPageTitle ( "lab_configs" )] = "lab_configs.php";
 		$page_list [LangUtil::getPageTitle ( "lab_admins" )] = "lab_admins.php";
 		$page_list [LangUtil::getPageTitle ( "catalog" )] = "country_catalog.php";
 		$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
 	} else if ($user_role == $LIS_VERIFIER) {
-		// echo "lis verifier";
 		$page_list [LangUtil::getPageTitle ( "results_entry" )] = "results_entry.php";
 	}
-else
-{
-	// echo "final";
+	else
+	{
 		if (in_array ( "2", $rw_option ))
 			$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
 		if (in_array ( "3", $rw_option ))
@@ -352,53 +303,8 @@ else
 			$page_list ["Inventory"] = "view_stock.php";
 		if (in_array ( "7", $rw_option ))
 			$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
-}
-/*else if (false) {
-		switch ($user_role) {
-			case $LIS_001 :
-				// Reports only
-				$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
-				$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
-				break;
-			case $LIS_010 :
-				// Results only
-				$page_list [LangUtil::getPageTitle ( "results_entry" )] = "results_entry.php";
-				$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
-				break;
-			case $LIS_011 :
-				// Results and reports
-				$page_list [LangUtil::getPageTitle ( "results_entry" )] = "results_entry.php";
-				$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
-				$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
-				break;
-			case $LIS_100 :
-				// Regn only
-				$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
-				$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
-				break;
-			case $LIS_101 :
-				// Regn and Reports
-				$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
-				$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
-				$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
-				break;
-			case $LIS_110 :
-				// Regn and Results
-				$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
-				$page_list [LangUtil::getPageTitle ( "results_entry" )] = "results_entry.php";
-				$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
-				break;
-			case $LIS_111 :
-				// All three
-				$page_list [LangUtil::getPageTitle ( "regn" )] = "find_patient.php";
-				$page_list [LangUtil::getPageTitle ( "results_entry" )] = "results_entry.php";
-				$page_list [LangUtil::getPageTitle ( "search" )] = "search.php";
-				$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
-				break;
-		}
-	}*/
-	// Currently Disabled. Uncomment if required
-	// $page_list[LangUtil::getPageTitle("help")] = "help.php";
+	}
+	
 	return $page_list;
 }
 function rand_str($length = 32, $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890') {

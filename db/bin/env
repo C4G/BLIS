@@ -31,7 +31,7 @@ function dump_database {
     local ROOT
     ROOT="$(dirname "$0")"
 
-    mysqldump -h"$DB_HOST" --port "$DB_PORT" -u"$DB_USER" -p"$DB_PASS" --no-data --no-create-db --skip-add-drop-table "$DATABASE_NAME" > "$ROOT/../structure/$DATABASE_NAME.sql"
+    mysqldump -h"$DB_HOST" --port "$DB_PORT" -u"$DB_USER" -p"$DB_PASS" --no-data --no-create-db --skip-add-drop-table "$DATABASE_NAME"  | sed 's/ AUTO_INCREMENT=[0-9]*//g' > "$ROOT/../structure/$DATABASE_NAME.sql"
     sed -i "s/CREATE TABLE \`/CREATE TABLE IF NOT EXISTS \`/g" "$ROOT/../structure/$DATABASE_NAME.sql"
 
     mysqldump -h"$DB_HOST" --port "$DB_PORT" -u"$DB_USER" -p"$DB_PASS" --no-create-info --skip-add-drop-table --skip-extended-insert --compact "$DATABASE_NAME" > "$ROOT/../seed/$DATABASE_NAME.sql"

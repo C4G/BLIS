@@ -8,6 +8,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 # Include required libraries
 require_once(__DIR__."/SessionCheck.php");
 require_once(__DIR__."/db_lib.php");
+require_once(__DIR__."/features.php");
 
 $TRACK_LOADTIME = false;
 $TRACK_LOADTIMEJS = false;
@@ -89,7 +90,7 @@ if (isset($_SESSION['username'])) {
     }
 
 
-    if (intval($_SESSION['user_level']) >= 3) {
+    if (intval($_SESSION['user_level']) >= 3 && (!isset($_SESSION['admin_as_tech']) || $_SESSION['admin_as_tech'] !== true)) {
     ?>
         <a href="/debug.php" class="black">Debug Tools</a> |
     <?php

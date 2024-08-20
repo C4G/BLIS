@@ -101,12 +101,23 @@ $status = 1;
 $uid = $_SESSION['user_id'];
 $query_string = "INSERT INTO version_data (version, status, user_id, i_ts) VALUES ('$vers', $status, '$uid', NOW())";
 query_insert_one($query_string);
-DbUtil::switchRestore($saved_db);
 
-$lab_config_id = $_SESSION['lab_config_id'];
+$lab_config_id = null;
+if (isset($_REQUEST["lab_config_id"])) {
+    $lab_config_id = $_REQUEST["lab_config_id"];
+} else if (isset($_SESSION["lab_config_id"])) {
+    $lab_config_id = $_SESSION["lab_config_id"];
+} else {
+    $log->error("Could not determine lab config ID in blis_update.php.");
+    echo("false");
+    return;
+}
+
 $lab_db_name_query = "SELECT db_name FROM lab_config WHERE lab_config_id = '$lab_config_id';";
 $result = query_associative_one($lab_db_name_query);
 $lab_db = $result['db_name'];
+
+DbUtil::switchRestore($saved_db);
 
 $migrator = new LabDatabaseMigrator($lab_db);
 $result = $migrator->apply_migrations();

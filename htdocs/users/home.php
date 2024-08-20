@@ -79,7 +79,7 @@ function blis_update_t()
 function blis_update()
 {
     $.ajax({
-		url : '../update/blis_update.php',
+		url : '../update/blis_update.php?lab_config_id=<?php echo($_SESSION['lab_config_id']); ?>',
 		success : function(data) {
 			if ( data=="true" ) {
                             $('#update_failure').hide();

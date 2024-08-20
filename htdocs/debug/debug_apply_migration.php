@@ -15,7 +15,7 @@ if (!file_exists($full_path)) {
     exit();
 }
 
-// Remove the .sql extension since the b
+// Remove the .sql extension since the blis_db_update function adds it back
 $migration_file = basename($migration_file, ".sql");
 $lab_db = $_GET['lab'];
 

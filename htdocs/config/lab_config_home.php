@@ -4,12 +4,13 @@
 # Used by the Lab Admin periodically to change settings
 #
 include("redirect.php");
-include("includes/new_image.php");
-include("includes/db_lib.php");
-include("includes/header.php");
-include("includes/random.php");
-include("includes/stats_lib.php");
-include("../AntiXSS.php");
+require_once("includes/new_image.php");
+require_once("includes/db_lib.php");
+require_once("includes/features.php");
+require_once("includes/header.php");
+require_once("includes/random.php");
+require_once("includes/stats_lib.php");
+require_once("../AntiXSS.php");
 
 require_once(dirname(__FILE__).'/../includes/composer.php');
 
@@ -25,7 +26,7 @@ $script_elems->enableJQueryForm();
 ?>
 
 
-<script src="js/jquery-ui-1.8.16.js" type="text/javascript"></script>
+<script src="/js/jquery-ui-1.8.16.js" type="text/javascript"></script>
 <link rel="stylesheet" href="css/jquery-ui-1.8.16.css" type="text/css" media="all">
 
 <div id='Summary_config' class='right_pane' style='display:none;margin-left:10px;'>
@@ -2373,7 +2374,7 @@ function AddnewDHIMS2Config()
                     <br><br>
                 </div>
 				<?php
-                    if ($SERVER != $ON_ARC) {
+                    if ($SERVER != $ON_ARC && !Features::lab_config_v2_enabled()) {
                         ?>
 						<a id='option13' class='menu_option' href="javascript:right_load(13, 'backup_revert_div');"><?php echo LangUtil::$pageTerms['MENU_BACKUP_REVERT']; ?></a><br><br></li>
 						<a id='option131' class='menu_option' href="javascript:right_load(131, 'key_management_div');"><?php echo LangUtil::$pageTerms['MENU_KEY_MANAGEMENT']; ?></a><br><br></li>
