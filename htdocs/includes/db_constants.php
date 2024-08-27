@@ -16,10 +16,10 @@ $ON_PORTABLE = 3;
 
 $SERVER = $ON_PORTABLE;
 
-$LOCAL_PATH = "../../local/";
+$LOCAL_PATH = realpath(__DIR__."/../../local/");
 if($SERVER == $ON_ARC)
 {
-	$LOCAL_PATH = "../local/";
+	$LOCAL_PATH =  realpath(__DIR__."/../local/");
 }
 
 $DB_HOST = getenv("DB_HOST");

@@ -41,18 +41,22 @@ $LIS_PHYSICIAN = 17;
 
 require_once("db_mysql_lib.php");
 
-if(!isset($_SESSION['langdata_path']))
-{
-	$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
-}
+global $LOCAL_PATH;
+// if(!isset($_SESSION['langdata_path'])) {
+	$_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_revamp/";
+// }
+
 # Select appropriate locale file
-if(!isset($_SESSION['locale']))
+if(!isset($_SESSION['locale'])) {
+	global $DEFAULT_LANG;
 	$_SESSION['locale'] = $DEFAULT_LANG;
+}
+
 $locale_catalog_file = $_SESSION['langdata_path'].$_SESSION['locale']."_catalog.php";
 $locale_file = $_SESSION['langdata_path'].$_SESSION['locale'].".php";
 
-require_once(dirname(__FILE__)."/$locale_catalog_file");
-require_once(dirname(__FILE__)."/$locale_file");
+require_once($locale_catalog_file);
+require_once($locale_file);
 
 require_once("debug_lib.php");
 require_once("date_lib.php");

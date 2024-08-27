@@ -24,10 +24,10 @@ if($locale === "default")
 		$locale = "en";
 }
 
-$LANGDATA_PATH = $LOCAL_PATH."langdata_revamp/";
+$LANGDATA_PATH = "$LOCAL_PATH/langdata_revamp/";
 if($SERVER == $ON_PORTABLE)
 {
-	$LANGDATA_PATH = $LOCAL_PATH."langdata_".$lab_config_id."/";;
+	$LANGDATA_PATH = $LOCAL_PATH."/langdata_".$lab_config_id."/";;
 }
 
 
