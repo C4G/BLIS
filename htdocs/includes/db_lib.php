@@ -42,9 +42,9 @@ $LIS_PHYSICIAN = 17;
 require_once("db_mysql_lib.php");
 
 global $LOCAL_PATH;
-// if(!isset($_SESSION['langdata_path'])) {
+if(!isset($_SESSION['langdata_path'])) {
 	$_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_revamp/";
-// }
+}
 
 # Select appropriate locale file
 if(!isset($_SESSION['locale'])) {

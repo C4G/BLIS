@@ -249,7 +249,6 @@ RewriteRule ^stock_lots\.php$ inventory/stock_lots.php
 ## /barcode folder
 RewriteRule ^generate_barcode\.php$ barcode/generate_barcode.php
 RewriteRule ^barcode_lib\.php$ barcode/barcode_lib.php
-RewriteRule ^export_to_pdf\.php$ barcode/tcpdf/export_to_pdf.php
 RewriteRule ^print_barcode\.php$ barcode/print_barcode.php
 RewriteRule ^get_barcode\.php$ barcode/get_barcode.php
 
