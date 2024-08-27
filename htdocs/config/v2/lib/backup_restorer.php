@@ -14,7 +14,7 @@ class BackupRestorer {
     private $analyzed;
 
     private $target_lab_id;
-    private $target_lab_database;
+    public $target_lab_database;
 
     private $logger;
 
@@ -70,31 +70,49 @@ class BackupRestorer {
         return $filename.".dec";
     }
 
+    private function sanitize_lab_sql_file($filename) {
+        global $log;
+
+        $pathinfo = pathinfo($filename);
+        $output_path = dirname($filename) . "/" . $pathinfo['filename'] . ".sanitized.sql";
+
+        $structure_file = file_get_contents($filename);
+        $file_lines = explode("\n", $structure_file);
+        $file_contents = "";
+        foreach($file_lines as $line) {
+            $matches = null;
+
+            if (preg_match('/^CREATE DATABASE/', $line, $matches) == 1) {
+                continue;
+            }
+
+            if (preg_match('/^USE /', $line, $matches) == 1) {
+                continue;
+            }
+
+            $file_contents = $file_contents . $line . "\n";
+        }
+
+        file_put_contents($output_path, $file_contents);
+
+        return $output_path;
+    }
+
     private function execute_sql_file($fname, $target_db) {
         global $DB_HOST, $DB_PORT, $DB_USER, $DB_PASS;
 
-        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        $mysql = PlatformLib::mySqlClientPath();
+        $command = "$mysql -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $target_db < \"$fname\"";
 
-        $target_conn = new mysqli("$DB_HOST:$DB_PORT", $DB_USER, $DB_PASS, $target_db);
-        $this->logger->info("Connected to " . $target_db);
-        $this->logger->info("Executing " . $fname);
+        $output = system($command, $result);
 
-        try {
-            $structure_file = file_get_contents($fname);
-
-            $target_conn->multi_query($structure_file);
-            do {
-                // Need to page through the results of the execution above so we can continue
-                $result = $target_conn->store_result();
-            } while ($target_conn->next_result());
-        } catch (Exception $e) {
-            $this->logger->error("Exception occurred: " . $e->getMessage());
+        if ($result == 0) {
+            return true;
+        } else {
+            $sanitized_command = "$mysql -B -h $DB_HOST -P $DB_PORT -u ***** -p ***** $target_db < \"$fname\"";
+            $this->logger->error("Could not execute SQL file $fname; command: $sanitized_command; err code $result; output:\n $output");
             return false;
-        } finally {
-            $target_conn->close();
         }
-    
-        return true;
     }
 
     /**
@@ -130,13 +148,27 @@ class BackupRestorer {
             $blisLabBackupFilePath = $decrypted_file;
         }
 
-        $return = $this->execute_sql_file($blisLabBackupFilePath, $this->target_lab_database);
+        $sanitized_file = $this->sanitize_lab_sql_file($blisLabBackupFilePath);
+        
+        // Since we are reverting to a backup, we need to reset the state of the migrations table as well.
+        db_change($this->target_lab_database);
+        query_delete("TRUNCATE TABLE blis_migrations;");
+        $this->logger->info("Truncated blis_migrations table.");
+        
+        $return = $this->execute_sql_file($sanitized_file, $this->target_lab_database);
 
         if (!!$decrypted_file) {
             unlink($decrypted_file);
         }
 
-        $this->logger->info("Restore completed.");
+        unlink($sanitized_file);
+
+        if ($return) {
+            $this->logger->info("Restore completed.");
+            PlatformLib::removeDirectory($unzip_path);
+        } else {
+            $this->logger->error("Restore was not successful.");
+        }
 
         return $return;
     }

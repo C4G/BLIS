@@ -7,6 +7,7 @@
 #
 
 require_once(__DIR__."/../../users/accesslist.php");
+require_once(__DIR__."/../../includes/migrations.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 require_once(__DIR__."/lib/backup.php");
 require_once(__DIR__."/lib/backup_restorer.php");
@@ -127,8 +128,22 @@ if ($_GET["action"] != "confirm") {
 
     $restorer = new BackupRestorer($backup, $lab_config_id);
 
-    if ($restorer->restore()) {
-        $_SESSION["BACKUP_FLASH"] = "Backup restored successfully.";
+    $restore_successful = $restorer->restore();
+
+    $migrations_successful = false;
+    if ($restore_successful) {
+        $migrator = new LabDatabaseMigrator($restorer->target_lab_database);
+        $migrations_successful = $migrator->apply_migrations();
+    }
+
+    if ($restore_successful) {
+        if ($migrations_successful) {
+            $_SESSION["BACKUP_FLASH"] = "Backup restored successfully.";
+        } else {
+            $_SESSION["BACKUP_FLASH"] = "Backup database was restored, "
+                                        . "but could not be migrated to the new BLIS version. "
+                                        . "Please check the logs for details.";
+        }
     } else {
         $_SESSION["BACKUP_FLASH"] = "Failed to restore backup.";
     }
