@@ -97,7 +97,7 @@ a.delete-backup {
 <?php
     # This is used for rendering ephemeral messages on this page.
     # To use, set $_SESSION['BACKUP_FLASH'] on another page and then redirect to this one.
-    if ($_SESSION['BACKUP_FLASH'] != '') {
+    if (isset($_SESSION['BACKUP_FLASH']) && $_SESSION['BACKUP_FLASH'] != '') {
         echo "<div class=\"backup-flash\">".$_SESSION['BACKUP_FLASH']."</div>";
         $_SESSION['BACKUP_FLASH'] = '';
     }
