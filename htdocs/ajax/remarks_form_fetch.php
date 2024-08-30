@@ -11,7 +11,7 @@ $page_elems = new PageElems();
 $lab_config_id = $_REQUEST['lid'];
 $test_type_id = $_REQUEST['ttype'];
 
-//include($LOCAL_PATH."langdata_".$lab_config_id."/remarks.php");
+//include($LOCAL_PATH."/langdata_".$lab_config_id."/remarks.php");
 
 $saved_id = $_SESSION['lab_config_id'];
 

@@ -787,7 +787,7 @@ class ReportConfig
 		$report_config->footerText = $record['footer'];
 		$report_config->titleText = $record['title'];
 
-		$report_config->logoUrl = $LOCAL_PATH."logos/logo_".$lab_config_id;
+		$report_config->logoUrl = $LOCAL_PATH."/logos/logo_".$lab_config_id;
 		$report_config->landscape = false;
 		if($record['landscape'] == 1)
 			$report_config->landscape = true;
@@ -15716,9 +15716,9 @@ class API
 			$_SESSION['doctor'] = $arr1[12];
 		}
 		if($SERVER == $ON_PORTABLE)
-			$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_".$lab_config->id."/";
+			$_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_".$lab_config->id."/";
 		else
-			$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
+			$_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_revamp/";
 	}
 
 

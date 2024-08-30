@@ -34,9 +34,9 @@ $_SESSION['dnum_reset'] = $lab_config->dailyNumReset;
 $_SESSION['doctor'] = $lab_config->doctor;
 $_SESSION['pnamehide'] = $lab_config->hidePatientName;
 if($SERVER == $ON_PORTABLE)
-	$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_".$lab_config->id."/";
+	$_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_".$lab_config->id."/";
 else
-	$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
+	$_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_revamp/";
 # Set flag
 if($_SESSION['user_level_backup'] == $LIS_SUPERADMIN || $_SESSION['user_level_backup'] == $LIS_COUNTRYDIR)
 	$_SESSION['dir_as_tech'] = true;

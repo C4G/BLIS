@@ -11,7 +11,7 @@ delete_lab_config($lab_config_id);
 # Delete corresponding langdata folder
 if($SERVER != $ON_ARC)
 {
-	$langdata_dir = $LOCAL_PATH."langdata_".$lab_config_id;
+	$langdata_dir = $LOCAL_PATH."/langdata_".$lab_config_id;
 	$file_list = array();
 	if ($handle = opendir($langdata_dir))
 	{

@@ -212,13 +212,16 @@ foreach($selected_test_list as $test_type_id)
 ###################
 
 # Create new langdata folder for this lab
-chmod($LOCAL_PATH."langdata_revamp", 0755);
-chmod($LOCAL_PATH."langdata_".$lab_config_id, 0755);
-mkdir($LOCAL_PATH."langdata_".$lab_config_id);
+
+global $LOCAL_PATH;
+
+chmod($LOCAL_PATH."/langdata_revamp", 0755);
+chmod($LOCAL_PATH."/langdata_".$lab_config_id, 0755);
+mkdir($LOCAL_PATH."/langdata_".$lab_config_id);
 # Copy contents from langdata_revamp into this new folder
-//copy($LOCAL_PATH."langdata_revamp", $LOCAL_PATH."langdata_".$lab_config_id);
+//copy($LOCAL_PATH."/langdata_revamp", $LOCAL_PATH."/langdata_".$lab_config_id);
 $file_list1 = array();
-$dir_name1 = $LOCAL_PATH."langdata_revamp";
+$dir_name1 = $LOCAL_PATH."/langdata_revamp";
 if ($handle = opendir($dir_name1))
 {
 	while (false !== ($file = readdir($handle)))
@@ -228,7 +231,7 @@ if ($handle = opendir($dir_name1))
 		$file_list1[] = $dir_name1."/$file";
 	}
 }
-$destination = $LOCAL_PATH."langdata_".$lab_config_id;
+$destination = $LOCAL_PATH."/langdata_".$lab_config_id;
 foreach($file_list1 as $file)
 {
 	$file_name_parts = explode("/", $file);
@@ -241,7 +244,7 @@ foreach($file_list1 as $file)
 	};
 }
 
-$langdata_path = $LOCAL_PATH."langdata_".$lab_config_id."/";
+$langdata_path = $LOCAL_PATH."/langdata_".$lab_config_id."/";
 remarks_db2xml($langdata_path, $lab_config_id);
 
 $_SESSION['lab_config_id'] = $saved_id;
@@ -262,5 +265,5 @@ if($blocation > 0)
     }
 }
 SessionUtil::restore($saved_session);
-header("location:lab_config_added.php?id=$saved_config_id");
+header("Location: lab_config_added.php?id=$saved_config_id");
 ?>

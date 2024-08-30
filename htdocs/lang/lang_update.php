@@ -11,10 +11,10 @@ $lang_id = $_REQUEST['lang_id'];
 $page_id = $_REQUEST['page_id'];
 $lab_config_id = $_REQUEST['lab_config_id'];
 
-$LANGDATA_PATH = $LOCAL_PATH."langdata_revamp/";;
+$LANGDATA_PATH = $LOCAL_PATH."/langdata_revamp/";;
 if($SERVER == $ON_PORTABLE)
 {
-	$LANGDATA_PATH = $LOCAL_PATH."langdata_".$lab_config_id."/";;
+	$LANGDATA_PATH = $LOCAL_PATH."/langdata_".$lab_config_id."/";;
 }
 
 $xml_file_name = $LANGDATA_PATH.$lang_id.".xml";

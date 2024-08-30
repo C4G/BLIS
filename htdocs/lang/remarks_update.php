@@ -95,7 +95,7 @@ foreach($measure_list as $measure)
 	}
 	}
 	# Update XML file with these changes
-$langdata_path = $LOCAL_PATH."langdata_".$lab_config_id."/";
+$langdata_path = $LOCAL_PATH."/langdata_".$lab_config_id."/";
 //update_remarks_xml($langdata_path, $updated_remarks);
 # Generate corresponding PHP file
 //remarks_xml2php($langdata_path);

@@ -15,7 +15,7 @@ if(isset($_SESSION['admin_as_tech']))
 	$_SESSION['admin_as_tech'] = false;
 if(isset($_SESSION['dir_as_tech']))
 {
-	$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
+	$_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_revamp/";
 	$_SESSION['dir_as_tech'] = false;	
 }
 header("location: home.php");
