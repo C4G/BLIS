@@ -5,6 +5,9 @@ FROM ubuntu:focal
 # See the documentation here to see why devcontainers are awesome:
 # https://code.visualstudio.com/docs/remote/containers
 
+# Set environment variables here that will only be seen in development
+ENV BLIS_LAB_BACKUPS_V2_ENABLED=1
+
 # Install a bunch of stuff from the standard repositories and a custom PHP repository
 # Namely, PHP 5.6
 RUN apt-get update && apt-get install -y software-properties-common && \

@@ -25,7 +25,11 @@ function query_insert_one($query)
     $LOG_QUERIES = true;
 	if($LOG_QUERIES == true) {
         DebugLib::logDBUpdates($query, db_get_current());
-        DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
+        $uname = "(unset)";
+        if (isset($_SESSION['username'])) {
+            $uname = $_SESSION['username'];
+        }
+        DebugLib::logQuery($query, db_get_current(), $uname);
     }
 }
 
@@ -77,11 +81,14 @@ function query_associative_all($query)
     $retval = array();
     while ( $row = mysql_fetch_assoc($result) ){ $retval[] = $row; }
     $LOG_QUERIES = true;
-	if($LOG_QUERIES == true)
-        {
-		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
-		DebugLib::logDBUpdates($query, db_get_current());
+	if($LOG_QUERIES == true) {
+        $uname = "(unset)";
+        if (isset($_SESSION['username'])) {
+            $uname = $_SESSION['username'];
         }
+		DebugLib::logQuery($query, db_get_current(), $uname);
+		DebugLib::logDBUpdates($query, db_get_current());
+    }
     return $retval;
 }
 

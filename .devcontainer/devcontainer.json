@@ -21,9 +21,5 @@
     "service": "app",
     "workspaceFolder": "/workspace",
     "postCreateCommand": ".devcontainer/post-create-command.sh",
-    "postAttachCommand": "start-blis.sh",
-    "containerEnv": {
-        // These environment variables will only be set in development!
-        "BLIS_LAB_BACKUPS_V2_ENABLED": "1"
-    }
+    "postAttachCommand": "start-blis.sh"
 }

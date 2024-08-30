@@ -4,12 +4,12 @@
 # Contains method calls for commonly used HTML page elements
 #
 
-require_once("../export/backup_lib.php");
-require_once("../regn/field_htmlFactory.php");
-require_once("../regn/generate_customize_field_order_patient.php");
-require_once("db_lib.php");
-require_once("field_order_update.php");
-include_once("../lang/lang_util.php");
+require_once(__DIR__."/../export/backup_lib.php");
+require_once(__DIR__."/../regn/field_htmlFactory.php");
+require_once(__DIR__."/../regn/generate_customize_field_order_patient.php");
+require_once(__DIR__."/db_lib.php");
+require_once(__DIR__."/field_order_update.php");
+include_once(__DIR__."/../lang/lang_util.php");
 
 
 class PageElems
@@ -35,7 +35,7 @@ class PageElems
 	public function getProgressSpinner($message)
 	{
 		?>
-		<img src='includes/img/small_spinner.gif' /><?php echo "<small> ".$message."</small>";
+		<img src='/includes/img/small_spinner.gif' /><?php echo "<small> ".$message."</small>";
 	}
 
 	public function getProgressSpinnerBig($message)
@@ -11704,7 +11704,7 @@ div#rMenu ul li{
 
 	}
 
-	
+
 public function gettestRangeStatsTable($test_range_count)
 	{
 		# Returns HTML table showing number of tests performed

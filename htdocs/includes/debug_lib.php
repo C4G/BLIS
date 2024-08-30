@@ -61,9 +61,14 @@ class DebugLib
 	{
         global $db_log;
 
+		$lab_config_id = null;
+		if (isset($_SESSION['lab_config_id'])) {
+			$lab_config_id = $_SESSION['lab_config_id'];
+		}
+
 		# Adds current query to log
         date_default_timezone_set("UTC");
-		$file_name = "../../local/log_".$_SESSION['lab_config_id'].".txt";
+		$file_name = __DIR__."/../../local/log_".$lab_config_id.".txt";
 		$file_handle = null;
 		if(file_exists($file_name))
 			$file_handle = fopen($file_name, "a");
@@ -80,9 +85,14 @@ class DebugLib
 
 	public static function logDBUpdates($query_string, $db_name)
 	{
+		$lab_config_id = null;
+		if (isset($_SESSION['lab_config_id'])) {
+			$lab_config_id = $_SESSION['lab_config_id'];
+		}
+
 		# Adds current query to update log
-		$file_name = "../../local/log_".$_SESSION['lab_config_id']."_updates.sql";
-		$file_name_revamp = "../../local/log_".$_SESSION['lab_config_id']."_revamp_updates.sql";
+		$file_name = __DIR__."/../../local/log_".$lab_config_id."_updates.sql";
+		$file_name_revamp = __DIR__."/../../local/log_".$lab_config_id."_revamp_updates.sql";
 		$file_handle = null;
 		$file_handle_revamp = null;
 
@@ -91,7 +101,7 @@ class DebugLib
 		}
 		else {
 			$file_handle = fopen($file_name, "w");
-			fwrite($file_handle, "USE blis_".$_SESSION['lab_config_id'].";\n\n");
+			fwrite($file_handle, "USE blis_".$lab_config_id.";\n\n");
 		}
 
 		if(file_exists($file_name_revamp)) {

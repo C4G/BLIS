@@ -1,26 +1,29 @@
 <?php
+require_once("../includes/composer.php");
+require_once("../includes/db_lib.php");
 
-include("../includes/db_lib.php");
 putUILog('export_word', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
-$fullPath = dirname(__FILE__)."\\";
-array_map('unlink', glob( "$fullPath*.pdf"));
-$date = date("Ymdhi");
-$file_name = dirname(__FILE__).'\blisreport_'.$date.".pdf";
-$_file_name = 'blisreport_'.$date.".pdf";
-$cmd = " docto -f \"".dirname(__FILE__).'\file.doc"'." -O \"".$file_name."\" -T wdFormatPDF";
-$id=$_REQUEST['lab_id'];
-$var=dirname(dirname(__FILE__))."\logos\logo_".$id.".jpg";
-$html_content = "<img src='".$var."'"." height='140' width='140' />" . stripcslashes($_REQUEST['data']);
-#echo dirname(__FILE__);
 
-$file = fopen(dirname(__FILE__).'\file.doc', 'w+');
+$base_path = realpath(__DIR__."/../../files/");
+
+$date = date("Ymdhi");
+
+$file_base_name = $base_path.'/blisreport_'.$date;
+
+$lab_id=$_REQUEST['lab_id'];
+$logo_file=__DIR__."/../logos/logo_".$lab_id.".jpg";
+$html_content = "<img src='".$logo_file."'"." height='140' width='140' />\n" . stripcslashes($_REQUEST['data']);
+
+$file = fopen($file_base_name.'.html', 'w+');
 fwrite($file, $html_content);
 fclose($file);
 
-system($cmd);
+$cmd = "pandoc -f html --pdf-engine=weasyprint -i \"$file_base_name.html\" -o \"$file_base_name.pdf\"";
+$output = system($cmd);
 
-header('Content-type: application/pdf');
-header('Content-Disposition: inline; filename="' . $_file_name . '"');
-header('Content-Transfer-Encoding: binary');
-header('Accept-Ranges: bytes');
-echo file_get_contents($file_name);
+unlink("$file_base_path.html");
+
+header('Content-Type: application/pdf');
+header('Content-Disposition: attachment; filename="' . basename($file_base_name.".pdf") . '"');
+header('Content-Length: ' . filesize("$file_base_name.pdf"));
+readfile("$file_base_name.pdf");

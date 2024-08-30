@@ -19,7 +19,7 @@ if (session_id() == "") {
     session_start();
 }
 
-$LOCAL_PATH = realpath(__DIR__."/../../local/");
+global $LOCAL_PATH;
 
 $username = $_REQUEST['username'];
 $password = $_REQUEST['password'];
@@ -93,9 +93,9 @@ if ($login_correct) {
             $_SESSION['doctor'] = $arr1[12];
         }
         if ($SERVER == $ON_PORTABLE) {
-            $_SESSION['langdata_path'] = $LOCAL_PATH."langdata_".$lab_config->id."/";
+            $_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_".$lab_config->id."/";
         } else {
-            $_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
+            $_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_revamp/";
         }
     }
     
@@ -104,17 +104,16 @@ if ($login_correct) {
         $_SESSION['dformat'] = $lab_config_list[0]->dateFormat;
 //        $_SESSION['lab_config_id'] = $lab_config_list[0]->id;
         if ($SERVER == $ON_PORTABLE) {
-            $langdata_path1 = $LOCAL_PATH."langdata_".$lab_config_list[0]->id."/";
-            if (is_dir($LOCAL_PATH."langdata_".$lab_config_list[0]->id."/")) {
-                $_SESSION['langdata_path'] = $LOCAL_PATH."langdata_".$lab_config_list[0]->id."/";
+            if (is_dir($LOCAL_PATH."/langdata_".$lab_config_list[0]->id."/")) {
+                $_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_".$lab_config_list[0]->id."/";
             } else {
                 $log->error("langdata_path could not be set because local/langdata_".$lab_config_list[0]->id . " does not exist.");
             }
         } else {
-            $_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
+            $_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_revamp/";
         }
     } else {
-        $_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
+        $_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_revamp/";
     }
     # Set session variables for recording latency/user props
     $_SESSION['PROPS_RECORDED'] = false;

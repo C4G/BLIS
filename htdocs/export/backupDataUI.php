@@ -1,8 +1,22 @@
 <?php
+    require_once("../includes/features.php");
+    
+    $lab_config_id = null;
+    if (isset($_REQUEST['id'])) {
+        $lab_config_id = $_REQUEST["id"];
+    } else if (isset($_SESSION['lab_config_id'])) {
+        $lab_config_id = $_SESSION["lab_config_id"];
+    }
+
+    if (Features::lab_config_v2_enabled()) {
+        header("Location: /config/v2/lab_config_backups.php?id=$lab_config_id");
+        exit;
+    }
+
     require_once("../includes/header.php");
     require_once("../includes/keymgmt.php");
-    //$labConfigId = $_REQUEST['id'];
-    $labConfigId =$_SESSION['lab_config_id'];
+    
+    $labConfigId = $lab_config_id;
     putUILog('backup_data_ui', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
     $target_set=KeyMgmt::getAllKeys();
     $encryption_enabled = (KeyMgmt::read_enc_setting() == 1);

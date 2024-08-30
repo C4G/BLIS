@@ -4,16 +4,18 @@
 # This file contains entity classes and functions for DB queries
 #
 
-include_once("../lang/lang_util.php");
-require_once('db_util.php');
-require_once('keymgmt.php');
-require_once('lab_config.php');
+require_once(__DIR__."/composer.php");
+
+include_once(__DIR__."/../lang/lang_util.php");
+require_once(__DIR__."/db_util.php");
+require_once(__DIR__."/keymgmt.php");
+require_once(__DIR__."/lab_config.php");
 
 # Start session if not already started
 if(session_id() == "")
 	session_start();
 
-require_once("defaults.php");
+require_once(__DIR__."/defaults.php");
 
 // List of known user roles (These could be fetched from DB and populated)
 $LIS_TECH_RW = 0;
@@ -39,21 +41,26 @@ $LIS_PHYSICIAN = 17;
 
 require_once("db_mysql_lib.php");
 
-if(!isset($_SESSION['langdata_path']))
-{
-	$_SESSION['langdata_path'] = $LOCAL_PATH."langdata_revamp/";
+global $LOCAL_PATH;
+if(!isset($_SESSION['langdata_path'])) {
+	$_SESSION['langdata_path'] = $LOCAL_PATH."/langdata_revamp/";
 }
+
 # Select appropriate locale file
-if(!isset($_SESSION['locale']))
+if(!isset($_SESSION['locale'])) {
+	global $DEFAULT_LANG;
 	$_SESSION['locale'] = $DEFAULT_LANG;
+}
+
 $locale_catalog_file = $_SESSION['langdata_path'].$_SESSION['locale']."_catalog.php";
 $locale_file = $_SESSION['langdata_path'].$_SESSION['locale'].".php";
 
-require_once(dirname(__FILE__)."/$locale_catalog_file");
-require_once(dirname(__FILE__)."/$locale_file");
+require_once($locale_catalog_file);
+require_once($locale_file);
 
 require_once("debug_lib.php");
 require_once("date_lib.php");
+
 
 #
 # Entity classes for database backend
@@ -82,7 +89,7 @@ class User
 {
 	public $userId;
 
-public $username;
+    public $username;
 	public $password;
 	public $actualName;
 	public $email;
@@ -428,7 +435,7 @@ class FieldOrdering
 			"INSERT INTO `field_ordering`(`lab_config_id`, `field1`, `field2`, `field3`, `field4`, `field5`, `field6`, `field7`,`field8`,`field9`,`field10`,`field11`,`field12`,`field13`,`field14`,`field15`,`field16`,`form_id`) ".
 			"VALUES ($lab_config_id, '$field1', '$field2', '$field3', '$field4', '$field5', '$field6', '$field7', '$field8', '$field9', '$field10', '$field11', '$field12', '$field13', '$field14', '$field15', '$field16', $form_id)";
 		 */
-		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
+		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 
 		$query_string =
 		"INSERT INTO `field_order`(`lab_config_id`, `field_order`,`form_id`) ".
@@ -3026,9 +3033,10 @@ class Test
 	public function getResultWithoutHash()
 	{
 	    global $PATIENT_HASH_LENGTH;
-		if(trim($this->result) == "")
+		if(trim($this->result) == "") {
 			# Results not yet entered
 			return "";
+        }
 
         #$retval = substr($this->result, 0, -1*$PATIENT_HASH_LENGTH);
 
@@ -6197,8 +6205,8 @@ function get_user_by_id($user_id)
 	$user_id = mysql_real_escape_string($user_id, $con);
 	# Fetches user record by primary key
 	$saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions
-	FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.user_id=$user_id LIMIT 1";
+	$query_string = "SELECT a.user_id, a.username, a.password, a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions
+	FROM user a, user_config b WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.user_id=$user_id LIMIT 1";
 	$record = query_associative_one($query_string);
 	DbUtil::switchRestore($saved_db);
 	return User::getObject($record);
@@ -8571,37 +8579,35 @@ function get_lab_configs($admin_user_id = "")
 	# If admin_user_id not supplied, all stored lab configs are returned
 	$saved_db = DbUtil::switchToGlobal();
 	$user = null;
-	if($admin_user_id != "")
+
+    if($admin_user_id != "") {
 		$user = get_user_by_id($admin_user_id);
-	if($admin_user_id == "" || is_super_admin($user))
-	{
+    }
+
+    if($admin_user_id == "" || is_super_admin($user)) {
 		# Super admin user: Fetch lab configs stored in DB
 		$query_configs = "SELECT * FROM lab_config ORDER BY name";
-	}
-	else if(is_country_dir($user))
-	{
-		# Country director: Fetch lab configs from lab_config_access table
-		$query_configs =
-			"SELECT * from lab_config lc ".
-			"WHERE lc.lab_config_id IN ( ".
-			"SELECT lca.lab_config_id from lab_config_access lca ".
-			"WHERE lca.user_id=$admin_user_id ) ".
-			"ORDER BY lc.name";
-	}
-	else
-	{
-		# Fetch all lab configs
 
-		$query_configs =
-			"SELECT * FROM lab_config ".
-			"WHERE admin_user_id=$admin_user_id ".
-			"OR lab_config_id IN ( ".
-			"	SELECT lab_config_id FROM user ".
-			"	WHERE user_id=$admin_user_id ".
-			") ORDER BY name";
+	} else if(is_country_dir($user)) {
+		# Country director: Fetch lab configs from lab_config_access table
+		$query_configs = "SELECT * from lab_config lc
+                            WHERE lc.lab_config_id IN (
+                                SELECT lca.lab_config_id from lab_config_access lca
+                                WHERE lca.user_id=$admin_user_id
+                            )
+                            ORDER BY lc.name";
+
+    } else {
+		# Fetch all lab configs
+		$query_configs = "SELECT * FROM lab_config
+                            WHERE admin_user_id=$admin_user_id
+                            OR lab_config_id IN (
+                                SELECT lab_config_id FROM user
+                                WHERE user_id=$admin_user_id
+                            ) ORDER BY name";
 	}
 	$retval = array();
-//echo $query_configs;
+
 	$resultset = query_associative_all($query_configs);
 	if($resultset == null)
 	{
@@ -13638,12 +13644,13 @@ function insert_lab_config_settings_barcode($type, $width, $height, $textsize, $
     return 1;
 }
 
-function get_lab_config_settings_barcode()
+function get_lab_config_settings_barcode($lab_config_id=null)
 {
+    if ($lab_config_id == null) {
+        $lab_config_id = $_SESSION['lab_config_id'];
+    }
     insert_lab_config_settings_barcode('code39', 2, 30, 11, 1);
     $id = 1; // ID for barcode settings
-    $lab_config_id = $_SESSION['lab_config_id'];
-
     $saved_db = DbUtil::switchToLabConfig($lab_config_id);
 
     $query_string = "SELECT * from lab_config_settings WHERE id = $id";
@@ -14117,11 +14124,11 @@ function checkVersionDataEntryExists($vers)
    $record = query_associative_one($query);
    if(!$record)
    {
-       $code = 0;   #version entry doesnt exist
+       $code = false;   #version entry doesnt exist
    }
    else
    {
-       $code = 1;  #version entry exists implying db update has been completed and update procedure incomplete
+       $code = true;  #version entry exists implying db update has been completed and update procedure incomplete
    }
 
    DbUtil::switchRestore($saved_db);

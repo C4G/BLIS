@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -euo pipefail
+
+ROOT="$(dirname "$0")"
+
+set -a
+source "$ROOT/env"
+set +a
+
+function escape_string()
+{
+   printf '%s' "$1" | sed -e 's/[][\\^*+.$-%]//g' | sed -e 's/ /_/g'
+}
+
+type="${1,,}"
+
+if ! { [[ "$type" = "lab" ]] || [[ "$type" = "revamp" ]] ;}; then
+    echo "The first parameter must be either 'lab' or 'revamp'."
+    exit 1
+fi
+
+if [[ -z "$2" ]]; then
+    echo "Must provide a migration name."
+    exit 1
+fi
+
+migration_name="$(escape_string "${2,,}")"
+
+filename="$(date -u +"%Y%m%d%H%M%S")_$migration_name.sql"
+fullpath="$ROOT/../migrations/$type/$filename"
+
+touch "$fullpath"
+
+echo -e "Created $(realpath "$fullpath")"

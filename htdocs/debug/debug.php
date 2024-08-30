@@ -70,7 +70,7 @@ require_once(__DIR__."/../includes/header.php");
 
 <h3>Database Utilities</h3>
 
-<h4>Lab Database Migrations</h4>
+<h4>Legacy Lab Database Migrations</h4>
 
 <p>
     <span class="red-danger">Warning!</span><br/>
