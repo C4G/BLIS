@@ -15,6 +15,7 @@ if [[ -d "/workspace" ]]; then
     find /workspace -type d -exec sudo chmod ug+s {} \;
 fi
 
+sudo service cron start
 sudo service apache2 start
 
 echo "BLIS is running!"

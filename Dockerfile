@@ -3,7 +3,9 @@ FROM ubuntu:focal
 # Install a bunch of stuff from the standard repositories
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apache2 \
+        cron \
         curl \
+        logrotate \
         mysql-client \
         pandoc \
         software-properties-common \
@@ -41,6 +43,9 @@ RUN a2enmod rewrite socache_shmcb ssl && \
 # Copy custom PHP config into the container
 COPY docker/config/php.ini /etc/php/5.6/apache2/php.ini
 
+# Copy logrotate configuration into container
+COPY docker/config/logrotate-blis.conf /etc/logrotate.d/blis
+
 # Copy utility scripts to /usr/bin
 COPY docker/bin/start-blis.sh /usr/bin/
 
@@ -50,7 +55,7 @@ COPY . /var/www/blis
 RUN chown -R www-data:www-data /var/www && \
     chmod +x /var/log/apache2 && \
     chmod +r /var/log/apache2/* && \
-    echo ". /var/www/apache2_blis.env" | tee -a /etc/apache2/envvars
+    echo ". /var/www/apache2_blis.env" >> /etc/apache2/envvars
 
 # Inject the current git commit SHA as a build parameter
 # This isn't foolproof, but will help when someone is using the
