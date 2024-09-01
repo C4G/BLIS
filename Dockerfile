@@ -31,10 +31,12 @@ RUN echo "column-statistics = 0" | tee -a /etc/mysql/conf.d/mysqldump.cnf
 
 # Copy the custom Apache2 config (blis.conf) into the
 # Apache2 configuration directory. This will be enabled by the start-blis.sh
-COPY docker/config/blis-release.conf /etc/apache2/blis-release.conf
+COPY docker/config/blis-release.conf /etc/apache2/sites-available/blis-release.conf
 
 # Enable Apache2 modules needed by application and disable default site
-RUN a2enmod rewrite socache_shmcb ssl && a2dissite 000-default
+RUN a2enmod rewrite socache_shmcb ssl && \
+    a2dissite 000-default && \
+    a2ensite blis*
 
 # Copy custom PHP config into the container
 COPY docker/config/php.ini /etc/php/5.6/apache2/php.ini
@@ -47,7 +49,8 @@ RUN mkdir /var/www/blis
 COPY . /var/www/blis
 RUN chown -R www-data:www-data /var/www && \
     chmod +x /var/log/apache2 && \
-    chmod +r /var/log/apache2/*
+    chmod +r /var/log/apache2/* && \
+    echo ". /var/www/apache2_blis.env" | tee -a /etc/apache2/envvars
 
 # Inject the current git commit SHA as a build parameter
 # This isn't foolproof, but will help when someone is using the
