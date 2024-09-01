@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../../vendor/autoload.php');
+require_once(__DIR__."/../../vendor/autoload.php");
 
 # Logger setup
 
@@ -13,11 +13,11 @@ if (!file_exists(__DIR__."/../../log")) {
     mkdir(__DIR__."/../../log", 0755);
 }
 
-$log = new Logger('application');
-$log->pushHandler(new StreamHandler(dirname(__FILE__).'/../../log/application.log', Logger::DEBUG));
+$log = new Logger("application");
+$log->pushHandler(new StreamHandler(__DIR__."/../../log/application.log", Logger::DEBUG));
 
-$db_log = new Logger('database');
-$db_log->pushHandler(new StreamHandler(dirname(__FILE__).'/../../log/database.log', Logger::DEBUG));
+$db_log = new Logger("database");
+$db_log->pushHandler(new StreamHandler(__DIR__."/../../log/database.log", Logger::DEBUG));
 
 # Check for other folders needed by application
 if (!file_exists(__DIR__."/../../files")) {
