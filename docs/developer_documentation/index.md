@@ -1,71 +1,56 @@
-# C4G BLIS Developer Guide
+# Getting Started
 
 C4G Basic Laboratory Information System is a collaboration between Computing-for-Good (C4G) at Georgia Tech, the CDC, and participating PEPFAR countries. This doc will works as a supplement to `BLIS_User_Guide.pdf`, mainly to help developers quick ramp up on this repo and list out tips when contribute to this project.
 
-- [C4G BLIS Developer Guide](#c4g-blis-developer-guide)
-  - [Welcome](#welcome)
-  - [Set up the dev envs](#set-up-the-dev-envs)
-    - [Tools](#tools)
-    - [Test the envs](#test-the-envs)
-    - [Smoke tests](#smoke-tests)
-  - [Running environment](#running-environment)
-    - [Running on `devcontainer`](#running-on-devcontainer)
-    - [Running on Windows](#running-on-windows)
-  - [Code directory and organization](#code-directory-and-organization)
-    - [Developer tools directories](#developer-tools-directories)
-      - [Docker related](#docker-related)
-      - [Github related](#github-related)
-      - [Composer Related](#composer-related)
-    - [Source code directories](#source-code-directories)
-      - [Backup Data and Cloud Backup](#backup-data-and-cloud-backup)
-      - [UI changes](#ui-changes)
-  - [Deployment](#deployment)
-      - [Deployment video](#deployment-video)
-
-
 ## Welcome
-So welcome to this project! In this guide, we are going to go through the recommended tools, workflows and debug tips.
 
-## Set up the dev envs
-### Tools
-1. git
+In this guide, we are going to go through the recommended tools, workflows and debug tips.
+
+## Prerequisites
+
+### `git`
+
 Depending on your computer OS, there will be different step to setup git. You can refer to the official manual for [git installation](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 
-??? tip "Tips on install git"
+??? tip "Tips for installing git"
     On Windows, installing command-line tools can be done with a Windows package manager such as [Scoop](https://scoop.sh/).
     On MacOS or Linux systems, installing tools can be done with package manager [brew](https://brew.sh/).
 
-1. VScode
-For IDE, we recommended using [VSCode](https://code.visualstudio.com/docs/setup/setup-overview), which is a lightweight, opensource IDE.
-VSCode-Extension recommended to install:
+### VS Code
 
-    - [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-    - [Remote-WSL](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl)
-    - [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
-    - [Docker-compose](https://marketplace.visualstudio.com/items?itemName=p1c2u.docker-compose)
+For an editor, we recommended using [VSCode](https://code.visualstudio.com/docs/setup/setup-overview), which is a lightweight, opensource IDE.
 
-2. Docker
+Some useful extensions that you can install are:
+
+- [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- [Remote-WSL](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl)
+- [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
+- [Docker-compose](https://marketplace.visualstudio.com/items?itemName=p1c2u.docker-compose)
+
+### Docker
+
 We will need [Docker](https://www.docker.com/) as the major tool in the development cycle.
 
-With the Docker application running, after installing the `Remote-Containers` and related extensions, we will be able to start the [devcontainer](https://code.visualstudio.com/docs/remote/create-dev-container) which has been setup under `/root/.devcontainer` directory.
+On Linux, you can install `docker` as a regular system package using the [Docker Engine](https://docs.docker.com/engine/install/ubuntu/) setup instructions. On Windows and macOS, including Windows Subsystem for Linux, you can install [Docker Desktop](https://docs.docker.com/desktop/).
 
-??? question "What's devcontainer and why do we use it here?"
+With Docker running, after installing the `Remote-Containers` and related extensions, we will be able to start the [devcontainer](https://code.visualstudio.com/docs/remote/create-dev-container) which has been setup under `/.devcontainer` directory.
+
+??? question "What's a devcontainer and why do we use it here?"
 
     Devcontainers are a feature of Visual Studio Code that allow you to specify your development environment as a Docker container develop inside of it as if you were running the tools on your computer directly.
 
-    The `c4g-blis-spr22/BLIS` repository has a `.devcontainer` configuration already specified, so you can develop BLIS on any computer that can run Docker and Visual Studio Code.
+    The `C4G/BLIS` repository has a `.devcontainer` configuration already specified, so you can develop BLIS on any computer that can run Docker and Visual Studio Code.
 
-### Test the envs
+## Clone the repository and run BLIS
+
 A quick way to test the dependencies installed correctly is:
-1. Clone the BLIS repository to your computer:
+
+1. Clone the BLIS repository to your computer (**note for Windows users:** if you are using WSL, we recommend cloning BLIS _inside_ your WSL home directory):
     ```
     $ git clone https://github.com/C4G/BLIS.git
     ```
-    <!---
-    TODO: get the link up-to-date after the end of this semester.
-    -->
 
-1. Open the folder in Visual Studio Code
+1. Open the folder in Visual Studio Code (you can run `code BLIS/` from the terminal to do this)
 
 1. A pop-up that says something like "This folder contains a devcontainer configuration" will appear. Click the button to open the folder in a container.
 
@@ -74,66 +59,21 @@ A quick way to test the dependencies installed correctly is:
 
 1. Once the container is started, the ports should forward automatically. You can see apache2 running if you click the "Ports" tab on the bottom (if the bottom panel is not open, use Ctrl-` (backtick) to open it)
 
-    In this plot, you can see the terminal output, where the apache servers starts.
+    You can see Apache2 running here:
     <img src="../images/dev_guide/container-terminal.png" width="100%"/>
 
-    In this plot, you can see the port, click the little earth button and then it will take you to the local hosted BLIS instance.
+    Clicking the icon will open your browser and take you to BLIS:
     <img src="../images/dev_guide/remote-container-ports.png" width="100%"/>
 
 1. You can then browse BLIS in your normal browser by visiting http://localhost:80 (substituting 80 for another port, depending on what port VS Code has mapped to apache2.)
 
 7. Log into the BLIS and start your exploration.
-??? tip "Read the [data structures site](./data-structure.md) for (username, password) pairs, as well as data structures stored in database before diving in"
 
-### Smoke tests
+??? tip "Read the [test accounts page](./data-structure.md) for test credentials you can use to log in"
 
-If you want to run smoke tests on BLIS you can find them in the [smoke_tests folder](https://github.com/C4G/BLIS/tree/master/smoke_tests) on the C4G BLIS Github. Below are the tests that are implemented and instructions for running the smoke tests.
+## Running BLIS for Windows (Legacy)
 
-Tests
-1. Login
-   
-1. Specimen test
-
-1. Registering a patient
-
-1. Registering a specimen
-
-Running Instructions
-1. You will need python 3 installed, the latest is preferred
-
-2. You will need to pip install selenium, if pip is not on your command line you can do python -m pip install selenium
-
-3. Create a folder called test or something of that variety to extract your smoke test zip file to
-
-4. Extract the zip to that folder
-
-5. Ensure you have Firefox installed on the local machine, you will need to also get the gecko driver
-
-6. Get the gecko driver from here for your platform you are running the tests on https://github.com/mozilla/geckodriver/releases
-
-7. Put the gecko driver into the folder where your tests are running
-
-8. Either run BLIS locally or have it installed on digital ocean
-
-9. Get the address for your BLIS installation, this is what you put in the address bar in your browser to access BLIS 
-
-10. Edit the BLIS_URL in test.py with your address from step 9, so if your address was http://172.24.80.1:4001 that line should now be blis_url = "http://172.24.80.1:4001"
-
-11. Open up command prompt or terminal
-
-12. Navigate to the directory with cd
-
-13. Run python main.py in your terminal or command prompt
-
-14. The testing platform will run and will report back if any tests failed and with any errors or if all the tests ran successfully
-
-## Running environment
-### Running on `devcontainer`
-You can see more details on the [Test the envs](#test-the-envs) section.
-
-### Running on Windows
-
-Aside by running BLIS on `devcontainer`, you can also try with running BLIS on Windows, where the BLIS was originally designed and developed on). This process will only require `git` to pull the code from github.
+Besides running BLIS in a `devcontainer`, you can also try running BLIS on Windows, which is what BLIS was originally designed and developed on. This process will only require `git` to pull the code from GitHub.
 
 BLIS was originally developed to run on Windows using a discontinued project called Server2Go. This packages Apache2, MySQL, PHP, and Firefox together into a package that can be run all at once on a desktop computer.
 
@@ -161,6 +101,7 @@ The bundled Firefox will start and you can use BLIS normally, or make changes to
 
 
 ## Code directory and organization
+
 As you can see [in the directory](https://github.com/C4G/BLIS), there is the first level file tree directory. And in the following sections, we will cover the some of important file/directory for your faster & better understanding about the BLIS code organization.
 
 ```bash
@@ -190,6 +131,7 @@ As you can see [in the directory](https://github.com/C4G/BLIS), there is the fir
     The above tree structure can be generated via the `tree` command. For more details, [read this doc](https://linux.die.net/man/1/tree).
 
 ### Developer tools directories
+
 #### Docker related
 ```bash
 ├── Dockerfile
