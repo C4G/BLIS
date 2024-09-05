@@ -22,7 +22,17 @@ plugins:
   - git-revision-date
   - search
   - with-pdf:
-        author: C4G BLIS
+      cover_title: C4G BLIS User Guide
+      cover_subtitle: Computing For Good
+      
+      author: C4G BLIS Team
+      copyright: 2008 - 2024
+
+      excludes_children:
+      exclude_pages:
+        - index.md
+        - contributing/
+        - developer_documentation/
 
 edit_uri: edit/master/docs/
 repo_url: https://github.com/C4G/BLIS

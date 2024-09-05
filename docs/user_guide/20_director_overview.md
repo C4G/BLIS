@@ -13,7 +13,7 @@ To setup a new lab configuration, click the button to add a new lab. This walks 
 
 It is possible to add Technicians during this setup process, but note that additional Technicians can be added later. During setup of the base configuration, an existing lab configuration can be selected from the dropdown menu to use as a base. During the next step, test can be imported from an existing facility by selecting it from the dropdown menu. As with the other steps, the configuation can be further customized later from the **Lab Configuration** tab when logged in and work as a Manager.
 
-Clicking on the name of a facility takes the user to the **Lab Configuration** view, with all the same options available in the Manager view, plus three additional menu options: **General Settings**, **Change Manager**, **Delete Configuration**, and **Import Configuration**. For information on the other menu options and how they work, please go to the [Manager Lab Configuration](#manager_lab_configuration) section. Each of the additional options are covered here.
+Clicking on the name of a facility takes the user to the **Lab Configuration** view, with all the same options available in the Manager view, plus three additional menu options: **General Settings**, **Change Manager**, **Delete Configuration**, and **Import Configuration**. For information on the other menu options and how they work, please go to the [Manager Lab Configuration](#lab-managers) section. Each of the additional options are covered here.
 
 The **General Settings** option allows the Director to change the name or location of a facility. Additionally, the user can populate the database with random data or clear randomly populated data. The **Change Manager** option is self-explanatory. This option allows the Director to select a user from the dropdown menu as the new Lab Manager. The **Delete Configuration** menu option should be used with caution. This allows the Director to delete an entire lab configuation. Please use this with caution!
 
@@ -25,7 +25,7 @@ Another functionality available on the **Lab Configuration** tab is importing la
 If the backup is encrypted, it can only be unencrypted with the correct key. If an encrypted backup is desired, first download the public key and share it with the lab. To do this, click the button to download a public key. It will get saved in the local computer's downloads folder by default. Send this file to the lab that is going to perform the backup. The Lab Manager can use the public key to export an encrypted backup from the Backup Data tab, and then share the zipped backup folder with the user, which can be imported as described above.
 
 ??? question "Who else can edit Lab Configurations?"
-    Lab Configurations can also be set by Lab Managers. [Click here for more details.](#manager_lab_configuration)
+    Lab Configurations can also be set by Lab Managers. [Click here for more details.](#lab-managers)
 
 ### Lab Managers
 Under the **Lab Managers** tab, the Director can add, edit, or delete Lab Managers. Click **Edit** on an existing manager to change the name, email address, phone number, or language of a manager, or to reset the managers password.
