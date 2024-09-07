@@ -90,8 +90,9 @@ $measure_list_objs = $test_type->getMeasures();
                     else
                     {
                         array_push($comb_measure_list, $measure);
-                        foreach($submeasure_list_objs as $submeasure)
-                           array_push($comb_measure_list, $submeasure); 
+                        foreach($submeasure_list_objs as $submeasure) {
+                           array_push($comb_measure_list, $submeasure);
+						} 
                     }
                 }
                 
@@ -99,8 +100,7 @@ $measure_list_objs = $test_type->getMeasures();
                 //echo "<pre>";
                 //print_r($comb_measure_list);
                 //echo "</pre>";
-                foreach($comb_measure_list as $measure)
-                {
+                foreach($comb_measure_list as $measure) {
                     array_push($measure_list_ids, $measure->measureId);
                 }
                 /*
@@ -1207,14 +1207,9 @@ function isInputCurrency(evt) {
                                         $us = '_';
                                     for($y = 1; $y <= $max_num_submeasures; $y += 1)
                                     {
-                                            echo "<tr valign='top' id='smrow_$i$us$y' style='display:none;'";
-                                            
-                                            echo ">";
-                                            
+                                            echo "<tr valign='top' id='smrow_$i$us$y' style='display:none;'>";                                            
                                             echo "<td align='center'>";
-							//	echo "<input type=checkbox name='delete_".$curr_measure->name."'  />";
-								echo "</td>";
-                                            
+											echo "</td>";
                                             echo "<td>";
                                             ?>
                                             Sub: <input type='text' name='submeasure[<?php echo $i; ?>][]' value='' />
@@ -1279,11 +1274,8 @@ function isInputCurrency(evt) {
                                             echo "</td>";
                                             echo "</tr>";
                                             ?>
-                                            <div id='new_subentries' style='display:none;'>
-                                            </div>
-                                            
-
-                                            
+											<div id='new_subentries' style='display:none;'>
+											</div>
                                         <?php
                                         }// end of submeasures for each measure
                                         ?>

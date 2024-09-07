@@ -13468,8 +13468,9 @@ function insert_lab_config_settings_billing($enabled, $currency_name, $currency_
     $query_string = "SELECT count(*) as val from lab_config_settings WHERE id = $id";
     $recordset = query_associative_one($query_string);
 
-    if($recordset[val] != 0)
+    if(isset($recordset['val']) && $recordset['val'] != 0) {
         return 0;
+	}
 
     $remarks = "Billing Settings";
 
