@@ -7,6 +7,8 @@ include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../lang/lang_xml2php.php");
 
+$lab_config_id = $_SESSION['lab_config_id'];
+
 $updated_entry = new SpecimenType();
 $updated_entry->specimenTypeId = $_REQUEST['sid'];
 $updated_entry->name = $_REQUEST['name'];
