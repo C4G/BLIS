@@ -70,7 +70,6 @@ class DbUtil
         $lab_config = get_lab_config_by_id($lab_config_id);
         if ($lab_config == null) {
             # Error: Lab configuration correspinding to $lab_config_id not found in DB
-            $log->error("Lab configuration corresponding to '$lab_config_id' not found in database");
             return;
         }
         $db_name = $lab_config->dbName;

@@ -7,10 +7,7 @@ include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../lang/lang_xml2php.php");
 
-//NC3065
-//$user = get_user_by_id($_SESSION['user_id']);
-//$lab_config_id = $_REQUEST['id'];
-//-NC3065
+$lab_config_id = $_SESSION['lab_config_id'];
 
 putUILog('test_type_update', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
@@ -392,7 +389,7 @@ $measure_list_objs = $test_type_obj->getMeasures();
 		{
 			# Numeric range
 			# Clear existing ref ranges			
-			ReferenceRange::deleteByMeasureId($measure_id, $_SESSION['lab_config_id']);
+			ReferenceRange::deleteByMeasureId($measure_id, $lab_config_id);
 			# Check if new reference values and age ranges have been entered properly
 			$ranges_lower = $_REQUEST['range_l_'.($i+1)];
 			$ranges_upper = $_REQUEST['range_u_'.($i+1)];
@@ -810,7 +807,7 @@ foreach($reference_ranges_list as $range_list)
 		$ref_range->sex = $gender_option;
 		$ref_range->rangeLower = $range_lower;
 		$ref_range->rangeUpper = $range_upper;
-		$ref_range->addToDb($_SESSION['lab_config_id']);
+		$ref_range->addToDb($lab_config_id);
 	}
 	$measure_count++;
 }
@@ -839,7 +836,7 @@ foreach($sub_reference_ranges_list as $range_list)
 		$ref_range->sex = $gender_option;
 		$ref_range->rangeLower = $range_lower;
 		$ref_range->rangeUpper = $range_upper;
-		$ref_range->addToDb($_SESSION['lab_config_id']);
+		$ref_range->addToDb($lab_config_id);
 	}
 	$measure_count++;
 }
