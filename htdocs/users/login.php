@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__."/includes/composer.php");
+require_once(__DIR__."/../includes/composer.php");
 include("redirect.php");
 include("includes/stats_lib.php");
 include("includes/password_reset_need.php");
