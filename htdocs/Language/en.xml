@@ -871,11 +871,11 @@
         </term>
         <term>
             <key>SPECIMEN_CUSTOM_FIELDS</key>
-            <value>Specimen Custom Fields</key>
+            <value>Specimen Custom Fields</value>
         </term>
         <term>
             <key>PATIENT_CUSTOM_FIELDS</key>
-            <value>Patient Custom Fields</key>
+            <value>Patient Custom Fields</value>
         </term>
     </page>
     <page id="header" descr="Page Header">
