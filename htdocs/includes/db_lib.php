@@ -8375,9 +8375,12 @@ function delete_lab_config($lab_config_id)
 	}
 	# Delete DB instance
 	db_delete($lab_config->dbName);
+
 	# Delete DB revamp instance
-	$revamp_db_name = "blis_revamp_".$lab_config->id;
-	db_delete($revamp_db_name);
+	# This appears to be an unused idea. This table never actually gets created.
+	// $revamp_db_name = "blis_revamp_".$lab_config->id;
+	// db_delete($revamp_db_name);
+	
 	# Delete entries from lab_config_access
 	$query_string =
 		"DELETE FROM lab_config_access ".

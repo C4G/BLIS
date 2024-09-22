@@ -7,6 +7,7 @@
 #
 
 require_once(__DIR__."/../../users/accesslist.php");
+require_once(__DIR__."/../../includes/migrations.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 require_once(__DIR__."/lib/backup.php");
 
@@ -52,6 +53,9 @@ require_once(__DIR__."/../../includes/keymgmt.php");
 // TODO: switch this to its own table, maybe...
 $settings_encryption_enabled = KeyMgmt::read_enc_setting() != "0";
 
+$migrator = new LabDatabaseMigrator($lab['db_name']);
+$has_pending_migrations = $migrator->pending_migrations();
+
 ?>
 
 <?php
@@ -68,6 +72,16 @@ require_once(__DIR__."/lab_config_backup_header.php");
 
     });
 </script>
+
+<?php
+if ($has_pending_migrations) {
+?>
+<div class="section" id="pending-migrations">
+    There are database migrations pending. Please <a href="lab_config_backups_apply_migrations.php?id=<?php echo($lab_config_id);?>">click here</a> to apply them.
+</div>
+<?php
+}
+?>
 
 <div id="create-backup" class="section">
     <h3 class="section-head">Create New Backup</h3>

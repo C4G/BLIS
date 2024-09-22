@@ -68,17 +68,14 @@ function render_tab($tab_name, $tab_link, $tab_label) {
     margin: 0.5rem 1rem;
 }
 
-.backup-flash {
-    background-color: lightgreen;
-    margin: 0.5rem;
-    padding: 1rem;
-    font-size: large;
-}
-
 a.delete-backup {
     color: red;
 }
 
+#pending-migrations {
+    border: 1px solid darkblue;
+    background-color: lightblue;
+}
 </style>
 
 <div class="tab-bar">
@@ -93,12 +90,3 @@ a.delete-backup {
     | <?php render_tab("settings", "lab_config_backup_settings.php?id=$lab_config_id", "Settings"); ?>
     | <?php render_tab("upload", "lab_config_backup_upload.php?id=$lab_config_id", "Upload Backup"); ?>
 </div>
-
-<?php
-    # This is used for rendering ephemeral messages on this page.
-    # To use, set $_SESSION['BACKUP_FLASH'] on another page and then redirect to this one.
-    if (isset($_SESSION['BACKUP_FLASH']) && $_SESSION['BACKUP_FLASH'] != '') {
-        echo "<div class=\"backup-flash\">".$_SESSION['BACKUP_FLASH']."</div>";
-        $_SESSION['BACKUP_FLASH'] = '';
-    }
-?>

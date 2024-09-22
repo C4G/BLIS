@@ -89,7 +89,7 @@ mkdir("/tmp/blis", 0700);
 $perm_tmp_path = "/tmp/blis/" . basename($tmp_path);
 
 if (!move_uploaded_file($tmp_path, $perm_tmp_path)) {
-    $_SESSION["BACKUP_FLASH"] = "Failed to upload $filename.";
+    $_SESSION["FLASH"] = "Failed to upload $filename.";
     header("Location: lab_config_backup_upload.php?id=$lab_config_id");
     return;
 }

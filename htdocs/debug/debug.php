@@ -9,32 +9,14 @@ require_once(__DIR__."/../includes/header.php");
 ?>
 
 <style type="text/css">
-    .debug-flash {
-        background-color: lightpink;
-        margin: 0.5rem;
-        padding: 1rem;
-        font-size: large;
-    }
-
     .red-danger {
         font-size: large;
         font-weight: bold;
         color: red;
     }
-
 </style>
 
 <h2>Debug Utilities</h2>
-
-<?php
-    # This is used for rendering ephemeral messages on this page.
-    # To use, set $_SESSION['DEBUG_FLASH'] on another page and then redirect to this one.
-    # See debug_update_language.php for an example.
-    if ($_SESSION['DEBUG_FLASH'] != '') {
-        echo "<div class=\"debug-flash\">".$_SESSION['DEBUG_FLASH']."</div>";
-        $_SESSION['DEBUG_FLASH'] = '';
-    }
-?>
 
 <?php
     $commit_sha = getenv('GIT_COMMIT_SHA');

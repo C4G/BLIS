@@ -44,6 +44,6 @@ if ($_POST["settings_encryption_enabled"] == "on") {
     KeyMgmt::write_enc_setting(0);
 }
 
-$_SESSION['BACKUP_FLASH'] = "Settings updated successfully.";
+$_SESSION['FLASH'] = "Settings updated successfully.";
 
 header("Location: lab_config_backup_settings.php?id=$lab_config_id");

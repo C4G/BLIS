@@ -51,7 +51,7 @@ $relpath = "storage/$uploaded_filename";
 $newpath = __DIR__."/../../../files/$relpath";
 
 if (!rename($uploaded_tmp_path, $newpath)) {
-    $_SESSION["BACKUP_FLASH"] = "Failed to upload $uploaded_filename.";
+    $_SESSION["FLASH"] = "Failed to upload $uploaded_filename.";
     header("Location: $lab_config_backups_path");
     return;
 }
@@ -60,9 +60,9 @@ try {
     DbUtil::switchToLabConfig($lab_config_id);
     Backup::insert($lab_config_id, $uploaded_filename, $relpath);
 
-    $_SESSION["BACKUP_FLASH"] = "Successfully uploaded $uploaded_filename";
+    $_SESSION["FLASH"] = "Successfully uploaded $uploaded_filename";
 } catch (Exception $e) {
-    $_SESSION["BACKUP_FLASH"] = "Failed to upload $uploaded_filename:" . $e->getMessage();
+    $_SESSION["FLASH"] = "Failed to upload $uploaded_filename:" . $e->getMessage();
 }
 
 header("Location: $lab_config_backups_path");
