@@ -12,6 +12,10 @@
         "8000": {
             "label": "mkdocs",
             "onAutoForward": "notify"
+        },
+        "8080": {
+            "label": "phpmyadmin",
+            "onAutoForward": "notify"
         }
     },
     "forwardPorts": [
