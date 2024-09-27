@@ -8,7 +8,9 @@
 class Features {
 
     public static function lab_config_v2_enabled() {
-        return Features::ev_enabled("BLIS_LAB_BACKUPS_V2_ENABLED");
+        return true;
+        // Enabled by default now!
+        // return Features::ev_enabled("BLIS_LAB_BACKUPS_V2_ENABLED");
     }
 
     private static function ev_enabled($ev) {

@@ -34,9 +34,9 @@ try {
         }
     }
 
-    $_SESSION['DEBUG_FLASH'] = $message."Language files were reset successfully.";
+    $_SESSION['FLASH'] = $message."Language files were reset successfully.";
 } catch (Exception $e) {
-    $_SESSION['DEBUG_FLASH'] = "Language files could not be updated: $e";
+    $_SESSION['FLASH'] = "Language files could not be updated: $e";
 }
 
 header("Location: /debug.php");

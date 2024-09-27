@@ -138,14 +138,14 @@ if ($_GET["action"] != "confirm") {
 
     if ($restore_successful) {
         if ($migrations_successful) {
-            $_SESSION["BACKUP_FLASH"] = "Backup restored successfully.";
+            $_SESSION["FLASH"] = "Backup restored successfully.";
         } else {
-            $_SESSION["BACKUP_FLASH"] = "Backup database was restored, "
+            $_SESSION["FLASH"] = "Backup database was restored, "
                                         . "but could not be migrated to the new BLIS version. "
                                         . "Please check the logs for details.";
         }
     } else {
-        $_SESSION["BACKUP_FLASH"] = "Failed to restore backup.";
+        $_SESSION["FLASH"] = "Failed to restore backup.";
     }
 
     header("Location: lab_config_backups.php?id=$lab_config_id");

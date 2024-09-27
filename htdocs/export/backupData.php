@@ -70,7 +70,7 @@ if (Features::lab_config_v2_enabled()) {
     $newpath = __DIR__."/../../files/$relpath";
 
     if (!rename($oldpath, $newpath)) {
-        $_SESSION["BACKUP_FLASH"] = "Could not move $oldpath to $newpath.";
+        $_SESSION["FLASH"] = "Could not move $oldpath to $newpath.";
         header("Location: $lab_config_backups_path");
         return;
     }
@@ -79,9 +79,9 @@ if (Features::lab_config_v2_enabled()) {
         DbUtil::switchToLabConfig($lab_config_id);
         Backup::insert($lab_config_id, $base, $relpath);
 
-        $_SESSION["BACKUP_FLASH"] = "Lab backup completed successfully.";
+        $_SESSION["FLASH"] = "Lab backup completed successfully.";
     } catch (Exception $e) {
-        $_SESSION["BACKUP_FLASH"] = "Lab backup was unsuccessful: " . $e->getMessage();
+        $_SESSION["FLASH"] = "Lab backup was unsuccessful: " . $e->getMessage();
     }
 
     header("Location: $lab_config_backups_path");

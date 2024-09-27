@@ -148,4 +148,26 @@ if (strpos($_SERVER['PHP_SELF'], 'login.php') === false) {
     }
 ?>
 </div><!--end of top_pane-->
+
+<?php
+    # This is used for rendering ephemeral messages in the header.
+    # To use, set $_SESSION['FLASH'].
+    if (isset($_SESSION["FLASH"]) && $_SESSION["FLASH"] != "") {
+    ?>
+        <style type="text/css">
+            .flash {
+                background-color: lightblue;
+                margin: 0.5rem;
+                padding: 1rem;
+                font-size: large;
+            }
+        </style>
+        <div class="flash">
+            <?php echo($_SESSION["FLASH"]); ?>
+        </div>
+    <?php
+        $_SESSION['FLASH'] = '';
+    }
+?>
+
 <div id='center_pane'>

@@ -45,6 +45,10 @@ LangUtil::setPageId("lab_configs");
     border-bottom: 1px solid #555;
 }
 
+a.delete {
+    color: red;
+}
+
 </style>
 
 <div class="tab-bar">
@@ -75,6 +79,8 @@ LangUtil::setPageId("lab_configs");
                     <?php echo LangUtil::$generalTerms['LAB_MGR']; ?>
                 </th>
                 <th></th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -98,17 +104,19 @@ LangUtil::setPageId("lab_configs");
                     <?php echo get_username_by_id($lab_config->adminUserId); ?>
                 </td>
                 <td>
-                    <div>
-                        <a href="/config/v2/lab_config_backups.php?id=<?php echo $lab_config->id; ?>">
-                            <?php echo "Manage Lab Backups"; ?>
-                        </a>
-                    </div>
-                    <hr>
-                    <div>
-                        <a href="/exportLabConfiguration.php?id=<?php echo $lab_config->id; ?>">
-                            <?php echo "Export Lab Configuration"; ?>
-                        </a>
-                    </div>
+                    <a href="/config/v2/lab_config_backups.php?id=<?php echo $lab_config->id; ?>">
+                        <?php echo "Manage Backups"; ?>
+                    </a>
+                </td>
+                <td>
+                    <a href="/exportLabConfiguration.php?id=<?php echo $lab_config->id; ?>">
+                        <?php echo "Export Configuration"; ?>
+                    </a>
+                </td>
+                <td>
+                    <a class="delete" href="/config/v2/delete_lab_config.php?lab_config_id=<?php echo $lab_config->id; ?>">
+                        <?php echo "Delete Lab"; ?>
+                    </a>
                 </td>
             </tr>
     <?php
