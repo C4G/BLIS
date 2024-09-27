@@ -13,6 +13,10 @@ class Features {
         // return Features::ev_enabled("BLIS_LAB_BACKUPS_V2_ENABLED");
     }
 
+    public static function lab_connection_enabled() {
+        return Features::ev_enabled("BLIS_LAB_CONNECTION_ENABLED");
+    }
+
     private static function ev_enabled($ev) {
         return getenv($ev) == "1" || getenv($ev) == "true";
     }
