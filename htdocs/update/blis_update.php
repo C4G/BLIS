@@ -122,7 +122,13 @@ DbUtil::switchRestore($saved_db);
 $migrator = new LabDatabaseMigrator($lab_db);
 $result = $migrator->apply_migrations();
 if (!$result) {
-    $log->error("Failed to apply database migrations.");
+    $log->error("Failed to apply database migrations to $lab_db.");
+}
+
+$migrator = new LabDatabaseMigrator("blis_revamp", "revamp");
+$result = $migrator->apply_migrations();
+if (!$result) {
+    $log->error("Failed to apply database migrations to blis_revamp.");
 }
 
 echo "true";
