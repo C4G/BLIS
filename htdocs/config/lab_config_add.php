@@ -154,7 +154,7 @@ add_lab_config_with_id($lab_config);
 db_create($db_name);
 # Switch to this new instance and create data tables
 db_change($db_name);
-create_lab_config_tables($lab_config_id, $db_name);
+create_lab_config_tables($db_name);
 # Generate initial worksheet configs if missing
 $lab_config = LabConfig::getById($lab_config_id);
 $lab_config->worksheetConfigGenerate();
