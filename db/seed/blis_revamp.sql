@@ -1232,6 +1232,7 @@ INSERT INTO `report_config` VALUES (4,'Grouped Specimen Count Report Configurati
 INSERT INTO `test_mapping` VALUES (27,'Cameroon','',1,0);
 INSERT INTO `user` VALUES (26,'monu','18865bfdeed2fd380316ecde609d94d7285af83f','Ruban','rubanm@gatech.edu',0,'2010-04-30 03:22:39',0,3,'','en','2,3,4,6,7');
 INSERT INTO `user` VALUES (27,'vempala','18865bfdeed2fd380316ecde609d94d7285af83f','Santosh Vempala','vempala@cc.gatech.edu',0,'2010-01-10 10:00:55',0,3,'','default','2,3,4,6,7');
+INSERT INTO `user` VALUES (28,'cloud_admin','18865bfdeed2fd380316ecde609d94d7285af83f','Cloud Administrator','no-reply@c4gblis.org',0,'2024-10-01 00:00:00',0,3,'','default','2,3,4,6,7');
 INSERT INTO `user` VALUES (53,'testlab1_admin','18865bfdeed2fd380316ecde609d94d7285af83f','Testlab1 admin','',26,'2010-01-14 12:05:44',0,2,'','default','2,3,4,6,7');
 INSERT INTO `user` VALUES (56,'testlab1_tech1','56cbdfb7197c476fdd872cf2872f38131d24c8be','Testlab1 Tech1','',26,'2010-04-29 23:53:06',127,0,'','en','2,3,4,6,7');
 INSERT INTO `user` VALUES (57,'testlab1_tech2','56cbdfb7197c476fdd872cf2872f38131d24c8be','Testlab1 Tech2','',26,'2010-01-14 12:10:48',127,1,'','default','2,3,4,6,7');

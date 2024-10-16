@@ -10,6 +10,7 @@ include_once(__DIR__."/../lang/lang_util.php");
 require_once(__DIR__."/db_util.php");
 require_once(__DIR__."/keymgmt.php");
 require_once(__DIR__."/lab_config.php");
+require_once(__DIR__."/migrations.php");
 
 # Start session if not already started
 if(session_id() == "")
@@ -154,10 +155,7 @@ else
 		global $LIS_ADMIN;
 		$lab_config_list = get_lab_configs($user_id, $user_level);
 
-		if(count($lab_config_list) == 1 && $user_level == $LIS_ADMIN)
-			return true;
-		else
-			return false;
+		return (count($lab_config_list) == 1 && $user_level == $LIS_ADMIN);
 	}
 }
 
@@ -8403,19 +8401,20 @@ function delete_lab_config($lab_config_id)
 	DbUtil::switchRestore($saved_db);
 }
 
-function create_lab_config_tables($lab_config_id, $db_name)
+function create_lab_config_tables($db_name)
 {
 	# Creates empty tables for a new lab configuration
-	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
-	db_change($db_name);
-	$file_name = '../data/create_tables.sql';
-	$sql_file = fopen($file_name, 'r');
-	$sql_string = fread($sql_file, filesize($file_name));
-	$sql_command_list = explode(";", $sql_string);
-	foreach($sql_command_list as $sql_command)
-	{
-		query_blind($sql_command.";");
+	global $log;
+
+	$log->info("Creating lab tables in $db_name...");
+
+	$migrator = new LabDatabaseMigrator($db_name);
+	$migrations_successful = $migrator->apply_migrations();
+
+	if ($migrations_successful) {
+		$log->info("Lab tables were created successfully.");
+	} else {
+		$log->warn("Lab tables were NOT created successfully.");
 	}
 }
 

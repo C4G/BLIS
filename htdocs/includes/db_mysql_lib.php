@@ -323,7 +323,7 @@ function db_change($db_name)
 function db_create($db_name)
 {
 	global $con;
-	$query_string = "CREATE DATABASE ".$db_name;
+	$query_string = "CREATE DATABASE $db_name CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
 	mysql_query($query_string, $con);
 }
 
