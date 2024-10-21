@@ -1,3 +1,7 @@
+INSERT INTO `blis_migrations` VALUES (1,'00000000000000_add_blis_migrations.sql','2024-11-21 03:16:45');
+INSERT INTO `blis_migrations` VALUES (2,'00000000000001_add_new_tables_blis_3.9.sql','2024-11-21 03:16:45');
+INSERT INTO `blis_migrations` VALUES (3,'20240815195015_add_all_columns_and_keys.sql','2024-11-21 03:16:46');
+INSERT INTO `blis_migrations` VALUES (4,'20240819163702_add_blis_backups.sql','2024-11-21 03:16:46');
 INSERT INTO `currency_conversion` VALUES ('USD','USD',1.00,'2013-09-19 05:16:47',1,NULL,NULL,NULL);
 INSERT INTO `custom_field_type` VALUES (1,'Freetext','2010-01-13 16:28:03');
 INSERT INTO `custom_field_type` VALUES (2,'Date','2010-01-13 16:28:03');
@@ -28758,6 +28762,9 @@ INSERT INTO `user_feedback` VALUES (30,53,6,'','2022-01-20 17:55:56');
 INSERT INTO `user_feedback` VALUES (31,56,6,'','2022-01-20 17:57:26');
 INSERT INTO `user_feedback` VALUES (32,57,6,'','2022-01-20 17:57:42');
 INSERT INTO `user_feedback` VALUES (33,53,6,'','2022-01-24 04:00:16');
+INSERT INTO `user_feedback` VALUES (34,53,6,'','2024-11-21 03:35:01');
+INSERT INTO `user_feedback` VALUES (35,53,6,'','2024-11-24 20:22:41');
+INSERT INTO `user_feedback` VALUES (36,53,6,'','2024-11-24 21:19:17');
 INSERT INTO `user_props` VALUES ('monu','Mozilla','Netscape','5.0 (Windows; en-US)',1,'Win32','Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3','undefined','undefined','en-US',772,1280,32,800,1280,'2010-04-27 15:06:26');
 INSERT INTO `user_props` VALUES ('monu','Mozilla','Netscape','5.0 (Windows; en-US)',1,'Win32','Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3','undefined','undefined','en-US',772,1280,32,800,1280,'2010-04-27 15:28:36');
 INSERT INTO `user_props` VALUES ('monu','Mozilla','Netscape','5.0 (Windows; en-US)',1,'Win32','Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3','undefined','undefined','en-US',772,1280,32,800,1280,'2010-04-27 18:54:50');

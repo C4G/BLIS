@@ -47,7 +47,8 @@ RUN echo "column-statistics = 0" | tee -a /etc/mysql/conf.d/mysqldump.cnf
 COPY docker/config/blis-dev.conf /etc/apache2/sites-available/blis.conf
 RUN rm /etc/apache2/sites-enabled/000-default.conf && \
     ln -s /etc/apache2/sites-available/blis.conf /etc/apache2/sites-enabled/blis.conf && \
-    a2enmod rewrite
+    a2enmod rewrite && \
+    echo ". /var/www/apache2_blis.env" >> /etc/apache2/envvars
 
 # Copy custom php.ini into the container
 RUN cp /etc/php/5.6/apache2/php.ini /etc/php/5.6/apache2/php.ini.original
