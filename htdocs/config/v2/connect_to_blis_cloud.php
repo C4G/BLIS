@@ -1,0 +1,74 @@
+<?php
+
+require_once(__DIR__."/../../includes/composer.php");
+require_once(__DIR__."/../../includes/keymgmt.php");
+
+$current_user_id = $_SESSION['user_id'];
+$current_user = get_user_by_id($current_user_id);
+
+$lab_config_id = $_REQUEST['lab_config_id'];
+$lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE lab_config_id = '$lab_config_id';";
+$lab = query_associative_one($lab_db_name_query);
+db_change($lab['db_name']);
+$lab_config_name = $lab['name'];
+
+$unauthorized = true;
+
+if (is_super_admin($current_user) || is_country_dir($current_user)) {
+    $unauthorized = false;
+}
+
+if ($unauthorized) {
+    // If the user is not a super admin or country director, they should only
+    // be able to access data for their own lab, and only if they are an admin.
+    if ($backup->lab_config_id == $current_user->labConfigId && is_admin($current_user)) {
+        $unauthorized = false;
+    }
+}
+
+if ($unauthorized) {
+    header('HTTP/1.1 401 Unauthorized', true, 401);
+    header("Location: /home.php");
+    exit;
+}
+
+$connect_url = $_REQUEST['blis-cloud-url'];
+$connect_code = $_REQUEST['blis-cloud-code'];
+
+$p_url = parse_url($connect_url);
+if ($p_url["scheme"] != "https") {
+    $_SESSION["FLASH"] = "You must specify a secure URL (starting with https://) for BLIS Cloud.";
+    header('HTTP/1.1 400 Bad Request', true, 400);
+    header("Location: /lab_config_home.php");
+    exit;
+}
+
+$key_basedir = __DIR__."/../../../files";
+$key_pub = "$key_basedir/LAB_".$lab_config_id."_pubkey.blis";
+$key_pvt = "$key_basedir/LAB_".$lab_config_id.".blis";
+
+$key_pubtext = null;
+if (!file_exists($f_pvt) || !file_exists($f_pub)) {
+    // generate key
+    KeyMgmt::generateKeyPair($f_pvt, $f_pub);
+    $key_pubtext = file_get_contents($key_pub);
+    KeyMgmt::create($lab_config_name, $key_pubtext, $current_user_id);
+    $log->info("Keypair generated successfully.");
+} else {
+    $key_pubtext = file_get_contents($key_pub);
+}
+
+$post = array('public_key'=> $key_pubtext, 'connection_code', $connect_code);
+
+$log->info("Connecting to BLIS cloud with URL: ".$connect_url);
+
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, $connect_url);
+curl_setopt($curl, CURLOPT_POST, 1);
+curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+$response = curl_exec($curl);
+curl_close($curl);
+
+$_SESSION['FLASH'] = "Connection established successfully.";
+header("Location: /lab_config_home.php");
