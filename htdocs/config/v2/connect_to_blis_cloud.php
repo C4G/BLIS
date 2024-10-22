@@ -58,7 +58,7 @@ if (!file_exists($f_pvt) || !file_exists($f_pub)) {
     $key_pubtext = file_get_contents($key_pub);
 }
 
-$post = array('public_key'=> $key_pubtext, 'connection_code', $connect_code);
+$post = array('action'=>'connect', 'public_key'=> $key_pubtext, 'connection_code', $connect_code);
 
 $log->info("Connecting to BLIS cloud with URL: ".$connect_url);
 

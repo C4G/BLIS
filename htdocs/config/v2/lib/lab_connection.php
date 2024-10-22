@@ -45,6 +45,22 @@ class LabConnection {
         return LabConnection::find_by_lab_config_id($lab_config_id);
     }
 
+    public function save() {
+        db_change("blis_revamp");
+
+        $query = "UPDATE blis_cloud_connections 
+            SET lab_pubkey_id = '".db_escape($this->public_key_id)."',
+            connection_code = '".db_escape($this->connection_code)."',
+            last_backup_time = ".strftime("%s")."
+            WHERE id = '".$this->id."';";
+
+        query_update($query);
+    }
+
+    public function refresh_connection_code() {
+        $this->connection_code = LabConnection::new_connection_code();
+    }
+
     private static function from_row($row) {
         $lab_connection = new LabConnection();
 
@@ -58,7 +74,7 @@ class LabConnection {
         return $lab_connection;
     }
 
-    private static function new_connection_code($formatted=true) {
+    private static function new_connection_code() {
         $newuuid = uniqid("", true);
         $code = strtoupper($newuuid);
         $code = str_replace(".", "", $code);
