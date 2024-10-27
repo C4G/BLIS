@@ -5,7 +5,7 @@ require_once("../includes/platform_lib.php");
 
 session_start();
 
-$basedir = dirname(__FILE__)."/../../files";
+$basedir = __DIR__."/../../files";
 
 if ($_GET["role"]==="dir") {
     $f_pvt="$basedir/LAB_dir.blis";
