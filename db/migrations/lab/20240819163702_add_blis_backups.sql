@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS `blis_backups` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `location` (`location`),
   KEY `lab_config_id` (`lab_config_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
