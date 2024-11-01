@@ -5,9 +5,6 @@ require_once(__DIR__."/analyzed_backup.php");
 require_once(__DIR__."/../../../includes/composer.php");
 
 class Backup {
-
-    const BASE_PATH = __DIR__."/../../../../files";
-
     // The unique ID of this backup entry.
     public $id;
 
@@ -32,16 +29,20 @@ class Backup {
     // Analyzed backup object, lazily computed since it's expensive to do.
     private $analyzed;
 
+    private static function base_path() {
+        return realpath(__DIR__ . "/../../../../files");
+    }
+
     public static function insert($lab_config_id, $filename, $location) {
         $escaped_lab = db_escape($lab_config_id);
         $escaped_filename = db_escape($filename);
         $escaped_location = db_escape($location);
 
-        $fullpath = realpath(Backup::BASE_PATH . "/" . $location);
+        $fullpath = realpath(Backup::base_path() . "/" . $location);
         $analyzed = new AnalyzedBackup($filename, $fullpath);
 
         $version = $analyzed->version;
-        
+
         $query = "INSERT INTO blis_backups (lab_config_id, filename, location, blis_version)
                   VALUES('$escaped_lab','$escaped_filename','$escaped_location', '$version');";
 
@@ -89,7 +90,7 @@ class Backup {
         $backup->version = $row['blis_version'];
         $backup->timestamp = strtotime($row['ts']);
 
-        $backup->full_path = realpath(Backup::BASE_PATH . "/" . $backup->location);
+        $backup->full_path = realpath(Backup::base_path() . "/" . $backup->location);
 
         return $backup;
     }
