@@ -2,6 +2,7 @@
 
 require_once(__DIR__."/../../includes/composer.php");
 require_once(__DIR__."/../../includes/keymgmt.php");
+require_once(__DIR__."/../../includes/user_lib.php");
 
 $current_user_id = $_SESSION['user_id'];
 $current_user = get_user_by_id($current_user_id);
@@ -38,12 +39,12 @@ $connect_url = $_REQUEST['blis-cloud-url'];
 $connect_code = $_REQUEST['blis-cloud-code'];
 
 $p_url = parse_url($connect_url);
-if ($p_url["scheme"] != "https") {
-    $_SESSION["FLASH"] = "You must specify a secure URL (starting with https://) for BLIS Cloud.";
-    header('HTTP/1.1 400 Bad Request', true, 400);
-    header("Location: /lab_config_home.php");
-    exit;
-}
+// if ($p_url["scheme"] != "https") {
+//     $_SESSION["FLASH"] = "You must specify a secure URL (starting with https://) for BLIS Cloud.";
+//     header('HTTP/1.1 400 Bad Request', true, 400);
+//     header("Location: /lab_config_home.php");
+//     exit;
+// }
 
 $key_basedir = __DIR__."/../../../files";
 $key_pub = "$key_basedir/LAB_".$lab_config_id."_pubkey.blis";

@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `blis_cloud_connections` (
   `lab_pubkey_id` int(10) unsigned DEFAULT NULL,
   `connection_code` varchar(128) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `last_backup_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `last_backup_time` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `lab_config_id` (`lab_config_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;

@@ -32,10 +32,6 @@ if ($unauthorized) {
     exit;
 }
 
-
-
-
-
 $connect_url = $_REQUEST['blis-cloud-url'];
 $connect_code = $_REQUEST['blis-cloud-code'];
 
