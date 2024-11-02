@@ -212,11 +212,10 @@ if ($conn->isResultSet($tableSql)) {
 		echo '<td><div class="item column1"><div style="float: left; overflow: hidden; width: 185px">' . $tableRow[0] . '</div><img src="images/goto.png" class="goto" onclick="subTabLoad(\'' . $db . '\', \'' . $tableRow[0] . '\')" /></div></td>';
 		echo '<td><div class="item column2">' . number_format($rowCount) . '</div></td>';
 		
-		if (isset($collationList) && array_key_exists("Collation", $infoRow) && array_key_exists($infoRow['Collation'], $collationList)) {
+		if (isset($collationList) && array_key_exists("Collation", $infoRow)) {
 			echo '<td><div class="item column3">' . $collationList[$infoRow['Collation']] . '</div></td>';
 			echo '<td><div class="item column4">' . $formattedOverhead . '</div></td>';
 		} else if ($conn->getAdapter() == "mysql") {
-			echo '<td><div class="item column3">&nbsp;</div></td>'; 
 			echo '<td><div class="item column4">' . $formattedOverhead . '</div></td>';
 		}
 		

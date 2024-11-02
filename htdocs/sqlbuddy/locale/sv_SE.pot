@@ -1,6 +1,6 @@
 Language: Svenska
 Language-Code: sv_SE
-Build-Date: Mon, 15 Jun 2009 12:08:30 -0600
+Build-Date: Tue, 18 Jan 2011 15:23:48 -0700
 
 msgid: "Either the file could not be read or it was empty"
 msgstr: "Filen kunde inte läsas eller var tom"
@@ -18,7 +18,7 @@ msgid: "With selected"
 msgstr: "Med markerade"
 
 msgid: "Empty"
-msgstr: "Töm"
+msgstr: "Tom"
 
 msgid: "Drop"
 msgstr: "Radera"
@@ -376,13 +376,13 @@ msgid: "You have SQL Buddy %s installed and %s is now available."
 msgstr: "Du har för närvarande SQL Buddy %s installerat och %s är nu tillgänglig"
 
 msgid: "Getting started"
-msgstr: "börja"
+msgstr: "Börja"
 
 msgid: "Help"
 msgstr: "Hjälp"
 
 msgid: "Translations"
-msgstr: "Översättning"
+msgstr: "Översättningar"
 
 msgid: "Release Notes"
 msgstr: "Ändringar"
@@ -662,3 +662,6 @@ msgstr: "Det finns inga tillgängliga uppdateringar"
 
 msgid: "Change password"
 msgstr: "Byt lösenord"
+
+msgid: "Redirecting..."
+msgstr: "Förflyttar..."
