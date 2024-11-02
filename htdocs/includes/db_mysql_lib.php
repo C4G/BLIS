@@ -35,12 +35,12 @@ function query_insert_one($query)
 
 
 function query_update($query)
-{	
+{
 	# Single update statement
 	global $con;
     mysql_query( $query, $con ) or die(mysql_error());
     $LOG_QUERIES = true;
-	if($LOG_QUERIES == true)	
+	if($LOG_QUERIES == true)
         {
 		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
 		DebugLib::logDBUpdates($query, db_get_current());
@@ -71,10 +71,10 @@ function query_alter($query)
         }
 }
 
-function query_associative_all($query) 
+function query_associative_all($query)
 {
     global $con;
-	if( !($result = mysql_query( $query, $con ) ) ) 
+	if( !($result = mysql_query( $query, $con ) ) )
 	{
         return null;
     }
@@ -92,20 +92,24 @@ function query_associative_all($query)
     return $retval;
 }
 
-function query_associative_one( $query ) 
+function query_associative_one( $query )
 {
     global $con;
-	if( !($result =  mysql_query( $query, $con ) ) ) 
+	if( !($result =  mysql_query( $query, $con ) ) )
 	{
         return null;
     }
     $retval = mysql_fetch_assoc( $result );
     $LOG_QUERIES = true;
 	if($LOG_QUERIES == true)
-        {
-		DebugLib::logQuery($query, db_get_current(), $_SESSION['username']);
-		DebugLib::logDBUpdates($query, db_get_current());
+    {
+        $uname = "(unset)";
+        if (isset($_SESSION['username'])) {
+            $uname = $_SESSION['username'];
         }
+        DebugLib::logQuery($query, db_get_current(), $uname);
+        DebugLib::logDBUpdates($query, db_get_current());
+    }
 	return $retval;
 }
 
@@ -130,23 +134,23 @@ function query_empty_table( $table_name )
 	$query_string =
 		"DELETE FROM $table_name";
 	query_blind($query_string);
-	
-	if($LOG_QUERIES == true)	
+
+	if($LOG_QUERIES == true)
         {
 		DebugLib::logQuery($query_string, db_get_current(), $_SESSION['username']);
 		DebugLib::logDBUpdates($query, db_get_current());
         }
 }
 
-function db_escape( $value ) 
+function db_escape( $value )
 {
     $retval = mysql_real_escape_string( $value );
     return $retval;
 }
 
-function db_prep_positive_real( $value, $zero_ok ) 
+function db_prep_positive_real( $value, $zero_ok )
 {
-    if( 
+    if(
             !isset( $value ) ||
             (is_null($value)) ||
             !is_numeric($value) ||
@@ -155,15 +159,15 @@ function db_prep_positive_real( $value, $zero_ok )
     {
         $value = 'null';
     }
-    else 
+    else
 	{
-	    if( $value < 0 ) 
+	    if( $value < 0 )
 		{
             $value = 'null';
         }
-        else if( $value == 0 ) 
+        else if( $value == 0 )
 		{
-            if( !$zero_ok ) 
+            if( !$zero_ok )
 			{
                 $value = 'null';
             }
@@ -172,9 +176,9 @@ function db_prep_positive_real( $value, $zero_ok )
     return (real) $value;
 }
 
-function db_prep_positive_int( $value, $zero_ok ) 
+function db_prep_positive_int( $value, $zero_ok )
 {
-    if( 
+    if(
             !isset( $value ) ||
             (is_null($value)) ||
             !is_numeric($value) ||
@@ -183,15 +187,15 @@ function db_prep_positive_int( $value, $zero_ok )
     {
         $value = 'null';
     }
-    else 
+    else
 	{
-        if( $value < 0 ) 
+        if( $value < 0 )
 		{
             $value = 'null';
         }
-        else if( $value == 0 ) 
+        else if( $value == 0 )
 		{
-            if( !$zero_ok ) 
+            if( !$zero_ok )
 			{
                 $value = 'null';
             }
@@ -200,9 +204,9 @@ function db_prep_positive_int( $value, $zero_ok )
     return $value;
 }
 
-function db_prep_int( $value, $zero_ok ) 
+function db_prep_int( $value, $zero_ok )
 {
-    if( 
+    if(
             !isset( $value ) ||
             (is_null($value)) ||
             !is_numeric($value)
@@ -210,11 +214,11 @@ function db_prep_int( $value, $zero_ok )
     {
         $value = 'null';
     }
-    else 
+    else
 	{
-        if( 
+        if(
                 ($value == 0 ) &&
-                ( !$zero_ok ) 
+                ( !$zero_ok )
           )
         {
             $value = 'null';
@@ -223,9 +227,9 @@ function db_prep_int( $value, $zero_ok )
     return $value;
 }
 
-function db_prep_string( $value ) 
+function db_prep_string( $value )
 {
-    if( 
+    if(
             !isset( $value ) ||
             (is_null($value)) ||
             preg_match( '/^\s+$/', $value ) ||
@@ -234,28 +238,28 @@ function db_prep_string( $value )
     {
         $value = 'null';
     }
-    else 
+    else
 	{
         $value = "'$value'";
     }
     return $value;
 }
 
-function db_prep_boolean( $value , $null_allowed = true ) 
+function db_prep_boolean( $value , $null_allowed = true )
 {
     //error_log('db_bool:'.$value);
-    if( 
+    if(
             !isset( $value ) ||
             (is_null( $value )) ||
             ($value == "") ||
             ($value == -1)
       )
     {
-        if( $null_allowed ) 
+        if( $null_allowed )
 		{
             $value = 'null';
         }
-        else 
+        else
 		{
             $value = 'false';
         }
@@ -270,7 +274,7 @@ function db_prep_boolean( $value , $null_allowed = true )
         {
             $value = 'true';
         }
-        else 
+        else
 		{
             $value = 'false';
         }
@@ -279,14 +283,14 @@ function db_prep_boolean( $value , $null_allowed = true )
     return $value;
 }
 
-function get_last_db_error() 
+function get_last_db_error()
 {
     global $con;
     $retval = mysql_error( $con );
     return $retval;
 }
 
-function query_blind( $query ) 
+function query_blind( $query )
 {
     global $con;
     $result = mysql_query( $query, $con );
@@ -299,7 +303,7 @@ function query_blind( $query )
     return $result;
 }
 
-function exec_stored_procedure( $query, &$retval ) 
+function exec_stored_procedure( $query, &$retval )
 {
     global $con;
     $result = mysql_query( $query, $con );
@@ -307,14 +311,14 @@ function exec_stored_procedure( $query, &$retval )
     return $result;
 }
 
-function get_last_insert_id() 
+function get_last_insert_id()
 {
     global $con;
     $retval = mysql_insert_id( $con );
     return $retval;
 }
 
-function db_change($db_name) 
+function db_change($db_name)
 {
 	global $con;
 	mysql_select_db( $db_name, $con );
@@ -343,7 +347,7 @@ function db_get_current()
 	return $row['db_name'];
 }
 
-function db_close() 
+function db_close()
 {
 	global $con;
 	mysql_close($con);

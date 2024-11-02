@@ -8,7 +8,7 @@ require_once(__DIR__."/lib/encrypted_file.php");
 
 # The controller for BLIS Cloud Server (/receiver) operations.
 
-$action = $_GET["action"];
+$action = $_POST["action"];
 $lab_config_id = $_GET["lab_config_id"];
 
 db_change("blis_revamp");
@@ -23,9 +23,11 @@ if (!$lab) {
 
 $lab_name = $lab["name"];
 
+$log->warn("Connection request received for lab $lab_config_id: $lab_name");
+
 $connection_code = str_replace("-", "", $_POST["connection_code"]);
 
-if ($action === "connect") {
+if ($action == "connect") {
     $pubkey = $_POST["public_key"];
 
     // look up connection
@@ -33,10 +35,12 @@ if ($action === "connect") {
 
     if ($connection != null) {
         // Lab connection already exists, so this request is trying to re-connect.
-        $log->warn("Connection request received for lab $lab_config_id");
+        $log->warn("Lab $lab_config_id is already connected. Re-connecting.");
     }
 
-    if ($connection_code != $connection->connection_code) {
+    $nrml_code = str_replace("-", "", $connection->connection_code);
+
+    if ($connection_code != $nrml_code) {
         $log->warn("Connection attempted with wrong connection code. Lab ID: $lab_config_id; Incorrect code: $connection_code");
         // Connection code does not match
         header("HTTP/1.1 400 Bad Request", true, 400);
@@ -44,6 +48,8 @@ if ($action === "connect") {
     }
 
     // Connection does not exist and connection code matches!
+
+    $log->info("Successful connection initiated for lab '$lab_name' ($lab_config_id)");
 
     $key = KeyMgmt::create($lab_name, $pubkey, -1);
     KeyMgmt::add_key_mgmt($key);
@@ -66,7 +72,7 @@ if ($action === "connect") {
     echo(json_encode($response));
     exit;
 
-} else if ($action === "backup") {
+} else if ($action == "backup") {
     // look up connection
     $connection = LabConnection::find_by_lab_config_id($lab_config_id);
 
