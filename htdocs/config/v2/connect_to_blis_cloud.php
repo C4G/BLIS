@@ -24,7 +24,7 @@ if (is_super_admin($current_user) || is_country_dir($current_user)) {
 if ($unauthorized) {
     // If the user is not a super admin or country director, they should only
     // be able to access data for their own lab, and only if they are an admin.
-    if ($backup->lab_config_id == $current_user->labConfigId && is_admin($current_user)) {
+    if ($lab_config_id == $current_user->labConfigId && is_admin($current_user)) {
         $unauthorized = false;
     }
 }
@@ -39,21 +39,21 @@ $connect_url = $_REQUEST['blis-cloud-url'];
 $connect_code = $_REQUEST['blis-cloud-code'];
 
 $p_url = parse_url($connect_url);
-// if ($p_url["scheme"] != "https") {
-//     $_SESSION["FLASH"] = "You must specify a secure URL (starting with https://) for BLIS Cloud.";
-//     header('HTTP/1.1 400 Bad Request', true, 400);
-//     header("Location: /lab_config_home.php");
-//     exit;
-// }
+if ($p_url["scheme"] != "https" && $p_url["host"] != "localhost") {
+    $_SESSION["FLASH"] = "You must specify a secure URL (starting with https://) for BLIS Cloud.";
+    header('HTTP/1.1 400 Bad Request', true, 400);
+    header("Location: /lab_config_home.php");
+    exit;
+}
 
 $key_basedir = __DIR__."/../../../files";
 $key_pub = "$key_basedir/LAB_".$lab_config_id."_pubkey.blis";
 $key_pvt = "$key_basedir/LAB_".$lab_config_id.".blis";
 
 $key_pubtext = null;
-if (!file_exists($f_pvt) || !file_exists($f_pub)) {
+if (!file_exists($key_pvt) || !file_exists($key_pub)) {
     // generate key
-    KeyMgmt::generateKeyPair($f_pvt, $f_pub);
+    KeyMgmt::generateKeyPair($key_pvt, $key_pub);
     $key_pubtext = file_get_contents($key_pub);
     KeyMgmt::create($lab_config_name, $key_pubtext, $current_user_id);
     $log->info("Keypair generated successfully.");
@@ -61,7 +61,7 @@ if (!file_exists($f_pvt) || !file_exists($f_pub)) {
     $key_pubtext = file_get_contents($key_pub);
 }
 
-$post = array('action'=>'connect', 'public_key'=> $key_pubtext, 'connection_code', $connect_code);
+$post = array('action'=> 'connect', 'public_key'=> $key_pubtext, 'connection_code'=> $connect_code);
 
 $log->info("Connecting to BLIS cloud with URL: ".$connect_url);
 
@@ -76,8 +76,9 @@ curl_close($curl);
 
 if ($httpCode != 200) {
     $_SESSION['FLASH'] = "There was an error establishing the connection. Check the logs for details.";
+    $log->error("Error connecting to server. URL: $connect_url, response status: $httpCode, response: $response");
 } else {
-    $r_json = json_decode($response);
+    $r_json = json_decode($response, true);
 
     $new_conncode = $r_json["connection_code"];
     $server_pubkey = $r_json["public_key"];
@@ -97,4 +98,4 @@ if ($httpCode != 200) {
     $_SESSION['FLASH'] = "Connection established successfully.";
 }
 
-header("Location: /lab_config_home.php");
+header("Location: /lab_config_home.php?id=$lab_config_id");
