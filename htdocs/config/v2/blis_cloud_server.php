@@ -51,28 +51,28 @@ if ($action == "connect") {
 
     $log->info("Successful connection initiated for lab '$lab_name' ($lab_config_id)");
 
-    $key = KeyMgmt::create($lab_name, $pubkey, -1);
-    KeyMgmt::add_key_mgmt($key);
-    $key_id = KeyMgmt::getByLabName($lab_name)->ID;
-
     $server_pub = KeyMgmt::pathToKey("LAB_dir_pubkey.blis");
     $server_pvt = KeyMgmt::pathToKey("LAB_dir.blis");
     if (!file_exists($server_pub) || !file_exists($server_pvt)) {
         KeyMgmt::generateKeyPair($server_pvt, $server_pub);
     }
     $server_key = file_get_contents($server_pub);
+    $server_key = base64_encode($server_key);
 
-    $connection->lab_pubkey_id = $key_id;
+    $connection->lab_name = $_POST["lab_name"];
     $connection->refresh_connection_code();
     $connection->save();
 
     $response = array();
     $response["connection_code"] = $connection->connection_code;
     $response["public_key"] = $server_key;
+
     echo(json_encode($response));
     exit;
 
 } else if ($action == "backup") {
+    $log->info(json_encode($_POST));
+
     // look up connection
     $connection = LabConnection::find_by_lab_config_id($lab_config_id);
 
@@ -82,7 +82,8 @@ if ($action == "connect") {
         exit;
     }
 
-    if ($connection_code != $connection->connection_code) {
+    $nrml_code = str_replace("-", "", $connection->connection_code);
+    if ($connection_code != $nrml_code) {
         // Connection code does not match
         header("HTTP/1.1 400 Bad Request", true, 400);
         exit;
@@ -96,7 +97,7 @@ if ($action == "connect") {
 
     $backup_location = realpath(__DIR__."/../../files/backups/");
     $backup_filename = "blis_backup_lab_".$lab_config_id."_" .
-                      strftime("Ymd-His") . ".zip";
+                       date("Ymd-His") . ".zip";
     $decrypted_path = "$backup_location/$backup_filename";
 
     $enc = new EncryptedFile($backup_tmp_path, "LAB_dir.blis", $backup_envelope_key);
@@ -110,6 +111,8 @@ if ($action == "connect") {
     $backup = Backup::insert($lab_config_id, $backup_filename, $backup_location);
 
     $log->info("Backup uploaded successfully!");
+
+    echo("{}");
 
     exit;
 }

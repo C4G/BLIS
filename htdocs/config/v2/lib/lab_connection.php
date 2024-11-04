@@ -11,6 +11,9 @@ class LabConnection {
     public $connection_code;
     public $last_backup_time;
     public $created_at;
+    // TODO: add these
+    public $lab_name;
+    public $last_backup_ip;
 
     public static function find_by_lab_config_id($lab_config_id) {
         db_change("blis_revamp");
@@ -48,10 +51,12 @@ class LabConnection {
     public function save() {
         db_change("blis_revamp");
 
-        $query = "UPDATE blis_cloud_connections 
+        $query = "UPDATE blis_cloud_connections
             SET lab_pubkey_id = '".db_escape($this->public_key_id)."',
+            lab_name = '".db_escape($this->lab_name)."',
             connection_code = '".db_escape($this->connection_code)."',
-            last_backup_time = ".strftime("%s")."
+            last_backup_time = ".strftime("%s").",
+            last_backup_ip = '".db_escape($this->last_backup_ip)."'
             WHERE id = '".$this->id."';";
 
         query_update($query);
@@ -68,8 +73,12 @@ class LabConnection {
         $lab_connection->lab_config_id = $row['lab_config_id'];
         $lab_connection->public_key_id = $row['lab_pubkey_id'];
         $lab_connection->connection_code = $row['connection_code'];
-        $lab_connection->last_backup_time = strtotime($row['last_backup_time']);
+        if ($row['last_backup_time'] != 0) {
+            $lab_connection->last_backup_time = strtotime($row['last_backup_time']);
+        }
         $lab_connection->created_at = strtotime($row['created_at']);
+        $lab_connection->lab_name = $row['lab_name'];
+        $lab_connection->last_backup_ip = $row['last_backup_ip'];
 
         return $lab_connection;
     }

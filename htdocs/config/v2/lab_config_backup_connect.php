@@ -54,11 +54,29 @@ require_once(__DIR__."/lib/lab_connection.php");
 ?>
 
 <style type="text/css">
+
+
     #connection-code label {
         font-weight: bold;
     }
 
-    #connection-code input[type="text"] {
+    #connection-code input {
+        width: 13rem;
+    }
+
+    #connection-url {
+        margin-bottom: 0.5rem;
+    }
+
+    #connection-url label {
+        font-weight: bold;
+    }
+
+    #connection-url input {
+        width: 30rem;
+    }
+
+    input.readonly-text {
         background-color: lightgrey;
         font-family: monospace;
         font-weight: bold;
@@ -73,25 +91,49 @@ require_once(__DIR__."/lib/lab_connection.php");
         $connection = LabConnection::find_or_create($lab_config_id);
         $code = $connection->connection_code;
         $code_quartets = array();
-        for($x = 0; $x < 4; $x++) {
-            array_push($code_quartets, substr($code, $x * 4, 5));
+        for($x = 0; $x <= 3; $x++) {
+            if ($x < 3) {
+                array_push($code_quartets, substr($code, $x * 5, 5));
+            } else {
+                array_push($code_quartets, substr($code, $x * 5));
+            }
         }
         $formatted_code = implode("-", $code_quartets);
+
+        if ($_SERVER['HTTP_HOST'] == "localhost") {
+            $scheme = "http";
+        } else {
+            $scheme = "https";
+        }
+        $connection_url = "$scheme://" . $_SERVER['HTTP_HOST'] . "/config/v2/blis_cloud_server.php?lab_config_id=$lab_config_id";
+
+        if ($connection->last_backup_time) {
+            $last_backup = date("Y-m-d H:i:s", $connection->last_backup_time);
+        } else {
+            $last_backup = "Never";
+        }
+
     ?>
-    <div id="connection-code">
-        <label for="connection-code">Connection Code:</label>
-        <input name="connection-code" type="text" readonly value="<?php echo($formatted_code); ?>" />
+    <div id="connection-url">
+        <label for="connection-url">Connection URL:</label>
+        <input class="readonly-text" name="connection-url" type="text" readonly value="<?php echo($connection_url); ?>" />
     </div>
 
-    <p>
-        <b>Server public key:</b>
-        <a href="../../ajax/download_key.php?role=dir">Download Public Key</a>
-    </p>
+    <div id="connection-code">
+        <label for="connection-code">Connection Code:</label>
+        <input class="readonly-text" name="connection-code" type="text" readonly value="<?php echo($formatted_code); ?>" />
+    </div>
 </div>
+
+<hr>
 
 <div id="connected-labs">
     <h3 class="section-head">Connected Lab Information</h3>
-</div>
 
+    <ul>
+        <li>Lab name: <?php echo($connection->lab_name); ?></li>
+        <li>Last successful backup: <?php echo($last_backup); ?></li>
+        <li>Last backup IP address: <?php echo($connection->last_backup_ip); ?></li>
+</div>
 
 <?php require_once(__DIR__."/../../includes/footer.php"); ?>
