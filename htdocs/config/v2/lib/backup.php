@@ -34,6 +34,8 @@ class Backup {
     }
 
     public static function insert($lab_config_id, $filename, $location) {
+        global $log;
+
         $escaped_lab = db_escape($lab_config_id);
         $escaped_filename = db_escape($filename);
         $escaped_location = db_escape($location);

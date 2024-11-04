@@ -46,22 +46,7 @@ if ($p_url["scheme"] != "https" && $p_url["host"] != "localhost") {
     exit;
 }
 
-$key_basedir = __DIR__."/../../../files";
-$key_pub = "$key_basedir/LAB_".$lab_config_id."_pubkey.blis";
-$key_pvt = "$key_basedir/LAB_".$lab_config_id.".blis";
-
-$key_pubtext = null;
-if (!file_exists($key_pvt) || !file_exists($key_pub)) {
-    // generate key
-    KeyMgmt::generateKeyPair($key_pvt, $key_pub);
-    $key_pubtext = file_get_contents($key_pub);
-    KeyMgmt::create($lab_config_name, $key_pubtext, $current_user_id);
-    $log->info("Keypair generated successfully.");
-} else {
-    $key_pubtext = file_get_contents($key_pub);
-}
-
-$post = array('action'=> 'connect', 'public_key'=> $key_pubtext, 'connection_code'=> $connect_code);
+$post = array('action'=> 'connect', 'public_key'=> '', 'lab_name'=>$lab_config_name, 'connection_code'=> $connect_code);
 
 $log->info("Connecting to BLIS cloud with URL: ".$connect_url);
 

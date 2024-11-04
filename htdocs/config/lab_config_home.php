@@ -2387,13 +2387,13 @@ function AddnewDHIMS2Config()
 					?>
 
 				<a href='export_config?id=<?php echo $_REQUEST['id']; ?>' target='_blank'><?php echo LangUtil::$pageTerms['MENU_EXPORTCONFIG']; ?></a><br><br></li>
-            	
+
 				<div id="old_update_div" style="display:none;">
 					<a id='option39' class='menu_option' href="javascript:right_load(39, 'blis_update_div');">Update to New Version</a>
 				</div>
 
 				<!-- TODO: feature gate this somehow -->
-				<a id='option66' class='menu_option' href="javascript:right_load(66, 'blis_cloud_connect_div');"><?php echo('hello world'); ?></a><br><br></li>
+				<a id='option66' class='menu_option' href="javascript:right_load(66, 'blis_cloud_connect_div');">BLIS Cloud</a><br><br></li>
 
 				<?php /* Enable for Data Merging
                 <a rel='facebox' id='option18' class='menu_option' href="updateCountryDbAtLocalUI.php">Update National Database</a>
@@ -4791,8 +4791,21 @@ function AddnewDHIMS2Config()
 
 				<!-- Form for configuring aggregated test reports -->
 				<div class='right_pane' id='blis_cloud_connect_div' style='display:none;margin-left:10px;'>
-					<h3>BLIS Cloud Connection</h3>
+                    <style type="text/css">
+                    </style>
 
+                    <?php
+                        $cloud_url = $lab_config->blis_cloud_hostname;
+                        $p_cloud_hostname = parse_url($cloud_url);
+                        $log->error(json_encode($p_cloud_hostname));
+                        $cloud_hostname = $p_cloud_hostname["host"];
+                        $connected = ($cloud_url != "");
+                    ?>
+
+					<h3>BLIS Cloud Connection</h3>
+                    <?php
+                        if (!$connected) {
+                    ?>
 					<form method="post" action="/config/v2/connect_to_blis_cloud.php">
 						<div>
 							<label for="blis-cloud-url">Cloud connection URL: </label>
@@ -4807,7 +4820,21 @@ function AddnewDHIMS2Config()
 						<input type="hidden" name="lab_config_id" value="<?php echo($lab_config_id); ?>" />
 
 						<input type="submit" value="Connect" />
-					</form>
+                    </form>
+                    <?php
+                        } else {
+                    ?>
+                    <p>Connected to: <?php echo($cloud_hostname); ?>
+
+					<form method="post" action="/config/v2/send_cloud_backup.php">
+						<input type="hidden" name="lab_config_id" value="<?php echo($lab_config_id); ?>" />
+
+						<input type="submit" value="Send Backup" />
+                    </form>
+
+                    <?php
+                        }
+                    ?>
 				</div>
 			</td>
 		</tr>

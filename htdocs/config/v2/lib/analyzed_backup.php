@@ -120,6 +120,7 @@ class AnalyzedBackup {
             $revamp_backup_contents = $zip->getFromName($revamp_backup);
             $revamp_lines = explode("\n", $revamp_backup_contents);
             foreach($revamp_lines as $lineno => $line) {
+                $matches = null;
                 if (preg_match("/^INSERT INTO `version_data` VALUES (?:\([0-9]+,'([0-9\.]+)'(?:,'?[0-9a-zA-Z :-]*'?)+\),?)+/", $line, $matches) == 1) {
                     $probable_version = $matches[1];
                     break;
@@ -150,8 +151,6 @@ class AnalyzedBackup {
         }
 
         $probable_name = null;
-
-        global $log;
 
         if ($revamp_backup != null) {
             $revamp_backup_contents = $zip->getFromName($revamp_backup);
