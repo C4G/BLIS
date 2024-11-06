@@ -35,6 +35,7 @@ class EncryptedFile {
         }
 
         $encrypted_blob = file_get_contents($this->filename);
+        $log->warn(base64_encode($encrypted_blob));
         $decrypted_blob = null;
 
         if (openssl_open($encrypted_blob, $decrypted_blob, $this->decryption_envelope_key, $pvt_key, $this->cipher_algo, $this->iv)) {

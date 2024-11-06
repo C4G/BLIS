@@ -22,12 +22,13 @@ if (!$lab) {
 }
 
 $lab_name = $lab["name"];
-
-$log->warn("Connection request received for lab $lab_config_id: $lab_name");
+$lab_db_name = $lab["db_name"];
 
 $connection_code = str_replace("-", "", $_POST["connection_code"]);
 
 if ($action == "connect") {
+    $log->warn("Connection request received for lab $lab_config_id: $lab_name");
+
     $pubkey = $_POST["public_key"];
 
     // look up connection
@@ -71,8 +72,6 @@ if ($action == "connect") {
     exit;
 
 } else if ($action == "backup") {
-    $log->info(json_encode($_POST));
-
     // look up connection
     $connection = LabConnection::find_by_lab_config_id($lab_config_id);
 
@@ -91,24 +90,28 @@ if ($action == "connect") {
 
     // Connection code matches!
 
-    $backup_envelope_key = $_POST["envelope_key"];
+    // $backup_envelope_key = $_POST["envelope_key"];
     $backup_filename = $_FILES["backup_file"]["name"];
     $backup_tmp_path = $_FILES["backup_file"]["tmp_name"];
 
-    $backup_location = realpath(__DIR__."/../../files/backups/");
-    $backup_filename = "blis_backup_lab_".$lab_config_id."_" .
+    $backup_location = realpath(__DIR__."/../../../files/storage/");
+    $backup_filename = "blis_backup_cloud_".$lab_config_id."_" .
                        date("Ymd-His") . ".zip";
     $decrypted_path = "$backup_location/$backup_filename";
 
-    $enc = new EncryptedFile($backup_tmp_path, "LAB_dir.blis", $backup_envelope_key);
-    $result = $enc->decrypt($decrypted_path);
+    // TODO: add functional encryption
+    // $enc = new EncryptedFile($backup_tmp_path, "LAB_dir.blis", $backup_envelope_key);
+    // $result = $enc->decrypt($decrypted_path);
+
+    $result = move_uploaded_file($backup_tmp_path, $decrypted_path);
 
     if (!$result) {
         header("HTTP/1.1 500 Internal Server Error", true, 500);
         exit;
     }
 
-    $backup = Backup::insert($lab_config_id, $backup_filename, $backup_location);
+    db_change($lab_db_name);
+    $backup = Backup::insert($lab_config_id, $backup_filename, "storage/$backup_filename");
 
     $log->info("Backup uploaded successfully!");
 
