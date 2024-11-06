@@ -532,7 +532,7 @@ if ($conn->getAdapter() == "mysql" && $conn->isResultSet($structureSql)) {
 	
 	echo '<dt>' . __("Storage engine") . ':</dt><dd>' . $engine . '</dd>';
 	
-	if (array_key_exists('Collation', $infoRow) && isset($collationList) && array_key_exists($infoRow['Collation'], $collationList)) {
+	if (array_key_exists('Collation', $infoRow) && isset($collationList)) {
 		echo '<dt>' . ("Charset") . ':</dt><dd>' . $collationList[$infoRow['Collation']] . '</dd>';
 	}
 	

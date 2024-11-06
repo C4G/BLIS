@@ -1,6 +1,6 @@
 Language: Srpski
 Language-Code: sp_RS
-Build-Date: Mon, 15 Jun 2009 12:10:13 -0600
+Build-Date: Tue, 18 Jan 2011 15:20:50 -0700
 
 msgid: "Either the file could not be read or it was empty"
 msgstr: "Ili dokument ne može biti očitan, ili je prazan."
@@ -590,7 +590,6 @@ msgstr: "Žao nam je, ali trenutno samo Internet Eksplorer 7 je podržan. It is 
 
 msgid: "You don't appear to have cookies enabled. For sessions to work, most php installations require cookies."
 msgstr: "Ne pojavljuje se da su kolačići uključeni. Za rad sesije većina php instalacija zahteva kolačiće.
-
 "
 
 msgid: "Importing..."
@@ -664,3 +663,6 @@ msgstr: "Nema dostupnih ažuriranja"
 
 msgid: "Change password"
 msgstr: "Promeni lozinku"
+
+msgid: "Redirecting..."
+msgstr: "Redirektam..."

@@ -26,7 +26,7 @@ if ($target_db == "blis_revamp") {
 }
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-$mysqli = new mysqli("$DB_HOST:$DB_PORT", $DB_USER, $DB_PASS, "blis_127");
+$mysqli = new mysqli($DB_HOST, $DB_USER, $DB_PASS, "blis_127", $DB_PORT);
 
 echo("Generating migration from blis_127...\n");
 
@@ -104,7 +104,7 @@ foreach($table_names as $table) {
 }
 $mysqli->close();
 
-$target_conn = new mysqli("$DB_HOST:$DB_PORT", $DB_USER, $DB_PASS, $target_db);
+$target_conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $target_db, $DB_PORT);
 echo("Connected to $target_db!\n");
 
 echo("Creating new tables using db/structure/blis_127.sql...\n");

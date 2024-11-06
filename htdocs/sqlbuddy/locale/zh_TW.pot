@@ -1,6 +1,6 @@
 Language: 中文 (繁體)
 Language-Code: zh_TW
-Build-Date: Mon, 15 Jun 2009 12:08:25 -0600
+Build-Date: Tue, 18 Jan 2011 15:26:25 -0700
 
 msgid: "Either the file could not be read or it was empty"
 msgstr: "檔案空白或無法讀取"
@@ -477,8 +477,8 @@ msgstr: "最末頁"
 
 msgid: "Your query returned %d result"
 msgid_plural: "Your query returned %d results"
-msgstr[0]: ""
-msgstr[1]: ""
+msgstr[0]: "您的指令傳回 %d 筆結果"
+msgstr[1]: "您的指令傳回 %d 筆結果"
 
 msgid: "Note: To avoid crashing your browser, only the first %d results have been displayed"
 msgstr: "備註: 為避免讓您的瀏覽器當機，只有前 %d 個結果被顯示"
@@ -662,3 +662,6 @@ msgstr: "目前沒有更新"
 
 msgid: "Change password"
 msgstr: "修改密碼"
+
+msgid: "Redirecting..."
+msgstr: "重新導向..."

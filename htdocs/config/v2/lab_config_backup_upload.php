@@ -83,8 +83,6 @@ $tmp_path = $_FILES["backup_file"]["tmp_name"];
 
 $analyzed_backup = new AnalyzedBackup($filename, $tmp_path);
 
-$backup_already_exists =
-
 mkdir("/tmp/blis", 0700);
 $perm_tmp_path = "/tmp/blis/" . basename($tmp_path);
 
