@@ -2,6 +2,7 @@ FROM ubuntu:focal
 
 # Install a bunch of stuff from the standard repositories
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        acl \
         apache2 \
         cron \
         curl \
