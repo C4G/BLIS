@@ -3,14 +3,22 @@
 require_once(__DIR__."/composer.php");
 require_once(__DIR__."/db_mysql_lib.php");
 
+class MigrationException extends Exception { }
+
 class LabDatabaseMigrator {
-
-    const MIGRATION_DIRECTORY = __DIR__."/../../db/migrations/lab";
-
     private $lab_db_name;
+    private $migration_type;
+    private $migration_directory;
 
-    function __construct($lab_db_name) {
+    function __construct($lab_db_name, $migration_type="lab") {
+        $root_migration_directory = __DIR__."/../../db/migrations/";
+
         $this->lab_db_name = $lab_db_name;
+        if ($migration_type != "lab" && $migration_type != "revamp") {
+            throw new MigrationException("$migration_type is not a valid migration type.");
+        }
+        $this->migration_type = $migration_type;
+        $this->migration_directory = $root_migration_directory . $migration_type . "/";
     }
 
     public function pending_migrations() {
@@ -34,7 +42,7 @@ class LabDatabaseMigrator {
         $pending_migrations = $this->pending_migrations();
 
         foreach($pending_migrations as $migration) {
-            $filepath = LabDatabaseMigrator::MIGRATION_DIRECTORY . "/$migration";
+            $filepath = $this->migration_directory . "/$migration";
 
             $result = null;
 
@@ -64,7 +72,7 @@ class LabDatabaseMigrator {
 
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-        $target_conn = new mysqli("$DB_HOST:$DB_PORT", $DB_USER, $DB_PASS, $this->lab_db_name);
+        $target_conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $this->lab_db_name, $DB_PORT);
         $log->info("Connected to " . $this->lab_db_name);
         $log->info("Executing " . $sql_file_path);
 
@@ -78,11 +86,11 @@ class LabDatabaseMigrator {
             } while ($target_conn->next_result());
         } catch (Exception $e) {
             $log->error("Exception occurred: " . $e->getMessage());
-            return false;
-        } finally {
             $target_conn->close();
+            return false;
         }
-    
+
+        $target_conn->close();
         return true;
     }
 
@@ -97,7 +105,7 @@ class LabDatabaseMigrator {
 
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-        $target_conn = new mysqli("$DB_HOST:$DB_PORT", $DB_USER, $DB_PASS, $this->lab_db_name);
+        $target_conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $this->lab_db_name, $DB_PORT);
         $log->info("Connected to " . $this->lab_db_name);
         $log->info("Executing SQL lines with no regard for errors...");
 
@@ -105,7 +113,7 @@ class LabDatabaseMigrator {
             if($line == "") {
                 continue;
             }
-        
+
             try {
                 $target_conn->query($line);
                 echo("Executed: " . $line . "\n");
@@ -114,15 +122,15 @@ class LabDatabaseMigrator {
                 // This means the column already existed, etc.
             }
         }
-        
+
         $target_conn->close();
-    
+
         return true;
     }
 
-    private function get_available_migrations() {       
+    private function get_available_migrations() {
         $migrations = array();
-        foreach(scandir(LabDatabaseMigrator::MIGRATION_DIRECTORY, SCANDIR_SORT_ASCENDING) as $dir) {
+        foreach(scandir($this->migration_directory) as $dir) {
             if ($dir == "." || $dir == "..") {
                 continue;
             } else {
@@ -134,7 +142,7 @@ class LabDatabaseMigrator {
 
     private function get_applied_migrations() {
         global $log;
-        
+
         db_change($this->lab_db_name);
 
         $query = "SELECT name FROM blis_migrations ORDER BY name ASC;";

@@ -12,7 +12,7 @@ $script_elems->enableLatencyRecord();
 ?>
 <style type='text/css'>
 .warning {
-    
+
     border: 1px solid;
     width: 350px;
     margin: 10px 0px;
@@ -24,7 +24,7 @@ $script_elems->enableLatencyRecord();
     background-image: url('../includes/img/knob_attention.png');
 }
 .update_error {
-    
+
     border: 1px solid;
     width: 500px;
     margin: 10px 0px;
@@ -36,7 +36,7 @@ $script_elems->enableLatencyRecord();
     background-image: url('../includes/img/knob_cancel.png');
 }
 .update_success {
-    
+
     border: 1px solid;
     width: 350px;
     margin: 10px 0px;
@@ -56,11 +56,11 @@ $(document).ready(function(){
 		type : 'POST',
 		url : 'update/check_version.php',
 		success : function(data) {
-			if ( data=='0' ) 
+			if ( data=='0' )
              {
                             $('#update_div').show();
 			}
-			else 
+			else
              {
                             // $('#update_div').show();
                             $('#update_div').hide();
@@ -73,7 +73,7 @@ $(document).ready(function(){
 function blis_update_t()
 {
     $('#update_spinner').show();
-    setTimeout( "blis_update();", 5000); 
+    setTimeout( "blis_update();", 5000);
 }
 
 function blis_update()
@@ -95,7 +95,7 @@ function blis_update()
 			}
 		}
 	});
-        
+
     //$('#update_button').show();
 }
 
@@ -105,7 +105,7 @@ function blis_update()
 <span class='page_title'><?php echo LangUtil::getTitle(); ?></span>
 <br><br>
 
-<?php 
+<?php
 echo LangUtil::getPageTerm("WELCOME").", " . $_SESSION['username'] . ".<br><br>";
 echo LangUtil::getPageTerm("TIPS_BLISINTRO");
 ?>
@@ -142,7 +142,7 @@ $page_elems->getProgressSpinnerBig($spinner_message);
 if($_SESSION['user_level'] == $LIS_ADMIN || $_SESSION['user_level'] == $LIS_SUPERADMIN || $_SESSION['user_level'] == $LIS_COUNTRYDIR)
 {
 ?>
-   
+
 
 <?php
 }

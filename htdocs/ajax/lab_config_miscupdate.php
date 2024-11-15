@@ -4,9 +4,22 @@
 # Also, generates/clears existing random data
 # Called via Ajax from lab_config_home.php
 #
-include("../includes/SessionCheck.php");
-include("../includes/db_lib.php");
-include("../includes/random.php");
+require_once(__DIR__."/../includes/SessionCheck.php");
+require_once(__DIR__."/../includes/composer.php");
+require_once(__DIR__."/../includes/db_lib.php");
+require_once(__DIR__."/../includes/random.php");
+require_once(__DIR__."/../users/accesslist.php");
+
+global $log;
+
+$current_user_id = $_SESSION['user_id'];
+$current_user = get_user_by_id($current_user_id);
+
+if (!isCountryDir($current_user) && !isSuperAdmin($current_user)) {
+	$_SESSION['FLASH'] = "You do not have permission to update this lab's metadata.";
+    header("Location: /home.php");
+    return;
+}
 
 $saved_session = SessionUtil::save();
 $saved_id = $_SESSION['lab_config_id'];
@@ -15,12 +28,19 @@ $lab_config_id = $_REQUEST['lid'];
 $name = $_REQUEST['name'];
 $location = $_REQUEST['loc'];
 $lab_config = LabConfig::getById($lab_config_id);
-if(trim($name) !== "")
+
+if(trim($name) !== "") {
+	$log->info("Updating lab name to '$name'");
 	$lab_config->changeName($name);
-if(trim($location) != "")
+}
+
+if(trim($location) != "") {
+	$log->info("Updating lab location to '$location'");
 	$lab_config->changeLocation($location);
+}
 
 $saved_db = DbUtil::switchToLabConfig($lab_config->id);
+
 # Random data management: ONLY for test/evaluation phase
 # 1: Generate Random Data
 # 2: Clear Random Data
@@ -67,4 +87,10 @@ if($dboption != 0)
 DbUtil::switchRestore($saved_db);
 $_SESSION['lab_config_id'] = $saved_id;
 SessionUtil::restore($saved_session);
+
+// Contrary to what this filename implies, this page is _not_ called by AJAX anywhere, so we need to make sure to redirect
+// back to the lab config page.
+$_SESSION['FLASH'] = "Lab config was updated successfully.";
+header("Location: /lab_config_home.php?id=$lab_config_id");
+
 ?>

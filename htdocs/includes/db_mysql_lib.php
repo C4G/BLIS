@@ -323,7 +323,7 @@ function db_change($db_name)
 function db_create($db_name)
 {
 	global $con;
-	$query_string = "CREATE DATABASE ".$db_name;
+	$query_string = "CREATE DATABASE $db_name;";
 	mysql_query($query_string, $con);
 }
 
