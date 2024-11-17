@@ -6,6 +6,7 @@ FROM ubuntu:focal
 # https://code.visualstudio.com/docs/remote/containers
 
 # Set environment variables here that will only be seen in development
+# If you change these, you will need to rebuild the container for the full effect.
 ENV BLIS_LAB_BACKUPS_V2_ENABLED=1
 
 # Install a bunch of stuff from the standard repositories and a custom PHP repository
@@ -15,6 +16,7 @@ RUN apt-get update && apt-get install -y software-properties-common && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         acl \
         apache2 \
+        cron \
         curl \
         git \
         libharfbuzz0b \
@@ -23,7 +25,7 @@ RUN apt-get update && apt-get install -y software-properties-common && \
         mysql-client \
         pandoc \
         python3-pip \
-        software-properties-common \
+        python3-venv \
         sudo \
         unzip \
         weasyprint \
@@ -64,7 +66,7 @@ RUN groupadd vscode && \
     usermod -aG www-data vscode && \
     # add www-data to vscode group so it can edit files (write logs, files)
     usermod -aG vscode www-data && \
-    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
+    touch /var/www/apache2_blis.env && chown vscode:vscode /var/www/apache2_blis.env
 
 USER vscode
-WORKDIR /workspace
