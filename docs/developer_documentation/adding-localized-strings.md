@@ -82,19 +82,19 @@ Here is the process for adding or changing a string:
     - **If you are using the BLIS devcontainer:** You can run:
         ```bash
         vscode@14ba082a42d1:/workspace$ php bin/update-lang.php htdocs/Language/en.xml
-        Generating PHP file: /workspace/htdocs/Language/en.php
-        From XML file:       /workspace/htdocs/Language/en.xml
-        Calling: lang_xml2php("en", "/workspace/htdocs/Language/")
-        Calling: require_once("/workspace/htdocs/Language/en.php") to ensure valid PHP syntax...
+        Generating PHP file: /workspaces/BLIS/htdocs/Language/en.php
+        From XML file:       /workspaces/BLIS/htdocs/Language/en.xml
+        Calling: lang_xml2php("en", "/workspaces/BLIS/htdocs/Language/")
+        Calling: require_once("/workspaces/BLIS/htdocs/Language/en.php") to ensure valid PHP syntax...
         ```
 
     - **If you are on Windows:** You can run:
         ```cmd
         C:\Users\c4g\BLIS>server\php\php.exe bin\update-lang.php htdocs\Language\en.xml
-        Generating PHP file: /workspace/htdocs/Language/en.php
-        From XML file:       /workspace/htdocs/Language/en.xml
-        Calling: lang_xml2php("en", "/workspace/htdocs/Language/")
-        Calling: require_once("/workspace/htdocs/Language/en.php") to ensure valid PHP syntax...
+        Generating PHP file: /workspaces/BLIS/htdocs/Language/en.php
+        From XML file:       /workspaces/BLIS/htdocs/Language/en.xml
+        Calling: lang_xml2php("en", "/workspaces/BLIS/htdocs/Language/")
+        Calling: require_once("/workspaces/BLIS/htdocs/Language/en.php") to ensure valid PHP syntax...
         ```
 1. Copy all your changes from the `htdocs/Language` folder to the `local/langdata_` folders.
     ```bash

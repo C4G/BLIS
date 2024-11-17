@@ -23,7 +23,9 @@
         8000
     ],
     "service": "app",
-    "workspaceFolder": "/workspace",
+    "workspaceFolder": "/workspaces/BLIS",
+    "shutdownAction": "stopCompose",
+    "remoteUser": "vscode",
     "postCreateCommand": ".devcontainer/post-create-command.sh",
     "postAttachCommand": "start-blis.sh"
 }
