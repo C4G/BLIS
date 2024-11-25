@@ -4,6 +4,7 @@
 #
 
 require_once("composer.php");
+require_once("features.php");
 
 class DebugLib
 {
@@ -59,72 +60,82 @@ class DebugLib
 
 	public static function logQuery($query_string, $db_name, $username)
 	{
-        global $db_log;
+		if (Features::legacy_database_logger()) {
+			$lab_config_id = null;
+			if (isset($_SESSION['lab_config_id'])) {
+				$lab_config_id = $_SESSION['lab_config_id'];
+			}
 
-		$lab_config_id = null;
-		if (isset($_SESSION['lab_config_id'])) {
-			$lab_config_id = $_SESSION['lab_config_id'];
+			# Adds current query to log
+			date_default_timezone_set("UTC");
+			$file_name = __DIR__."/../../local/log_".$lab_config_id.".txt";
+			$file_handle = null;
+			if(file_exists($file_name))
+				$file_handle = fopen($file_name, "a");
+			else
+				$file_handle = fopen($file_name, "w");
+			$timestamp = date("Y-m-d H:i:s");
+			$log_line = $timestamp."\t".$username."\t".$db_name."\t".$query_string."\n";
+
+			fwrite($file_handle, $log_line);
+			fclose($file_handle);
+		} else {
+			global $db_log;
+			$db_log->debug("[database: $db_name] [application user: $username] $query_string");
 		}
-
-		# Adds current query to log
-        date_default_timezone_set("UTC");
-		$file_name = __DIR__."/../../local/log_".$lab_config_id.".txt";
-		$file_handle = null;
-		if(file_exists($file_name))
-			$file_handle = fopen($file_name, "a");
-		else
-			$file_handle = fopen($file_name, "w");
-		$timestamp = date("Y-m-d H:i:s");
-		$log_line = $timestamp."\t".$username."\t".$db_name."\t".$query_string."\n";
-
-        $db_log->debug("[database: $db_name] [application user: $username] $query_string");
-
-		fwrite($file_handle, $log_line);
-		fclose($file_handle);
 	}
 
 	public static function logDBUpdates($query_string, $db_name)
 	{
-		$lab_config_id = null;
-		if (isset($_SESSION['lab_config_id'])) {
-			$lab_config_id = $_SESSION['lab_config_id'];
+		if (Features::legacy_database_logger()) {
+			$lab_config_id = null;
+			if (isset($_SESSION['lab_config_id'])) {
+				$lab_config_id = $_SESSION['lab_config_id'];
+			}
+
+			# Adds current query to update log
+			$file_name = __DIR__."/../../local/log_".$lab_config_id."_updates.sql";
+			$file_name_revamp = __DIR__."/../../local/log_".$lab_config_id."_revamp_updates.sql";
+			$file_handle = null;
+			$file_handle_revamp = null;
+
+			if(file_exists($file_name)) {
+				$file_handle = fopen($file_name, "a");
+			}
+			else {
+				$file_handle = fopen($file_name, "w");
+				fwrite($file_handle, "USE blis_".$lab_config_id.";\n\n");
+			}
+
+			if(file_exists($file_name_revamp)) {
+				$file_handle_revamp = fopen($file_name_revamp, "a");
+			}
+			else {
+				$file_handle_revamp = fopen($file_name_revamp, "w");
+				fwrite($file_handle_revamp, "USE blis_revamp;\n\n");
+			}
+
+			$timestamp = date("Y-m-d H:i:s");
+			$log_line = $timestamp."\t".$query_string."\n";
+			$pos = stripos($query_string, "SELECT");
+
+			if($pos === false) {
+				if($db_name=="blis_revamp")
+					fwrite($file_handle_revamp, $log_line);
+				else
+					fwrite($file_handle, $log_line);
+			}
+
+			fclose($file_handle);
+			fclose($file_handle_revamp);
+		} else {
+            $first_word = strtolower(substr($query_string, 0, 6));
+            // Skip logging SELECTs
+            if ($first_word != "select") {
+                $dblogger = get_database_logger($db_name);
+                $dblogger->debug($query_string);
+            }
 		}
-
-		# Adds current query to update log
-		$file_name = __DIR__."/../../local/log_".$lab_config_id."_updates.sql";
-		$file_name_revamp = __DIR__."/../../local/log_".$lab_config_id."_revamp_updates.sql";
-		$file_handle = null;
-		$file_handle_revamp = null;
-
-		if(file_exists($file_name)) {
-			$file_handle = fopen($file_name, "a");
-		}
-		else {
-			$file_handle = fopen($file_name, "w");
-			fwrite($file_handle, "USE blis_".$lab_config_id.";\n\n");
-		}
-
-		if(file_exists($file_name_revamp)) {
-			$file_handle_revamp = fopen($file_name_revamp, "a");
-		}
-		else {
-			$file_handle_revamp = fopen($file_name_revamp, "w");
-			fwrite($file_handle_revamp, "USE blis_revamp;\n\n");
-		}
-
-		$timestamp = date("Y-m-d H:i:s");
-		$log_line = $timestamp."\t".$query_string."\n";
-		$pos = stripos($query_string, "SELECT");
-
-        if($pos === false) {
-			if($db_name=="blis_revamp")
-				fwrite($file_handle_revamp, $log_line);
-			else
-				fwrite($file_handle, $log_line);
-        }
-
-		fclose($file_handle);
-		fclose($file_handle_revamp);
 	}
 
 	#TODO: Add or transfer other debugging related functions here

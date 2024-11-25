@@ -5,6 +5,7 @@ require_once(__DIR__."/../../vendor/autoload.php");
 # Logger setup
 
 use Monolog\Logger;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 
 # Check if log/ folder does not exist
@@ -46,6 +47,20 @@ if (!file_exists("$local_path/langdata_revamp/")) {
 if ($lab_config_id != null && !file_exists("$local_path/langdata_$lab_config_id/")) {
     $log->warn("$local_path/langdata_$lab_config_id does not exist, copying template");
     PlatformLib::copyDirectory($lang_template_path, "$local_path/langdata_$lab_config_id/");
+}
+
+$_DATABASE_LOGGERS = array();
+function get_database_logger($dbname) {
+    global $_DATABASE_LOGGERS;
+    if (!isset($_DATABASE_LOGGERS[$dbname])) {
+        $log = new Logger("application");
+        $formatter = new LineFormatter("%message%;\n", "");
+        $stream = new StreamHandler(__DIR__."/../../log/$dbname.sql.log", Logger::DEBUG);
+        $stream->setFormatter($formatter);
+        $log->pushHandler($stream);
+        $_DATABASE_LOGGERS[$dbname] = $log;
+    }
+    return $_DATABASE_LOGGERS[$dbname];
 }
 
 ?>
