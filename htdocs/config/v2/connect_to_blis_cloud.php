@@ -39,10 +39,12 @@ $connect_url = $_REQUEST['blis-cloud-url'];
 $connect_code = $_REQUEST['blis-cloud-code'];
 
 $p_url = parse_url($connect_url);
-if ($p_url["scheme"] != "https" && $p_url["host"] != "localhost") {
+$is_localhost = $p_url["host"] == "localhost";
+$is_localnetwork = substr($p_url["host"], 0, 8) == "192.168.";
+if ($p_url["scheme"] != "https" && !$is_localhost && !$is_localnetwork) {
     $_SESSION["FLASH"] = "You must specify a secure URL (starting with https://) for BLIS Cloud.";
     header('HTTP/1.1 400 Bad Request', true, 400);
-    header("Location: /lab_config_home.php");
+    header("Location: /lab_config_home.php?id=$lab_config_id");
     exit;
 }
 
