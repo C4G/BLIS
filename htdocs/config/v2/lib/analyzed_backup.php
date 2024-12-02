@@ -40,7 +40,8 @@ class AnalyzedBackup {
         $realpath = realpath($location);
         $info = pathinfo($realpath);
 
-        $likely_encrypted = !!(substr($filename, -strlen("_enc.zip")) === "_enc.zip");
+        $ends_with_enc = !!(substr($filename, -strlen("_enc.zip")) === "_enc.zip");
+        $likely_encrypted = $ends_with_enc || $pubkey_supplied;
 
         $this->encryped = $likely_encrypted;
 
@@ -119,6 +120,7 @@ class AnalyzedBackup {
             $revamp_backup_contents = $zip->getFromName($revamp_backup);
             $revamp_lines = explode("\n", $revamp_backup_contents);
             foreach($revamp_lines as $lineno => $line) {
+                $matches = null;
                 if (preg_match("/^INSERT INTO `version_data` VALUES (?:\([0-9]+,'([0-9\.]+)'(?:,'?[0-9a-zA-Z :-]*'?)+\),?)+/", $line, $matches) == 1) {
                     $probable_version = $matches[1];
                     break;
@@ -149,8 +151,6 @@ class AnalyzedBackup {
         }
 
         $probable_name = null;
-
-        global $log;
 
         if ($revamp_backup != null) {
             $revamp_backup_contents = $zip->getFromName($revamp_backup);

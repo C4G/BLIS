@@ -72,11 +72,10 @@ if (Features::lab_config_v2_enabled()) {
     if (!rename($oldpath, $newpath)) {
         $_SESSION["FLASH"] = "Could not move $oldpath to $newpath.";
         header("Location: $lab_config_backups_path");
-        return;
+        exit;
     }
 
     try {
-        DbUtil::switchToLabConfig($lab_config_id);
         Backup::insert($lab_config_id, $base, $relpath);
 
         $_SESSION["FLASH"] = "Lab backup completed successfully.";
@@ -85,7 +84,7 @@ if (Features::lab_config_v2_enabled()) {
     }
 
     header("Location: $lab_config_backups_path");
-    return;
+    exit;
 } else {
     echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/backups/".basename($backup_path)."'/>Download Zip</a>";
 }

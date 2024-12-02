@@ -1,3 +1,11 @@
+INSERT INTO `blis_migrations` VALUES (1,'00000000000000_add_blis_migrations.sql','2024-11-21 03:16:46');
+INSERT INTO `blis_migrations` VALUES (2,'20240925014433_createbliscloudconnectiontable.sql','2024-11-21 03:16:46');
+INSERT INTO `blis_migrations` VALUES (3,'20241020032547_addbliscloudconnectionkeytolabconfig.sql','2024-11-21 03:16:46');
+INSERT INTO `blis_migrations` VALUES (4,'20241027192939_addbliscloudpubkeyidtolabconfig.sql','2024-11-21 03:16:46');
+INSERT INTO `blis_migrations` VALUES (5,'20241104000000_addlabnameandiptoconnections.sql','2024-11-21 03:16:47');
+INSERT INTO `blis_migrations` VALUES (6,'00000000000001_add_new_tables_blis_3.9.sql','2024-11-24 20:22:52');
+INSERT INTO `blis_migrations` VALUES (7,'20240815195015_add_all_columns_and_keys.sql','2024-11-24 20:22:52');
+INSERT INTO `blis_migrations` VALUES (8,'20241124201109_updatecloudurlwidth.sql','2024-11-24 20:22:53');
 INSERT INTO `encryption_setting` VALUES (0);
 INSERT INTO `equip_config` VALUES (1,1,'PORT','5150');
 INSERT INTO `equip_config` VALUES (1,2,'MODE','client');
@@ -93,8 +101,9 @@ INSERT INTO `interfaced_equipment` VALUES (9,'GeneXpert','Bi-directional','','Mi
 INSERT INTO `interfaced_equipment` VALUES (10,'ABX Pentra 80','Bi-directional','','Haematology','RS232',' \\BLISInterfaceClient\\configs\\pentra80\\abxpentra80.xml');
 INSERT INTO `interfaced_equipment` VALUES (11,'Sysmex XT 2000i','Uni-directional','','Haematology','TCP/IP','\\BLISInterfaceClient\\configs\\SYSMEX\\SYSMEXXT2000i.xml');
 INSERT INTO `interfaced_equipment` VALUES (12,'Vitalex Flexor','Uni-directional','','Chemistry','TCP/IP',' \\BLISInterfaceClient\\configs\\flexorE\\flexore.xml');
-INSERT INTO `lab_config` VALUES (12,'FONDATION SOCIALE SUISSE, HD PETTE','MAROUA',504,'blis_12',1,1,0,1,4,1,2,1,1,2,1,2,0,'d-m-Y',3,1,'Cameroon',0,'');
-INSERT INTO `lab_config` VALUES (127,'Testlab1','GT',53,'blis_127',1,0,0,1,2,1,2,1,1,0,0,2,0,'d-m-Y',1,1,'USA',0,'');
+INSERT INTO `keymgmt` VALUES (1,'BLIS Cloud: Testlab','-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrAjXq4ehW6kgOAXkOmQxim5Nm\r\nDpB/ML/xTSP+xfC59sFfY2blRpijkTdvVGoxPgbeTDevpe5VY/O+42dn/ZW+iST0\r\nyY4SXqR4sMNLa+FDkvcsHUxuCx/9yWFH4AFKl4yNHXqY0XXeuYLSMkR3t2nm3Abe\r\ngGXM6WWe9u8T6FMcuQIDAQAB\r\n-----END PUBLIC KEY-----\r\n','2024-11-22 03:23:37',12);
+INSERT INTO `lab_config` VALUES (12,'FONDATION SOCIALE SUISSE, HD PETTE','MAROUA',504,'blis_12',1,1,0,1,4,1,2,1,1,2,1,2,0,'d-m-Y',3,1,'Cameroon',0,'',NULL,NULL);
+INSERT INTO `lab_config` VALUES (127,'Testlab1','GT',53,'blis_127',1,0,0,1,2,1,2,1,1,0,0,2,0,'d-m-Y',1,1,'USA',0,'http://localhost:80/config/v2/blis_cloud_server.php?lab_config_id=12','439C79BB895642324002',1);
 INSERT INTO `lab_config_access` VALUES (123,12);
 INSERT INTO `lab_config_specimen_type` VALUES (106,7);
 INSERT INTO `lab_config_specimen_type` VALUES (106,6);
@@ -1232,7 +1241,6 @@ INSERT INTO `report_config` VALUES (4,'Grouped Specimen Count Report Configurati
 INSERT INTO `test_mapping` VALUES (27,'Cameroon','',1,0);
 INSERT INTO `user` VALUES (26,'monu','18865bfdeed2fd380316ecde609d94d7285af83f','Ruban','rubanm@gatech.edu',0,'2010-04-30 03:22:39',0,3,'','en','2,3,4,6,7');
 INSERT INTO `user` VALUES (27,'vempala','18865bfdeed2fd380316ecde609d94d7285af83f','Santosh Vempala','vempala@cc.gatech.edu',0,'2010-01-10 10:00:55',0,3,'','default','2,3,4,6,7');
-INSERT INTO `user` VALUES (28,'cloud_admin','18865bfdeed2fd380316ecde609d94d7285af83f','Cloud Administrator','no-reply@c4gblis.org',0,'2024-10-01 00:00:00',0,3,'','default','2,3,4,6,7');
 INSERT INTO `user` VALUES (53,'testlab1_admin','18865bfdeed2fd380316ecde609d94d7285af83f','Testlab1 admin','',26,'2010-01-14 12:05:44',0,2,'','default','2,3,4,6,7');
 INSERT INTO `user` VALUES (56,'testlab1_tech1','56cbdfb7197c476fdd872cf2872f38131d24c8be','Testlab1 Tech1','',26,'2010-04-29 23:53:06',127,0,'','en','2,3,4,6,7');
 INSERT INTO `user` VALUES (57,'testlab1_tech2','56cbdfb7197c476fdd872cf2872f38131d24c8be','Testlab1 Tech2','',26,'2010-01-14 12:10:48',127,1,'','default','2,3,4,6,7');
@@ -1308,3 +1316,5 @@ INSERT INTO `version_data` VALUES (12,'3.61',1,53,'','2021-10-22 14:57:13','2021
 INSERT INTO `version_data` VALUES (13,'3.7',1,53,'','2021-12-06 15:03:29','2021-12-06 15:03:29');
 INSERT INTO `version_data` VALUES (14,'3.71',1,53,'','2022-01-14 11:00:25','2022-01-14 11:00:25');
 INSERT INTO `version_data` VALUES (15,'3.72',1,27,'','2022-07-04 15:05:02','2022-07-04 15:05:02');
+INSERT INTO `version_data` VALUES (16,'3.9',1,53,NULL,'2024-11-21 03:16:45','2024-11-21 03:16:45');
+INSERT INTO `version_data` VALUES (17,'3.9',1,27,NULL,'2024-11-24 20:22:52','2024-11-24 20:22:52');
