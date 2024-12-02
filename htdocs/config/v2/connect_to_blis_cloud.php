@@ -41,12 +41,17 @@ $connect_code = $_REQUEST['blis-cloud-code'];
 $p_url = parse_url($connect_url);
 $is_localhost = $p_url["host"] == "localhost";
 $is_localnetwork = substr($p_url["host"], 0, 8) == "192.168.";
-if ($p_url["scheme"] != "https" && !$is_localhost && !$is_localnetwork) {
-    $_SESSION["FLASH"] = "You must specify a secure URL (starting with https://) for BLIS Cloud.";
-    header('HTTP/1.1 400 Bad Request', true, 400);
-    header("Location: /lab_config_home.php?id=$lab_config_id");
-    exit;
-}
+
+// WARNING! This _should_ get turned on again.
+// Unfortunately, the version of Apache/PHP/OpenSSL on the client BLIS only supports
+// the insecure and outdated TLS 1.1, which isn't supported by modern webservers (due to the insecurity)
+// Rather than decrease security for all traffic, we'll just allow HTTP servers here... sigh...
+// if ($p_url["scheme"] != "https" && !$is_localhost && !$is_localnetwork) {
+//     $_SESSION["FLASH"] = "You must specify a secure URL (starting with https://) for BLIS Cloud.";
+//     header('HTTP/1.1 400 Bad Request', true, 400);
+//     header("Location: /lab_config_home.php?id=$lab_config_id");
+//     exit;
+// }
 
 $post = array('action'=> 'connect', 'public_key'=> '', 'lab_name'=>$lab_config_name, 'connection_code'=> $connect_code);
 
@@ -59,11 +64,10 @@ curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 $response = curl_exec($curl);
 $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-curl_close($curl);
 
 if ($httpCode != 200) {
     $_SESSION['FLASH'] = "There was an error establishing the connection. Check the logs for details.";
-    $log->error("Error connecting to server. URL: $connect_url, response status: $httpCode, response: $response");
+    $log->error("Error connecting to server. URL: $connect_url, response status: $httpCode; response: $response; curl: ".curl_error($curl));
 } else {
     $r_json = json_decode($response, true);
 
@@ -84,5 +88,7 @@ if ($httpCode != 200) {
 
     $_SESSION['FLASH'] = "Connection established successfully.";
 }
+
+curl_close($curl);
 
 header("Location: /lab_config_home.php?id=$lab_config_id");
