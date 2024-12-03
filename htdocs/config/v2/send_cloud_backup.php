@@ -66,7 +66,7 @@ $backup_blob = file_get_contents($latest_backup->full_path);
 $log->info("Sending backup: " . $latest_backup->full_path . " to " . $connect_url);
 
 // WARNING! RC4 is a very outdated and insecure encryption algorithm.
-// This will prevent only the most simple attempts to decrypt the file. 
+// This will prevent only the most simple attempts to decrypt the file.
 // Unfortunately, the old version of PHP we use on Windows prevents anything newer (for now...)
 $ossl_result = openssl_seal($backup_blob, $sealed_data, $ekeys, array($ossl_pubkey), "RC4");
 if ($ossl_result === false) {
@@ -94,6 +94,7 @@ if (function_exists('curl_file_create')) {
 } else {
     // For old-school PHP, which is in-use by the Desktop BLIS
     $curlfile = '@' . realpath($tmppath);
+    curl_setopt($curl, CURLOPT_SAFE_UPLOAD, false);
     $log->info("curl_file_create not available; using @-syntax. Resolved path to: $curlfile");
 }
 

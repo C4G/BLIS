@@ -20,7 +20,7 @@ $user_lab_config_id = $user->labConfigId;
 $lab_config_id = $_REQUEST['labConfigId'];
 
 if ($user_lab_config_id != $lab_config_id && !is_super_admin($user) && !is_country_dir($user)) {
-    echo "You do not have permission to back up lab #$request_lab_config_id!";
+    echo "You do not have permission to back up lab #$lab_config_id!";
     return;
 }
 

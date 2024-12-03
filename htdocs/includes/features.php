@@ -15,10 +15,8 @@ class Features {
      * Windows/client installations can force enable it with an environment variable.
      */
     public static function lab_config_v2_enabled() {
-        if (!PlatformLib::runningOnWindows()) {
-            return true;
-        }
-        return Features::ev_enabled("BLIS_LAB_BACKUPS_V2_ENABLED");
+        return true;
+        // return Features::ev_enabled("BLIS_LAB_BACKUPS_V2_ENABLED");
     }
 
     /**
