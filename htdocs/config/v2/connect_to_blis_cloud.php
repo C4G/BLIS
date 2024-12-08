@@ -72,7 +72,7 @@ if ($httpCode != 200) {
     $r_json = json_decode($response, true);
 
     $new_conncode = $r_json["connection_code"];
-    $server_pubkey = $r_json["public_key"];
+    $server_pubkey = base64_decode($r_json["public_key"]);
 
     $key_lab_name = "BLIS Cloud Connection for $lab_config_name";
     $key = KeyMgmt::create($key_lab_name, $server_pubkey, $current_user_id);

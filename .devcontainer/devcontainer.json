@@ -27,5 +27,5 @@
     "shutdownAction": "stopCompose",
     "remoteUser": "vscode",
     "postCreateCommand": ".devcontainer/post-create-command.sh",
-    "postAttachCommand": "start-blis.sh"
+    "postAttachCommand": "start-blis"
 }

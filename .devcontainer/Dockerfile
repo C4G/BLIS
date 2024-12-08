@@ -5,10 +5,6 @@ FROM ubuntu:focal
 # See the documentation here to see why devcontainers are awesome:
 # https://code.visualstudio.com/docs/remote/containers
 
-# Set environment variables here that will only be seen in development
-# If you change these, you will need to rebuild the container for the full effect.
-ENV BLIS_LAB_BACKUPS_V2_ENABLED=1
-
 # Install a bunch of stuff from the standard repositories and a custom PHP repository
 # Namely, PHP 5.6
 RUN apt-get update && apt-get install -y software-properties-common && \
@@ -54,7 +50,7 @@ RUN rm /etc/apache2/sites-enabled/000-default.conf && \
 RUN cp /etc/php/5.6/apache2/php.ini /etc/php/5.6/apache2/php.ini.original
 COPY docker/config/php.ini /etc/php/5.6/apache2/php.ini
 
-COPY docker/bin/start-blis.sh /usr/bin/
+COPY docker/bin/start-blis.sh /usr/bin/start-blis
 
 # Modify the www-data user (which Apache runs as) to be usable by us and give it password-less sudo
 # Also add the www-data user to the adm group so we can view some logs

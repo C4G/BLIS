@@ -8,6 +8,12 @@ require_once(__DIR__."/lib/encrypted_file.php");
 
 # The controller for BLIS Cloud Server (/receiver) operations.
 
+if (!Features::allow_client_connections()) {
+    header('HTTP/1.1 404 Not Found', true, 404);
+    header("Location: /home.php");
+    exit;
+}
+
 $action = $_POST["action"];
 $lab_config_id = $_GET["lab_config_id"];
 
@@ -28,8 +34,6 @@ $connection_code = str_replace("-", "", $_POST["connection_code"]);
 
 if ($action == "connect") {
     $log->warn("Connection request received for lab $lab_config_id: $lab_name");
-
-    $pubkey = $_POST["public_key"];
 
     // look up connection
     $connection = LabConnection::find_by_lab_config_id($lab_config_id);
@@ -54,8 +58,12 @@ if ($action == "connect") {
 
     $server_pub = KeyMgmt::pathToKey("LAB_dir_pubkey.blis");
     $server_pvt = KeyMgmt::pathToKey("LAB_dir.blis");
-    if (!file_exists($server_pub) || !file_exists($server_pvt)) {
-        KeyMgmt::generateKeyPair($server_pvt, $server_pub);
+    if (!$server_pub || !$server_pvt) {
+        $log->info("Generating server keypair");
+        $key_basedir = realpath(__DIR__."/../../../files");
+        KeyMgmt::generateKeyPair("$key_basedir/LAB_dir.blis", "$key_basedir/LAB_dir_pubkey.blis");
+        $server_pub = KeyMgmt::pathToKey("LAB_dir_pubkey.blis");
+        $server_pvt = KeyMgmt::pathToKey("LAB_dir.blis");
     }
     $server_key = file_get_contents($server_pub);
     $server_key = base64_encode($server_key);

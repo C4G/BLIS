@@ -76,6 +76,7 @@ if (Features::lab_config_v2_enabled()) {
     }
 
     try {
+        db_change("blis_$lab_config_id");
         Backup::insert($lab_config_id, $base, $relpath);
 
         $_SESSION["FLASH"] = "Lab backup completed successfully.";

@@ -91,5 +91,7 @@ a.delete-backup {
     | <?php render_tab("lab_backups", "lab_config_backups.php?id=$lab_config_id", "Lab Backups"); ?>
     | <?php render_tab("settings", "lab_config_backup_settings.php?id=$lab_config_id", "Settings"); ?>
     | <?php render_tab("upload", "lab_config_backup_upload.php?id=$lab_config_id", "Upload Backup"); ?>
+    <?php if (Features::allow_client_connections()) { ?>
     | <?php render_tab("connect", "lab_config_backup_connect.php?id=$lab_config_id", "Connect Offline Lab"); ?>
+    <?php } ?>
 </div>

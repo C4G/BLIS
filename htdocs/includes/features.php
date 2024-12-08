@@ -11,12 +11,22 @@ class Features {
 
     /**
      * Enables the redesigned administrator lab config view.
-     * This is always enabled for Docker/server installations.
-     * Windows/client installations can force enable it with an environment variable.
+     * This is always enabled, but was previously controllable via environment variable.
      */
     public static function lab_config_v2_enabled() {
         return true;
         // return Features::ev_enabled("BLIS_LAB_BACKUPS_V2_ENABLED");
+    }
+
+    /**
+     * Enables client BLIS (Windows) instances to connect to this BLIS.
+     * On Windows, this is disabled.
+     */
+    public static function allow_client_connections() {
+        if (PlatformLib::runningOnWindows()) {
+            return false;
+        }
+        return true;
     }
 
     /**

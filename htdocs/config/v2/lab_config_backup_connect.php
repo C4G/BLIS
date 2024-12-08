@@ -9,6 +9,12 @@
 require_once(__DIR__."/../../users/accesslist.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 
+if (!Features::allow_client_connections()) {
+    header('HTTP/1.1 404 Not Found', true, 404);
+    header("Location: /home.php");
+    exit;
+}
+
 $current_user_id = $_SESSION['user_id'];
 $current_user = get_user_by_id($current_user_id);
 $lab_config_id = $_REQUEST['id'];
