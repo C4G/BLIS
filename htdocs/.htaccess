@@ -18,6 +18,9 @@ Options -Indexes
 #Set max upload size in PHP
 php_value upload_max_filesize 100M
 
+SetEnv MAGIC_QUOTES 0
+SetEnv REGISTER_GLOBALS 0
+
 #
 # Redirect old links to new ones
 #

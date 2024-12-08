@@ -13,6 +13,7 @@ require_once("includes/stats_lib.php");
 require_once("../AntiXSS.php");
 
 require_once(dirname(__FILE__).'/../includes/composer.php');
+require_once(__DIR__."/v2/lib/backup.php");
 
 include_once("includes/field_order_update.php");
 
@@ -2384,13 +2385,17 @@ function AddnewDHIMS2Config()
 
 						<?php }
                     }
-                ?>
+					?>
 
 				<a href='export_config?id=<?php echo $_REQUEST['id']; ?>' target='_blank'><?php echo LangUtil::$pageTerms['MENU_EXPORTCONFIG']; ?></a><br><br></li>
-                                <div id="old_update_div" style="display:none;">
-				<a id='option39' class='menu_option' href="javascript:right_load(39, 'blis_update_div');">Update to New Version</a>
-				<br><br>
+
+				<div id="old_update_div" style="display:none;">
+					<a id='option39' class='menu_option' href="javascript:right_load(39, 'blis_update_div');">Update to New Version</a>
 				</div>
+
+				<!-- TODO: feature gate this somehow -->
+				<a id='option66' class='menu_option' href="javascript:right_load(66, 'blis_cloud_connect_div');">BLIS Cloud</a><br><br></li>
+
 				<?php /* Enable for Data Merging
                 <a rel='facebox' id='option18' class='menu_option' href="updateCountryDbAtLocalUI.php">Update National Database</a>
                 </ul>
@@ -4676,7 +4681,7 @@ function AddnewDHIMS2Config()
 
                 </div>
 
-                  <div class='right_pane' id='analyzer_setup_config_div' style='display:none;margin-left:10px;'>
+                <div class='right_pane' id='analyzer_setup_config_div' style='display:none;margin-left:10px;'>
                 	<p style="text-align: right;"><a rel='facebox' href='#analyzer_setup_INFO'>Page Help</a></p>
                     <form id="analyzer_setup">
                     <table>
@@ -4784,6 +4789,59 @@ function AddnewDHIMS2Config()
                         }
                     </script>
                 </div>
+
+				<!-- Form for configuring aggregated test reports -->
+				<div class='right_pane' id='blis_cloud_connect_div' style='display:none;margin-left:10px;'>
+                    <style type="text/css">
+                    </style>
+
+                    <?php
+                        $cloud_url = $lab_config->blis_cloud_hostname;
+                        $p_cloud_hostname = parse_url($cloud_url);
+                        $cloud_hostname = $p_cloud_hostname["host"];
+                        $connected = ($cloud_url != "");
+						$latest_backup = Backup::last_backup_for_lab_config_id($lab_config_id);
+						$latest_backup_date = "None";
+						if ($latest_backup) {
+							$latest_backup_date = date("d-M-Y H:i:s", $latest_backup->timestamp);
+						}
+                    ?>
+
+					<h3>BLIS Cloud Connection</h3>
+                    <?php
+                        if (!$connected) {
+                    ?>
+					<form method="post" action="/config/v2/connect_to_blis_cloud.php">
+						<div>
+							<label for="blis-cloud-url">Cloud connection URL: </label>
+							<input type="text" id="blis-cloud-url" name="blis-cloud-url"></input>
+						</div>
+
+						<div>
+							<label for="blis-cloud-code">Cloud connection code: </label>
+							<input type="text" id="blis-cloud-code" name="blis-cloud-code"></input>
+						</div>
+
+						<input type="hidden" name="lab_config_id" value="<?php echo($lab_config_id); ?>" />
+
+						<input type="submit" value="Connect" />
+                    </form>
+                    <?php
+                        } else {
+                    ?>
+                    <p>Connected to: <?php echo($cloud_hostname); ?></p>
+					<p>Latest backup: <?php echo($latest_backup_date); ?></p>
+					
+
+					<form method="post" action="/config/v2/send_cloud_backup.php">
+						<input type="hidden" name="lab_config_id" value="<?php echo($lab_config_id); ?>" />
+						<input type="submit" value="Send Latest Backup" />
+                    </form>
+
+                    <?php
+                        }
+                    ?>
+				</div>
 			</td>
 		</tr>
 	</tbody>

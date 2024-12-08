@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.36, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.40, for Linux (x86_64)
 --
 -- Host: db    Database: blis_revamp
 -- ------------------------------------------------------
@@ -14,6 +14,41 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `blis_cloud_connections`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE IF NOT EXISTS `blis_cloud_connections` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `lab_config_id` int(10) unsigned NOT NULL,
+  `lab_pubkey_id` int(10) unsigned DEFAULT NULL,
+  `connection_code` varchar(128) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_backup_time` timestamp NULL DEFAULT NULL,
+  `lab_name` varchar(256) DEFAULT NULL,
+  `last_backup_ip` varchar(40) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `lab_config_id` (`lab_config_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `blis_migrations`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE IF NOT EXISTS `blis_migrations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `dhims2_api_config`
@@ -195,7 +230,9 @@ CREATE TABLE IF NOT EXISTS `lab_config` (
   `doctor` int(10) unsigned NOT NULL DEFAULT '1',
   `country` varchar(512) DEFAULT NULL,
   `site_choice_enabled` tinyint(1) DEFAULT '0',
-  `blis_cloud_hostname` char(45) DEFAULT '',
+  `blis_cloud_hostname` varchar(256) DEFAULT NULL,
+  `blis_cloud_connection_key` varchar(128) DEFAULT NULL,
+  `blis_cloud_server_pubkey_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`lab_config_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -488,4 +525,4 @@ CREATE TABLE IF NOT EXISTS `version_data` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-20 14:25:17
+-- Dump completed on 2024-11-26  2:52:28

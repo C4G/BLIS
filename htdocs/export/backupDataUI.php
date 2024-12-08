@@ -1,6 +1,6 @@
 <?php
     require_once("../includes/features.php");
-    
+
     $lab_config_id = null;
     if (isset($_REQUEST['id'])) {
         $lab_config_id = $_REQUEST["id"];
@@ -15,8 +15,14 @@
 
     require_once("../includes/header.php");
     require_once("../includes/keymgmt.php");
-    
-    $labConfigId = $lab_config_id;
+
+    $labConfigId = null;
+    if (isset($_REQUEST['id'])) {
+        $labConfigId = $_REQUEST["id"];
+    } else if (isset($_SESSION['lab_config_id'])) {
+        $labConfigId = $_SESSION["lab_config_id"];
+    }
+
     putUILog('backup_data_ui', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
     $target_set=KeyMgmt::getAllKeys();
     $encryption_enabled = (KeyMgmt::read_enc_setting() == 1);
@@ -52,7 +58,7 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 ?>
 
 <form id='databaseBackupType' name='databaseBackupType' action='backupData.php' method='post' target='_blank' enctype="multipart/form-data">
-    <input type='hidden' value='<?php echo $labConfigId; ?>' id='labConfigId' name='labConfigId' />
+    <input type='hidden' value='<?php echo($labConfigId); ?>' id='labConfigId' name='labConfigId' />
     <table>
 <tr id="keySelectRow" style="<?php echo($encryption_enabled ? '' : 'display: none') ?>">
     <td style="text-align: right">Backup encryption key: </td>
@@ -122,4 +128,3 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), LangUtil::getGeneralTe
 <?php
 require_once("../includes/footer.php");
 ?>
-

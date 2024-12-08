@@ -5,13 +5,11 @@ services:
     build:
       dockerfile: ./.devcontainer/Dockerfile
       context: ..
+    environment:
+      - BLIS_LAB_BACKUPS_V2_ENABLED=1
+      - BLIS_LAB_CONNECTION_ENABLED=1
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
-    # Runs app on the same network as the database container,
-    # allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:db
-    depends_on:
-      - db
     volumes:
       - ..:/workspaces/BLIS:cached
 
@@ -20,8 +18,11 @@ services:
 
   db:
     image: mysql:5.7
-    command: --default-authentication-plugin=mysql_native_password --innodb-strict-mode=OFF --sql-mode=""
+    command: --default-authentication-plugin=mysql_native_password --innodb-strict-mode=OFF --sql-mode="" --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: unless-stopped
+    # Runs database on the same network as the app container,
+    # allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:app
     volumes:
       - blis-data:/var/lib/mysql
       - type: bind
@@ -33,10 +34,10 @@ services:
   phpmyadmin:
     image: phpmyadmin
     restart: unless-stopped
-    ports:
-      - 8080:80
+    network_mode: service:app
     environment:
-      PMA_HOST: db
+      PMA_HOST: 127.0.0.1
+      APACHE_PORT: 8080
 
 volumes:
   blis-data:
