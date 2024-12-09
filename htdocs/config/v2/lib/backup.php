@@ -34,6 +34,8 @@ class Backup {
     }
 
     public static function insert($lab_config_id, $filename, $location) {
+        global $log;
+
         $escaped_lab = db_escape($lab_config_id);
         $escaped_filename = db_escape($filename);
         $escaped_location = db_escape($location);
@@ -68,6 +70,19 @@ class Backup {
         }
 
         return $backups;
+    }
+
+    public static function last_backup_for_lab_config_id($lab_config_id) {
+        $escaped_id = db_escape($lab_config_id);
+        $query = "SELECT id, lab_config_id, filename, location, blis_version, ts
+                  FROM blis_backups WHERE lab_config_id = '$escaped_id'
+                  ORDER BY ts DESC LIMIT 1;";
+
+        $result = query_associative_one($query);
+
+        $backup = Backup::from_row($result);
+
+        return $backup;
     }
 
     public static function find($backup_id) {

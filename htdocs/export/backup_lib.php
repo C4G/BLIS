@@ -35,7 +35,9 @@ class BackupArchive {
     }
 
     public function friendlyDate() {
-        return $this->timestamp->format("Y-m-d H:i:s");
+        if ($this->timestamp) {
+            return $this->timestamp->format("Y-m-d H:i:s");
+        }
     }
 
     public function lab_config_id() {
