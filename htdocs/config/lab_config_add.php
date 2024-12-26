@@ -3,6 +3,8 @@
 # Adds a new lab configuration to DB
 #
 include("redirect.php");
+require_once("includes/composer.php");
+require_once("includes/platform_lib.php");
 require_once("includes/user_lib.php");
 include("includes/db_lib.php");
 include("includes/random.php");
@@ -213,36 +215,18 @@ foreach($selected_test_list as $test_type_id)
 
 # Create new langdata folder for this lab
 
-global $LOCAL_PATH;
+global $LOCAL_PATH, $log;
 
 chmod($LOCAL_PATH."/langdata_revamp", 0755);
 chmod($LOCAL_PATH."/langdata_".$lab_config_id, 0755);
 mkdir($LOCAL_PATH."/langdata_".$lab_config_id);
 # Copy contents from langdata_revamp into this new folder
-//copy($LOCAL_PATH."/langdata_revamp", $LOCAL_PATH."/langdata_".$lab_config_id);
-$file_list1 = array();
-$dir_name1 = $LOCAL_PATH."/langdata_revamp";
-if ($handle = opendir($dir_name1))
-{
-	while (false !== ($file = readdir($handle)))
-	{
-		if($file === "." || $file == "..")
-			continue;
-		$file_list1[] = $dir_name1."/$file";
-	}
+if (is_dir($LOCAL_PATH."/langdata_".$lab_config_id)) {
+    $log->warn("$LOCAL_PATH/langdata_$lab_config_id already exists. Deleting it.");
+    PlatformLib::removeDirectory($LOCAL_PATH."/langdata_".$lab_config_id);
 }
-$destination = $LOCAL_PATH."/langdata_".$lab_config_id;
-foreach($file_list1 as $file)
-{
-	$file_name_parts = explode("/", $file);
-	$target_file_name = $destination."/".$file_name_parts[4];
-	$ourFileHandle = fopen($target_file_name, 'w') or die("can't open file");
-	fclose($ourFileHandle);
-	if(!copy($file, $target_file_name))
-	{
-		echo "Error: $file -> $destination.$file <br>";
-	};
-}
+$log->info("Copying langdata_revamp folder to langdata_$lab_config_id");
+PlatformLib::copyDirectory($LOCAL_PATH."/langdata_revamp", $LOCAL_PATH."/langdata_".$lab_config_id);
 
 $langdata_path = $LOCAL_PATH."/langdata_".$lab_config_id."/";
 remarks_db2xml($langdata_path, $lab_config_id);
