@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `bills` (
   `paid_in_full` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `bills_test_association` (
   `discount_amount` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `blis_backups` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `location` (`location`),
   KEY `lab_config_id` (`lab_config_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `blis_migrations` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `comment` varchar(150) NOT NULL DEFAULT '',
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `currency_conversion` (
   `setting1` varchar(200) DEFAULT NULL,
   `setting2` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`currencya`,`currencyb`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `custom_field_type` (
   `field_type` varchar(100) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `delay_measures` (
   `Recorded_At` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Page_Name` varchar(45) DEFAULT NULL,
   `Request_URI` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `dhims2_api_config` (
   `gender` varchar(5) DEFAULT NULL,
   `period` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `field_order` (
   `form_id` int(11) DEFAULT NULL,
   `field_order` varchar(2000) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `inv_reagent` (
   `assocation` varchar(10) DEFAULT '0',
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -224,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `inv_supply` (
   PRIMARY KEY (`id`),
   KEY `reagent_id` (`reagent_id`),
   CONSTRAINT `reagent_id` FOREIGN KEY (`reagent_id`) REFERENCES `inv_reagent` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `inv_usage` (
   KEY `reagent_id` (`reagent_id`),
   KEY `reagent_id2` (`reagent_id`),
   CONSTRAINT `reagent_id2` FOREIGN KEY (`reagent_id`) REFERENCES `inv_reagent` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -279,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `lab_config` (
   `doctor` int(10) unsigned NOT NULL DEFAULT '1',
   `ageLimit` int(11) DEFAULT NULL,
   PRIMARY KEY (`lab_config_id`)
-) ENGINE=InnoDB ROW_FORMAT=COMPACT;
+) ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `lab_config_access` (
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `lab_config_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`,`lab_config_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -315,7 +315,7 @@ CREATE TABLE IF NOT EXISTS `lab_config_settings` (
   `remarks` varchar(500) DEFAULT NULL,
   `ts` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -327,7 +327,7 @@ CREATE TABLE IF NOT EXISTS `lab_config_settings` (
 CREATE TABLE IF NOT EXISTS `lab_config_specimen_type` (
   `lab_config_id` int(10) unsigned NOT NULL DEFAULT '0',
   `specimen_type_id` int(10) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -339,7 +339,7 @@ CREATE TABLE IF NOT EXISTS `lab_config_specimen_type` (
 CREATE TABLE IF NOT EXISTS `lab_config_test_type` (
   `lab_config_id` int(10) unsigned NOT NULL DEFAULT '0',
   `test_type_id` int(10) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -356,7 +356,7 @@ CREATE TABLE IF NOT EXISTS `labtitle_custom_field` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `field_type_id` (`field_type_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -375,7 +375,7 @@ CREATE TABLE IF NOT EXISTS `measure` (
   `unit` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`measure_id`),
   KEY `unit_id` (`unit_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -406,7 +406,7 @@ CREATE TABLE IF NOT EXISTS `misc` (
   `d3` date DEFAULT NULL,
   `ts` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -425,7 +425,7 @@ CREATE TABLE IF NOT EXISTS `numeric_interpretation` (
   `measure_id` int(10) DEFAULT NULL,
   `id` int(10) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -448,7 +448,7 @@ CREATE TABLE IF NOT EXISTS `patient` (
   `hash_value` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`patient_id`),
   KEY `created_by` (`created_by`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,7 +466,7 @@ CREATE TABLE IF NOT EXISTS `patient_custom_data` (
   PRIMARY KEY (`id`),
   KEY `field_id` (`field_id`),
   KEY `patient_id` (`patient_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -483,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `patient_custom_field` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `field_type_id` (`field_type_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -495,7 +495,7 @@ CREATE TABLE IF NOT EXISTS `patient_custom_field` (
 CREATE TABLE IF NOT EXISTS `patient_daily` (
   `datestring` varchar(45) NOT NULL,
   `count` int(10) unsigned NOT NULL
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -509,7 +509,7 @@ CREATE TABLE IF NOT EXISTS `patient_report_fields_order` (
   `p_fields` varchar(500) NOT NULL DEFAULT '',
   `o_fields` varchar(500) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -523,7 +523,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   `amount` decimal(10,2) NOT NULL DEFAULT '0.00',
   `bill_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -541,7 +541,7 @@ CREATE TABLE IF NOT EXISTS `reference_range` (
   `range_lower` varchar(45) NOT NULL,
   `range_upper` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -561,7 +561,7 @@ CREATE TABLE IF NOT EXISTS `removal_record` (
   `ts` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `category` varchar(20) DEFAULT 'test',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -589,7 +589,7 @@ CREATE TABLE IF NOT EXISTS `report_config` (
   `result_border_horizontal` int(1) unsigned NOT NULL DEFAULT '0',
   `result_border_vertical` int(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`report_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -608,7 +608,7 @@ CREATE TABLE IF NOT EXISTS `report_disease` (
   `lab_config_id` int(10) unsigned NOT NULL,
   `test_type_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -624,7 +624,7 @@ CREATE TABLE IF NOT EXISTS `sites` (
   `Region` varchar(40) DEFAULT NULL,
   `District` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -660,7 +660,7 @@ CREATE TABLE IF NOT EXISTS `specimen` (
   KEY `user_id` (`user_id`),
   KEY `status_code_id` (`status_code_id`),
   KEY `referred_to` (`referred_to`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -678,7 +678,7 @@ CREATE TABLE IF NOT EXISTS `specimen_custom_data` (
   PRIMARY KEY (`id`),
   KEY `field_id` (`field_id`),
   KEY `specimen_id` (`specimen_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -695,7 +695,7 @@ CREATE TABLE IF NOT EXISTS `specimen_custom_field` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `field_type_id` (`field_type_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -708,7 +708,7 @@ CREATE TABLE IF NOT EXISTS `specimen_session` (
   `session_num` varchar(45) NOT NULL DEFAULT '',
   `count` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`session_num`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -723,7 +723,7 @@ CREATE TABLE IF NOT EXISTS `specimen_test` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   KEY `test_type_id` (`test_type_id`),
   KEY `specimen_type_id` (`specimen_type_id`)
-) ENGINE=InnoDB COMMENT='Relates tests to the specimens that are compatible with thos';
+) COMMENT='Relates tests to the specimens that are compatible with thos';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -739,7 +739,7 @@ CREATE TABLE IF NOT EXISTS `specimen_type` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `disabled` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`specimen_type_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -757,7 +757,7 @@ CREATE TABLE IF NOT EXISTS `stock_content` (
   `lot_number` varchar(40) DEFAULT NULL,
   `new_balance` int(11) DEFAULT NULL,
   `user_name` varchar(40) DEFAULT NULL
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -786,7 +786,7 @@ CREATE TABLE IF NOT EXISTS `stock_details` (
   `receiver` varchar(1000) DEFAULT '',
   `remarks` varchar(1000) DEFAULT '',
   UNIQUE KEY `entry_id` (`entry_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -809,7 +809,7 @@ CREATE TABLE IF NOT EXISTS `test` (
   KEY `test_type_id` (`test_type_id`),
   KEY `user_id` (`user_id`),
   KEY `specimen_id` (`specimen_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -828,7 +828,7 @@ CREATE TABLE IF NOT EXISTS `test_agg_report_config` (
   `age_groups` varchar(255) DEFAULT NULL,
   `report_type` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -843,7 +843,7 @@ CREATE TABLE IF NOT EXISTS `test_category` (
   `description` varchar(100) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`test_category_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -867,7 +867,7 @@ CREATE TABLE IF NOT EXISTS `test_type` (
   `is_reporting_enabled` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`test_type_id`),
   KEY `test_category_id` (`test_category_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -880,7 +880,7 @@ CREATE TABLE IF NOT EXISTS `test_type_costs` (
   `earliest_date_valid` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `test_type_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL DEFAULT '0.00'
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -895,7 +895,7 @@ CREATE TABLE IF NOT EXISTS `test_type_measure` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   KEY `test_type_id` (`test_type_id`),
   KEY `measure_id` (`measure_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -909,7 +909,7 @@ CREATE TABLE IF NOT EXISTS `unit` (
   `unit` varchar(45) NOT NULL DEFAULT '',
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`unit_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -932,7 +932,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `lang_id` varchar(45) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`user_id`),
   KEY `user_id_index` (`lab_config_id`) USING BTREE
-) ENGINE=InnoDB COMMENT='Users are anybody that works in the lab.';
+) COMMENT='Users are anybody that works in the lab.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -948,7 +948,7 @@ CREATE TABLE IF NOT EXISTS `user_feedback` (
   `comments` varchar(500) DEFAULT NULL,
   `ts` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -974,7 +974,7 @@ CREATE TABLE IF NOT EXISTS `user_props` (
   `ScreenHeight` int(11) NOT NULL DEFAULT '0',
   `ScreenWidth` int(11) NOT NULL DEFAULT '0',
   `Recorded_At` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -988,7 +988,7 @@ CREATE TABLE IF NOT EXISTS `user_rating` (
   `rating` int(10) unsigned NOT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`,`ts`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1012,7 +1012,7 @@ CREATE TABLE IF NOT EXISTS `worksheet_custom` (
   `id_fields` varchar(45) NOT NULL DEFAULT '0,0,0',
   `landscape` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1026,7 +1026,7 @@ CREATE TABLE IF NOT EXISTS `worksheet_custom_test` (
   `test_type_id` int(10) unsigned NOT NULL,
   `measure_id` int(10) unsigned NOT NULL,
   `width` varchar(45) NOT NULL
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1041,7 +1041,7 @@ CREATE TABLE IF NOT EXISTS `worksheet_custom_userfield` (
   `width` int(10) unsigned NOT NULL DEFAULT '10',
   `field_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   KEY `Primary Key` (`field_id`)
-) ENGINE=InnoDB;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

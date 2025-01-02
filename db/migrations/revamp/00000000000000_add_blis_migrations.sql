@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS `blis_migrations` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
-) ENGINE=InnoDB;
+);

@@ -10,4 +10,4 @@ CREATE TABLE IF NOT EXISTS `blis_cloud_connections` (
   `last_backup_time` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `lab_config_id` (`lab_config_id`)
-) ENGINE=InnoDB;
+);
