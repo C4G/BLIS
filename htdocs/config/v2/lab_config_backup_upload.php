@@ -83,8 +83,8 @@ $tmp_path = $_FILES["backup_file"]["tmp_name"];
 
 $analyzed_backup = new AnalyzedBackup($filename, $tmp_path);
 
-mkdir("/tmp/blis", 0700);
-$perm_tmp_path = "/tmp/blis/" . basename($tmp_path);
+mkdir(sys_get_temp_dir()."/blis", 0700);
+$perm_tmp_path = sys_get_temp_dir() . "/blis/" . basename($tmp_path);
 
 if (!move_uploaded_file($tmp_path, $perm_tmp_path)) {
     $_SESSION["FLASH"] = "Failed to upload $filename.";
