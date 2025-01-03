@@ -38,7 +38,6 @@ class AnalyzedBackup {
         $this->files = array();
 
         $realpath = realpath($location);
-        $info = pathinfo($realpath);
 
         $ends_with_enc = !!(substr($filename, -strlen("_enc.zip")) === "_enc.zip");
         $likely_encrypted = $ends_with_enc || $pubkey_supplied;

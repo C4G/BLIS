@@ -14182,18 +14182,18 @@ function update_language_files(){
 			if (strpos($directory,'langdata_') !== false && is_dir("../../local/".$directory)) {
 				copy("../Language/en.php","../../local/".$directory."/en.php");
 				copy("../Language/en.xml","../../local/".$directory."/en.xml");
-                copy("../Language/en_catalog.php","../../local/".$directory."/en.php");
-				copy("../Language/en_catalog.xml","../../local/".$directory."/en.xml");
+                copy("../Language/en_catalog.php","../../local/".$directory."/en_catalog.php");
+				copy("../Language/en_catalog.xml","../../local/".$directory."/en_catalog.xml");
 
 				copy("../Language/default.php","../../local/".$directory."/default.php");
 				copy("../Language/default.xml","../../local/".$directory."/default.xml");
-				copy("../Language/default_catalog.php","../../local/".$directory."/default.php");
-				copy("../Language/default_catalog.xml","../../local/".$directory."/default.xml");
+				copy("../Language/default_catalog.php","../../local/".$directory."/default_catalog.php");
+				copy("../Language/default_catalog.xml","../../local/".$directory."/default_catalog.xml");
 
 				copy("../Language/fr.php","../../local/".$directory."/fr.php");
 				copy("../Language/fr.xml","../../local/".$directory."/fr.xml");
-                copy("../Language/fr_catalog.php","../../local/".$directory."/fr.php");
-				copy("../Language/fr_catalog.xml","../../local/".$directory."/fr.xml");
+                copy("../Language/fr_catalog.php","../../local/".$directory."/fr_catalog.php");
+				copy("../Language/fr_catalog.xml","../../local/".$directory."/fr_catalog.xml");
 			}
 
 		}

@@ -6,6 +6,15 @@ $page_elems = new PageElems();
 $profile_tip = LangUtil::getPageTerm("TIPS_PWD");
 $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), $profile_tip);
 
+// Hackity hack
+// Sometimes this isn't set, which causes various problems on this page and others
+if (!isset($_SESSION['lab_config_id']) || $_SESSION['lab_config_id'] == null) {
+    if (User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level'])) {
+        $lab_config_list = get_lab_configs($_SESSION['user_id']);
+        $_SESSION['lab_config_id'] = $lab_config_list[0]->id;
+    }
+}
+
 # Enable JavaScript for recording user props and latency values
 # Attaches record.js to this HTML
 $script_elems->enableLatencyRecord();
@@ -54,7 +63,7 @@ $script_elems->enableLatencyRecord();
 $(document).ready(function(){
     $.ajax({
 		type : 'POST',
-		url : 'update/check_version.php',
+		url : 'update/check_version.php?lab_config_id=<?php echo($_SESSION['lab_config_id']); ?>',
 		success : function(data) {
 			if ( data=='0' )
              {
