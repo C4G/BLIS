@@ -54,7 +54,14 @@ $post = array('action'=> 'connect', 'public_key'=> '', 'lab_name'=>$lab_config_n
 $log->info("Connecting to BLIS cloud with URL: ".$connect_url);
 
 $curl_cmd = PlatformLib::curlPath();
-$curl_cmd = $curl_cmd . " -i --fail-with-body --show-error -X POST ";
+$curl_cmd = $curl_cmd . " -i --show-error -X POST ";
+if (PlatformLib::runningOnWindows()) {
+    // The Windows version of cURL is newer than the one we might have on Linux
+    // (especially Ubuntu 20.04) so we can add this new option.
+    $curl_cmd = $curl_cmd . "--fail-with-body ";
+} else {
+    $curl_cmd = $curl_cmd . "--fail ";
+}
 foreach($post as $key=>$value) {
     $curl_cmd = $curl_cmd . " -F \"$key=$value\"";
 }

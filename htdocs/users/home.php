@@ -120,7 +120,7 @@ echo LangUtil::getPageTerm("TIPS_BLISINTRO");
 ?>
 <br><br>
     <div id="update_div2" style="display:none;" class="warning">
-    <a rel='facebox' id='update_link' href='../update/blis_update.php'>Click here to complete update to version <?php echo $VERSION ?></a>
+    <a rel='facebox' id='update_link' href='../update/blis_update.php?lab_config_id=<?php echo($_SESSION['lab_config_id']); ?>'>Click here to complete update to version <?php echo $VERSION ?></a>
     </div>
 
     <div id="update_div" style="display:none;" class="warning">

@@ -121,7 +121,13 @@ if ($action == "connect") {
     $backup = Backup::insert($lab_config_id, $backup_filename, "storage/$backup_filename");
 
     $connection->last_backup_time = strftime("%s");
-    $connection->last_backup_ip = $_SERVER['REMOTE_ADDR'];
+    $ip = "";
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+    $connection->last_backup_ip = $ip;
     $connection->refresh_connection_code();
     $connection->save();
 

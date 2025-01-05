@@ -104,7 +104,14 @@ $log->info("Sending backup to BLIS cloud with URL: ".$connect_url);
 // cannot do this! So I am shelling out to curl instead!
 
 $curl_cmd = PlatformLib::curlPath();
-$curl_cmd = $curl_cmd . " -i --fail-with-body --show-error -X POST ";
+$curl_cmd = $curl_cmd . " -i --show-error -X POST ";
+if (PlatformLib::runningOnWindows()) {
+    // The Windows version of cURL is newer than the one we might have on Linux
+    // (especially Ubuntu 20.04) so we can add this new option.
+    $curl_cmd = $curl_cmd . "--fail-with-body ";
+} else {
+    $curl_cmd = $curl_cmd . "--fail ";
+}
 foreach($post as $key=>$value) {
     $curl_cmd = $curl_cmd . " -F \"$key=$value\"";
 }
@@ -119,7 +126,7 @@ for ($x = 0; $x < $NUM_RETRIES; $x = $x + 1) {
     system($curl_cmd, $return_code);
     $output = ob_get_contents();
     ob_end_clean();
-    
+
     if ($return_code == 0 && strlen($output) > 0) {
         // HACK HACK HACKITY HACK
         // If there is ever a space in the output we're in trouble!

@@ -8,12 +8,14 @@ require_once("includes/new_image.php");
 require_once("includes/db_lib.php");
 require_once("includes/features.php");
 require_once("includes/header.php");
+require_once("includes/migrations.php");
 require_once("includes/random.php");
 require_once("includes/stats_lib.php");
 require_once("../AntiXSS.php");
 
 require_once(dirname(__FILE__).'/../includes/composer.php');
 require_once(__DIR__."/v2/lib/backup.php");
+require_once(__DIR__."/v2/lib/lab_connection.php");
 
 include_once("includes/field_order_update.php");
 
@@ -2394,7 +2396,26 @@ function AddnewDHIMS2Config()
 				</div>
 
 				<!-- TODO: feature gate this somehow -->
+                <?php
+                    $saved_db = DbUtil::switchToGlobal();
+                    $revamp_migrator = new LabDatabaseMigrator("blis_revamp", "revamp");
+
+                    // Hide the BLIS Cloud option if migrations are pending on the revamp database.
+                    $revamp_migrations_pending = $revamp_migrator->has_pending_migrations();
+
+                    // Hide the BLIS Cloud option if this lab is already receiving data from an offline lab.
+                    // (a lab cannot be both a sender and receiver)
+                    $cloud_connection = LabConnection::find_by_lab_config_id($lab_config_id);
+                    $cloud_connection_exists = $cloud_connection->last_backup_time != null;
+
+                    DbUtil::switchRestore($saved_db);
+
+                    if (!$revamp_migrations_pending && !$connection_exists) {
+                ?>
 				<a id='option66' class='menu_option' href="javascript:right_load(66, 'blis_cloud_connect_div');">BLIS Cloud</a><br><br></li>
+                <?php
+                    }
+                ?>
 
 				<?php /* Enable for Data Merging
                 <a rel='facebox' id='option18' class='menu_option' href="updateCountryDbAtLocalUI.php">Update National Database</a>
@@ -4831,11 +4852,17 @@ function AddnewDHIMS2Config()
                     ?>
                     <p>Connected to: <?php echo($cloud_hostname); ?></p>
 					<p>Latest backup: <?php echo($latest_backup_date); ?></p>
-					
 
 					<form method="post" action="/config/v2/send_cloud_backup.php">
 						<input type="hidden" name="lab_config_id" value="<?php echo($lab_config_id); ?>" />
 						<input type="submit" value="Send Latest Backup" />
+                    </form>
+
+                    <br/>
+
+                    <form method="post" action="/config/v2/disconnect_from_cloud.php">
+						<input type="hidden" name="lab_config_id" value="<?php echo($lab_config_id); ?>" />
+						<input type="submit" value="Disconnect" />
                     </form>
 
                     <?php
