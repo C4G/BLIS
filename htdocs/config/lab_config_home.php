@@ -2410,7 +2410,7 @@ function AddnewDHIMS2Config()
 
                     DbUtil::switchRestore($saved_db);
 
-                    if (!$revamp_migrations_pending && !$connection_exists) {
+                    if (!$revamp_migrations_pending && !$cloud_connection_exists) {
                 ?>
 				<a id='option66' class='menu_option' href="javascript:right_load(66, 'blis_cloud_connect_div');">BLIS Cloud</a><br><br></li>
                 <?php
