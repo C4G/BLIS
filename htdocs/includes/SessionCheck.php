@@ -7,7 +7,7 @@ if (basename($_SERVER['PHP_SELF'])!=="login.php") {
         header("Location: /login.php");
         die();
     }
-    if ($_SESSION['user_level'] != $LIS_SUPERADMIN &&	$_SESSION['user_level'] != $LIS_COUNTRYDIR&&	$_SESSION['user_level'] != $LIS_ADMIN) {
+    if ($_SESSION['user_level'] != $LIS_SUPERADMIN && $_SESSION['user_level'] != $LIS_COUNTRYDIR && $_SESSION['user_level'] != $LIS_ADMIN) {
         if ($_SESSION['user_level'] ==$READONLYMODE) {
             $_SESSION['rwoptionsarray']=array(5);
         }

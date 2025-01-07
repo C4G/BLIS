@@ -1,0 +1,1 @@
+ALTER TABLE `lab_config` ADD COLUMN `blis_cloud_connection_key` varchar(128) DEFAULT NULL;

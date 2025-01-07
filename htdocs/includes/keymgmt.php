@@ -19,8 +19,8 @@ class KeyMgmt
     public static function pathToKey($keyName) {
         global $log;
         $log->debug("Looking for key: $keyName");
-        $ajax_dir = __DIR__ . "/../ajax/";
-        $files_dir = __DIR__ . "/../../files/";
+        $ajax_dir = realpath(__DIR__ . "/../ajax/")."/";
+        $files_dir = realpath(__DIR__ . "/../../files/")."/";
 
         if (file_exists("$ajax_dir/$keyName")) {
             $log->warn("Found $keyName in ajax/ folder, moving it to htdocs/files/");
@@ -29,7 +29,9 @@ class KeyMgmt
 
         if (file_exists("$files_dir/$keyName")) {
             return "$files_dir/$keyName";
-        }
+	} else {
+	    $log->warn("$files_dir/$keyName does not exist");
+	}
 
         $log->error("Could not find keyfile: $keyName");
         return false;

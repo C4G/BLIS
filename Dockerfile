@@ -48,7 +48,7 @@ COPY docker/config/php.ini /etc/php/5.6/apache2/php.ini
 COPY docker/config/logrotate-blis.conf /etc/logrotate.d/blis
 
 # Copy utility scripts to /usr/bin
-COPY docker/bin/start-blis.sh /usr/bin/
+COPY docker/bin/start-blis.sh /usr/bin/start-blis
 
 # Copy all of the BLIS files into the container
 RUN mkdir /var/www/blis
@@ -67,4 +67,4 @@ RUN echo "${GIT_COMMIT_SHA}" | tee /etc/blis_git_commit_sha
 # Expose port 80 for HTTP
 EXPOSE 80
 
-CMD start-blis.sh && tail -f /var/log/apache2/error.log
+CMD start-blis && tail -f /var/log/apache2/error.log

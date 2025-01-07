@@ -20,7 +20,7 @@ $user_lab_config_id = $user->labConfigId;
 $lab_config_id = $_REQUEST['labConfigId'];
 
 if ($user_lab_config_id != $lab_config_id && !is_super_admin($user) && !is_country_dir($user)) {
-    echo "You do not have permission to back up lab #$request_lab_config_id!";
+    echo "You do not have permission to back up lab #$lab_config_id!";
     return;
 }
 
@@ -72,11 +72,11 @@ if (Features::lab_config_v2_enabled()) {
     if (!rename($oldpath, $newpath)) {
         $_SESSION["FLASH"] = "Could not move $oldpath to $newpath.";
         header("Location: $lab_config_backups_path");
-        return;
+        exit;
     }
 
     try {
-        DbUtil::switchToLabConfig($lab_config_id);
+        db_change("blis_$lab_config_id");
         Backup::insert($lab_config_id, $base, $relpath);
 
         $_SESSION["FLASH"] = "Lab backup completed successfully.";
@@ -85,7 +85,7 @@ if (Features::lab_config_v2_enabled()) {
     }
 
     header("Location: $lab_config_backups_path");
-    return;
+    exit;
 } else {
     echo "Download the below zip of the backup and save it to your disk. <br/><a href='/export/backups/".basename($backup_path)."'/>Download Zip</a>";
 }

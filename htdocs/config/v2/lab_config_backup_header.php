@@ -1,5 +1,9 @@
 <?php
 
+require_once(__DIR__."/../../includes/db_mysql_lib.php");
+require_once(__DIR__."/../../includes/db_util.php");
+require_once(__DIR__."/../../includes/features.php");
+
 // Assume authentication + everything has been done outside of this file
 global $lab_config_id;
 global $lab_config_name;
@@ -13,6 +17,16 @@ function render_tab($tab_name, $tab_link, $tab_label) {
     } else {
         echo("<a href=\"$tab_link\">$tab_label</a>");
     }
+}
+
+function is_connected_to_cloud() {
+    global $lab_config_id;
+    $saved_db = DbUtil::switchToGlobal();
+    $lc_id = db_escape($lab_config_id);
+    $query = "SELECT blis_cloud_hostname FROM lab_config WHERE lab_config_id = '$lc_id';";
+    $result = query_associative_one($query);
+    DbUtil::switchRestore($saved_db);
+    return $result != null && $result['blis_cloud_hostname'] != null && trim($result['blis_cloud_hostname']) !== "";
 }
 
 ?>
@@ -89,4 +103,7 @@ a.delete-backup {
     | <?php render_tab("lab_backups", "lab_config_backups.php?id=$lab_config_id", "Lab Backups"); ?>
     | <?php render_tab("settings", "lab_config_backup_settings.php?id=$lab_config_id", "Settings"); ?>
     | <?php render_tab("upload", "lab_config_backup_upload.php?id=$lab_config_id", "Upload Backup"); ?>
+    <?php if (Features::allow_client_connections() && !is_connected_to_cloud()) { ?>
+    | <?php render_tab("connect", "lab_config_backup_connect.php?id=$lab_config_id", "Connect Offline Lab"); ?>
+    <?php } ?>
 </div>

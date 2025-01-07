@@ -40,6 +40,16 @@ class PlatformLib {
 		}
 	}
 
+	public static function curlPath() {
+		if(self::runningOnWindows()) {
+			// If running on Windows, use the bundled curl
+            $exe_path = realpath(__DIR__."\..\..\win32-curl\bin\curl.exe");
+			return preg_replace('`(?<!^) `', '^ ', escapeshellcmd('"'.$exe_path.'"'));
+		} else {
+			return "curl";
+		}
+	}
+
 	public static function copyDirectory($source, $dest) {
 		$command = "";
 		if(self::runningOnWindows()) {
