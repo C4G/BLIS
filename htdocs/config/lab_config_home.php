@@ -2395,7 +2395,6 @@ function AddnewDHIMS2Config()
 					<a id='option39' class='menu_option' href="javascript:right_load(39, 'blis_update_div');">Update to New Version</a>
 				</div>
 
-				<!-- TODO: feature gate this somehow -->
                 <?php
                     $saved_db = DbUtil::switchToGlobal();
                     $revamp_migrator = new LabDatabaseMigrator("blis_revamp", "revamp");

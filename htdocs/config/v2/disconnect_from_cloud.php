@@ -1,8 +1,4 @@
 <?php
-#
-# (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
-# Download a lab backup, with access control.
-#
 
 require_once(__DIR__."/../../users/accesslist.php");
 require_once(__DIR__."/../../includes/user_lib.php");

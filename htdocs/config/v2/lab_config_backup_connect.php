@@ -1,10 +1,4 @@
 <?php
-#
-# (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
-# Lists currently accessible lab configurations with options to modify/add
-# Check whether to redirect to lab configuration page
-# Called when the lab admin has only one lab under him/her
-#
 
 require_once(__DIR__."/../../users/accesslist.php");
 require_once(__DIR__."/../../includes/user_lib.php");
