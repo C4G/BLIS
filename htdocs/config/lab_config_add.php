@@ -217,14 +217,14 @@ foreach($selected_test_list as $test_type_id)
 
 global $LOCAL_PATH, $log;
 
-chmod($LOCAL_PATH."/langdata_revamp", 0755);
-chmod($LOCAL_PATH."/langdata_".$lab_config_id, 0755);
-mkdir($LOCAL_PATH."/langdata_".$lab_config_id);
 # Copy contents from langdata_revamp into this new folder
 if (is_dir($LOCAL_PATH."/langdata_".$lab_config_id)) {
     $log->warn("$LOCAL_PATH/langdata_$lab_config_id already exists. Deleting it.");
     PlatformLib::removeDirectory($LOCAL_PATH."/langdata_".$lab_config_id);
 }
+chmod($LOCAL_PATH."/langdata_revamp", 0755);
+chmod($LOCAL_PATH."/langdata_".$lab_config_id, 0755);
+mkdir($LOCAL_PATH."/langdata_".$lab_config_id);
 $log->info("Copying langdata_revamp folder to langdata_$lab_config_id");
 PlatformLib::copyDirectory($LOCAL_PATH."/langdata_revamp", $LOCAL_PATH."/langdata_".$lab_config_id);
 
