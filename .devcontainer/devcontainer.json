@@ -20,7 +20,8 @@
     },
     "forwardPorts": [
         80,
-        8000
+        8000,
+        8080
     ],
     "service": "app",
     "workspaceFolder": "/workspaces/BLIS",
