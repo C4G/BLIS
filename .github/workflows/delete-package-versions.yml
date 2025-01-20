@@ -2,7 +2,7 @@ name: Delete Old Containers
 
 on:
   push:
-    branches: ['main']
+    branches: ['master']
   workflow_dispatch:
 
 jobs:
