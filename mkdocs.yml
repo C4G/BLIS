@@ -33,6 +33,7 @@ plugins:
         - index.md
         - contributing/
         - developer_documentation/
+        - C4G_Spring_2025/
 
 edit_uri: edit/master/docs/
 repo_url: https://github.com/C4G/BLIS
