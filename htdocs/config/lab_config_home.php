@@ -2405,7 +2405,7 @@ function AddnewDHIMS2Config()
                     // Hide the BLIS Cloud option if this lab is already receiving data from an offline lab.
                     // (a lab cannot be both a sender and receiver)
                     $cloud_connection = LabConnection::find_by_lab_config_id($lab_config_id);
-                    $cloud_connection_exists = $cloud_connection->last_backup_time != null;
+                    $cloud_connection_exists = $cloud_connection != null && $cloud_connection->last_backup_time != null;
 
                     DbUtil::switchRestore($saved_db);
 
@@ -4214,7 +4214,7 @@ function AddnewDHIMS2Config()
 								<tr valign='top' class='random_params' style='display:none;'>
 									<td>Total Patients</td>
 									<td>
-										<input type='text' class='uniform_width' name='num_p' value='<?php echo $MAX_NUM_PATIENTS/2; ?>'></input>
+										<input type='text' class='uniform_width' name='num_p' value='<?php echo "2000"; #$MAX_NUM_PATIENTS/2; ?>'></input>
 									</td>
 								</tr>
 								<tr valign='top' class='random_params' style='display:none;'>

@@ -14,6 +14,9 @@ class Backup {
     // The filename of this backup as it was originally uploaded to the server.
     public $filename;
 
+    // The file size of this backup archive, in bytes.
+    public $filesize;
+
     // The full path, relative to the /files directory, of this backup file.
     public $location;
 
@@ -106,6 +109,7 @@ class Backup {
         $backup->timestamp = strtotime($row['ts']);
 
         $backup->full_path = realpath(Backup::base_path() . "/" . $backup->location);
+        $backup->filesize = filesize($backup->full_path);
 
         return $backup;
     }

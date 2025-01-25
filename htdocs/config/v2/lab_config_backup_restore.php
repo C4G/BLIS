@@ -1,16 +1,17 @@
 <?php
 #
 # (c) C4G, Santosh Vempala, Ruban Monu and Amol Shintre
-# Lists currently accessible lab configurations with options to modify/add
-# Check whether to redirect to lab configuration page
-# Called when the lab admin has only one lab under him/her
+# Restores a lab backup to the local database.
 #
 
 require_once(__DIR__."/../../users/accesslist.php");
+require_once(__DIR__."/../../includes/composer.php");
 require_once(__DIR__."/../../includes/migrations.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 require_once(__DIR__."/lib/backup.php");
 require_once(__DIR__."/lib/backup_restorer.php");
+
+global $log;
 
 $current_user_id = $_SESSION['user_id'];
 $current_user = get_user_by_id($current_user_id);
@@ -126,6 +127,9 @@ if ($_GET["action"] != "confirm") {
 
 } else {
 
+    $start_time = time();
+    $end_time = null;
+
     $restorer = new BackupRestorer($backup, $lab_config_id);
 
     $restore_successful = $restorer->restore();
@@ -136,10 +140,17 @@ if ($_GET["action"] != "confirm") {
         $migrations_successful = $migrator->apply_migrations();
     }
 
+    $end_time = time();
+    $total_time = $end_time - $start_time;
+
     if ($restore_successful) {
         if ($migrations_successful) {
+            $log->info("Backup " . $backup->filename . " restored (migrated: yes size: " . $backup->filesize . " ) to database " . $restorer->target_lab_database . " in seconds: " . $total_time);
+
             $_SESSION["FLASH"] = "Backup restored successfully.";
         } else {
+            $log->info("Backup " . $backup->filename . " restored (migrated: no size: " . $backup->filesize . " ) to database " . $restorer->target_lab_database . " in seconds: " . $total_time);
+
             $_SESSION["FLASH"] = "Backup database was restored, "
                                         . "but could not be migrated to the new BLIS version. "
                                         . "Please check the logs for details.";

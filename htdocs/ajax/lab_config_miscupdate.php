@@ -67,7 +67,7 @@ if($dboption != 0)
 	if($dboption == 1)
 	{
 		# Generate random data again
-		//add_patients_random($num_patients);
+		add_patients_random($num_patients);
 		//echo "Patients added successfully!";
 		## Random specimen entries
 		$user_list = $lab_config->getUsers();

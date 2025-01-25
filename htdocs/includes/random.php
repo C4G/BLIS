@@ -210,17 +210,17 @@ function add_patients_random($num_patients)
 	{
 		$num_patients = $MAX_NUM_PATIENTS;
 	}
-	//$patient_sql_filename = "../data/patients.sql";	
+	//$patient_sql_filename = "../data/patients.sql";
 	/*
 	if(strpos($_SERVER['HTTP_REFERER'], "lab_config_home.php") !== false)
 	{
-		$patient_sql_filename = "../data/patients.sql";	
+		$patient_sql_filename = "../data/patients.sql";
 	}
 	else
 	{
-		$patient_sql_filename = "../data/patients.sql";	
+		$patient_sql_filename = "../data/patients.sql";
 	}
-	*/	
+	*/
 	/*$patient_sql_file = fopen($patient_sql_filename, 'r');
 	$count = 0;
 	while($count < $num_patients)
@@ -242,8 +242,8 @@ function add_patients_random($num_patients)
 		$dob = get_random_date($minDate, $maxDate);
 		$sql = "INSERT INTO `patient` (`patient_id`,`name`,`dob`,`sex`,`addl_id`,`surr_id`)".
 				"VALUES ($patientId, '$name' , '$dob' , '$sex', $addl_id, $surr_id)";
-                        query_insert_one($sql);
-		
+        query_insert_one($sql);
+
 		$count++;
 	}
 	$NUM_PATIENTS = $num_patients;
@@ -266,7 +266,7 @@ function add_specimens_random($num_specimens, $user_list=array())
 	{
 		$num_specimens = $MAX_NUM_SPECIMENS;
 	}
-	
+
 	$specimen_type_list = get_lab_config_specimen_types($lab_config_id);
 	$test_type_list = get_lab_config_test_types($lab_config_id);
 	$count = 0;
@@ -288,7 +288,7 @@ function add_specimens_random($num_specimens, $user_list=array())
 		$specimen->specimenId = $specimen_id_count;
 		$specimen->specimenTypeId = $specimen_type_id;
 		$specimen->patientId = $patient_id;
-		$specimen->userId = $user_id; 
+		$specimen->userId = $user_id;
 		# Alternatively, above userId can be linked to $_SESSION['user_id']
 		$randomDate = get_random_date($ts_start, $ts_end);
 		$specimen->dateCollected = $randomDate;
@@ -299,7 +299,7 @@ function add_specimens_random($num_specimens, $user_list=array())
 		$specimen->referredTo = 0;
 		$specimen->comments = "";
 		$specimen->auxId = "";
-			
+
 		# Schedule tests for this specimen
 		$compatible_test_list = get_compatible_tests($specimen_type_id);
 		if(count($compatible_test_list) == 0)
@@ -339,7 +339,7 @@ function add_specimens_random($num_specimens, $user_list=array())
 		} while(with_probability($P_NEW_TEST) && (count($candidate_test_list) > 0));
 		DbUtil::switchRestore($saved_db);
 		//commit_transaction();
-		
+
 		# Update counters
 		$TESTS_ADDED++;
 		$specimen_id_count++;
@@ -425,7 +425,7 @@ function add_results_random($user_list=array())
 			{
 				$is_verified = 2;
 				$test->setVerifiedBy($is_verified);
-			}			
+			}
 			DbUtil::switchRestore($saved_db);
 		}
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
@@ -525,7 +525,7 @@ function add_results_sequential($user_list=array())
 			{
 				$is_verified = 2;
 				$test->setVerifiedBy($is_verified);
-			}			
+			}
 			DbUtil::switchRestore($saved_db);
 		}
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
