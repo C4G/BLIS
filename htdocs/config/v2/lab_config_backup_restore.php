@@ -127,7 +127,7 @@ if ($_GET["action"] != "confirm") {
 
 } else {
 
-    $start_time = time();
+    $start_time = microtime(true);
     $end_time = null;
 
     $restorer = new BackupRestorer($backup, $lab_config_id);
@@ -140,7 +140,7 @@ if ($_GET["action"] != "confirm") {
         $migrations_successful = $migrator->apply_migrations();
     }
 
-    $end_time = time();
+    $end_time = microtime(true);
     $total_time = $end_time - $start_time;
 
     if ($restore_successful) {
