@@ -63,7 +63,7 @@ if($dboption != 0)
 	//clear_random_data($lab_config);
 	empty_test_table();
 	empty_specimen_table();
-	//empty_patient_table();
+	empty_patient_table();
 	if($dboption == 1)
 	{
 		# Generate random data again
