@@ -61,6 +61,8 @@ First, create a fork of the C4G BLIS repository:
 1. Now you can go to the resulting `https://github.com/[your username]/BLIS`
    and see your own copy of the repository!
 
+#### BLIS Cloud Development
+
 Second, let's set up the BLIS code repository for **BLIS cloud development.**
 
 1. Install [Visual Studio Code](https://code.visualstudio.com/).
@@ -79,6 +81,8 @@ Second, let's set up the BLIS code repository for **BLIS cloud development.**
 1. Type `cd BLIS`, then `code` to open VS Code
 1. VS Code will eventually say "This folder contains a `.devcontainer` folder"
    and ask you to reopen in a container. Click the button!
+
+#### Local Windows development
 
 Finally, let's clone the repository again so you can run the Windows version
 as well.
