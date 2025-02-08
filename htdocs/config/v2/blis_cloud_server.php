@@ -5,11 +5,12 @@ require_once(__DIR__."/lib/lab_connection.php");
 require_once(__DIR__."/lib/analyzed_backup.php");
 require_once(__DIR__."/lib/backup.php");
 require_once(__DIR__."/lib/encrypted_file.php");
+require_once(__DIR__."/../../includes/db_lib.php");
 
 # The controller for BLIS Cloud Server (/receiver) operations.
 
 if (!Features::allow_client_connections()) {
-    header('HTTP/1.1 404 Not Found', true, 404);
+    header(LangUtil::$generalTerms['404_BAD_REQUEST'], true, 404);
     header("Location: /home.php");
     exit;
 }
@@ -23,7 +24,7 @@ $lab = query_associative_one($lab_db_name_query);
 
 if (!$lab) {
     // doesn't exist!
-    header("HTTP/1.1 400 Bad Request", true, 400);
+    header(LangUtil::$generalTerms['404_BAD_REQUEST'], true, 400);
     exit;
 }
 
@@ -48,7 +49,7 @@ if ($action == "connect") {
     if ($connection_code != $nrml_code) {
         $log->warn("Connection attempted with wrong connection code. Lab ID: $lab_config_id; Incorrect code: $connection_code");
         // Connection code does not match
-        header("HTTP/1.1 400 Bad Request", true, 400);
+        header(LangUtil::$generalTerms['404_BAD_REQUEST'], true, 400);
         exit;
     }
 
@@ -85,14 +86,14 @@ if ($action == "connect") {
 
     if ($connection == null) {
         // Lab connection does not exist, so backups can't be uploaded.
-        header("HTTP/1.1 400 Bad Request", true, 400);
+        header(LangUtil::$generalTerms['404_BAD_REQUEST'], true, 400);
         exit;
     }
 
     $nrml_code = str_replace("-", "", $connection->connection_code);
     if ($connection_code != $nrml_code) {
         // Connection code does not match
-        header("HTTP/1.1 400 Bad Request", true, 400);
+        header(LangUtil::$generalTerms['404_BAD_REQUEST'], true, 400);
         exit;
     }
 
@@ -113,7 +114,7 @@ if ($action == "connect") {
     $result = $enc->decrypt("LAB_dir.blis", $backup_envelope_key, $decrypted_path);
 
     if (!$result) {
-        header("HTTP/1.1 500 Internal Server Error", true, 500);
+        header(LangUtil::$generalTerms['500_SERVER_ERROR'], true, 500);
         exit;
     }
 

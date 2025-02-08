@@ -204,7 +204,9 @@ $LANG_ARRAY = array (
 		"ALL_FACILITIES" => "Toutes les installations", 
 		"ALL_SITES" => "Tous les sites", 
 		"DISTRICT" => "District", 
-		"REGION" => "Région"
+		"REGION" => "Région", 
+		"404_BAD_REQUEST" => "HTTP/1.1 404 Page Non Trouvée", 
+		"500_SERVER_ERROR" => "HTTP/1.1 500 Erreur Interne du Serveur"
 	) , 
 	"header" => array ( 
 		"TITLE" => "", 

@@ -877,6 +877,14 @@
             <key>PATIENT_CUSTOM_FIELDS</key>
             <value>Patient Custom Fields</value>
         </term>
+        <term>
+            <key>404_BAD_REQUEST</key>
+            <value>HTTP/1.1 404 Not Found</value>
+        </term>
+        <term>
+            <key>500_SERVER_ERROR</key>
+            <value>HTTP/1.1 500 Internal Server Error</value>
+        </term>
     </page>
     <page id="header" descr="Page Header">
         <term>
