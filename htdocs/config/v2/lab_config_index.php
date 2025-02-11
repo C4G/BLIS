@@ -54,7 +54,7 @@ a.delete {
 <div class="tab-bar">
     <b><?php echo LangUtil::getTitle(); ?></b>
     | <a href='/lab_config_new.php'><?php echo LangUtil::$pageTerms['CMD_ADDNEWLAB']; ?></a>
-    | <a href="/ajax/download_key.php?role=dir">Download Public Key</a>
+    | <a href="/ajax/download_key.php?role=dir"><?php echo LangUtil::$pageTerms['DOWNLOAD_PUBKEY']; ?></a>
 </div>
 
 <div id='lab_config_list'>

@@ -1325,6 +1325,10 @@
 			<key>TIPS_MISSING_TTYPES</key>
 			<value>Erreur: Aucun Examen selectionné</value>
 		</term>
+        <term>
+            <key>DOWNLOAD_PUBKEY</key>
+            <value>Télécharger la clé publique</value>
+        </term>
 	</page>
 	<page id="lab_config_home" descr="Lab Configuration Page">
 		<term>
