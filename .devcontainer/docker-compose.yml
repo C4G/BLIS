@@ -2,7 +2,9 @@ version: '3'
 
 services:
   app:
-    image: ghcr.io/c4g/blis-devcontainer:latest
+    build:
+      dockerfile: ./Dockerfile
+      context: ..
     environment:
       - BLIS_LAB_BACKUPS_V2_ENABLED=1
       - BLIS_LAB_CONNECTION_ENABLED=1
