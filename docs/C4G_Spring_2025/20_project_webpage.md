@@ -12,7 +12,12 @@ Our project will have a few different goals
 ## Team Members
 - Sofia Muller: Project management and external communications, data engineering for satellite labs feature.
 - Princesca Dorsaint: French localization, data engineering for satellite labs feature, facilitate cloud deployment, externalization.
-- Disha Patel: French localization, UI/UX design, testing.
+- Disha Patel: UI/UX design, testing, and satellite labs requirements gathering.
 - Mishwa Bhavsar: French localization, documentation.
+Note: Team members goals and contributions will change through the semester.
 
 ## Lighthouse Scores
+- Performance: 94
+- Accessibility: 92
+- Best Practices: 96
+- SEO: 90
