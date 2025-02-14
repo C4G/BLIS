@@ -818,6 +818,14 @@
 			<key>REGION</key>
 			<value>Région</value>
 		</term>
+		<term>
+            <key>404_BAD_REQUEST</key>
+            <value>HTTP/1.1 404 Page Non Trouvée</value>
+        </term>
+		<term>
+            <key>500_SERVER_ERROR</key>
+            <value>HTTP/1.1 500 Erreur Interne du Serveur</value>
+        </term>
 
 
 	</page>
