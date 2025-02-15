@@ -1,4 +1,6 @@
 # Project Webpage
+This page has been created as part of Spring 2025's P3 assignment: Project Webpage.
+
 ## Project Description
 Our project will build on C4G's existing BLIS project. C4G Basic Laboratory Information System is a collaboration between Computing for Good (C4G) at Georgia Tech, the Center for Diseaser Control (CDC), and participating PEPFAR countries. The project provides software for tracking of lab test results in developing countries. We will provide support and maintenance, improve existing features, as well as provide new features to the system.
 
@@ -12,7 +14,13 @@ Our project will have a few different goals
 ## Team Members
 - Sofia Muller: Project management and external communications, data engineering for satellite labs feature.
 - Princesca Dorsaint: French localization, data engineering for satellite labs feature, facilitate cloud deployment, externalization.
-- Disha Patel: French localization, UI/UX design, testing.
+- Disha Patel: UI/UX design, testing, and satellite labs requirements gathering.
 - Mishwa Bhavsar: French localization, documentation.
+Note: Team members goals and contributions will change through the semester.
 
 ## Lighthouse Scores
+- Performance: 94
+- Accessibility: 92
+- Best Practices: 96
+- SEO: 90
+![Screenshot](../images/spring_2025/lighthouse.png)
