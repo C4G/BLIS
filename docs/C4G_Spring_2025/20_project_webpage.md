@@ -1,4 +1,6 @@
 # Project Webpage
+This page has been created as part of Spring 2025's P3 assignment: Project Webpage.
+
 ## Project Description
 Our project will build on C4G's existing BLIS project. C4G Basic Laboratory Information System is a collaboration between Computing for Good (C4G) at Georgia Tech, the Center for Diseaser Control (CDC), and participating PEPFAR countries. The project provides software for tracking of lab test results in developing countries. We will provide support and maintenance, improve existing features, as well as provide new features to the system.
 
@@ -21,3 +23,4 @@ Note: Team members goals and contributions will change through the semester.
 - Accessibility: 92
 - Best Practices: 96
 - SEO: 90
+![Screenshot](../images/spring_2025/lighthouse.png)
