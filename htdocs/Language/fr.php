@@ -351,7 +351,8 @@ $LANG_ARRAY = array (
 		"TIPS_MISSING_LOCATION" => "Erreur: Non du Facilitateur manquant.", 
 		"TIPS_MISSING_MGR" => "Erreur: Aministrateur de Laboratoire non sélectionner.", 
 		"TIPS_MISSING_STYPES" => "Erreur: Aucun échantillon sélectionné.", 
-		"TIPS_MISSING_TTYPES" => "Erreur: Aucun Examen selectionné"
+		"TIPS_MISSING_TTYPES" => "Erreur: Aucun Examen selectionné", 
+		"DOWNLOAD_PUBKEY" => "Télécharger la clé publique"
 	) , 
 	"lab_config_home" => array ( 
 		"TITLE" => "Configuration du Lab.", 

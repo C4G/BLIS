@@ -1390,6 +1390,10 @@
             <key>TIPS_MISSING_TTYPES</key>
             <value>Error: No test types selected</value>
         </term>
+        <term>
+            <key>DOWNLOAD_PUBKEY</key>
+            <value>Download Public Key</value>
+        </term>
     </page>
     <page id="lab_config_home" descr="Lab Configuration Page">
         <term>

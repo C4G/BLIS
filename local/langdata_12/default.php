@@ -368,7 +368,8 @@ $LANG_ARRAY = array (
 		"TIPS_MISSING_LOCATION" => "Error: Facility Name missing", 
 		"TIPS_MISSING_MGR" => "Error: Lab Manager not selected", 
 		"TIPS_MISSING_STYPES" => "Error: No specimen types selected", 
-		"TIPS_MISSING_TTYPES" => "Error: No test types selected"
+		"TIPS_MISSING_TTYPES" => "Error: No test types selected", 
+		"DOWNLOAD_PUBKEY" => "Download Public Key"
 	) , 
 	"lab_config_home" => array ( 
 		"TITLE" => "Lab Configuration", 
