@@ -16581,5 +16581,13 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
 		return $resultset;
     }
 
+    function get_user_lab_id($user_id) {
+        $saved_db = DbUtil::switchToGlobal();
+        $uid = db_escape($user_id);
+        $query = "SELECT lab_config_id FROM user WHERE user_id = '$uid';";
+        $res = query_associative_one($query);
+        DbUtil::switchRestore($saved_db);
+        return $res['lab_config_id'];
+    }
 
 ?>
