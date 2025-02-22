@@ -125,7 +125,7 @@ class CustomFieldOrderGeneration_Patient{
 		echo "</td>
 		<td>
 		<font style='color:red'>";
-		echo LangUtil::$pageTerms['TIPS_DOB_AGE'];echo "</font>
+		echo LangUtil::$pageTerms['TIPS_DOB_AGE'];echo "</font><br/>
 			<input type='text' name='age' id='age' value='' size='4' maxlength='10' class='uniform_width' />
 
 			<select name='age_param' id='age_param'>";

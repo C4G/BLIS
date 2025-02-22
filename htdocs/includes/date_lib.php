@@ -20,64 +20,39 @@ class DateLib
 
 	public static function dobToAge($dob)
 	{
+        $today = new DateTime();
+        $dt_dob = new DateTime($dob);
+        $diff = $today->diff($dt_dob);
+
 		# Converts date of birth to age in years/months
-		/*
-		$today = date("m-d-Y");
-		$dob_array = explode("-", $dob); # gives Y-m-d
-		$dob_formatted = $dob_array[1]."-".$dob_array[2]."-".$dob_array[0];
-		$diff = round(floor(DateLib::dateDiff("-", $today, $dob_formatted)/365), 0);
-		if($diff >= 2)
-		{
-			return $diff." ".LangUtil::$generalTerms['YEARS'];
-		}
-		else
-		{
-			$diff = round(floor(DateLib::dateDiff("-", $today, $dob_formatted)/30), 0);
-			if($diff >= 2)
-			{
-				return "$diff ".LangUtil::$generalTerms['MONTHS'];
-			}
-			else
-			{
-				$diff = round(floor(DateLib::dateDiff("-", $today, $dob_formatted)%31), 0);
-				return "$diff ".LangUtil::$generalTerms['DAYS'];
-			}
-		}
-		*/
 		$labConfig = LabConfig::getById($_SESSION['lab_config_id']);
 
-		$today = date('Y-m-d');
-		$diff = abs(strtotime($today) - strtotime($dob));
-
-		# explode below gives Y-m-d (Required, because the difference function to get years, months & days is approximate.
-		# Therefore if current day is same as dob day, do display days.
-		$dob_array = explode("-", $dob);
-		$today_array = explode("-", $today);
 		$value = "";
 
-		$years = floor($diff / (365*60*60*24));
-		if( $years >= $labConfig->ageLimit ) {
-			$value .= $years . " " . LangUtil::$generalTerms['YEARS'];
-		}
-		else {
-			$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
-			$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+        $years = $diff->y;
+		if( $diff->y >= $labConfig->ageLimit ) {
+			$value .= $diff->format("%y " . LangUtil::$generalTerms['YEARS']);
+		} else {
+			$months = $diff->m;
+			$days = $diff->d;
 
-			if ( $years > 0 )
-				$value .= $years . " " . LangUtil::$generalTerms['YEARS'];
+			if ( $years > 0 ) {
+                $value .= $diff->format("%y " . LangUtil::$generalTerms['YEARS']);
+            }
+
 			if ( $months > 0 ) {
-				if ( $years > 0 )
+				if ( $years > 0 ) {
 					$value .= ", ";
-				$value .= $months . " " . LangUtil::$generalTerms['MONTHS'];
+                }
+				$value .= $diff->format("%m " . LangUtil::$generalTerms['MONTHS']);
 			}
 
-			if($dob_array[2] != $today_array[2]) {
-				if ( $days > 0 ) {
-					if ( $months > 0 || $years > 0 )
-						$value .= ", ";
-					$value .= $days . " " .LangUtil::$generalTerms['DAYS'] . " ";
-				}
-			}
+            if ( $days > 0 ) {
+                if ( $months > 0 || $years > 0 ) {
+                    $value .= ", ";
+                }
+                $value .= $diff->format("%d " . LangUtil::$generalTerms['DAYS']);
+            }
 		}
 		return $value;
 	}

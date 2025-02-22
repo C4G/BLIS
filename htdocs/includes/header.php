@@ -10,6 +10,14 @@ require_once(__DIR__."/SessionCheck.php");
 require_once(__DIR__."/db_lib.php");
 require_once(__DIR__."/features.php");
 
+# Session hack for pages that use the header
+# Make sure $_SESSION["lab_config_id"] is set... something really hates the session
+# and is constantly overwriting lab_config_id. Can't figure out where.
+if ($_SESSION["lab_config_id"] == null && $_SESSION["user_id"] != null) {
+    $lcid = get_user_lab_id($_SESSION["user_id"]);
+    $_SESSION["lab_config_id"] = $lcid;
+}
+
 $TRACK_LOADTIME = false;
 $TRACK_LOADTIMEJS = false;
 if ($TRACK_LOADTIME) {

@@ -31,7 +31,7 @@ if(trim($_REQUEST['yyyy']) == "" && trim($_REQUEST['mm']) == "" && trim($_REQUES
 	# Set year in partial_dob field to auto-update age value in the future
 	$today = date("Y-m-d");
 	$today_parts = explode("-", $today);
-	
+
 	# Find year of birth based on supplied age value
 	if($age_param == 2)
 	{
@@ -85,9 +85,9 @@ if(trim($_REQUEST['yyyy']) == "" && trim($_REQUEST['mm']) == "" && trim($_REQUES
 		// 	// $age_parts=explode("-",$age);
 		// 	// $age=$age_parts[0]+$age_parts[1];
 		// 	// $age=-1*$age/2;
-		// } 
+		// }
 		// else if($pos==0){
-		// 	// $age1 = substr($age,1); 
+		// 	// $age1 = substr($age,1);
 		// 	// $age=intval($age1);
 		// 	$age=intval($age);
 		// }
