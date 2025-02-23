@@ -41,7 +41,8 @@ BLIS currently allows satellite labs to log in and view test results. However, s
 The solution involves creating unique satellite lab identifiers and tagging each of results with the tag matching the respective lab. This would involve the following:
 
 ### Tagging Results
-- The test results would consist of an additional field. The reference lab would assign the correct satellite lab id tag to each test result. This would be done at the time of the result entry. Additionally, ensure that each satellite lab id is unique using UUIDs for data integrity and consistency purposes.
+- The test results would consist of an additional field. The reference lab would assign the correct satellite lab id tag to each test result. This would be done at the time of the result entry. 
+- Ensure that each satellite lab id is unique using UUIDs for data integrity and consistency purposes.
 
 ### Filtering based on tag
 - The database will have to be modified to account for the new field. This could be in the form of a new column to an existing results table. With such information available, the database queries can be modified to include the following to allow for filtering based on satellite id: `WHERE satellite_lab_id = <user_lab_id>`. With the capability of filtering based on satellite id being available in the backend, the user interface will need to be updated to ensure visibility based on the satellite lab id corresponding to the logged in user.
