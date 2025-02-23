@@ -2961,4 +2961,62 @@
             <value>Update Profile</value>
         </term>
     </page>
+    <page id="debug" descr="Debug Utilities">
+        <term>
+            <key>DEBUG_UTILITIES</key>
+            <value>Debug Utilities</value>
+        </term>
+        <term>
+            <key>GIT_COMMIT_SHA</key>
+            <value>Git commit SHA</value>
+        </term>
+        <term>
+            <key>BROWSE_SOURCE_CODE</key>
+            <value>browse source code</value>
+        </term>
+        <term>
+            <key>AVAILABLE_LOG_FILES</key>
+            <value>Available Log Files</value>
+        </term>
+        <term>
+            <key>LANGUAGE_UTILITIES</key>
+            <value>Language Utilities</value>
+        </term>
+        <term>
+            <key>RESET_UPDATE_LANGUAGE_FILES</key>
+            <value>Reset/update language files</value>
+        </term>
+        <term>
+            <key>DATABASE_UTILITIES</key>
+            <value>Database Utilities</value>
+        </term>
+        <term>
+            <key>LEGACY_LAB_DATABASE_MIGRATIONS</key>
+            <value>Legacy Lab Database Migrations</value>
+        </term>
+        <term>
+            <key>WARNING</key>
+            <value>Warning!</value>
+        </term>
+        <term>
+            <key>MIGRATION_WARNING</key>
+            <value>Running ANY of these migrations could break your lab configuration PERMANENTLY!</value>
+        </term>
+        <term>
+            <key>MIGRATION_DESCRIPTION</key>
+            <value>These migrations are used to perform manual updates to an imported lab configuration from an older version of BLIS.</value>
+        </term>
+        <term>
+            <key>LAB_DATABASE</key>
+            <value>Lab database</value>
+        </term>
+        <term>
+            <key>SELECT_LAB</key>
+            <value>Select a lab</value>
+        </term>
+        <term>
+            <key>SQL_MIGRATION</key>
+            <value>SQL migration</value>
+        </term>
+    </page>
 </pages>

@@ -2749,4 +2749,70 @@
 			<value>Contient</value>
 		</term>
  </page>
+ <page id="debug" descr="Debug Page">
+    <term>
+        <key>DEBUG_UTILITIES</key>
+        <value>Utilitaires de débogage</value>
+    </term>
+    <term>
+        <key>GIT_COMMIT_SHA</key>
+        <value>SHA du commit Git</value>
+    </term>
+    <term>
+        <key>BROWSE_SOURCE_CODE</key>
+        <value>parcourir le code source</value>
+    </term>
+    <term>
+        <key>AVAILABLE_LOG_FILES</key>
+        <value>Fichiers de journal disponibles</value>
+    </term>
+    <term>
+        <key>LANGUAGE_UTILITIES</key>
+        <value>Utilitaires de langue</value>
+    </term>
+    <term>
+        <key>RESET_UPDATE_LANGUAGE_FILES</key>
+        <value>Réinitialiser/mettre à jour les fichiers de langue</value>
+    </term>
+    <term>
+        <key>DATABASE_UTILITIES</key>
+        <value>Utilitaires de base de données</value>
+    </term>
+    <term>
+        <key>LEGACY_LAB_DATABASE_MIGRATIONS</key>
+        <value>Migrations de la base de données du laboratoire hérité</value>
+    </term>
+    <term>
+        <key>WARNING</key>
+        <value>Attention!</value>
+    </term>
+    <term>
+        <key>MIGRATION_WARNING</key>
+        <value>Exécuter l'une de ces migrations pourrait casser votre configuration de laboratoire DE MANIÈRE PERMANENTE !</value>
+    </term>
+    <term>
+        <key>MIGRATION_DESCRIPTION</key>
+        <value>Ces migrations sont utilisées pour effectuer des mises à jour manuelles d'une configuration de laboratoire importée à partir d'une ancienne version de BLIS.</value>
+    </term>
+    <term>
+        <key>LAB_DATABASE</key>
+        <value>Base de données du laboratoire</value>
+    </term>
+    <term>
+        <key>SELECT_LAB</key>
+        <value>Sélectionnez un laboratoire</value>
+    </term>
+    <term>
+        <key>SQL_MIGRATION</key>
+        <value>Migration SQL</value>
+    </term>
+    <term>
+        <key>SELECT_MIGRATION</key>
+        <value>Sélectionnez une migration</value>
+    </term>
+    <term>
+        <key>APPLY</key>
+        <value>Appliquer</value>
+    </term>
+</page>
 </pages>
