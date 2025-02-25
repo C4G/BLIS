@@ -26,6 +26,7 @@ $LIS_SUPERADMIN = 3;
 $LIS_COUNTRYDIR = 4;
 $LIS_CLERK = 5;
 $LIS_TECH_SHOWPNAME = 13;
+$LIS_SATELLITE_LAB_USER = 20;
 // New user levels for technicians
 // Regn, Results, Reports
 $LIS_001 = 6;
