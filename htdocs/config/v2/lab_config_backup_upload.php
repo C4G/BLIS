@@ -39,7 +39,7 @@ if ($unauthorized) {
 }
 
 if ($unauthorized) {
-    header("HTTP/1.1 401 Unauthorized", true, 401);
+    header(LangUtil::$generalTerms['401_UNAUTHORIZE'], true, 401);
     header("Location: /home.php");
     exit;
 }
@@ -147,7 +147,7 @@ if (!move_uploaded_file($tmp_path, $perm_tmp_path)) {
     </form>
 
     <p>
-        Your data will not be affected. You can restore the data in this backup in the "Lab Backups" screen.
+        <?php echo LangUtil::$generalTerms['DATA_NOT_AFFECTED']; ?>
     </p>
 
 </div>

@@ -13,7 +13,7 @@ $current_user_id = $_SESSION['user_id'];
 $current_user = get_user_by_id($current_user_id);
 
 if (!isset($_REQUEST["lab_config_id"])) {
-    $_SESSION["FLASH"] = "Error deleting lab: no lab specified.";
+    $_SESSION["FLASH"] = LangUtil::$generalTerms['ERROR_LAB_DELETE'];
     header("Location: /lab_config_index.php");
     exit;
 }
@@ -31,7 +31,7 @@ if (is_super_admin($current_user) || is_country_dir($current_user)) {
 }
 
 if ($unauthorized) {
-    header('HTTP/1.1 401 Unauthorized', true, 401);
+    header(LangUtil::$generalTerms['401_UNAUTHORIZE'], true, 401);
     header("Location: /home.php");
     exit;
 }
@@ -66,9 +66,9 @@ if ($confirmed) {
     }
 
     if (!$err) {
-        $_SESSION["FLASH"] = "Lab deleted successfully.";
+        $_SESSION["FLASH"] = LangUtil::$generalTerms['SUCCESS_DELETE'];
     } else {
-        $_SESSION["FLASH"] = "There was a problem deleting the lab. Please see the logs for details.";
+        $_SESSION["FLASH"] = LangUtil::$generalTerms['PROBLEM_LAB_DELETE'];
     }
 
     header("Location: lab_config_index.php");
@@ -110,17 +110,15 @@ form input[type="submit"] {
     <h3 class="section-head">Delete Lab</h3>
 
     <div class="text-center">
-        <p>Are you sure you want to delete <b><?php echo($lab_config_name); ?></b>?</p>
-
-        <p><b>This cannot be undone.</b> ALL data about this lab will be deleted forever!</p>
+        <p><?php echo LangUtil::$pageTerms['TIPS_LABDELETE']; ?></p>
 
         <div class="cancel-ok-buttons">
             <form action="delete_lab_config.php" method="GET">
-                <a class="cancel" href="lab_config_index.php">Cancel</a>
+                <a class="cancel" href="lab_config_index.php"><?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?></a>
 
                 <input type="hidden" name="lab_config_id" value="<?php echo($lab_config_id);?>" />
                 <input type="hidden" name="confirm" value="true" />
-                <input type="submit" value="Delete" />
+                <input type="submit" value="<?php echo LangUtil::$generalTerms['CMD_DELETE']; ?>" />
             </form>
         </div>
     </div>

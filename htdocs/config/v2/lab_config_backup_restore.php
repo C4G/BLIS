@@ -40,7 +40,7 @@ if ($unauthorized) {
 }
 
 if ($unauthorized) {
-    header('HTTP/1.1 401 Unauthorized', true, 401);
+    header(LangUtil::$generalTerms['401_UNAUTHORIZE'], true, 401);
     header("Location: /home.php");
     exit;
 }
@@ -111,11 +111,11 @@ if ($_GET["action"] != "confirm") {
 
     <div id="restore-footer">
         <p class="text-center">
-            <b>This operation cannot be undone.</b> Please ensure you have a current backup before proceeding.
+            <b><?php echo LangUtil::$generalTerms['ALERT_FOR_BACKUP']; ?></b>
         </p>
 
         <div>
-            <a style="float: left" class="text-bold" href="lab_config_backups.php?id=<?php echo($lab_config_id); ?>"><< Cancel</a>
+            <a style="float: left" class="text-bold" href="lab_config_backups.php?id=<?php echo($lab_config_id); ?>"><< <?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?></a>
             <a style="float: right" class="text-bold" href="lab_config_backup_restore.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup_id); ?>&action=confirm">Next >></a>
         </div>
     </div>

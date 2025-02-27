@@ -30,7 +30,7 @@ if ($unauthorized) {
 }
 
 if ($unauthorized) {
-    header('HTTP/1.1 401 Unauthorized', true, 401);
+    header(LangUtil::$generalTerms['404_BAD_REQUEST'], true, 401);
     header("Location: /home.php");
     exit;
 }

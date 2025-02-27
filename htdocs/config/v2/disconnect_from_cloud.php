@@ -25,7 +25,7 @@ if ($unauthorized) {
 }
 
 if ($unauthorized) {
-    header('HTTP/1.1 401 Unauthorized', true, 401);
+    header(LangUtil::$generalTerms['401_UNAUTHORIZE'], true, 401);
     header("Location: /home.php");
     exit;
 }
@@ -34,6 +34,6 @@ $lc_id = db_escape($lab_config_id);
 $query = "UPDATE lab_config SET blis_cloud_hostname = NULL, blis_cloud_connection_key = NULL, blis_cloud_server_pubkey_id = NULL WHERE lab_config_id = $lc_id";
 query_update($query);
 
-$_SESSION['FLASH'] = "Successfully disconnected from cloud.";
+$_SESSION['FLASH'] = LangUtil::$generalTerms['SUCCESS_DISCONNECT'];
 
 header("Location: /lab_config_home.php?id=$lab_config_id");
