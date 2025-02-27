@@ -9759,6 +9759,17 @@ function get_max_test_type_id()
 	DbUtil::switchRestore($saved_db);
 	return $resultset['maxval'];
 }
+
+function getSatelliteLabList()
+{
+	# TODO
+}
+
+function get_satellite_lab_name_by_id($satellite_lab_id)
+{
+	# Returns satellite name corresponding to the lab id
+}
+
 function getDoctorList()
 {
 	$query_string =

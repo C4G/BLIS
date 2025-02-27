@@ -3034,6 +3034,9 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				<?php echo get_specimen_name_by_id($specimen->specimenTypeId); ?>
 			</td>
 			<td>
+				<?php echo get_satellite_lab_name_by_id($specimen->satelliteLabId); ?>
+			</td>
+			<td>
 				<?php echo DateLib::mysqlToString($specimen->dateRecvd); ?>
 			</td>
 			<td>

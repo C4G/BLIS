@@ -42,7 +42,14 @@ else
 if ( substr($session_num,strpos($session_num, "-")+1 ) )
 	$session_num = substr($session_num,0,strpos($session_num, "-"))."-".$dnum;
 */
-	
+
+// Get the satellite lab IDs to populate the dropdown
+$satellite_lab_list = getSatelliteLabList();
+$satellite_lab_options = "";
+foreach($satellite_lab_list as $lab_id => $lab_name) {
+    $satellite_lab_options .= "<option value='$lab_id'>$lab_name</option>";
+}
+
 $doc_array= getDoctorList();
 $ref_array= getRefToList();
 $php_array= addslashes(implode("%", $doc_array));
@@ -332,6 +339,12 @@ function get_testbox(testbox_id, stype_id)
 	);
 }
 
+function get_satellite_lab_dropdown()
+{
+    var satellite_lab_options_list = "<?php echo $satellite_lab_options; ?>";
+    return "<select name='satellite_lab_id'>" + satellite_lab_options_list + "</select>";
+}
+
 function show_dialog_box(div_id)
 {
 	var dialog_id = div_id+"_dialog";
@@ -433,6 +446,7 @@ if($patient == null)
 				<span id='specimenboxes'>
 				<!--[Sep 3, 2018 - Jung Wook] Add a $doc_array variable to the argument of the getNewSpecimenForm function  -->
 				<?php echo $page_elems->getNewSpecimenForm(1, $pid, $dnum, $session_num, $GLOBALS['doc_array']); ?>
+				<br><?php echo LangUtil::$generalTerms['SATELLITE_LAB']; ?>:<span style="color: red;">*</span><?php echo get_satellite_lab_dropdown(); ?>
 				</span>
 				<br>
 				<a href='javascript:add_specimenbox();'><?php echo LangUtil::$pageTerms['ADD_ANOTHER_SPECIMEN']; ?> &raquo;</a>

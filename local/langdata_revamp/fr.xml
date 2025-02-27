@@ -826,8 +826,10 @@
             <key>500_SERVER_ERROR</key>
             <value>HTTP/1.1 500 Erreur Interne du Serveur</value>
         </term>
-
-
+		<term>
+			<key>SATELLITE_LAB</key>
+			<value>Laboratoire Satellite</value>
+		</term>
 	</page>
 	<page id="header" descr="Page Header">
 		<term>
