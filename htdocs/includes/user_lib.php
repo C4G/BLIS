@@ -265,7 +265,7 @@ function get_top_menu_options($user_role, $user_rwoption = "") {
 			$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
 	}
     else if ($user_role == $LIS_SATELLITE_LAB_USER) {
-        $page_list ["Get Test Results"] = "test_results.php";
+        $page_list ["Search"] = "search.php";
     }
 	else if ($user_role == $READONLYMODE) {
 		$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
