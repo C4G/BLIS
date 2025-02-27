@@ -241,6 +241,7 @@ function get_top_menu_options($user_role, $user_rwoption = "") {
 	// Called from perms_check.php
 	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_VERIFIER, $LIS_COUNTRYDIR, $LIS_CLERK, $READONLYMODE, $LIS_PHYSICIAN;
 	global $LIS_001, $LIS_010, $LIS_011, $LIS_100, $LIS_101, $LIS_110, $LIS_111, $LIS_TECH_SHOWPNAME;
+    global $LIS_SATELLITE_LAB_USER;
 	// Global variables from includes/db_constants.php
 	global $SERVER, $ON_ARC;
 	$page_list = array ();
@@ -263,6 +264,9 @@ function get_top_menu_options($user_role, $user_rwoption = "") {
 		if (in_array ( "7", $rw_option ))
 			$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
 	}
+    else if ($user_role == $LIS_SATELLITE_LAB_USER) {
+        $page_list ["Search"] = "search.php";
+    }
 	else if ($user_role == $READONLYMODE) {
 		$page_list [LangUtil::getPageTitle ( "reports" )] = "reports.php";
 	}
@@ -304,7 +308,7 @@ function get_top_menu_options($user_role, $user_rwoption = "") {
 		if (in_array ( "7", $rw_option ))
 			$page_list [LangUtil::$pageTerms ['MENU_BACKUP']] = "backupDataUI.php?id=" . $id;
 	}
-	
+
 	return $page_list;
 }
 function rand_str($length = 32, $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890') {
@@ -354,6 +358,14 @@ function is_country_dir($user) {
 		return true;
 	return false;
 }
+
+function is_satellite_lab_user($user) {
+	global $LIS_SATELLITE_LAB_USER;
+	if ($user->level == $LIS_SATELLITE_LAB_USER)
+		return true;
+	return false;
+}
+
 function get_level_name($level_code) {
 	// Returns string containing user-level
 	global $LIS_PHYSICIAN, $READONLYMODE, $LIS_001, $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_VERIFIER, $LIS_COUNTRYDIR, $LIS_CLERK, $LIS_TECH_SHOWPNAME;
