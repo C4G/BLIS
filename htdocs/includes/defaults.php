@@ -6,7 +6,7 @@
 #
 
 # System version number displayed on page title and footer
-$VERSION = "3.9";
+$VERSION = "3.91";
 
 # Debug mode
 $DEBUG = false;
@@ -58,14 +58,14 @@ $SCREEN_WIDTH = 1000;
 
 #List of available date formats in PHP
 $DATE_FORMAT_LIST = array(
-	"d-m-Y", 
-	"m-d-Y", 
+	"d-m-Y",
+	"m-d-Y",
 	"Y-m-d"
 );
 
 $DATE_FORMAT_PRETTY_LIST = array(
-	"dd-mm-yyyy", 
-	"mm-dd-yyyy", 
+	"dd-mm-yyyy",
+	"mm-dd-yyyy",
 	"yyyy-mm-dd"
 );
 
@@ -97,9 +97,9 @@ $DISABLE_UPDATE_PATIENT_PROFILE = false;
 #Default system patient fields. These fields are predefined in the system
 $SYSTEM_PATIENT_FIELDS = array(
 	'p_field_0' => 'PATIENT_ID',
-	'p_field_9' => 'PATIENT_BARCODE',	
+	'p_field_9' => 'PATIENT_BARCODE',
 	'p_field_10' => 'PATIENT_SIGNATURE',
-	'p_field_1' => 'PATIENT_DAILYNUM',	
+	'p_field_1' => 'PATIENT_DAILYNUM',
 	'p_field_2' => 'ADDL_ID',
 	'p_field_3' => 'GENDER',
 	'p_field_4' => 'AGE',
