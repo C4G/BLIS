@@ -819,15 +819,65 @@
 			<value>Région</value>
 		</term>
 		<term>
-            <key>404_BAD_REQUEST</key>
-            <value>HTTP/1.1 404 Page Non Trouvée</value>
-        </term>
+			<key>404_BAD_REQUEST</key>
+			<value>HTTP/1.1 404 Page Non Trouvée</value>
+    </term>
 		<term>
-            <key>500_SERVER_ERROR</key>
-            <value>HTTP/1.1 500 Erreur Interne du Serveur</value>
-        </term>
-
-
+			<key>401_UNAUTHORIZE</key>
+			<value>HTTP/1.1 401 Non Autorisée</value>
+		</term>
+		<term>
+			<key>500_SERVER_ERROR</key>
+			<value>HTTP/1.1 500 Erreur de serveur interne</value>
+		</term>
+		<term>
+			<key>ERROR_LAB_DELETE</key>
+			<value></value>
+		</term>Erreur lors de la suppression de labo : aucun labo n’est spécifié.
+		<term>
+			<key>SUCCESS_DELETE</key>
+			<value>Supprimé avec succès</value>
+		</term>
+		<term>
+			<key>SUCCESS_DISCONNECT</key>
+			<value>Déconnexion réussie du cloud</value>
+		</term>
+		<term>
+			<key>PROBLEM_LAB_DELETE</key>
+			<value>Il y a eu un problème lors de la suppression du laboratoire. Veuillez consulter les journaux pour plus de détails.</value>
+		</term>
+		<term>
+			<key>ALERT_FOR_BACKUP</key>
+			<value>Cette opération ne peut pas être annulée. Assurez-vous d’avoir une sauvegarde à jour avant de continuer.</value>
+		</term>
+		<term>
+			<key>KEY_MANAGEMENT</key>
+			<value>Gestion des clés</value>
+		</term>
+		<term>
+			<key>DATA_NOT_AFFECTED</key>
+			<value>Vos données ne seront pas affectées. Vous pouvez restaurer les données de cette sauvegarde dans l'écran Sauvegardes de laboratoire.</value>
+		</term>
+		<term>
+			<key>SUCCESS_MIGRATION</key>
+			<value>Les migrations se sont appliquées avec succès.</value>
+		</term>
+		<term>
+			<key>ERROR_MIGRATION</key>
+			<value>Des erreurs se sont produites lors de l'application des migrations.</value>
+		</term>
+		<term>
+			<key>LAB_CONFIG_ADDED</key>
+			<value>Configuration du labo ajoutée</value>
+		</term>
+		<term>
+			<key>SUCCESS_EXPORT</key>
+			<value>Exportation réussie.</value>
+		</term>
+		<term>
+			<key>PENDING_EXPORT</key>
+			<value>Exportation de la configuration du laboratoire. Veuillez patienter..</value>
+		</term>
 	</page>
 	<page id="header" descr="Page Header">
 		<term>
