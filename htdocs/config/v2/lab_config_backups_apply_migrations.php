@@ -37,7 +37,7 @@ if ($unauthorized) {
 }
 
 if ($unauthorized) {
-    header('HTTP/1.1 401 Unauthorized', true, 401);
+    header(LangUtil::$generalTerms['401_UNAUTHORIZE'], true, 401);
     header("Location: /home.php");
     exit;
 }
@@ -46,9 +46,9 @@ $migrator = new LabDatabaseMigrator($lab['db_name']);
 $migrations_successful = $migrator->apply_migrations();
 
 if ($migrations_successful) {
-    $_SESSION["FLASH"] = "Migrations applied successfully.";
+    $_SESSION["FLASH"] = LangUtil::$generalTerms['SUCCESS_MIGRATION'];
 } else {
-    $_SESSION["FLASH"] = "There were errors while applying migrations.";
+    $_SESSION["FLASH"] = LangUtil::$generalTerms['ERROR_MIGRATION'];
 }
 
 header("Location: lab_config_backups.php?id=$lab_config_id");

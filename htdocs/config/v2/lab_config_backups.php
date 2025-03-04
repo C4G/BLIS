@@ -183,10 +183,10 @@ if ($has_pending_migrations) {
                     <a href="download_backup.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>"><?php echo $backup->filename; ?></a>
                 </td>
                 <td>
-                    <a href="lab_config_backup_restore.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>">Restore</a>
+                    <a href="lab_config_backup_restore.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>"><?php echo LangUtil::$generalTerms['CMD_RESTORE']; ?></a>
                 </td>
                 <td>
-                    <a class="delete-backup" href="delete_backup.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>">Delete</a>
+                    <a class="delete-backup" href="delete_backup.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup->id); ?>"><?php echo LangUtil::$generalTerms['CMD_DELETE']; ?></a>
                 </td>
             </tr>
     <?php

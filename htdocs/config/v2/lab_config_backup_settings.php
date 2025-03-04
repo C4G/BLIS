@@ -39,7 +39,7 @@ if ($unauthorized) {
 }
 
 if ($unauthorized) {
-    header('HTTP/1.1 401 Unauthorized', true, 401);
+    header(LangUtil::$generalTerms['401_UNAUTHORIZE'], true, 401);
     header("Location: /home.php");
     exit;
 }
@@ -60,21 +60,21 @@ require_once(__DIR__."/lab_config_backup_header.php");
 ?>
 
 <div id="key-management">
-    <h3 class="section-head">Key Management</h3>
+    <h3 class="section-head"><?php echo LangUtil::$generalTerms['KEY_MANAGEMENT']; ?></h3>
 
     <?php
         if ($super_admin_or_country_dir) {
     ?>
     <p>
         <b>BLIS Cloud Administrator Key</b>:
-        <a href="../../ajax/download_key.php?role=dir">Download Public Key</a>
+        <a href="../../ajax/download_key.php?role=dir"><?php echo LangUtil::$generalTerms['DOWNLOAD_PUBKEY']; ?></a>
     </p>
     <?php
         }
     ?>
     <p>
         <b><?php echo($lab["name"]); ?></b>:
-        <a href="../../ajax/download_key.php?id=<?php echo($lab_config_id) ?>"><?php echo LangUtil::$pageTerms['download_key']; ?></a>
+        <a href="../../ajax/download_key.php?id=<?php echo($lab_config_id) ?>"><?php echo LangUtil::$generalTerms['DOWNLOAD_PUBKEY']; ?></a>
     </p>
 </div>
 

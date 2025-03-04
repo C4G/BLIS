@@ -4,7 +4,7 @@ require_once(__DIR__."/../../users/accesslist.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 
 if (!Features::allow_client_connections()) {
-    header('HTTP/1.1 404 Not Found', true, 404);
+    header(LangUtil::$generalTerms['404_BAD_REQUEST'], true, 404);
     header("Location: /home.php");
     exit;
 }
@@ -38,7 +38,7 @@ if ($unauthorized) {
 }
 
 if ($unauthorized) {
-    header('HTTP/1.1 401 Unauthorized', true, 401);
+    header(LangUtil::$generalTerms['401_UNAUTHORIZE'], true, 401);
     header("Location: /home.php");
     exit;
 }
@@ -85,7 +85,7 @@ require_once(__DIR__."/lib/lab_connection.php");
 </style>
 
 <div id="connect-lab">
-    <h3 class="section-head">Connect Offline Lab</h3>
+    <h3 class="section-head"><?php echo LangUtil::$generalTerms['CONNECT_OFFLINE_LAB']; ?></h3>
 
     <?php
         $connection = LabConnection::find_or_create($lab_config_id);
@@ -128,8 +128,7 @@ require_once(__DIR__."/lib/lab_connection.php");
 <hr>
 
 <div id="connected-labs">
-    <h3 class="section-head">Connected Lab Information</h3>
-
+    <h3 class="section-head"><?php echo LangUtil::$generalTerms['CONNECT_LAB_INFO']; ?></h3>
     <ul>
         <li>Lab name: <?php echo($connection->lab_name); ?></li>
         <li>Last successful backup: <?php echo($last_backup); ?></li>

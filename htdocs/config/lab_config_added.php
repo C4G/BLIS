@@ -21,17 +21,17 @@ function export(labConfigId) {
 </script>
 
 <br>
-<b>Lab Configuration added</b>
+<b><?php echo LangUtil::$generalTerms['LAB_CONFIG_ADDED']; ?></b>
  | <a href='lab_configs.php'>&laquo; Back to Configurations</a>
  | <a href='exportLabConfiguration.php?id=<?php echo $_REQUEST["id"]; ?>'> Export Lab Configuration &raquo; </a></b>
 <br><br>
 
 <div id='successfulExport' style='display:none;'>
-	Export Successful.
+	<?php echo LangUtil::$generalTerms['SUCCESS_EXPORT']; ?>
 </div>
 
 <div id='currentExporting' style='display:none;'>
-	Exporting Lab Configuration. Please wait..	
+	<?php echo LangUtil::$generalTerms['PENDING_EXPORT']; ?>
 </div>
 
 <?php

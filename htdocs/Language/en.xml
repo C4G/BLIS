@@ -674,6 +674,10 @@
             <value>Remove</value>
         </term>
         <term>
+            <key>CMD_RESTORE</key>
+            <value>Restore</value>
+        </term>
+        <term>
             <key>CMD_VERIFY</key>
             <value>Verify</value>
         </term>
@@ -882,8 +886,60 @@
             <value>HTTP/1.1 404 Not Found</value>
         </term>
         <term>
+            <key>401_UNAUTHORIZE</key>
+            <value>HTTP/1.1 401 Unauthorized</value>
+        </term>
+        <term>
             <key>500_SERVER_ERROR</key>
             <value>HTTP/1.1 500 Internal Server Error</value>
+        </term>
+        <term>
+            <key>ERROR_LAB_DELETE</key>
+            <value>Error deleting lab: no lab specified.</value>
+        </term>
+        <term>
+            <key>SUCCESS_DELETE</key>
+            <value>Successfully Deleted</value>
+        </term>
+        <term>
+            <key>SUCCESS_DISCONNECT</key>
+            <value>Successfully disconnected from cloud</value>
+        </term>
+        <term>
+            <key>PROBLEM_LAB_DELETE</key>
+            <value>There was a problem deleting the lab. Please see the logs for details.</value>
+        </term>
+        <term>
+            <key>ALERT_FOR_BACKUP</key>
+            <value>This operation cannot be undone. Please ensure you have a current backup before proceeding.</value>
+        </term>
+        <term>
+            <key>KEY_MANAGEMENT</key>
+            <value>Key Management</value>
+        </term>
+        <term>
+            <key>DATA_NOT_AFFECTED</key>
+            <value>Your data will not be affected. You can restore the data in this backup in the Lab Backups screen.</value>
+        </term>
+        <term>
+            <key>SUCCESS_MIGRATION</key>
+            <value>Migrations applied successfully.</value>
+        </term>
+        <term>
+            <key>ERROR_MIGRATION</key>
+            <value>There were errors while applying migrations.</value>
+        </term>
+        <term>
+            <key>LAB_CONFIG_ADDED</key>
+            <value>Lab Configuration added</value>
+        </term>
+        <term>
+            <key>SUCCESS_EXPORT</key>
+            <value>Export Successful.</value>
+        </term>
+        <term>
+            <key>PENDING_EXPORT</key>
+            <value>Exporting Lab Configuration. Please wait..</value>
         </term>
     </page>
     <page id="header" descr="Page Header">
