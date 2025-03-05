@@ -3363,19 +3363,25 @@ echo "<option value='$lc->id'>$lc->name</option>";
 
 		# Lists patient-profile related tasks in a tips box
             $patientBarcodes = patientBarcodeCheck();
-		global $LIS_TECH_RO, $DISABLE_UPDATE_PATIENT_PROFILE;
+		global $LIS_TECH_RO, $DISABLE_UPDATE_PATIENT_PROFILE, $LIS_SATELLITE_LAB_USER;
 		if($_SESSION['user_level'] != $LIS_TECH_RO)
 		{
 		?>
 			<div class='sidetip_nopos'>
 			<p>
-				<a href='new_specimen.php?pid=<?php echo $patient_id; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register a New Specimen for this Patient'>
-					<?php echo LangUtil::$pageTerms['MSG_REGNEWSPECIMEN']; ?>
-				</a>
+				<?php
+				// Exclude "new_specimen.php" option for satellite user
+				if ($_SESSION['user_level'] != $LIS_SATELLITE_LAB_USER){ 
+				?>
+					<a href='new_specimen.php?pid=<?php echo $patient_id; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register a New Specimen for this Patient'>
+						<?php echo LangUtil::$pageTerms['MSG_REGNEWSPECIMEN']; ?>
+					</a>
+				<?php
+				}
+				?>
 			</p>
 			<?php
-			if(($DISABLE_UPDATE_PATIENT_PROFILE === false)&&(get_level_by_id($_SESSION['user_id']) ==2))
-			{
+			if(($DISABLE_UPDATE_PATIENT_PROFILE === false)&&(get_level_by_id($_SESSION['user_id']) ==2)) {
 				?>
 				<p>
 					<a href='javascript:toggle_profile_divs();' title='Click to Update Patient Profile'>
