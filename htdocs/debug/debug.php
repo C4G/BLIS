@@ -4,9 +4,9 @@ require_once(__DIR__."/util.php");
 
 require_admin_or_401();
 
-LangUtil::setPageId("debug");
-
 require_once(__DIR__."/../includes/header.php");
+
+LangUtil::setPageId("debug");
 
 ?>
 
@@ -18,7 +18,7 @@ require_once(__DIR__."/../includes/header.php");
     }
 </style>
 
-<h2><?php echo LangUtil::$debug['DEBUG_UTILITIES']; ?></h2>
+<h2><?php echo LangUtil::$pageTerms['DEBUG_UTILITIES']; ?></h2>
 
 <?php
     $commit_sha = getenv('GIT_COMMIT_SHA');
@@ -31,10 +31,10 @@ require_once(__DIR__."/../includes/header.php");
 ?>
 
 <p>
-    <b><?php echo LangUtil::$debug['GIT_COMMIT_SHA']; ?>:</b> <code><?php echo($commit_sha); ?></code> <i>(<a href="<?php echo($github_link); ?>"><?php echo LangUtil::$debug['BROWSE_SOURCE_CODE']; ?></a>)</i>
+    <b><?php echo LangUtil::$pageTerms['GIT_COMMIT_SHA']; ?>:</b> <code><?php echo($commit_sha); ?></code> <i>(<a href="<?php echo($github_link); ?>"><?php echo LangUtil::$pageTerms['BROWSE_SOURCE_CODE']; ?></a>)</i>
 </p>
 
-<h3><?php echo LangUtil::$debug['AVAILABLE_LOG_FILES']; ?></h3>
+<h3><?php echo LangUtil::$pageTerms['AVAILABLE_LOG_FILES']; ?></h3>
 
 <ul>
 <?php
@@ -46,26 +46,26 @@ require_once(__DIR__."/../includes/header.php");
 ?>
 </ul>
 
-<h3><?php echo LangUtil::$debug['LANGUAGE_UTILITIES']; ?></h3>
+<h3><?php echo LangUtil::$pageTerms['LANGUAGE_UTILITIES']; ?></h3>
 
 <ul>
-    <li><a href="/debug/debug_update_language.php"><?php echo LangUtil::$debug['RESET_UPDATE_LANGUAGE_FILES']; ?></a></li>
+    <li><a href="/debug/debug_update_language.php"><?php echo LangUtil::$pageTerms['RESET_UPDATE_LANGUAGE_FILES']; ?></a></li>
 </ul>
 
-<h3><?php echo LangUtil::$debug['DATABASE_UTILITIES']; ?></h3>
+<h3><?php echo LangUtil::$pageTerms['DATABASE_UTILITIES']; ?></h3>
 
-<h4><?php echo LangUtil::$debug['LEGACY_LAB_DATABASE_MIGRATIONS']; ?></h4>
+<h4><?php echo LangUtil::$pageTerms['LEGACY_LAB_DATABASE_MIGRATIONS']; ?></h4>
 
 <p>
-    <span class="red-danger"><?php echo LangUtil::$debug['WARNING']; ?></span><br/>
-    <?php echo LangUtil::$debug['MIGRATION_WARNING']; ?><br/>
-    <?php echo LangUtil::$debug['MIGRATION_DESCRIPTION']; ?>
+    <span class="red-danger"><?php echo LangUtil::$pageTerms['WARNING']; ?></span><br/>
+    <?php echo LangUtil::$pageTerms['MIGRATION_WARNING']; ?><br/>
+    <?php echo LangUtil::$pageTerms['MIGRATION_DESCRIPTION']; ?>
 </p>
 
 <form action="/debug/debug_apply_migration.php" method="GET">
-    <label for="migration-lab-select"><?php echo LangUtil::$debug['LAB_DATABASE']; ?>:</label>
+    <label for="migration-lab-select"><?php echo LangUtil::$pageTerms['LAB_DATABASE']; ?>:</label>
     <select id="migration-lab-select" name="lab">
-        <option value=""><?php echo LangUtil::$debug['SELECT_LAB']; ?></option>
+        <option value=""><?php echo LangUtil::$pageTerms['SELECT_LAB']; ?></option>
     <?php
         $lab_configs = get_lab_configs();
         foreach($lab_configs as $lab) {
@@ -77,9 +77,9 @@ require_once(__DIR__."/../includes/header.php");
 
     <br/>
 
-    <label for="migration-select"><?php echo LangUtil::$debug['SQL_MIGRATION']; ?>:</label>
+    <label for="migration-select"><?php echo LangUtil::$pageTerms['SQL_MIGRATION']; ?>:</label>
     <select id="migration-select" name="migration">
-        <option value=""><?php echo LangUtil::$debug['SELECT_MIGRATION']; ?></option>
+        <option value=""><?php echo LangUtil::$pageTerms['SELECT_MIGRATION']; ?></option>
     <?php
         $available_migrations = list_files_like(__DIR__."/../data/", "/db_update_lab/");
         foreach($available_migrations as $migration) {
@@ -90,7 +90,7 @@ require_once(__DIR__."/../includes/header.php");
 
     <br/>
 
-    <input type="submit" value="<?php echo LangUtil::$debug['APPLY']; ?>"/>
+    <input type="submit" value="<?php echo LangUtil::$pageTerms['APPLY']; ?>"/>
 </form>
 
 <?php
