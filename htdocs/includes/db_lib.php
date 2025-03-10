@@ -2469,6 +2469,7 @@ class Specimen
 	public $specimenId;
 	public $specimenTypeId;
 	public $patientId;
+	public $satelliteId;
 	public $statusCodeId;
 	public $referredTo;
 	public $comments;
@@ -2503,6 +2504,10 @@ class Specimen
 		$specimen->specimenId = $record['specimen_id'];
 		$specimen->specimenTypeId = $record['specimen_type_id'];
 		$specimen->patientId = $record['patient_id'];
+		if(isset($record['satellite_id']))
+			$specimen->satelliteId = $record['satellite_id'];
+		else
+			$specimen->satelliteId = null;
 		$specimen->userId = $record['user_id'];
 		$specimen->dateCollected = $record['date_collected'];
 		if(isset($record['date_recvd']))
