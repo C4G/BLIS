@@ -5817,9 +5817,21 @@ function add_user($user)
 		if($user->level == 17) {
 			$user->rwoptions = LabConfig::getDoctorUserOptions();
 		}
+		// If level = 20, generate the satellite_lab_id value
+        if ($user->level == 20) {
+            // Retrieve the last satellite_lab_id (assuming it's auto-incremented)
+            $query_string = "SELECT MAX(satellite_lab_id) AS max_lab_id FROM user";
+            $result = mysql_query($query_string);
+            $row = mysql_fetch_assoc($result);
+            $new_satellite_lab_id = $row['max_lab_id'] + 1;
+        } else {
+            // Set the satellite_lab_id to NULL or handle differently for other levels
+            $new_satellite_lab_id = "NULL"; 
+        }
+
 		$query_string =
-			"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions) ".
-			"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions')";
+			"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions, satellite_lab_id) ".
+			"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions', $new_satellite_lab_id)";
 
 		query_insert_one($query_string);
 		DbUtil::switchRestore($saved_db);
