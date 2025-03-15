@@ -5817,9 +5817,21 @@ function add_user($user)
 		if($user->level == 17) {
 			$user->rwoptions = LabConfig::getDoctorUserOptions();
 		}
+		// If level = 20, generate the satellite_lab_id value
+        if ($user->level == 20) {
+            // Retrieve the last satellite_lab_id (assuming it's auto-incremented)
+            $query_string = "SELECT MAX(satellite_lab_id) AS max_lab_id FROM user";
+            $result = mysql_query($query_string);
+            $row = mysql_fetch_assoc($result);
+            $new_satellite_lab_id = $row['max_lab_id'] + 1;
+        } else {
+            // Set the satellite_lab_id to NULL or handle differently for other levels
+            $new_satellite_lab_id = "NULL"; 
+        }
+
 		$query_string =
-			"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions) ".
-			"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions')";
+			"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions, satellite_lab_id) ".
+			"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions', $new_satellite_lab_id)";
 
 		query_insert_one($query_string);
 		DbUtil::switchRestore($saved_db);
@@ -6585,7 +6597,7 @@ function search_patients_by_id($q, $labsection = 0)
 	return $patient_list;
 }
 
-function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0)
+function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
 	global $con;
@@ -6596,11 +6608,11 @@ function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0)
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient ".
-		"WHERE surr_id='$q' ORDER BY ts DESC LIMIT $offset,$cap";
+		"WHERE surr_id='$q' AND satellite_lab_id = $satellite_lab_id ORDER BY ts DESC LIMIT $offset,$cap";
 	} else {
 		$query_string =
 		"select distinct p.* from patient p, specimen s where ".
-		"p.surr_id ='$q' and p.patient_id = s.patient_id and s.specimen_id in ".
+		"p.surr_id ='$q' and p.satellite_lab_id = $satellite_lab_id and p.patient_id = s.patient_id and s.specimen_id in ".
 		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
 
@@ -6717,7 +6729,7 @@ function search_patients_by_name($q, $labsection = 0,$c="")
 	return $patient_list;
 }
 
-function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0)
+function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
 	global $con;
@@ -6734,11 +6746,11 @@ function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0)
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient  ".
-		"WHERE name LIKE '$q' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC LIMIT $offset,$cap";
+		"WHERE name LIKE '$q' AND satellite_lab_id = $satellite_lab_id AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC LIMIT $offset,$cap";
 	} else {
 		$query_string =
 		"select distinct p.* from patient p, specimen s where ".
-		"p.name LIKE '$q' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+		"p.name LIKE '$q' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
 		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
 	//;
@@ -6747,11 +6759,11 @@ function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0)
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
-			"WHERE name LIKE '$q' ORDER BY name ASC LIMIT $offset,$cap";
+			"WHERE name LIKE '$q' AND satellite_lab_id = $satellite_lab_id ORDER BY name ASC LIMIT $offset,$cap";
 		} else {
 			$query_string =
 			"select distinct p.* from patient p, specimen s where ".
-			"p.name LIKE '$q' and p.patient_id = s.patient_id and s.specimen_id in ".
+			"p.name LIKE '$q' and p.satellite_lab_id = $satellite_lab_id and  p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
 			//;
@@ -6816,7 +6828,7 @@ function search_patients_by_name_count($q, $labsection = 0,$c="")
 	//return $res;
 }
 
-function search_patients_by_addlid($q, $labsection = 0)
+function search_patients_by_addlid($q, $labsection = 0, $satellite_lab_id)
 {
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
@@ -6864,7 +6876,7 @@ function search_patients_by_addlid($q, $labsection = 0)
 	return $patient_list;
 }
 
-function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0)
+function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
 	global $con;
@@ -6876,11 +6888,11 @@ function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0)
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient ".
-		"WHERE addl_id LIKE '%$q%' ORDER BY addl_id ASC LIMIT $offset,$cap";
+		"WHERE addl_id LIKE '%$q%' AND satellite_lab_id = $satellite_lab_id ORDER BY addl_id ASC LIMIT $offset,$cap";
 	} else {
 		$query_string =
 		"select distinct p.* from patient p, specimen s where ".
-		"p.addl_id LIKE '%$q%' and p.patient_id = s.patient_id and s.specimen_id in ".
+		"p.addl_id LIKE '%$q%' and p.satellite_lab_id = $satellite_lab_id and p.patient_id = s.patient_id and s.specimen_id in ".
 		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
 
@@ -6889,11 +6901,11 @@ function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0)
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
-			"WHERE addl_id LIKE '%$q%' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY addl_id ASC LIMIT $offset,$cap";
+			"WHERE addl_id LIKE '%$q%' AND satellite_lab_id = $satellite_lab_id AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY addl_id ASC LIMIT $offset,$cap";
 		} else {
 			$query_string =
 			"select distinct p.* from patient p, specimen s where ".
-			"p.addl_id LIKE '%$q%' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+			"p.addl_id LIKE '%$q%' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
 
