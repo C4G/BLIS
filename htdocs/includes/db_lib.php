@@ -1882,6 +1882,7 @@ class Measure
 class Patient
 {
 	public $patientId; # db primary key
+	public $satelliteId;
 	public $addlId;
 	public $name;
 	public $dob;
@@ -1901,6 +1902,10 @@ class Patient
 			return null;
 		$patient = new Patient();
 		$patient->patientId = $record['patient_id'];
+		if (isset($record['satellite_lab_id']))
+			$patient->satelliteId = $record['satellite_lab_id'];
+		else
+			$patient->satelliteId = null;
 		$patient->addlId = $record['addl_id'];
 		$patient->name = $record['name'];
 		$patient->dob = $record['dob'];
@@ -1943,6 +1948,10 @@ class Patient
 			return null;
 		$patient = new Patient();
 		$patient->patientId = $record['patientId'];
+		if (isset($record['satellite_lab_id']))
+			$patient->satelliteId = $record['satellite_lab_id'];
+		else
+			$patient->satelliteId = null;
 		$patient->addlId = $record['addlId'];
 		$patient->name = $record['name'];
 		$patient->dob = $record['dob'];
@@ -1997,6 +2006,14 @@ class Patient
 			return " - ";
 		else
 			return $this->name;
+	}
+
+	public function getSatelliteLabId()
+	{
+		if($this->satelliteId == "" || $this->satelliteId == null)
+			return " - ";
+		else
+			return $this->satelliteId;
 	}
 
 	public function getAddlId()
@@ -6464,7 +6481,7 @@ function check_patient_id($pid)
 		return true;
 }
 
-function check_spacemen_byname($specimen_name)
+function check_specimen_by_name($specimen_name)
 {
 	# Checks if Specimen already exists in DB, and returns true/false accordingly
 	global $con;

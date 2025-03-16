@@ -2716,6 +2716,10 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<td><u><?php echo LangUtil::$generalTerms['NAME']; ?></u></td>
 					<td><?php echo $patient->getName(); ?></td>
 				</tr>
+				<tr valign='top'>
+					<td><u>Satellite Lab</u></td>
+					<td><?php echo $patient->getSatelliteLabId()?></td>
+				</tr>
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['GENDER']; ?></u></td>
 					<td><?php echo $patient->sex; ?></td>
@@ -3371,7 +3375,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			<p>
 				<?php
 				// Exclude "new_specimen.php" option for satellite user
-				if ($_SESSION['user_level'] != $LIS_SATELLITE_LAB_USER){ 
+				if ($_SESSION['user_level'] != $LIS_SATELLITE_LAB_USER){
 				?>
 					<a href='new_specimen.php?pid=<?php echo $patient_id; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register a New Specimen for this Patient'>
 						<?php echo LangUtil::$pageTerms['MSG_REGNEWSPECIMEN']; ?>
@@ -3513,6 +3517,10 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				<tr valign='top'>
 					<td><u><?php echo LangUtil::$generalTerms['ACCESSION_NUM']; ?></u></td>
 					<td><?php echo $specimen->sessionNum; ?></td>
+				</tr>
+				<tr valign='top'>
+					<td><u>Satellite Lab</u></td>
+					<td><?php echo Patient::getById($specimen->patientId)->getSatelliteLabId()?></td>
 				</tr>
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['PATIENT']; ?></u></td>
