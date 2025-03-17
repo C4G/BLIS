@@ -9,7 +9,7 @@ require_once("../includes/script_elems.php");
 require_once("../includes/SessionCheck.php");
 require_once("../includes/ajax_lib.php");
 LangUtil::setPageId("find_patient");
-global $log;
+
 
 $script_elems = new ScriptElems();
 //$script_elems->enableTableSorter();
@@ -23,7 +23,6 @@ if ($lab_config_id == "") {
 }
 $search_settings = get_lab_config_settings_search($lab_config_id);
 $satellite_lab_id = get_satellite_lab_user_id($_SESSION['user_id']);
-$log->info("Got satellite lab id $satellite_lab_id for lab id $lab_config_id");
 
 $rcap = $search_settings['results_per_page'];
 ?>
@@ -412,7 +411,7 @@ if($a == 0)
         }
         else
         {
-            $patient_list = search_patients_by_id_dyn($q, $result_cap, $result_counter, $lab_section);
+            $patient_list = search_patients_by_id_dyn($q, $result_cap, $result_counter, $lab_section, $satellite_lab_id);
         }
 
 }
@@ -427,7 +426,7 @@ else if($a == 1)
         else
         {
         	//echo "Fetch By Name section is ".$lab_section;
-            $patient_list = search_patients_by_name_dyn($q, $result_cap, $result_counter, $c, $lab_section);
+            $patient_list = search_patients_by_name_dyn($q, $result_cap, $result_counter, $c, $lab_section, $satellite_lab_id);
         }
 	//DB Merging - Currently Disabled
 	# See if there's a patient by the exact same name in another lab
@@ -446,7 +445,7 @@ else if($a == 2)
         }
         else
         {
-            $patient_list = search_patients_by_addlid_dyn($q, $result_cap, $result_counter, $lab_section);
+            $patient_list = search_patients_by_addlid_dyn($q, $result_cap, $result_counter, $lab_section, $satellite_lab_id);
         }
 }
 else if($a == 3)
