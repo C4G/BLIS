@@ -9,6 +9,7 @@ require_once("../includes/script_elems.php");
 require_once("../includes/SessionCheck.php");
 require_once("../includes/ajax_lib.php");
 LangUtil::setPageId("find_patient");
+global $log;
 
 $script_elems = new ScriptElems();
 //$script_elems->enableTableSorter();
@@ -21,6 +22,9 @@ if ($lab_config_id == "") {
     $lab_config_id = $_SESSION['lab_config_id'];
 }
 $search_settings = get_lab_config_settings_search($lab_config_id);
+$satellite_lab_id = get_satellite_lab_user_id($_SESSION['user_id']);
+$log->info("Got satellite lab id $satellite_lab_id for lab id $lab_config_id");
+
 $rcap = $search_settings['results_per_page'];
 ?>
 <style type="text/css">

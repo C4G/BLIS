@@ -8,11 +8,14 @@ $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), $profile_tip);
 
 // Hackity hack
 // Sometimes this isn't set, which causes various problems on this page and others
-if (!isset($_SESSION['lab_config_id']) || $_SESSION['lab_config_id'] == null) {
+if (!isset($_SESSION['lab_config_id']) || $_SESSION['lab_config_id'] == null || $_SESSION['lab_config_id'] == 0) {
     if (User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level'])) {
         $lab_config_list = get_lab_configs($_SESSION['user_id']);
-        $_SESSION['lab_config_id'] = $lab_config_list[0]->id;
+        $lab_config_id = $lab_config_list[0]->id;
+        $_SESSION['lab_config_id'] = $lab_config_id;
     }
+} else {
+    $lab_config_id = $_SESSION['lab_config_id'];
 }
 
 # Enable JavaScript for recording user props and latency values
@@ -63,7 +66,7 @@ $script_elems->enableLatencyRecord();
 $(document).ready(function(){
     $.ajax({
 		type : 'POST',
-		url : 'update/check_version.php?lab_config_id=<?php echo($_SESSION['lab_config_id']); ?>',
+		url : 'update/check_version.php?lab_config_id=<?php echo($lab_config_id); ?>',
 		success : function(data) {
 			if ( data=='0' )
              {
@@ -88,7 +91,7 @@ function blis_update_t()
 function blis_update()
 {
     $.ajax({
-		url : '../update/blis_update.php?lab_config_id=<?php echo($_SESSION['lab_config_id']); ?>',
+		url : '../update/blis_update.php?lab_config_id=<?php echo($lab_config_id); ?>',
 		success : function(data) {
 			if ( data=="true" ) {
                             $('#update_failure').hide();
@@ -120,7 +123,7 @@ echo LangUtil::getPageTerm("TIPS_BLISINTRO");
 ?>
 <br><br>
     <div id="update_div2" style="display:none;" class="warning">
-    <a rel='facebox' id='update_link' href='../update/blis_update.php?lab_config_id=<?php echo($_SESSION['lab_config_id']); ?>'>Click here to complete update to version <?php echo $VERSION ?></a>
+    <a rel='facebox' id='update_link' href='../update/blis_update.php?lab_config_id=<?php echo($lab_config_id); ?>'>Click here to complete update to version <?php echo $VERSION ?></a>
     </div>
 
     <div id="update_div" style="display:none;" class="warning">

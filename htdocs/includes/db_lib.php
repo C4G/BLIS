@@ -27,6 +27,7 @@ $LIS_COUNTRYDIR = 4;
 $LIS_CLERK = 5;
 $LIS_TECH_SHOWPNAME = 13;
 $LIS_SATELLITE_LAB_USER = 20;
+
 // New user levels for technicians
 // Regn, Results, Reports
 $LIS_001 = 6;
@@ -6846,23 +6847,23 @@ function search_patients_by_addlid($q, $labsection = 0)
 		"WHERE addl_id LIKE '%$q%'";
 	} else {
 		$query_string =
-		"select distinct p.* from patient p, specimen s where ".
-		"p.addl_id LIKE '%$q%' and p.patient_id = s.patient_id and s.specimen_id in ".
-		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
-		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
+		"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
+		"p.addl_id LIKE '%$q%' AND p.patient_id = s.patient_id AND s.specimen_id in ".
+		"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test WHERE test_type_id in ".
+		"(SELECT test_type_id AS lab_section FROM test_type WHERE test_category_id = '$labsection')))";
 
 	}
 	} else {
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
-			"WHERE addl_id LIKE '%$q%'  AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1)";
+			"WHERE addl_id LIKE '%$q%'  AND patient.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1)";
 		} else {
 			$query_string =
-			"select distinct p.* from patient p, specimen s where ".
-			"p.addl_id LIKE '%$q%'  AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
-			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
-			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
+			"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
+			"p.addl_id LIKE '%$q%' AND p.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1) AND p.patient_id = s.patient_id AND s.specimen_id in ".
+			"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test WHERE test_type_id in ".
+			"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = '$labsection')))";
 
 		}
 	}
@@ -7103,6 +7104,19 @@ function search_patients_by_dailynum_count($q, $labsection = 0)
 	return $resultset['val'];
 }
 
+function get_satellite_lab_user_id($user_id)
+{
+	# Retrievest the satellite_lab_id associated for the logged user
+    global $con;
+    $user_id = mysql_real_escape_string($user_id, $con);
+ 
+    $saved_db = DbUtil::switchToGlobal();
+    $query_string = "SELECT satellite_lab_id FROM user WHERE user_id = $user_id";
+    $record = query_associative_one($query_string);
+    DbUtil::switchRestore($saved_db);
+    return $record["satellite_lab_id"];
+}
+ 
 function search_specimens_by_id($q)
 {
 	global $con;
@@ -16599,7 +16613,7 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
 		return $resultset;
     }
 
-    function get_user_lab_id($user_id) {
+	function get_user_lab_id($user_id) {
         $saved_db = DbUtil::switchToGlobal();
         $uid = db_escape($user_id);
         $query = "SELECT lab_config_id FROM user WHERE user_id = '$uid';";
