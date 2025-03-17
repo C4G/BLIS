@@ -2717,7 +2717,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<td><?php echo $patient->getName(); ?></td>
 				</tr>
 				<tr valign='top'>
-					<td><u>Satellite Lab</u></td>
+					<td><u>Satellite Lab ID</u></td>
 					<td><?php echo $patient->getSatelliteLabId()?></td>
 				</tr>
 				<tr>
@@ -2799,7 +2799,12 @@ echo "<option value='$lc->id'>$lc->name</option>";
 						<input type='text' name='surr_id' id='surr_id' value='<?php if($patient->surrogateId != undefined) { echo $patient->surrogateId; }?>' class='uniform_width'></input>
 					</td>
 				</tr>
-
+				<tr>
+                	<td><u>Satellite Lab ID</u></td>
+                	<td>
+                    	<input type='text' value='<?php echo $patient->getSatelliteLabId(); ?>' name='satellite_lab_id' class='uniform_width'></input>
+                	</td>
+            	</tr>
 				<tr <?php
 				if($lab_config->patientAddl == 0)
 				{
@@ -3517,10 +3522,6 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				<tr valign='top'>
 					<td><u><?php echo LangUtil::$generalTerms['ACCESSION_NUM']; ?></u></td>
 					<td><?php echo $specimen->sessionNum; ?></td>
-				</tr>
-				<tr valign='top'>
-					<td><u>Satellite Lab</u></td>
-					<td><?php echo Patient::getById($specimen->patientId)->getSatelliteLabId()?></td>
 				</tr>
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['PATIENT']; ?></u></td>

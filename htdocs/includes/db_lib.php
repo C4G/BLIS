@@ -1883,7 +1883,7 @@ class Measure
 class Patient
 {
 	public $patientId; # db primary key
-	public $satelliteId;
+	public $satelliteLabId;
 	public $addlId;
 	public $name;
 	public $dob;
@@ -1904,9 +1904,9 @@ class Patient
 		$patient = new Patient();
 		$patient->patientId = $record['patient_id'];
 		if (isset($record['satellite_lab_id']))
-			$patient->satelliteId = $record['satellite_lab_id'];
+			$patient->satelliteLabId = $record['satellite_lab_id'];
 		else
-			$patient->satelliteId = null;
+			$patient->satelliteLabId = null;
 		$patient->addlId = $record['addl_id'];
 		$patient->name = $record['name'];
 		$patient->dob = $record['dob'];
@@ -1950,9 +1950,9 @@ class Patient
 		$patient = new Patient();
 		$patient->patientId = $record['patientId'];
 		if (isset($record['satellite_lab_id']))
-			$patient->satelliteId = $record['satellite_lab_id'];
+			$patient->satelliteLabId = $record['satellite_lab_id'];
 		else
-			$patient->satelliteId = null;
+			$patient->satelliteLabId = null;
 		$patient->addlId = $record['addlId'];
 		$patient->name = $record['name'];
 		$patient->dob = $record['dob'];
@@ -2011,10 +2011,10 @@ class Patient
 
 	public function getSatelliteLabId()
 	{
-		if($this->satelliteId == "" || $this->satelliteId == null)
+		if($this->satelliteLabId == "" || $this->satelliteLabId == null)
 			return " - ";
 		else
-			return $this->satelliteId;
+			return $this->satelliteLabId;
 	}
 
 	public function getAddlId()
@@ -6435,6 +6435,8 @@ function add_patient($patient, $importOn = false)
 	$surr_id = db_escape($patient->surrogateId);
 	$created_by = db_escape($patient->createdBy);
 	$hash_value = $patient->generateHashValue();
+	$satellite_lab_id = db_escape($patient->satelliteLabId);
+	
 	$query_string = "";
 
 	/* Ensure that no other entry has been added prior to this function being called. If yes, update patientId */
@@ -6447,20 +6449,20 @@ function add_patient($patient, $importOn = false)
 	if($dob == "" && $partial_dob == "")
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `surr_id`, `created_by`, `hash_value` ,`ts`) ".
-			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `surr_id`, `created_by`, `hash_value` ,`ts`, `satellite_lab_id`) ".
+			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id')";
 	}
 	else if($partial_dob != "")
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `partial_dob`, `surr_id`, `created_by`, `hash_value`,`ts`) ".
-			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$partial_dob', '$surr_id', $created_by, '$hash_value', '$receipt_date')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `partial_dob`, `surr_id`, `created_by`, `hash_value`,`ts`, `satellite_lab_id`) ".
+			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$partial_dob', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id')";
 	}
 	else
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `dob`, `age`, `sex`, `surr_id`, `created_by`, `hash_value`, `ts`) ".
-			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `dob`, `age`, `sex`, `surr_id`, `created_by`, `hash_value`, `ts`, `satellite_lab_id`) ".
+			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', $satellite_lab_id')";
 	}
 
 	print $query_string;
@@ -7106,7 +7108,7 @@ function search_patients_by_dailynum_count($q, $labsection = 0)
 
 function get_satellite_lab_user_id($user_id)
 {
-	# Retrievest the satellite_lab_id associated for the logged user
+	# Retrieves the satellite_lab_id associated for the logged user
     global $con;
     $user_id = mysql_real_escape_string($user_id, $con);
  
@@ -7297,6 +7299,7 @@ $pid = $modified_record->patientId;
 		"surr_id='$modified_record->surrogateId', ".
 		"addl_id='$modified_record->addlId', ".
 		"sex='$modified_record->sex', ";
+		"satellite_lab_id='$modified_record->satelliteLabId', ";
 	if($modified_record->age != 0)
 	{
 		$today = date("Y-m-d");

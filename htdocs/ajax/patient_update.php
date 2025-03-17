@@ -42,6 +42,7 @@ $age_param = $_REQUEST['age_param'];
 $dob = "";
 $partial_dob = "";
 $surr_id = $_REQUEST['surr_id'];
+$satellite_lab_id = $_REQUEST['satellite_lab_id'];
 
 if($age_param == 2)
 {
@@ -83,6 +84,7 @@ $updated_profile->dob = $dob;
 $updated_profile->partialDob = $partial_dob;
 $updated_profile->sex = $sex;
 $updated_profile->surrogateId = $surr_id;
+$updated_profile->satelliteLabId = $satellite_lab_id;
 
 $flag = update_patient($updated_profile);
 # Handle custom fields
@@ -94,6 +96,7 @@ foreach($custom_field_list as $custom_field)
 	$custom_data->fieldId = $custom_field->id;
 	$custom_data->fieldValue = $custom_value;
 	$custom_data->patientId = $patient_id;
+	$custom_data->satellite_lab_id = $satellite_lab_id;
 	update_custom_data_patient($custom_data);
 }
 

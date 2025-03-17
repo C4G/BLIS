@@ -33,6 +33,13 @@ class CustomFieldOrderGeneration_Patient{
 		</tr>";
 		}
 	}
+	
+	public static function generate_patient_satellite_lab_id(){
+        echo "<tr>
+			<td><u>Satellite Lab ID</u></td>
+            <td><input type='text' name='satellite_lab_id' id='satellite_lab_id' value='' size='20' class='uniform_width' /></td>
+        </tr>";
+    }
 
 	public static function generate_patient_rdate(){
 		echo"
