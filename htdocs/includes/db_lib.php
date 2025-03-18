@@ -7104,14 +7104,14 @@ function get_satellite_lab_user_id($user_id)
 	# Retrievest the satellite_lab_id associated for the logged user
     global $con;
     $user_id = mysql_real_escape_string($user_id, $con);
- 
+
     $saved_db = DbUtil::switchToGlobal();
     $query_string = "SELECT satellite_lab_id FROM user WHERE user_id = $user_id";
     $record = query_associative_one($query_string);
     DbUtil::switchRestore($saved_db);
     return $record["satellite_lab_id"];
 }
- 
+
 function search_specimens_by_id($q)
 {
 	global $con;
@@ -16612,6 +16612,15 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
         $saved_db = DbUtil::switchToGlobal();
         $uid = db_escape($user_id);
         $query = "SELECT lab_config_id FROM user WHERE user_id = '$uid';";
+        $res = query_associative_one($query);
+        DbUtil::switchRestore($saved_db);
+        return $res['lab_config_id'];
+    }
+
+    function get_first_lab_config_with_admin_user_id($user_id) {
+        $saved_db = DbUtil::switchToGlobal();
+        $uid = db_escape($user_id);
+        $query = "SELECT lab_config_id FROM lab_config WHERE admin_user_id = '$uid' LIMIT 1;";
         $res = query_associative_one($query);
         DbUtil::switchRestore($saved_db);
         return $res['lab_config_id'];

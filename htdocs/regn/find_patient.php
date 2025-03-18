@@ -6,16 +6,16 @@
 #
 include("redirect.php");
 include("includes/header.php");
+require_once(__DIR__."/../config/lab_config_resolver.php");
 LangUtil::setPageId("find_patient");
 
 putUILog('find_patient', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
-
-
 $script_elems->enableDatePicker();
 $script_elems->enableJQueryForm();
 
-$lab_config = get_lab_config_by_id($_SESSION['lab_config_id']);
+$lab_config_id = LabConfigResolver::resolveId();
+$lab_config = get_lab_config_by_id($lab_config_id);
 ?>
 <script type='text/javascript'>
 $(document).ready(function() {
@@ -28,7 +28,7 @@ $(document).ready(function() {
 });
 
 function restrictCharacters(e) {
-	
+
 	var alphabets = /[A-Za-z]/g;
 	var numbers = /[0-9]/g;
 	var specialCharacter = /[_&.]/g;
@@ -36,7 +36,7 @@ function restrictCharacters(e) {
 	if( e.keyCode ) code = e.keyCode;
 	else if ( e.which) code = e.which;
 	var character = String.fromCharCode(code);
-	
+
 	if( !e.ctrlKey && code!=9 && code!=8 && code!=27 && code!=36 && code!=37 && code!=38  && code!=40 &&code!=13 &&code!=32 ) {
 		if ( !character.match(alphabets) && !character.match(numbers) && !character.match(specialCharacter))
 			return false;
@@ -71,7 +71,7 @@ function fetch_patients()
 
 function delete_patient_profile(patientId){
 	if(ConfirmDelete()){
-	var params = "patient_id="+patientId+"&lab_config_id="+<?php echo $lab_config->id;?>;
+	var params = "patient_id="+patientId+"&lab_config_id="+<?php echo($lab_config->id); ?>;
 	//alert("patient Id " + patient_id);
 	$.ajax({
 		type: "POST",
@@ -87,7 +87,7 @@ function delete_patient_profile(patientId){
 			$("#patients_found").html('');
 			$("#add_anyway_div").hide();
 		}
-	}); 
+	});
 }
 }
 
@@ -115,8 +115,8 @@ function continue_fetch_patients()
 		return;
 	}
 	var url = 'ajax/search_p.php';
-	$("#patients_found").load(url, 
-		{q: patient_id, a: search_attrib, c: condition_attrib}, 
+	$("#patients_found").load(url,
+		{q: patient_id, a: search_attrib, c: condition_attrib},
 		function(response)
 		{
 			$('#psearch_progress_spinner').hide();
@@ -153,8 +153,8 @@ function hideCondition(p_attrib)
 		if(LangUtil::$pageTerms['TIPS_REGISTRATION_1']!="-") {
 			echo "This page allows us to register new patients or lookup existing patients based on name, patient ID or number.";
 			echo "</br>";
-		}	
-		
+		}
+
 		?>
 </div>
 
@@ -166,7 +166,7 @@ function hideCondition(p_attrib)
 		<?php $page_elems->getPatientSearchAttribSelect(); ?>
 	</select><select name='h_attrib' id='h_attrib' style='font-family:Tahoma;'>
 		<?php $page_elems->getPatientSearchCondition(); ?>
-        
+
 	</select>
 	&nbsp;&nbsp;
 	<input type='text' name='pq' id='pq' style='font-family:Tahoma;' onkeypress="return restrictCharacters(event)" />
@@ -185,16 +185,16 @@ function hideCondition(p_attrib)
 			echo "<li>";
 			echo LangUtil::$pageTerms['TIPS_REGISTRATION_1'];
 			echo "</li>";
-		}	
+		}
 		if(LangUtil::$pageTerms['TIPS_REGISTRATION_2']!="-") {
-			echo "<li>"; 
+			echo "<li>";
 			echo LangUtil::$pageTerms['TIPS_REGISTRATION_2'];
 			echo "</li>";
 		}
 		if(LangUtil::$pageTerms['TIPS_PATIENT_LOOKUP']!="-")	{
-			echo "<li>"; 
+			echo "<li>";
 			echo LangUtil::$pageTerms['TIPS_PATIENT_LOOKUP'];
-			echo "</li>"; 
+			echo "</li>";
 		}
 		?>
 	</ul>
