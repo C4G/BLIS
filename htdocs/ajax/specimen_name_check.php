@@ -7,7 +7,7 @@ include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
 $specimen_name = $_REQUEST['specimen_name'];
-$specimen_name_exists = check_spacemen_byname($specimen_name);
+$specimen_name_exists = check_specimen_by_name($specimen_name);
 if($specimen_name_exists === false)
 	echo "0";
 else

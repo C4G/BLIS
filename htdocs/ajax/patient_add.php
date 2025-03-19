@@ -18,6 +18,7 @@ $receipt_mm = $_REQUEST['receipt_mm'];
 $receipt_dd = $_REQUEST['receipt_dd'];
 $date_receipt=trim($_REQUEST['receipt_yyyy'])."-".trim($_REQUEST['receipt_mm'])."-".trim($_REQUEST['receipt_dd'])." 00:00:00";//mktime(0, 0, 0, $receipt_mm, $receipt_dd, $receipt_yyyy);
 $pid = $_REQUEST['pid']; # Surrogate key
+$satellite_lab_id = $_REQUEST['satellite_lab_id'];
 # Check partial DOB flags
 $dob = "";
 $partial_dob = "";
@@ -132,6 +133,7 @@ $patient->age = $age;
 $patient->sex = $sex;
 $patient->regDate=$date_receipt;
 $patient->surrogateId = $pid;
+$patient->satelliteLabId = $satellite_lab_id;
 $patient->createdBy = $_SESSION['user_id'];
 update_daily_number_registration();
 $patient_added = add_patient($patient);

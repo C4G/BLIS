@@ -1883,6 +1883,7 @@ class Measure
 class Patient
 {
 	public $patientId; # db primary key
+	public $satelliteLabId;
 	public $addlId;
 	public $name;
 	public $dob;
@@ -1902,6 +1903,10 @@ class Patient
 			return null;
 		$patient = new Patient();
 		$patient->patientId = $record['patient_id'];
+		if (isset($record['satellite_lab_id']))
+			$patient->satelliteLabId = $record['satellite_lab_id'];
+		else
+			$patient->satelliteLabId = null;
 		$patient->addlId = $record['addl_id'];
 		$patient->name = $record['name'];
 		$patient->dob = $record['dob'];
@@ -1944,6 +1949,10 @@ class Patient
 			return null;
 		$patient = new Patient();
 		$patient->patientId = $record['patientId'];
+		if (isset($record['satellite_lab_id']))
+			$patient->satelliteLabId = $record['satellite_lab_id'];
+		else
+			$patient->satelliteLabId = null;
 		$patient->addlId = $record['addlId'];
 		$patient->name = $record['name'];
 		$patient->dob = $record['dob'];
@@ -1998,6 +2007,14 @@ class Patient
 			return " - ";
 		else
 			return $this->name;
+	}
+
+	public function getSatelliteLabId()
+	{
+		if($this->satelliteLabId == "" || $this->satelliteLabId == null)
+			return " - ";
+		else
+			return $this->satelliteLabId;
 	}
 
 	public function getAddlId()
@@ -5817,9 +5834,21 @@ function add_user($user)
 		if($user->level == 17) {
 			$user->rwoptions = LabConfig::getDoctorUserOptions();
 		}
+		// If level = 20, generate the satellite_lab_id value
+        if ($user->level == 20) {
+            // Retrieve the last satellite_lab_id (assuming it's auto-incremented)
+            $query_string = "SELECT MAX(satellite_lab_id) AS max_lab_id FROM user";
+            $result = mysql_query($query_string);
+            $row = mysql_fetch_assoc($result);
+            $new_satellite_lab_id = $row['max_lab_id'] + 1;
+        } else {
+            // Set the satellite_lab_id to NULL or handle differently for other levels
+            $new_satellite_lab_id = "NULL"; 
+        }
+
 		$query_string =
-			"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions) ".
-			"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions')";
+			"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions, satellite_lab_id) ".
+			"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions', $new_satellite_lab_id)";
 
 		query_insert_one($query_string);
 		DbUtil::switchRestore($saved_db);
@@ -6418,6 +6447,8 @@ function add_patient($patient, $importOn = false)
 	$surr_id = db_escape($patient->surrogateId);
 	$created_by = db_escape($patient->createdBy);
 	$hash_value = $patient->generateHashValue();
+	$satellite_lab_id = db_escape($patient->satelliteLabId);
+
 	$query_string = "";
 
 	/* Ensure that no other entry has been added prior to this function being called. If yes, update patientId */
@@ -6430,20 +6461,20 @@ function add_patient($patient, $importOn = false)
 	if($dob == "" && $partial_dob == "")
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `surr_id`, `created_by`, `hash_value` ,`ts`) ".
-			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `surr_id`, `created_by`, `hash_value` ,`ts`, `satellite_lab_id`) ".
+			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id')";
 	}
 	else if($partial_dob != "")
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `partial_dob`, `surr_id`, `created_by`, `hash_value`,`ts`) ".
-			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$partial_dob', '$surr_id', $created_by, '$hash_value', '$receipt_date')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `partial_dob`, `surr_id`, `created_by`, `hash_value`,`ts`, `satellite_lab_id`) ".
+			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$partial_dob', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id')";
 	}
 	else
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `dob`, `age`, `sex`, `surr_id`, `created_by`, `hash_value`, `ts`) ".
-			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `dob`, `age`, `sex`, `surr_id`, `created_by`, `hash_value`, `ts`, `satellite_lab_id`) ".
+			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', $satellite_lab_id')";
 	}
 
 	print $query_string;
@@ -6465,7 +6496,7 @@ function check_patient_id($pid)
 		return true;
 }
 
-function check_spacemen_byname($specimen_name)
+function check_specimen_by_name($specimen_name)
 {
 	# Checks if Specimen already exists in DB, and returns true/false accordingly
 	global $con;
@@ -6588,7 +6619,7 @@ function search_patients_by_id($q, $labsection = 0)
 	return $patient_list;
 }
 
-function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0)
+function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
 	global $con;
@@ -6599,14 +6630,13 @@ function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0)
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient ".
-		"WHERE surr_id='$q' ORDER BY ts DESC LIMIT $offset,$cap";
+		"WHERE surr_id='$q' AND satellite_lab_id = $satellite_lab_id ORDER BY ts DESC LIMIT $offset,$cap";
 	} else {
 		$query_string =
-		"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
-		"p.surr_id ='$q' AND p.patient_id = s.patient_id AND s.specimen_id IN ".
-		"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN (SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
-		"(SELECT test_type_id AS lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
-
+		"select distinct p.* from patient p, specimen s where ".
+		"p.surr_id ='$q' and p.satellite_lab_id = $satellite_lab_id and p.patient_id = s.patient_id and s.specimen_id in ".
+		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
 	}
 
 	$resultset = query_associative_all($query_string);
@@ -6720,7 +6750,7 @@ function search_patients_by_name($q, $labsection = 0,$c="")
 	return $patient_list;
 }
 
-function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0)
+function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
 	global $con;
@@ -6737,26 +6767,26 @@ function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0)
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient  ".
-		"WHERE name LIKE '$q' AND patient.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC LIMIT $offset,$cap";
+		"WHERE name LIKE '$q' AND satellite_lab_id = $satellite_lab_id AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC LIMIT $offset,$cap";
 	} else {
 		$query_string =
-		"SELECT distinct p.* from patient p, specimen s where ".
-		"p.name LIKE '$q' AND p.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
-		"(SELECT specimen_id from specimen where specimen_type_id in (SELECT specimen_type_id from specimen_test where test_type_id in ".
-		"(SELECT test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
+		"select distinct p.* from patient p, specimen s where ".
+		"p.name LIKE '$q' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
 	//;
 	}
 	} else {
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
-			"WHERE name LIKE '$q' ORDER BY name ASC LIMIT $offset,$cap";
+			"WHERE name LIKE '$q' AND satellite_lab_id = $satellite_lab_id ORDER BY name ASC LIMIT $offset,$cap";
 		} else {
 			$query_string =
-			"SELECT distinct p.* from patient p, specimen s where ".
-			"p.name LIKE '$q' and p.patient_id = s.patient_id and s.specimen_id in ".
-			"(SELECT specimen_id from specimen where specimen_type_id in (SELECT specimen_type_id from specimen_test where test_type_id in ".
-			"(SELECT test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
+			"select distinct p.* from patient p, specimen s where ".
+			"p.name LIKE '$q' and p.satellite_lab_id = $satellite_lab_id and  p.patient_id = s.patient_id and s.specimen_id in ".
+			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
 			//;
 		}
 	}
@@ -6819,7 +6849,7 @@ function search_patients_by_name_count($q, $labsection = 0,$c="")
 	//return $res;
 }
 
-function search_patients_by_addlid($q, $labsection = 0)
+function search_patients_by_addlid($q, $labsection = 0, $satellite_lab_id)
 {
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
@@ -6867,7 +6897,7 @@ function search_patients_by_addlid($q, $labsection = 0)
 	return $patient_list;
 }
 
-function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0)
+function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
 	global $con;
@@ -6879,26 +6909,26 @@ function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0)
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient ".
-		"WHERE addl_id LIKE '%$q%' ORDER BY addl_id ASC LIMIT $offset,$cap";
+		"WHERE addl_id LIKE '%$q%' AND satellite_lab_id = $satellite_lab_id ORDER BY addl_id ASC LIMIT $offset,$cap";
 	} else {
 		$query_string =
-		"SELECT distinct p.* from patient p, specimen s where ".
-		"p.addl_id LIKE '%$q%' and p.patient_id = s.patient_id and s.specimen_id in ".
-		"(SELECT specimen_id from specimen where specimen_type_id in (SELECT specimen_type_id from specimen_test where test_type_id in ".
-		"(SELECT test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
+		"select distinct p.* from patient p, specimen s where ".
+		"p.addl_id LIKE '%$q%' and p.satellite_lab_id = $satellite_lab_id and p.patient_id = s.patient_id and s.specimen_id in ".
+		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
 
 	}
 	} else{
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
-			"WHERE addl_id LIKE '%$q%' AND patient.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY addl_id ASC LIMIT $offset,$cap";
+			"WHERE addl_id LIKE '%$q%' AND satellite_lab_id = $satellite_lab_id AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY addl_id ASC LIMIT $offset,$cap";
 		} else {
 			$query_string =
-			"SELECT distinct p.* from patient p, specimen s where ".
-			"p.addl_id LIKE '%$q%' AND p.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
-			"(SELECT specimen_id from specimen where specimen_type_id in (SELECT specimen_type_id from specimen_test where test_type_id in ".
-			"(SELECT test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
+			"select distinct p.* from patient p, specimen s where ".
+			"p.addl_id LIKE '%$q%' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
 
 		}
 	}
@@ -7095,14 +7125,14 @@ function get_satellite_lab_user_id($user_id)
 	# Retrieves the satellite_lab_id associated for the logged user
     global $con;
     $user_id = mysql_real_escape_string($user_id, $con);
- 
+
     $saved_db = DbUtil::switchToGlobal();
     $query_string = "SELECT satellite_lab_id FROM user WHERE user_id = $user_id";
     $record = query_associative_one($query_string);
     DbUtil::switchRestore($saved_db);
     return $record["satellite_lab_id"];
 }
- 
+
 function search_specimens_by_id($q)
 {
 	global $con;
@@ -7282,7 +7312,8 @@ $pid = $modified_record->patientId;
 		"name='$modified_record->name', ".
 		"surr_id='$modified_record->surrogateId', ".
 		"addl_id='$modified_record->addlId', ".
-		"sex='$modified_record->sex', ";
+		"sex='$modified_record->sex', ".
+		"satellite_lab_id='$modified_record->satelliteLabId', ";
 	if($modified_record->age != 0)
 	{
 		$today = date("Y-m-d");

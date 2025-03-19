@@ -132,6 +132,7 @@ function add_patient()
 	}
 	var email = $("#email").attr("value");
 	var phone = $("#phone").attr("value");
+	var satellite_lab_id = $("#satellite_lab_id").attr("value");
 	var error_message = "";
 	var error_flag = 0;
 	var partial_dob_ym = 0;
@@ -246,9 +247,8 @@ function add_patient()
 				alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['TIPS_PATIENTID_EXISTS']; ?>");	
 				return;		
 			}
-	<?php }?>	
-		var data_string = "card_num="+card_num+"&addl_id="+addl_id+"&name="+name+"&yyyy="+yyyy+"&mm="+mm+"&dd="+dd+"&age="+age+"&sex="+sex+"&pd_ym="+partial_dob_ym+"&pd_y="+partial_dob_y+"&agep="+age_param+"&pid="+pid+"&receipt_yyyy="+receipt_yyyy+"&receipt_mm="+receipt_mm+"&receipt_dd="+receipt_dd;
-		// alert(sex);
+	<?php }?>
+		var data_string = "card_num="+card_num+"&addl_id="+addl_id+"&name="+name+"&yyyy="+yyyy+"&mm="+mm+"&dd="+dd+"&age="+age+"&sex="+sex+"&pd_ym="+partial_dob_ym+"&pd_y="+partial_dob_y+"&agep="+age_param+"&pid="+pid+"&receipt_yyyy="+receipt_yyyy+"&receipt_mm="+receipt_mm+"&receipt_dd="+receipt_dd+"&satellite_lab_id="+satellite_lab_id;
 		if(error_flag == 0)
 		{
 			$("#progress_spinner").show();
@@ -430,7 +430,7 @@ function addCustomElements(){
 	?>
 	
 	<?php CustomFieldOrderGeneration_Patient::generate_patient_rdate(); ?>
-
+	<?php CustomFieldOrderGeneration_Patient::generate_patient_satellite_lab_id(); ?>
 	</form>
 	
 	<input type='hidden' name='pid2' id='pid2' value=''></input>
