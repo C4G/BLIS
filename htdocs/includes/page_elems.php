@@ -2716,6 +2716,10 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<td><u><?php echo LangUtil::$generalTerms['NAME']; ?></u></td>
 					<td><?php echo $patient->getName(); ?></td>
 				</tr>
+				<tr valign='top'>
+					<td><u>Satellite Lab ID</u></td>
+					<td><?php echo $patient->getSatelliteLabId()?></td>
+				</tr>
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['GENDER']; ?></u></td>
 					<td><?php echo $patient->sex; ?></td>
@@ -2795,7 +2799,12 @@ echo "<option value='$lc->id'>$lc->name</option>";
 						<input type='text' name='surr_id' id='surr_id' value='<?php if($patient->surrogateId != undefined) { echo $patient->surrogateId; }?>' class='uniform_width'></input>
 					</td>
 				</tr>
-
+				<tr>
+                	<td><u>Satellite Lab ID</u></td>
+                	<td>
+                    	<input type='text' value='<?php echo $patient->getSatelliteLabId(); ?>' name='satellite_lab_id' class='uniform_width'></input>
+                	</td>
+            	</tr>
 				<tr <?php
 				if($lab_config->patientAddl == 0)
 				{
@@ -3371,7 +3380,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 			<p>
 				<?php
 				// Exclude "new_specimen.php" option for satellite user
-				if ($_SESSION['user_level'] != $LIS_SATELLITE_LAB_USER){ 
+				if ($_SESSION['user_level'] != $LIS_SATELLITE_LAB_USER){
 				?>
 					<a href='new_specimen.php?pid=<?php echo $patient_id; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register a New Specimen for this Patient'>
 						<?php echo LangUtil::$pageTerms['MSG_REGNEWSPECIMEN']; ?>
