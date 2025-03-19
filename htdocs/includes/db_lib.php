@@ -6436,7 +6436,7 @@ function add_patient($patient, $importOn = false)
 	$created_by = db_escape($patient->createdBy);
 	$hash_value = $patient->generateHashValue();
 	$satellite_lab_id = db_escape($patient->satelliteLabId);
-	
+
 	$query_string = "";
 
 	/* Ensure that no other entry has been added prior to this function being called. If yes, update patientId */
@@ -7111,14 +7111,14 @@ function get_satellite_lab_user_id($user_id)
 	# Retrieves the satellite_lab_id associated for the logged user
     global $con;
     $user_id = mysql_real_escape_string($user_id, $con);
- 
+
     $saved_db = DbUtil::switchToGlobal();
     $query_string = "SELECT satellite_lab_id FROM user WHERE user_id = $user_id";
     $record = query_associative_one($query_string);
     DbUtil::switchRestore($saved_db);
     return $record["satellite_lab_id"];
 }
- 
+
 function search_specimens_by_id($q)
 {
 	global $con;
@@ -7298,7 +7298,7 @@ $pid = $modified_record->patientId;
 		"name='$modified_record->name', ".
 		"surr_id='$modified_record->surrogateId', ".
 		"addl_id='$modified_record->addlId', ".
-		"sex='$modified_record->sex', ";
+		"sex='$modified_record->sex', ".
 		"satellite_lab_id='$modified_record->satelliteLabId', ";
 	if($modified_record->age != 0)
 	{

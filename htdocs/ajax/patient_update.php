@@ -6,7 +6,7 @@
 include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 
-# Helper function 
+# Helper function
 function get_custom_value($custom_field)
 {
 	# Fetched custom field value from $_REQUEST
@@ -96,11 +96,9 @@ foreach($custom_field_list as $custom_field)
 	$custom_data->fieldId = $custom_field->id;
 	$custom_data->fieldValue = $custom_value;
 	$custom_data->patientId = $patient_id;
-	$custom_data->satellite_lab_id = $satellite_lab_id;
 	update_custom_data_patient($custom_data);
 }
 
 SessionUtil::restore($saved_session);
 echo "1";
 ?>
-

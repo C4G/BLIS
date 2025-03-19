@@ -33,12 +33,12 @@ $font_size = $barcodeSettings['textsize']; //11;
 $(document).ready(function(){
     var code = $('#patientID').val();
     $("#patientBarcodeDiv").barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'bmp'});
-	<?php 
+	<?php
 		if($isUpdate==1){
 	?>
 		toggle_profile_divs();
 	<?php } ?>
-             
+
 
 });
 
@@ -54,10 +54,10 @@ function retrieve_deleted(sid, category){
 			} else {
 				$("#target_div_id_del").html("Specimen cannot be Retrieved");
 			}
-			
+
 		}
-	}); 
-	
+	});
+
 }
 
 
@@ -82,7 +82,7 @@ function print_specimen_barcode(pid, sid)
 
 		}
 	});
-    $("#specimenBarcodeDiv").barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'bmp'});         
+    $("#specimenBarcodeDiv").barcode(code, '<?php echo $code_type; ?>',{barWidth:<?php echo $bar_width; ?>, barHeight:<?php echo $bar_height; ?>, fontSize:<?php echo $font_size; ?>, output:'bmp'});
     Popup($('#specimenBarcodeDiv').html());
 }
 
@@ -91,7 +91,7 @@ function print_patient_barcode()
     Popup($('#patientBarcodeDiv').html());
 }
 
-function Popup(data) 
+function Popup(data)
     {
         var mywindow = window.open('', 'my div', 'height=400,width=600');
         mywindow.document.write('<html><head><title>Barcode</title>');
@@ -114,6 +114,7 @@ function update_profile()
 	var mm = $('#mm').attr("value");
 	var dd = $('#dd').attr("value");
 	var age = $('#age').attr("value");
+	var satellite_lab_id = $("#satellite_lab_id").attr("value");
 	var error_message = "";
 	var error_flag = 0;
 	//Age not given
@@ -129,7 +130,7 @@ function update_profile()
 				return;
 			}
 			$('#pd_ym').attr("value", "1");
-			
+
 		}
 		else if(yyyy.trim() != "" && mm.trim() == "" && dd.trim() == "")
 		{
@@ -163,8 +164,8 @@ function update_profile()
 	{
 		alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['AGE']." ".LangUtil::$generalTerms['INVALID']; ?>");
 		return;
-	}	
-	
+	}
+
 	$('#update_profile_progress').show();
 	var params = $('#profile_update_form').formSerialize();
 	$.ajax({
@@ -176,14 +177,14 @@ function update_profile()
 			alert("Successfully updated");
 			window.location.reload();
 		}
-	});	
+	});
 }
 </script>
 <br>
 <b><?php echo LangUtil::getTitle(); ?></b>
  | <a href='javascript:history.go(-1);'>&laquo; <?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a>
- &nbsp;&nbsp; <?php 
-    			if($isSpecDel){ 
+ &nbsp;&nbsp; <?php
+    			if($isSpecDel){
     		?>
     			<span class='clean-orange' id='msg_box_specimen'>
 					<?php echo "Specimen Deleted Successfully" ?> &nbsp;&nbsp;<a href="javascript:toggle('msg_box_specimen');"><?php echo LangUtil::$generalTerms['CMD_HIDE']; ?></a>&nbsp;&nbsp;
