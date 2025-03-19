@@ -8,7 +8,7 @@ Our project will build on C4G's existing BLIS project. C4G Basic Laboratory Info
 Our project will have a few different goals
 
 - We will build a system for satellite labs to seamlessly access results from source labs. 
-    - Source labs extract specimens from patients and send the speciments to satellite labs that have full capabilities to perform the tests needed. When satellite labs have extracted the results, these are currently sent through PDF's over email or even physically to the source labs. We are building capability within the BLIS system for satellite labs to seamlessly and privately share these results with source labs.
+    - Source labs extract specimens from patients and send the specimens to satellite labs that have full capabilities to perform the tests needed. When satellite labs have extracted the results, these are currently sent through PDF's over email or even physically to the source labs. We are building capability within the BLIS system for satellite labs to seamlessly and privately share these results with source labs.
 - We will improve translation of text for French speakers.
 - We will deploy BLIS-on-cloud to labs.
 - We will fix an existing bug where we can't enroll new clients younger than a year old.
