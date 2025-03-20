@@ -16639,4 +16639,13 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
         return $res['lab_config_id'];
     }
 
+    function get_first_lab_config_with_admin_user_id($user_id) {
+        $saved_db = DbUtil::switchToGlobal();
+        $uid = db_escape($user_id);
+        $query = "SELECT lab_config_id FROM lab_config WHERE admin_user_id = '$uid' LIMIT 1;";
+        $res = query_associative_one($query);
+        DbUtil::switchRestore($saved_db);
+        return $res['lab_config_id'];
+    }
+
 ?>
