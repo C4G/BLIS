@@ -15,10 +15,25 @@ Our project will have a few different goals
 
 
 ## Team Members
-- Sofia Muller: Project management and external communications, assisted in code changes for search functionality for satellite labs, project webpage.
-- Princesca Dorsaint: Leadership, French translation, main contributor to code and database changes for satellite lab functionality.
-- Disha Patel: Satellite labs requirements gathering, UI changes for satellite lab changes, assisted in code changes for satellite lab functionality.
-- Mishwa Bhavsar: French translation.
+- Sofia Muller: 
+    - Team webpage
+    - Funcionality to extract satellite lab id when searching from a satellite lab account
+- Princesca Dorsaint: 
+    - Leadership
+    - French translation
+    - Main contributor to code and database changes for satellite lab
+    functionality.
+    - Modified queries when searching from a satellite lab account
+    - Changed code to add satellite lab field on the specimen info page
+- Disha Patel: 
+    - Satellite labs requirements gathering
+    - UI for satellite lab changes
+        - Modified specimen info page
+        - Added satellite lab field
+    - assisted in code changes for satellite lab functionality.
+- Mishwa Bhavsar:
+    - French translation
+    - Survey for peer evaluations
 Note: Team members goals and contributions will change through the semester.
 
 ## Peer Evaluations
