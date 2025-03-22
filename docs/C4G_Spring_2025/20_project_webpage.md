@@ -15,15 +15,29 @@ Our project will have a few different goals
 
 
 ## Team Members
-- Sofia Muller: Project management and external communications, assisted in code changes for search functionality for satellite labs, project webpage.
-- Princesca Dorsaint: Leadership, French translation, main contributor to code and database changes for satellite lab functionality.
-- Disha Patel: Satellite labs requirements gathering, UI changes for satellite lab changes, assisted in code changes for satellite lab functionality.
-- Mishwa Bhavsar: French translation.
+- Sofia Muller: 
+    - Team webpage
+    - Funcionality to extract satellite lab id when searching from a satellite lab account
+- Princesca Dorsaint: 
+    - Developed functionality to create a satellite lab user type in the db and allow satellite lab user ability to search for patient results. https://github.com/C4G/BLIS/pull/121
+    - Remove satellite lab users ability to remove/modify specimen data. https://github.com/C4G/BLIS/pull/126
+    - Add functionality to auto generate a satellite_lab_id for satellite lab users when creating  a satellite lab user type in the user table. Modify search_patients_by_...dyn functions to take in the $satellite_lab_id variable. Modify sql queries associated with search functions to filter for patients associated with the logged in satellite lab user. https://github.com/C4G/BLIS/pull/130
+    - QA'd changes to ensure end to end functionality.
+- Disha Patel: 
+    - Satellite labs requirements gathering
+    - UI for satellite lab changes
+        - Modified specimen info page
+        - Added satellite lab field
+    - assisted in code changes for satellite lab functionality.
+- Mishwa Bhavsar:
+    - French translation
+    - Survey for peer evaluations
 Note: Team members goals and contributions will change through the semester.
 
 ## Peer Evaluations
 1. Please find our demo application here: https://demo.c4gblis.org/login.php
-2. Answer the following survey: [BLIS Peer Evaluation Survey](https://forms.office.com/Pages/DesignPageV2.aspx?subpage=design&FormId=u5ghSHuuJUuLem1_Mvqgg_CBGTLwWyRMsMkGlgCOR6FUNjNMNFM4MVdSMDJNM0Q2M09GU0xTS0Y2US4u&Token=1093daca5c5c47c09777b6a5339c000d)
+2. Answer the following survey: [BLIS Peer Evaluation Survey](https://forms.office.com/r/snWhypaQiy)
+3. Troubleshooting contact: Sofia Muller or Mishwa Bhavsar on Microsoft teams
 
 ## Lighthouse Scores
 - Performance: 94
