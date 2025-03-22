@@ -36,7 +36,7 @@ Note: Team members goals and contributions will change through the semester.
 
 ## Peer Evaluations
 1. Please find our demo application here: https://demo.c4gblis.org/login.php
-2. Answer the following survey: [BLIS Peer Evaluation Survey](https://forms.office.com/Pages/DesignPageV2.aspx?subpage=design&FormId=u5ghSHuuJUuLem1_Mvqgg_CBGTLwWyRMsMkGlgCOR6FUNjNMNFM4MVdSMDJNM0Q2M09GU0xTS0Y2US4u&Token=1093daca5c5c47c09777b6a5339c000d)
+2. Answer the following survey: [BLIS Peer Evaluation Survey](https://forms.office.com/r/snWhypaQiy)
 3. Troubleshooting contact: Sofia Muller or Mishwa Bhavsar on Microsoft teams
 
 ## Lighthouse Scores
