@@ -26,7 +26,7 @@ Our project will have a few different goals
 - Disha Patel: 
     - [Requirements gathering for Satellite labs feature](https://github.com/C4G/BLIS/pull/116)
     - [UI and database code changes related to adding satellite lab ID, updating satellite lab ID and viewing the satellite lab ID](https://github.com/C4G/BLIS/pull/127)
-    - Performed end-to-end testing of the satellite lab id feature
+    - Performed end-to-end testing of the satellite lab ID feature
 - Mishwa Bhavsar:
     - French translation
     - Survey for peer evaluations
