@@ -17,18 +17,16 @@ Our project will have a few different goals
 ## Team Members
 - Sofia Muller: 
     - Team webpage
-    - Funcionality to extract satellite lab id when searching from a satellite lab account
+    - Functionality to extract satellite lab id when searching from a satellite lab account
 - Princesca Dorsaint: 
     - Developed functionality to create a satellite lab user type in the db and allow satellite lab user ability to search for patient results. https://github.com/C4G/BLIS/pull/121
     - Remove satellite lab users ability to remove/modify specimen data. https://github.com/C4G/BLIS/pull/126
     - Add functionality to auto generate a satellite_lab_id for satellite lab users when creating  a satellite lab user type in the user table. Modify search_patients_by_...dyn functions to take in the $satellite_lab_id variable. Modify sql queries associated with search functions to filter for patients associated with the logged in satellite lab user. https://github.com/C4G/BLIS/pull/130
     - QA'd changes to ensure end to end functionality.
 - Disha Patel: 
-    - Satellite labs requirements gathering
-    - UI for satellite lab changes
-        - Modified specimen info page
-        - Added satellite lab field
-    - assisted in code changes for satellite lab functionality.
+    - [Requirements gathering for Satellite labs feature](https://github.com/C4G/BLIS/pull/116)
+    - [UI and database code changes related to adding satellite lab ID, updating satellite lab ID and viewing the satellite lab ID](https://github.com/C4G/BLIS/pull/127)
+    - Performed end-to-end testing of the satellite lab id feature
 - Mishwa Bhavsar:
     - French translation
     - Survey for peer evaluations
