@@ -171,6 +171,7 @@ $LIS_SUPERADMIN = 3;
 $LIS_COUNTRYDIR = 4;
 $LIS_CLERK = 5;
 $LIS_TECH_SHOWPNAME = 13;
+
 // New user levels for technicians
 // Regn, Results, Reports
 $LIS_001 = 6;
@@ -337,9 +338,6 @@ function get_random_password() {
 function is_admin($user) {
 	// Returns true for admin and superadmin level users
 	global $LIS_VERIFIER, $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_CLERK, $LIS_TECH_SHOWPNAME, $LIS_COUNTRYDIR, $LIS_PHYSICIAN;
-/*	if ($user->level == $LIS_TECH_RO || $user->level == $LIS_TECH_RW || $user->level == $LIS_CLERK || $user->level == $LIS_TECH_SHOWPNAME || $user->level == $LIS_VERIFIER || $user->level == $LIS_PHYSICIAN)
-		return false;
-	return true;*/
 if($user->level==$LIS_ADMIN||$user->level==$LIS_SUPERADMIN||$user->level==$LIS_COUNTRYDIR)
 return true;
 return false;
