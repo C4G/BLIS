@@ -3,10 +3,10 @@
 # Main page for adding new patient into the system
 #
 /*
-$load_time = microtime(); 
-$load_time = explode(' ',$load_time); 
-$load_time = $load_time[1] + $load_time[0]; 
-$page_start = $load_time; 
+$load_time = microtime();
+$load_time = explode(' ',$load_time);
+$load_time = $load_time[1] + $load_time[0];
+$page_start = $load_time;
 */
 
 include("redirect.php");
@@ -22,7 +22,7 @@ $script_elems->enableJQueryForm();
 $script_elems->enableFacebox();
 
 $lab_config = get_lab_config_by_id($_SESSION['lab_config_id']);
-//$daily_num = get_daily_number(); 
+//$daily_num = get_daily_number();
 $session_num = get_session_number();
 $uiinfo = "qr=".$_REQUEST['n'];
 putUILog('new_patient', $uiinfo, basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
@@ -51,12 +51,12 @@ $(document).ready(function(){
 	$('#name').keydown(function() {
 		prefetch_pname();
 	});
-	
-	/* $('#custom_field_form').submit(function() { 
-		// submit the form 
-		$(this).ajaxSubmit({async:false}); 
-		// return false to prevent normal browser submit and page navigation 
-		return false; 
+
+	/* $('#custom_field_form').submit(function() {
+		// submit the form
+		$(this).ajaxSubmit({async:false});
+		// return false to prevent normal browser submit and page navigation
+		return false;
 	}); */
 });
 
@@ -87,7 +87,7 @@ function add_patient()
 	var dd = $("#dd").attr("value");
 	dd = dd.replace(/[^0-9]/gi,'');
 	var receipt_yyyy = $("#receipt_yyyy").attr("value");
-	
+
 	receipt_yyyy = receipt_yyyy.replace(/[^0-9]/gi,'');
 	var receipt_mm = $("#receipt_mm").attr("value");
 	receipt_mm = receipt_mm.replace(/[^0-9]/gi,'');
@@ -136,7 +136,7 @@ function add_patient()
 	var error_message = "";
 	var error_flag = 0;
 	var partial_dob_ym = 0;
-	var partial_dob_y = 0; 
+	var partial_dob_y = 0;
 	for(i = 0; i < document.new_record.sex.length; i++)
 	{
 		if(document.new_record.sex[i].checked)
@@ -155,8 +155,8 @@ function add_patient()
 		error_flag = 1;
 		error_message += "<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['GENDER']; ?>\n";
 	}
-		
-	<?php $_SESSION['pid']= $lab_config->pid; ?>	
+
+	<?php $_SESSION['pid']= $lab_config->pid; ?>
 	if(card_num == "" || !card_num)
 	{
 		error_message += "<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['PATIENT_ID']; ?>\n";
@@ -167,7 +167,7 @@ function add_patient()
 		alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['PATIENT_NAME']; ?>");
 		return;
 	}
-	
+
 	//Age not given
 	if(age.trim() == "")
 	{
@@ -182,7 +182,7 @@ function add_patient()
 				return;
 			}
 			partial_dob_ym =  1;
-			
+
 		}
 		else if(yyyy.trim() != "" && mm.trim() == "" && dd.trim() == "")
 		{
@@ -216,7 +216,7 @@ function add_patient()
 	{
 		alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['AGE']; ?>");
 		return;
-	}	
+	}
 	if(sex == "" || !sex)
 	{
 		alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['GENDER']; ?>");
@@ -235,17 +235,17 @@ function add_patient()
 	<?php
 	}
 	?>
-	
+
 	var check_url = "ajax/patient_check_surr_id.php?sur_id="+pid;
-	$.ajax({ url: check_url, success: function(response){	
+	$.ajax({ url: check_url, success: function(response){
 		<?php
 		if($_SESSION['pid'] == 3 || $_SESSION['pid'] == 4)
 		{
-		?>		
-			if(response == "1")	
-			{		
-				alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['TIPS_PATIENTID_EXISTS']; ?>");	
-				return;		
+		?>
+			if(response == "1")
+			{
+				alert("<?php echo LangUtil::$generalTerms['ERROR'].": ".LangUtil::$generalTerms['TIPS_PATIENTID_EXISTS']; ?>");
+				return;
 			}
 	<?php }?>
 		var data_string = "card_num="+card_num+"&addl_id="+addl_id+"&name="+name+"&yyyy="+yyyy+"&mm="+mm+"&dd="+dd+"&age="+age+"&sex="+sex+"&pd_ym="+partial_dob_ym+"&pd_y="+partial_dob_y+"&agep="+age_param+"&pid="+pid+"&receipt_yyyy="+receipt_yyyy+"&receipt_mm="+receipt_mm+"&receipt_dd="+receipt_dd+"&satellite_lab_id="+satellite_lab_id;
@@ -253,27 +253,27 @@ function add_patient()
 		{
 			$("#progress_spinner").show();
 			//Submit form by ajax
-			$.ajax({  
-				type: "POST",  
-				url: "ajax/patient_add.php", 
+			$.ajax({
+				type: "POST",
+				url: "ajax/patient_add.php",
 				data: data_string,
-				success: function(data) { 
+				success: function(data) {
 					//Add custom fields
 					//$('#custom_field_form').ajaxSubmit();
-						
+
 					//$('#custom_field_form').submit();
 					addCustomElements();
 					$("#progress_spinner").hide();
-					
+
 					/* Retrieve actual DB Key used */
 					var pidStart = data.indexOf("VALUES") + 8;
 					var pidEnd = data.indexOf(",",pidStart);
 					var new_card_num = data.substring(pidStart,pidEnd);
-					
-					/* If DB key used was different from one sent, increase daily num if set in session and card_num to new DB key 
+
+					/* If DB key used was different from one sent, increase daily num if set in session and card_num to new DB key
 					if ( new_card_num != card_num ) {
-							<?php 
-								if($_SESSION['dnum'] != 0) 
+							<?php
+								if($_SESSION['dnum'] != 0)
 								{
 							?>
 									dnum = parseInt(dnum) + 1;
@@ -283,7 +283,7 @@ function add_patient()
 					*/
 						card_num = new_card_num;
 					<?php
-					if( is_numeric($_SESSION['dnum']) && $_SESSION['dnum'] != 0 ) 
+					if( is_numeric($_SESSION['dnum']) && $_SESSION['dnum'] != 0 )
 					{
 					?>
 						window.location = "new_specimen.php?pid="+card_num+"&dnum="+dnum+"&session_num=<?php echo $session_num ?>";
@@ -304,7 +304,7 @@ function add_patient()
 		{
 			alert(error_message);
 		}
-	
+
 		}
 	});
 }
@@ -382,7 +382,7 @@ function addCustomElements(){
 	$(".custom").each(function(){
 		myCustomName.push(this.name);
 	});
-	
+
 	if(myCustomName.length > 0){
 		var card_num = $("#card_num").attr("value");
 		var params = "pid2="+card_num+"&";
@@ -391,16 +391,16 @@ function addCustomElements(){
 			params = params+myCustomName[i]+"="+$('[name="'+myCustomName[i]+'"]').val()+"&";
 		}
 		params = params.match(/(.*).$/)[1];
-			
+
 		$.ajax({
 			url : "ajax/patient_add_custom?"+params,
 			async: false,
 			success : function(data) {
-			}	
+			}
 		});
 	}
 
-	
+
 }
 </script>
 <p style="text-align: right;"><a rel='facebox' href='#regn_sidetip'>Page Help</a></p>
@@ -419,22 +419,22 @@ function addCustomElements(){
 	<?php # Hidden field for db key ?>
 	<input type='hidden' name='card_num' id='card_num' value="<?php echo get_max_patient_id()+1; ?>" ></input>
 	<table cellpadding="2" class='regn_form_table'>
-	<?php CustomFieldOrderGeneration_Patient::init(); 
+	<?php CustomFieldOrderGeneration_Patient::init();
 		  $HTMLFactory = new field_htmlFactory(); ?>
-	<?php 
+	<?php
 		$fieldOrder = $field_odering->form_field_inOrder;
 		$fieldOrder = explode(',', $fieldOrder);
 		foreach($fieldOrder as $fieldName){
 			$HTMLFactory->generateHTML($fieldName);
 		}
 	?>
-	
+
 	<?php CustomFieldOrderGeneration_Patient::generate_patient_rdate(); ?>
-	<?php CustomFieldOrderGeneration_Patient::generate_patient_satellite_lab_id(); ?>
+	<?php CustomFieldOrderGeneration_Patient::generate_patient_satellite_lab_ids_dropdown(); ?>
 	</form>
-	
+
 	<input type='hidden' name='pid2' id='pid2' value=''></input>
-	
+
 	<tr>
 		<td></td>
 		<td>
@@ -449,14 +449,14 @@ function addCustomElements(){
 	</tr>
 </table>
 
-<?php 
+<?php
 /*
-$load_time = microtime(); 
-$load_time = explode(' ',$load_time); 
-$load_time = $load_time[1] + $load_time[0]; 
-$page_end = $load_time; 
-$final_time = ($page_end - $page_start); 
-$page_load_time = number_format($final_time, 4, '.', ''); 
-echo("Page generated in " . $page_load_time . " seconds"); 
+$load_time = microtime();
+$load_time = explode(' ',$load_time);
+$load_time = $load_time[1] + $load_time[0];
+$page_end = $load_time;
+$final_time = ($page_end - $page_start);
+$page_load_time = number_format($final_time, 4, '.', '');
+echo("Page generated in " . $page_load_time . " seconds");
 */
 include("includes/footer.php"); ?>

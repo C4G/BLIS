@@ -33,13 +33,23 @@ class CustomFieldOrderGeneration_Patient{
 		</tr>";
 		}
 	}
-	
-	public static function generate_patient_satellite_lab_id(){
-        echo "<tr>
-			<td>Satellite Lab ID</td>
-            <td><input type='text' name='satellite_lab_id' id='satellite_lab_id' value='' size='20' class='uniform_width' /></td>
-        </tr>";
-    }
+
+	public static function generate_patient_satellite_lab_ids_dropdown(){
+		$satellite_lab_ids = get_all_satellite_lab_ids();
+		echo "<tr>
+				<td>Satellite Lab ID</td>
+				<td>
+					<select name='satellite_lab_id' id='satellite_lab_id' class='uniform_width'>
+						<option value=''>Select Satellite Lab</option>";
+
+		foreach ($satellite_lab_ids as $satellite_lab_id) {
+			echo "<option value='{$satellite_lab_id}'>{$satellite_lab_id}</option>";
+		}
+
+		echo "      </select>
+				</td>
+			</tr>";
+	}
 
 	public static function generate_patient_rdate(){
 		echo"
