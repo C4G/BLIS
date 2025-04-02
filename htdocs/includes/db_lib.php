@@ -6626,7 +6626,7 @@ function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satelli
         $offset = $cap * ($counter - 1);
 	$q = mysql_real_escape_string($q, $con);
 
-
+	if ($_SESSION['user_level'] == 20){
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient ".
@@ -6637,6 +6637,19 @@ function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satelli
 		"p.surr_id ='$q' and p.satellite_lab_id = $satellite_lab_id and p.patient_id = s.patient_id and s.specimen_id in ".
 		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
+	}
+	} if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
+		if($labsection == 0){
+			$query_string =
+			"SELECT * FROM patient ".
+			"WHERE surr_id='$q' ORDER BY ts DESC LIMIT $offset,$cap";
+		} else {
+			$query_string =
+			"select distinct p.* from patient p, specimen s where ".
+			"p.surr_id ='$q' and p.patient_id = s.patient_id and s.specimen_id in ".
+			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
+			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
+		}
 	}
 
 	$resultset = query_associative_all($query_string);
@@ -6760,10 +6773,8 @@ function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0,
 		$q.='%';
     else
 		$q=str_replace('[pq]',$q,$c);
-	//echo "[]".$labsection;
-	$user = get_user_by_id($_SESSION['user_id']);
 
-	if(! is_admin_check($user)){
+	if ($_SESSION['user_level'] == 20){
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient  ".
@@ -6774,23 +6785,21 @@ function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0,
 		"p.name LIKE '$q' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
 		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
-	//;
 	}
-	} else {
+	} if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
-			"WHERE name LIKE '$q' AND satellite_lab_id = $satellite_lab_id ORDER BY name ASC LIMIT $offset,$cap";
+			"WHERE name LIKE '$q' ORDER BY name ASC LIMIT $offset,$cap";
 		} else {
 			$query_string =
 			"select distinct p.* from patient p, specimen s where ".
-			"p.name LIKE '$q' and p.satellite_lab_id = $satellite_lab_id and  p.patient_id = s.patient_id and s.specimen_id in ".
+			"p.name LIKE '$q' and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
-			//;
 		}
 	}
-	//;
+	
 	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -6883,7 +6892,7 @@ function search_patients_by_addlid($q, $labsection = 0, $satellite_lab_id)
 
 		}
 	}
-	//;
+
 	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -6903,9 +6912,9 @@ function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0, $sat
 	global $con;
         $offset = $cap * ($counter - 1);
 	$q = mysql_real_escape_string($q, $con);
+	$user = get_user_by_id($_SESSION['user_id']);
 
-	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
-
+	if ($_SESSION['user_level'] == 20){
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient ".
@@ -6918,21 +6927,21 @@ function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0, $sat
 		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
 
 	}
-	} else{
+	} if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
-			"WHERE addl_id LIKE '%$q%' AND satellite_lab_id = $satellite_lab_id AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY addl_id ASC LIMIT $offset,$cap";
+			"WHERE addl_id LIKE '%$q%' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY addl_id ASC LIMIT $offset,$cap";
 		} else {
 			$query_string =
 			"select distinct p.* from patient p, specimen s where ".
-			"p.addl_id LIKE '%$q%' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
+			"p.addl_id LIKE '%$q%' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
 
 		}
 	}
-	//;
+
 	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
