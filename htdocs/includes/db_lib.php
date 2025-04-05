@@ -7135,11 +7135,11 @@ function get_satellite_lab_user_id($user_id)
 
 function get_all_satellite_lab_ids()
 {
-    global $con;
+    global $con, $LIS_SATELLITE_LAB_USER;
 
     # Retrieves all user IDs corresponding to $LIS_SATELLITE_LAB_USER from the user table
     $saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT satellite_lab_id FROM user WHERE level = 20";
+	$query_string = "SELECT satellite_lab_id FROM user WHERE level = $LIS_SATELLITE_LAB_USER";
 	$resultset = query_associative_all($query_string);
 
 	$satellite_lab_ids = array();
