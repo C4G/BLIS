@@ -132,7 +132,7 @@ class User
 	global $LIS_001, $LIS_010, $LIS_011, $LIS_100, $LIS_101, $LIS_110, $LIS_111, $LIS_TECH_SHOWPNAME;
 		if($user->level!=$LIS_PHYSICIAN&&$user->level!=$READONLYMODE&&$user->level!=$LIS_VERIFIER&&$user->level!=$LIS_TECH_SHOWPNAME&&$user->level!=$LIS_CLERK&&$user->level!=$LIS_COUNTRYDIR&&$user->level!=$LIS_SUPERADMIN&&$user->level!=$LIS_ADMIN&&$user->level!=$LIS_TECH_RO&&$user->level!=$LIS_TECH_RW)
 {
-		$user->rwoptions =get_user_by_level($user->level)->rwoption;
+		$user->rwoptions = get_user_by_level($user->level)->rwoption;
 }
 else
 		$user->rwoptions=$record['rwoptions'];
@@ -5843,7 +5843,7 @@ function add_user($user)
             $new_satellite_lab_id = $row['max_lab_id'] + 1;
         } else {
             // Set the satellite_lab_id to NULL or handle differently for other levels
-            $new_satellite_lab_id = "NULL"; 
+            $new_satellite_lab_id = "NULL";
         }
 
 		$query_string =
@@ -7131,6 +7131,28 @@ function get_satellite_lab_user_id($user_id)
     $record = query_associative_one($query_string);
     DbUtil::switchRestore($saved_db);
     return $record["satellite_lab_id"];
+}
+
+function get_all_satellite_lab_ids()
+{
+    global $con, $LIS_SATELLITE_LAB_USER;
+
+    # Retrieves all user IDs corresponding to $LIS_SATELLITE_LAB_USER from the user table
+    $saved_db = DbUtil::switchToGlobal();
+	$query_string = "SELECT satellite_lab_id FROM user WHERE level = $LIS_SATELLITE_LAB_USER";
+	$resultset = query_associative_all($query_string);
+
+	$satellite_lab_ids = array();
+	if (count($resultset) > 0)
+	{
+		foreach($resultset as $record)
+		{
+			if (isset($record["satellite_lab_id"])){
+				$satellite_lab_ids[] = $record["satellite_lab_id"];
+			}
+		}
+	}
+	return $satellite_lab_ids;
 }
 
 function search_specimens_by_id($q)

@@ -2800,11 +2800,25 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					</td>
 				</tr>
 				<tr>
-                	<td><u>Satellite Lab ID</u></td>
-                	<td>
-                    	<input type='text' value='<?php echo $patient->getSatelliteLabId(); ?>' name='satellite_lab_id' class='uniform_width'></input>
-                	</td>
-            	</tr>
+					<td><u>Satellite Lab ID</u></td>
+					<td>
+						<select name='satellite_lab_id' id='satellite_lab_id' class='uniform_width'>
+							<option value=''>Select Satellite Lab</option>
+							<?php
+							$satellite_lab_ids = get_all_satellite_lab_ids();
+							$selected_satellite_lab_id = $patient->satelliteLabId;
+							foreach ($satellite_lab_ids as $satellite_lab_id) {
+								if ($satellite_lab_id == $selected_satellite_lab_id) {
+									echo "<option value='{$satellite_lab_id}' selected>{$satellite_lab_id}</option>";
+								}
+								else {
+									echo "<option value='{$satellite_lab_id}'>{$satellite_lab_id}</option>";
+								}
+							}
+							?>
+						</select>
+					</td>
+				</tr>
 				<tr <?php
 				if($lab_config->patientAddl == 0)
 				{
