@@ -24,6 +24,8 @@ Our project will have a few different goals
     - Add functionality to auto generate a satellite_lab_id for satellite lab users when creating  a satellite lab user type in the user table. Modify search_patients_by_...dyn functions to take in the $satellite_lab_id variable. Modify sql queries associated with search functions to filter for patients associated with the logged in satellite lab user. https://github.com/C4G/BLIS/pull/130
     - QA'd changes to ensure end to end functionality.
     - Fixed satellite lab filter patient search to apply only to satellite lab users. Use session level to check if user is a satellite lab. If user is a satellite lab, then a satellite lab filter is applied to patient search functions.
+    - Worked on P7 FieldEvaulation.
+    -Attended team, mentor, and stakeholder meetings.
 - Disha Patel: 
     - [Requirements gathering for Satellite labs feature](https://github.com/C4G/BLIS/pull/116)
     - [UI and database code changes related to adding satellite lab ID, updating satellite lab ID and viewing the satellite lab ID](https://github.com/C4G/BLIS/pull/127)
