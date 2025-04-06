@@ -6622,11 +6622,11 @@ function search_patients_by_id($q, $labsection = 0)
 function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
-	global $con;
+	global $con, $LIS_SATELLITE_LAB_USER;
         $offset = $cap * ($counter - 1);
 	$q = mysql_real_escape_string($q, $con);
 
-	if ($_SESSION['user_level'] == 20){
+	if ($_SESSION['user_level'] == $LIS_SATELLITE_LAB_USER){
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient ".
@@ -6638,7 +6638,8 @@ function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satelli
 		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
 	}
-	} if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
+	} 
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
@@ -6766,7 +6767,7 @@ function search_patients_by_name($q, $labsection = 0,$c="")
 function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
-	global $con;
+	global $con, $LIS_SATELLITE_LAB_USER;
         $offset = $cap * ($counter - 1);
 	$q = mysql_real_escape_string($q, $con);
 	if(empty($c))
@@ -6774,7 +6775,7 @@ function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0,
     else
 		$q=str_replace('[pq]',$q,$c);
 
-	if ($_SESSION['user_level'] == 20){
+	if ($_SESSION['user_level'] == $LIS_SATELLITE_LAB_USER){
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient  ".
@@ -6786,7 +6787,8 @@ function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0,
 		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
 		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
 	}
-	} if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
+	} 
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
@@ -6909,12 +6911,12 @@ function search_patients_by_addlid($q, $labsection = 0, $satellite_lab_id)
 function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
-	global $con;
+	global $con, $LIS_SATELLITE_LAB_USER;
         $offset = $cap * ($counter - 1);
 	$q = mysql_real_escape_string($q, $con);
 	$user = get_user_by_id($_SESSION['user_id']);
 
-	if ($_SESSION['user_level'] == 20){
+	if ($_SESSION['user_level'] == $LIS_SATELLITE_LAB_USER){
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient ".
@@ -6927,7 +6929,8 @@ function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0, $sat
 		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
 
 	}
-	} if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
+	} 
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
