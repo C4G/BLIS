@@ -315,7 +315,7 @@ class currencyConfig{
 		//echo "TEST";
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		global $con;
-		$query_string = "SELECT distinct currencyb FROM currency_conversion";
+		$query_string = "SELECT DISTINCT currencyb FROM currency_conversion";
 		$resultset = query_associative_all($query_string);
 		$record_c=array();
 		foreach($resultset as $record)
@@ -334,7 +334,7 @@ class currencyConfig{
 
 	public static function getAllSecondaryCurrencies($lab_config_id, $default_currency) {
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
-		$query_string = "SELECT distinct currencyb FROM currency_conversion where currencya='$default_currency'";
+		$query_string = "SELECT DISTINCT currencyb FROM currency_conversion where currencya='$default_currency'";
 
 		$resultset = query_associative_all($query_string);
 		$record_c=array();
@@ -1230,7 +1230,7 @@ return $retval;
     {
         # Return all test types that have reporting enabled/disabled
         $retval = array();
-        $query_string = " SELECT  distinct b.test_type_id,c.name FROM reference_range a , ".
+        $query_string = " SELECT  DISTINCT b.test_type_id,c.name FROM reference_range a , ".
 		" test_type_measure b,test_type c, test_category d where a.measure_id=b.measure_id  ".
 		" and b.test_type_id=c.test_type_id  and c.test_category_id = d.test_category_id  order by c.name";
 		;
@@ -6581,7 +6581,7 @@ function search_patients_by_id($q, $labsection = 0)
 			"ORDER BY ts DESC";
 		} else {
 			$query_string =
-			"SELECT distinct p.* FROM patient p, specimen s WHERE ".
+			"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
 			"p.surr_id ='$q' AND p.patient_id = s.patient_id AND s.specimen_id IN ".
 			"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN (SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
 			"(SELECT test_type_id AS lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.ts DESC";
@@ -6633,10 +6633,24 @@ function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satelli
 		"WHERE surr_id='$q' AND satellite_lab_id = $satellite_lab_id ORDER BY ts DESC LIMIT $offset,$cap";
 	} else {
 		$query_string =
-		"select distinct p.* from patient p, specimen s where ".
-		"p.surr_id ='$q' and p.satellite_lab_id = $satellite_lab_id and p.patient_id = s.patient_id and s.specimen_id in ".
-		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
-		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
+		"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
+		"p.surr_id ='$q' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id = s.patient_id AND s.specimen_id IN ".
+		"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test where test_type_id IN ".
+		"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
+	}
+	} 
+	if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
+		if($labsection == 0){
+			$query_string =
+			"SELECT * FROM patient ".
+			"WHERE surr_id='$q' ORDER BY ts DESC LIMIT $offset,$cap";
+		} else {
+			$query_string =
+			"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
+			"p.surr_id ='$q' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id = s.patient_id AND s.specimen_id IN ".
+			"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test where test_type_id IN ".
+			"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
+		}
 	}
 	} 
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
@@ -6679,7 +6693,7 @@ function search_patients_by_id_count($q, $labsection = 0)
 			"WHERE surr_id LIKE '$q'";
 		} else {
 			$query_string = "SELECT COUNT(DISTINCT patient.patient_id) AS val FROM patient, specimen ".
-					"WHERE patient.surr_id LIKE '$q' AND patient.patient_id = specimen.patient_id ".
+					"WHERE patient.surr_id LIKE '$q' AND p.satellite_lab_id = $satellite_lab_id AND patient.patient_id = specimen.patient_id ".
 					"AND specimen.specimen_id IN ".
 					"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN ".
 					"(SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
@@ -6689,16 +6703,16 @@ function search_patients_by_id_count($q, $labsection = 0)
 
 		if($labsection == 0){
 			$query_string =
-			"SELECT count(*) as val FROM patient ".
-			"WHERE surr_id LIKE '$q' AND patient.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1)";
+			"SELECT COUNT(*) as val FROM patient ".
+			"WHERE surr_id LIKE '$q' AND patient.patient_id NOT IN (SELECT r_id from removal_record WHERE category='patient' AND removal_record.status=1)";
 		} else {
-			$query_string = "SELECT count(distinct patient.patient_id) as val from patient, specimen ".
-					"where patient.surr_id like '$q' and patient.patient_id = specimen.patient_id ".
-					" AND patient.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1)".
-					" and specimen.specimen_id in ".
-					"(SELECT specimen_id from specimen where specimen_type_id in ".
-					"(SELECT specimen_type_id from specimen_test where test_type_id in ".
-					"(SELECT test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+			$query_string = "SELECT COUNT(DISTINCT patient.patient_id) as val from patient, specimen ".
+					"WHERE patient.surr_id like '$q' AND p.satellite_lab_id = $satellite_lab_id AND patient.patient_id = specimen.patient_id ".
+					" AND patient.patient_id NOT IN (SELECT r_id from removal_record WHERE category='patient' AND removal_record.status=1)".
+					" AND specimen.specimen_id IN ".
+					"(SELECT specimen_id from specimen WHERE specimen_type_id IN ".
+					"(SELECT specimen_type_id from specimen_test WHERE test_type_id IN ".
+					"(SELECT test_type_id as lab_section from test_type WHERE test_category_id = $labsection)))";
 		}
 
 
@@ -6730,8 +6744,8 @@ function search_patients_by_name($q, $labsection = 0,$c="")
 		"WHERE name LIKE '$q' ORDER BY name ASC";
 	} else {
 		$query_string =
-		"SELECT distinct p.* from patient p, specimen s where ".
-		"p.name LIKE '$q' and p.patient_id = s.patient_id and s.specimen_id in ".
+		"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
+		"p.name LIKE '$q' AND p.patient_id = s.patient_id AND s.specimen_id in ".
 		"(SELECT specimen_id from specimen where specimen_type_id in (SELECT specimen_type_id from specimen_test where test_type_id in ".
 		"(SELECT test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC";
 
@@ -6743,7 +6757,7 @@ function search_patients_by_name($q, $labsection = 0,$c="")
 			"WHERE name LIKE '$q'  AND patient.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC";
 		} else {
 			$query_string =
-			"SELECT distinct p.* from patient p, specimen s where ".
+			"SELECT DISTINCT p.* from patient p, specimen s where ".
 			"p.name LIKE '$q'  AND p.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
 			"(SELECT specimen_id from specimen where specimen_type_id in (SELECT specimen_type_id from specimen_test where test_type_id in ".
 			"(SELECT test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC";
@@ -6779,13 +6793,14 @@ function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0,
 	if($labsection == 0){
 		$query_string =
 		"SELECT * FROM patient  ".
-		"WHERE name LIKE '$q' AND satellite_lab_id = $satellite_lab_id AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC LIMIT $offset,$cap";
+		"WHERE name LIKE '$q' AND satellite_lab_id = $satellite_lab_id AND patient.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY name ASC LIMIT $offset,$cap";
 	} else {
 		$query_string =
-		"select distinct p.* from patient p, specimen s where ".
-		"p.name LIKE '$q' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
-		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
-		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
+		"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
+		"p.name LIKE '$q' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1) AND p.patient_id = s.patient_id AND s.specimen_id in ".
+		"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test WHERE test_type_id in ".
+		"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
+	//;
 	}
 	} 
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
@@ -6795,10 +6810,11 @@ function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0,
 			"WHERE name LIKE '$q' ORDER BY name ASC LIMIT $offset,$cap";
 		} else {
 			$query_string =
-			"select distinct p.* from patient p, specimen s where ".
-			"p.name LIKE '$q' and p.patient_id = s.patient_id and s.specimen_id in ".
-			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
-			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
+			"SELECT DISTINCT p.* from patient p, specimen s where ".
+			"p.name LIKE '$q' and p.satellite_lab_id = $satellite_lab_id and  p.patient_id = s.patient_id and s.specimen_id in ".
+			"(SELECT specimen_id from specimen where specimen_type_id in (SELECT specimen_type_id from specimen_test where test_type_id in ".
+			"(SELECT test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.name ASC LIMIT $offset,$cap";
+			//;
 		}
 	}
 	
@@ -6828,27 +6844,27 @@ function search_patients_by_name_count($q, $labsection = 0,$c="")
 	if(! is_admin_check(get_user_by_id($_SESSION['user_id']))){
 		if($labsection == 0){
 			$query_string =
-			"SELECT count(*) as val FROM patient  ".
-			"WHERE name LIKE '$q' AND patient.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1)";
+			"SELECT COUNT(*) AS val FROM patient  ".
+			"WHERE name LIKE '$q' AND p.satellite_lab_id = $satellite_lab_id AND patient.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1)";
 		} else {
 			$query_string =
-			"SELECT count(distinct p.patient_id) as val from patient p, specimen s where ".
-			"p.name LIKE '$q' AND p.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
-			"(SELECT specimen_id from specimen where specimen_type_id in (SELECT specimen_type_id from specimen_test where test_type_id in ".
-			"(SELECT test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
+			"SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p, specimen s WHERE ".
+			"p.name LIKE '$q' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1) AND p.patient_id = s.patient_id AND s.specimen_id IN ".
+			"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id from specimen_test WHERE test_type_id in ".
+			"(SELECT test_type_id as lab_section from test_type WHERE test_category_id = '$labsection')))";
 
 		}
 	} else {
 		if($labsection == 0){
 			$query_string =
-			"SELECT count(*) as val FROM patient ".
-			"WHERE name LIKE '$q'";
+			"SELECT COUNT(*) AS val FROM patient ".
+			"WHERE name LIKE '$q' AND p.satellite_lab_id = $satellite_lab_id";
 		} else {
 			$query_string =
-			"SELECT count(distinct p.patient_id) as val from patient p, specimen s where ".
-			"p.name LIKE '$q' and p.patient_id = s.patient_id and s.specimen_id in ".
-			"(SELECT specimen_id from specimen where specimen_type_id in (SELECT specimen_type_id from specimen_test where test_type_id in ".
-			"(SELECT test_type_id as lab_section from test_type where test_category_id = '$labsection')))";
+			"SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p, specimen s WHERE ".
+			"p.name LIKE '$q' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id = s.patient_id and s.specimen_id in ".
+			"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test where test_type_id in ".
+			"(SELECT test_type_id A lab_section FROM test_type WHERE test_category_id = '$labsection')))";
 
 		}
 	}
@@ -6875,8 +6891,8 @@ function search_patients_by_addlid($q, $labsection = 0, $satellite_lab_id)
 	} else {
 		$query_string =
 		"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
-		"p.addl_id LIKE '%$q%' AND p.patient_id = s.patient_id AND s.specimen_id in ".
-		"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test WHERE test_type_id in ".
+		"p.addl_id LIKE '%$q%' AND p.patient_id = s.patient_id AND s.specimen_id IN ".
+		"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
 		"(SELECT test_type_id AS lab_section FROM test_type WHERE test_category_id = '$labsection')))";
 
 	}
@@ -6884,12 +6900,12 @@ function search_patients_by_addlid($q, $labsection = 0, $satellite_lab_id)
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
-			"WHERE addl_id LIKE '%$q%'  AND patient.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1)";
+			"WHERE addl_id LIKE '%$q%' AND patient.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1)";
 		} else {
 			$query_string =
 			"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
 			"p.addl_id LIKE '%$q%' AND p.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1) AND p.patient_id = s.patient_id AND s.specimen_id in ".
-			"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test WHERE test_type_id in ".
+			"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN (SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
 			"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = '$labsection')))";
 
 		}
@@ -6923,10 +6939,10 @@ function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0, $sat
 		"WHERE addl_id LIKE '%$q%' AND satellite_lab_id = $satellite_lab_id ORDER BY addl_id ASC LIMIT $offset,$cap";
 	} else {
 		$query_string =
-		"select distinct p.* from patient p, specimen s where ".
-		"p.addl_id LIKE '%$q%' and p.satellite_lab_id = $satellite_lab_id and p.patient_id = s.patient_id and s.specimen_id in ".
-		"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
-		"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
+		"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
+		"p.addl_id LIKE '%$q%' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id = s.patient_id AND s.specimen_id IN ".
+		"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN (SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
+		"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
 
 	}
 	} 
@@ -6934,13 +6950,13 @@ function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0, $sat
 		if($labsection == 0){
 			$query_string =
 			"SELECT * FROM patient ".
-			"WHERE addl_id LIKE '%$q%' AND patient.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY addl_id ASC LIMIT $offset,$cap";
+			"WHERE addl_id LIKE '%$q%' AND satellite_lab_id = $satellite_lab_id AND patient.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1) ORDER BY addl_id ASC LIMIT $offset,$cap";
 		} else {
 			$query_string =
-			"select distinct p.* from patient p, specimen s where ".
-			"p.addl_id LIKE '%$q%' AND p.patient_id NOT IN (select r_id from removal_record where category='patient' AND removal_record.status=1) and p.patient_id = s.patient_id and s.specimen_id in ".
-			"(select specimen_id from specimen where specimen_type_id in (select specimen_type_id from specimen_test where test_type_id in ".
-			"(select test_type_id as lab_section from test_type where test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
+			"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
+			"p.addl_id LIKE '%$q%' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1) AND p.patient_id = s.patient_id AND s.specimen_id IN ".
+			"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN (SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
+			"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.addl_id ASC LIMIT $offset,$cap";
 
 		}
 	}
@@ -6968,30 +6984,30 @@ function search_patients_by_addlid_count($q, $labsection = 0)
 
 	if($labsection == 0){
 		$query_string =
-		"SELECT count(*) as val FROM patient ".
+		"SELECT COUNT(*) as val FROM patient ".
 		"WHERE addl_id LIKE '%$q%'";
 	}
 	else {
-		$query_string = "SELECT count(distinct patient.patient_id) as val from patient, specimen ".
-				"where patient.addl_id LIKE '%$q%' and patient.patient_id = specimen.patient_id ".
-				"and specimen.specimen_id in ".
-				"(SELECT specimen_id from specimen where specimen_type_id in ".
-				"(SELECT specimen_type_id from specimen_test where test_type_id in ".
-				"(SELECT test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+		$query_string = "SELECT COUNT(DISTINCT patient.patient_id) as val FROM patient, specimen ".
+				"WHERE patient.addl_id LIKE '%$q%' AND p.satellite_lab_id = $satellite_lab_id AND patient.patient_id = specimen.patient_id ".
+				"AND specimen.specimen_id IN ".
+				"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN ".
+				"(SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
+				"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = $labsection)))";
 	}
 	} else {
 		if($labsection == 0){
 			$query_string =
-			"SELECT count(*) as val FROM patient ".
-			"WHERE addl_id LIKE '%$q%' AND patient.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1)";
+			"SELECT COUNT(*) as val FROM patient ".
+			"WHERE addl_id LIKE '%$q%' AND p.satellite_lab_id = $satellite_lab_id AND patient.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1)";
 		}
 		else {
-			$query_string = "SELECT count(distinct patient.patient_id) as val from patient, specimen ".
-					"where patient.addl_id LIKE '%$q%' AND patient.patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) and patient.patient_id = specimen.patient_id ".
-					"and specimen.specimen_id in ".
-					"(SELECT specimen_id from specimen where specimen_type_id in ".
-					"(SELECT specimen_type_id from specimen_test where test_type_id in ".
-					"(SELECT test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+			$query_string = "SELECT COUNT(DISTINCT patient.patient_id) as val FROM patient, specimen ".
+					"WHERE patient.addl_id LIKE '%$q%' AND p.satellite_lab_id = $satellite_lab_id AND patient.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1) AND patient.patient_id = specimen.patient_id ".
+					"AND specimen.specimen_id IN ".
+					"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN ".
+					"(SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
+					"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = $labsection)))";
 		}
 	}
 	//;
@@ -7011,24 +7027,24 @@ function search_patients_by_dailynum($q, $labsection = 0)
 	if($labsection == 0){
 		$query_string = "SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' ORDER BY date_collected DESC LIMIT 20";
 	} else {
-	$query_string = "SELECT distinct patient_id from specimen ".
-			"where specimen.daily_num like '%$q' ".
-			"and specimen.specimen_id in ".
-				"(SELECT specimen_id from specimen where specimen_type_id in ".
-				"(SELECT specimen_type_id from specimen_test where test_type_id in ".
-				"(SELECT test_type_id as lab_section from test_type where test_category_id = $labsection)))".
+	$query_string = "SELECT DISTINCT patient_id FROM specimen ".
+			"WHERE specimen.daily_num like '%$q' ".
+			"AND specimen.specimen_id IN ".
+				"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN ".
+				"(SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
+				"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = $labsection)))".
 				"  ORDER BY date_collected DESC LIMIT 20";
 	}
 	} else {
 		if($labsection == 0){
-			$query_string = "SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' AND patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) ORDER BY date_collected DESC LIMIT 20";
+			$query_string = "SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' AND patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1) ORDER BY date_collected DESC LIMIT 20";
 		} else {
-			$query_string = "SELECT distinct patient_id from specimen ".
-					"where specimen.daily_num like '%$q'  AND patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) ".
-					"and specimen.specimen_id in ".
-					"(SELECT specimen_id from specimen where specimen_type_id in ".
-					"(SELECT specimen_type_id from specimen_test where test_type_id in ".
-					"(SELECT test_type_id as lab_section from test_type where test_category_id = $labsection)))".
+			$query_string = "SELECT DISTINCT patient_id FROM specimen ".
+					"WHERE specimen.daily_num like '%$q'  AND patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1) ".
+					"AND specimen.specimen_id IN ".
+					"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN ".
+					"(SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
+					"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = $labsection)))".
 					"  ORDER BY date_collected DESC LIMIT 20";
 		}
 	}
@@ -7057,26 +7073,26 @@ function search_patients_by_dailynum_dyn($q, $cap, $counter, $labsection = 0)
 		$query_string =
 		"SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' ORDER BY date_collected DESC LIMIT $offset,$cap";
 	} else {
-		$query_string = "SELECT distinct patient_id from specimen ".
-			"where specimen.daily_num like '%$q' ".
-			"and specimen.specimen_id in ".
-				"(SELECT specimen_id from specimen where specimen_type_id in ".
-				"(SELECT specimen_type_id from specimen_test where test_type_id in ".
-				"(SELECT test_type_id as lab_section from test_type where test_category_id = $labsection)))".
+		$query_string = "SELECT DISTINCT patient_id FROM specimen ".
+			"WHERE specimen.daily_num like '%$q' ".
+			"AND specimen.specimen_id IN ".
+				"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN ".
+				"(SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
+				"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = $labsection)))".
 				"  ORDER BY date_collected DESC LIMIT $offset,$cap";
 
 	}
 	} else {
 		if($labsection == 0){
 			$query_string =
-			"SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' AND patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1)  ORDER BY date_collected DESC LIMIT $offset,$cap";
+			"SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' AND patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1)  ORDER BY date_collected DESC LIMIT $offset,$cap";
 		} else {
-			$query_string = "SELECT distinct patient_id from specimen ".
-					"where specimen.daily_num like '%$q'  AND patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) ".
-					"and specimen.specimen_id in ".
-					"(SELECT specimen_id from specimen where specimen_type_id in ".
-					"(SELECT specimen_type_id from specimen_test where test_type_id in ".
-					"(SELECT test_type_id as lab_section from test_type where test_category_id = $labsection)))".
+			$query_string = "SELECT DISTINCT patient_id FROM specimen ".
+					"WHERE specimen.daily_num like '%$q'  AND patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1) ".
+					"AND specimen.specimen_id IN ".
+					"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN ".
+					"(SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
+					"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = $labsection)))".
 					"  ORDER BY date_collected DESC LIMIT $offset,$cap";
 
 		}
@@ -7103,25 +7119,25 @@ function search_patients_by_dailynum_count($q, $labsection = 0)
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 	if($labsection == 0){
 		$query_string =
-		"SELECT count(DISTINCT patient_id) as val FROM specimen WHERE daily_num LIKE '%$q'";
+		"SELECT COUNT(DISTINCT patient_id) as val FROM specimen WHERE daily_num LIKE '%$q'";
 	} else {
-		$query_string = "SELECT count(distinct specimen.patient_id) as val from specimen ".
-				"where specimen.daily_num like '%$q' ".
-				"and specimen.specimen_id in ".
-				"(SELECT specimen_id from specimen where specimen_type_id in ".
-				"(SELECT specimen_type_id from specimen_test where test_type_id in ".
-				"(SELECT test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+		$query_string = "SELECT COUNT(DISTINCT specimen.patient_id) as val FROM specimen ".
+				"WHERE specimen.daily_num like '%$q' ".
+				"AND specimen.specimen_id IN ".
+				"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN ".
+				"(SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
+				"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = $labsection)))";
 	} } else {
 		if($labsection == 0){
 			$query_string =
-			"SELECT count(DISTINCT patient_id) as val FROM specimen WHERE daily_num LIKE '%$q'  AND patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1)";
+			"SELECT COUNT(DISTINCT patient_id) as val FROM specimen WHERE daily_num LIKE '%$q'  AND patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1)";
 		} else {
-		$query_string = "SELECT count(distinct specimen.patient_id) as val from specimen ".
-				"where specimen.daily_num like '%$q'  AND patient_id NOT IN (SELECT r_id from removal_record where category='patient' AND removal_record.status=1) ".
-				"and specimen.specimen_id in ".
-				"(SELECT specimen_id from specimen where specimen_type_id in ".
-				"(SELECT specimen_type_id from specimen_test where test_type_id in ".
-				"(SELECT test_type_id as lab_section from test_type where test_category_id = $labsection)))";
+		$query_string = "SELECT COUNT(DISTINCT specimen.patient_id) as val FROM specimen ".
+				"WHERE specimen.daily_num like '%$q' AND p.satellite_lab_id = $satellite_lab_id AND patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1) ".
+				"AND specimen.specimen_id IN ".
+				"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN ".
+				"(SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
+				"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = $labsection)))";
 		}
 	}
 
@@ -8041,7 +8057,7 @@ function get_reagent_name()
 {
 $retval= array();
 $saved_db = DbUtil::switchToLabConfigRevamp();
-$query_string = "SELECT distinct(name) FROM stock_details ";
+$query_string = "SELECT DISTINCT(name) FROM stock_details ";
 $resultset = query_associative_all($query_string);
 		//print $resultset[0];
 		if($resultset!=null)
@@ -8611,7 +8627,7 @@ function  insert_import_entry($id)
 function get_lab_configs_imported()
 {
     $saved_db = DbUtil::switchToGlobal();
-    $query_configs = "SELECT distinct lab_config_id from import_log";
+    $query_configs = "SELECT DISTINCT lab_config_id from import_log";
     $retval = array();
 	$resultset = query_associative_all($query_configs);
 	if($resultset == null)
@@ -10358,7 +10374,7 @@ function get_compatible_test_types($lab_config_id, $specimen_type_id)
 	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
 	$query_string =
-		"SELECT distinct tt.* FROM test_type tt, lab_config_test_type lctt, specimen_test st ".
+		"SELECT DISTINCT tt.* FROM test_type tt, lab_config_test_type lctt, specimen_test st ".
 		"WHERE tt.test_type_id=lctt.test_type_id ".
 		"AND lctt.lab_config_id=$lab_config_id ".
 		"AND st.specimen_type_id=$specimen_type_id ".
@@ -16668,15 +16684,6 @@ VALUES (NULL , '$this->username', '$this->password', '$this->orgUnit', '$this->d
         $saved_db = DbUtil::switchToGlobal();
         $uid = db_escape($user_id);
         $query = "SELECT lab_config_id FROM user WHERE user_id = '$uid';";
-        $res = query_associative_one($query);
-        DbUtil::switchRestore($saved_db);
-        return $res['lab_config_id'];
-    }
-
-    function get_first_lab_config_with_admin_user_id($user_id) {
-        $saved_db = DbUtil::switchToGlobal();
-        $uid = db_escape($user_id);
-        $query = "SELECT lab_config_id FROM lab_config WHERE admin_user_id = '$uid' LIMIT 1;";
         $res = query_associative_one($query);
         DbUtil::switchRestore($saved_db);
         return $res['lab_config_id'];

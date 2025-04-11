@@ -17,6 +17,5 @@ else if($a == 3)
     $count = search_patients_by_dailynum_count("-".$q, $labsection);
 else if($a == 9)
     $count = search_patients_by_db_id_count($q, $labsection);
-
 echo $count;
 ?>
