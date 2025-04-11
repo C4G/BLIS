@@ -2717,8 +2717,8 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<td><?php echo $patient->getName(); ?></td>
 				</tr>
 				<tr valign='top'>
-					<td><u>Satellite Lab ID</u></td>
-					<td><?php echo $patient->getSatelliteLabId()?></td>
+					<td><u>Satellite Lab Name</u></td>
+					<td><?php echo $patient->getSatelliteLabName()?></td>
 				</tr>
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['GENDER']; ?></u></td>
@@ -2800,19 +2800,19 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					</td>
 				</tr>
 				<tr>
-					<td><u>Satellite Lab ID</u></td>
+					<td><u>Satellite Lab Name</u></td>
 					<td>
-						<select name='satellite_lab_id' id='satellite_lab_id' class='uniform_width'>
+						<select name='satellite_lab_name' id='satellite_lab_name' class='uniform_width'>
 							<option value=''>Select Satellite Lab</option>
 							<?php
-							$satellite_lab_ids = get_all_satellite_lab_ids();
-							$selected_satellite_lab_id = $patient->satelliteLabId;
-							foreach ($satellite_lab_ids as $satellite_lab_id) {
-								if ($satellite_lab_id == $selected_satellite_lab_id) {
-									echo "<option value='{$satellite_lab_id}' selected>{$satellite_lab_id}</option>";
+							$satellite_lab_names = get_all_satellite_lab_names();
+							$selected_satellite_lab_name = $patient->satelliteLabName;
+							foreach ($satellite_lab_names as $satellite_lab_name) {
+								if ($satellite_lab_name == $selected_satellite_lab_name) {
+									echo "<option value='{$satellite_lab_name}' selected>{$satellite_lab_name}</option>";
 								}
 								else {
-									echo "<option value='{$satellite_lab_id}'>{$satellite_lab_id}</option>";
+									echo "<option value='{$satellite_lab_name}'>{$satellite_lab_name}</option>";
 								}
 							}
 							?>

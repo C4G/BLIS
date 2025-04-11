@@ -51,6 +51,23 @@ class CustomFieldOrderGeneration_Patient{
 			</tr>";
 	}
 
+	public static function generate_patient_satellite_lab_names_dropdown(){
+		$satellite_lab_names = get_all_satellite_lab_names();
+		echo "<tr>
+				<td>Satellite Lab Name</td>
+				<td>
+					<select name='satellite_lab_name' id='satellite_lab_name' class='uniform_width'>
+						<option value=''>Select Satellite Lab</option>";
+
+		foreach ($satellite_lab_names as $satellite_lab_name) {
+			echo "<option value='{$satellite_lab_name}'>{$satellite_lab_name}</option>";
+		}
+
+		echo "      </select>
+				</td>
+			</tr>";
+	}
+
 	public static function generate_patient_rdate(){
 		echo"
 		<tr>
