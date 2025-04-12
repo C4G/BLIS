@@ -2717,7 +2717,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					<td><?php echo $patient->getName(); ?></td>
 				</tr>
 				<tr valign='top'>
-					<td><u>Satellite Lab Name</u></td>
+					<td><u><?php echo LangUtil::$generalTerms['SATELLITE_LAB_NAME']; ?></u></td>
 					<td><?php echo $patient->getSatelliteLabName()?></td>
 				</tr>
 				<tr>
@@ -2800,7 +2800,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 					</td>
 				</tr>
 				<tr>
-					<td><u>Satellite Lab Name</u></td>
+					<td><u><?php echo LangUtil::$generalTerms['SATELLITE_LAB_NAME']; ?></u></td>
 					<td>
 						<select name='satellite_lab_name' id='satellite_lab_name' class='uniform_width'>
 							<option value=''>Select Satellite Lab</option>

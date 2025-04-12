@@ -937,6 +937,10 @@
             <key>PENDING_EXPORT</key>
             <value>Exporting Lab Configuration. Please wait..</value>
         </term>
+        <term>
+            <key>SATELLITE_LAB_NAME</key>
+            <value>Satellite Lab Name</value>
+        </term>
     </page>
     <page id="header" descr="Page Header">
         <term>

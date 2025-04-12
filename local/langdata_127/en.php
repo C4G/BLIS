@@ -234,7 +234,8 @@ $LANG_ARRAY = array (
 		"ERROR_MIGRATION" => "There were errors while applying migrations.", 
 		"LAB_CONFIG_ADDED" => "Lab Configuration added", 
 		"SUCCESS_EXPORT" => "Export Successful.", 
-		"PENDING_EXPORT" => "Exporting Lab Configuration. Please wait.."
+		"PENDING_EXPORT" => "Exporting Lab Configuration. Please wait..", 
+		"SATELLITE_LAB_NAME" => "Satellite Lab Name"
 	) , 
 	"header" => array ( 
 		"TITLE" => "", 

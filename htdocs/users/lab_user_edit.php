@@ -189,7 +189,7 @@ if($user == null)
 			<td><input type="text" name="fullname" id="fullname" value="<?php echo $user->actualName; ?>" class='uniform_width' /><br></td>
 		</tr>
 		<tr>
-			<td>Satellite Lab Name</td>
+			<td><?php echo LangUtil::$generalTerms['SATELLITE_LAB_NAME']; ?></td>
 			<td><input type="text" name="satellite_lab_name" id="satellite_lab_name" value="<?php echo $user->satelliteLabName; ?>" class='uniform_width' /><br></td>
 		</tr>
 		<tr>

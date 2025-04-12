@@ -335,7 +335,7 @@ Backup Data
 			<td><input type="text" name="fullname" id="fullname" value="" class='uniform_width' /><br></td>
 		</tr>
 		<tr>
-			<td>Satellite Lab Name</td>
+			<td><?php echo LangUtil::$generalTerms['SATELLITE_LAB_NAME']; ?></td>
 			<td><input type="text" name="satellite_lab_name" id="satellite_lab_name" value="" class='uniform_width' /></td>
 		</tr>
 		<tr>
