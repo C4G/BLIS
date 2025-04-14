@@ -3,6 +3,7 @@
 include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 include("../includes/script_elems.php");
+global $log;
 LangUtil::setPageId("find_patient");
 
 $script_elems = new ScriptElems();
@@ -46,7 +47,8 @@ if($a == 0)
         else
         {
             $patient_list = search_patients_by_id_dyn($q, $result_cap, $result_counter);
-        }
+			$log->info("Querying by ID dynamically");
+		}
         
 }
 else if($a == 1)
