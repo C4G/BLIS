@@ -2,22 +2,25 @@
 This page has been created as part of Spring 2025's P3 assignment: Project Webpage.
 
 ## Project Description
-Our project will build on C4G's existing BLIS project. C4G Basic Laboratory Information System is a collaboration between Computing for Good (C4G) at Georgia Tech, the Center for Diseaser Control (CDC), and participating PEPFAR countries. The project provides software for tracking of lab test results in developing countries. We will provide support and maintenance, improve existing features, as well as provide new features to the system.
+Our project expanded on C4G's existing BLIS project. C4G Basic Laboratory Information System is a collaboration between Computing for Good (C4G) at Georgia Tech, the Center for Disease Control (CDC), and participating PEPFAR countries. The project provides software for tracking of lab test results in developing countries. Our worked focus on adding features for satellite labs that perform tests on behalf of reference labs that don’t have the necessary equipment. Additionally, we expanded the French translation.
 
 ## Overall Project Goal
-Our project will have a few different goals
+Our project had a few different goals
 
-- We will build a system for satellite labs to seamlessly access results from source labs. 
-    - Source labs extract specimens from patients and send the specimens to satellite labs that have full capabilities to perform the tests needed. When satellite labs have extracted the results, these are currently sent through PDF's over email or even physically to the source labs. We are building capability within the BLIS system for satellite labs to seamlessly and privately share these results with source labs.
-- We will improve translation of text for French speakers.
-- We will deploy BLIS-on-cloud to labs.
-- We will fix an existing bug where we can't enroll new clients younger than a year old.
-
+- We built a system for refrence labs to seamlessly access results from satellite labs
+    - Reference labs extract specimens from patients and send the specimens to satellite labs that have full capabilities to perform the tests needed. When satellite labs have extracted the results, these are currently sent through PDF's over email or even physically to the source labs. We built a feature within the BLIS system for satellite labs to seamlessly and privately share these results with reference labs.
+- We expanded the translation of text for French speakers.
 
 ## Team Members
 - Sofia Muller: 
-    - Team webpage
-    - Functionality to extract satellite lab id when searching from a satellite lab account
+    - Team webpage. 
+        - https://github.com/C4G/BLIS/pull/113
+        - https://github.com/C4G/BLIS/pull/114 
+        - https://github.com/C4G/BLIS/pull/131 
+        - https://github.com/C4G/BLIS/pull/133 
+    - Functionality to extract satellite lab id when searching from a satellite lab account. https://github.com/C4G/BLIS/pull/129
+    - Ensured accurate search result count when searching patients from a satellite lab perspective. https://github.com/C4G/BLIS/pull/137
+    - Added documentation. https://github.com/C4G/BLIS/pull/148
 - Princesca Dorsaint: 
     - Developed functionality to create a satellite lab user type in the db and allow satellite lab user ability to search for patient results. https://github.com/C4G/BLIS/pull/121
     - Remove satellite lab users ability to remove/modify specimen data. https://github.com/C4G/BLIS/pull/126
@@ -33,7 +36,6 @@ Our project will have a few different goals
 - Mishwa Bhavsar:
     - French translation
     - Survey for peer evaluations
-Note: Team members goals and contributions will change through the semester.
 
 ## Peer Evaluations
 1. Please find our demo application here: https://demo.c4gblis.org/login.php
