@@ -6573,39 +6573,26 @@ function search_patients_by_id($q, $labsection = 0)
 	global $con;
 	$q = mysql_real_escape_string($q, $con);
 	# Searches for patients with similar PID
-	if(! is_admin_check(get_user_by_id($_SESSION['user_id']))){
-		if($labsection == 0){
-			$query_string =
-			"SELECT * FROM patient ".
-			"WHERE surr_id='$q' ".
-			"ORDER BY ts DESC";
-		} else {
-			$query_string =
-			"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
-			"p.surr_id ='$q' AND p.patient_id = s.patient_id AND s.specimen_id IN ".
-			"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN (SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
-			"(SELECT test_type_id AS lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.ts DESC";
-
-		}
+	$core_query = "SELECT DISTINCT p.* FROM patient p"; 
+	$core_filter = "WHERE surr_id='$q";
+	$default_order = "ORDER BY ts DESC";
+	if($labsection == 0) {
+		$query_string = $core_query.$core_filter;
 	} else {
-	if($labsection == 0){
-		$query_string =
-		"SELECT * FROM patient ".
-		"WHERE surr_id='$q' ".
-		"AND patient.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1)".
-		"ORDER BY ts DESC";
-	} else {
-		$query_string =
-		"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
-		"p.surr_id ='$q'".
-		"AND p.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1)".
-		"AND p.patient_id = s.patient_id AND s.specimen_id IN ".
+		# If searching from a sepecific lab section, filter to the tests performed from that section
+		$query_string = $core_filter.
+		"JOIN specimen s ON p.patient_id = s.patient_id".
+		$core_filter.
+		"AND s.specimen_id IN ".
 		"(SELECT specimen_id FROM specimen WHERE specimen_type_id IN (SELECT specimen_type_id FROM specimen_test WHERE test_type_id IN ".
-		"(SELECT test_type_id AS lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.ts DESC";
-
+		"(SELECT test_type_id AS lab_section FROM test_type WHERE test_category_id = '$labsection')))";
 	}
+	if(!is_admin_check(get_user_by_id($_SESSION['user_id']))){
+		# If not searching from admin account, filter out removed records
+		$query_string == $query_string.
+		"AND patient.patient_id NOT IN (SELECT r_id FROM removal_record WHERE category='patient' AND removal_record.status=1)";
 	}
-	//;
+	$query_string = $query_string.$default_order;
 	$resultset = query_associative_all($query_string);
 	$patient_list = array();
 	if(count($resultset) > 0)
@@ -6613,7 +6600,6 @@ function search_patients_by_id($q, $labsection = 0)
 		foreach($resultset as $record)
 		{
 			$patient_list[] = Patient::getObject($record);
-
 		}
 	}
 	return $patient_list;
@@ -6621,23 +6607,23 @@ function search_patients_by_id($q, $labsection = 0)
 
 function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satellite_lab_id)
 {
-	# Searches for patients with similar name
+	# Searches for patients with similar PID
 	global $con, $LIS_SATELLITE_LAB_USER;
         $offset = $cap * ($counter - 1);
 	$q = mysql_real_escape_string($q, $con);
 
 	if ($_SESSION['user_level'] == $LIS_SATELLITE_LAB_USER){
-	if($labsection == 0){
-		$query_string =
-		"SELECT * FROM patient ".
-		"WHERE surr_id='$q' AND satellite_lab_id = $satellite_lab_id ORDER BY ts DESC LIMIT $offset,$cap";
-	} else {
-		$query_string =
-		"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
-		"p.surr_id ='$q' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id = s.patient_id AND s.specimen_id IN ".
-		"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test where test_type_id IN ".
-		"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
-	}
+		if($labsection == 0){
+			$query_string =
+			"SELECT * FROM patient ".
+			"WHERE surr_id='$q' AND satellite_lab_id = $satellite_lab_id ORDER BY ts DESC LIMIT $offset,$cap";
+		} else {
+			$query_string =
+			"SELECT DISTINCT p.* FROM patient p, specimen s WHERE ".
+			"p.surr_id ='$q' AND p.satellite_lab_id = $satellite_lab_id AND p.patient_id = s.patient_id AND s.specimen_id IN ".
+			"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test where test_type_id IN ".
+			"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
+		}
 	} 
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
 		if($labsection == 0){
@@ -6651,7 +6637,6 @@ function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satelli
 			"(SELECT specimen_id FROM specimen WHERE specimen_type_id in (SELECT specimen_type_id FROM specimen_test where test_type_id IN ".
 			"(SELECT test_type_id as lab_section FROM test_type WHERE test_category_id = '$labsection'))) ORDER BY p.ts DESC LIMIT $offset,$cap";
 		}
-	}
 	} 
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))) {
 		if($labsection == 0){
@@ -6680,7 +6665,7 @@ function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satelli
 	return $patient_list;
 }
 
-function search_patients_by_id_count($q, $labsection = 0)
+function search_patients_by_id_count($q, $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
 	global $con;
