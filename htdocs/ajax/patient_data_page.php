@@ -46,7 +46,7 @@ if($a == 0)
         else
         {
             $patient_list = search_patients_by_id_dyn($q, $result_cap, $result_counter);
-        }
+		}
         
 }
 else if($a == 1)
