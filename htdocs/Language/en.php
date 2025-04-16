@@ -235,7 +235,8 @@ $LANG_ARRAY = array (
 		"ERROR_MIGRATION" => "There were errors while applying migrations.", 
 		"LAB_CONFIG_ADDED" => "Lab Configuration added", 
 		"SUCCESS_EXPORT" => "Export Successful.", 
-		"PENDING_EXPORT" => "Exporting Lab Configuration. Please wait.."
+		"PENDING_EXPORT" => "Exporting Lab Configuration. Please wait..", 
+		"SATELLITE_LAB_NAME" => "Satellite Lab Name"
 	) , 
 	"header" => array ( 
 		"TITLE" => "", 
@@ -791,25 +792,25 @@ $LANG_ARRAY = array (
 		"CMD_VIEWPROFILE" => "View Profile", 
 		"CMD_DELPROFILE" => "Delete Profile", 
 		"CMD_UPDPROFILE" => "Update Profile"
-	) ,
-	"debug" => array (
-		"DEBUG_UTILITIES" => "Debug Utilities",
-		"GIT_COMMIT_SHA" => "Git commit SHA",
-		"BROWSE_SOURCE_CODE" => "browse source code",
-		"AVAILABLE_LOG_FILES" => "Available Log Files",
-		"LANGUAGE_UTILITIES" => "Language Utilities",
-		"RESET_UPDATE_LANGUAGE_FILES" => "Reset/update language files",
-		"DATABASE_UTILITIES" => "Database Utilities",
-		"LEGACY_LAB_DATABASE_MIGRATIONS" => "Legacy Lab Database Migrations",
-		"WARNING" => "Warning!",
-		"MIGRATION_WARNING" => "Running ANY of these migrations could break your lab configuration PERMANENTLY!",
-		"MIGRATION_DESCRIPTION" => "These migrations are used to perform manual updates to an imported lab configuration from an older version of BLIS.",
-		"LAB_DATABASE" => "Lab database",
-		"SELECT_LAB" => "Select a lab",
-		"SQL_MIGRATION" => "SQL migration",
-		"SELECT_MIGRATION" => "Select a migration",
+	) , 
+	"debug" => array ( 
+		"DEBUG_UTILITIES" => "Debug Utilities", 
+		"GIT_COMMIT_SHA" => "Git commit SHA", 
+		"BROWSE_SOURCE_CODE" => "browse source code", 
+		"AVAILABLE_LOG_FILES" => "Available Log Files", 
+		"LANGUAGE_UTILITIES" => "Language Utilities", 
+		"RESET_UPDATE_LANGUAGE_FILES" => "Reset/update language files", 
+		"DATABASE_UTILITIES" => "Database Utilities", 
+		"LEGACY_LAB_DATABASE_MIGRATIONS" => "Legacy Lab Database Migrations", 
+		"WARNING" => "Warning!", 
+		"MIGRATION_WARNING" => "Running ANY of these migrations could break your lab configuration PERMANENTLY!", 
+		"MIGRATION_DESCRIPTION" => "These migrations are used to perform manual updates to an imported lab configuration from an older version of BLIS.", 
+		"LAB_DATABASE" => "Lab database", 
+		"SELECT_LAB" => "Select a lab", 
+		"SQL_MIGRATION" => "SQL migration", 
+		"SELECT_MIGRATION" => "Select a migration", 
 		"APPLY" => "Apply"
-	)
+	) 
 );
 
 include_once(__DIR__."/../lang/lang_util.php");

@@ -5,11 +5,11 @@
 #
 
 include("../users/accesslist.php");
-if( !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList)) 
-     && !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList)) 
+if( !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList))
+     && !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList))
 	 && !(isSuperAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $superAdminPageList)) )
 		header( 'Location: home.php' );
-	
+
 include("redirect.php");
 include("includes/header.php");
 LangUtil::setPageId("lab_config_home");
@@ -39,7 +39,7 @@ function update_lab_user()
 
 
 	// Begin email address test
-	var email_regex = new RegExp(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i);
+	var email_regex = new RegExp(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i);
 
 	if (!(email_regex.test($('#email').attr("value"))) && $('#email').attr("value") != '') {
 		alert("Invalid email supplied.  Please enter an email in the form abcd@efgh.ijk or leave the field blank.");
@@ -52,6 +52,7 @@ function update_lab_user()
 	var email = $('#email').attr('value');
 	var phone = $('#phone').attr('value');
 	var fullname = $('#fullname').attr('value');
+	var satellite_lab_name = $('#satellite_lab_name').attr('value');
 	var level = $('#level').attr('value');
 	var lang_id = $('#lang_id').attr('value');
 	var url_string = 'ajax/lab_user_update.php';
@@ -63,24 +64,24 @@ function update_lab_user()
 
 /*	var readwriteOption = 0;
     var rwoptions = ',';
-    
+
 	$('input[name="readwriteOpt"]:checked').each(function() {
 		readwriteOption++;
-		rwoptions = rwoptions + this.value+','  ; 
+		rwoptions = rwoptions + this.value+','  ;
 	});
 
 	rwoptions = rwoptions.slice(1,-1);
-	
+
 	if(readwriteOption < 1){
 		alert("Select at least one read or write options");
 		return;
 	}
 
-*/	
+*/
 
 var rwoptions=document.getElementById('hdn_rwopts').value;
 
-	var data_string = 'id=<?php echo $user_id; ?>&un='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&lev='+level+'&lang='+lang_id+"&showpname="+showpname+"&opt="+rwoptions;
+	var data_string = 'id=<?php echo $user_id; ?>&un='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&lev='+level+'&lang='+lang_id+"&showpname="+showpname+"&opt="+rwoptions+"&sln="+satellite_lab_name;
 	$('#edit_user_progress').show();
 	$.ajax({
 		type: "POST",
@@ -160,7 +161,7 @@ else
 <input type="hidden" value="<?php echo $user->rwoptions;?>" id="hdn_rwopts"/>
 <br>
 <a href='javascript:goback();'><?php echo LangUtil::$generalTerms['CMD_BACK']; ?></a> |<b><?php echo LangUtil::$pageTerms['EDIT_LAB_USER']; ?></b>
- 
+
 <br><br>
 <?php
 if($user == null)
@@ -183,10 +184,13 @@ if($user == null)
 				<input type='hidden' name='username' id='username' value="<?php echo $user->username; ?>" class='uniform_width'></input>
 			</td>
 		</tr>
-		
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['NAME'] ?></td>
 			<td><input type="text" name="fullname" id="fullname" value="<?php echo $user->actualName; ?>" class='uniform_width' /><br></td>
+		</tr>
+		<tr>
+			<td><?php echo LangUtil::$generalTerms['SATELLITE_LAB_NAME']; ?></td>
+			<td><input type="text" name="satellite_lab_name" id="satellite_lab_name" value="<?php echo $user->satelliteLabName; ?>" class='uniform_width' /><br></td>
 		</tr>
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['EMAIL'] ?></td>
@@ -217,15 +221,15 @@ if($user == null)
 		</tr>
 <!--		<tr>-->
 <!--<tr id="rw">
-			<?php 
+			<?php
 //			$page_elems->getLabUserReadWriteOptionRO($user->level, $user->rwoptions);
 
 			?>
 //</tr>			-->
-			
+
 <!--		</tr>-->
 		<tr valign='top'>
-		
+
 			<td><div id="patient-entry"><?php echo LangUtil::$pageTerms['USE_PNAME_RESULTS']; ?>?</div></td>
 			<td>
 				<div id="patient-entry_check"><input type="checkbox" name="showpname" id="showpname" <?php
@@ -267,7 +271,7 @@ if($user == null)
 	</table>
 
 </form>
-<?php 
+<?php
 SessionUtil::restore($saved_session);
-include("includes/footer.php"); 
+include("includes/footer.php");
 ?>

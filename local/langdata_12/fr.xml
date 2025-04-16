@@ -823,11 +823,13 @@
             <value>HTTP/1.1 404 Page Non Trouvée</value>
         </term>
 		<term>
-            <key>500_SERVER_ERROR</key>
-            <value>HTTP/1.1 500 Erreur Interne du Serveur</value>
+			<key>500_SERVER_ERROR</key>
+			<value>HTTP/1.1 500 Erreur de serveur interne</value>
+		</term>
+		<term>
+            <key>SATELLITE_LAB_NAME</key>
+            <value>Satellite Lab Name</value>
         </term>
-
-
 	</page>
 	<page id="header" descr="Page Header">
 		<term>
