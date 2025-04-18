@@ -26,6 +26,14 @@ if (!file_exists(__DIR__."/../../files")) {
     mkdir(__DIR__."/../../files", 0755);
 }
 
+if (!file_exists(__DIR__."/../../files/backups")) {
+    mkdir(__DIR__."/../../files/backups", 0755);
+}
+
+if (!file_exists(__DIR__."/../../files/storage")) {
+    mkdir(__DIR__."/../../files/storage", 0755);
+}
+
 require_once(__DIR__."/platform_lib.php");
 
 # Ensure that we create the language files in local/
