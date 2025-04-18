@@ -882,8 +882,16 @@
             <value>HTTP/1.1 404 Not Found</value>
         </term>
         <term>
+            <key>401_UNAUTHORIZE</key>
+            <value>HTTP/1.1 401 Unauthorized</value>
+        </term>
+        <term>
             <key>500_SERVER_ERROR</key>
             <value>HTTP/1.1 500 Internal Server Error</value>
+        </term>
+        <term>
+            <key>SATELLITE_LAB_NAME</key>
+            <value>Satellite Lab Name</value>
         </term>
     </page>
     <page id="header" descr="Page Header">

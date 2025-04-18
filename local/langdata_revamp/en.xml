@@ -674,6 +674,10 @@
             <value>Remove</value>
         </term>
         <term>
+            <key>CMD_RESTORE</key>
+            <value>Restore</value>
+        </term>
+        <term>
             <key>CMD_VERIFY</key>
             <value>Verify</value>
         </term>
@@ -936,6 +940,10 @@
         <term>
             <key>PENDING_EXPORT</key>
             <value>Exporting Lab Configuration. Please wait..</value>
+        </term>
+        <term>
+            <key>SATELLITE_LAB_NAME</key>
+            <value>Satellite Lab Name</value>
         </term>
     </page>
     <page id="header" descr="Page Header">
@@ -3069,6 +3077,14 @@
         <term>
             <key>SQL_MIGRATION</key>
             <value>SQL migration</value>
+        </term>
+        <term>
+            <key>SELECT_MIGRATION</key>
+            <value>Select a migration</value>
+        </term>
+        <term>
+            <key>APPLY</key>
+            <value>Apply</value>
         </term>
     </page>
 </pages>

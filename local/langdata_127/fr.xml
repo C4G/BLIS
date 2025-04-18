@@ -878,6 +878,10 @@
 			<key>PENDING_EXPORT</key>
 			<value>Exportation de la configuration du laboratoire. Veuillez patienter..</value>
 		</term>
+		<term>
+            <key>SATELLITE_LAB_NAME</key>
+            <value>Satellite Lab Name</value>
+        </term>
 	</page>
 	<page id="header" descr="Page Header">
 		<term>
@@ -2799,7 +2803,7 @@
 			<value>Contient</value>
 		</term>
  </page>
- <page id="debug" descr="Debug Utilities">
+	<page id="debug" descr="Debug Utilities">
         <term>
             <key>DEBUG_UTILITIES</key>
             <value>Utilitaires de débogage</value>

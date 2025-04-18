@@ -221,7 +221,8 @@ $LANG_ARRAY = array (
 		"SPECIMEN_CUSTOM_FIELDS" => "Specimen Custom Fields", 
 		"PATIENT_CUSTOM_FIELDS" => "Patient Custom Fields", 
 		"404_BAD_REQUEST" => "HTTP/1.1 404 Not Found", 
-		"500_SERVER_ERROR" => "HTTP/1.1 500 Internal Server Error"
+		"500_SERVER_ERROR" => "HTTP/1.1 500 Internal Server Error",
+		"SATELLITE_LAB_NAME" => "Satellite Lab Name"
 	) , 
 	"header" => array ( 
 		"TITLE" => "", 

@@ -5,8 +5,8 @@
 # Called from lab_config_home.php
 #
 include("../users/accesslist.php");
-if( !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList)) 
-     && !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList)) 
+if( !(isAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $adminPageList))
+     && !(isCountryDir(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $countryDirPageList))
 	 && !(isSuperAdmin(get_user_by_id($_SESSION['user_id'])) && in_array(basename($_SERVER['PHP_SELF']), $superAdminPageList)) ) {
 		header( 'Location: home.php' );
 }
@@ -29,6 +29,7 @@ function add_lab_user()
 	var email = $('#email').attr('value');
 	var phone = $('#phone').attr('value');
 	var fullname = $('#fullname').attr('value');
+	var satellite_lab_name = $('#satellite_lab_name').attr('value');
 	var ut = $('#user_type').attr('value');
 	var lang_id = $('#lang_id').attr("value");
 	var showpname = 0;
@@ -82,10 +83,10 @@ function add_lab_user()
 	// readwriteOption = $('#readwriteOpt:checked').length;
 /*    var readwriteOption = 0;
     var rwoptions = ',';
-    
+
 	$('input[name="readwriteOpt"]:checked').each(function() {
 		readwriteOption++;
-		rwoptions = rwoptions + this.value+','  ; 
+		rwoptions = rwoptions + this.value+','  ;
 	});
 
 	rwoptions = rwoptions.slice(1,-1);
@@ -99,7 +100,7 @@ function add_lab_user()
 	//var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&ut='+ut+'&lid=<?php echo $lab_config_id; ?>&lang='+lang_id+"&fn_reports="+fn_reports+"&fn_results="+fn_results+"&fn_regn="+fn_regn;
 var rwoptions=document.getElementById('hdn_rwopt').value;
 //alert(rwoptions);
-	var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&ut='+ut+'&lid=<?php echo $lab_config_id; ?>&lang='+lang_id+"&showpname="+showpname+"&opt="+rwoptions;
+	var data_string = 'u='+username+'&p='+pwd+'&fn='+fullname+'&em='+email+'&ph='+phone+'&ut='+ut+'&lid=<?php echo $lab_config_id; ?>&lang='+lang_id+"&showpname="+showpname+"&opt="+rwoptions+"&sln="+satellite_lab_name;
 //alert(data_string);
 	$('#add_user_progress').show();
 	$.ajax({
@@ -122,7 +123,7 @@ var rwoptions=document.getElementById('hdn_rwopt').value;
 }
 function add_user_type(){
 	var user_type = prompt("Please enter a name for your custom user type");
-	
+
 	//Add to user_type table and return the id
 	var data_string = 'u='+user_type;
 	$.ajax({
@@ -274,7 +275,7 @@ add_read_mode();
 			</td>
 		</tr>
 		<tr>
-		  
+
 		 	<td> <div id="readOrWrite" name="readOrWrite" > Writeable Options </div><?php $page_elems->getAsterisk(); ?>
 		 	</td>
 		 	<td><div id="readWrite_options" name="readWrite_options">
@@ -309,13 +310,13 @@ Backup Data
 <td id="readwriteOpt7">
 </td>
 </tr>
-</table> 		
+</table>
 <!--					<input type="checkbox" name="readwriteOpt" id='readwriteOpt2' value="2">Patient Registration<br>
 					<input type="checkbox" name="readwriteOpt" id='readwriteOpt3' value="3">Test Results<br>
 					<input type="checkbox" name="readwriteOpt" id='readwriteOpt4' value="4">Search<br>
 					<input type="checkbox" name="readwriteOpt" id='readwriteOpt6' value="6">Inventory<br>
 					<input type="checkbox" name="readwriteOpt" id='readwriteOpt7' value="7">Backup Data <br>
-	-->			
+	-->
 				</div>
 		 	</td>
 		</tr>
@@ -332,6 +333,10 @@ Backup Data
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['NAME']; ?></td>
 			<td><input type="text" name="fullname" id="fullname" value="" class='uniform_width' /><br></td>
+		</tr>
+		<tr>
+			<td><?php echo LangUtil::$generalTerms['SATELLITE_LAB_NAME']; ?></td>
+			<td><input type="text" name="satellite_lab_name" id="satellite_lab_name" value="" class='uniform_width' /></td>
 		</tr>
 		<tr>
 			<td><?php echo LangUtil::$generalTerms['EMAIL']; ?></td>
