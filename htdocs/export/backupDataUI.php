@@ -1,12 +1,9 @@
 <?php
     require_once("../includes/features.php");
+    require_once("../config/lab_config_resolver.php");
 
-    $lab_config_id = null;
-    if (isset($_REQUEST['id'])) {
-        $lab_config_id = $_REQUEST["id"];
-    } else if (isset($_SESSION['lab_config_id'])) {
-        $lab_config_id = $_SESSION["lab_config_id"];
-    }
+    $lab_config_id = LabConfigResolver::resolveId();
+    $labConfigId = $lab_config_id;
 
     if (Features::lab_config_v2_enabled()) {
         header("Location: /config/v2/lab_config_backups.php?id=$lab_config_id");
@@ -15,13 +12,6 @@
 
     require_once("../includes/header.php");
     require_once("../includes/keymgmt.php");
-
-    $labConfigId = null;
-    if (isset($_REQUEST['id'])) {
-        $labConfigId = $_REQUEST["id"];
-    } else if (isset($_SESSION['lab_config_id'])) {
-        $labConfigId = $_SESSION["lab_config_id"];
-    }
 
     putUILog('backup_data_ui', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
     $target_set=KeyMgmt::getAllKeys();
