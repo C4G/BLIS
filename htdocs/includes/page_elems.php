@@ -2802,7 +2802,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['SATELLITE_LAB_NAME']; ?></u></td>
 					<td>
-						<select name='satellite_lab_name' id='satellite_lab_id' class='uniform_width'>
+						<select name='satellite_lab_id' id='satellite_lab_id' class='uniform_width'>
 							<option value=''>Select Satellite Lab</option>
 							<?php
 							$satellite_labs = get_all_satellite_labs();

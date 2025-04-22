@@ -39,7 +39,7 @@ class CustomFieldOrderGeneration_Patient{
 		echo "<tr>
 				<td>" . LangUtil::$generalTerms['SATELLITE_LAB_NAME'] . "</td>
 				<td>
-					<select name='satellite_lab_name' id='satellite_lab_id' class='uniform_width'>
+					<select name='satellite_lab_id' id='satellite_lab_id' class='uniform_width'>
 						<option value=''>" . LangUtil::$generalTerms['SATELLITE_LAB_NAME'] . "</option>";
 	
 		foreach ($satellite_labs as $satellite_lab_id => $satellite_lab_name) {
