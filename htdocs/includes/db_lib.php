@@ -117,7 +117,7 @@ class User
 		$user->username = $record['username'];
 		$user->password = $record['password'];
 		$user->actualName = $record['actualname'];
-		$user->satelliteLabName = get_satellite_lab_name_by_user_id($user->userId);//$record['satellite_lab_name'];
+		$user->satelliteLabName = get_satellite_lab_name_by_user_id($user->userId);
 		$user->level = $record['level'];
 		$user->email = $record['email'];
 		$user->phone = $record['phone'];
@@ -7167,61 +7167,36 @@ function get_satellite_lab_user_id($user_id)
     return $record["satellite_lab_id"];
 }
 
-function get_all_satellite_lab_ids()
-{
+function get_all_satellite_labs() {
     global $con, $LIS_SATELLITE_LAB_USER;
 
-    # Retrieves all user IDs corresponding to $LIS_SATELLITE_LAB_USER from the user table
+	# Retrieves all satellite Lab IDs and names corresponding to $LIS_SATELLITE_LAB_USER from the user table
+	# and returns a map of satellite lab IDs and names
     $saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT satellite_lab_id FROM user WHERE level = $LIS_SATELLITE_LAB_USER";
-	$resultset = query_associative_all($query_string);
+    $query_string = "SELECT satellite_lab_id, satellite_lab_name FROM user WHERE level = $LIS_SATELLITE_LAB_USER";
+    $resultset = query_associative_all($query_string);
 
-	$satellite_lab_ids = array();
-	if (count($resultset) > 0)
-	{
-		foreach($resultset as $record)
-		{
-			if (isset($record["satellite_lab_id"])){
-				$satellite_lab_ids[] = $record["satellite_lab_id"];
-			}
-		}
-	}
-	return $satellite_lab_ids;
+    $satellite_labs = array();
+
+    if ($resultset != null) {
+        foreach ($resultset as $record) {
+            $satellite_labs[$record['satellite_lab_id']] = $record['satellite_lab_name'];
+        }
+    }
+
+    return $satellite_labs;
 }
 
-
-function get_all_satellite_lab_names()
-{
-    global $con, $LIS_SATELLITE_LAB_USER;
-
-    # Retrieves all user IDs corresponding to $LIS_SATELLITE_LAB_USER from the user table
-    $saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT satellite_lab_name FROM user WHERE level = $LIS_SATELLITE_LAB_USER";
-	$resultset = query_associative_all($query_string);
-
-	$satellite_lab_names = array();
-	if (count($resultset) > 0)
-	{
-		foreach($resultset as $record)
-		{
-			if (isset($record["satellite_lab_name"])){
-				$satellite_lab_names[] = $record["satellite_lab_name"];
-			}
-		}
-	}
-	return $satellite_lab_names;
-}
-
-function get_satellite_lab_id_by_name($satellite_lab_name)
+function get_satellite_lab_name_by_satellite_lab_id($satellite_lab_id)
 {
 	global $con, $LIS_SATELLITE_LAB_USER;
 
-	# Retrieves all user IDs corresponding to $LIS_SATELLITE_LAB_USER from the user table
+	# Retrieves all satellite lab names corresponding to $LIS_SATELLITE_LAB_USER from the patient table
 	$saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT satellite_lab_id FROM user WHERE satellite_lab_name = '$satellite_lab_name'";
+	$query_string = "SELECT satellite_lab_name FROM patient WHERE satellite_lab_id = $satellite_lab_id LIMIT 1";
 	$record = query_associative_one($query_string);
 	DbUtil::switchRestore($saved_db);
-	return $record["satellite_lab_id"];
+	return $record["satellite_lab_name"];
 }
 
 function search_specimens_by_id($q)

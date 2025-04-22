@@ -34,18 +34,18 @@ class CustomFieldOrderGeneration_Patient{
 		}
 	}
 
-	public static function generate_patient_satellite_lab_names_dropdown(){
-		$satellite_lab_names = get_all_satellite_lab_names();
+	public static function generate_patient_satellite_lab_names_dropdown() {
+		$satellite_labs = get_all_satellite_labs(); // Fetch map of satellite lab IDs and names
 		echo "<tr>
 				<td>" . LangUtil::$generalTerms['SATELLITE_LAB_NAME'] . "</td>
 				<td>
-					<select name='satellite_lab_name' id='satellite_lab_name' class='uniform_width'>
+					<select name='satellite_lab_name' id='satellite_lab_id' class='uniform_width'>
 						<option value=''>" . LangUtil::$generalTerms['SATELLITE_LAB_NAME'] . "</option>";
-
-		foreach ($satellite_lab_names as $satellite_lab_name) {
-			echo "<option value='{$satellite_lab_name}'>{$satellite_lab_name}</option>";
+	
+		foreach ($satellite_labs as $satellite_lab_id => $satellite_lab_name) {
+			echo "<option value='{$satellite_lab_id}'>{$satellite_lab_name}</option>";
 		}
-
+	
 		echo "      </select>
 				</td>
 			</tr>";

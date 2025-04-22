@@ -2802,17 +2802,18 @@ echo "<option value='$lc->id'>$lc->name</option>";
 				<tr>
 					<td><u><?php echo LangUtil::$generalTerms['SATELLITE_LAB_NAME']; ?></u></td>
 					<td>
-						<select name='satellite_lab_name' id='satellite_lab_name' class='uniform_width'>
+						<select name='satellite_lab_name' id='satellite_lab_id' class='uniform_width'>
 							<option value=''>Select Satellite Lab</option>
 							<?php
-							$satellite_lab_names = get_all_satellite_lab_names();
+							$satellite_labs = get_all_satellite_labs();
 							$selected_satellite_lab_name = $patient->satelliteLabName;
-							foreach ($satellite_lab_names as $satellite_lab_name) {
+
+							foreach ($satellite_labs as $satellite_lab_id => $satellite_lab_name) {
 								if ($satellite_lab_name == $selected_satellite_lab_name) {
-									echo "<option value='{$satellite_lab_name}' selected>{$satellite_lab_name}</option>";
+									echo "<option value='{$satellite_lab_id}' selected>{$satellite_lab_name}</option>";
 								}
 								else {
-									echo "<option value='{$satellite_lab_name}'>{$satellite_lab_name}</option>";
+									echo "<option value='{$satellite_lab_id}'>{$satellite_lab_name}</option>";
 								}
 							}
 							?>
