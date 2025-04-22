@@ -7191,9 +7191,9 @@ function get_satellite_lab_name_by_satellite_lab_id($satellite_lab_id)
 {
 	global $con, $LIS_SATELLITE_LAB_USER;
 
-	# Retrieves all satellite lab names corresponding to $LIS_SATELLITE_LAB_USER from the patient table
+	# Retrieves satellite lab name corresponding to $satellite_lab_id from the user table
 	$saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT satellite_lab_name FROM patient WHERE satellite_lab_id = $satellite_lab_id LIMIT 1";
+	$query_string = "SELECT satellite_lab_name FROM user WHERE satellite_lab_id = $satellite_lab_id LIMIT 1";
 	$record = query_associative_one($query_string);
 	DbUtil::switchRestore($saved_db);
 	return $record["satellite_lab_name"];
