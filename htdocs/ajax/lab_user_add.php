@@ -15,6 +15,7 @@ $saved_session = SessionUtil::save();
 $username=$_REQUEST['u'];
 $password=$_REQUEST['p'];
 $fullname = $_REQUEST['fn'];
+$satellite_lab_name = $_REQUEST['sln'];
 $email = $_REQUEST['em'];
 $phone = $_REQUEST['ph'];
 $user_type = $_REQUEST['ut'];
@@ -62,6 +63,7 @@ $user->username = $username;
 $user->password = $password;
 $user->level = $user_type;
 $user->actualName = $fullname;
+$user->satelliteLabName = $satellite_lab_name;
 $user->labConfigId = $lab_config_id;
 $user->email = $email;
 $user->phone = $phone;
@@ -84,7 +86,7 @@ if ($success_var){
 		</td>
 	</tr>
 </table>
-<?php 
+<?php
 }
 else
 	echo "User already exists";

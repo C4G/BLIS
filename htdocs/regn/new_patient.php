@@ -430,7 +430,7 @@ function addCustomElements(){
 	?>
 
 	<?php CustomFieldOrderGeneration_Patient::generate_patient_rdate(); ?>
-	<?php CustomFieldOrderGeneration_Patient::generate_patient_satellite_lab_ids_dropdown(); ?>
+	<?php CustomFieldOrderGeneration_Patient::generate_patient_satellite_lab_names_dropdown(); ?>
 	</form>
 
 	<input type='hidden' name='pid2' id='pid2' value=''></input>

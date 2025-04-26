@@ -134,6 +134,7 @@ $patient->sex = $sex;
 $patient->regDate=$date_receipt;
 $patient->surrogateId = $pid;
 $patient->satelliteLabId = $satellite_lab_id;
+$patient->satelliteLabName = get_satellite_lab_name_by_satellite_lab_id($satellite_lab_id);
 $patient->createdBy = $_SESSION['user_id'];
 update_daily_number_registration();
 $patient_added = add_patient($patient);

@@ -885,6 +885,10 @@
             <key>500_SERVER_ERROR</key>
             <value>HTTP/1.1 500 Internal Server Error</value>
         </term>
+        <term>
+            <key>SATELLITE_LAB_NAME</key>
+            <value>Satellite Lab Name</value>
+        </term>
     </page>
     <page id="header" descr="Page Header">
         <term>

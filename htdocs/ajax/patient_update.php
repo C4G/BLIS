@@ -85,6 +85,7 @@ $updated_profile->partialDob = $partial_dob;
 $updated_profile->sex = $sex;
 $updated_profile->surrogateId = $surr_id;
 $updated_profile->satelliteLabId = $satellite_lab_id;
+$updated_profile->satelliteLabName = get_satellite_lab_name_by_satellite_lab_id($satellite_lab_id);
 
 $flag = update_patient($updated_profile);
 # Handle custom fields

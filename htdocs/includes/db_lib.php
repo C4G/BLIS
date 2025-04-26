@@ -95,6 +95,7 @@ class User
     public $username;
 	public $password;
 	public $actualName;
+	public $satelliteLabName;
 	public $email;
 	public $phone;
 	public $level;
@@ -116,6 +117,7 @@ class User
 		$user->username = $record['username'];
 		$user->password = $record['password'];
 		$user->actualName = $record['actualname'];
+		$user->satelliteLabName = get_satellite_lab_name_by_user_id($user->userId);
 		$user->level = $record['level'];
 		$user->email = $record['email'];
 		$user->phone = $record['phone'];
@@ -1884,6 +1886,7 @@ class Patient
 {
 	public $patientId; # db primary key
 	public $satelliteLabId;
+	public $satelliteLabName;
 	public $addlId;
 	public $name;
 	public $dob;
@@ -1907,6 +1910,10 @@ class Patient
 			$patient->satelliteLabId = $record['satellite_lab_id'];
 		else
 			$patient->satelliteLabId = null;
+		if (isset($record['satellite_lab_name']))
+			$patient->satelliteLabName = $record['satellite_lab_name'];
+		else
+			$patient->satelliteLabName = null;
 		$patient->addlId = $record['addl_id'];
 		$patient->name = $record['name'];
 		$patient->dob = $record['dob'];
@@ -1953,6 +1960,10 @@ class Patient
 			$patient->satelliteLabId = $record['satellite_lab_id'];
 		else
 			$patient->satelliteLabId = null;
+		if (isset($record['satellite_lab_name']))
+			$patient->satelliteLabName = $record['satellite_lab_name'];
+		else
+			$patient->satelliteLabName = null;
 		$patient->addlId = $record['addlId'];
 		$patient->name = $record['name'];
 		$patient->dob = $record['dob'];
@@ -2015,6 +2026,14 @@ class Patient
 			return " - ";
 		else
 			return $this->satelliteLabId;
+	}
+
+	public function getSatelliteLabName()
+	{
+		if($this->satelliteLabName == "" || $this->satelliteLabName == null)
+			return " - ";
+		else
+			return $this->satelliteLabName;
 	}
 
 	public function getAddlId()
@@ -5847,8 +5866,8 @@ function add_user($user)
         }
 
 		$query_string =
-			"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions, satellite_lab_id) ".
-			"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions', $new_satellite_lab_id)";
+			"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions, satellite_lab_id, satellite_lab_name) ".
+			"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions', $new_satellite_lab_id, '$user->satelliteLabName')";
 
 		query_insert_one($query_string);
 		DbUtil::switchRestore($saved_db);
@@ -6036,6 +6055,7 @@ function update_user_profile($updated_entry)
 		"SET email='$updated_entry->email', ".
 		"phone='$updated_entry->phone', ".
 		"actualname='$updated_entry->actualName', ".
+		"satellite_lab_name='$updated_entry->satelliteLabName', ".
 		"lang_id='$updated_entry->langId' ".
 		"WHERE user_id=$user_id";
 	query_blind($query_string);
@@ -6092,6 +6112,7 @@ function update_lab_user($updated_entry)
 	$query_string =
 		"UPDATE user ".
 		"SET actualname='$updated_entry->actualName', ".
+		"satellite_lab_name='$updated_entry->satelliteLabName', ".
 		"phone='$updated_entry->phone', ".
 		"email='$updated_entry->email', ".
 		"level=$updated_entry->level, ".
@@ -6234,7 +6255,7 @@ function get_user_by_id($user_id)
 	$user_id = mysql_real_escape_string($user_id, $con);
 	# Fetches user record by primary key
 	$saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT a.user_id, a.username, a.password, a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions
+	$query_string = "SELECT a.user_id, a.username, a.password, a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, a.satellite_lab_name, b.value as rwoptions
 	FROM user a, user_config b WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.user_id=$user_id LIMIT 1";
 	$record = query_associative_one($query_string);
 	DbUtil::switchRestore($saved_db);
@@ -6448,6 +6469,7 @@ function add_patient($patient, $importOn = false)
 	$created_by = db_escape($patient->createdBy);
 	$hash_value = $patient->generateHashValue();
 	$satellite_lab_id = db_escape($patient->satelliteLabId);
+	$satellite_lab_name = db_escape($patient->satelliteLabName);
 
 	$query_string = "";
 
@@ -6461,20 +6483,20 @@ function add_patient($patient, $importOn = false)
 	if($dob == "" && $partial_dob == "")
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `surr_id`, `created_by`, `hash_value` ,`ts`, `satellite_lab_id`) ".
-			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `surr_id`, `created_by`, `hash_value` ,`ts`, `satellite_lab_id`, `satellite_lab_name`) ".
+			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id', '$satellite_lab_name')";
 	}
 	else if($partial_dob != "")
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `partial_dob`, `surr_id`, `created_by`, `hash_value`,`ts`, `satellite_lab_id`) ".
-			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$partial_dob', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `partial_dob`, `surr_id`, `created_by`, `hash_value`,`ts`, `satellite_lab_id`, `satellite_lab_name`) ".
+			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$partial_dob', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id', '$satellite_lab_name')";
 	}
 	else
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `dob`, `age`, `sex`, `surr_id`, `created_by`, `hash_value`, `ts`, `satellite_lab_id`) ".
-			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', $satellite_lab_id')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `dob`, `age`, `sex`, `surr_id`, `created_by`, `hash_value`, `ts`, `satellite_lab_id`, `satellite_lab_name`) ".
+			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', $satellite_lab_id', '$satellite_lab_name')";
 	}
 
 	print $query_string;
@@ -7087,26 +7109,36 @@ function get_satellite_lab_user_id($user_id)
     return $record["satellite_lab_id"];
 }
 
-function get_all_satellite_lab_ids()
-{
+function get_all_satellite_labs() {
     global $con, $LIS_SATELLITE_LAB_USER;
 
-    # Retrieves all user IDs corresponding to $LIS_SATELLITE_LAB_USER from the user table
+	# Retrieves all satellite Lab IDs and names corresponding to $LIS_SATELLITE_LAB_USER from the user table
+	# and returns a map of satellite lab IDs and names
     $saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT satellite_lab_id FROM user WHERE level = $LIS_SATELLITE_LAB_USER";
-	$resultset = query_associative_all($query_string);
+    $query_string = "SELECT satellite_lab_id, satellite_lab_name FROM user WHERE level = $LIS_SATELLITE_LAB_USER";
+    $resultset = query_associative_all($query_string);
 
-	$satellite_lab_ids = array();
-	if (count($resultset) > 0)
-	{
-		foreach($resultset as $record)
-		{
-			if (isset($record["satellite_lab_id"])){
-				$satellite_lab_ids[] = $record["satellite_lab_id"];
-			}
-		}
-	}
-	return $satellite_lab_ids;
+    $satellite_labs = array();
+
+    if ($resultset != null) {
+        foreach ($resultset as $record) {
+            $satellite_labs[$record['satellite_lab_id']] = $record['satellite_lab_name'];
+        }
+    }
+
+    return $satellite_labs;
+}
+
+function get_satellite_lab_name_by_satellite_lab_id($satellite_lab_id)
+{
+	global $con, $LIS_SATELLITE_LAB_USER;
+
+	# Retrieves satellite lab name corresponding to $satellite_lab_id from the user table
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string = "SELECT satellite_lab_name FROM user WHERE satellite_lab_id = $satellite_lab_id LIMIT 1";
+	$record = query_associative_one($query_string);
+	DbUtil::switchRestore($saved_db);
+	return $record["satellite_lab_name"];
 }
 
 function search_specimens_by_id($q)
@@ -7289,7 +7321,8 @@ $pid = $modified_record->patientId;
 		"surr_id='$modified_record->surrogateId', ".
 		"addl_id='$modified_record->addlId', ".
 		"sex='$modified_record->sex', ".
-		"satellite_lab_id='$modified_record->satelliteLabId', ";
+		"satellite_lab_id='$modified_record->satelliteLabId', ".
+		"satellite_lab_name='$modified_record->satelliteLabName', ";
 	if($modified_record->age != 0)
 	{
 		$today = date("Y-m-d");
@@ -8539,6 +8572,16 @@ $id=get_lab_config_id_admin($user_id);
 //echo "second:".$id;
 	DbUtil::switchRestore($saved_db);
 	return $id;
+}
+
+function get_satellite_lab_name_by_user_id($user_id)
+{
+	$saved_db = DbUtil::switchToGlobal();
+	$query_string = "SELECT satellite_lab_name FROM user WHERE user_id='$user_id'";
+	$record = query_associative_one($query_string);
+	$satelliteLabName = $record['satellite_lab_name'];
+	DbUtil::switchRestore($saved_db);
+	return $satelliteLabName;
 }
 
 /* Import Configuration function */
