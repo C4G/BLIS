@@ -48,7 +48,7 @@
 ![upgrade done](394_upgrade/login_upgrade_complete.png)
 1. Click "Lab Configurations"
 ![lab configurations](394_upgrade/list_of_labs.png)
-1. Click the lab that you want to see
+1. Click **"Manage Backups"** for the lab that you want to see
 1. The lab will have a "Migrations pending" link at the top. Click it.
 ![lab migrations](394_upgrade/migrations_pending.png)
 1. Once migrations are done, now you can make a backup.
