@@ -9058,18 +9058,30 @@ function get_specimen_types_by_site($lab_config_id="")
 #
 # Functions for adding data to catalog
 #
-function add_specimen_type($specimen_name, $specimen_descr, $test_list=array())
+function add_specimen_type($specimen_name, $specimen_descr, $test_list=array(), $lab_config_id=null)
 {
 	global $con;
 	$specimen_name = mysql_real_escape_string($specimen_name, $con);
 	$specimen_descr = mysql_real_escape_string($specimen_descr, $con);
 	# Adds a new specimen type in DB with compatible tests in $test_list
 	$saved_db = DbUtil::switchToLabConfigRevamp();
+	
+	if ($lab_config_id == null) {
+		$lab_config_id = $_SESSION['lab_config_id'];
+	}
+
 	$query_string =
 		"INSERT INTO specimen_type(name, description) ".
 		"VALUES ('$specimen_name', '$specimen_descr')";
 	query_insert_one($query_string);
+
 	$specimen_type_id = get_max_specimen_type_id();
+
+	$query_string =
+		"INSERT INTO lab_config_specimen_type(lab_config_id, specimen_type_id) ".
+		"VALUES ('$lab_config_id', '$specimen_type_id')";
+	query_insert_one($query_string);
+
 	if(count($test_list) != 0)
 	{
 		# For each compatible test type, add a new entry in 'specimen_test' map table
