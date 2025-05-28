@@ -6,11 +6,12 @@
 include("../includes/SessionCheck.php");
 include("../includes/db_lib.php");
 require_once("../includes/ajax_lib.php");
+require_once("../config/lab_config_resolver.php");
 
 LangUtil::setPageId("new_specimen");
 
 $specimen_type_id = $_REQUEST['stype'];
-$lab_config_id = $_SESSION['lab_config_id'];
+$lab_config_id = LabConfigResolver::resolveId();
 $test_type_list = get_compatible_test_types($lab_config_id, $specimen_type_id);
 
 if(count($test_type_list) == 0)
