@@ -49,23 +49,23 @@ class BackupRestorer {
             $this->logger->error("Both of these files must exist but at least one does not: $filename.key, $pvt_key");
             return false;
         }
-    
+
         $private_key_id = openssl_get_privatekey(file_get_contents($pvt_key));
         $env_key=file_get_contents($filename.".key");
         $env_key=base64_decode($env_key);
-    
+
         $sealed=file_get_contents($filename);
         $open = '';
         $res = openssl_open($sealed, $open, $env_key, $private_key_id);
         openssl_free_key($private_key_id);
-    
+
         if (!$res) {
             $this->logger->error("Could not decrypt $filename with $filename.key: " . openssl_error_string());
             return false;
         }
-    
+
         file_put_contents($filename.".dec", $open);
-    
+
         // Return the filename of the decrypted file
         return $filename.".dec";
     }
@@ -78,7 +78,7 @@ class BackupRestorer {
 
         $structure_file = file_get_contents($filename);
         $file_lines = explode("\n", $structure_file);
-        $file_contents = "";
+        $output_file = fopen($output_path, 'w');
         foreach($file_lines as $line) {
             $matches = null;
 
@@ -90,10 +90,9 @@ class BackupRestorer {
                 continue;
             }
 
-            $file_contents = $file_contents . $line . "\n";
+            fwrite($output_file, $line . "\n");
         }
-
-        file_put_contents($output_path, $file_contents);
+        fclose($output_file);
 
         return $output_path;
     }
@@ -126,7 +125,7 @@ class BackupRestorer {
         $unzip_path = dirname($zip_path) . "/" . $pathinfo['filename'];
         mkdir($unzip_path);
         $this->logger->info("Unzipping $zip_path to $unzip_path");
-        
+
         $zip = new ZipArchive;
         $res = $zip->open($zip_path);
         if ($res === TRUE) {
@@ -137,7 +136,7 @@ class BackupRestorer {
             $this->logger->error("Could not open $zip_path!");
             return false;
         }
-        
+
         $pvt=KeyMgmt::pathToKey("LAB_".$this->target_lab_id.".blis");
 
         $blisLabBackupFilePath = "$unzip_path/".$this->analyzed->relative_lab_backup_sql_path;
@@ -149,12 +148,12 @@ class BackupRestorer {
         }
 
         $sanitized_file = $this->sanitize_lab_sql_file($blisLabBackupFilePath);
-        
+
         // Since we are reverting to a backup, we need to reset the state of the migrations table as well.
         db_change($this->target_lab_database);
         query_delete("TRUNCATE TABLE blis_migrations;");
         $this->logger->info("Truncated blis_migrations table.");
-        
+
         $return = $this->execute_sql_file($sanitized_file, $this->target_lab_database);
 
         if (!!$decrypted_file) {
