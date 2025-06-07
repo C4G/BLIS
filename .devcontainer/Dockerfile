@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:noble
 
 # THIS IS A DEVCONTAINER
 # This is not a production-ready Dockerfile.
