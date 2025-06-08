@@ -14,7 +14,7 @@ $testId = intval($record['test_id']) + 1;
 
 $queryString = "INSERT INTO TEST_MAPPING (user_id, test_name, lab_id_test_id, test_id) ".
 			   "VALUES (".$userId.",'".$testName."','".$labIdTestId."',".$testId.")";
-query_insert_one($queryString) or die(mysql_error());
+query_insert_one($queryString) or die(mysqli_error());
 DbUtil::switchRestore($saved_db);
 
 echo "true";

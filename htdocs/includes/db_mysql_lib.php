@@ -1,20 +1,20 @@
 <?php
 #
 # Contains function calls for MySQL DB connection and query execution
-# For e.g., use query_associative_all() instead of mysql_query()
+# For e.g., use query_associative_all() instead of mysqli_query()
 #
 
 require_once(__DIR__."/composer.php");
 require_once(__DIR__."/db_constants.php" );
 require_once(__DIR__."/debug_lib.php");
 
-$con = mysql_connect( $DB_HOST, $DB_USER, $DB_PASS );
+$con = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS);
 if (!$con) {
-    die('Could not connect: ' . mysql_error());
+    die('Could not connect: ' . mysqli_error());
 }
 $LOG_QUERIES = true;
 
-mysql_select_db( $DB_NAME, $con );
+mysqli_select_db($con, $DB_NAME);
 
 function _db_get_username() {
     if (isset($_SESSION['username'])) {
@@ -28,7 +28,7 @@ function query_insert_one($query)
 {
 	# Single insert statement
 	global $con, $LOG_QUERIES;
-    mysql_query( $query, $con ) or die(mysql_error());
+    mysqli_query($con,  $query ) or die(mysqli_error());
 	if($LOG_QUERIES == true) {
         DebugLib::logDBUpdates($query, db_get_current());
         DebugLib::logQuery($query, db_get_current(), _db_get_username());
@@ -40,7 +40,7 @@ function query_update($query)
 {
 	# Single update statement
 	global $con, $LOG_QUERIES;
-    mysql_query( $query, $con ) or die(mysql_error());
+    mysqli_query($con,  $query ) or die(mysqli_error());
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
@@ -52,7 +52,7 @@ function query_delete($query)
 {
 	# Single delete from statement
 	global $con, $LOG_QUERIES;
-	mysql_query( $query, $con ) or die(mysql_error());
+	mysqli_query($con,  $query ) or die(mysqli_error());
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
@@ -64,7 +64,7 @@ function query_alter($query)
 {
 	# Single ALTER statement
 	global $con, $LOG_QUERIES;
-    mysql_query( $query, $con ) or die(mysql_error());
+    mysqli_query($con,  $query ) or die(mysqli_error());
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
@@ -75,12 +75,12 @@ function query_alter($query)
 function query_associative_all($query)
 {
     global $con, $LOG_QUERIES;
-	if( !($result = mysql_query( $query, $con ) ) )
+	if( !($result = mysqli_query($con,  $query ) ) )
 	{
         return null;
     }
     $retval = array();
-    while ( $row = mysql_fetch_assoc($result) ){ $retval[] = $row; }
+    while ( $row = mysqli_fetch_assoc($result) ){ $retval[] = $row; }
 	if($LOG_QUERIES == true) {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
 		DebugLib::logDBUpdates($query, db_get_current());
@@ -91,11 +91,11 @@ function query_associative_all($query)
 function query_associative_one( $query )
 {
     global $con, $LOG_QUERIES;
-	if( !($result =  mysql_query( $query, $con ) ) )
+	if( !($result =  mysqli_query($con,  $query)))
 	{
         return null;
     }
-    $retval = mysql_fetch_assoc( $result );
+    $retval = mysqli_fetch_assoc( $result );
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
@@ -182,14 +182,14 @@ function db_prep_string( $value )
 function get_last_db_error()
 {
     global $con, $LOG_QUERIES;
-    $retval = mysql_error( $con );
+    $retval = mysqli_error( $con );
     return $retval;
 }
 
 function query_blind( $query )
 {
     global $con, $LOG_QUERIES;
-    $result = mysql_query( $query, $con );
+    $result = mysqli_query($con,  $query );
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
@@ -201,43 +201,43 @@ function query_blind( $query )
 function get_last_insert_id()
 {
     global $con, $LOG_QUERIES;
-    $retval = mysql_insert_id( $con );
+    $retval = mysqli_insert_id( $con );
     return $retval;
 }
 
 function db_change($db_name)
 {
 	global $con, $LOG_QUERIES;
-	mysql_select_db( $db_name, $con );
+	mysqli_select_db($con, $db_name);
 }
 
 function db_create($db_name)
 {
 	global $con, $LOG_QUERIES;
 	$query_string = "CREATE DATABASE $db_name;";
-	mysql_query($query_string, $con);
+	mysqli_query($con, $query_string);
 }
 
 function db_delete($db_name)
 {
 	global $con, $LOG_QUERIES;
 	$query_string = "DROP DATABASE ".$db_name;
-	mysql_query($query_string, $con);
+	mysqli_query($con, $query_string);
 }
 
 function db_get_current()
 {
 	global $con, $LOG_QUERIES;
 	$query_string = "SELECT DATABASE() AS db_name";
-	$record = mysql_query($query_string, $con);
-	$row = mysql_fetch_assoc($record);
+	$record = mysqli_query($con, $query_string);
+	$row = mysqli_fetch_assoc($record);
 	return $row['db_name'];
 }
 
 function db_close()
 {
 	global $con, $LOG_QUERIES;
-	mysql_close($con);
+	mysqli_close($con);
 }
 
 ?>

@@ -13,7 +13,7 @@ $record = query_associative_one($queryString);
 $specimenId = intval($record['specimen_id']) + 1;
 $queryString = "INSERT INTO specimen_mapping (user_id, specimen_name, lab_id_specimen_id, specimen_id) ".
 			   "VALUES (".$userId.",'".$specimenName."','".$labIdSpecimenId."',".$specimenId.")";
-query_insert_one($queryString) or die(mysql_error());
+query_insert_one($queryString) or die(mysqli_error());
 DbUtil::switchRestore($saved_db);
 
 echo "true";

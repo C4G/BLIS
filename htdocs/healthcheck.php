@@ -3,17 +3,17 @@
 $status = "ok";
 $response_code = 200;
 
-require_once("includes/db_constants.php" );
+require_once("includes/db_constants.php");
 
-$con = mysql_connect($DB_HOST, $DB_USER, $DB_PASS);
+$con = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS);
 
 if (!$con) {
     $status = "could not connect to database: $DB_HOST";
 } else {
-    if (!mysql_query("SELECT DATABASE()", $con)) {
+    if (!mysqli_query($con, "SELECT DATABASE()")) {
         $status = "could not query database";
     }
-    mysql_close($con);
+    mysqli_close($con);
 }
 
 if ($status != "ok") {

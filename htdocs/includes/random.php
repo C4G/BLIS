@@ -17,8 +17,6 @@ else
 
 set_time_limit(1800000);
 
-$con = mysql_connect( $DB_HOST, $DB_USER, $DB_PASS );
-
 $MAX_NUM_PATIENTS = 5000000;
 $MAX_NUM_SPECIMENS = 5000000;
 

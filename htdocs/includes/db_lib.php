@@ -496,11 +496,10 @@ class Sites
     {
         $saved_db = DbUtil::switchToLabConfig($id);
         global $con;
-        $val = mysql_query('SELECT 1 from `sites` LIMIT 1');
+        $val = mysqli_query($con, "SELECT 1 from `sites` LIMIT 1");
         if($val !== FALSE)
         {
-            $query = "SELECT * FROM sites ".
-                "WHERE lab_id=".$id;
+            $query = "SELECT * FROM sites WHERE lab_id=".$id;
             $result = query_associative_all($query);
 			if ($result == NULL)
    			{
@@ -5810,12 +5809,8 @@ function password_reset_need_confirm()
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string = "SELECT count(*) as resetCount from misc where action='password reset completed'";
 	$record = query_associative_one($query_string);
-	//$num_rows = mysql_num_rows($record);
 	DbUtil::switchRestore($saved_db);
-	if($record['resetCount'] == 0)
-		return true;
-	return false;
-	//return $record;
+	return ($record['resetCount'] == 0);
 }
 
 function password_reset_flush($reset_before_date){
@@ -5842,6 +5837,7 @@ function check_user_exists($username)
 
 function add_user($user)
 {
+	global $con;
 	# Adds a new user account
 	if (!check_user_exists($user->username)){
 		$saved_db = DbUtil::switchToGlobal();
@@ -5854,8 +5850,8 @@ function add_user($user)
         if ($user->level == 20) {
             // Retrieve the last satellite_lab_id (assuming it's auto-incremented)
             $query_string = "SELECT MAX(satellite_lab_id) AS max_lab_id FROM user";
-            $result = mysql_query($query_string);
-            $row = mysql_fetch_assoc($result);
+            $result = mysqli_query($con, $query_string);
+            $row = mysqli_fetch_assoc($result);
             $new_satellite_lab_id = $row['max_lab_id'] + 1;
         } else {
             // Set the satellite_lab_id to NULL or handle differently for other levels
