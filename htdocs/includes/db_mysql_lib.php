@@ -133,7 +133,8 @@ function query_empty_table( $table_name )
 
 function db_escape( $value )
 {
-    $retval = mysql_real_escape_string( $value );
+    global $con;
+    $retval = mysqli_real_escape_string($con, $value);
     return $retval;
 }
 
