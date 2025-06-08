@@ -1206,7 +1206,7 @@ class TestType
 		return TestType::getObject($record);
 	}
 
-	public static function getByReportingStatus($status)
+	public static function getByReportingStatus($status=NULL)
     {
         # Return all test types that have reporting enabled/disabled
         $retval = array();
