@@ -6,7 +6,7 @@ include('includes/db_constants.php');
 $con = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS);
 if (!$con)
 {
-  die('Could not connect: ' . mysqli_error());
+  die('Could not connect: ' . mysqli_error($con));
 }
 mysqli_select_db($con, $GLOBAL_DB_NAME);
 

@@ -10,7 +10,7 @@ require_once(__DIR__."/debug_lib.php");
 
 $con = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS);
 if (!$con) {
-    die('Could not connect: ' . mysqli_error());
+    die('Could not connect: ' . mysqli_error($con));
 }
 $LOG_QUERIES = true;
 
@@ -28,7 +28,7 @@ function query_insert_one($query)
 {
 	# Single insert statement
 	global $con, $LOG_QUERIES;
-    mysqli_query($con,  $query ) or die(mysqli_error());
+    mysqli_query($con,  $query ) or die(mysqli_error($con));
 	if($LOG_QUERIES == true) {
         DebugLib::logDBUpdates($query, db_get_current());
         DebugLib::logQuery($query, db_get_current(), _db_get_username());
@@ -40,7 +40,7 @@ function query_update($query)
 {
 	# Single update statement
 	global $con, $LOG_QUERIES;
-    mysqli_query($con,  $query ) or die(mysqli_error());
+    mysqli_query($con,  $query ) or die(mysqli_error($con));
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
@@ -52,7 +52,7 @@ function query_delete($query)
 {
 	# Single delete from statement
 	global $con, $LOG_QUERIES;
-	mysqli_query($con,  $query ) or die(mysqli_error());
+	mysqli_query($con,  $query ) or die(mysqli_error($con));
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
@@ -64,7 +64,7 @@ function query_alter($query)
 {
 	# Single ALTER statement
 	global $con, $LOG_QUERIES;
-    mysqli_query($con,  $query ) or die(mysqli_error());
+    mysqli_query($con,  $query ) or die(mysqli_error($con));
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());

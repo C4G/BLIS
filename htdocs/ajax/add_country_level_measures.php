@@ -13,7 +13,8 @@ $record = query_associative_one($queryString);
 $measureId = intval($record['measure_id']) + 1;
 
 $queryString = "INSERT INTO measure_mapping (user_id, measure_name, lab_id_measure_id, measure_id) VALUES (".$userId.",'".$measureName."','".$labIdMeasureId."',".$measureId.")";
-query_insert_one($queryString) or die(mysqli_error());
+global $con;
+query_insert_one($queryString) or die(mysqli_error($con));
 DbUtil::switchRestore($saved_db);
 
 echo "true";

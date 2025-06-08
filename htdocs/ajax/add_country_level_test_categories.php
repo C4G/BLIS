@@ -14,7 +14,8 @@ $testCategoryId = intval($record['test_category_id']) + 1;
 
 $queryString = "INSERT INTO TEST_CATEGORY_MAPPING (user_id, test_category_name, lab_id_test_category_id, test_category_id) ".
 			   "VALUES (".$userId.",'".$testCategoryName."','".$labIdTestCategoryId."',".$testCategoryId.")";
-query_insert_one($queryString) or die(mysqli_error());
+global $con;
+query_insert_one($queryString) or die(mysqli_error($con));
 DbUtil::switchRestore($saved_db);
 
 echo "true";
