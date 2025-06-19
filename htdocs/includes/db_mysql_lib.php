@@ -8,9 +8,9 @@ require_once(__DIR__."/composer.php");
 require_once(__DIR__."/db_constants.php" );
 require_once(__DIR__."/debug_lib.php");
 
-$con = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS);
-if (!$con) {
-    die('Could not connect: ' . mysqli_error($con));
+$con = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS, null, $DB_PORT);
+if (!$con || mysqli_connect_errno()) {
+    die('Could not connect: ' . mysqli_connect_error());
 }
 $LOG_QUERIES = true;
 

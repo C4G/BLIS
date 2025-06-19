@@ -5,7 +5,7 @@ $response_code = 200;
 
 require_once("includes/db_constants.php");
 
-$con = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS);
+$con = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS, null, $DB_PORT);
 
 if (!$con) {
     $status = "could not connect to database: $DB_HOST";

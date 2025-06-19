@@ -3,10 +3,10 @@ include("redirect.php");
 session_start();
 include('includes/db_constants.php');
 
-$con = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS);
+$con = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS, null, $DB_PORT);
 if (!$con)
 {
-  die('Could not connect: ' . mysqli_error($con));
+  die('Could not connect: ' . mysqli_connect_error());
 }
 mysqli_select_db($con, $GLOBAL_DB_NAME);
 
