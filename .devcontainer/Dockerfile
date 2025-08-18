@@ -5,7 +5,7 @@ FROM ubuntu:noble
 # See the documentation here to see why devcontainers are awesome:
 # https://code.visualstudio.com/docs/remote/containers
 
-ARG PHP_VERSION="5.6"
+ARG PHP_VERSION="7.4"
 
 # Install a bunch of stuff from the standard repositories and a custom PHP repository
 RUN apt-get update && apt-get install -y software-properties-common && \
