@@ -20,7 +20,7 @@ $current_user = null;
 if ($current_user_id) {
     $current_user = get_user_by_id($current_user_id);
 } else {
-    $log->warn("\$current_user_id is null");
+    $log->warning("\$current_user_id is null");
 }
 
 // It's not really clear whether to use the `lab_config_id` value in

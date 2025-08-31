@@ -8465,7 +8465,7 @@ function create_lab_config_tables($db_name)
 	if ($migrations_successful) {
 		$log->info("Lab tables were created successfully.");
 	} else {
-		$log->warn("Lab tables were NOT created successfully.");
+		$log->warning("Lab tables were NOT created successfully.");
 	}
 }
 

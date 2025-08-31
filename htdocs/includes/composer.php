@@ -48,12 +48,12 @@ $lang_template_path = realpath(__DIR__."/../Language/");
 $local_path = realpath(__DIR__."/../../local");
 
 if (!file_exists("$local_path/langdata_revamp/")) {
-    $log->warn("$local_path/langdata_revamp does not exist, copying template");
+    $log->warning("$local_path/langdata_revamp does not exist, copying template");
     PlatformLib::copyDirectory($lang_template_path, "$local_path/langdata_revamp/");
 }
 
 if ($lab_config_id != null && !file_exists("$local_path/langdata_$lab_config_id/")) {
-    $log->warn("$local_path/langdata_$lab_config_id does not exist, copying template");
+    $log->warning("$local_path/langdata_$lab_config_id does not exist, copying template");
     PlatformLib::copyDirectory($lang_template_path, "$local_path/langdata_$lab_config_id/");
 }
 
