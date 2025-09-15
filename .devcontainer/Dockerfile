@@ -34,6 +34,7 @@ RUN apt-get update && apt-get install -y software-properties-common && \
         php$PHP_VERSION-zip \
         php$PHP_VERSION-mbstring \
         php$PHP_VERSION-xml \
+        php$PHP_VERSION-sodium \
         && rm -rf /var/lib/apt/lists/*
 
 RUN echo "column-statistics = 0" | tee -a /etc/mysql/conf.d/mysqldump.cnf

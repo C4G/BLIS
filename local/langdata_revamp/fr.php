@@ -736,25 +736,25 @@ $LANG_ARRAY = array (
 		"SEARCH_BEGIN_WITH" => "Commence par", 
 		"SEARCH_END_WITH" => "Fin d'", 
 		"SEARCH_CONTAINS" => "Contient"
-	) ,
-	"debug" => array (
-        "DEBUG_UTILITIES" => "Utilitaires de débogage",
-        "GIT_COMMIT_SHA" => "SHA du commit Git",
-        "BROWSE_SOURCE_CODE" => "parcourir le code source",
-        "AVAILABLE_LOG_FILES" => "Fichiers de journal disponibles",
-        "LANGUAGE_UTILITIES" => "Utilitaires de langue",
-        "RESET_UPDATE_LANGUAGE_FILES" => "Réinitialiser/mettre à jour les fichiers de langue",
-        "DATABASE_UTILITIES" => "Utilitaires de base de données",
-        "LEGACY_LAB_DATABASE_MIGRATIONS" => "Migrations de la base de données du laboratoire hérité",
-        "WARNING" => "Attention!",
-        "MIGRATION_WARNING" => "Exécuter l'une de ces migrations pourrait casser votre configuration de laboratoire DE MANIÈRE PERMANENTE !",
-        "MIGRATION_DESCRIPTION" => "Ces migrations sont utilisées pour effectuer des mises à jour manuelles d'une configuration de laboratoire importée à partir d'une ancienne version de BLIS.",
-        "LAB_DATABASE" => "Base de données du laboratoire",
-        "SELECT_LAB" => "Sélectionnez un laboratoire",
-        "SQL_MIGRATION" => "Migration SQL",
-        "SELECT_MIGRATION" => "Sélectionnez une migration",
-        "APPLY" => "Appliquer"
-    )
+	) , 
+	"debug" => array ( 
+		"DEBUG_UTILITIES" => "Utilitaires de débogage", 
+		"GIT_COMMIT_SHA" => "SHA du commit Git", 
+		"BROWSE_SOURCE_CODE" => "parcourir le code source", 
+		"AVAILABLE_LOG_FILES" => "Fichiers de journal disponibles", 
+		"LANGUAGE_UTILITIES" => "Utilitaires de langue", 
+		"RESET_UPDATE_LANGUAGE_FILES" => "Réinitialiser/mettre à jour les fichiers de langue", 
+		"DATABASE_UTILITIES" => "Utilitaires de base de données", 
+		"LEGACY_LAB_DATABASE_MIGRATIONS" => "Migrations de la base de données du laboratoire hérité", 
+		"WARNING" => "Attention!", 
+		"MIGRATION_WARNING" => "Exécuter l'une de ces migrations pourrait casser votre configuration de laboratoire DE MANIÈRE PERMANENTE !", 
+		"MIGRATION_DESCRIPTION" => "Ces migrations sont utilisées pour effectuer des mises à jour manuelles d'une configuration de laboratoire importée à partir d'une ancienne version de BLIS.", 
+		"LAB_DATABASE" => "Base de données du laboratoire", 
+		"SELECT_LAB" => "Sélectionnez un laboratoire", 
+		"SQL_MIGRATION" => "Migration SQL", 
+		"SELECT_MIGRATION" => "Sélectionnez une migration", 
+		"APPLY" => "Appliquer"
+	) 
 );
 
 include_once(__DIR__."/../lang/lang_util.php");

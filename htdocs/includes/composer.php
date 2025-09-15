@@ -14,8 +14,13 @@ if (!file_exists(__DIR__."/../../log")) {
     mkdir(__DIR__."/../../log", 0755);
 }
 
+$is_cli = (php_sapi_name() === 'cli');
+
 $log = new Logger("application");
 $log->pushHandler(new StreamHandler(__DIR__."/../../log/application.log", Logger::DEBUG));
+if ($is_cli) {
+    $log->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+}
 
 $db_log = new Logger("database");
 $db_log->pushHandler(new StreamHandler(__DIR__."/../../log/database.log", Logger::DEBUG));
