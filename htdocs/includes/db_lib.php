@@ -6588,7 +6588,7 @@ function search_patients_by_id($q, $labsection = 0)
 	global $con;
 	$q = mysqli_real_escape_string($con, $q);
 	# Searches for patients with similar PID
-	$core_query = "SELECT DISTINCT p.* FROM patient p"; 
+	$core_query = "SELECT DISTINCT p.* FROM patient p";
 	$core_filter = "WHERE surr_id='$q";
 	$default_order = "ORDER BY ts DESC";
 	if($labsection == 0) {
@@ -6626,7 +6626,7 @@ function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satelli
 	global $con, $LIS_SATELLITE_LAB_USER;
         $offset = $cap * ($counter - 1);
 	$q = mysqli_real_escape_string($con, $q);
-	$core_query = "SELECT DISTINCT p.* FROM patient p "; 
+	$core_query = "SELECT DISTINCT p.* FROM patient p ";
 	$core_filter = "WHERE surr_id LIKE '%$q%' ";
 	$default_order = "ORDER BY ts DESC LIMIT $offset,$cap ";
 
@@ -6670,7 +6670,7 @@ function search_patients_by_id_count($q, $labsection = 0, $satellite_lab_id)
 	# Searches for patients with similar name
 	global $con, $LIS_SATELLITE_LAB_USER;
 	$q = mysqli_real_escape_string($con, $q);
-	$core_query = "SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p "; 
+	$core_query = "SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p ";
 	$core_filter = "WHERE surr_id LIKE '%$q%' ";
 
 	if($labsection == 0) {
@@ -6759,7 +6759,7 @@ function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0,
 	global $con, $LIS_SATELLITE_LAB_USER;
         $offset = $cap * ($counter - 1);
 	$q = mysqli_real_escape_string($con, $q);
-	$core_query = "SELECT DISTINCT p.* FROM patient p "; 
+	$core_query = "SELECT DISTINCT p.* FROM patient p ";
 	$core_filter = "WHERE name LIKE '%$q%' ";
 	$default_order = "ORDER BY name ASC LIMIT $offset,$cap ";
 	if(empty($c))
@@ -6806,7 +6806,7 @@ function search_patients_by_name_count($q, $labsection = 0,$c="", $satellite_lab
 	# Searches for patients with similar name
 	global $con, $LIS_SATELLITE_LAB_USER;
 	$q = mysqli_real_escape_string($con, $q);
-	$core_query = "SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p "; 
+	$core_query = "SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p ";
 	$core_filter = "WHERE name LIKE '%$q%' ";
 
 	if($labsection == 0) {
@@ -6892,7 +6892,7 @@ function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0, $sat
 	global $con, $LIS_SATELLITE_LAB_USER;
         $offset = $cap * ($counter - 1);
 	$q = mysqli_real_escape_string($con, $q);
-	$core_query = "SELECT DISTINCT p.* FROM patient p "; 
+	$core_query = "SELECT DISTINCT p.* FROM patient p ";
 	$core_filter = "WHERE addl_id LIKE '%$q%' ";
 	$default_order = "ORDER BY addl_id ASC LIMIT $offset,$cap ";
 
@@ -6972,7 +6972,7 @@ function search_patients_by_dailynum($q, $labsection = 0)
 	global $con;
 	$q = mysqli_real_escape_string($con, $q);
 	# Searches for patients with similar daily number
-	
+
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 	if($labsection == 0){
 		$query_string = "SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' ORDER BY date_collected DESC LIMIT 20";
@@ -7016,7 +7016,7 @@ function search_patients_by_dailynum_dyn($q, $cap, $counter, $labsection = 0)
 	global $con;
         $offset = $cap * ($counter - 1);
 	$q = mysqli_real_escape_string($con, $q);
-	$core_query = "SELECT DISTINCT p.* FROM patient p "; 
+	$core_query = "SELECT DISTINCT p.* FROM patient p ";
 	$core_filter = "WHERE daily_num LIKE '%$q' ";
 	$default_order = "ORDER BY date_collected DESC LIMIT $offset,$cap ";
 
@@ -8544,12 +8544,13 @@ function get_lab_config_by_id($lab_config_id)
 
 function get_lab_config_id_admin($user_id)
 {
-
-$query_string = "SELECT lab_config_id FROM lab_config WHERE admin_user_id='$user_id'";
-$record = query_associative_one($query_string);
-		$id = $record['lab_config_id'];
-
-return $id;
+    $query_string = "SELECT lab_config_id FROM lab_config WHERE admin_user_id='$user_id'";
+    $record = query_associative_one($query_string);
+    if ($record != null) {
+	    $id = $record['lab_config_id'];
+        return $id;
+    }
+    return null;
 }
 
 function get_lab_config_id($user_id)
@@ -9058,7 +9059,7 @@ function add_specimen_type($specimen_name, $specimen_descr, $test_list=array(), 
 	$specimen_descr = mysqli_real_escape_string($con, $specimen_descr);
 	# Adds a new specimen type in DB with compatible tests in $test_list
 	$saved_db = DbUtil::switchToLabConfigRevamp();
-	
+
 	if ($lab_config_id == null) {
 		$lab_config_id = $_SESSION['lab_config_id'];
 	}

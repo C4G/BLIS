@@ -8,13 +8,12 @@ class Encryption
      * Asymmetrically encrypt a file with a given public key.
      * @param $inputFile: String path to the file to encrypt.
      * @param $outputFile: String path to write the encrypted file.
-     * @param $keyfile: Path to the public key file.
+     * @param $keycontents: Base64-encoded public key.
      */
-    public static function encryptFile($inputFile, $outputFile, $keyfile)
+    public static function encryptFile($inputFile, $outputFile, $keycontents)
     {
         global $log;
 
-        $keycontents = file_get_contents($keyfile);
         $pubkey = base64_decode($keycontents);
         sodium_memzero($keycontents);
 
@@ -35,13 +34,12 @@ class Encryption
      * Asymmetrically decrypt a file with a given keypair (private key).
      * @param $inputFile: String path to the file to decrypt.
      * @param $outputFile: String path to write the decrypted file.
-     * @param $keyfile: Path to the private key file.
+     * @param $keycontents: Base64-encoded private key.
      */
-    public static function decryptFile($inputFile, $outputFile, $keyfile)
+    public static function decryptFile($inputFile, $outputFile, $keycontents)
     {
         global $log;
 
-        $keycontents = file_get_contents($keyfile);
         $keypair = base64_decode($keycontents);
         sodium_memzero($keycontents);
 
