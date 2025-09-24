@@ -47,6 +47,10 @@ if ($_POST["settings_encryption_enabled"] == "on") {
     $lab_config->setBackupEncryptionEnabled(false);
 }
 
+if (trim($_POST["settings_lab_decryption_key"]) != "") {
+    $lab_config->updateBackupEncryptionKeyId($_POST["settings_lab_decryption_key"]);
+}
+
 $_SESSION['FLASH'] = "Settings updated successfully.";
 
 header("Location: lab_config_backup_settings.php?id=$lab_config_id");
