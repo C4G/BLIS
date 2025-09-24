@@ -30,6 +30,20 @@ class Encryption
         sodium_memzero($pubkey);
     }
 
+    public static function decrypt($input, $keycontents)
+    {
+        $keypair = base64_decode($keycontents);
+        $res = false;
+        try {
+            $res = sodium_crypto_box_seal_open($input, $keypair);
+        } catch (Exception $ex) {
+            $log->error($ex);
+        }
+
+        sodium_memzero($keypair);
+        return $res;
+    }
+
     /**
      * Asymmetrically decrypt a file with a given keypair (private key).
      * @param $inputFile: String path to the file to decrypt.
@@ -39,20 +53,18 @@ class Encryption
     public static function decryptFile($inputFile, $outputFile, $keycontents)
     {
         global $log;
-
-        $keypair = base64_decode($keycontents);
-        sodium_memzero($keycontents);
-
         $data = file_get_contents($inputFile);
-
         try {
-            $res = sodium_crypto_box_seal_open($data, $keypair);
+            $res = Encryption::decrypt($data, $keycontents);
+            if (!$res) {
+                return false;
+            }
             file_put_contents($outputFile, $res);
             sodium_memzero($res);
+            return true;
         } catch (Exception $ex) {
             $log->error($ex);
+            return false;
         }
-
-        sodium_memzero($keypair);
     }
 }

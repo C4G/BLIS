@@ -68,6 +68,9 @@ function key_to_row($key) {
     );
 }
 
+$server_keys = Key::where_type(Key::$KEYPAIR);
+$public_keys = Key::where_type(Key::$PUBLIC);
+
 ?>
 
 <div id="settings" class="section">
@@ -76,6 +79,26 @@ function key_to_row($key) {
         <div class="form-element">
             <input type="checkbox" id="settings_encryption_enabled" name="settings_encryption_enabled" <?php echo($settings_encryption_enabled ? "checked" : ""); ?>>
             <label for="settings_encryption_enabled">Enable Encrypted Backups</label>
+        </div>
+        <div class="form-element">
+            <?php if ($settings_encryption_enabled) {
+            ?>
+            <label for="settings_lab_decryption_key">Backup decryption key:</label>
+            <select id="settings_lab_decryption_key" name="settings_lab_decryption_key" autocomplete="off">
+                <option value=""></option>
+                <?php
+                foreach ($server_keys as $keypair)
+                {
+                    $selected = $lab_config->backup_encryption_key_id != null && ($keypair->id == $lab_config->backup_encryption_key_id);
+                    $selected_attr = $selected ? "selected" : "";
+                    echo "<option value=\"" . $keypair->id . "\" $selected_attr>" . $keypair->name . "</option>";
+                }
+                ?>
+            </select>
+            <?php
+            }
+            ?>
+
         </div>
 
         <div class="form-element">
@@ -89,7 +112,7 @@ function key_to_row($key) {
 ?>
 
 <div id="key-management" class="section">
-    <h3 class="section-head">BLIS Cloud Administrator Server Keys</h3>
+    <h3 class="section-head">Decryption Keys</h3>
     <div id="server-keypair-table">
         <table class="hor-minimalist-b">
             <thead>
@@ -100,7 +123,6 @@ function key_to_row($key) {
                 </tr>
             </thead>
             <?php
-                $server_keys = Key::where_type(Key::$KEYPAIR);
                 foreach($server_keys as $key) {
                     echo(key_to_row($key));
                 }
@@ -132,7 +154,6 @@ function key_to_row($key) {
             </tr>
         </thead>
         <?php
-            $public_keys = Key::where_type(Key::$PUBLIC);
             foreach($public_keys as $key) {
                 echo(key_to_row($key));
             }

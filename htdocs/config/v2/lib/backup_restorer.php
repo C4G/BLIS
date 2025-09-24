@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__."/../../../encryption/encryption.php");
+require_once(__DIR__."/../../../encryption/keys.php");
 require_once(__DIR__."/../../../includes/composer.php");
 require_once(__DIR__."/../../../includes/db_mysql_lib.php");
 require_once(__DIR__."/../../../includes/keymgmt.php");
@@ -12,6 +14,7 @@ class BackupRestorer {
 
     private $backup;
     private $analyzed;
+    private $decryption_key;
 
     private $target_lab_id;
     public $target_lab_database;
@@ -21,13 +24,14 @@ class BackupRestorer {
     /**
      * Accepts a Backup object (from ./backup.php)
      */
-    function __construct($backup, $target_lab_id) {
+    function __construct($backup, $target_lab_id, $decryption_key_id=null) {
         global $log;
 
         $this->logger = $log;
 
         $this->backup = $backup;
-        $this->analyzed = $backup->analyze();
+        $this->analyzed = $backup->analyze($decryption_key_id);
+        $this->decryption_key = Key::find($decryption_key_id);
 
         $this->target_lab_id = $target_lab_id;
 
@@ -42,32 +46,24 @@ class BackupRestorer {
         $this->target_lab_database = $lab_db_name['db_name'];
     }
 
-    private function decrypt($filename, $pvt_key) {
-        $this->logger->info("Attempting to decrypt $filename with $pvt_key");
+    private function decrypt($filename) {
+        $this->logger->error("decrypt $filename");
 
-        if (!file_exists($filename.".key") || !file_exists($pvt_key)) {
-            $this->logger->error("Both of these files must exist but at least one does not: $filename.key, $pvt_key");
+        if (!$this->decryption_key) {
             return false;
         }
 
-        $private_key_id = openssl_get_privatekey(file_get_contents($pvt_key));
-        $env_key=file_get_contents($filename.".key");
-        $env_key=base64_decode($env_key);
+        $this->logger->info("Attempting to decrypt $filename with " . $this->decryption_key->name);
 
-        $sealed=file_get_contents($filename);
-        $open = '';
-        $res = openssl_open($sealed, $open, $env_key, $private_key_id);
-        openssl_free_key($private_key_id);
+        $res = Encryption::decryptFile($filename, "$filename.dec", $this->decryption_key->data);
 
         if (!$res) {
-            $this->logger->error("Could not decrypt $filename with $filename.key: " . openssl_error_string());
+            $this->logger->error("Could not decrypt $filename with " . $this->decryption_key->name);
             return false;
         }
 
-        file_put_contents($filename.".dec", $open);
-
         // Return the filename of the decrypted file
-        return $filename.".dec";
+        return "$filename.dec";
     }
 
     private function sanitize_lab_sql_file($filename) {
@@ -137,12 +133,10 @@ class BackupRestorer {
             return false;
         }
 
-        $pvt=KeyMgmt::pathToKey("LAB_".$this->target_lab_id.".blis");
-
         $blisLabBackupFilePath = "$unzip_path/".$this->analyzed->relative_lab_backup_sql_path;
 
         // Attempt to decrypt file
-        $decrypted_file = $this->decrypt($blisLabBackupFilePath, $pvt);
+        $decrypted_file = $this->decrypt($blisLabBackupFilePath);
         if (!!$decrypted_file) {
             $blisLabBackupFilePath = $decrypted_file;
         }
