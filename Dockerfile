@@ -27,7 +27,6 @@ RUN add-apt-repository ppa:ondrej/php && apt-get update && \
         php$PHP_VERSION-zip \
         php$PHP_VERSION-mbstring \
         php$PHP_VERSION-xml \
-        php$PHP_VERSION-sodium \
         && rm -rf /var/lib/apt/lists/*
 
 # This is a mysqldump configuration option required in this environment to
