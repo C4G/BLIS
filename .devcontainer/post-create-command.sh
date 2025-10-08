@@ -20,4 +20,7 @@ sudo setfacl -R -m u:www-data:rwX "$WORKSPACE_FOLDER"
 # Set default ACL recursively to give www-data access to new files and folders too
 sudo setfacl -R -m d:u:www-data:rwx "$WORKSPACE_FOLDER"
 
-pip3 install -r requirements.txt
+python3 -m venv ~/venv-mkdocs
+~/venv-mkdocs/bin/pip3 install -r requirements.txt
+mkdir -p ~/.local/bin && ln -s ~/venv-mkdocs/bin/mkdocs ~/.local/bin/mkdocs
+
