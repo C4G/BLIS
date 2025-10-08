@@ -109,7 +109,7 @@ for ($x = 0; $x < $NUM_RETRIES; $x = $x + 1) {
         } else {
             $outstr = "Output: $output";
         }
-        $log->warn("Request failed. Curl exit code: $return_code. $outstr");
+        $log->warning("Request failed. Curl exit code: $return_code. $outstr");
         $failure = true;
     }
 }

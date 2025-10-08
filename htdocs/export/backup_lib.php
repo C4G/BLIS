@@ -2,6 +2,7 @@
 #
 # Contains commonly used functions for performing backup or reverting to a backup
 #
+require_once(__DIR__."/../encryption/encryption.php");
 require_once(__DIR__."/../includes/composer.php");
 require_once(__DIR__."/../includes/db_lib.php");
 require_once(__DIR__."/../includes/platform_lib.php");
@@ -71,29 +72,13 @@ class BackupLib
         }
     }
 
-    private static function encryptFile($filename, $publicKey, $outputFilename, $decryptionKeyFilename)
-    {
-        global $log;
-
-        $data = file_get_contents($filename);
-        $res = openssl_seal($data, $sealed, $ekeys, array($publicKey));
-        if (!$res) {
-            $log->error("Failed to encrypt data: " . openssl_error_string());
-            return false;
-        }
-        $env_key = $ekeys[0];
-        file_put_contents($decryptionKeyFilename, base64_encode($env_key));
-        file_put_contents($outputFilename, $sealed);
-    }
-
     # Backup log files if they exist
     private static function dumpLog($logfile, $dest_base, $public_key)
     {
         if (file_exists($logfile)) {
             if (!!$public_key) {
                 $dest = "$dest_base.enc";
-                $key_dest = "$dest_base.key";
-                self::encryptFile($logfile, $public_key, $dest, $key_dest);
+                Encryption::encryptFile($logfile, $dest, $public_key);
             } else {
                 copy($logfile, $dest_base);
             }
@@ -135,57 +120,6 @@ class BackupLib
         $zip->close();
 
         $log->info("$zipFile created successfully!");
-    }
-
-    /**
-     * Upload a backup file to a BLIS Cloud server
-     */
-    public static function send_file_to_server($file_path, $lab_config_id)
-    {
-        global $log;
-
-        $lab_config = LabConfig::getById($lab_config_id);
-        $server_host = $lab_config->blis_cloud_hostname;
-
-        if (strlen($server_host === 0)) {
-            $log->info("blis_cloud_hostname is not set for lab ID $lab_config_id");
-            return false;
-        }
-
-        $endpoint = $server_host.'/export/import_data_director.php';
-        $log->info("Attempting to upload $file_path to $endpoint...");
-
-        if (function_exists('curl_file_create')) {
-            // For PHP 5.5+, which is what we use in the BLIS docker image
-            $curlfile = curl_file_create($file_path, 'application/zip');
-        } else {
-            // For old-school PHP, which is in-use by the Desktop BLIS
-            $curlfile = '@' . realpath($file_path);
-            $log->info("Resolved path to: $curlfile");
-        }
-
-        // The sqlFile name is the form name for the file
-        // This should match the name used in import_data_director.php
-        $post = array('sqlFile'=> $curlfile);
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $endpoint);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        // See https://www.php.net/manual/en/function.curl-exec.php
-        // for why to use the === here
-        if ($response === false) {
-            $log->error("Failed to upload file.");
-        } else {
-            $log->info("File uploaded successfully!");
-            echo("<p>Backup was transferred to server $server_host</p>");
-        }
-
-        return $response;
     }
 
     /**
@@ -286,17 +220,9 @@ class BackupLib
             // Now the file located at $plaintext_backup is anonymized!
         }
 
-        $server_public_key = false;
-
         if ($encryption_enabled) {
-            $server_public_key = openssl_pkey_get_public($encryption_key);
-            if (!$server_public_key) {
-                $log->error(openssl_error_string());
-                return;
-            }
             $encrypted_backup = "$backup_dir/$lab_db/$lab_db"."_backup.sql.enc";
-            $encrypted_backup_key = "$backup_dir/$lab_db/$lab_db"."_backup.sql.key";
-            self::encryptFile($plaintext_backup, $server_public_key, $encrypted_backup, $encrypted_backup_key);
+            Encryption::encryptFile($plaintext_backup, $encrypted_backup, $encryption_key);
 
             // Delete plaintext backup
             unlink($plaintext_backup);
@@ -312,8 +238,7 @@ class BackupLib
 
         if ($encryption_enabled) {
             $encrypted_backup = "$backup_dir/$dbname/$dbname"."_backup.sql.enc";
-            $encrypted_backup_key = "$backup_dir/$dbname/$dbname"."_backup.sql.key";
-            self::encryptFile($backupDbFileName, $server_public_key, $encrypted_backup, $encrypted_backup_key);
+            Encryption::encryptFile($backupDbFileName, $encrypted_backup, $encryption_key);
 
             unlink($backupDbFileName);
 
@@ -333,15 +258,15 @@ class BackupLib
         }
 
 
-        self::dumpLog("../../local/log_$lab_config_id.txt", "$backup_dir/log_$lab_config_id.txt", $server_public_key);
-        self::dumpLog("../../local/log_$lab_config_id"."_updates.txt", "$backup_dir/log_$lab_config_id"."_updates.txt", $server_public_key);
-        self::dumpLog("../../local/log_$lab_config_id"."_revamp_updates.txt", "$backup_dir/log_$lab_config_id"."_revamp_updates.txt", $server_public_key);
-        self::dumpLog("../../local/UILog_2-2.csv", "$backup_dir/UILog_2-2.csv", $server_public_key);
-        self::dumpLog("../../local/UILog_2-3.csv", "$backup_dir/UILog_2-3.csv", $server_public_key);
-        self::dumpLog("../../log/application.log", "$backup_dir/application.log", $server_public_key);
-        self::dumpLog("../../log/database.log", "$backup_dir/database.log", $server_public_key);
-        self::dumpLog("../../log/apache2_error.log", "$backup_dir/apache2_error.log", $server_public_key);
-        self::dumpLog("../../log/php_error.log", "$backup_dir/apache2_error.log", $server_public_key);
+        self::dumpLog("../../local/log_$lab_config_id.txt", "$backup_dir/log_$lab_config_id.txt", $encryption_key);
+        self::dumpLog("../../local/log_$lab_config_id"."_updates.txt", "$backup_dir/log_$lab_config_id"."_updates.txt", $encryption_key);
+        self::dumpLog("../../local/log_$lab_config_id"."_revamp_updates.txt", "$backup_dir/log_$lab_config_id"."_revamp_updates.txt", $encryption_key);
+        self::dumpLog("../../local/UILog_2-2.csv", "$backup_dir/UILog_2-2.csv", $encryption_key);
+        self::dumpLog("../../local/UILog_2-3.csv", "$backup_dir/UILog_2-3.csv", $encryption_key);
+        self::dumpLog("../../log/application.log", "$backup_dir/application.log", $encryption_key);
+        self::dumpLog("../../log/database.log", "$backup_dir/database.log", $encryption_key);
+        self::dumpLog("../../log/apache2_error.log", "$backup_dir/apache2_error.log", $encryption_key);
+        self::dumpLog("../../log/php_error.log", "$backup_dir/apache2_error.log", $encryption_key);
 
         $zipFile=$backup_dir;
         if ($encryption_enabled) {

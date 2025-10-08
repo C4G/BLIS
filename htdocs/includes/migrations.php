@@ -169,7 +169,7 @@ class LabDatabaseMigrator {
         $results = query_associative_all($query);
 
         if (!$results) {
-            $log->warn("Error querying migrations for database " . $this->lab_db_name);
+            $log->warning("Error querying migrations for database " . $this->lab_db_name);
             return array();
         }
 

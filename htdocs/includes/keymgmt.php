@@ -23,14 +23,14 @@ class KeyMgmt
         $files_dir = realpath(__DIR__ . "/../../files/")."/";
 
         if (file_exists("$ajax_dir/$keyName")) {
-            $log->warn("Found $keyName in ajax/ folder, moving it to htdocs/files/");
+            $log->warning("Found $keyName in ajax/ folder, moving it to htdocs/files/");
             rename("$ajax_dir/$keyName", "$files_dir/$keyName");
         }
 
         if (file_exists("$files_dir/$keyName")) {
             return "$files_dir/$keyName";
 	} else {
-	    $log->warn("$files_dir/$keyName does not exist");
+	    $log->warning("$files_dir/$keyName does not exist");
 	}
 
         $log->error("Could not find keyfile: $keyName");

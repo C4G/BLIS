@@ -31,22 +31,22 @@ $page_elems = new PageElems();
 $login_tip="If you have forgotten your password then please contact your BLIS administrator.";
 $page_elems->getSideTip(LangUtil::getGeneralTerm("TIPS"), $login_tip);
 ?>
-<style type="text/css"> 
+<style type="text/css">
 	.btn {
-		color:white; 
-		background-color:#3B5998; 
-		border-style:none; 
-		font-weight:bold; 
-		font-size:14px; 
-		height:28px; 
+		color:white;
+		background-color:#3B5998;
+		border-style:none;
+		font-weight:bold;
+		font-size:14px;
+		height:28px;
 		width:65px;
 		cursor:pointer;
 	}
-</style> 
+</style>
 
 <script type='text/javascript'>
 function load()
-{	
+{
 	$('#username_error').hide();
 	$('#password_error').hide();
 }
@@ -134,7 +134,7 @@ function capLock(e)
 				<form name="form_login" id='form_login' action="validate.php" method="post">
 				<table cellpadding="6px" cellspacing='10px'>
 				<?php
-					
+
 					if(isset($_REQUEST['to']))
 					{
 						# Previous session timed out
@@ -190,7 +190,7 @@ function capLock(e)
 						</td>
 						<td>
 							<input type="text" name="username" id = "username" value="" size="20" class='uniform_width' />
-							<label class="error" for="username" id="username_error"><small><font color="red"><?php echo LangUtil::getGeneralTerm("MSG_REQDFIELD"); ?></font></small></label> 
+							<label class="error" for="username" id="username_error"><small><font color="red"><?php echo LangUtil::getGeneralTerm("MSG_REQDFIELD"); ?></font></small></label>
 						</td>
 					</tr>
 					<tr valign='top'>
@@ -203,12 +203,12 @@ function capLock(e)
 							<br>
 							<div id="caps_lock_msg_div" style="display:none"><font color='red'><small><?php echo LangUtil::getPageTerm("MSG_CAPSLOCK"); ?></small></font></div>
 						</td>
-					</tr>					
+					</tr>
 					<tr>
 						<td></td>
 						<td>
 							<input type="button" class="btn" id="login_button" value="<?php echo LangUtil::$generalTerms["CMD_LOGIN"]; ?>" onclick="check_input_boxes()"/>
-						
+
 						</td>
 					</tr>
 					<tr>
@@ -220,7 +220,7 @@ function capLock(e)
 							</a> -->
 						</td>
 					</tr>
-					<?php 
+					<?php
 					$password_reset_needed = password_reset_required();
 					if($password_reset_needed){
 					?>
