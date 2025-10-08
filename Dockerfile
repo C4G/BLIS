@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:noble
 
 # Install a bunch of stuff from the standard repositories
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
