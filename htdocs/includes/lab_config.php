@@ -302,7 +302,7 @@ class LabConfig
 
 
 
-    public function getUserCountry($lab_config_id)
+    public static function getUserCountry($lab_config_id)
     {
         global $con;
         $lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
@@ -552,7 +552,7 @@ class LabConfig
         */
     }
 
-    public function getPrintUnverified($lab_config)
+    public static function getPrintUnverified($lab_config)
     {
         $saved_db = DbUtil::switchToLabConfigRevamp($lab_config);
         # Returns a list of all test type IDs added to the lab configuration

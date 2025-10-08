@@ -4797,7 +4797,7 @@ class UILog
         public $tag2;
         public $tag3;
 
-    function UILog($logfilename = '../../local/UILog.csv', $separator = ',') {
+    function __construct($logfilename = '../../local/UILog.csv', $separator = ',') {
                 global $VERSION;
                 $vers = $VERSION;
                 $verss = str_replace('.','-',$vers);
@@ -5146,7 +5146,7 @@ class Bill
 	private $patientId;
 	private $paidInFull;
 
-	function Bill($patientId)
+	function __construct($patientId)
 	{
 		$this->paidInFull = FALSE;
 		$this->patientId = $patientId;
@@ -5353,7 +5353,7 @@ class BillsTestsAssociationObject
 	private $discountType;
 	private $discount;
 
-	function BillsTestsAssociationObject($billId, $testId)
+	function __construct($billId, $testId)
 	{
 		$this->billId = $billId;
 		$this->testId = $testId;
@@ -5637,7 +5637,7 @@ class Payment
 	public $amount;
 	public $billId;
 
-	function Payment($amount, $billId)
+	function __construct($amount, $billId)
 	{
 		$this->amount = $amount;
 		$this->billId = $billId;
@@ -13708,7 +13708,7 @@ function insert_lab_config_settings_barcode($type, $width, $height, $textsize, $
     $query_string = "SELECT count(*) as val from lab_config_settings WHERE id = $id";
     $recordset = query_associative_one($query_string);
 
-    if($recordset[val] != 0)
+    if($recordset["val"] != 0)
         return 0;
 
     $remarks = "Barcode Settings";
@@ -14041,7 +14041,7 @@ class Inventory
                 return -1;
         }
 
-        public function getAllReagents($lid)
+        public static function getAllReagents($lid)
         {
             $lab_config_id = $lid;
 

@@ -2596,7 +2596,7 @@ function AddnewDHIMS2Config()
 							  method="post">
 							<br> <?php echo LangUtil::$pageTerms['MODIFY_SITE'];  ?> :<br>
 							<?php
-                            $page_elems->getSiteConfigForm($_SESSION['lab_config_id']);
+                            $page_elems->getSiteConfigForm($lab_config_id);
                             ?>
 							<br><br>
 							<input type='button' value='<?php echo LangUtil::$generalTerms['CMD_SUBMIT']; ?>'

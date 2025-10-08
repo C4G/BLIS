@@ -62,13 +62,15 @@ if (substr(strtolower($key_filename), strlen($key_filename) - 5, 5) != ".blis") 
     $key_filename = $key_filename . ".blis";
 }
 
-header('Content-Type: application/force-download');
+ob_start('ob_gzhandler');
+
+header('Content-Type: text/plain');
 header("Content-Disposition: attachment; filename=\"$key_filename\";");
-header('Content-Transfer-Encoding: binary');
+header('Content-Length: ' . strlen($pubkey_contents));
 header('Expires: 0');
 header('Cache-Control: must-revalidate');
 header('Pragma: public');
-header('Content-Length: ' . strlen($pubkey_contents));
-ob_clean();
-flush();
+
 echo($pubkey_contents);
+
+ob_end_flush();
