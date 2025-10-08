@@ -50,6 +50,14 @@ $pubkey_filename = $_FILES["pubkey"]["name"];
 $pubkey_tmp_path = $_FILES["pubkey"]["tmp_name"];
 $pubkey = file_get_contents($pubkey_tmp_path);
 
+$pkey_decoded = base64_decode($pubkey);
+if (strlen($pkey_decoded) !== SODIUM_CRYPTO_BOX_PUBLICKEYBYTES) {
+    header("400 Bad Request", true, 400);
+    $_SESSION['FLASH'] = "The public key is not the correct size. Must be " . SODIUM_CRYPTO_BOX_PUBLICKEYBYTES . " bytes.";
+    header("Location: lab_config_backup_settings.php?id=$lab_config_id");
+    exit;
+}
+
 try {
     db_change($lab["db_name"]);
     $db_key_id = Key::insert($pubkey_filename, Key::$PUBLIC, $pubkey);
