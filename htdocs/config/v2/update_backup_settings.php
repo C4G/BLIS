@@ -5,6 +5,7 @@
 #
 
 require_once(__DIR__."/../../users/accesslist.php");
+require_once(__DIR__."/../../includes/lab_config.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 require_once(__DIR__."/lib/backup.php");
 
@@ -12,7 +13,7 @@ $current_user_id = $_SESSION['user_id'];
 $current_user = get_user_by_id($current_user_id);
 
 $lab_config_id = $_REQUEST['id'];
-$lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE lab_config_id = '$lab_config_id';";
+$lab_db_name_query = "SELECT * FROM lab_config WHERE lab_config_id = '$lab_config_id' LIMIT 1;";
 $lab = query_associative_one($lab_db_name_query);
 db_change($lab['db_name']);
 
@@ -36,12 +37,18 @@ if ($unauthorized) {
     exit;
 }
 
+$lab_config = LabConfig::getObject($lab);
+
 require_once(__DIR__."/../../includes/keymgmt.php");
 
 if ($_POST["settings_encryption_enabled"] == "on") {
-    KeyMgmt::write_enc_setting(1);
+    $lab_config->setBackupEncryptionEnabled(true);
 } else {
-    KeyMgmt::write_enc_setting(0);
+    $lab_config->setBackupEncryptionEnabled(false);
+}
+
+if (trim($_POST["settings_lab_decryption_key"]) != "") {
+    $lab_config->updateBackupEncryptionKeyId($_POST["settings_lab_decryption_key"]);
 }
 
 $_SESSION['FLASH'] = "Settings updated successfully.";

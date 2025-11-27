@@ -33,7 +33,7 @@ function runUpdate($lab_config_id) {
 
 	$query_alter = "ALTER TABLE report_disease ".
 				   "DROP FOREIGN KEY report_disease_ibfk_1";
-	mysql_query( $query_alter, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_alter ) or die(mysqli_error($con));
 
 	/*BLIS 1.27 Update 
 	$query_alter = "ALTER TABLE stock_details ADD COLUMN used VARCHAR(1000) NULL DEFAULT '' ".
@@ -41,11 +41,11 @@ function runUpdate($lab_config_id) {
 				   " ADD COLUMN receiver VARCHAR(1000) NULL DEFAULT ''  AFTER user ,".
 				   " ADD COLUMN remarks VARCHAR(1000) NULL DEFAULT ''  AFTER receiver ";
 
-	mysql_query( $query_alter, $con ) or die(mysql_error());			   
+	mysqli_query($con,  $query_alter ) or die(mysqli_error($con));			   
 				
 	/*BLIS 1.28 Update 
 	$query_alter = "ALTER TABLE custom_field_type MODIFY field_type VARCHAR(100) ";
-	mysql_query( $query_alter, $con ) or die(mysql_error());	
+	mysqli_query($con,  $query_alter ) or die(mysqli_error($con));	
 	*/
 
 	/*BLIS 1.29 Update 
@@ -53,7 +53,7 @@ function runUpdate($lab_config_id) {
 	$saved_db = DbUtil::switchToGlobal();
 
 	$query_alter = "ALTER TABLE lab_config add column ageLimit INTEGER ";
-	mysql_query( $query_alter, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_alter ) or die(mysqli_error($con));
 				
 	DbUtil::switchRestore($saved_db);
 	*/
@@ -66,7 +66,7 @@ function runUpdate($lab_config_id) {
 				   "ADD COLUMN prevalence_threshold int(3) default 70, ".
 				   "ADD COLUMN target_tat int(3) default 24";
 				   
-	mysql_query( $query_alter, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_alter ) or die(mysqli_error($con));
 	
 	*/
 	
@@ -76,7 +76,7 @@ function runUpdate($lab_config_id) {
 	$query_update = "ALTER TABLE user_rating ".
 					"ADD COLUMN comments varchar(2048) default '' ";
 	
-	mysql_query( $query_update, $con) or die(mysql_error());
+	mysqli_query($con,  $query_update) or die(mysqli_error($con));
 	
 }
 
@@ -95,7 +95,7 @@ function runGlobalUpdate() {
 					"test_category_id int(10) unsigned, ".
 					"primary key (user_id, test_id) )";
 					
-	mysql_query( $query_insert, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_insert ) or die(mysqli_error($con));
 
 	$query_insert = "CREATE TABLE specimen_mapping (".
 					"user_id int(11), ".
@@ -104,7 +104,7 @@ function runGlobalUpdate() {
 					"specimen_id int(10), ".
 					"primary key (user_id, specimen_id) )";
 					
-	mysql_query( $query_insert, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_insert ) or die(mysqli_error($con));
 	
 	$query_insert = "CREATE TABLE test_category_mapping (".
 					"user_id int(11), ".
@@ -113,7 +113,7 @@ function runGlobalUpdate() {
 					"test_category_id int(10), ".
 					"primary key (user_id, test_category_id) )";
 					
-	mysql_query( $query_insert, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_insert ) or die(mysqli_error($con));
 	
 	$query_insert = "CREATE TABLE measure_mapping (".
 					"user_id int(11), ".
@@ -122,7 +122,7 @@ function runGlobalUpdate() {
 					"measure_id int(10), ".
 					"primary key (user_id, measure_id) )";
 					
-	mysql_query( $query_insert, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_insert ) or die(mysqli_error($con));
 	
 	$query_insert = "CREATE TABLE global_measures (".
 					"user_id int(11), ".
@@ -133,7 +133,7 @@ function runGlobalUpdate() {
 					"unit varchar(64), ".
 					"primary key (user_id, test_id, measure_id) )";
 	
-	mysql_query( $query_insert, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_insert ) or die(mysqli_error($con));
 	
 	$query_insert = "CREATE TABLE infection_report_settings (".
 				    "id int(10) unsigned, ".
@@ -146,7 +146,7 @@ function runGlobalUpdate() {
 					"test_id int(10), ".
 					"primary key (user_id, id) )";
 					
-	mysql_query( $query_insert, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_insert ) or die(mysqli_error($con));
 	
 	$query_insert = "CREATE TABLE reference_range_global (".
 					"measure_id int(10), ".
@@ -158,24 +158,24 @@ function runGlobalUpdate() {
 					"user_id int(11), ".
 					"primary key (user_id, measure_id) )";
 	
-	mysql_query( $query_insert, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_insert ) or die(mysqli_error($con));
 
 	$query_insert = "INSERT INTO user (user_id, username, `password`, actualname, email, lang_id, `level`, created_by, lab_config_id, phone) ".
 				    "VALUES (401, 'philip', '18865bfdeed2fd380316ecde609d94d7285af83f', 'Philip Boakye', 'boakyephilip@ymail.com', 'en', 4, 0, 0, '')";
 					
-	mysql_query( $query_insert, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_insert ) or die(mysqli_error($con));
  
 	$query_insert = "INSERT INTO user (user_id, username, `password`, actualname, email, lang_id, `level`, created_by, lab_config_id, phone) ".
 				    "VALUES (402, 'mercy', '18865bfdeed2fd380316ecde609d94d7285af83f', 'Mercy Maeda', 'mirygibson@yahoo.com', 'en', 4, 0, 0, '')";
  
-	mysql_query( $query_insert, $con ) or die(mysql_error());
+	mysqli_query($con,  $query_insert ) or die(mysqli_error($con));
 	*/
 	
 	/* BLIS 1.91 Update */
 	$query_alter = "ALTER table lab_config".
 				   "ADD column country varchar(512)";
 				   
-	mysql_query( $query_alter, $con) or die(mysql_error());
+	mysqli_query($con, $query_alter) or die(mysqli_error($con));
 	
 	DbUtil::switchRestore($saved_db);
 }

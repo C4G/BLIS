@@ -49,6 +49,6 @@ class LabConfigResolver {
             }
         }
 
-        $log->warn("Could not resolve lab_config_id. Logged in user ID: " . $_SESSION["user_id"]);
+        $log->warning("Could not resolve lab_config_id. Logged in user ID: " . $_SESSION["user_id"]);
     }
 }

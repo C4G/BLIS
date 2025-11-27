@@ -10,7 +10,7 @@ $user_id = $_REQUEST['user_id'];
 $rating = $_REQUEST['rating'];
 $skipped = $_REQUEST['skipped'];
 $comments = $_REQUEST['comments'];
-//$comments= mysql_real_escape_string($_REQUEST['comments'],$con);
+
 if($skipped==-1)
 	$rating=6;
 

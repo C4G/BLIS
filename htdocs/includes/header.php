@@ -67,6 +67,12 @@ $page_elems = new PageElems();
         });
     });
     </script>
+
+    <?php
+        # TODO: Summer 2025 Analytics. remove later
+    ?>
+    <script defer src="https://analytics.c4g.dev/script.js" data-website-id="7eae24c7-61c8-4b2b-af6c-5ec9434f2cde"></script>
+
     </head>
 
     <body>

@@ -496,16 +496,15 @@ class Sites
     {
         $saved_db = DbUtil::switchToLabConfig($id);
         global $con;
-        $val = mysql_query('SELECT 1 from `sites` LIMIT 1');
+        $val = mysqli_query($con, "SELECT 1 from `sites` LIMIT 1");
         if($val !== FALSE)
         {
-            $query = "SELECT * FROM sites ".
-                "WHERE lab_id=".$id;
+            $query = "SELECT * FROM sites WHERE lab_id=".$id;
             $result = query_associative_all($query);
 			if ($result == NULL)
    			{
                 $lab_config = LabConfig::getById($id);
-                $lab_name = mysql_real_escape_string($lab_config->name, $con);
+                $lab_name = mysqli_real_escape_string($con, $lab_config->name);
                 $query = "INSERT INTO sites ".
                     "(name, lab_id) VALUES ".
                     "('$lab_name', '$id')";
@@ -539,7 +538,7 @@ class Sites
         $saved_db = DbUtil::switchToLabConfig($lab_config_id);
         global $con;
 
-        $name = mysql_real_escape_string($site_name, $con);
+        $name = mysqli_real_escape_string($con, $site_name);
 
         $query = "INSERT INTO sites ".
             "(name, lab_id) VALUES ".
@@ -554,9 +553,9 @@ class Sites
         $saved_db = DbUtil::switchToLabConfig($lab_config_id);
         global $con;
 
-        //$id = mysql_real_escape_string($site_id, $con);
-        $region = mysql_real_escape_string($site_region, $con);
-        $district = mysql_real_escape_string($site_district, $con);
+        //$id = mysqli_real_escape_string($con, $site_id);
+        $region = mysqli_real_escape_string($con, $site_region);
+        $district = mysqli_real_escape_string($con, $site_district);
         echo $site_region;
         echo $site_district;
 
@@ -618,7 +617,7 @@ class TestAggReportConfig
         $saved_db = DbUtil::switchToLabConfig($lab_config_id);
 
         $test_type = TestType::getById($test_type_id);
-        $test_name = mysql_real_escape_string($test_type->name, $con);
+        $test_name = mysqli_real_escape_string($con, $test_type->name);
 
         $query = "SELECT * FROM test_agg_report_config ".
             "WHERE test_type_id=".$test_type_id.
@@ -962,7 +961,7 @@ class ReportConfig
 	public static function getOneWorksheetRow($lab_config_id)
 	{
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM report_config WHERE test_type_id!=0 LIMIT 1";
 		$record = query_associative_one($query_string);
@@ -978,7 +977,7 @@ class ReportConfig
     public static function getAllRows($lab_config_id)
 	{
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM report_config";
 		$record = query_associative_all($query_string);
@@ -993,8 +992,8 @@ class ReportConfig
 	public static function getById($lab_config_id, $report_id)
 	{
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id);
-		$report_id = mysql_real_escape_string($report_id);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
+		$report_id = mysqli_real_escape_string($con, $report_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM report_config WHERE report_id=$report_id LIMIT 1";
 		$record = query_associative_one($query_string);
@@ -1006,11 +1005,8 @@ class ReportConfig
 	public static function getByTestTypeId($lab_config_id, $test_type_id)
 	{
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id);
-
-		$reflFunc = new ReflectionFunction('mysql_real_escape_string');
-
-		$test_type_id = mysql_real_escape_string($test_type_id);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
+		$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM report_config WHERE test_type_id=$test_type_id LIMIT 1";
 		$record = query_associative_one($query_string);
@@ -1201,7 +1197,7 @@ class TestType
             $lab_config_id = $_SESSION['lab_config_id'];
         }
 
-		$test_type_id = mysql_real_escape_string($test_type_id, $con);
+		$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 		//$saved_db = DbUtil::switchToLabConfigRevamp();
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM test_type WHERE test_type_id=$test_type_id LIMIT 1";
@@ -1210,7 +1206,7 @@ class TestType
 		return TestType::getObject($record);
 	}
 
-	public static function getByReportingStatus($status)
+	public static function getByReportingStatus($status=NULL)
     {
         # Return all test types that have reporting enabled/disabled
         $retval = array();
@@ -1318,7 +1314,7 @@ return $retval;
 		# Deletes test type from database
 		# 1. Delete entries in lab_config_test_type
 		global $con;
-		$test_type_id = mysql_real_escape_string($test_type_id, $con);
+		$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 		$query_string =
 			"DELETE FROM lab_config_test_type WHERE test_type_id=$test_type_id";
@@ -1336,7 +1332,7 @@ return $retval;
 
 	public function toHidePatientName($test_type_id) {
 		global $con;
-		$test_type_id = mysql_real_escape_string($test_type_id, $con);
+		$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 		$query_string =
 			"SELECT hide_patient_name FROM test_type WHERE test_type_id=$test_type_id";
 		$record = query_associative_one($query_string);
@@ -1414,7 +1410,7 @@ class SpecimenType
 	{
 		# Returns a specimen type entry fetch by ID
 		global $con;
-		$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
+		$specimen_type_id = mysqli_real_escape_string($con, $specimen_type_id);
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 		$query_string =
 			"SELECT * FROM specimen_type ".
@@ -1429,7 +1425,7 @@ class SpecimenType
 		# Deletes specimen type from database
 		# 1. Delete entries in lab_config_specimen_type
 		global $con;
-		$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
+		$specimen_type_id = mysqli_real_escape_string($con, $specimen_type_id);
 		$saved_db = DbUtil::switchToLabConfigRevamp();
 		$query_string =
 			"DELETE FROM lab_config_specimen_type WHERE specimen_type_id=$specimen_type_id";
@@ -1714,7 +1710,7 @@ class Measure
 	{
 		# Returns a test measure by ID
 		global $con;
-		$measure_id = mysql_real_escape_string($measure_id, $con);
+		$measure_id = mysqli_real_escape_string($con, $measure_id);
 		if($measure_id == null || $measure_id < 0)
 			return null;
 		$query_string = "SELECT * FROM measure WHERE measure_id=$measure_id LIMIT 1";
@@ -1838,7 +1834,7 @@ class Measure
 	{
 		# Fetches reference ranges from database for this measure
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM reference_range WHERE measure_id=$this->measureId ORDER BY sex DESC";
 		$resultset = query_associative_all($query_string);
@@ -2002,7 +1998,7 @@ class Patient
 	{
 		# Checks if the given patient name (or similar match) already exists
 		global $con;
-		$name = mysql_real_escape_string($name, $con);
+		$name = mysqli_real_escape_string($con, $name);
 		$query_string =
 			"SELECT COUNT(patient_id) AS val FROM patient WHERE name LIKE '%$name%'";
 		$resultset = query_associative_one($query_string);
@@ -2173,7 +2169,7 @@ class Patient
 	{
 		# Returns all patient records added on that date
 		global $con;
-		$date = mysql_real_escape_string($date, $con);
+		$date = mysqli_real_escape_string($con, $date);
 		$query_string =
 			"SELECT * FROM patient ".
 			"WHERE ts LIKE '%$date%' ORDER BY patient_id";
@@ -2368,7 +2364,7 @@ class Patient
 	{
 		# Returns patient record by ID
 		global $con;
-		$patient_id = mysql_real_escape_string($patient_id, $con);
+		$patient_id = mysqli_real_escape_string($con, $patient_id);
 		$query_string = "SELECT * FROM patient WHERE patient_id=$patient_id";
 		$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
 		$record = query_associative_one($query_string);
@@ -2612,7 +2608,7 @@ class Specimen
 	public static function getById($specimen_id)
 	{
 		global $con;
-		$specimen_id = mysql_real_escape_string($specimen_id, $con);
+		$specimen_id = mysqli_real_escape_string($con, $specimen_id);
 		$query_string = "SELECT * FROM specimen WHERE specimen_id=$specimen_id LIMIT 1";
 		$record = query_associative_one($query_string);
 		return Specimen::getObject($record);
@@ -2723,7 +2719,7 @@ class Specimen
 	{
 		# Marks a given specimen as reported as sets 'date_reported'
 		global $con;
-		$specimen_id = mysql_real_escape_string($specimen_id, $con);
+		$specimen_id = mysqli_real_escape_string($con, $specimen_id);
 		$query_string =
 			"UPDATE specimen ".
 			"SET date_reported='$timestamp' ".
@@ -2951,7 +2947,7 @@ class Test
 			return null;
 		}
 		global $con;
-		$test_id = mysql_real_escape_string($test_id, $con);
+		$test_id = mysqli_real_escape_string($con, $test_id);
 		$query_string = "SELECT * FROM test WHERE `test_id` = $test_id";
 		$record = query_associative_one($query_string);
 		return Test::getObject($record);
@@ -3029,7 +3025,7 @@ class Test
 	{
 		# Sets verified by flag for given test
 		global $con;
-		$verified_by = mysql_real_escape_string($verified_by, $con);
+		$verified_by = mysqli_real_escape_string($con, $verified_by);
 		$query_string =
 			"UPDATE test SET verified_by=$verified_by WHERE test_id=".$this->testId;
 		query_blind($query_string);
@@ -3039,7 +3035,7 @@ class Test
 	{
 		# Sets verified by flag for given test
 		global $con;
-		$verified_by = mysql_real_escape_string($signed_by, $con);
+		$verified_by = mysqli_real_escape_string($con, $signed_by);
 		$query_string =
 			"UPDATE test SET signed_by=$signed_by WHERE test_id=".$this->testId;
 		echo "set signed by ->".$query_string;
@@ -3687,8 +3683,8 @@ class Test
 	{
 		# Returns all test records added on that day
 		global $con;
-		$test_type_id = mysql_real_escape_string($test_type_id, $con);
-		$date = mysql_real_escape_string($date, $con);
+		$test_type_id = mysqli_real_escape_string($con, $test_type_id);
+		$date = mysqli_real_escape_string($con, $date);
 		$query_string =
 			"SELECT * FROM test ".
 			"WHERE test_type_id=$test_type_id ".
@@ -3859,7 +3855,7 @@ class CustomField
 	public static function addNew($new_entry, $lab_config_id, $tabletype)
 	{
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		# Adds a new custom field entry
 		# $tabletype = 1 for specimen custom field
 		# $tabletype = 2 for patient custom field
@@ -3884,8 +3880,8 @@ class CustomField
 	public function setId($field_id, $lab_config_id, $tabletype)
 	{
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
-		$field_id = mysql_real_escape_string($field_id, $con);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
+		$field_id = mysqli_real_escape_string($con, $field_id);
 		if($field_id<100)
 		$new_id=$field_id+100;
 		else
@@ -3935,7 +3931,7 @@ class CustomField
 	public static function deleteById($updated_entry, $lab_config_id, $tabletype)
 	{
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		if($updated_entry == null)
 			return;
 		$table_name = "";
@@ -3965,7 +3961,7 @@ class CustomField
 		# $tabletype = 2 for patient custom field
 		# $tabletype = 3 for labtitle custom field
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		if($updated_entry == null)
 			return;
 		$table_name = "";
@@ -4084,7 +4080,7 @@ class SpecimenCustomData
 	public function getFieldValueString($lab_config_id, $tabletype)
 	{
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		$field_type = CustomField::getById($this->fieldId, $lab_config_id, $tabletype);
 		$field_value = $this->fieldValue;
 		if(trim($field_value) == "" || $field_value == null)
@@ -4177,7 +4173,7 @@ class PatientCustomData
 	public function getFieldValueString($lab_config_id, $tabletype)
 	{
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		$field_type = CustomField::getById($this->fieldId, $lab_config_id, $tabletype);
 		$field_value = $this->fieldValue;
 		if(trim($field_value) == "" || $field_value == null)
@@ -4264,7 +4260,7 @@ class Report
 	public static function getById($report_id)
 	{
 		global $con;
-		$report_id = mysql_real_escape_string($report_id, $con);
+		$report_id = mysqli_real_escape_string($con, $report_id);
 		# Fetches a report record from table
 		$saved_db = DbUtil::switchToGlobal();
 		$query_string = "SELECT * FROM report WHERE report_id=$report_id LIMIT 1";
@@ -4354,9 +4350,9 @@ class DiseaseReport
 	public static function getByKeys($lab_config_id, $test_type_id, $measure_id)
 	{
 		global $con;
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
-		$test_type_id = mysql_real_escape_string($test_type_id, $con);
-		$measure_id = mysql_real_escape_string($measure_id, $con);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
+		$test_type_id = mysqli_real_escape_string($con, $test_type_id);
+		$measure_id = mysqli_real_escape_string($con, $measure_id);
 		# Fetches a record by compound key
 		$query_string =
 			"SELECT * FROM report_disease ".
@@ -4527,7 +4523,7 @@ class CustomWorksheet
 	public static function getById($worksheet_id, $lab_config)
 	{
 		global $con;
-		$worksheet_id = mysql_real_escape_string($worksheet_id, $con);
+		$worksheet_id = mysqli_real_escape_string($con, $worksheet_id);
 		if($worksheet_id == null || $lab_config == null)
 			return null;
 		$saved_db = DbUtil::switchToLabConfig($lab_config->id);
@@ -4711,8 +4707,8 @@ class ReferenceRange
 		# Used when deleting the measure from catalof
 		# Or when resetting ranges (from test_type_edit.php)
 		global $con;
-		$measure_id = mysql_real_escape_string($measure_id, $con);
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+		$measure_id = mysqli_real_escape_string($con, $measure_id);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "DELETE FROM reference_range WHERE measure_id=$measure_id";
 		query_delete($query_string);
@@ -4723,10 +4719,10 @@ class ReferenceRange
 	{
 		# Fetches the reference range based on supplied age and sex values
 		global $con;
-		$measure_id = mysql_real_escape_string($measure_id, $con);
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
-		$age = mysql_real_escape_string($age, $con);
-		$sex = mysql_real_escape_string($sex, $con);
+		$measure_id = mysqli_real_escape_string($con, $measure_id);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
+		$age = mysqli_real_escape_string($con, $age);
+		$sex = mysqli_real_escape_string($con, $sex);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string = "SELECT * FROM reference_range WHERE measure_id=$measure_id";
 		$retval = null;
@@ -4801,7 +4797,7 @@ class UILog
         public $tag2;
         public $tag3;
 
-    function UILog($logfilename = '../../local/UILog.csv', $separator = ',') {
+    function __construct($logfilename = '../../local/UILog.csv', $separator = ',') {
                 global $VERSION;
                 $vers = $VERSION;
                 $verss = str_replace('.','-',$vers);
@@ -5150,7 +5146,7 @@ class Bill
 	private $patientId;
 	private $paidInFull;
 
-	function Bill($patientId)
+	function __construct($patientId)
 	{
 		$this->paidInFull = FALSE;
 		$this->patientId = $patientId;
@@ -5357,7 +5353,7 @@ class BillsTestsAssociationObject
 	private $discountType;
 	private $discount;
 
-	function BillsTestsAssociationObject($billId, $testId)
+	function __construct($billId, $testId)
 	{
 		$this->billId = $billId;
 		$this->testId = $testId;
@@ -5641,7 +5637,7 @@ class Payment
 	public $amount;
 	public $billId;
 
-	function Payment($amount, $billId)
+	function __construct($amount, $billId)
 	{
 		$this->amount = $amount;
 		$this->billId = $billId;
@@ -5756,7 +5752,7 @@ function check_user_password($username, $password)
 {
 	# Verifies username and password
 	global $con;
-	$username = mysql_real_escape_string($username, $con);
+	$username = mysqli_real_escape_string($con, $username);
 	$saved_db = DbUtil::switchToGlobal();
 	$password = encrypt_password($password);
 	$query_string =
@@ -5773,7 +5769,7 @@ function change_user_password($username, $password)
 {
 	# Changes user password
 	global $con;
-	$username = mysql_real_escape_string($username, $con);
+	$username = mysqli_real_escape_string($con, $username);
 	$saved_db = DbUtil::switchToGlobal();
 	$password = encrypt_password($password);
 	$query_string =
@@ -5788,7 +5784,7 @@ function change_user_password_oneTime($username, $password)
 {
 	# Changes user password
 	global $con;
-	$username = mysql_real_escape_string($username, $con);
+	$username = mysqli_real_escape_string($con, $username);
 	$saved_db = DbUtil::switchToGlobal();
 	$password = encrypt_password($password);
 	$query_string =
@@ -5813,12 +5809,8 @@ function password_reset_need_confirm()
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string = "SELECT count(*) as resetCount from misc where action='password reset completed'";
 	$record = query_associative_one($query_string);
-	//$num_rows = mysql_num_rows($record);
 	DbUtil::switchRestore($saved_db);
-	if($record['resetCount'] == 0)
-		return true;
-	return false;
-	//return $record;
+	return ($record['resetCount'] == 0);
 }
 
 function password_reset_flush($reset_before_date){
@@ -5833,7 +5825,7 @@ function check_user_exists($username)
 {
 	# Checks if the username exists in DB
 	global $con;
-	$username = mysql_real_escape_string($username, $con);
+	$username = mysqli_real_escape_string($con, $username);
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string = "SELECT username FROM user WHERE username='$username' LIMIT 1";
 	$record = query_associative_one($query_string);
@@ -5845,6 +5837,7 @@ function check_user_exists($username)
 
 function add_user($user)
 {
+	global $con;
 	# Adds a new user account
 	if (!check_user_exists($user->username)){
 		$saved_db = DbUtil::switchToGlobal();
@@ -5857,8 +5850,8 @@ function add_user($user)
         if ($user->level == 20) {
             // Retrieve the last satellite_lab_id (assuming it's auto-incremented)
             $query_string = "SELECT MAX(satellite_lab_id) AS max_lab_id FROM user";
-            $result = mysql_query($query_string);
-            $row = mysql_fetch_assoc($result);
+            $result = mysqli_query($con, $query_string);
+            $row = mysqli_fetch_assoc($result);
             $new_satellite_lab_id = $row['max_lab_id'] + 1;
         } else {
             // Set the satellite_lab_id to NULL or handle differently for other levels
@@ -6207,7 +6200,7 @@ function delete_user_by_id($user_id)
 {
 	# Deletes a user from DB
 	global $con;
-	$user_id = mysql_real_escape_string($user_id, $con);
+	$user_id = mysqli_real_escape_string($con, $user_id);
 	$saved_db = DbUtil::switchToGlobal();
 	# Remove entries from lab_config_access
 	$query_string =
@@ -6231,7 +6224,7 @@ function delete_user_type($user_type)
 {
 	# Deletes a user from DB
 	global $con;
-	//$user_id = mysql_real_escape_string($user_id, $con);
+	//$user_id = mysqli_real_escape_string($con, $user_id);
 	$saved_db = DbUtil::switchToGlobal();
 	# Remove entries from lab_config_access
 	$query_string =
@@ -6252,7 +6245,7 @@ function delete_user_type($user_type)
 function get_user_by_id($user_id)
 {
 	global $con;
-	$user_id = mysql_real_escape_string($user_id, $con);
+	$user_id = mysqli_real_escape_string($con, $user_id);
 	# Fetches user record by primary key
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string = "SELECT a.user_id, a.username, a.password, a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, a.satellite_lab_name, b.value as rwoptions
@@ -6265,7 +6258,7 @@ function get_user_by_id($user_id)
 function get_user_by_level($user_level)
 {
 	global $con;
-	//$user_id = mysql_real_escape_string($user_id, $con);
+	//$user_id = mysqli_real_escape_string($con, $user_id);
 	# Fetches user record by primary key
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string = "SELECT  a.*,b.value as rwoption from user_type a, user_type_config b WHERE a.level = $user_level and a.level = b.level and b.parameter = 'rwoptions' LIMIT 1";
@@ -6278,7 +6271,7 @@ function get_username_by_id($user_id)
 {
 	# Returns username as string
 	global $con;
-	$user_id = mysql_real_escape_string($user_id, $con);
+	$user_id = mysqli_real_escape_string($con, $user_id);
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string = "SELECT username FROM user WHERE user_id=$user_id";
 	$record = query_associative_one($query_string);
@@ -6293,7 +6286,7 @@ function get_actualname_by_id($user_id)
 {
 	# Returns username as string
 	global $con;
-	$user_id = mysql_real_escape_string($user_id, $con);
+	$user_id = mysqli_real_escape_string($con, $user_id);
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string = "SELECT actualname FROM user WHERE user_id=$user_id";
 	$record = query_associative_one($query_string);
@@ -6309,7 +6302,7 @@ function get_user_position_by_id($user_id)
 {
 	# Returns username as string
 	global $con;
-	$user_id = mysql_real_escape_string($user_id, $con);
+	$user_id = mysqli_real_escape_string($con, $user_id);
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string = "SELECT level FROM user WHERE user_id=$user_id";
 	$record = query_associative_one($query_string);
@@ -6359,7 +6352,7 @@ function get_user_position_by_id($user_id)
 function get_user_by_name($username)
 {
 	global $con;
-	$username = mysql_real_escape_string($username, $con);
+	$username = mysqli_real_escape_string($con, $username);
 	# Fetches user record by username
 	$saved_db = DbUtil::switchToGlobal();
 	#$query_string = "SELECT * FROM user WHERE username='$username' LIMIT 1";
@@ -6421,7 +6414,7 @@ function get_admin_users()
 function get_level_by_id($user_id)
 {
 	global $con;
-	$username = mysql_real_escape_string($username, $con);
+	$username = mysqli_real_escape_string($con, $username);
 	$user = get_user_by_id($user_id);
 	return $user->level;
 }
@@ -6431,7 +6424,7 @@ function get_admin_user_list($user_id)
 	# Fetches list (assoc array) of admin users
 	# Called from lab_config_new.php
 	global $con;
-	$user_id = mysql_real_escape_string($user_id, $con);
+	$user_id = mysqli_real_escape_string($con, $user_id);
 	global $LIS_ADMIN;
 	$saved_db = DbUtil::switchToGlobal();
 	$user = get_user_by_id($user_id);
@@ -6509,7 +6502,7 @@ function check_patient_id($pid)
 	# Checks if patient ID already exists in DB, and returns true/false accordingly
 	# Called from ajax/patient_check_id.php
 	global $con;
-	$pid = mysql_real_escape_string($pid, $con);
+	$pid = mysqli_real_escape_string($con, $pid);
 	$query_string = "SELECT patient_id FROM patient WHERE patient_id=$pid LIMIT 1";
 	$retval = query_associative_one($query_string);
 	if($retval == null)
@@ -6522,7 +6515,7 @@ function check_specimen_by_name($specimen_name)
 {
 	# Checks if Specimen already exists in DB, and returns true/false accordingly
 	global $con;
-	$specimen_name = mysql_real_escape_string($specimen_name, $con);
+	$specimen_name = mysqli_real_escape_string($con, $specimen_name);
 	$query_string = "SELECT specimen_type_id FROM specimen_type WHERE name='$specimen_name' LIMIT 1";
 	$retval = query_associative_one($query_string);
 	if($retval == null)
@@ -6536,7 +6529,7 @@ function check_testType_byname($test_type)
 {
 	# Checks if Specimen already exists in DB, and returns true/false accordingly
 	global $con;
-	$test_type = mysql_real_escape_string($test_type, $con);
+	$test_type = mysqli_real_escape_string($con, $test_type);
 	$query_string = "SELECT test_type_id FROM test_type WHERE name='$test_type' LIMIT 1";
 	$retval = query_associative_one($query_string);
 	if($retval == null)
@@ -6550,7 +6543,7 @@ function check_patient_surr_id($surr_id)
 	# Checks if patient ID already exists in DB, and returns true/false accordingly
 	# Called from ajax/patient_check_surr_id.php
 	global $con;
-	$surr_id = mysql_real_escape_string($surr_id, $con);
+	$surr_id = mysqli_real_escape_string($con, $surr_id);
 	$query_string = "SELECT surr_id FROM patient WHERE surr_id='$surr_id' LIMIT 1";
 	$retval = query_associative_one($query_string);
 	if($retval == null)
@@ -6562,7 +6555,7 @@ function check_patient_surr_id($surr_id)
 function get_patient_by_sp_id($sid)
 {
 	global $con;
-	$sid = mysql_real_escape_string($sid, $con);
+	$sid = mysqli_real_escape_string($con, $sid);
 $query_string="SELECT patient_id FROM specimen WHERE specimen_id=$sid ";
 //;
 $resultset = query_associative_one($query_string);
@@ -6585,7 +6578,7 @@ return $patient_list;
 function get_patient_by_id($pid)
 {
 	global $con;
-	$pid = mysql_real_escape_string($pid, $con);
+	$pid = mysqli_real_escape_string($con, $pid);
 	# Fetches a patient record by patient id
 	return Patient::getById($pid);
 }
@@ -6593,9 +6586,9 @@ function get_patient_by_id($pid)
 function search_patients_by_id($q, $labsection = 0)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	$q = mysqli_real_escape_string($con, $q);
 	# Searches for patients with similar PID
-	$core_query = "SELECT DISTINCT p.* FROM patient p"; 
+	$core_query = "SELECT DISTINCT p.* FROM patient p";
 	$core_filter = "WHERE surr_id='$q";
 	$default_order = "ORDER BY ts DESC";
 	if($labsection == 0) {
@@ -6632,8 +6625,8 @@ function search_patients_by_id_dyn($q, $cap, $counter, $labsection = 0, $satelli
 	# Searches for patients with similar PID
 	global $con, $LIS_SATELLITE_LAB_USER;
         $offset = $cap * ($counter - 1);
-	$q = mysql_real_escape_string($q, $con);
-	$core_query = "SELECT DISTINCT p.* FROM patient p "; 
+	$q = mysqli_real_escape_string($con, $q);
+	$core_query = "SELECT DISTINCT p.* FROM patient p ";
 	$core_filter = "WHERE surr_id LIKE '%$q%' ";
 	$default_order = "ORDER BY ts DESC LIMIT $offset,$cap ";
 
@@ -6676,8 +6669,8 @@ function search_patients_by_id_count($q, $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
 	global $con, $LIS_SATELLITE_LAB_USER;
-	$q = mysql_real_escape_string($q, $con);
-	$core_query = "SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p "; 
+	$q = mysqli_real_escape_string($con, $q);
+	$core_query = "SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p ";
 	$core_filter = "WHERE surr_id LIKE '%$q%' ";
 
 	if($labsection == 0) {
@@ -6712,7 +6705,7 @@ function search_patients_by_name($q, $labsection = 0,$c="")
 {
 	# Searches for patients with similar name
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	$q = mysqli_real_escape_string($con, $q);
 	if(empty($c))
 		$q.='%';
     else
@@ -6765,8 +6758,8 @@ function search_patients_by_name_dyn($q, $cap, $counter, $c="", $labsection = 0,
 	# Searches for patients with similar name
 	global $con, $LIS_SATELLITE_LAB_USER;
         $offset = $cap * ($counter - 1);
-	$q = mysql_real_escape_string($q, $con);
-	$core_query = "SELECT DISTINCT p.* FROM patient p "; 
+	$q = mysqli_real_escape_string($con, $q);
+	$core_query = "SELECT DISTINCT p.* FROM patient p ";
 	$core_filter = "WHERE name LIKE '%$q%' ";
 	$default_order = "ORDER BY name ASC LIMIT $offset,$cap ";
 	if(empty($c))
@@ -6812,8 +6805,8 @@ function search_patients_by_name_count($q, $labsection = 0,$c="", $satellite_lab
 {
 	# Searches for patients with similar name
 	global $con, $LIS_SATELLITE_LAB_USER;
-	$q = mysql_real_escape_string($q, $con);
-	$core_query = "SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p "; 
+	$q = mysqli_real_escape_string($con, $q);
+	$core_query = "SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p ";
 	$core_filter = "WHERE name LIKE '%$q%' ";
 
 	if($labsection == 0) {
@@ -6848,7 +6841,7 @@ function search_patients_by_name_count($q, $labsection = 0,$c="", $satellite_lab
 function search_patients_by_addlid($q, $labsection = 0, $satellite_lab_id)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	$q = mysqli_real_escape_string($con, $q);
 	# Searches for patients with similar addl ID
 
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
@@ -6898,8 +6891,8 @@ function search_patients_by_addlid_dyn($q, $cap, $counter, $labsection = 0, $sat
 	# Searches for patients with similar name
 	global $con, $LIS_SATELLITE_LAB_USER;
         $offset = $cap * ($counter - 1);
-	$q = mysql_real_escape_string($q, $con);
-	$core_query = "SELECT DISTINCT p.* FROM patient p "; 
+	$q = mysqli_real_escape_string($con, $q);
+	$core_query = "SELECT DISTINCT p.* FROM patient p ";
 	$core_filter = "WHERE addl_id LIKE '%$q%' ";
 	$default_order = "ORDER BY addl_id ASC LIMIT $offset,$cap ";
 
@@ -6942,7 +6935,7 @@ function search_patients_by_addlid_count($q, $labsection = 0, $satellite_lab_id)
 {
 	# Searches for patients with similar name
 	global $con, $LIS_SATELLITE_LAB_USER;
-	$q = mysql_real_escape_string($q, $con);
+	$q = mysqli_real_escape_string($con, $q);
 	$core_query = "SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p ";
 	$core_filter = "WHERE addl_id LIKE '%$q%' ";
 
@@ -6977,9 +6970,9 @@ function search_patients_by_addlid_count($q, $labsection = 0, $satellite_lab_id)
 function search_patients_by_dailynum($q, $labsection = 0)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	$q = mysqli_real_escape_string($con, $q);
 	# Searches for patients with similar daily number
-	
+
 	if(is_admin_check(get_user_by_id($_SESSION['user_id']))){
 	if($labsection == 0){
 		$query_string = "SELECT DISTINCT patient_id FROM specimen WHERE daily_num LIKE '%".$q."' ORDER BY date_collected DESC LIMIT 20";
@@ -7022,8 +7015,8 @@ function search_patients_by_dailynum_dyn($q, $cap, $counter, $labsection = 0)
 {
 	global $con;
         $offset = $cap * ($counter - 1);
-	$q = mysql_real_escape_string($q, $con);
-	$core_query = "SELECT DISTINCT p.* FROM patient p "; 
+	$q = mysqli_real_escape_string($con, $q);
+	$core_query = "SELECT DISTINCT p.* FROM patient p ";
 	$core_filter = "WHERE daily_num LIKE '%$q' ";
 	$default_order = "ORDER BY date_collected DESC LIMIT $offset,$cap ";
 
@@ -7065,7 +7058,7 @@ function search_patients_by_dailynum_dyn($q, $cap, $counter, $labsection = 0)
 function search_patients_by_dailynum_count($q, $labsection = 0, $satellite_lab_id)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	$q = mysqli_real_escape_string($con, $q);
 	$core_query = "SELECT COUNT(DISTINCT p.patient_id) AS val FROM patient p ";
 	$core_filter = "WHERE addl_id LIKE '%$q%' ";
 
@@ -7100,7 +7093,7 @@ function get_satellite_lab_user_id($user_id)
 {
 	# Retrieves the satellite_lab_id associated for the logged user
     global $con;
-    $user_id = mysql_real_escape_string($user_id, $con);
+    $user_id = mysqli_real_escape_string($con, $user_id);
 
     $saved_db = DbUtil::switchToGlobal();
     $query_string = "SELECT satellite_lab_id FROM user WHERE user_id = $user_id";
@@ -7144,7 +7137,7 @@ function get_satellite_lab_name_by_satellite_lab_id($satellite_lab_id)
 function search_specimens_by_id($q)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	$q = mysqli_real_escape_string($con, $q);
 	# Searches for specimens with similar ID
 	$query_string =
 		"SELECT * FROM specimen ".
@@ -7164,7 +7157,7 @@ function search_specimens_by_id($q)
 function search_specimens_by_addlid($q)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	$q = mysqli_real_escape_string($con, $q);
 	# Searches for specimens with similar addl ID
 	$query_string =
 		"SELECT * FROM specimen ".
@@ -7184,7 +7177,7 @@ function search_specimens_by_addlid($q)
 function search_specimens_by_patient_id($patient_id)
 {
 	global $con;
-	$patient_id = mysql_real_escape_string($patient_id, $con);
+	$patient_id = mysqli_real_escape_string($con, $patient_id);
 	# Searches for specimens by patient ID
 	$query_string =
 		"SELECT sp.* FROM specimen sp, patient p ".
@@ -7206,7 +7199,7 @@ function search_specimens_by_patient_name($patient_name)
 {
 	# Searches for specimens by patient name
 	global $con;
-	$patient_name = mysql_real_escape_string($patient_name, $con);
+	$patient_name = mysqli_real_escape_string($con, $patient_name);
 	$query_string =
 		"SELECT sp.* FROM specimen sp, patient p ".
 		"WHERE sp.patient_id=p.patient_id ".
@@ -7226,7 +7219,7 @@ function search_specimens_by_patient_name($patient_name)
 function search_specimens_by_session($q)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	$q = mysqli_real_escape_string($con, $q);
 	# Searched for specimens in a single session
 	$query_string =
 		"SELECT * FROM specimen ".
@@ -7246,7 +7239,7 @@ function search_specimens_by_session($q)
 function search_specimens_by_session_exact($q)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	$q = mysqli_real_escape_string($con, $q);
 	# Searched for specimens in a single session
 	$query_string =
 		"SELECT * FROM specimen ".
@@ -7266,7 +7259,7 @@ function search_specimens_by_session_exact($q)
 function search_specimens_by_dailynum($q)
 {
 	global $con;
-	$q = mysql_real_escape_string($q, $con);
+	$q = mysqli_real_escape_string($con, $q);
 	# Searched for specimens in a single session
 	$query_string =
 		"SELECT * FROM specimen ".
@@ -7286,7 +7279,7 @@ function search_specimens_by_dailynum($q)
 function get_patients_by_name_or_id($search_term)
 {
 	global $con;
-	$search_term = mysql_real_escape_string($search_term, $con);
+	$search_term = mysqli_real_escape_string($con, $search_term);
 	# Searches for patients with similar PID or Name
 	# Called from patient_fetch.php
 	$query_string =
@@ -7364,7 +7357,7 @@ $pid = $modified_record->patientId;
 function get_pending_tests_by_type($test_type_id)
 {
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 	# Returns a list of pending tests for a given test type
 	$query_string =
 		"SELECT * FROM test WHERE test_type_id=$test_type_id ".
@@ -7381,7 +7374,7 @@ function get_pending_tests_by_type($test_type_id)
 function get_pending_tests_by_type_date($test_type_id, $date_from,$date_to)
 {
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 	$date_from_array=explode("-",$date_from);
 	$date_to_array=explode("-",$date_to);
 	# Returns a list of pending tests for a given test type
@@ -7403,7 +7396,7 @@ function get_pending_tests_by_type_date($test_type_id, $date_from,$date_to)
 function get_tests_by_specimen_id($specimen_id)
 {
 	global $con;
-	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	$specimen_id = mysqli_real_escape_string($con, $specimen_id);
 	# Returns list of tests scheduled for this given specimen
 	$query_string = "SELECT * FROM test WHERE specimen_id=$specimen_id";
 	$saved_db = DbUtil::switchToLabConfig($_SESSION['lab_config_id']);
@@ -7420,7 +7413,7 @@ function get_tests_by_specimen_id($specimen_id)
 function get_completed_tests_by_type($test_type_id, $date_from="", $date_to="")
 {
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 	# Returns list of tests of a particular type,
 	# that were registered between date_from and date_to and completed
 	$query_string = "";
@@ -7474,7 +7467,7 @@ function get_completed_tests_by_type($test_type_id, $date_from="", $date_to="")
 function get_pendingtat_tests_by_type($test_type_id, $date_from="", $date_to="")
 {
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 	# Returns list of pending tests of a particular type,
 	# that were registered between date_from and date_to and not completed
 	$query_string = "";
@@ -7528,7 +7521,7 @@ function get_pendingtat_tests_by_type($test_type_id, $date_from="", $date_to="")
 function get_specimens_by_patient_id($patient_id, $labsection =0)
 {
 	global $con;
-	$patient_id = mysql_real_escape_string($patient_id, $con);
+	$patient_id = mysqli_real_escape_string($con, $patient_id);
 	# Returns list of specimens registered for the given patient
 	if($labsection == 0){
 		$query_string =
@@ -7570,7 +7563,7 @@ function add_specimen($specimen)
 function check_specimen_id($sid)
 {
 	global $con;
-	$sid = mysql_real_escape_string($sid, $con);
+	$sid = mysqli_real_escape_string($con, $sid);
 	# Checks if specimen ID already exists in DB, and returns true/false accordingly
 	# Called from ajax/specimen_check_id.php
 	$query_string = "SELECT specimen_id FROM specimen WHERE specimen_id=$sid LIMIT 1";
@@ -7620,8 +7613,8 @@ function add_test_random($test)
 function get_test_entry($specimen_id, $test_type_id)
 {
 	global $con;
-	$specimen_id = mysql_real_escape_string($specimen_id, $con);
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
+	$specimen_id = mysqli_real_escape_string($con, $specimen_id);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 	# Returns the test_id primary key
 	$query_string =
 		"SELECT * FROM test ".
@@ -7661,7 +7654,7 @@ function add_test_result($test_id, $result_entry, $comments="", $specimen_id="",
 function update_specimen_status($specimen_id)
 {
 	global $con;
-	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	$specimen_id = mysqli_real_escape_string($con, $specimen_id);
 	# Checks if all test results for the specimen have been entered,
 	# and updates specimen status accordingly
 	$test_list = get_tests_by_specimen_id($specimen_id);
@@ -7681,7 +7674,7 @@ function update_specimen_status($specimen_id)
 function set_specimen_status($specimen_id, $status_code)
 {
 	global $con;
-	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	$specimen_id = mysqli_real_escape_string($con, $specimen_id);
 	# Sets specimen status to specified status code
 	# TODO: Link this to customized status codes in 'status_code' table
 	$query_string =
@@ -7693,7 +7686,7 @@ function set_specimen_status($specimen_id, $status_code)
 function get_specimen_status($specimen_id)
 {
 	global $con;
-	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	$specimen_id = mysqli_real_escape_string($con, $specimen_id);
 	# Returns status of the given specimen
 	# TODO: Link this to customized status codes in 'status_code' table
 	$query_string =
@@ -7706,7 +7699,7 @@ function get_specimen_status($specimen_id)
 function get_specimen_by_id($specimen_id)
 {
 	global $con;
-	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	$specimen_id = mysqli_real_escape_string($con, $specimen_id);
 	# Fetches a specimen record by specimen id
 	$query_string =
 		"SELECT * FROM specimen WHERE specimen_id=$specimen_id LIMIT 1";
@@ -7722,7 +7715,7 @@ function get_specimen_by_id_api($specimen_id, $lab_config_id)
 	global $con;
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
 
-	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	$specimen_id = mysqli_real_escape_string($con, $specimen_id);
 	# Fetches a specimen record by specimen id
 	$query_string =
 	"SELECT * FROM specimen WHERE specimen_id=$specimen_id LIMIT 1";
@@ -7736,7 +7729,7 @@ function get_test_by_test_id_api($test_id, $lab_config_id)
 {
 	global $con;
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
-	$test_id = mysql_real_escape_string($test_id, $con);
+	$test_id = mysqli_real_escape_string($con, $test_id);
 	$query_string =
 	"SELECT * FROM test WHERE test_id=$test_id LIMIT 1";
 	//." ";
@@ -7748,7 +7741,7 @@ function get_test_by_test_id_api($test_id, $lab_config_id)
 function get_specimens_by_session($session_num)
 {
 	global $con;
-	$session_num = mysql_real_escape_string($session_num, $con);
+	$session_num = mysqli_real_escape_string($con, $session_num);
 	# Returns all specimens registered in this session
 	$query_string =
 		"SELECT * FROM specimen ".
@@ -7769,7 +7762,7 @@ function get_specimens_by_session($session_num)
 */
 function checkAndAddAdmin($adminName, $labConfigId, $dev=0) {
 	global $con, $log;
-	$labConfigId = mysql_real_escape_string($labConfigId, $con);
+	$labConfigId = mysqli_real_escape_string($con, $labConfigId);
 	$saved_db = DbUtil::switchToGlobal();
 	if($dev == 0)
 		$query_check = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions
@@ -8035,7 +8028,7 @@ function get_stock_details($entry_id)
 {
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	global $con;
-	$entry_id = mysql_real_escape_string($entry_id, $con);
+	$entry_id = mysqli_real_escape_string($con, $entry_id);
 	$query_string = "SELECT name,lot_number,expiry_date,manufacturer,supplier,current_quantity,unit ,cost_per_unit FROM stock_details WHERE entry_id='$entry_id' ";
 	$resultset = query_associative_one($query_string);
 	if($resultset!=null)
@@ -8183,7 +8176,7 @@ function get_current_inventory_byName($date_to,$date_from, $name)
 {
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	global $con;
-	$name = mysql_real_escape_string($name, $con);
+	$name = mysqli_real_escape_string($con, $name);
 	$query_string =
 		"SELECT name,new_balance,date_of_use, lot_number FROM stock_content WHERE date_of_use<='$date_to' AND date_of_use >= '$date_from' AND name='$name' ";
 		$resultset = query_associative_all($query_string);
@@ -8270,11 +8263,11 @@ function get_entry_ids()
 function update_stocks($name, $lot_number, $quant, $receiver, $remarks, $ts)
 {
 	global $con;
-	$name = mysql_real_escape_string($name, $con);
-	$lot_number = mysql_real_escape_string($lot_number, $con);
-	$quant = mysql_real_escape_string($quant, $con);
-	$receiver = mysql_real_escape_string($receiver, $con);
-	$remarks = mysql_real_escape_string($remarks, $con);
+	$name = mysqli_real_escape_string($con, $name);
+	$lot_number = mysqli_real_escape_string($con, $lot_number);
+	$quant = mysqli_real_escape_string($con, $quant);
+	$receiver = mysqli_real_escape_string($con, $receiver);
+	$remarks = mysqli_real_escape_string($con, $remarks);
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$current_ts = date("Y-m-d H:i:s" , $ts);
 	$query_string =
@@ -8347,7 +8340,7 @@ function update_stocks($name, $lot_number, $quant, $receiver, $remarks, $ts)
 function add_currency_lab_config($lab_config_id, $new_currency)
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_string =
 			"SELECT count(*) as currencyCount from currency_conversion where currencyb='$new_currency' limit 1";
@@ -8382,7 +8375,7 @@ function add_currency_lab_config($lab_config_id, $new_currency)
 function add_currency_rate_lab_config($lab_config_id, $default_currency, $new_currency, $exchange_rate)
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_string =
 	"SELECT count(*) as currencyCount from currency_conversion where currencya='$default_currency' && currencyb='$new_currency' limit 1";
@@ -8406,7 +8399,7 @@ function add_currency_rate_lab_config($lab_config_id, $default_currency, $new_cu
 
 function delete_currency_rate_lab_config($lab_config_id, $default_currency, $delete_currency)
 {
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	global $con;
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_string =
@@ -8421,7 +8414,7 @@ function delete_lab_config($lab_config_id)
 {
 	# Deletes a lab configuration and all related data
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	$saved_db = DbUtil::switchToGlobal();
 	$lab_config = get_lab_config_by_id($lab_config_id);
 	if($lab_config == null)
@@ -8472,7 +8465,7 @@ function create_lab_config_tables($db_name)
 	if ($migrations_successful) {
 		$log->info("Lab tables were created successfully.");
 	} else {
-		$log->warn("Lab tables were NOT created successfully.");
+		$log->warning("Lab tables were NOT created successfully.");
 	}
 }
 
@@ -8480,7 +8473,7 @@ function blis_db_update($lab_config_id, $db_name, $ufile)
 {
 	# Creates empty tables for a new lab configuration
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	db_change($db_name);
 	$file_name = "../data/".$ufile.".sql";
 	$sql_file = fopen($file_name, 'r');
@@ -8510,7 +8503,7 @@ function default_currency_copy($lab_config_id){
 function create_lab_config_revamp_tables($lab_config_id, $revamp_db_name)
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Creates empty tables for a new lab configuration (revamp)
 	db_change($revamp_db_name);
 	$file_name = '../data/create_tables_revamp.sql';
@@ -8526,7 +8519,7 @@ function create_lab_config_revamp_tables($lab_config_id, $revamp_db_name)
 function set_lab_config_db_name($lab_config_id, $db_name)
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Sets database instance name for lab configuration
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string =
@@ -8544,19 +8537,20 @@ function get_lab_config_by_id($lab_config_id)
 {
 	global $con;
 	//print_r($lab_config_id);
-	//$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	//$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns a lab configuration record by id
 	return LabConfig::getById($lab_config_id);
 }
 
 function get_lab_config_id_admin($user_id)
 {
-
-$query_string = "SELECT lab_config_id FROM lab_config WHERE admin_user_id='$user_id'";
-$record = query_associative_one($query_string);
-		$id = $record['lab_config_id'];
-
-return $id;
+    $query_string = "SELECT lab_config_id FROM lab_config WHERE admin_user_id='$user_id'";
+    $record = query_associative_one($query_string);
+    if ($record != null) {
+	    $id = $record['lab_config_id'];
+        return $id;
+    }
+    return null;
 }
 
 function get_lab_config_id($user_id)
@@ -8695,7 +8689,7 @@ function get_lab_configs($admin_user_id = "")
 function get_lab_config_num_patients($lab_config_id)
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns total number of patients present in lab configuration
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$retval = query_num_rows("patient");
@@ -8706,7 +8700,7 @@ function get_lab_config_num_patients($lab_config_id)
 function get_lab_config_num_specimens($lab_config_id)
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns total number of specimens present in lab configuration
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$retval = query_num_rows("specimen");
@@ -8717,8 +8711,8 @@ function get_lab_config_num_specimens($lab_config_id)
 function get_lab_config_num_specimens_pending($lab_config_id, $specimen_type_id="")
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
-	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
+	$specimen_type_id = mysqli_real_escape_string($con, $specimen_type_id);
 	# Returns total number of pending specimens present in lab configuration
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	if($specimen_type_id != "")
@@ -8747,8 +8741,8 @@ function get_lab_config_num_specimens_pending($lab_config_id, $specimen_type_id=
 function get_lab_config_num_tests_pending($lab_config_id, $test_type_id="")
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 	# Returns total number of pending tests in lab configuration
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	if($test_type_id != "")
@@ -8827,7 +8821,7 @@ function get_site_info($site_id)
 
 function get_site_list_with_labid($user_id) {
 	global $con;
-	$user_id = mysql_real_escape_string($user_id, $con);
+	$user_id = mysqli_real_escape_string($con, $user_id);
 	$saved_db = DbUtil::switchToGlobal();
 	$user = get_user_by_id($user_id);
 	$retval = array();
@@ -8860,7 +8854,7 @@ function get_site_list($user_id)
 {
 	# Returns a list of accessible site names and ids for a given user (admin or technician)
 	global $con;
-	$user_id = mysql_real_escape_string($user_id, $con);
+	$user_id = mysqli_real_escape_string($con, $user_id);
 	$saved_db = DbUtil::switchToGlobal();
 	$user = get_user_by_id($user_id);
 	$retval = array();
@@ -8898,7 +8892,7 @@ function get_site_list($user_id)
 function get_test_types_by_site($lab_config_id="")
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns a list of test types configured for a particular site
 	$saved_db = "";
 	if($lab_config_id == "")
@@ -8928,8 +8922,8 @@ function get_test_types_by_site($lab_config_id="")
 function get_test_types_by_site_category($lab_config_id, $cat_code)
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
-	$cat_code = mysql_real_escape_string($cat_code, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
+	$cat_code = mysqli_real_escape_string($con, $cat_code);
 	# Returns a list of test types of a particular section (category),
 	# configured for a particular site
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
@@ -8955,7 +8949,7 @@ function get_test_types_by_site_category($lab_config_id, $cat_code)
 function get_test_types_by_site_map($lab_config_id)
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns a list of test types configured for a particular site
 	global $CATALOG_TRANSLATION;
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
@@ -8980,7 +8974,7 @@ function get_test_types_by_site_map($lab_config_id)
 function get_users_by_site_map($lab_config_id)
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns a list of usernames configured for a particular site
 	$saved_db = DbUtil::switchToGlobal();
 	$retval = array();
@@ -9006,7 +9000,7 @@ function get_users_by_site_map($lab_config_id)
 function get_tech_users_by_site_map($lab_config_id)
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns a list of technician usernames configured for a particular site
 	$saved_db = DbUtil::switchToGlobal();
 	$retval = array();
@@ -9028,7 +9022,7 @@ function get_tech_users_by_site_map($lab_config_id)
 function get_specimen_types_by_site($lab_config_id="")
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns a list of specimen types configured for a particular site
 	$saved_db = "";
 	if($lab_config_id == "")
@@ -9061,11 +9055,11 @@ function get_specimen_types_by_site($lab_config_id="")
 function add_specimen_type($specimen_name, $specimen_descr, $test_list=array(), $lab_config_id=null)
 {
 	global $con;
-	$specimen_name = mysql_real_escape_string($specimen_name, $con);
-	$specimen_descr = mysql_real_escape_string($specimen_descr, $con);
+	$specimen_name = mysqli_real_escape_string($con, $specimen_name);
+	$specimen_descr = mysqli_real_escape_string($con, $specimen_descr);
 	# Adds a new specimen type in DB with compatible tests in $test_list
 	$saved_db = DbUtil::switchToLabConfigRevamp();
-	
+
 	if ($lab_config_id == null) {
 		$lab_config_id = $_SESSION['lab_config_id'];
 	}
@@ -9158,12 +9152,12 @@ function update_specimen_type($updated_entry, $new_test_list)
 function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_panel, $lab_config_id, $hide_patient_name, $prevalenceThreshold, $targetTat, $specimen_list = array())
 {
 	global $con;
-	$test_name = mysql_real_escape_string($test_name, $con);
-	$test_descr = mysql_real_escape_string($test_descr, $con);
-	$cat = mysql_real_escape_string($cat_code, $con);
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
-	$hide_patient_name = mysql_real_escape_string($hide_patient_name, $con);
-    $cost_to_patient = mysql_real_escape_string($cost, $con);
+	$test_name = mysqli_real_escape_string($con, $test_name);
+	$test_descr = mysqli_real_escape_string($con, $test_descr);
+	$cat = mysqli_real_escape_string($con, $cat_code);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
+	$hide_patient_name = mysqli_real_escape_string($con, $hide_patient_name);
+    $cost_to_patient = mysqli_real_escape_string($con, $cost);
 	# Adds a new test type in DB with compatible specimens in 'specimen_list'
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$is_panel_num = 1;
@@ -9208,7 +9202,7 @@ function add_test_type($test_name, $test_descr, $clinical_data, $cat_code, $is_p
 function update_test_type($updated_entry, $new_specimen_list,$lab_config_id)
 {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Updates test type info in DB catalog
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$existing_entry = get_test_type_by_id($updated_entry->testTypeId);
@@ -9285,8 +9279,8 @@ function update_test_type($updated_entry, $new_specimen_list,$lab_config_id)
 function add_test_category($cat_name, $cat_descr="")
 {
 	global $con;
-	$cat_name = mysql_real_escape_string($cat_name, $con);
-	$cat_descr = mysql_real_escape_string($cat_descr, $con);
+	$cat_name = mysqli_real_escape_string($con, $cat_name);
+	$cat_descr = mysqli_real_escape_string($con, $cat_descr);
 	# Adds a new test category to catalog
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string =
@@ -9302,9 +9296,9 @@ function add_measure($measure, $range, $unit)
 {
 	# Adds a new measure to catalog
 	global $con;
-	$measure = mysql_real_escape_string($measure, $con);
-	$range = mysql_real_escape_string($range, $con);
-	$unit = mysql_real_escape_string($unit, $con);
+	$measure = mysqli_real_escape_string($con, $measure);
+	$range = mysqli_real_escape_string($con, $range);
+	$unit = mysqli_real_escape_string($con, $unit);
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string =
 		"INSERT INTO measure(`name`, `range`, unit) ".
@@ -9456,7 +9450,7 @@ function get_test_ids_by_category($cat, $lab_config_id) {
 
 function get_test_categories($lab_config_id=null) {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns a list of all test categories available in catalog
 	global $CATALOG_TRANSLATION;
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
@@ -9476,7 +9470,7 @@ function get_test_categories($lab_config_id=null) {
 
 function get_test_categories2($lab_config_id=null) {
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns a list of all test categories available in catalog
 	global $CATALOG_TRANSLATION;
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
@@ -9500,7 +9494,7 @@ function get_test_categories2($lab_config_id=null) {
 function get_test_category_name_by_id($cat_id)
 {
 	global $con;
-	$cat_id = mysql_real_escape_string($cat_id, $con);
+	$cat_id = mysqli_real_escape_string($con, $cat_id);
 	# Returns test category name as string
 	global $CATALOG_TRANSLATION;
 	if($CATALOG_TRANSLATION === true)
@@ -9550,7 +9544,7 @@ function get_test_types_wcat_catalog()
 
 function getMeasuresByLab($labConfigId) {
 	global $con;
-	$labConfigId = mysql_real_escape_string($labConfigId, $con);
+	$labConfigId = mysqli_real_escape_string($con, $labConfigId);
 	$saved_db = DbUtil::switchToLabConfig($labConfigId);
 	$query_string = "SELECT * FROM measure ORDER BY name";
 	$resultset = query_associative_all($query_string);
@@ -9584,7 +9578,7 @@ function get_measures_catalog()
 function get_measure_by_id($measure_id)
 {
 	global $con;
-	$measure_id = mysql_real_escape_string($measure_id, $con);
+	$measure_id = mysqli_real_escape_string($con, $measure_id);
 	# Returns Measure object from DB
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_measure =
@@ -9599,7 +9593,7 @@ function get_test_type_measure($test_type_id)
 {
 	# Returns list of measures for a given test type
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 	# Moved to TestType::getMeasures()
 	$test_type = TestType::getById($test_type_id);
 	if($test_type != null)
@@ -9616,7 +9610,7 @@ function get_test_type_measure($test_type_id)
 function get_specimen_type_by_name($specimen_name)
 {
 	global $con;
-	$specimen_name = mysql_real_escape_string($specimen_name, $con);
+	$specimen_name = mysqli_real_escape_string($con, $specimen_name);
 	# Returns specimen type record in DB
 	$user = get_user_by_id($_SESSION['user_id']);
 	$lab_config_id = $user->labConfigId;
@@ -9631,7 +9625,7 @@ function get_specimen_type_by_name($specimen_name)
 function get_test_type_by_name($test_name)
 {
 	global $con;
-	$test_name = mysql_real_escape_string($test_name, $con);
+	$test_name = mysqli_real_escape_string($con, $test_name);
 	# Returns test type record in DB
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$test_name = addslashes($test_name);
@@ -9646,7 +9640,7 @@ function get_specimen_name_by_id($specimen_type_id)
 {
 	# Returns specimen type name string
 	global $con;
-	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
+	$specimen_type_id = mysqli_real_escape_string($con, $specimen_type_id);
 	global $CATALOG_TRANSLATION;
 	if($CATALOG_TRANSLATION === true)
 		return LangUtil::getSpecimenName($specimen_type_id);
@@ -9669,8 +9663,8 @@ function get_specimen_name_by_id($specimen_type_id)
 function get_test_name_by_id($test_type_id, $lab_config_id=null)
 {
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns test type name string
 	global $CATALOG_TRANSLATION;
 	if($CATALOG_TRANSLATION === true)
@@ -9694,7 +9688,7 @@ function get_test_name_by_id($test_type_id, $lab_config_id=null)
 function get_clinical_data_by_id($test_type_id)
 {
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 	# Returns test type name string
 	global $CATALOG_TRANSLATION;
 	if($CATALOG_TRANSLATION === true)
@@ -9717,7 +9711,7 @@ function get_clinical_data_by_id($test_type_id)
 function get_test_type_by_id($test_type_id)
 {
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 	# Returns test type record in DB
 	return TestType::getById($test_type_id);
 }
@@ -9725,7 +9719,7 @@ function get_test_type_by_id($test_type_id)
 function get_specimen_type_by_id($specimen_type_id)
 {
 	global $con;
-	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
+	$specimen_type_id = mysqli_real_escape_string($con, $specimen_type_id);
 	# Returns specimen type record in DB
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string =
@@ -9747,7 +9741,7 @@ function search_measures_catalog($measure_name)
 	# Returns a list of matching measures available in catalog
 	# Called from ajax/token_tmeas.php
 	global $con;
-	$measure_name = mysql_real_escape_string($measure_name, $con);
+	$measure_name = mysqli_real_escape_string($con, $measure_name);
 	global $CATALOG_TRANSLATION;
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string =
@@ -9770,7 +9764,7 @@ function search_test_types_catalog($test_name)
 	# Returns matching test types available in catalog
 	# Called from ajax/token_ttypes.php
 	global $con;
-	$test_name = mysql_real_escape_string($test_name, $con);
+	$test_name = mysqli_real_escape_string($con, $test_name);
 	global $CATALOG_TRANSLATION;
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string =
@@ -9793,7 +9787,7 @@ function search_specimen_types_catalog($specimen_name)
 	# Returns matching test types available in catalog
 	# Called from ajax/token_stypes.php
 	global $con;
-	$specimen_name = mysql_real_escape_string($specimen_name, $con);
+	$specimen_name = mysqli_real_escape_string($con, $specimen_name);
 	global $CATALOG_TRANSLATION;
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string =
@@ -10160,8 +10154,8 @@ function update_daily_number($daily_date_string, $curr_count)
 function add_test_type_measure($test_type_id, $measure_id)
 {
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
-	$measure_id = mysql_real_escape_string($measure_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
+	$measure_id = mysqli_real_escape_string($con, $measure_id);
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	# Adds a new entry to test_type->measure map table
 	$query_check =
@@ -10186,8 +10180,8 @@ function delete_test_type_measure($test_type_id, $measure_id)
 {
 	# Deletes the mapping entry between test_type and measure
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
-	$measure_id = mysql_real_escape_string($measure_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
+	$measure_id = mysqli_real_escape_string($con, $measure_id);
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string =
 		"DELETE FROM test_type_measure ".
@@ -10210,8 +10204,8 @@ function delete_test_type_measure($test_type_id, $measure_id)
 function add_specimen_test($specimen_type_id, $test_type_id)
 {
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
-	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
+	$specimen_type_id = mysqli_real_escape_string($con, $specimen_type_id);
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	# Adds a new entry to specimen_type->test_type map table
 	$query_check =
@@ -10236,8 +10230,8 @@ function add_lab_config_test_type($lab_config_id, $test_type_id)
 {
 	# Adds a new entry to lab_config->test_type map table
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
 	$query_check =
 		"SELECT * FROM lab_config_test_type ".
@@ -10260,8 +10254,8 @@ function add_lab_config_specimen_type($lab_config_id, $specimen_type_id)
 {
 	# Adds a new entry to lab_config->specimen_type map table
 	global $con;
-	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$specimen_type_id = mysqli_real_escape_string($con, $specimen_type_id);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
 	$query_check =
 		"SELECT * FROM lab_config_specimen_type ".
@@ -10284,8 +10278,8 @@ function add_lab_config_access($user_id, $lab_config_id)
 {
 	# Adds access to a new lab config for a country dir user
 	global $con, $log;
-	$user_id = mysql_real_escape_string($user_id, $con);
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$user_id = mysqli_real_escape_string($con, $user_id);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	$saved_db = DbUtil::switchToGlobal();
 	$query_check =
 		"SELECT * FROM lab_config_access ".
@@ -10311,7 +10305,7 @@ function get_compatible_tests($specimen_type_id)
 {
 	# Returns a list of compatible tests for a given specimen type in catalog
 	global $con;
-	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
+	$specimen_type_id = mysqli_real_escape_string($con, $specimen_type_id);
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string =
 		"SELECT test_type_id FROM specimen_test WHERE specimen_type_id=$specimen_type_id";
@@ -10331,7 +10325,7 @@ function get_compatible_specimens($test_type_id)
 {
 	# Returns a list of compatible specimens for a given test type in catalog
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	$query_string =
 		"SELECT specimen_type_id FROM specimen_test WHERE test_type_id=$test_type_id";
@@ -10351,8 +10345,8 @@ function get_compatible_test_types($lab_config_id, $specimen_type_id)
 {
 	# Returns a list of compatible tests for a given specimen type in lab configuration
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
-	$specimen_type_id = mysql_real_escape_string($specimen_type_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
+	$specimen_type_id = mysqli_real_escape_string($con, $specimen_type_id);
 	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
 	$query_string =
 		"SELECT DISTINCT tt.* FROM test_type tt, lab_config_test_type lctt, specimen_test st ".
@@ -10382,7 +10376,7 @@ function get_lab_config_test_types($lab_config_id, $to_global=false)
 	global $con;
 	//$lab_config_id = 127;
 
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	//echo "test ".$lab_config_id;
 	//$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$lab_config = LabConfig::getById($lab_config_id);
@@ -10395,7 +10389,7 @@ function get_lab_config_specimen_types($lab_config_id, $to_global=false, $lab_co
 {
 	global $con;
 
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns a list of all specimen types added to the lab configuration
 	if($to_global == false){
 		$saved_db = DbUtil::switchToLabConfigRevamp();
@@ -10428,7 +10422,7 @@ function get_test_type_measures($test_type_id)
 	# Returns list of measure IDs included in a test type
 	# Moved to Measure::getMeasureIds()
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 	$test_type = TestType::getById($test_type_id);
 	if($test_type != null)
 	{
@@ -10444,7 +10438,7 @@ function get_test_type_measures($test_type_id)
 function get_measure_range($measure_id)
 {
 	global $con;
-	$measure_id = mysql_real_escape_string($measure_id, $con);
+	$measure_id = mysqli_real_escape_string($con, $measure_id);
 	$saved_db = DbUtil::switchToLabConfigRevamp();
 	# Returns range specified for the measure
 	$query_string =
@@ -10464,7 +10458,7 @@ function add_custom_field_specimen($custom_field, $lab_config_id=null)
 	# Adds a new specimen custom field to lab configuration
 	global $con;
 	if($lab_config_id != null) {
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	}
 	$query_string =
@@ -10480,7 +10474,7 @@ function add_custom_field_patient($custom_field, $lab_config_id=null)
 	# Adds a new patient custom field to lab configuration
 	global $con;
 	if($lab_config_id != null) {
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	}
 	$query_string =
@@ -10496,7 +10490,7 @@ function add_custom_field_labtitle($custom_field, $lab_config_id=null)
 	# Adds a new lab title custom field to lab configuration
 	global $con;
 	if($lab_config_id != null) {
-		$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+		$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	}
 	$query_string =
@@ -10575,7 +10569,7 @@ function get_custom_fields_labtitle($field_id)
 {
 	# Returns a list of all patient custom fields
 	global $con;
-	$field_id = mysql_real_escape_string($field_id, $con);
+	$field_id = mysqli_real_escape_string($con, $field_id);
 	$query_string =
 		"SELECT field_options FROM labtitle_custom_field where id = $field_id LIMIT 1";
 	$record = query_associative_one($query_string);
@@ -10586,7 +10580,7 @@ function get_custom_field_name_specimen($field_id)
 {
 	# Returns name of the specimen custom field
 	global $con;
-	$field_id = mysql_real_escape_string($field_id, $con);
+	$field_id = mysqli_real_escape_string($con, $field_id);
 	$query_string =
 		"SELECT field_name FROM specimen_custom_field ".
 		"WHERE id=$field_id LIMIT 1";
@@ -10598,7 +10592,7 @@ function get_custom_field_name_patient($field_id)
 {
 	# Returns name of the patient custom field
 	global $con;
-	$field_id = mysql_real_escape_string($field_id, $con);
+	$field_id = mysqli_real_escape_string($con, $field_id);
 	$query_string =
 		"SELECT field_name FROM patient_custom_field ".
 		"WHERE id=$field_id LIMIT 1";
@@ -10610,7 +10604,7 @@ function get_custom_field_name_labtitle($field_id)
 {
 	# Returns name of the specimen custom field
 	global $con;
-	$field_id = mysql_real_escape_string($field_id, $con);
+	$field_id = mysqli_real_escape_string($con, $field_id);
 	$query_string =
 		"SELECT field_name FROM labtitle_custom_field ".
 		"WHERE id=$field_id LIMIT 1";
@@ -10670,7 +10664,7 @@ function get_custom_data_specimen($specimen_id)
 {
 	# Fetches custom data stored for a given specimen ID
 	global $con;
-	$specimen_id = mysql_real_escape_string($specimen_id, $con);
+	$specimen_id = mysqli_real_escape_string($con, $specimen_id);
 	$query_string =
 		"SELECT * FROM specimen_custom_data ".
 		"WHERE specimen_id=$specimen_id";
@@ -10688,8 +10682,8 @@ function get_custom_data_specimen($specimen_id)
 function get_custom_data_specimen_bytype($specimen_id, $field_id)
 {
 	global $con;
-	$specimen_id = mysql_real_escape_string($specimen_id, $con);
-	$field_id = mysql_real_escape_string($field_id, $con);
+	$specimen_id = mysqli_real_escape_string($con, $specimen_id);
+	$field_id = mysqli_real_escape_string($con, $field_id);
 	$query_string =
 		"SELECT * FROM specimen_custom_data ".
 		"WHERE specimen_id=$specimen_id AND field_id=$field_id LIMIT 1";
@@ -10704,7 +10698,7 @@ function get_custom_data_patient($patient_id)
 {
 	# Fetches custom data stored for a given patient ID
 	global $con;
-	$patient_id = mysql_real_escape_string($patient_id, $con);
+	$patient_id = mysqli_real_escape_string($con, $patient_id);
 	$query_string =
 		"SELECT * FROM patient_custom_data ".
 		"WHERE patient_id=$patient_id";
@@ -10720,8 +10714,8 @@ function get_custom_data_patient($patient_id)
 function get_custom_data_patient_bytype($patient_id, $field_id)
 {
 	global $con;
-	$patient_id = mysql_real_escape_string($patient_id, $con);
-	$field_id = mysql_real_escape_string($field_id, $con);
+	$patient_id = mysqli_real_escape_string($con, $patient_id);
+	$field_id = mysqli_real_escape_string($con, $field_id);
 	$query_string =
 		"SELECT * FROM patient_custom_data ".
 		"WHERE patient_id=$patient_id AND field_id=$field_id LIMIT 1";
@@ -10735,8 +10729,8 @@ function get_custom_data_patient_bytype($patient_id, $field_id)
 function get_custom_data_patient_fieldvalue($patient_id, $field_id)
 {
 	global $con;
-	$patient_id = mysql_real_escape_string($patient_id, $con);
-	$field_id = mysql_real_escape_string($field_id, $con);
+	$patient_id = mysqli_real_escape_string($con, $patient_id);
+	$field_id = mysqli_real_escape_string($con, $field_id);
 	$query_string =
 		"SELECT field_value FROM patient_custom_data ".
 		"WHERE patient_id=$patient_id AND field_id=$field_id LIMIT 1";
@@ -10749,8 +10743,8 @@ function get_custom_data_patient_fieldvalue($patient_id, $field_id)
 function get_custom_data_specimen_fieldvalue($specimen_id, $field_id)
 {
 	global $con;
-	$patient_id = mysql_real_escape_string($patient_id, $con);
-	$field_id = mysql_real_escape_string($field_id, $con);
+	$patient_id = mysqli_real_escape_string($con, $patient_id);
+	$field_id = mysqli_real_escape_string($con, $field_id);
 	$query_string =
 		"SELECT field_value FROM specimen_custom_data ".
 		"WHERE specimen_id=$specimen_id AND field_id=$field_id LIMIT 1";
@@ -10765,7 +10759,7 @@ function get_lab_config_specimen_custom_fields($lab_config_id)
 {
 	# Returns list of specimen custom fields for a lab configuration
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_string =
 		"SELECT * FROM specimen_custom_field";
@@ -10783,7 +10777,7 @@ function get_lab_config_patient_custom_fields($lab_config_id)
 {
 	# Returns list of patient custom fields for a lab configuration
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_string =
 		"SELECT * FROM patient_custom_field";
@@ -10801,7 +10795,7 @@ function get_lab_config_labtitle_custom_fields($lab_config_id)
 {
 	# Returns list of patient custom fields for a lab configuration
 	global $con;
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 	$query_string =
 		"SELECT * FROM labtitle_custom_field";
@@ -10845,9 +10839,9 @@ function add_new_comment($username, $page, $comment)
 {
 	# Adds a copy of user comment to DB
 	global $con;
-	$username = mysql_real_escape_string($username, $con);
-	$page = mysql_real_escape_string($page, $con);
-	$comment = mysql_real_escape_string($comment, $con);
+	$username = mysqli_real_escape_string($con, $username);
+	$page = mysqli_real_escape_string($con, $page);
+	$comment = mysqli_real_escape_string($con, $comment);
 	$query_string =
 		"INSERT INTO comment (username, page, comment) ".
 		"VALUES ('$username', '$page', '$comment')";
@@ -12676,8 +12670,8 @@ function updateGroupedReportsConfig($byAge, $byGender, $ageGroups, $bySection, $
         function getTestRecordsByDate($date, $test_type_id)
 	{
 		global $con;
-		$test_type_id = mysql_real_escape_string($test_type_id, $con);
-		$date = mysql_real_escape_string($date, $con);
+		$test_type_id = mysqli_real_escape_string($con, $test_type_id);
+		$date = mysqli_real_escape_string($con, $date);
 		$query_string =
 			"SELECT * FROM test ".
 			"WHERE test_type_id=$test_type_id ".
@@ -12705,8 +12699,8 @@ function updateGroupedReportsConfig($byAge, $byGender, $ageGroups, $bySection, $
 	{
 		# Returns all test records added on that day
 		global $con;
-		$test_type_id = mysql_real_escape_string($test_type_id, $con);
-		$date = mysql_real_escape_string($date, $con);
+		$test_type_id = mysqli_real_escape_string($con, $test_type_id);
+		$date = mysqli_real_escape_string($con, $date);
 		$query_string =
 			"SELECT * FROM test ".
 			"Where ts > From_UNIXTIME($date) ";
@@ -12722,8 +12716,8 @@ function updateGroupedReportsConfig($byAge, $byGender, $ageGroups, $bySection, $
         function get_test_date_by_id($test_type_id, $lab_config_id=null)
 {
 	global $con;
-	$test_type_id = mysql_real_escape_string($test_type_id, $con);
-	$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+	$test_type_id = mysqli_real_escape_string($con, $test_type_id);
+	$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
 	# Returns test type name string
 	global $CATALOG_TRANSLATION;
 	if($CATALOG_TRANSLATION === true)
@@ -13714,7 +13708,7 @@ function insert_lab_config_settings_barcode($type, $width, $height, $textsize, $
     $query_string = "SELECT count(*) as val from lab_config_settings WHERE id = $id";
     $recordset = query_associative_one($query_string);
 
-    if($recordset[val] != 0)
+    if($recordset["val"] != 0)
         return 0;
 
     $remarks = "Barcode Settings";
@@ -14047,7 +14041,7 @@ class Inventory
                 return -1;
         }
 
-        public function getAllReagents($lid)
+        public static function getAllReagents($lid)
         {
             $lab_config_id = $lid;
 
@@ -14635,9 +14629,6 @@ function get_prevalence_data_per_test_per_lab_dir22($test_type_id, $lab_config_i
 							//echo($query_string);
 						$record = query_associative_one($query_string);
 						$count_all = intval($record['count_val']);
-						# If total tests is 0, ignore
-						if($count_all == 0)
-							continue;
 						$testName = get_test_name_by_id($test_type_id);
 						$labName = $lab_config->name;
 						$query_string =
@@ -15082,7 +15073,7 @@ function db_analysis_ratings($lb)
 		// NO data
 		// entries from 2012-06-16 to 2013-04-28
 		$labdb = "blis_1006";
-		$lastdate = mktime( 0, 0, 0, 04, 28, 2013);
+		$lastdate = mktime(0, 0, 0, 4, 28, 2013);
 		$day = 11;
 		$yr = 2012;
 		$mth = 6;
@@ -15091,7 +15082,7 @@ function db_analysis_ratings($lb)
 	{
 		// entries from 2010-05-11 to 2013-04-29
 		$labdb = "blis_131";
-		$lastdate = mktime( 0, 0, 0, 7, 09, 2012);
+		$lastdate = mktime(0, 0, 0, 7, 9, 2012);
 		$day = 26;
 		$yr = 2010;
 		$mth = 4;
@@ -15709,7 +15700,7 @@ class API
     {
        print_r($_SESSION);
         global $con;
-	$username = mysql_real_escape_string($username, $con);
+	$username = mysqli_real_escape_string($con, $username);
 	$saved_db = DbUtil::switchToGlobal();
 	$password = encrypt_password($password);
 	$query_string =
@@ -15830,7 +15821,7 @@ class API
     {
         //by 1 = name, 2 = id, 3 = number
         global $con;
-	$q = mysql_real_escape_string($str, $con);
+	$q = mysqli_real_escape_string($con, $str);
 
         if($by == 2)
          {
@@ -15871,7 +15862,7 @@ class API
     {
         //by 3 = patient name, 2 = patient id, 1 = specimen_id
         global $con;
-	$q = mysql_real_escape_string($str, $con);
+	$q = mysqli_real_escape_string($con, $str);
 
         if($by == 1)
          {
@@ -16063,7 +16054,7 @@ class API
             {
                 $lab_config_id = get_lab_config_id_admin($_SESSION['user_id']);
             }
-		$test_type_id = mysql_real_escape_string($test_type_id, $con);
+		$test_type_id = mysqli_real_escape_string($con, $test_type_id);
 		$saved_db = DbUtil::switchToLabConfig($lab_config_id);
 		$query_string =
 			"SELECT * FROM test_type WHERE test_type_id=$test_type_id LIMIT 1";
