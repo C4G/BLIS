@@ -128,15 +128,13 @@ foreach($test_type_ids as $tt_idx => $test_type_id) {
         INNER JOIN test AS t ON s.specimen_id = t.specimen_id
         INNER JOIN patient AS p ON s.patient_id = p.patient_id
         WHERE s.date_collected BETWEEN '$start_date' AND '$end_date'
-        AND t.test_type_id = '$test_type_id';
+        AND t.test_type_id = '$test_type_id'
 EOQ;
 
     $results = query_associative_all($query);
 
     if(count($results) == 0) {
-        header('HTTP/1.1 404 Not Found', true, 404);
-        echo "No data to report in the chosen date range";
-        exit;
+        continue;
     }
 
     // Send the spreadsheet directly to the browser

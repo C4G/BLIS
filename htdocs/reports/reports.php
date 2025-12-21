@@ -2990,7 +2990,7 @@ alert(dd_to);
                                     echo '<select name="locationAgg" id="locationAgg" onchange="exportExcel_updateTestTypesAndCustomFields()">';
                                     echo '<option value="-1"></option>';
 
-                                    $lab_config_list_imported = get_lab_configs_imported();
+                                    $lab_config_list_imported = get_lab_configs();
                                     foreach($lab_config_list_imported as $lc) {
                                         echo "<option value=\"$lc->id\">$lc->name</option>";
                                     }
@@ -3501,7 +3501,6 @@ alert(dd_to);
 
                 <div id='test_results_range_div' style='display:none;' class='reports_subdiv'>
                     <b><?php echo "Test Statistics"; ?></b>
-                    <?php?>
                     <br><br>
 
                     <form name="test_range_form" id="test__range_form" action="reports_test_range_stats.php" method='post'>
