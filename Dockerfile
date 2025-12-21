@@ -4,7 +4,6 @@ FROM ubuntu:noble
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         acl \
         apache2 \
-        cron \
         curl \
         logrotate \
         mysql-client \

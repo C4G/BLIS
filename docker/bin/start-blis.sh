@@ -28,7 +28,6 @@ if [[ -d /var/www/blis ]]; then
     fi
 fi
 
-sudo service cron start
 sudo service apache2 start
 
 echo "BLIS is running!"

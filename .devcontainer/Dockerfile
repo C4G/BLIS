@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y software-properties-common && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         acl \
         apache2 \
-        cron \
         curl \
         git \
         libharfbuzz0b \
