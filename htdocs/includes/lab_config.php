@@ -161,7 +161,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         //global $con;
-        //$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+        //$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
         $query_rwoptions= "SELECT * FROM user WHERE level=17 and lab_config_id = ".$_SESSION['lab_config_id']." LIMIT 1";
         $recordOptions = query_associative_one($query_rwoptions);
         DbUtil::switchRestore($saved_db);
@@ -265,7 +265,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         //global $con;
-        //$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+        //$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
         $query_config = "SELECT * FROM lab_config WHERE lab_config_id = $lab_config_id LIMIT 1";
         $record = query_associative_one($query_config);
         DbUtil::switchRestore($saved_db);
@@ -276,7 +276,7 @@ class LabConfig
     // public static function getById($lab_config_id) {
     // 	$saved_db = DbUtil::switchToGlobal();
     // 	//global $con;
-    // 	//$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+    // 	//$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
     // 	$query_config = "SELECT * FROM lab_config WHERE lab_config_id = $lab_config_id LIMIT 1";
     // 	$record = query_associative_one($query_config);
     // 	DbUtil::switchRestore($saved_db);
@@ -288,7 +288,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         //global $con;
-        //$lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+        //$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
         $query_config = "SELECT * FROM lab_config WHERE lab_config_id = $lab_config_id LIMIT 1";
         $record = query_associative_one($query_config);
         DbUtil::switchRestore($saved_db);
@@ -298,10 +298,10 @@ class LabConfig
 
 
 
-    public function getUserCountry($lab_config_id)
+    public static function getUserCountry($lab_config_id)
     {
         global $con;
-        $lab_config_id = mysql_real_escape_string($lab_config_id, $con);
+        $lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
         $saved_db = DbUtil::switchToGlobal();
         $userId = $_SESSION['user_id'];
         if ($lab_config_id == 0) {
@@ -318,7 +318,7 @@ class LabConfig
     public function changeAdmin($new_admin_id)
     {
         global $con;
-        $new_admin_id = mysql_real_escape_string($new_admin_id, $con);
+        $new_admin_id = mysqli_real_escape_string($con, $new_admin_id);
         $query_string =
             "UPDATE lab_config ".
             "SET admin_user_id=$new_admin_id ".
@@ -444,7 +444,7 @@ class LabConfig
         global $DEFAULT_TARGET_TAT, $con;
         $saved_db = DbUtil::switchToLabConfig($this->id);
         $query_string = "";
-        $test_type_id = mysql_real_escape_string($test_type_id, $con);
+        $test_type_id = mysqli_real_escape_string($con, $test_type_id);
         $query_string = "SELECT target_tat FROM test_type ".
                         "WHERE test_type_id=$test_type_id ORDER BY ts DESC LIMIT 1";
         $record = query_associative_one($query_string);
@@ -503,8 +503,8 @@ class LabConfig
         ## Adds a new entry for every update to have time-versioned goal TAT values
         $saved_db = DbUtil::switchToLabConfig($this->id);
         global $con;
-        $test_type_id = mysql_real_escape_string($test_type_id, $con);
-        $tat_value = mysql_real_escape_string($tat_value, $con);
+        $test_type_id = mysqli_real_escape_string($con, $test_type_id);
+        $tat_value = mysqli_real_escape_string($con, $tat_value);
         # Create new entry
         /*
         $query_string =
@@ -548,7 +548,7 @@ class LabConfig
         */
     }
 
-    public function getPrintUnverified($lab_config)
+    public static function getPrintUnverified($lab_config)
     {
         $saved_db = DbUtil::switchToLabConfigRevamp($lab_config);
         # Returns a list of all test type IDs added to the lab configuration
@@ -609,7 +609,7 @@ class LabConfig
     {
         # Changes facility name for this lab configuration
         global $con;
-        $new_name = mysql_real_escape_string($new_name, $con);
+        $new_name = mysqli_real_escape_string($con, $new_name);
         $saved_db = DbUtil::switchToGlobal();
         $query_string =
             "UPDATE lab_config SET name='$new_name' WHERE lab_config_id=$this->id";
@@ -621,7 +621,7 @@ class LabConfig
     {
         # Changes location value for this lab configuration
         global $con;
-        $new_location = mysql_real_escape_string($new_location, $con);
+        $new_location = mysqli_real_escape_string($con, $new_location);
         $saved_db = DbUtil::switchToGlobal();
         $query_string =
             "UPDATE lab_config SET location='$new_location' WHERE lab_config_id=$this->id";
@@ -633,7 +633,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET p_addl=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -644,7 +644,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET s_addl=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -655,7 +655,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET daily_num=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -666,7 +666,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET pid=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -677,7 +677,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET sid=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -688,7 +688,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET comm=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -699,7 +699,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET rdate=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -710,7 +710,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET refout=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -721,7 +721,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET doctor=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -732,7 +732,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET pnamehide=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -743,7 +743,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET age=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -754,7 +754,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET sex=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -765,7 +765,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET dob=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -776,7 +776,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET pname=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -787,7 +787,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_format = mysql_real_escape_string($new_format, $con);
+        $new_format = mysqli_real_escape_string($con, $new_format);
         $query_string =
             "UPDATE lab_config SET dformat='$new_format' WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -798,7 +798,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $ageLimit = mysql_real_escape_string($ageLimit, $con);
+        $ageLimit = mysqli_real_escape_string($con, $ageLimit);
         $query_string =
             "UPDATE lab_config SET ageLimit=$ageLimit WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -836,7 +836,7 @@ class LabConfig
         # $target_entity = 1 for specimen. 2 for patients
         $saved_db = DbUtil::switchToLabConfig($this->id);
         global $con;
-        $target_entity = mysql_real_escape_string($target_entity, $con);
+        $target_entity = mysqli_real_escape_string($con, $target_entity);
         $target_table = "patient_custom_field";
         if ($target_entity == 1) {
             $target_table = "specimen_custom_field";
@@ -878,7 +878,7 @@ class LabConfig
     {
         $saved_db = DbUtil::switchToGlobal();
         global $con;
-        $new_value = mysql_real_escape_string($new_value, $con);
+        $new_value = mysqli_real_escape_string($con, $new_value);
         $query_string =
             "UPDATE lab_config SET dnum_reset=$new_value WHERE lab_config_id=$this->id";
         query_blind($query_string);
@@ -939,8 +939,9 @@ class LabConfig
 
     public function updateBlisCloudHostname($hostname)
     {
+        global $con;
         $saved_db = DbUtil::switchToGlobal();
-        $escaped = mysql_real_escape_string($hostname);
+        $escaped = mysqli_real_escape_string($con, $hostname);
         $query = "UPDATE lab_config SET blis_cloud_hostname='$escaped' WHERE lab_config_id='$this->id'";
         query_update($query);
         DbUtil::switchRestore($saved_db);

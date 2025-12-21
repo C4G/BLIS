@@ -3,12 +3,12 @@ include("redirect.php");
 session_start();
 include('includes/db_constants.php');
 
-$con = mysql_connect($DB_HOST,$DB_USER,$DB_PASS);
+$con = mysqli_connect($DB_HOST, $DB_USER, $DB_PASS, null, $DB_PORT);
 if (!$con)
 {
-  die('Could not connect: ' . mysql_error());
+  die('Could not connect: ' . mysqli_connect_error());
 }
-mysql_select_db($GLOBAL_DB_NAME, $con);
+mysqli_select_db($con, $GLOBAL_DB_NAME);
 
 $Latency="";
 $Page_Name="";
@@ -33,10 +33,10 @@ if(!$_SESSION['DELAY_RECORDED'])
 	$sql=
 		"Insert Into Delay_Measures (User_Id, IP_Address, Latency, Recorded_At, Page_Name, Request_URI) ".
 		"VALUES ('$User', '".$_SERVER['REMOTE_ADDR']."', '$Latency', '$now', '$Page_Name', '$Request_URI');";
-	if(mysql_query($sql))
+	if(mysqli_query($con, $sql))
 		$_SESSION['DELAY_RECORDED']=true;
 	else
 		$_SESSION['DELAY_RECORDED']=false;
 }
-mysql_close($con);
+mysqli_close($con);
 ?>
