@@ -5,8 +5,9 @@ FROM ubuntu:noble
 # See the documentation here to see why devcontainers are awesome:
 # https://code.visualstudio.com/docs/remote/containers
 
+ARG PHP_VERSION="5.6"
+
 # Install a bunch of stuff from the standard repositories and a custom PHP repository
-# Namely, PHP 5.6
 RUN apt-get update && apt-get install -y software-properties-common && \
     add-apt-repository ppa:ondrej/php && apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -25,14 +26,14 @@ RUN apt-get update && apt-get install -y software-properties-common && \
         unzip \
         weasyprint \
         zip \
-        php5.6 \
-        php5.6-bcmath \
-        php5.6-curl \
-        php5.6-gd \
-        php5.6-mysql \
-        php5.6-zip \
-        php5.6-mbstring \
-        php5.6-xml \
+        php$PHP_VERSION \
+        php$PHP_VERSION-bcmath \
+        php$PHP_VERSION-curl \
+        php$PHP_VERSION-gd \
+        php$PHP_VERSION-mysql \
+        php$PHP_VERSION-zip \
+        php$PHP_VERSION-mbstring \
+        php$PHP_VERSION-xml \
         && rm -rf /var/lib/apt/lists/*
 
 RUN echo "column-statistics = 0" | tee -a /etc/mysql/conf.d/mysqldump.cnf
@@ -46,8 +47,8 @@ RUN rm /etc/apache2/sites-enabled/000-default.conf && \
     echo ". /var/www/apache2_blis.env" >> /etc/apache2/envvars
 
 # Copy custom php.ini into the container
-RUN cp /etc/php/5.6/apache2/php.ini /etc/php/5.6/apache2/php.ini.original
-COPY docker/config/php.ini /etc/php/5.6/apache2/php.ini
+RUN cp /etc/php/$PHP_VERSION/apache2/php.ini /etc/php/$PHP_VERSION/apache2/php.ini.original
+COPY docker/config/php.ini /etc/php/$PHP_VERSION/apache2/php.ini
 
 COPY docker/bin/start-blis.sh /usr/bin/start-blis
 
