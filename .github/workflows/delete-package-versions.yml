@@ -2,7 +2,7 @@ name: Delete Old Containers
 
 on:
   push:
-    branches: ['master']
+    branches: ['main']
   workflow_dispatch:
 
 jobs:
@@ -11,15 +11,15 @@ jobs:
     steps:
     - name: Delete old blis-devcontainer builds
       uses: actions/delete-package-versions@v5.0.0
-      with:   
-        package-name: 'blis-devcontainer'    
+      with:
+        package-name: 'blis-devcontainer'
         package-type: 'container'
         min-versions-to-keep: 10
         delete-only-untagged-versions: 'false'
     - name: Delete old blis builds
       uses: actions/delete-package-versions@v5.0.0
-      with:   
-        package-name: 'blis'    
+      with:
+        package-name: 'blis'
         package-type: 'container'
         min-versions-to-keep: 50
         delete-only-untagged-versions: 'false'
