@@ -24,7 +24,7 @@ cd dist/Build-BLIS || exit 1
 echo "Downloading C4G/BLISRuntime..."
 curl --silent -L "https://github.com/C4G/BLISRuntime/archive/refs/heads/main.zip" > BLISRuntime.zip &
 echo "Downloading C4G/BLIS..."
-curl --silent -L "https://github.com/C4G/BLIS/archive/refs/heads/master.zip" > BLISCode.zip &
+curl --silent -L "https://github.com/C4G/BLIS/archive/refs/heads/main.zip" > BLISCode.zip &
 
 wait
 
@@ -37,9 +37,9 @@ mkdir BLIS-Standalone/
 mkdir BLIS-Upgrade/
 
 cp -r BLISRuntime-main/* BLIS-Standalone/ &
-cp -r BLIS-master/* BLIS-Standalone/ &
+cp -r BLIS-main/* BLIS-Standalone/ &
 
-cp -r BLIS-master/* BLIS-Upgrade/ && rm -rf BLIS-Upgrade/local/ &
+cp -r BLIS-main/* BLIS-Upgrade/ && rm -rf BLIS-Upgrade/local/ &
 cp -r BLISRuntime-main/server BLIS-Upgrade/server &
 
 wait
@@ -49,7 +49,7 @@ zip -r BLIS-Upgrade.zip BLIS-Upgrade/ &
 
 wait
 
-rm -rf BLIS-master/
+rm -rf BLIS-main/
 rm -rf BLISRuntime-main/
 
 rm BLISCode.zip

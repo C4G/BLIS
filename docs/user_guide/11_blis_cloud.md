@@ -12,7 +12,7 @@
 You can run our official bootstrap script to start BLIS on a new, Ubuntu-based Digital Ocean image:
 
 ```bash
-curl https://raw.githubusercontent.com/C4G/BLIS/master/docker/bootstrap.sh | bash
+curl https://raw.githubusercontent.com/C4G/BLIS/main/docker/bootstrap.sh | bash
 ```
 
 You may now proceed to [Running BLIS](#running-blis).
@@ -67,10 +67,10 @@ If you need additional help or feel like something is missing you may want to lo
 
 ![droplet console](../images/cloud_guide/droplet_console.png)
 
-2. Run this to install docker 
+2. Run this to install docker
 
 ```bash
-curl https://raw.githubusercontent.com/C4G/BLIS/master/docker/bootstrap.sh |bash
+curl https://raw.githubusercontent.com/C4G/BLIS/main/docker/bootstrap.sh |bash
 ```
 
 3. Check if `docker-compose` is installed. You can check this by running `docker-compose` if it is **not installed** you should see something like this
@@ -79,13 +79,13 @@ curl https://raw.githubusercontent.com/C4G/BLIS/master/docker/bootstrap.sh |bash
 If you see something like the above run this command
 
 ```bash
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose 
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 ```
 
 4. Run this command to allow docker compose to run
 
 ```bash
-chmod +x /usr/local/bin/docker-compose 
+chmod +x /usr/local/bin/docker-compose
 ```
 
 Now you're ready to run BLIS!
@@ -103,22 +103,22 @@ Now you're ready to run BLIS!
     ```
     $ pip3 install git+https://github.com/C4G/blis-cloud-cli.git
     ```
-    
+
 1. Ensure Docker is installed correctly:
 
     ```bash
     blis docker status
     ```
-    
+
     You should get something like this:
-    
+
     ```bash
     root@ubuntu-s-1vcpu-1gb-nyc0-00:~# blis docker status
     Docker is accessible? Yes
     Docker Compose is installed? v2
 
     ```
-    
+
 1. Install BLIS:
 
     ```bash
@@ -144,7 +144,7 @@ Substitute your droplet IP address above, you should have this from your console
 
 ## Upgrading BLIS
 
-When you want to upgrade BLIS, you can follow these commands to 
+When you want to upgrade BLIS, you can follow these commands to
 pull the latest version of the Docker image and restart the containers:
 
 ```bash

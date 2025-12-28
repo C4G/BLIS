@@ -24,7 +24,7 @@ plugins:
   - with-pdf:
       cover_title: C4G BLIS User Guide
       cover_subtitle: Computing For Good
-      
+
       author: C4G BLIS Team
       copyright: 2008 - 2024
 
@@ -35,7 +35,7 @@ plugins:
         - developer_documentation/
         - C4G_Spring_2025/
 
-edit_uri: edit/master/docs/
+edit_uri: edit/main/docs/
 repo_url: https://github.com/C4G/BLIS
 
 theme:

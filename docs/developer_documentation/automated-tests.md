@@ -1,11 +1,11 @@
 # Automated Tests
 
-If you want to run smoke tests on BLIS you can find them in the [smoke_tests folder](https://github.com/C4G/BLIS/tree/master/smoke_tests) on the C4G BLIS Github. Below are the tests that are implemented and instructions for running the smoke tests.
+If you want to run smoke tests on BLIS you can find them in the [smoke_tests folder](https://github.com/C4G/BLIS/tree/main/smoke_tests) on the C4G BLIS Github. Below are the tests that are implemented and instructions for running the smoke tests.
 
 Tests
 
 1. Login
-   
+
 1. Specimen test
 
 1. Registering a patient
@@ -30,7 +30,7 @@ Running Instructions
 
 8. Either run BLIS locally or have it installed on digital ocean
 
-9. Get the address for your BLIS installation, this is what you put in the address bar in your browser to access BLIS 
+9. Get the address for your BLIS installation, this is what you put in the address bar in your browser to access BLIS
 
 10. Edit the BLIS_URL in test.py with your address from step 9, so if your address was http://172.24.80.1:4001 that line should now be blis_url = "http://172.24.80.1:4001"
 
