@@ -1,0 +1,38 @@
+services:
+  app:
+    image: blis-dev:latest
+    environment:
+      - BLIS_LAB_BACKUPS_V2_ENABLED=1
+      - BLIS_LAB_CONNECTION_ENABLED=1
+      - DB_HOST=db
+    volumes:
+      - ../..:/workspaces/BLIS
+    ports:
+      - 8000:80
+
+  db:
+    image: mariadb:10
+    command: --default-authentication-plugin=mysql_native_password --innodb-strict-mode=OFF --sql-mode="" --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: unless-stopped
+    volumes:
+      - blis-data:/var/lib/mysql
+      - type: bind
+        source: ../database
+        target: /docker-entrypoint-initdb.d
+      - type: tmpfs
+        target: /tmp
+    environment:
+      MARIADB_ROOT_PASSWORD: blis123
+      MARIADB_AUTO_UPGRADE: true
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      APACHE_PORT: 8080
+    ports:
+      - 8080:8080
+
+volumes:
+  blis-data:

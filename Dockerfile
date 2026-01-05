@@ -4,8 +4,8 @@ ARG PHP_VERSION="7.4"
 
 # Install a bunch of stuff from the standard repositories
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        acl \
         apache2 \
+        cron \
         curl \
         logrotate \
         mysql-client \
@@ -68,4 +68,6 @@ RUN echo "${GIT_COMMIT_SHA}" | tee /etc/blis_git_commit_sha
 # Expose port 80 for HTTP
 EXPOSE 80
 
-CMD start-blis && tail -f /var/log/apache2/error.log
+STOPSIGNAL SIGWINCH
+
+CMD ["/usr/bin/start-blis"]

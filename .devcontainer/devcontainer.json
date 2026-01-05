@@ -1,16 +1,17 @@
 {
-    "dockerComposeFile": "docker-compose.yml",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
     "features": {
         "ghcr.io/devcontainers/features/sshd:1": {},
-        "ghcr.io/devcontainers/features/github-cli:1": {}
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     },
+    "forwardPorts": [
+        8000,
+        8080
+    ],
     "portsAttributes": {
-        "80": {
-            "label": "apache2",
-            "onAutoForward": "notify"
-        },
         "8000": {
-            "label": "mkdocs",
+            "label": "apache2",
             "onAutoForward": "notify"
         },
         "8080": {
@@ -18,15 +19,5 @@
             "onAutoForward": "notify"
         }
     },
-    "forwardPorts": [
-        80,
-        8000,
-        8080
-    ],
-    "service": "app",
-    "workspaceFolder": "/workspaces/BLIS",
-    "shutdownAction": "stopCompose",
-    "remoteUser": "vscode",
-    "postCreateCommand": ".devcontainer/post-create-command.sh",
-    "postAttachCommand": "start-blis"
+    "postCreateCommand": ".devcontainer/post-create-command.sh"
 }

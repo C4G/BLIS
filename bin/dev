@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -euo pipefail
+
+WORKSPACE="$(readlink -f "$(dirname $0)/../")"
+
+echo "Workspace: $WORKSPACE"
+cd "$WORKSPACE" || exit 1
+
+echo "Current branch: $(git branch --show-current)"
+
+MNT_UID="$(id -u)"
+MNT_GID="$(id -g)"
+
+echo "User ID:  $MNT_UID"
+echo "Group ID: $MNT_GID"
+
+docker build -f "$WORKSPACE/docker/dev/Dockerfile" "$WORKSPACE" \
+    --build-arg "MNT_UID=$MNT_UID" \
+    --build-arg "MNT_GID=$MNT_GID" \
+    -t blis-dev:latest
+
+COMPOSE_FILE="$WORKSPACE/docker/dev/docker-compose.yml"
+COMPOSE_PROJECT_NAME="blis-dev"
+
+docker compose -p "$COMPOSE_PROJECT_NAME" -f "$COMPOSE_FILE" up
