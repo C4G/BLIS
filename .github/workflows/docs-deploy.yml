@@ -35,7 +35,7 @@ jobs:
         run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0
 
       - name: Setup Python and Dependencies
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.x
           cache: 'pip' # caching pip dependencies
