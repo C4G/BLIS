@@ -7,6 +7,7 @@
 #
 
 require_once(__DIR__."/../../users/accesslist.php");
+require_once(__DIR__."/../../includes/lab_config.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 require_once(__DIR__."/lib/backup.php");
 
@@ -16,8 +17,10 @@ $lab_config_id = $_REQUEST['id'];
 
 DbUtil::switchToGlobal();
 
-$lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE lab_config_id = '$lab_config_id';";
+$lab_db_name_query = "SELECT * FROM lab_config WHERE lab_config_id = '$lab_config_id';";
 $lab = query_associative_one($lab_db_name_query);
+$lab_config = LabConfig::getObject($lab);
+
 db_change($lab['db_name']);
 
 $lab_config_name = $lab["name"];
@@ -47,43 +50,55 @@ if ($unauthorized) {
 require_once(__DIR__."/../../includes/header.php");
 LangUtil::setPageId("lab_config_home");
 
-require_once(__DIR__."/../../includes/keymgmt.php");
+$settings_encryption_enabled = $lab_config->backup_encryption_enabled;
 
-// TODO: switch this to its own table, maybe...
-$settings_encryption_enabled = KeyMgmt::read_enc_setting() != "0";
-
-?>
-
-<?php
 $selected_tab = "settings";
 require_once(__DIR__."/lab_config_backup_header.php");
+require_once(__DIR__."/../../encryption/keys.php");
+
+function key_to_row($key) {
+    global $lab_config_id;
+    $key_id = $key->id;
+    echo(
+        "<tr>\n" .
+        "<td class=\"text-right\">" . $key->created_at . "</td>\n" .
+        "<td class=\"text-right\">" . $key->name . "</td>\n" .
+        "<td><a href=\"../../encryption/download_key.php?lab_config_id=$lab_config_id&key_id=$key_id\">Download</a></td>\n" .
+        "</tr>\n"
+    );
+}
+
+$server_keys = Key::where_type(Key::$KEYPAIR);
+$public_keys = Key::where_type(Key::$PUBLIC);
+
 ?>
 
-<div id="key-management">
-    <h3 class="section-head"><?php echo LangUtil::$generalTerms['KEY_MANAGEMENT']; ?></h3>
-
-    <?php
-        if ($super_admin_or_country_dir) {
-    ?>
-    <p>
-        <b>BLIS Cloud Administrator Key</b>:
-        <a href="../../ajax/download_key.php?role=dir"><?php echo LangUtil::$generalTerms['DOWNLOAD_PUBKEY']; ?></a>
-    </p>
-    <?php
-        }
-    ?>
-    <p>
-        <b><?php echo($lab["name"]); ?></b>:
-        <a href="../../ajax/download_key.php?id=<?php echo($lab_config_id) ?>"><?php echo LangUtil::$generalTerms['DOWNLOAD_PUBKEY']; ?></a>
-    </p>
-</div>
-
-<div id="settings">
-    <h3 class="section-head">Settings</h3>
+<div id="settings" class="section">
+    <h3 class="section-head">Settings for <?php echo($lab_config_name); ?></h3>
     <form id="settings_form" action="update_backup_settings.php?id=<?php echo($lab_config_id); ?>" method="POST">
         <div class="form-element">
             <input type="checkbox" id="settings_encryption_enabled" name="settings_encryption_enabled" <?php echo($settings_encryption_enabled ? "checked" : ""); ?>>
             <label for="settings_encryption_enabled">Enable Encrypted Backups</label>
+        </div>
+        <div class="form-element">
+            <?php if ($settings_encryption_enabled) {
+            ?>
+            <label for="settings_lab_decryption_key">Backup decryption key:</label>
+            <select id="settings_lab_decryption_key" name="settings_lab_decryption_key" autocomplete="off">
+                <option value=""></option>
+                <?php
+                foreach ($server_keys as $keypair)
+                {
+                    $selected = $lab_config->backup_encryption_key_id != null && ($keypair->id == $lab_config->backup_encryption_key_id);
+                    $selected_attr = $selected ? "selected" : "";
+                    echo "<option value=\"" . $keypair->id . "\" $selected_attr>" . $keypair->name . "</option>";
+                }
+                ?>
+            </select>
+            <?php
+            }
+            ?>
+
         </div>
 
         <div class="form-element">
@@ -92,5 +107,65 @@ require_once(__DIR__."/lab_config_backup_header.php");
     </form>
 </div>
 
+<?php
+    if ($super_admin_or_country_dir) {
+?>
+
+<div id="key-management" class="section">
+    <h3 class="section-head">Decryption Keys</h3>
+    <div id="server-keypair-table">
+        <table class="hor-minimalist-b">
+            <thead>
+                <tr>
+                    <th class="text-right">Created at</th>
+                    <th class="text-center">Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <?php
+                foreach($server_keys as $key) {
+                    echo(key_to_row($key));
+                }
+            ?>
+        </table>
+    </div>
+
+    <div id="create-key-form">
+        <br/>
+        <form id="create_key_form" name="create_key_form" action="lab_config_backup_create_keypair.php?id=<?php echo($lab_config_id); ?>" method="post" enctype="multipart/form-data">
+            <b>Create new server key:</b> <input type="text" id="keypair_name" name="keypair_name">
+            <input type="submit" id="create_submit" value="Create">
+        </form>
+    </div>
+</div>
+<?php
+    }
+?>
+
+<div id="pubkey-table" class="section">
+    <h3 class="section-head">Encryption Keys</h3>
+
+    <table class="hor-minimalist-b">
+        <thead>
+            <tr>
+                <th class="text-right">Created at</th>
+                <th class="text-center">Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <?php
+            foreach($public_keys as $key) {
+                echo(key_to_row($key));
+            }
+        ?>
+    </table>
+</div>
+
+<div id="upload-key-form" class="section">
+    <form id="upload_key_form" name="upload_key_form" action="lab_config_backup_upload_pubkey.php?id=<?php echo($lab_config_id); ?>" method="post" enctype="multipart/form-data">
+        <b>Upload encryption key:</b> <input type="file" id="pubkey" name="pubkey">
+        <input type="submit" id="upload_submit" value="Upload">
+    </form>
+</div>
 
 <?php require_once(__DIR__."/../../includes/footer.php"); ?>
