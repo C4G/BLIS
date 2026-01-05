@@ -19,7 +19,7 @@ markdown_extensions:
 
 
 plugins:
-  - git-revision-date
+  - git-revision-date-localized
   - search
   - with-pdf:
       cover_title: C4G BLIS User Guide
