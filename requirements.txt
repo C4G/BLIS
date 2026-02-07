@@ -2,6 +2,6 @@
 # mkdocs == 1.*
 mkdocs-material == 9.*
 mkdocs-git-revision-date-localized-plugin >= 1.5.0
-mkdocs-with-pdf >= 0.9.3
-weasyprint == 61.*
+mkdocs-to-pdf >= 0.10.1
+weasyprint == 62.3
 pydyf == 0.10.0
