@@ -51,7 +51,7 @@ are instructions for running the development version of BLIS as a web service be
 ### Windows Desktop (x86-64)
 
 1. [Install Docker Desktop](https://www.docker.com/products/docker-desktop/)
-  - Note that this is for personal use, and you should not install this on a work computer.
+    - Note that this is for personal use, and you should not install this on a work computer.
 1. [Install the .NET 10.x SDK](https://dotnet.microsoft.com/en-us/download)
 1. Clone the main repository: `git clone https://github.com/C4G/BLIS.git`
 1. Clone the BLISRuntime repository: `git clone https://github.com/C4G/BLISRuntime.git`
@@ -64,7 +64,7 @@ are instructions for running the development version of BLIS as a web service be
 **Windows Subsystem for Linux 2 Users:** Unless otherwise noted, all instructions should be followed from _within_ your WSL2 installation.
 
 1. **Windows (including WSL2) & MacOS Users:** [Install Docker Desktop](https://www.docker.com/products/docker-desktop/)
-  - Note that this is for personal use, and you should not install this on a work computer.
+    - Note that this is for personal use, and you should not install this on a work computer.
 1. **Linux Users (NOT including WSL2):** Install [Docker Engine](https://docs.docker.com/engine/install/)
 1. Clone the main repository: `git clone https://github.com/C4G/BLIS.git`
 1. Enter the main repository: `cd BLIS`
