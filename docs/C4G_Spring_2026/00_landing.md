@@ -29,111 +29,49 @@ on our demo site: [demo.c4gblis.org](https://demo.c4gblis.org).
 
 There are stock usernames and passwords on [this page](../developer_documentation/test-accounts.md).
 
+## Two Modes of Operation
+
+BLIS can operate either as a web service (using Apache 2, PHP, and MySQL in a Docker container) or as a desktop
+application on Windows (using the same stack, except Docker is replaced with a Windows launcher application).
+
+**The majority of work on this project this semester requires Windows (x86-64) to test effectively.** There
+are instructions for running the development version of BLIS as a web service below for other platforms.
+
 ## Getting Started
 
-### tl;dr
+### Prerequisites
 
-If you are a "clone n' code" type of engineer, here's what you need:
+- Git ([installation instructions](https://git-scm.com/install/))
+- GitHub.com account
+- [Visual Studio Code](https://code.visualstudio.com/)
+  - Optional, but highly recommended
+- [GitHub CLI](https://cli.github.com/)
+  - Optional, but recommended
 
-- git
-- GitHub.com (NOT `github.gatech.edu` account)
-- Docker and docker-compose
-- Windows or [WINE](https://www.winehq.org/) (for running BLIS.exe)
-- Visual Studio Code (...is the supported editor but not required)
+### Windows Desktop (x86-64)
 
-### Windows Users
+1. [Install Docker Desktop](https://www.docker.com/products/docker-desktop/)
+  - Note that this is for personal use, and you should not install this on a work computer.
+1. [Install the .NET 10.x SDK](https://dotnet.microsoft.com/en-us/download)
+1. Clone the main repository: `git clone https://github.com/C4G/BLIS.git`
+1. Clone the BLISRuntime repository: `git clone https://github.com/C4G/BLISRuntime.git`
+1. Clone the BLIS-NG repository: `git clone https://github.com/C4G/BLIS-NG.git`
+1. In the **BLISRuntime** directory, highlight all the files (Ctrl-A) and **copy them** to the **BLIS/** folder
+1. Open the **BLIS-NG** folder in VS Code, and in the Debug tab, click run
 
-**Using [WSL2](https://learn.microsoft.com/en-us/windows/wsl/about) is highly
-recommended for developing BLIS.** You don't have to, but if you follow these instructions, that is what you will be using.
+#### BLIS Cloud Development (Linux, MacOS, WSL2, Devcontainer) (x86-64 / ARM)
 
-First, create a fork of the C4G BLIS repository:
+**Windows Subsystem for Linux 2 Users:** Unless otherwise noted, all instructions should be followed from _within_ your WSL2 installation.
 
-1. Log in to GitHub.com using your GitHub credentials
-   (NOT your Georgia Tech credentials)
-1. Go to [https://github.com/C4G/BLIS](https://github.com/C4G/BLIS)
-   and click "Fork"
-1. Now you can go to the resulting `https://github.com/[your username]/BLIS`
-   and see your own copy of the repository!
+1. **Windows (including WSL2) & MacOS Users:** [Install Docker Desktop](https://www.docker.com/products/docker-desktop/)
+  - Note that this is for personal use, and you should not install this on a work computer.
+1. **Linux Users (NOT including WSL2):** Install [Docker Engine](https://docs.docker.com/engine/install/)
+1. Clone the main repository: `git clone https://github.com/C4G/BLIS.git`
+1. Enter the main repository: `cd BLIS`
+1. Start the development containers: `bin/dev`
 
-#### BLIS Cloud Development
+BLIS can be accessed at `http://127.0.0.1:8000/` and PHPMyAdmin can be accessed at `http://127.0.0.1:8080/`.
 
-Second, let's set up the BLIS code repository for **BLIS cloud development.**
+**WSL2 Users:** You may need to use a different local IP address. From within WSL2, run `hostname -i` to determine the correct address to use.
 
-1. Install [Visual Studio Code](https://code.visualstudio.com/).
-1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
-   This will enable WSL2 and Docker for the platform. You may have to reboot
-   during the installation.
-1. After Docker Desktop is finished installing, install
-   [Ubuntu 24.04](https://apps.microsoft.com/detail/9nz3klhxdjp5?hl=en-us&gl=US)
-   from the Microsoft store.
-1. Open Ubuntu 24.04 from the start menu and set up your local user account
-1. Open Docker Desktop, click the Settings gear icon, then under Resources
-   click "WSL integration" and make sure the "Ubuntu" option is enabled,
-   then click "Apply & Restart."
-1. In the Ubuntu window, type
-   `git clone https://github.com/[your username]/BLIS` to clone the repository
-1. Type `cd BLIS`, then `code` to open VS Code
-1. VS Code will eventually say "This folder contains a `.devcontainer` folder"
-   and ask you to reopen in a container. Click the button!
-
-#### Local Windows development
-
-Finally, let's clone the repository again so you can run the Windows version
-as well.
-
-1. Install [Git for Windows](https://git-scm.com/downloads/win) or another
-   Git installation if you do not have one already.
-1. Open a Windows command prompt or PowerShell.
-1. Type `git clone https://github.com/[your username]/BLIS` wherever you'd
-   like to have BLIS.
-1. Download the [C4G/BLISRuntime](https://github.com/C4G/BLISRuntime/archive/refs/heads/main.zip) package
-   and unzip the contents directly into the BLIS repository you cloned.
-1. Run `BLIS.exe` to run BLIS!
-
-### Mac Users
-
-**These instructions only apply if you are using an Intel Mac.** If you are
-using an M1/M2/etc. Mac, you might have issues. BLIS has hard dependecies on
-x86 runtimes, although it might be possible to build it for aarch64. If this
-applies to you, let me know very soon.
-
-1. Install [Visual Studio Code](https://code.visualstudio.com/).
-1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
-1. Open Terminal.
-1. Type `git clone https://github.com/[your username]/BLIS` wherever you'd
-   like to have BLIS.
-1. Type `code BLIS/` to open BLIS
-1. VS Code will eventually say "This folder contains a `.devcontainer` folder"
-   and ask you to reopen in a container. Click the button!
-
-Mac users cannot run the BLIS Windows desktop application. You can make
-a Windows virtual machine to do this, and then follow the third set of
-instructions for Windows above.
-
-### Linux Users
-
-If you're a Linux user, I'd recommend using Debian or Ubuntu for running
-the BLIS containerized setup, but it's theoretically supported anywhere
-that Docker runs<sup>1</sup>. To install Docker, if you don't have it, you can download
-the installer script:
-
-```bash
-curl https://get.docker.com/ > install_docker.sh
-sudo sh install_docker.sh
-# Depending on your system you might need to add your user to the docker group
-sudo usermod -aG docker $USER
-```
-
-Then you can run VS Code (installed separately) and open the devcontainer.
-
-If you have WINE installed, there is a script in `bin/wine-server` that
-attempts to start `BLIS.exe` in WINE.
-
-1. I (Mitchell) have had trouble running BLIS on Fedora since
-   Fedora has SELinux enabled out of the box, and BLIS does
-   some funky stuff as the root user that doesn't play well
-   with SELinux. Debian/Ubuntu do not have this issue.
-
-## Next Steps
-
-Get everything set up? Now you can proceed to [testing the BLIS cloud setup procedure!](./10_testing_blis_local_to_cloud.md)
+**Optional: Devcontainer:** BLIS contains a [devcontainer specification](https://containers.dev/). If you are using VS Code and it prompts you to "Reopen this folder in a devcontainer" - feel free to try it out and see if it works for you!
