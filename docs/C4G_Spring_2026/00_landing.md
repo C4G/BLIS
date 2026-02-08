@@ -59,7 +59,7 @@ are instructions for running the development version of BLIS as a web service be
 1. In the **BLISRuntime** directory, highlight all the files (Ctrl-A) and **copy them** to the **BLIS/** folder
 1. Open the **BLIS-NG** folder in VS Code, and in the Debug tab, click run
 
-#### BLIS Cloud Development (Linux, MacOS, WSL2, Devcontainer) (x86-64 / ARM)
+### BLIS Cloud Development (Linux, MacOS, WSL2, Devcontainer) (x86-64 / ARM)
 
 **Windows Subsystem for Linux 2 Users:** Unless otherwise noted, all instructions should be followed from _within_ your WSL2 installation.
 
