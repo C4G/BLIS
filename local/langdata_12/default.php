@@ -221,7 +221,20 @@ $LANG_ARRAY = array (
 		"SPECIMEN_CUSTOM_FIELDS" => "Specimen Custom Fields", 
 		"PATIENT_CUSTOM_FIELDS" => "Patient Custom Fields", 
 		"404_BAD_REQUEST" => "HTTP/1.1 404 Not Found", 
+		"401_UNAUTHORIZE" => "HTTP/1.1 401 Unauthorized", 
 		"500_SERVER_ERROR" => "HTTP/1.1 500 Internal Server Error", 
+		"ERROR_LAB_DELETE" => "Error deleting lab: no lab specified.", 
+		"SUCCESS_DELETE" => "Successfully Deleted", 
+		"SUCCESS_DISCONNECT" => "Successfully disconnected from cloud", 
+		"PROBLEM_LAB_DELETE" => "There was a problem deleting the lab. Please see the logs for details.", 
+		"ALERT_FOR_BACKUP" => "This operation cannot be undone. Please ensure you have a current backup before proceeding.", 
+		"KEY_MANAGEMENT" => "Key Management", 
+		"DATA_NOT_AFFECTED" => "Your data will not be affected. You can restore the data in this backup in the Lab Backups screen.", 
+		"SUCCESS_MIGRATION" => "Migrations applied successfully.", 
+		"ERROR_MIGRATION" => "There were errors while applying migrations.", 
+		"LAB_CONFIG_ADDED" => "Lab Configuration added", 
+		"SUCCESS_EXPORT" => "Export Successful.", 
+		"PENDING_EXPORT" => "Exporting Lab Configuration. Please wait..", 
 		"SATELLITE_LAB_NAME" => "Satellite Lab Name"
 	) , 
 	"header" => array ( 
@@ -779,24 +792,24 @@ $LANG_ARRAY = array (
 		"CMD_DELPROFILE" => "Delete Profile", 
 		"CMD_UPDPROFILE" => "Update Profile"
 	) , 
-	"debug" => array (
-		"DEBUG_UTILITIES" => "Debug Utilities",
-		"GIT_COMMIT_SHA" => "Git commit SHA",
-		"BROWSE_SOURCE_CODE" => "browse source code",
-		"AVAILABLE_LOG_FILES" => "Available Log Files",
-		"LANGUAGE_UTILITIES" => "Language Utilities",
-		"RESET_UPDATE_LANGUAGE_FILES" => "Reset/update language files",
-		"DATABASE_UTILITIES" => "Database Utilities",
-		"LEGACY_LAB_DATABASE_MIGRATIONS" => "Legacy Lab Database Migrations",
-		"WARNING" => "Warning!",
-		"MIGRATION_WARNING" => "Running ANY of these migrations could break your lab configuration PERMANENTLY!",
-		"MIGRATION_DESCRIPTION" => "These migrations are used to perform manual updates to an imported lab configuration from an older version of BLIS.",
-		"LAB_DATABASE" => "Lab database",
-		"SELECT_LAB" => "Select a lab",
-		"SQL_MIGRATION" => "SQL migration",
-		"SELECT_MIGRATION" => "Select a migration",
+	"debug" => array ( 
+		"DEBUG_UTILITIES" => "Debug Utilities", 
+		"GIT_COMMIT_SHA" => "Git commit SHA", 
+		"BROWSE_SOURCE_CODE" => "browse source code", 
+		"AVAILABLE_LOG_FILES" => "Available Log Files", 
+		"LANGUAGE_UTILITIES" => "Language Utilities", 
+		"RESET_UPDATE_LANGUAGE_FILES" => "Reset/update language files", 
+		"DATABASE_UTILITIES" => "Database Utilities", 
+		"LEGACY_LAB_DATABASE_MIGRATIONS" => "Legacy Lab Database Migrations", 
+		"WARNING" => "Warning!", 
+		"MIGRATION_WARNING" => "Running ANY of these migrations could break your lab configuration PERMANENTLY!", 
+		"MIGRATION_DESCRIPTION" => "These migrations are used to perform manual updates to an imported lab configuration from an older version of BLIS.", 
+		"LAB_DATABASE" => "Lab database", 
+		"SELECT_LAB" => "Select a lab", 
+		"SQL_MIGRATION" => "SQL migration", 
+		"SELECT_MIGRATION" => "Select a migration", 
 		"APPLY" => "Apply"
-	)
+	) 
 );
 
 include_once(__DIR__."/../lang/lang_util.php");

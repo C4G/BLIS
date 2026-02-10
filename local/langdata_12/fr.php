@@ -206,7 +206,20 @@ $LANG_ARRAY = array (
 		"DISTRICT" => "District", 
 		"REGION" => "Région", 
 		"404_BAD_REQUEST" => "HTTP/1.1 404 Page Non Trouvée", 
-		"500_SERVER_ERROR" => "HTTP/1.1 500 Erreur de serveur interne",  
+		"401_UNAUTHORIZE" => "HTTP/1.1 401 Non Autorisée", 
+		"500_SERVER_ERROR" => "HTTP/1.1 500 Erreur de serveur interne", 
+		"ERROR_LAB_DELETE" => "", 
+		"SUCCESS_DELETE" => "Supprimé avec succès", 
+		"SUCCESS_DISCONNECT" => "Déconnexion réussie du cloud", 
+		"PROBLEM_LAB_DELETE" => "Il y a eu un problème lors de la suppression du laboratoire. Veuillez consulter les journaux pour plus de détails.", 
+		"ALERT_FOR_BACKUP" => "Cette opération ne peut pas être annulée. Assurez-vous d’avoir une sauvegarde à jour avant de continuer.", 
+		"KEY_MANAGEMENT" => "Gestion des clés", 
+		"DATA_NOT_AFFECTED" => "Vos données ne seront pas affectées. Vous pouvez restaurer les données de cette sauvegarde dans l'écran Sauvegardes de laboratoire.", 
+		"SUCCESS_MIGRATION" => "Les migrations se sont appliquées avec succès.", 
+		"ERROR_MIGRATION" => "Des erreurs se sont produites lors de l'application des migrations.", 
+		"LAB_CONFIG_ADDED" => "Configuration du labo ajoutée", 
+		"SUCCESS_EXPORT" => "Exportation réussie.", 
+		"PENDING_EXPORT" => "Exportation de la configuration du laboratoire. Veuillez patienter..", 
 		"SATELLITE_LAB_NAME" => "Satellite Lab Name"
 	) , 
 	"header" => array ( 
@@ -384,7 +397,7 @@ $LANG_ARRAY = array (
 		"TIPS_INFECTIONREPORT" => "Ceci est une page modifiable pour le réglage des différents paramètres associaated chaque type d'épreuve individuelle.", 
 		"MENU_GENERAL" => "General settings", 
 		"Reports" => "Rapports", 
-		"Results" => "Results", 
+		"Results" => "Resultats du Patient", 
 		"Tests" => "Tests", 
 		"New Stock" => "New Stock", 
 		"Edit Stock" => "Modifier Stock", 
@@ -723,25 +736,25 @@ $LANG_ARRAY = array (
 		"SEARCH_BEGIN_WITH" => "Commence par", 
 		"SEARCH_END_WITH" => "Fin d'", 
 		"SEARCH_CONTAINS" => "Contient"
-	) ,
-	"debug" => array (
-        "DEBUG_UTILITIES" => "Utilitaires de débogage",
-        "GIT_COMMIT_SHA" => "SHA du commit Git",
-        "BROWSE_SOURCE_CODE" => "parcourir le code source",
-        "AVAILABLE_LOG_FILES" => "Fichiers de journal disponibles",
-        "LANGUAGE_UTILITIES" => "Utilitaires de langue",
-        "RESET_UPDATE_LANGUAGE_FILES" => "Réinitialiser/mettre à jour les fichiers de langue",
-        "DATABASE_UTILITIES" => "Utilitaires de base de données",
-        "LEGACY_LAB_DATABASE_MIGRATIONS" => "Migrations de la base de données du laboratoire hérité",
-        "WARNING" => "Attention!",
-        "MIGRATION_WARNING" => "Exécuter l'une de ces migrations pourrait casser votre configuration de laboratoire DE MANIÈRE PERMANENTE !",
-        "MIGRATION_DESCRIPTION" => "Ces migrations sont utilisées pour effectuer des mises à jour manuelles d'une configuration de laboratoire importée à partir d'une ancienne version de BLIS.",
-        "LAB_DATABASE" => "Base de données du laboratoire",
-        "SELECT_LAB" => "Sélectionnez un laboratoire",
-        "SQL_MIGRATION" => "Migration SQL",
-        "SELECT_MIGRATION" => "Sélectionnez une migration",
-        "APPLY" => "Appliquer"
-    )
+	) , 
+	"debug" => array ( 
+		"DEBUG_UTILITIES" => "Utilitaires de débogage", 
+		"GIT_COMMIT_SHA" => "SHA du commit Git", 
+		"BROWSE_SOURCE_CODE" => "parcourir le code source", 
+		"AVAILABLE_LOG_FILES" => "Fichiers de journal disponibles", 
+		"LANGUAGE_UTILITIES" => "Utilitaires de langue", 
+		"RESET_UPDATE_LANGUAGE_FILES" => "Réinitialiser/mettre à jour les fichiers de langue", 
+		"DATABASE_UTILITIES" => "Utilitaires de base de données", 
+		"LEGACY_LAB_DATABASE_MIGRATIONS" => "Migrations de la base de données du laboratoire hérité", 
+		"WARNING" => "Attention!", 
+		"MIGRATION_WARNING" => "Exécuter l'une de ces migrations pourrait casser votre configuration de laboratoire DE MANIÈRE PERMANENTE !", 
+		"MIGRATION_DESCRIPTION" => "Ces migrations sont utilisées pour effectuer des mises à jour manuelles d'une configuration de laboratoire importée à partir d'une ancienne version de BLIS.", 
+		"LAB_DATABASE" => "Base de données du laboratoire", 
+		"SELECT_LAB" => "Sélectionnez un laboratoire", 
+		"SQL_MIGRATION" => "Migration SQL", 
+		"SELECT_MIGRATION" => "Sélectionnez une migration", 
+		"APPLY" => "Appliquer"
+	) 
 );
 
 include_once(__DIR__."/../lang/lang_util.php");

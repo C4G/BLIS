@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Monolog package.
@@ -11,6 +11,7 @@
 
 namespace Monolog\Handler;
 
+use Elastica\Document;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\ElasticaFormatter;
 use Monolog\Logger;
@@ -25,15 +26,15 @@ use Elastica\Exception\ExceptionInterface;
  *    $client = new \Elastica\Client();
  *    $options = array(
  *        'index' => 'elastic_index_name',
- *        'type' => 'elastic_doc_type',
+ *        'type' => 'elastic_doc_type', Types have been removed in Elastica 7
  *    );
- *    $handler = new ElasticSearchHandler($client, $options);
+ *    $handler = new ElasticaHandler($client, $options);
  *    $log = new Logger('application');
  *    $log->pushHandler($handler);
  *
  * @author Jelle Vink <jelle.vink@gmail.com>
  */
-class ElasticSearchHandler extends AbstractProcessingHandler
+class ElasticaHandler extends AbstractProcessingHandler
 {
     /**
      * @var Client
@@ -41,26 +42,24 @@ class ElasticSearchHandler extends AbstractProcessingHandler
     protected $client;
 
     /**
-     * @var array Handler config options
+     * @var mixed[] Handler config options
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
-     * @param Client $client  Elastica Client object
-     * @param array  $options Handler configuration
-     * @param int    $level   The minimum logging level at which this handler will be triggered
-     * @param bool   $bubble  Whether the messages that are handled can bubble up the stack or not
+     * @param Client  $client  Elastica Client object
+     * @param mixed[] $options Handler configuration
      */
-    public function __construct(Client $client, array $options = array(), $level = Logger::DEBUG, $bubble = true)
+    public function __construct(Client $client, array $options = [], $level = Logger::DEBUG, bool $bubble = true)
     {
         parent::__construct($level, $bubble);
         $this->client = $client;
         $this->options = array_merge(
-            array(
+            [
                 'index'          => 'monolog',      // Elastic index name
                 'type'           => 'record',       // Elastic document type
                 'ignore_error'   => false,          // Suppress Elastica exceptions
-            ),
+            ],
             $options
         );
     }
@@ -68,27 +67,27 @@ class ElasticSearchHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record)
+    protected function write(array $record): void
     {
-        $this->bulkSend(array($record['formatted']));
+        $this->bulkSend([$record['formatted']]);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter)
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         if ($formatter instanceof ElasticaFormatter) {
             return parent::setFormatter($formatter);
         }
-        throw new \InvalidArgumentException('ElasticSearchHandler is only compatible with ElasticaFormatter');
+
+        throw new \InvalidArgumentException('ElasticaHandler is only compatible with ElasticaFormatter');
     }
 
     /**
-     * Getter options
-     * @return array
+     * @return mixed[]
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -96,15 +95,15 @@ class ElasticSearchHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new ElasticaFormatter($this->options['index'], $this->options['type']);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handleBatch(array $records)
+    public function handleBatch(array $records): void
     {
         $documents = $this->getFormatter()->formatBatch($records);
         $this->bulkSend($documents);
@@ -112,10 +111,12 @@ class ElasticSearchHandler extends AbstractProcessingHandler
 
     /**
      * Use Elasticsearch bulk API to send list of documents
-     * @param  array             $documents
+     *
+     * @param Document[] $documents
+     *
      * @throws \RuntimeException
      */
-    protected function bulkSend(array $documents)
+    protected function bulkSend(array $documents): void
     {
         try {
             $this->client->addDocuments($documents);

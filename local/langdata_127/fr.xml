@@ -819,8 +819,8 @@
 			<value>Région</value>
 		</term>
 		<term>
-			<key>404_BAD_REQUEST</key>
-			<value>HTTP/1.1 404 Page Non Trouvée</value>
+      <key>404_BAD_REQUEST</key>
+      <value>HTTP/1.1 404 Page Non Trouvée</value>
     </term>
 		<term>
 			<key>401_UNAUTHORIZE</key>
@@ -1499,7 +1499,7 @@
 		</term>
 		<term>
 			<key>Results</key>
-			<value>Results</value>
+			<value>Resultats du Patient</value>
 		</term>
 		<term>
 			<key>Tests</key>

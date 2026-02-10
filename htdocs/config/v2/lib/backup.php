@@ -114,9 +114,9 @@ class Backup {
         return $backup;
     }
 
-    public function analyze() {
+    public function analyze($private_key_id=null) {
         if ($this->analyzed == NULL) {
-            $this->analyzed = new AnalyzedBackup($this->filename, $this->full_path);
+            $this->analyzed = new AnalyzedBackup($this->filename, $this->full_path, $private_key_id);
         }
 
         return $this->analyzed;
