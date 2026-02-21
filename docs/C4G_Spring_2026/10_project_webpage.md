@@ -28,7 +28,8 @@ These are our goals for the semester.
     - Planned role descripton
     - Goal commitment: BLIS PHP upgrade
 - Luqman Rashad:
-    - Planned role descripton
+    - Coordinate with Haki and create a design document for the launcher-based self update feature
+    - Add unit tests to test self update feature functionality
     - Goal commitment: BLIS self-update feature
 - Tony Simo Dzumgang
     - Planned role descripton
