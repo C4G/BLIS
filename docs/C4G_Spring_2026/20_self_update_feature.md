@@ -33,5 +33,6 @@ The launcher will automatically prepare and stage the new version, stop currentl
 ---
 
 Main Contributors:
+
 Luqman Rashad  
 Haki Atalov  
