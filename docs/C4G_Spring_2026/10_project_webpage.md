@@ -48,8 +48,9 @@ Current manual updates (copy-pasting ZIP contents) often result in a mix of old 
     - Add unit tests to test self update feature functionality
     - Goal commitment: BLIS self-update feature
 - Tony Simo Dzumgang
-    - Planned role descripton
+    - Role: Design and Development
     - Goal commitment: Password reset utility
+    - Email: tdzumgang3@gatech.edu
 - Emmanuel Asuquo
     - Planned role descripton
     - Goal commitment: BLIS PHP upgrade
