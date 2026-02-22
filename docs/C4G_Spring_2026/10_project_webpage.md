@@ -17,7 +17,7 @@ To ensure long-term sustainability, we are migrating BLIS from legacy PGP 5.x to
 - The Challenge: Legacy codebases often break during environment shifts. We are specifically tasked with fixing a high-priority bug in the BLIS 4.0 Registration Workflow that currently prevents new patient intake. 
 - Deliverable: Further testing and support of BLIS online development regarding the PHP upgrade. 
 
-### 2. DImplement a password reset tool in the BLIS-NG desktop launcher
+### 2. Implement a password reset tool in the BLIS-NG desktop launcher
 
 Lab staff frequently lose access to their local instances due to a lack of technical training. We are building a standalone recovery tool. 
 - The Challenge: Providing a way for labs to self-sever without requiring a manual intervention from the limited IT staff.
