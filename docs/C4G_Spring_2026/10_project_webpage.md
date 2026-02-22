@@ -9,13 +9,25 @@ Our team is collaborating with the Ministry of Health and National Public Health
 Our mission this semester is to bridge this gap by upgrading the legacy PHP core, securing the system with local password recovery tools, and implementing a reliable self-update mechanism that functions even in resource-constrained environments. 
 
 ## Overall Project Goal
-> TODO: Add description to each goal
 
-These are our goals for the semester.
+### 1. Test the PHP 7 upgrade and support BLIS online development
 
-1. Testing and delivering BLIS PHP upgrade, including bug found during initial partner meeting.
-2. Implementing a user facing password reset tool in the BLIS launcher.
-3. Implementing a launcher based self-update feature.
+To ensure long-term sustainability, we are migrating BLIS from legacy PGP 5.x to a secure PHP 7/MySQLi environment. 
+
+- The Challenge: Legacy codebases often break during environment shifts. We are specifically tasked with fixing a high-priority bug in the BLIS 4.0 Registration Workflow that currently prevents new patient intake. 
+- Deliverable: Further testing and support of BLIS online development regarding the PHP upgrade. 
+
+### 2. DImplement a password reset tool in the BLIS-NG desktop launcher
+
+Lab staff frequently lose access to their local instances due to a lack of technical training. We are building a standalone recovery tool. 
+- The Challenge: Providing a way for labs to self-sever without requiring a manual intervention from the limited IT staff.
+- Deliverable: A secure utility built into the BLIS Desktop Launcher. 
+
+### 3. Implement a self-update feature of the BLIS-NG desktop launcher
+
+Current manual updates (copy-pasting ZIP contents) often result in a mix of old and new files, leading to unstable "Frankenstein" versions that are impossible to support. 
+- The Challenge: Creating a robust, sequential SQL migration and file-syncing process that can reliably update the full BLIS stack. 
+- Deliverable: A self-updating launcher that maintains version integrity. 
 
 ## Team Members
 > TODO: Everybody fill out their planned role description
