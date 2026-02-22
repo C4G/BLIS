@@ -44,9 +44,9 @@ Current manual updates (copy-pasting ZIP contents) often result in a mix of old 
     - Planned role descripton
     - Goal commitment: BLIS PHP upgrade
 - Luqman Rashad:
-    - Coordinate with Haki and create a design document for the launcher-based self update feature
-    - Add unit tests to test self update feature functionality
     - Goal commitment: BLIS self-update feature
+    - Role: Design and Development
+    - Email: lrashad3@gatech.edu
 - Tony Simo Dzumgang
     - Role: Design and Development
     - Goal commitment: Password reset utility
