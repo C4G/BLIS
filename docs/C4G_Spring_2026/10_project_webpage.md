@@ -37,8 +37,9 @@ Current manual updates (copy-pasting ZIP contents) often result in a mix of old 
     - Role: Program Management + Engineering. Acting as Team Lead.
     - Email: hatalov3@gatech.edu
 - Ranjini Unnikrishnan:
-    - Planned role descripton
-    - Goal commitment: Password reset utility
+    - Role: Design and Development
+    - Goal commitment: Password reset utility -BLIS Launcher
+    - Email: runnikrishnan6@gatech.edu
 - Tanner Jones:
     - Planned role descripton
     - Goal commitment: BLIS PHP upgrade
