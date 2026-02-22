@@ -60,10 +60,9 @@ Current manual updates (copy-pasting ZIP contents) often result in a mix of old 
 3. Troubleshooting contact: Haki Atalov or Ranjini Unnikrishnan on Microsoft teams
 
 ## Lighthouse Scores
-> TODO: Update these with our own scores
 
-- Performance: 94
-- Accessibility: 92
-- Best Practices: 96
+- Performance: 97
+- Accessibility: 89
+- Best Practices: 77
 - SEO: 90
-![Screenshot](../images/spring_2025/lighthouse.png)
+![Screenshot](../images/spring_2026/lighthouse.png)
