@@ -2,9 +2,11 @@
 This page has been created as part of Spring 2026's P3 assignment: Project Webpage.
 
 ## Project Description
-> TODO: Update this if needed
+The Basic Laboratory Information System (BLIS) is the flagship initiative of Computing for Good (C4G) at Georgia Tech, developed in partnership with the CDC and PEPFAR. For over 15 years, BLIS has served public health laboratories across sub-Saharan Africa, managing patient specimens and diagnostic data to combat infectious diseases. 
 
-Our project expanded on C4G's existing BLIS project. C4G Basic Laboratory Information System is a collaboration between Computing for Good (C4G) at Georgia Tech, the Center for Disease Control (CDC), and participating PEPFAR countries. The project provides software for tracking of lab test results in developing countries. Our worked focus on adding features for satellite labs that perform tests on behalf of reference labs that don’t have the necessary equipment. Additionally, we expanded the French translation.
+Our team is collaborating with the Ministry of Health and National Public Health Labs to modernize the platform. While the partner's goal is a transition to a cloud-based, bi-directional system, significant infrastructure challenges currently block progress.
+
+Our mission this semester is to bridge this gap by upgrading the legacy PHP core, securing the system with local password recovery tools, and implementing a reliable self-update mechanism that functions even in resource-constrained environments. 
 
 ## Overall Project Goal
 > TODO: Add description to each goal
@@ -40,10 +42,8 @@ These are our goals for the semester.
     
 
 ## Peer Evaluations
-> TODO: Create a survey form and link it here
-
 1. Please find our demo application here: https://demo.c4gblis.org/login.php
-2. Answer the following survey: [BLIS Peer Evaluation Survey](#)
+2. Answer the following survey: [BLIS Peer Evaluation Survey](https://forms.office.com/r/snWhypaQiy)
 3. Troubleshooting contact: Haki Atalov or Ranjini Unnikrishnan on Microsoft teams
 
 ## Lighthouse Scores
