@@ -33,8 +33,9 @@ Current manual updates (copy-pasting ZIP contents) often result in a mix of old 
 > TODO: Everybody fill out their planned role description
 
 - Haki Atalov: 
-    - Planned role descripton
     - Goal commitment: BLIS self-update feature
+    - Role: Program Management + Engineering. Acting as Team Lead.
+    - Email: hatalov3@gatech.edu
 - Ranjini Unnikrishnan:
     - Planned role descripton
     - Goal commitment: Password reset utility
