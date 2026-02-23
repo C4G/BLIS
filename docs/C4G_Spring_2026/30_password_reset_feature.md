@@ -34,5 +34,5 @@ This change transforms an IT support ticket into a simple, self-service task for
 
 Main Contributors:
 
-[Insert Name]
-[Insert Name]
+Ranjini Unnikrishnan
+Tony Simo Dzumgang
