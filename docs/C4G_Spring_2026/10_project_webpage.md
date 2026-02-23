@@ -41,8 +41,9 @@ Current manual updates (copy-pasting ZIP contents) often result in a mix of old 
     - Goal commitment: Password reset utility -BLIS Launcher
     - Email: runnikrishnan6@gatech.edu
 - Tanner Jones:
-    - Planned role descripton
+    - Discover bugs in current cloud setup, work on upgrade from php 5 to php 8+, asses current technology and offer improvements and migrations plans.
     - Goal commitment: BLIS PHP upgrade
+    - Email: tjones406@gatech.edu
 - Luqman Rashad:
     - Goal commitment: BLIS self-update feature
     - Role: Design and Development
