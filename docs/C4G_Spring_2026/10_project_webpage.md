@@ -30,7 +30,6 @@ Current manual updates (copy-pasting ZIP contents) often result in a mix of old 
 - Deliverable: A self-updating launcher that maintains version integrity. 
 
 ## Team Members
-> TODO: Everybody fill out their planned role description
 
 - Haki Atalov: 
     - Goal commitment: BLIS self-update feature
@@ -53,8 +52,10 @@ Current manual updates (copy-pasting ZIP contents) often result in a mix of old 
     - Goal commitment: Password reset utility
     - Email: tdzumgang3@gatech.edu
 - Emmanuel Asuquo
-    - Planned role descripton
+    - Coordinate with Tanner to upgrading the PHP from 5 to 8 
+    - Identify, debug, and resolve backend issue. Also strengthening input validation and enhacning error hadling. 
     - Goal commitment: BLIS PHP upgrade
+    - Email: easuquo3@gatech.edu
     
 
 ## Peer Evaluations
