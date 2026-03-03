@@ -1,6 +1,6 @@
 FROM ubuntu:noble
 
-ARG PHP_VERSION="5.6"
+ARG PHP_VERSION="7.4"
 
 ARG MNT_UID=1000
 ARG MNT_GID=1000
@@ -16,6 +16,7 @@ RUN echo "Setting ownership of dev directory to $MNT_UID:$MNT_GID" && \
 RUN apt-get update && apt-get install -y software-properties-common && \
     add-apt-repository ppa:ondrej/php && apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        libapache2-mod-php$PHP_VERSION \
         apache2 \
         curl \
         mysql-client \
