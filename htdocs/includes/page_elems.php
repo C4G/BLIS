@@ -3111,7 +3111,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
                             {
                             ?>
                                 <td><a href="javascript:print_specimen_barcode(<?php echo $pid;?>,<?php echo $sid;?> )">Print Barcode</a> </td>
-                            <?
+                            <?php
                             }
 
                         ?>
@@ -3243,7 +3243,7 @@ echo "<option value='$lc->id'>$lc->name</option>";
                             {
                             ?>
                                  <th></th>
-                            <?
+                            <?php
                             }
 
                         ?>
