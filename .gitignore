@@ -21,6 +21,7 @@
 /log/*
 /local/log*
 /local/UILog*
+/logs
 
 # OS generated files #
 ######################
