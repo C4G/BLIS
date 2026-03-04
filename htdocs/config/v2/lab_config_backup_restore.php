@@ -6,6 +6,7 @@
 
 require_once(__DIR__."/../../users/accesslist.php");
 require_once(__DIR__."/../../includes/composer.php");
+require_once(__DIR__."/../../includes/lab_config.php");
 require_once(__DIR__."/../../includes/migrations.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 require_once(__DIR__."/lib/backup.php");
@@ -17,8 +18,9 @@ $current_user_id = $_SESSION['user_id'];
 $current_user = get_user_by_id($current_user_id);
 
 $lab_config_id = $_REQUEST['lab_config_id'];
-$lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE lab_config_id = '$lab_config_id';";
+$lab_db_name_query = "SELECT * FROM lab_config WHERE lab_config_id = '$lab_config_id';";
 $lab = query_associative_one($lab_db_name_query);
+$lab_config = LabConfig::getObject($lab);
 db_change($lab['db_name']);
 $lab_config_name = $lab['name'];
 
@@ -45,7 +47,7 @@ if ($unauthorized) {
     exit;
 }
 
-$analyzed = $backup->analyze();
+$analyzed = $backup->analyze($lab_config->backup_encryption_key_id);
 
 if ($_GET["action"] != "confirm") {
 
@@ -130,7 +132,7 @@ if ($_GET["action"] != "confirm") {
     $start_time = microtime(true);
     $end_time = null;
 
-    $restorer = new BackupRestorer($backup, $lab_config_id);
+    $restorer = new BackupRestorer($backup, $lab_config_id, $lab_config->backup_encryption_key_id);
 
     $restore_successful = $restorer->restore();
 
