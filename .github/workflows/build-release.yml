@@ -3,6 +3,11 @@ name: Build Release
 on:
   workflow_dispatch:
     inputs:
+      version:
+        description: 'Version string (e.g. 1.0.0)'
+        required: true
+        type: string
+        default: '1.0.0'
       blis_branch:
         description: 'Branch for C4G/BLIS'
         required: true
@@ -52,21 +57,41 @@ jobs:
           cache: true
           cache-dependency-path: 'BLIS-NG/packages.lock.json'
           
+      - name: Inject Version into HttpdConf
+        working-directory: ./BLIS-NG
+        run: |
+          $file = "Config/HttpdConf.cs"
+          $content = Get-Content $file
+          $content = $content -replace 'DOCROOT = Path.Combine\(BASE_DIR, "htdocs"\);', 'DOCROOT = Path.Combine(BASE_DIR, "releases", "${{ inputs.version }}", "htdocs");'
+          Set-Content $file $content
+
+      - name: Adjust PHP Constants
+        working-directory: ./BLIS
+        run: |
+          $file = "htdocs/includes/db_constants.php"
+          $content = Get-Content $file
+          $content = $content -replace '\$LOCAL_PATH = realpath\(__DIR__\."/../../local/"\);', '$LOCAL_PATH = realpath(__DIR__."/../../../../local/");'
+          Set-Content $file $content
+
       - name: Build BLIS-NG
         working-directory: ./BLIS-NG
         run: dotnet publish -r win-x64 -c Release
 
       - name: Prepare Artifact Folders
         run: |
+          $ver = "${{ inputs.version }}"
           mkdir BLIS-Standalone
+          mkdir "BLIS-Standalone/releases/$ver"
           
-          # Copy BLISRuntime (excluding .git)
-          Copy-Item "./BLISRuntime/*" -Destination "./BLIS-Standalone/" -Recurse -Exclude ".git"
+          # Copy Database and Server Binaries
+          Copy-Item "./BLISRuntime/dbdir" -Destination "./BLIS-Standalone/" -Recurse
+          Copy-Item "./BLISRuntime/server" -Destination "./BLIS-Standalone/" -Recurse
           
-          # Copy BLIS (excluding .git and the legacy EXEs)
-          Copy-Item "./BLIS/*" -Destination "./BLIS-Standalone/" -Recurse -Exclude ".git"
-          Remove-Item "./BLIS-Standalone/BLIS.exe" -ErrorAction SilentlyContinue
-          Remove-Item "./BLIS-Standalone/BLIS.exe.manifest" -ErrorAction SilentlyContinue
+          # Copy Application to Versioned Release Folder
+          Copy-Item "./BLIS/htdocs" -Destination "./BLIS-Standalone/releases/$ver/" -Recurse
+          Copy-Item "./BLIS/db" -Destination "./BLIS-Standalone/releases/$ver/" -Recurse
+          Copy-Item "./BLIS/local" -Destination "./BLIS-Standalone/" -Recurse
+          Copy-Item "./BLIS/vendor" -Destination "./BLIS-Standalone/releases/$ver/" -Recurse
           
           # Copy BLIS-NG executable
           Copy-Item "./BLIS-NG/bin/Release/net10.0/win-x64/publish/BLIS-NG.exe" -Destination "./BLIS-Standalone/"
