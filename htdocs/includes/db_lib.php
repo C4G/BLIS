@@ -3828,13 +3828,13 @@ class CustomField
 
 		if(isset($record['field_name']))
 		{
-			$name=$record['field_name'];
-			$name_string=explode("^^" , $name);
-			$custom_field->fieldName=$name_string[0];
-			if($name_string[1]!=NULL|| $name_string!="")
-			$custom_field->flag=$name_string[1];
+			$name = $record['field_name'];
+			$name_string = explode("^^", $name);
+			$custom_field->fieldName = $name_string[0];
+			if (isset($name_string[1]) && $name_string[1] !== "")
+				$custom_field->flag = $name_string[1];
 			else
-			$custom_field->flag=0;
+				$custom_field->flag = 0;
 		}
 			else
 			$custom_field->fieldName = null;
@@ -6251,6 +6251,14 @@ function get_user_by_id($user_id)
 	$query_string = "SELECT a.user_id, a.username, a.password, a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, a.satellite_lab_name, b.value as rwoptions
 	FROM user a, user_config b WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.user_id=$user_id LIMIT 1";
 	$record = query_associative_one($query_string);
+	if ($record == null) {
+		$query_string = "SELECT user_id, username, password, actualname, email, created_by, ts, lab_config_id, level, phone, lang_id, satellite_lab_name, rwoptions FROM user WHERE user_id=$user_id LIMIT 1";
+		$record = query_associative_one($query_string);
+	}
+	if ($record == null) {
+		$query_string = "SELECT user_id, username, password, actualname, email, created_by, ts, lab_config_id, level, phone, lang_id, satellite_lab_name FROM user WHERE user_id=$user_id LIMIT 1";
+		$record = query_associative_one($query_string);
+	}
 	DbUtil::switchRestore($saved_db);
 	return User::getObject($record);
 }
@@ -6494,8 +6502,8 @@ function add_patient($patient, $importOn = false)
 	else
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `dob`, `age`, `sex`, `surr_id`, `created_by`, `hash_value`, `ts` $satelliteLabKeys) ".
-			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date' $satelliteLabValues)";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `dob`, `age`, `sex`, `surr_id`, `created_by`, `hash_value`, `ts`, `satellite_lab_id`, `satellite_lab_name`) ".
+			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id', '$satellite_lab_name')";
 	}
 
 	print $query_string;
@@ -7137,7 +7145,7 @@ function get_satellite_lab_name_by_satellite_lab_id($satellite_lab_id)
 	$query_string = "SELECT satellite_lab_name FROM user WHERE satellite_lab_id = $satellite_lab_id LIMIT 1";
 	$record = query_associative_one($query_string);
 	DbUtil::switchRestore($saved_db);
-	return $record["satellite_lab_name"];
+	return $record["satellite_lab_name"] ?? null;
 }
 
 function search_specimens_by_id($q)
@@ -8565,10 +8573,10 @@ function get_lab_config_id($user_id)
 
 	$query_string = "SELECT lab_config_id FROM user WHERE user_id='$user_id'";
 	$record = query_associative_one($query_string);
-	$id = $record['lab_config_id'];
-//echo "first:".$id;
-if($id==0)
-$id=get_lab_config_id_admin($user_id);
+	$id = $record['lab_config_id'] ?? null;
+	//echo "first:".$id;
+	if($id==0)
+	$id=get_lab_config_id_admin($user_id);
 //echo "second:".$id;
 	DbUtil::switchRestore($saved_db);
 	return $id;
@@ -8579,7 +8587,7 @@ function get_satellite_lab_name_by_user_id($user_id)
 	$saved_db = DbUtil::switchToGlobal();
 	$query_string = "SELECT satellite_lab_name FROM user WHERE user_id='$user_id'";
 	$record = query_associative_one($query_string);
-	$satelliteLabName = $record['satellite_lab_name'];
+	$satelliteLabName = $record['satellite_lab_name'] ?? null;
 	DbUtil::switchRestore($saved_db);
 	return $satelliteLabName;
 }
@@ -8849,8 +8857,14 @@ function get_site_list_with_labid($user_id) {
 	else
 	{
 		# Technician user -> Return local lab configuration
+		if($user == null || !isset($user->labConfigId) || $user->labConfigId == null)
+		{
+			DbUtil::switchRestore($saved_db);
+			return $retval;
+		}
 		$lab_config = get_lab_config_by_id($user->labConfigId);
-		$retval[$user->labConfigId] = $lab_config->getSiteName();
+		if($lab_config != null)
+			$retval[$user->labConfigId] = $lab_config->getSiteName();
 	}
 	DbUtil::switchRestore($saved_db);
 	return $retval;
@@ -15633,15 +15647,20 @@ function is_admin_check($user)
 	)
 		return false;
 	return true;*/
-if($user->level==$LIS_ADMIN||$user->level==$LIS_SUPERADMIN||$user->level==$LIS_COUNTRYDIR)
-return true;
-return false;
+
+	if (!is_object($user) || !isset($user->level))
+		return false;
+	if($user->level==$LIS_ADMIN||$user->level==$LIS_SUPERADMIN||$user->level==$LIS_COUNTRYDIR)
+		return true;
+	return false;
 }
 
 function is_super_admin_check($user)
 {
 	# Returns true for superadmin level users only
 	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_VERIFIER, $LIS_SUPERADMIN;
+	if (!is_object($user) || !isset($user->level))
+        return false;
 	if($user->level == $LIS_SUPERADMIN)
 		return true;
 	return false;

@@ -4740,7 +4740,8 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		$labtitlefieldoptions = get_custom_fields_labtitle(1);
 		$lab_titles = explode("/",$labtitlefieldoptions);
 		echo "<SELECT name='title' id='".$doc_row_id."_title'>";
-
+		
+		$field_value = ""; //default so comparison below is always defined
 		foreach($lab_titles as $option)
 			{
 				if(trim($option) == "")

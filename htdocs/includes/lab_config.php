@@ -303,16 +303,20 @@ class LabConfig
         global $con;
         $lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
         $saved_db = DbUtil::switchToGlobal();
-        $userId = $_SESSION['user_id'];
+        $userId = $_SESSION['user_id'] ?? null;
         if ($lab_config_id == 0) {
+            if ($userId === null) {
+                DbUtil::switchRestore($saved_db);
+                return null;
+            }
             $query = "SELECT lab_config_id FROM lab_config_access where user_id = $userId LIMIT 1";
             $record = query_associative_one($query);
-            $lab_config_id = $record['lab_config_id'];
+            $lab_config_id = $record['lab_config_id'] ?? 0;
         }
         $query = "SELECT country FROM lab_config where lab_config_id = $lab_config_id LIMIT 1";
         $record = query_associative_one($query);
         DbUtil::switchRestore($saved_db);
-        return $record['country'];
+        return $record['country'] ?? null;
     }
 
     public function changeAdmin($new_admin_id)
