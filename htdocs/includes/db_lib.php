@@ -5810,7 +5810,7 @@ function password_reset_need_confirm()
 	$query_string = "SELECT count(*) as resetCount from misc where action='password reset completed'";
 	$record = query_associative_one($query_string);
 	DbUtil::switchRestore($saved_db);
-	return ($record['resetCount'] == 0);
+	return (int)($record['resetCount'] ?? 0) == 0;
 }
 
 function password_reset_flush($reset_before_date){

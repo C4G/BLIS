@@ -446,8 +446,11 @@ CREATE TABLE IF NOT EXISTS `patient` (
   `partial_dob` varchar(45) DEFAULT NULL,
   `surr_id` varchar(45) DEFAULT NULL,
   `hash_value` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`patient_id`),
   KEY `created_by` (`created_by`)
+  KEY `created_by` (`created_by`),
+  `satellite_lab_id` int(11) DEFAULT NULL,
+  `satellite_lab_name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`patient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
