@@ -6470,6 +6470,7 @@ function add_patient($patient, $importOn = false)
 	$created_by = db_escape($patient->createdBy);
 	$hash_value = $patient->generateHashValue();
 	$satellite_lab_id = db_escape($patient->satelliteLabId);
+	$satellite_lab_id_query = ($satellite_lab_id === "") ? "NULL" : "'$satellite_lab_id'";
 	$satellite_lab_name = db_escape($patient->satelliteLabName);
 
 	$query_string = "";
@@ -6485,22 +6486,22 @@ function add_patient($patient, $importOn = false)
 	{
 		$query_string =
 			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `surr_id`, `created_by`, `hash_value` ,`ts`, `satellite_lab_id`, `satellite_lab_name`) ".
-			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id', '$satellite_lab_name')";
+			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', $satellite_lab_id_query, '$satellite_lab_name')";
 	}
 	else if($partial_dob != "")
 	{
 		$query_string =
 			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `partial_dob`, `surr_id`, `created_by`, `hash_value`,`ts`, `satellite_lab_id`, `satellite_lab_name`) ".
-			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$partial_dob', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id', '$satellite_lab_name')";
+			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$partial_dob', '$surr_id', $created_by, '$hash_value', '$receipt_date', $satellite_lab_id_query, '$satellite_lab_name')";
 	}
 	else
 	{
 		$query_string =
 			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `dob`, `age`, `sex`, `surr_id`, `created_by`, `hash_value`, `ts`, `satellite_lab_id`, `satellite_lab_name`) ".
-			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id', '$satellite_lab_name')";
+			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', $satellite_lab_id_query, '$satellite_lab_name')";
 	}
 
-	print $query_string;
+	// print $query_string;
 	query_insert_one($query_string);
 	return true;
 }
