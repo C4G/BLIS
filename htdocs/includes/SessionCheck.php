@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 require_once(__DIR__."/user_lib.php");
 
 if (basename($_SERVER['PHP_SELF'])!=="login.php") {

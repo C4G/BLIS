@@ -14,7 +14,7 @@ class LangUtil
 	public static function init()
 	{
 		global $LANG_ARRAY;
-		self::$generalTerms = $LANG_ARRAY[self::$generalPageId];
+		self::$generalTerms = $LANG_ARRAY[self::$generalPageId] ?? array();
 
 	}
 
@@ -25,13 +25,13 @@ class LangUtil
 			self::init();
 		}
 		self::$pageId = $page_id;
-		self::$pageTerms = $LANG_ARRAY[self::$pageId];
+		self::$pageTerms = $LANG_ARRAY[self::$pageId] ?? array();
 	}
 
 	public static function getGeneralTerm($key)
 	{
 		# Returns general term string
-		$retval = self::$generalTerms[$key];
+		$retval = self::$generalTerms[$key] ?? null;
 		if($retval == null)
 		{
 			$retval = "[ERROR]";
@@ -42,8 +42,8 @@ class LangUtil
 	public static function getPageTitle($page_id)
 	{
 
-		global $LANG_ARRAY;
-		$retval = $LANG_ARRAY[$page_id]["TITLE"];
+			global $LANG_ARRAY;
+			$retval = $LANG_ARRAY[$page_id]["TITLE"] ?? null;
 		if($retval == null)
 		{
 			$retval = "[ERROR]";
@@ -52,8 +52,8 @@ class LangUtil
 	}
 	public static function getStockTerm($key)
 	{
-		global $LANG_ARRAY;
-		$retval = $LANG_ARRAY['stocks'][$key];
+			global $LANG_ARRAY;
+			$retval = $LANG_ARRAY['stocks'][$key] ?? null;
 		if($retval == null)
 		{
 			$retval = "[ERROR]";
@@ -63,7 +63,7 @@ class LangUtil
 
 	public static function getTitle()
 	{
-		$retval = self::$pageTerms["TITLE"];
+		$retval = self::$pageTerms["TITLE"] ?? null;
 		if($retval == null)
 		{
 			$retval = "[ERROR]";
@@ -74,7 +74,7 @@ class LangUtil
 	public static function getPageTerm($key)
 	{
 		# Returns page specific term string
-		$retval = self::$pageTerms[$key];
+		$retval = self::$pageTerms[$key] ?? null;
 		if($retval == null)
 		{
 			$retval = "[ERROR]";

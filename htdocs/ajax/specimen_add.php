@@ -44,20 +44,20 @@ $addl_id = preg_replace("/[^a-zA-Z0-9\/\s]/", "", $addl_id);
 $date_recvd = $_REQUEST['receipt_yyyy']."-".$_REQUEST['receipt_mm']."-".$_REQUEST['receipt_dd'];
 if(trim($_REQUEST['collect_yyyy']) == "" && trim($_REQUEST['collect_mm']) == "" && trim($_REQUEST['collect_dd']) == "")
 	# date_collected not entered. Copy value from date_received
-	$date_collected = $date_received;
+	$date_collected = $date_recvd;
 else
 	$date_collected = $_REQUEST['collect_yyyy']."-".$_REQUEST['collect_mm']."-".$_REQUEST['collect_dd'];
 $time_collected = $_REQUEST['ctime_hh'].":".$_REQUEST['ctime_mm'];
 $patient_id = $_REQUEST['pid'];
 $specimen_type_id = $_REQUEST['stype'];
-$comments = $_REQUEST['comments'];
+$comments = $_REQUEST['comments'] ?? "";
 $comments = preg_replace("/[^a-zA-Z0-9\s]/", "", $comments);
 $report_to = $_REQUEST['report_to'];
 $doctor = $_REQUEST['doctor'];
 $doctor = preg_replace("/[^a-zA-Z\s]/", "", $doctor);
 $title=$_REQUEST['title'];
 $tests_list = $_REQUEST['t_type_list'];
-$site_id = $_REQUEST['collection_sites'];
+$site_id = $_REQUEST['collection_sites'] ?? null;
 
 putUILog('specimen_add', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
