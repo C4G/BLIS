@@ -6501,7 +6501,7 @@ function add_patient($patient, $importOn = false)
 			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', $satellite_lab_id_query, '$satellite_lab_name')";
 	}
 
-	// print $query_string;
+	print $query_string;
 	query_insert_one($query_string);
 	return true;
 }
