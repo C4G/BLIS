@@ -19,9 +19,9 @@ markdown_extensions:
 
 
 plugins:
-  - git-revision-date
+  - git-revision-date-localized
   - search
-  - with-pdf:
+  - to-pdf:
       cover_title: C4G BLIS User Guide
       cover_subtitle: Computing For Good
 
@@ -34,6 +34,7 @@ plugins:
         - contributing/
         - developer_documentation/
         - C4G_Spring_2025/
+        - C4G_Spring_2026/
 
 edit_uri: edit/main/docs/
 repo_url: https://github.com/C4G/BLIS

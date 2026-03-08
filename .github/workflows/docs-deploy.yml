@@ -28,14 +28,16 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       # Need to install prereqs for Weasyprint
       - name: Install Prerequisites
         run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0
 
       - name: Setup Python and Dependencies
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.x
           cache: 'pip' # caching pip dependencies
@@ -45,7 +47,7 @@ jobs:
         run: mkdocs build -d _docs/
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           # Upload directory generated above
           path: '_docs'

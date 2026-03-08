@@ -17,7 +17,7 @@ jobs:
           REPO_NAME: ${{ github.repository }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - id: headSHA
         run: echo "headSha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
