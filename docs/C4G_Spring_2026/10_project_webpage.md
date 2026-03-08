@@ -58,9 +58,14 @@ Current manual updates (copy-pasting ZIP contents) often result in a mix of old 
     - Email: easuquo3@gatech.edu
     
 
+## Initial Partner Evaluation
+1. We shared with the partner the BLIS artifact form a new workflow: [Build Release](https://github.com/C4G/BLIS/actions/runs/22791471537)
+2. Initial Evaluation survey: [Initial Experience Evaluation for BLIS Modernization Features](https://forms.office.com/r/td9Rqjsyv4)
+3. Troubleshooting contact: Haki Atalov or Ranjini Unnikrishnan on Microsoft teams
+
 ## Peer Evaluations
 1. Please find our demo application here: https://demo.c4gblis.org/login.php
-2. Answer the following survey: [BLIS Peer Evaluation Survey](https://forms.office.com/r/snWhypaQiy)
+2. Answer the following survey: [BLIS Peer Evaluation Survey]()
 3. Troubleshooting contact: Haki Atalov or Ranjini Unnikrishnan on Microsoft teams
 
 ## Lighthouse Scores
