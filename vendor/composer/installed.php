@@ -1,31 +1,31 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '7339e8384d5dbbb2996a74f960ea539477cbb0ad',
+        'reference' => 'f66d3df7b35f5fa7ae0a323762c7c6f3dde8f61e',
         'name' => '__root__',
         'dev' => true,
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '7339e8384d5dbbb2996a74f960ea539477cbb0ad',
+            'reference' => 'f66d3df7b35f5fa7ae0a323762c7c6f3dde8f61e',
             'dev_requirement' => false,
         ),
         'monolog/monolog' => array(
-            'pretty_version' => '2.10.0',
-            'version' => '2.10.0.0',
+            'pretty_version' => '1.27.1',
+            'version' => '1.27.1.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../monolog/monolog',
             'aliases' => array(),
-            'reference' => '5cf826f2991858b54d5c3809bee745560a1042a7',
+            'reference' => '904713c5929655dc9b97288b69cfeedad610c9a1',
             'dev_requirement' => false,
         ),
         'phpoffice/phpexcel' => array(
@@ -49,7 +49,7 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0.0 || 2.0.0 || 3.0.0',
+                0 => '1.0.0',
             ),
         ),
     ),

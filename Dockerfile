@@ -1,6 +1,6 @@
 FROM ubuntu:noble
 
-ARG PHP_VERSION="7.4"
+ARG PHP_VERSION="5.6"
 
 # Install a bunch of stuff from the standard repositories
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
