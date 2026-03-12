@@ -117,6 +117,12 @@ $fields_sql = implode(", ", $fields);
 
 $objPHPExcel = new PHPExcel();
 
+// Send the spreadsheet directly to the browser
+// Do not echo() or output anything else below this line!
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment;filename="report.xlsx"');
+header('Cache-Control: max-age=0');
+
 foreach($test_type_ids as $tt_idx => $test_type_id) {
 
     // Ignore the weird indentation... that is because this is a multiline string
@@ -136,13 +142,6 @@ EOQ;
     if(count($results) == 0) {
         continue;
     }
-
-    // Send the spreadsheet directly to the browser
-    // Do not echo() or output anything else below this line!
-
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="report.xlsx"');
-    header('Cache-Control: max-age=0');
 
     $sheet = $objPHPExcel->createSheet();
 
@@ -224,7 +223,16 @@ EOQ;
     }
 }
 
-$objPHPExcel->removeSheetByIndex(0);
+// Remove the default empty sheet created by new PHPExcel().
+// Only safe to do if the loop actually added at least one sheet.
+if ($objPHPExcel->getSheetCount() > 1) {
+    $objPHPExcel->removeSheetByIndex(0);
+} else if ($objPHPExcel->getSheetCount() == 1 && $objPHPExcel->getSheet(0)->getTitle() == 'Worksheet') {
+    // No test types had results — the only sheet is the default blank one.
+    // Rename it so the user sees a clear message instead of a corrupt file.
+    $objPHPExcel->getSheet(0)->setTitle('No Data');
+    $objPHPExcel->getSheet(0)->setCellValue('A1', 'No results found for the selected test types and date range.');
+}
 
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save("php://output");

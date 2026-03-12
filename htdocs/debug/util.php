@@ -1,4 +1,6 @@
-<?
+<?php
+services:
+
 
 require_once(__DIR__."/../includes/composer.php");
 
