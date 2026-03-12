@@ -1,8 +1,10 @@
 <?php
 require_once("./backup_lib.php");
+require_once("../encryption/keys.php");
 require_once("../includes/composer.php");
 require_once("../includes/db_lib.php");
 require_once("../includes/features.php");
+require_once("../includes/lab_config.php");
 require_once("../includes/platform_lib.php");
 require_once("../includes/user_lib.php");
 require_once("redirect.php");
@@ -24,36 +26,23 @@ if ($user_lab_config_id != $lab_config_id && !is_super_admin($user) && !is_count
     return;
 }
 
-$encryption_enabled = (KeyMgmt::read_enc_setting() == 1);
+$lab_config = LabConfig::getById($lab_config_id);
+db_change($lab_config->dbName);
+
+$encryption_enabled = $lab_config->backup_encryption_enabled;
 
 $keyContents = false;
 if ($encryption_enabled) {
-    $keySelection=$_POST['target'];
-    if ($keySelection == "-1") {
-        // A new key is uploaded
-        $pkey_alias = $_POST['pkey_alias'];
-        $pkey_contents = file_get_contents($_FILES['pkey']['tmp_name']);
-        $res = KeyMgmt::add_key_mgmt(KeyMgmt::create($pkey_alias, $pkey_contents, $user->userId));
-        $log->info("Uploading $pkey_alias: $res");
-        $keyContents = $pkey_contents;
-    } else if ($keySelection == "0") {
-        // The Current Lab key is used
-        $labKeyFile = dirname(__FILE__) . "/../../files/LAB_".$lab_config_id."_pubkey.blis";
-        if (!file_exists($labKeyFile)) {
-            // generate key
-            KeyMgmt::generateKeyPair(
-                dirname(__FILE__) . "/../../files/LAB_".$lab_config_id.".blis",
-                $labKeyFile);
-            $log->info("Keypair generated successfully.");
-        }
-        $keyContents = file_get_contents($labKeyFile);
+    $key_id = $_REQUEST["keySelectDropdown"];
+
+    $key = Key::find($key_id);
+    if (!$key) {
+        $log->error("Could not find public key ID $key_id");
     } else {
-        // a specific key in the database was requested
-        $key = KeyMgmt::getByID($keySelection);
-        $keyContents = $key->PubKey;
-        $log->debug("Public key contents before trim: $keyContents");
-        $keyContents = substr($keyContents, ($pos = strpos($keyContents, '-')) !== false ? $pos : 0);
-        $log->debug("Position of - : $pos, Public key contents trimmed: $keyContents");
+        if($key->type != Key::$PUBLIC) {
+            $log->error("Attempting to backup data with a keypair instead of a public key. Key ID: $key_id");
+        }
+        $keyContents = $key->data;
     }
 }
 

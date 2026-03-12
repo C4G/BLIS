@@ -10,7 +10,7 @@ $log->info("Uploaded $file_name");
 
 $replace_revamp_database = $_REQUEST['replaceRevampDatabase'] === "true";
 if ($replace_revamp_database) {
-    $log->warn("Revamp database is being replaced with this import!");
+    $log->warning("Revamp database is being replaced with this import!");
 }
 
 $file_name_and_extension = explode('.', $file_name);

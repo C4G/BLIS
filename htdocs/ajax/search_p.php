@@ -62,7 +62,7 @@ else if($a == 1)
 	# Fetch by patient name
 	$patient_list_all = search_patients_by_name($q,0,$c);
 	//print_r($patient_list_all);exit;
-	//DB Merging - Currently Disabled 
+	//DB Merging - Currently Disabled
 	# See if there's a patient by the exact same name in another lab
 	//$patient = searchPatientByName($q);
 	/*if($patient != null) {
@@ -120,13 +120,13 @@ if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient == null
 	SessionUtil::restore($saved_session);
 	return;
 }
-//DB Merging - Currently disabled 
+//DB Merging - Currently disabled
 else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient != null) ) {
 	?>
 	<br>
 	<div class='sidetip_nopos'>
 	<?php
-		echo "A record of the patient has been found in another hospital.<br><br>"; 
+		echo "A record of the patient has been found in another hospital.<br><br>";
 	?>
 		<a rel='facebox' href='viewPatientInfo.php?pid=<?php echo $patient->patientId; ?>&type=national'>View Patient Info>></a><br>
 		<a href='ajax/import_patient.php?patientId=<?php echo $patient->patientId; ?>'>Import patient record and continue?</a><br>
@@ -162,10 +162,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			}
 			?>
 			<?php  #TODO: Add check if user has patient name/private data access here ?>
-                        
+
 			<th><?php echo LangUtil::$generalTerms['NAME']; ?></th>
 			<th><?php echo LangUtil::$generalTerms['GENDER']; ?></th>
-                        
+
                         <?php
 			if($lab_config->age >= 11)
 			{
@@ -173,7 +173,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				<th><?php echo LangUtil::$generalTerms['AGE']; ?></th>
 				<?php
 			}?>
-			
+
                         <?php
 			if(strpos($_SERVER["HTTP_REFERER"], "search.php") !== false)
 			{
@@ -199,11 +199,11 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				?>
 				<td><?php echo  $patient_num?></td>
 			<?php
-			
+
 			if($lab_config->pid != 0)
 			{
 				$patient_id =$patient->getSurrogateId();
-				if ($patient_id == undefined) {
+				if (!isset($patient_id)) {
 					$patient_id = "*";
 				}
 				?>
@@ -262,7 +262,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 				</td>
 				<?php
 			}?>
-                        
+
 			<?php
 			if(strpos($_SERVER["HTTP_REFERER"], "search.php") !== false)
 			{
@@ -288,11 +288,11 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			}
 			?>
 			<td>
-				<?php 
+				<?php
 				if(strpos($_SERVER["HTTP_REFERER"], "find_patient.php") !== false)
 				{
 					# Called from find_patient.php. Show 'profile' and 'register specimen' link
-					
+
 					?>
 					<a href='new_specimen.php?pid=<?php echo $patient->patientId; ?>&dnum=<?php echo $pieces[1]; ?>' title='Click to Register New Specimen for this Patient'><?php echo LangUtil::$pageTerms['CMD_REGISTERSPECIMEN']; ?></a>
 					</td><td>
@@ -327,10 +327,10 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 					<a href='select_test_profile.php?pid=<?php echo $patient->patientId; ?>' title='Click to View Patient Profile'>Select Tests</a>
 										</td>
                                         <td <?php (is_billing_enabled($_SESSION['lab_config_id']) ? print("") : print("style='display:none'")) ?> >
-                                       
+
                                             <a href=<?php echo $billing_url_string; ?>' title='Click to generate a bill for this patient'>Generate Bill</a>
                                         </td>
-					<td>					
+					<td>
 					<?php
 				}
 				else
