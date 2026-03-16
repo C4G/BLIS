@@ -55,6 +55,22 @@ jobs:
           cache: true
           cache-dependency-path: 'BLIS-NG/packages.lock.json'
           
+      - name: Generate version.json
+        shell: bash
+        run: |
+          cat > BLIS/version.json << EOF
+          {
+            "version": "dev",
+            "build_timestamp": "$(date -u +%Y%m%d-%H%M%S)",
+            "git_sha": "$(git -C BLIS rev-parse --short HEAD)",
+            "min_launcher_version": "1.0.0"
+          }
+          EOF
+
+      - name: Verify version.json
+        shell: bash
+        run: cat BLIS/version.json
+
       - name: Build BLIS-NG
         working-directory: ./BLIS-NG
         run: dotnet publish -r win-x64 -c Release
