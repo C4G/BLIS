@@ -76,18 +76,32 @@ jobs:
         run: dotnet publish -r win-x64 -c Release
 
       - name: Prepare Artifact Folders
+        shell: bash
         run: |
-          mkdir -p BLIS-Standalone
+          VERSION=$(python3 -c "import json; print(json.load(open('BLIS/version.json'))['version'])")
 
-          # Copy BLISRuntime (excluding .git)
-          cp -r BLISRuntime/. BLIS-Standalone/ && rm -rf BLIS-Standalone/.git
+          mkdir -p BLIS-Standalone/releases/${VERSION}
+          mkdir -p BLIS-Standalone/local
+          mkdir -p BLIS-Standalone/storage
+          mkdir -p BLIS-Standalone/data/backups
+          mkdir -p BLIS-Standalone/log
+          mkdir -p BLIS-Standalone/staging
 
-          # Copy BLIS (excluding .git and the legacy EXEs)
-          cp -r BLIS/. BLIS-Standalone/ && rm -rf BLIS-Standalone/.git
-          rm -f BLIS-Standalone/BLIS.exe BLIS-Standalone/BLIS.exe.manifest
+          # Application files into the versioned release directory
+          cp -r ./BLIS/htdocs    BLIS-Standalone/releases/${VERSION}/
+          cp -r ./BLIS/db        BLIS-Standalone/releases/${VERSION}/
+          cp -r ./BLIS/vendor    BLIS-Standalone/releases/${VERSION}/
+          cp -r ./BLIS/local     BLIS-Standalone/releases/${VERSION}/
+          cp    ./BLIS/version.json BLIS-Standalone/releases/${VERSION}/
 
-          # Copy BLIS-NG executable
-          cp BLIS-NG/bin/Release/net10.0/win-x64/publish/BLIS-NG.exe BLIS-Standalone/
+          # Working config (copy of defaults)
+          cp -r ./BLIS/local/* BLIS-Standalone/local/
+
+          # Server runtime binaries only
+          cp -r ./BLISRuntime/server BLIS-Standalone/
+
+          # Launcher at the root
+          cp ./BLIS-NG/bin/Release/net10.0/win-x64/publish/BLIS-NG.exe BLIS-Standalone/
 
       - name: Create Zip Archive
         run: |
