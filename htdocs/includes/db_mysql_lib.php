@@ -27,8 +27,15 @@ function _db_get_username() {
 function query_insert_one($query)
 {
 	# Single insert statement
-	global $con, $LOG_QUERIES;
-    mysqli_query($con,  $query ) or die(mysqli_error($con));
+	global $con, $LOG_QUERIES, $log;
+    $result = mysqli_query($con, $query);
+
+    if (!$result) {
+        $err = mysqli_error($con);
+        $log->error("mysqli error: " . $err);
+        die();
+    }
+
 	if($LOG_QUERIES == true) {
         DebugLib::logDBUpdates($query, db_get_current());
         DebugLib::logQuery($query, db_get_current(), _db_get_username());

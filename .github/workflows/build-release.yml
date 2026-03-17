@@ -1,0 +1,85 @@
+name: Build Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      blis_branch:
+        description: 'Branch for C4G/BLIS'
+        required: true
+        default: 'main'
+        type: string
+      blisruntime_branch:
+        description: 'Branch for C4G/BLISRuntime'
+        required: true
+        default: 'main'
+        type: string
+      blisng_branch:
+        description: 'Branch for C4G/BLIS-NG'
+        required: true
+        default: 'main'
+        type: string
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout BLIS
+        uses: actions/checkout@v4
+        with:
+          repository: 'C4G/BLIS'
+          ref: ${{ inputs.blis_branch }}
+          path: 'BLIS'
+          
+      - name: Checkout BLISRuntime
+        uses: actions/checkout@v4
+        with:
+          repository: 'C4G/BLISRuntime'
+          # BLISRuntime contains large binary files using Git LFS
+          # https://git-lfs.com/
+          lfs: true
+          ref: ${{ inputs.blisruntime_branch }}
+          path: 'BLISRuntime'
+          
+      - name: Checkout BLIS-NG
+        uses: actions/checkout@v4
+        with:
+          repository: 'C4G/BLIS-NG'
+          ref: ${{ inputs.blisng_branch }}
+          path: 'BLIS-NG'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+          cache: true
+          cache-dependency-path: 'BLIS-NG/packages.lock.json'
+          
+      - name: Build BLIS-NG
+        working-directory: ./BLIS-NG
+        run: dotnet publish -r win-x64 -c Release
+
+      - name: Prepare Artifact Folders
+        run: |
+          mkdir BLIS-Standalone
+          
+          # Copy BLISRuntime (excluding .git)
+          Copy-Item "./BLISRuntime/*" -Destination "./BLIS-Standalone/" -Recurse -Exclude ".git"
+          
+          # Copy BLIS (excluding .git and the legacy EXEs)
+          Copy-Item "./BLIS/*" -Destination "./BLIS-Standalone/" -Recurse -Exclude ".git"
+          Remove-Item "./BLIS-Standalone/BLIS.exe" -ErrorAction SilentlyContinue
+          Remove-Item "./BLIS-Standalone/BLIS.exe.manifest" -ErrorAction SilentlyContinue
+          
+          # Copy BLIS-NG executable
+          Copy-Item "./BLIS-NG/bin/Release/net10.0/win-x64/publish/BLIS-NG.exe" -Destination "./BLIS-Standalone/"
+
+      - name: Create Zip Archive
+        run: |
+          Compress-Archive -Path "BLIS-Standalone/*" -DestinationPath BLIS-Standalone.zip
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLIS-Standalone
+          path: BLIS-Standalone.zip
