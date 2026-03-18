@@ -8,7 +8,7 @@ Troubleshooting contact: Haki Atalov (hatalov3@gatech.edu) or Ranjini Unnikrishn
 2. x86/x64 CPU
 
 ## Downloading BLIS
-1. Please download our application artifact here: [BLIS Standalone Zip File](https://github.com/C4G/BLIS/releases/tag/v4.0.0.beta1)
+1. Please download our application artifact here: [BLIS Standalone Zip File](https://github.com/C4G/BLIS/releases/tag/v4.0.0.beta1) - titled `BLIS-Standalone.zip`
 2. Once downloaded, extract the contents of the file. 
 3. Open the extracted folder and find the `BLIS-NG.exe` launcher. 
 4. Run the `BLIS-NG.exe` launcher. This will start the BLIS instance in your browser. 
