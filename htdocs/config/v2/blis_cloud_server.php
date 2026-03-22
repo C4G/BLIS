@@ -34,20 +34,20 @@ $lab_db_name = $lab["db_name"];
 $connection_code = str_replace("-", "", $_POST["connection_code"]);
 
 if ($action == "connect") {
-    $log->warn("Connection request received for lab $lab_config_id: $lab_name");
+    $log->warning("Connection request received for lab $lab_config_id: $lab_name");
 
     // look up connection
     $connection = LabConnection::find_by_lab_config_id($lab_config_id);
 
     if ($connection != null) {
         // Lab connection already exists, so this request is trying to re-connect.
-        $log->warn("Lab $lab_config_id is already connected. Re-connecting.");
+        $log->warning("Lab $lab_config_id is already connected. Re-connecting.");
     }
 
     $nrml_code = str_replace("-", "", $connection->connection_code);
 
     if ($connection_code != $nrml_code) {
-        $log->warn("Connection attempted with wrong connection code. Lab ID: $lab_config_id; Incorrect code: $connection_code");
+        $log->warning("Connection attempted with wrong connection code. Lab ID: $lab_config_id; Incorrect code: $connection_code");
         // Connection code does not match
         header(LangUtil::$generalTerms['404_BAD_REQUEST'], true, 400);
         exit;
