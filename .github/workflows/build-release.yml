@@ -116,6 +116,14 @@ jobs:
           # Launcher at the root
           cp ./BLIS-NG/bin/Release/net10.0/win-x64/publish/BLIS-NG.exe BLIS-Standalone/
 
+          # Initial state.json pointing to this release
+          cat > BLIS-Standalone/state.json << EOF
+          {
+            "active_version": "${VERSION}",
+            "previous_version": null
+          }
+          EOF
+
       - name: Create Zip Archive
         run: |
           cd BLIS-Standalone && zip -r ../BLIS-Standalone.zip . && cd ..
