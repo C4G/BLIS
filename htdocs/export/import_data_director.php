@@ -176,7 +176,7 @@ if ($file_name_and_extension[1]=="zip") {
         #the following code copies folder containing langdata_<labid> files from back up to the local folder
 
         $src_langdata_path = trim($extractPath."/".$langFile);
-        $dest_path = dirname(__FILE__)."/../../local/";
+        $dest_path = $LOCAL_PATH."/";
         $res = PlatformLib::copyDirectory($src_langdata_path, $dest_path);
         if (!$res) {
            $log->error("There was a problem copying the langdata folder.");

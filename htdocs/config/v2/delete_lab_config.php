@@ -53,7 +53,7 @@ if ($confirmed) {
     }
 
     try {
-        $langdata_dir = realpath("../../../local/langdata_$lab_config_id");
+        $langdata_dir = realpath($LOCAL_PATH."/langdata_$lab_config_id");
         if ($langdata_dir) {
             $log->info("Deleting folder: $langdata_dir");
             PlatformLib::removeDirectory($langdata_dir);

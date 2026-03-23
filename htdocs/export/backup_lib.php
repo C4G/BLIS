@@ -322,7 +322,8 @@ class BackupLib
         }
 
         // Add language data files to backup folder
-        $lab_langdata = "../../local/langdata_$lab_config_id";
+        global $LOCAL_PATH;
+        $lab_langdata = $LOCAL_PATH."/langdata_$lab_config_id";
         if ($handle = opendir($lab_langdata)) {
             while (false !== ($file = readdir($handle))) {
                 if ($file === "." || $file == "..") {
@@ -333,11 +334,11 @@ class BackupLib
         }
 
 
-        self::dumpLog("../../local/log_$lab_config_id.txt", "$backup_dir/log_$lab_config_id.txt", $server_public_key);
-        self::dumpLog("../../local/log_$lab_config_id"."_updates.txt", "$backup_dir/log_$lab_config_id"."_updates.txt", $server_public_key);
-        self::dumpLog("../../local/log_$lab_config_id"."_revamp_updates.txt", "$backup_dir/log_$lab_config_id"."_revamp_updates.txt", $server_public_key);
-        self::dumpLog("../../local/UILog_2-2.csv", "$backup_dir/UILog_2-2.csv", $server_public_key);
-        self::dumpLog("../../local/UILog_2-3.csv", "$backup_dir/UILog_2-3.csv", $server_public_key);
+        self::dumpLog($LOCAL_PATH."/log_$lab_config_id.txt", "$backup_dir/log_$lab_config_id.txt", $server_public_key);
+        self::dumpLog($LOCAL_PATH."/log_$lab_config_id"."_updates.txt", "$backup_dir/log_$lab_config_id"."_updates.txt", $server_public_key);
+        self::dumpLog($LOCAL_PATH."/log_$lab_config_id"."_revamp_updates.txt", "$backup_dir/log_$lab_config_id"."_revamp_updates.txt", $server_public_key);
+        self::dumpLog($LOCAL_PATH."/UILog_2-2.csv", "$backup_dir/UILog_2-2.csv", $server_public_key);
+        self::dumpLog($LOCAL_PATH."/UILog_2-3.csv", "$backup_dir/UILog_2-3.csv", $server_public_key);
         self::dumpLog("../../log/application.log", "$backup_dir/application.log", $server_public_key);
         self::dumpLog("../../log/database.log", "$backup_dir/database.log", $server_public_key);
         self::dumpLog("../../log/apache2_error.log", "$backup_dir/apache2_error.log", $server_public_key);

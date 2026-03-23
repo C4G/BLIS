@@ -178,7 +178,7 @@ $langdata_dir = $backup_folder."/langdata_".$lab_config_id;
 
 if ($do_langdata === true) {
     $log->info("Copying $langdata_dir to local/langdata_$lab_config_id");
-    PlatformLib::copyDirectory($langdata_dir, __DIR__."/../../local/");
+    PlatformLib::copyDirectory($langdata_dir, $LOCAL_PATH."/");
 }
 
 if ($restored_from_zip) {
