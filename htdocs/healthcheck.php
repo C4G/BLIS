@@ -24,4 +24,4 @@ header("Content-Type: application/json", true, $response_code);
 
 ?>
 
-{ "status": "<? echo($status) ?>" }
+{ "status": "<?php echo($status) ?>" }

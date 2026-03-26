@@ -21,6 +21,7 @@
 /log/*
 /local/log*
 /local/UILog*
+/logs
 
 # OS generated files #
 ######################
@@ -57,3 +58,10 @@ Thumbs.db
 
 # Wine prefix folder if using Wine to run the server on Linux with bin/wine-server
 /wine/
+
+# local folder exclusion
+/local
+
+# blis configuration exclusion
+/blis_configuration_*
+

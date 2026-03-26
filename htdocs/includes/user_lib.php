@@ -188,7 +188,7 @@ $LIS_PHYSICIAN = 17;
 function is_allowed($fname,$rwopts)
 {
 global $access_rights;
-$access_right_label=$access_rights[$fname];
+$access_right_label = $access_rights[$fname] ?? "";
 	$rw_option = array ();
 	$rw_option =explode ( ',', $rwopts );
 $opt_index="";
@@ -250,6 +250,10 @@ function get_top_menu_options($user_role, $user_rwoption = "") {
 	$page_list [LangUtil::getPageTitle ( "home" )] = "home.php";
 
 	$rw_option = explode ( ',', $user_rwoption );
+	$id = $_SESSION['user_id'] ?? null;
+	if ($id !== null) {
+		$id = get_lab_config_id($id);
+	}
 
 	if($user_role == $LIS_PHYSICIAN) {
 		if (in_array ( "2", $rw_option ))
@@ -338,6 +342,9 @@ function get_random_password() {
 function is_admin($user) {
 	// Returns true for admin and superadmin level users
 	global $LIS_VERIFIER, $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_CLERK, $LIS_TECH_SHOWPNAME, $LIS_COUNTRYDIR, $LIS_PHYSICIAN;
+	if (!is_object($user) || !isset($user->level)) {
+		return false;
+	}
 if($user->level==$LIS_ADMIN||$user->level==$LIS_SUPERADMIN||$user->level==$LIS_COUNTRYDIR)
 return true;
 return false;
@@ -345,6 +352,9 @@ return false;
 function is_super_admin($user) {
 	// Returns true for superadmin level users only
 	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN;
+	if (!is_object($user) || !isset($user->level)) {
+		return false;
+	}
 	if ($user->level == $LIS_SUPERADMIN)
 		return true;
 	return false;
@@ -352,6 +362,9 @@ function is_super_admin($user) {
 function is_country_dir($user) {
 	// Returns true for superadmin level users only
 	global $LIS_TECH_RO, $LIS_TECH_RW, $LIS_ADMIN, $LIS_SUPERADMIN, $LIS_COUNTRYDIR;
+	if (!is_object($user) || !isset($user->level)) {
+		return false;
+	}
 	if ($user->level == $LIS_COUNTRYDIR)
 		return true;
 	return false;
@@ -359,6 +372,9 @@ function is_country_dir($user) {
 
 function is_satellite_lab_user($user) {
 	global $LIS_SATELLITE_LAB_USER;
+	if (!is_object($user) || !isset($user->level)) {
+		return false;
+	}
 	if ($user->level == $LIS_SATELLITE_LAB_USER)
 		return true;
 	return false;
