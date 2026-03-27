@@ -22,6 +22,8 @@ if(!getenv("LOCAL_DIR") && $SERVER == $ON_ARC)
 	$LOCAL_PATH = realpath(__DIR__."/../local/");
 }
 
+$STORAGE_DIR = getenv("STORAGE_DIR") ?: realpath(__DIR__."/../../storage/");
+
 $DB_HOST = getenv("DB_HOST");
 if (!$DB_HOST) {
 	$DB_HOST = "127.0.0.1";

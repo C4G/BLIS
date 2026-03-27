@@ -45,7 +45,11 @@ if($_REQUEST['Clinical_Data'] == 'Y')
 	$ClinicalData = 1;
 else
 	$ClinicalData = 0;
-$name="../../logo_".$lab_config_id.".jpg";
+$logos_dir = $STORAGE_DIR . "/logos";
+if (!is_dir($logos_dir)) {
+    mkdir($logos_dir, 0755, true);
+}
+$name = $logos_dir . "/logo_" . $lab_config_id . ".jpg";
 # Header text
 $align_header=array();
 $align_header[0]=db_escape($_REQUEST['header']);
