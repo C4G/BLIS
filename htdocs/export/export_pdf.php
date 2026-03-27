@@ -6,7 +6,7 @@ putUILog('export_word', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X'
 
 $date = date("Ymdhi");
 
-$exports_dir = $STORAGE_DIR . "/exports";
+$exports_dir = $STORAGE_DIR . "/files";
 if (!is_dir($exports_dir)) {
     mkdir($exports_dir, 0755, true);
 }
