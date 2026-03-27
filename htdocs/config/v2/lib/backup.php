@@ -33,7 +33,7 @@ class Backup {
     private $analyzed;
 
     private static function base_path() {
-        return realpath(__DIR__ . "/../../../../files");
+        return getenv("DATA_DIR") ?: realpath(__DIR__ . "/../../../../files");
     }
 
     public static function insert($lab_config_id, $filename, $location) {

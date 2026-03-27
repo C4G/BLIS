@@ -116,12 +116,12 @@ if ($do_currbackup === true) {
 $restored_from_zip = false;
 if (endsWith($backup_folder, ".zip")) {
     // A BLIS 3.8+ backup zip file was specified, so we have to unzip it.
-    $zip_path = __DIR__ . "/../../files/backups/$backup_folder";
+    $zip_path = $DATA_DIR . "/backups/" . $backup_folder;
     $pathinfo = pathinfo($zip_path);
-    $unzip_path = dirname($zip_path) . "/" . $pathinfo['filename'];
+    $unzip_path = $DATA_DIR . "/backups/" . $pathinfo['filename'];
     mkdir($unzip_path);
     $log->info("Unzipping $zip_path to $unzip_path");
-    
+
     $zip = new ZipArchive;
     $res = $zip->open($zip_path);
     if ($res === TRUE) {
@@ -139,7 +139,7 @@ if (endsWith($backup_folder, ".zip")) {
     }
 } else {
     // If backup_folder is an old-style folder backup, prepend it with the path to the main BLIS folder.
-    $mainBlisDir = __DIR__ . "/../../";
+    $mainBlisDir = dirname($DATA_DIR) . "/";
     $backup_folder = $mainBlisDir . $backup_folder;
 }
 
