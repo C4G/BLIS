@@ -100,7 +100,7 @@ if ($do_currbackup === true) {
     if (!file_exists($labKeyFile)) {
         // generate key
         KeyMgmt::generateKeyPair(
-            dirname(__FILE__) . "/../../files/LAB_".$lab_config_id.".blis",
+            $DATA_DIR . "/LAB_".$lab_config_id.".blis",
             $labKeyFile
         );
         $log->info("Keypair generated successfully.");
