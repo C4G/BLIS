@@ -48,7 +48,7 @@ class Backup {
 
         $version = $analyzed->version;
 
-        $query = "INSERT INTO blis_backups (lab_config_id, filename, location, blis_version)
+        $query = "INSERT IGNORE INTO blis_backups (lab_config_id, filename, location, blis_version)
                   VALUES('$escaped_lab','$escaped_filename','$escaped_location', '$version');";
 
         query_insert_one($query);
@@ -67,9 +67,11 @@ class Backup {
         $results = query_associative_all($query);
 
         $backups = array();
-        foreach($results as $result) {
-            $backup = Backup::from_row($result);
-            array_push($backups, $backup);
+        if ($results) {
+            foreach($results as $result) {
+                $backup = Backup::from_row($result);
+                array_push($backups, $backup);
+            }
         }
 
         return $backups;
