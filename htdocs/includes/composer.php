@@ -70,5 +70,3 @@ function get_database_logger($dbname) {
     }
     return $_DATABASE_LOGGERS[$dbname];
 }
-
-?>
