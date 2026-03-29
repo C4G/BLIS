@@ -6,7 +6,10 @@ The Basic Laboratory Information System (BLIS) is the flagship initiative of Com
 
 Our team is collaborating with the Ministry of Health and National Public Health Labs to modernize the platform. While the partner's goal is a transition to a cloud-based, bi-directional system, significant infrastructure challenges currently block progress.
 
-Our mission this semester is to bridge this gap by upgrading the legacy PHP core, securing the system with local password recovery tools, and implementing a reliable self-update mechanism that functions even in resource-constrained environments. 
+Our mission this semester is to bridge this gap by upgrading the legacy PHP core, securing the system with local password recovery tools, and implementing a reliable self-update mechanism that functions even in resource-constrained environments.
+
+## Assignment Links
+- [P6-Demo Presentation](https://gtvault-my.sharepoint.com/:v:/g/personal/hatalov3_gatech_edu/IQBht2wBxxVETZAyljo7sn7-AdHsssfrsJna-ixTSHoMFVc?e=Sm1fci&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
 
 ## Overall Project Goal
 
