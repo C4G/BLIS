@@ -164,16 +164,11 @@ class LabDatabaseMigrator {
 
         db_change($this->lab_db_name);
 
-        query_blind("CREATE TABLE IF NOT EXISTS `blis_migrations` (
-            `name` varchar(255) NOT NULL,
-            PRIMARY KEY (`name`)
-        );");
-
         $query = "SELECT name FROM blis_migrations ORDER BY name ASC;";
 
         $results = query_associative_all($query);
 
-        if ($results === null) {
+        if (!$results) {
             $log->warn("Error querying migrations for database " . $this->lab_db_name);
             return array();
         }

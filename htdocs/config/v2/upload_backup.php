@@ -57,9 +57,6 @@ if (!rename($uploaded_tmp_path, $newpath)) {
     return;
 }
 
-$migrator = new LabDatabaseMigrator("blis_$lab_config_id");
-$migrator->apply_migrations();
-
 try {
     DbUtil::switchToLabConfig($lab_config_id);
     Backup::insert($lab_config_id, $uploaded_filename, $relpath);

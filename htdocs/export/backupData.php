@@ -67,9 +67,6 @@ if (Features::lab_config_v2_enabled()) {
     $base = basename($backup_path);
     $relpath = "backups/$base";
 
-    $migrator = new LabDatabaseMigrator("blis_$lab_config_id");
-    $migrator->apply_migrations();
-
     try {
         db_change("blis_$lab_config_id");
         Backup::insert($lab_config_id, $base, $relpath);
