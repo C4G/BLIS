@@ -70,11 +70,7 @@ $config_p4 = str_replace("--EQUIP_NAME--", $equipment_name, $current);
 
 //Concatenated file
 $config_file_content = $config_p1."\n".$config_p2."\n".$config_p3."\n".$config_p4;
-$interface_config_dir = $LOCAL_PATH . '/BLISInterfaceClient';
-if (!is_dir($interface_config_dir)) {
-    mkdir($interface_config_dir, 0755, true);
-}
-$file2 = $interface_config_dir . '/BLISInterfaceClient.ini';
+$file2 = '../BLISInterfaceClient/BLISInterfaceClient.ini';
 file_put_contents($file2, $config_file_content);
 
 ?>
