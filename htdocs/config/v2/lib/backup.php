@@ -48,7 +48,7 @@ class Backup {
 
         $version = $analyzed->version;
 
-        $query = "INSERT IGNORE INTO blis_backups (lab_config_id, filename, location, blis_version)
+        $query = "INSERT INTO blis_backups (lab_config_id, filename, location, blis_version)
                   VALUES('$escaped_lab','$escaped_filename','$escaped_location', '$version');";
 
         query_insert_one($query);
