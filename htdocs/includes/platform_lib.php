@@ -77,7 +77,15 @@ class PlatformLib {
 		return $result === 0;
 	}
 
-	public static function removeDirectory($dir)
+	public static function ensurePath($baseDir, $subdir = '', $mask = 0755) {
+        $path = $subdir !== '' ? $baseDir . '/' . $subdir : $baseDir;
+        if (!is_dir($path)) {
+            mkdir($path, $mask, true);
+        }
+        return $path;
+    }
+
+    public static function removeDirectory($dir)
     {
         $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new RecursiveIteratorIterator(

@@ -11,10 +11,7 @@ $country = $user->country;
 
 global $DB_HOST,$DB_USER,$DB_PASS,$DATA_DIR;
 
-$tmp_dir = $DATA_DIR . "/exports_tmp";
-if (!is_dir($tmp_dir)) {
-    mkdir($tmp_dir, 0700, true);
-}
+$tmp_dir = PlatformLib::ensurePath($DATA_DIR, 'exports_tmp', 0700);
 
 $mysqldumpPath = PlatformLib::mySqlDumpPath();
 $dbname = "blis_".$lab_config_id;

@@ -14,10 +14,7 @@ if ($_REQUEST['enable_billing']) {
     disable_billing();
 }
 
-$logos_dir = $STORAGE_DIR . "/logos";
-if (!is_dir($logos_dir)) {
-    mkdir($logos_dir, 0755, true);
-}
+$logos_dir = PlatformLib::ensurePath($STORAGE_DIR, 'logos');
 $name = $logos_dir . "/logo_billing_" . $lab_config_id . ".jpg";
 $success = move_uploaded_file($_FILES["billingLogo"]["tmp_name"], $name);
 $a = update_currency_name_in_lab_config_settings($_REQUEST['default_currency']);

@@ -6,10 +6,7 @@ putUILog('export_word', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X'
 
 $date = date("Ymdhi");
 
-$exports_dir = $STORAGE_DIR . "/files";
-if (!is_dir($exports_dir)) {
-    mkdir($exports_dir, 0755, true);
-}
+$exports_dir = PlatformLib::ensurePath($STORAGE_DIR, 'files');
 $html_tmp      = sys_get_temp_dir() . '/blisreport_' . $date . '.html';
 $file_base_name = $exports_dir . '/blisreport_' . $date;
 
