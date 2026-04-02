@@ -17,21 +17,24 @@ class KeyMgmt
      * Move it to the files/ folder, and then return the updated path.
      */
     public static function pathToKey($keyName) {
-        global $log;
+        global $log, $DATA_DIR;
         $log->debug("Looking for key: $keyName");
-        $ajax_dir = realpath(__DIR__ . "/../ajax/")."/";
-        $files_dir = realpath(__DIR__ . "/../../files/")."/";
+        $ajax_dir  = realpath(__DIR__ . "/../ajax/") . "/";
+        $keys_dir  = $DATA_DIR . "/";
 
-        if (file_exists("$ajax_dir/$keyName")) {
-            $log->warn("Found $keyName in ajax/ folder, moving it to htdocs/files/");
-            rename("$ajax_dir/$keyName", "$files_dir/$keyName");
+        if (file_exists($ajax_dir . $keyName)) {
+            $log->warn("Found $keyName in ajax/ folder, moving it to data directory");
+            if (!is_dir($DATA_DIR)) {
+                mkdir($DATA_DIR, 0700, true);
+            }
+            rename($ajax_dir . $keyName, $keys_dir . $keyName);
         }
 
-        if (file_exists("$files_dir/$keyName")) {
-            return "$files_dir/$keyName";
-	} else {
-	    $log->warn("$files_dir/$keyName does not exist");
-	}
+        if (file_exists($keys_dir . $keyName)) {
+            return $keys_dir . $keyName;
+        } else {
+            $log->warn($keys_dir . $keyName . " does not exist");
+        }
 
         $log->error("Could not find keyfile: $keyName");
         return false;

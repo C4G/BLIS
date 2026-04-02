@@ -47,8 +47,9 @@ $lab_config_backups_path = "/config/v2/lab_config_backups.php?id=$lab_config_id"
 $uploaded_filename = basename($_POST['confirmed_backup_filename']);
 $uploaded_tmp_path = $_POST['confirmed_backup_tmp_path'];
 
-$relpath = "storage/$uploaded_filename";
-$newpath = __DIR__."/../../../files/$relpath";
+global $DATA_DIR;
+$relpath = "backups/$uploaded_filename";
+$newpath = $DATA_DIR . "/$relpath";
 
 if (!rename($uploaded_tmp_path, $newpath)) {
     $_SESSION["FLASH"] = "Failed to upload $uploaded_filename.";

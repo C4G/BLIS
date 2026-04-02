@@ -294,20 +294,11 @@ for($i = 0; $i < count($margin_list); $i++) {
 						<?php
 						
 						# If hospital logo exists, include it
-						$logo_path = "../logos/logo_".$lab_config_id.".jpg";
-						$logo_path2 = "../ajax/logo_".$lab_config_id.".jpg";
-						$logo_path1="../../logo_".$lab_config_id.".jpg";
-						
-						if(file_exists($logo_path1) === true)
-						{	copy($logo_path1,$logo_path);
+						$logo_storage_path = $STORAGE_DIR . "/logos/logo_" . $lab_config_id . ".jpg";
+
+						if (file_exists($logo_storage_path)) {
 							?>
-							<img src='<?php echo "logos/logo_".$lab_config_id.".jpg"; ?>' alt="Big Boat" height='140px'    ></src>
-							<?php
-						}
-						else if(file_exists($logo_path) === true)
-						{
-						?>
-							<img src='<?php echo "logos/logo_".$lab_config_id.".jpg"; ?>' alt="Big Boat" height='140px' width='140px'></src>
+							<img src='<?php echo "logo_serve.php?id=" . $lab_config_id; ?>' alt="Big Boat" height='140px'></src>
 							<?php
 						}
 						?>
