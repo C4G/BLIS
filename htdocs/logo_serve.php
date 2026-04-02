@@ -20,22 +20,13 @@ if ($id <= 0) {
 $base    = $type ? "logo_{$type}_{$id}" : "logo_{$id}";
 $baseDir = $STORAGE_DIR . "/logos/";
 
-$mimeMap = [
-    'jpg'  => 'image/jpeg',
-    'jpeg' => 'image/jpeg',
-    'png'  => 'image/png',
-    'gif'  => 'image/gif',
-    'webp' => 'image/webp',
-    'svg'  => 'image/svg+xml',
-];
-
 $path = null;
 $mime = null;
-foreach ($mimeMap as $ext => $type_mime) {
-    $candidate = $baseDir . $base . '.' . $ext;
-    if (file_exists($candidate)) {
+foreach (glob($baseDir . $base . '.*') ?: [] as $candidate) {
+    $detected = mime_content_type($candidate);
+    if (str_starts_with($detected, 'image/')) {
         $path = $candidate;
-        $mime = $type_mime;
+        $mime = $detected;
         break;
     }
 }
