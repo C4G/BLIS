@@ -27,6 +27,7 @@ RUN add-apt-repository ppa:ondrej/php && apt-get update && \
         php$PHP_VERSION-zip \
         php$PHP_VERSION-mbstring \
         php$PHP_VERSION-xml \
+        unzip \
         && rm -rf /var/lib/apt/lists/*
 
 # This is a mysqldump configuration option required in this environment to
@@ -54,6 +55,7 @@ COPY docker/bin/start-blis.sh /usr/bin/start-blis
 # Copy all of the BLIS files into the container
 RUN mkdir /var/www/blis
 COPY . /var/www/blis
+
 RUN chown -R www-data:www-data /var/www && \
     chmod +x /var/log/apache2 && \
     chmod +r /var/log/apache2/* && \
