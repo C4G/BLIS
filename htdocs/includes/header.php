@@ -14,9 +14,7 @@ require_once(__DIR__."/../config/lab_config_resolver.php");
 # Session hack for pages that use the header
 # Make sure $_SESSION["lab_config_id"] is set... something really hates the session
 # and is constantly overwriting lab_config_id. Can't figure out where.
-if (isset($_SESSION['user_id'])) {
-    $_SESSION["lab_config_id"] = LabConfigResolver::resolveId();
-}
+$_SESSION["lab_config_id"] = LabConfigResolver::resolveId();
 
 $TRACK_LOADTIME = false;
 $TRACK_LOADTIMEJS = false;
@@ -98,7 +96,7 @@ if (isset($_SESSION['username'])) {
     }
 
 
-    if (isset($_SESSION['user_level']) && intval($_SESSION['user_level']) >= 3 && (!isset($_SESSION['admin_as_tech']) || $_SESSION['admin_as_tech'] !== true)) {
+    if (intval($_SESSION['user_level']) >= 3 && (!isset($_SESSION['admin_as_tech']) || $_SESSION['admin_as_tech'] !== true)) {
     ?>
         <a href="/debug.php" class="black">Debug Tools</a> |
     <?php

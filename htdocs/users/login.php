@@ -1,7 +1,4 @@
 <?php
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
 require_once(__DIR__."/../includes/composer.php");
 include("redirect.php");
 include("includes/stats_lib.php");
@@ -20,9 +17,7 @@ CONTENT="1; URL=http://{$_SERVER['SERVER_ADDR']}:4001/login.php">
 content;
 file_put_contents($file, $content);
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
+session_start();
 # If already logged in, redirect to home page
 if(isset($_SESSION['user_id']))
 {

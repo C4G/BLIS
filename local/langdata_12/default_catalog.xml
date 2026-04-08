@@ -36,10 +36,6 @@
 		<term>
 			<key>10</key>
 			<value>Bacteriology</value>
-		</term>		
-		<term>
-			<key>12</key>
-			<value>parasitology</value>
 		</term>	
 	</entity>	
 	<entity id="test" descr="Test Type">		
@@ -97,7 +93,7 @@
 		</term>		
 		<term>
 			<key>20</key>
-			<value>Total Bilirubin</value>
+			<value>Total Birilubin</value>
 		</term>		
 		<term>
 			<key>21</key>
@@ -125,7 +121,7 @@
 		</term>		
 		<term>
 			<key>27</key>
-			<value>Total Cholesterol</value>
+			<value>Cholesterol</value>
 		</term>		
 		<term>
 			<key>28</key>
@@ -173,7 +169,7 @@
 		</term>		
 		<term>
 			<key>39</key>
-			<value>Full Blood Count</value>
+			<value>Complete Blood Count</value>
 		</term>		
 		<term>
 			<key>40</key>
@@ -217,7 +213,7 @@
 		</term>		
 		<term>
 			<key>51</key>
-			<value>Erythrocyte Sedimentation Rate (ESR)</value>
+			<value>ESR (Sed rate)</value>
 		</term>		
 		<term>
 			<key>52</key>
@@ -328,48 +324,12 @@
 			<value>T-Lymphocytes CD4</value>
 		</term>		
 		<term>
-			<key>88</key>
-			<value>examen bacteriologique</value>
-		</term>		
-		<term>
-			<key>89</key>
-			<value>Culture</value>
-		</term>		
-		<term>
 			<key>90</key>
-			<value>Alb</value>
+			<value>123 Sample</value>
 		</term>		
 		<term>
 			<key>91</key>
-			<value>Sugar</value>
-		</term>		
-		<term>
-			<key>92</key>
-			<value>ASLO</value>
-		</term>		
-		<term>
-			<key>93</key>
-			<value>Widal</value>
-		</term>		
-		<term>
-			<key>94</key>
-			<value>PSA</value>
-		</term>		
-		<term>
-			<key>95</key>
-			<value>chlamydia</value>
-		</term>		
-		<term>
-			<key>96</key>
-			<value>H.pylori</value>
-		</term>		
-		<term>
-			<key>97</key>
-			<value>Pregnancy test</value>
-		</term>		
-		<term>
-			<key>98</key>
-			<value>Blood filaria</value>
+			<value>Culture</value>
 		</term>	
 	</entity>	
 	<entity id="measure" descr="Measures">		
@@ -451,11 +411,11 @@
 		</term>		
 		<term>
 			<key>21</key>
-			<value>NA+</value>
+			<value>NA</value>
 		</term>		
 		<term>
 			<key>22</key>
-			<value>K+</value>
+			<value>K</value>
 		</term>		
 		<term>
 			<key>23</key>
@@ -467,7 +427,7 @@
 		</term>		
 		<term>
 			<key>25</key>
-			<value>T. Chol</value>
+			<value>CHOL</value>
 		</term>		
 		<term>
 			<key>26</key>
@@ -675,7 +635,7 @@
 		</term>		
 		<term>
 			<key>88</key>
-			<value>Random Blood Sugar</value>
+			<value>Blood Sugar</value>
 		</term>		
 		<term>
 			<key>87</key>
@@ -711,47 +671,47 @@
 		</term>		
 		<term>
 			<key>94</key>
-			<value>indicateur</value>
+			<value>sample1</value>
 		</term>		
 		<term>
 			<key>95</key>
-			<value>Indicator</value>
+			<value>sample1</value>
 		</term>		
 		<term>
 			<key>96</key>
-			<value>albumin</value>
+			<value>12</value>
 		</term>		
 		<term>
 			<key>97</key>
-			<value>Sugar</value>
+			<value>13</value>
 		</term>		
 		<term>
 			<key>98</key>
-			<value>ASLO</value>
+			<value>14</value>
 		</term>		
 		<term>
 			<key>99</key>
-			<value>Widal</value>
+			<value>12</value>
 		</term>		
 		<term>
 			<key>100</key>
-			<value>PSA</value>
+			<value>13</value>
 		</term>		
 		<term>
 			<key>101</key>
-			<value>chlamydia</value>
+			<value>12</value>
 		</term>		
 		<term>
 			<key>102</key>
-			<value>H.pylori</value>
+			<value>13</value>
 		</term>		
 		<term>
 			<key>103</key>
-			<value>Pregnancy test</value>
+			<value>14</value>
 		</term>		
 		<term>
 			<key>104</key>
-			<value>Blood filaria</value>
+			<value>Bacteria</value>
 		</term>	
 	</entity>	
 	<entity id="specimen" descr="Specimen Types">		
@@ -808,8 +768,8 @@
 			<value>Plasma EDTA</value>
 		</term>		
 		<term>
-			<key>21</key>
-			<value>V/S</value>
+			<key>19</key>
+			<value>Urine</value>
 		</term>	
 	</entity>	
 </catalog>

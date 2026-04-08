@@ -39,11 +39,11 @@ if ($unauthorized) {
 $lab_config = LabConfig::getById($lab_id);
 $custom_field_list = $lab_config->getPatientCustomFields();
 
-echo "[";
 foreach($custom_field_list as $idx => $custom_field) {
     echo '{ "id": '.$custom_field->id.', "fieldName": "'.$custom_field->fieldName.'" }';
-    if ($idx < count($custom_field_list) - 1) {
+    if ($idx < count($output_fields) - 1) {
         echo ",\n";
     }
 }
+
 echo "\n]";

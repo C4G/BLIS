@@ -49,7 +49,6 @@ class LabConfigResolver {
             }
         }
 
-        $current_user_id = $_SESSION["user_id"] ?? "none";
-        $log->debug("Could not resolve lab_config_id. Logged in user ID: " . $current_user_id);
+        $log->warn("Could not resolve lab_config_id. Logged in user ID: " . $_SESSION["user_id"]);
     }
 }

@@ -138,5 +138,6 @@ $patient->satelliteLabName = get_satellite_lab_name_by_satellite_lab_id($satelli
 $patient->createdBy = $_SESSION['user_id'];
 update_daily_number_registration();
 $patient_added = add_patient($patient);
+echo json_encode($patient_data);
 SessionUtil::restore($saved_session);
 ?>

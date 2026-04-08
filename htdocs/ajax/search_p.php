@@ -24,7 +24,6 @@ $q = strip_tags($q);
 $a = $_REQUEST['a'];
 $saved_db = "";
 $lab_config = null;
-$patient = null;
 $uiinfo = "op=".$a."&qr=".$q;
 
 $c = $_REQUEST['c'];
@@ -204,7 +203,7 @@ else if( (count($patient_list) == 0 || $patient_list[0] == null) && ($patient !=
 			if($lab_config->pid != 0)
 			{
 				$patient_id =$patient->getSurrogateId();
-				if ($patient_id == null || $patient_id == "") {
+				if ($patient_id == undefined) {
 					$patient_id = "*";
 				}
 				?>
