@@ -28,6 +28,18 @@ on:
         required: false
         default: true
         type: boolean
+      version:
+        description: 'Release version (SemVer format, e.g. 4.1.0, 4.1.0-beta.1, 4.1.0-beta.1-hotfix). Do not include a leading "v".'
+        required: true
+        type: string
+      push_tag:
+        description: 'Create and push git tag to BLIS repo after build'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -65,12 +77,38 @@ jobs:
           cache: true
           cache-dependency-path: 'BLIS-NG/packages.lock.json'
           
+      - name: Compute Version
+        id: versioning
+        shell: bash
+        run: |
+          # Strip whitespace and an accidental leading v/V
+          VERSION="${{ inputs.version }}"
+          VERSION="${VERSION#[vV]}"
+
+          # Validate: MAJOR.MINOR.PATCH with optional -prerelease and optional -suffix
+          # Each numeric component must be 0 or a positive integer with no leading zeros.
+          SEMVER_RE='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(-[A-Za-z0-9]+(\.[A-Za-z0-9]+)*)?)?$'
+          if [[ -z "$VERSION" ]]; then
+            echo "ERROR: version input is empty." >&2
+            exit 1
+          fi
+          if ! [[ "$VERSION" =~ $SEMVER_RE ]]; then
+            echo "ERROR: '$VERSION' is not a valid SemVer version." >&2
+            echo "Expected format: MAJOR.MINOR.PATCH[-prerelease[-suffix]]  e.g. 4.1.0 or 4.1.0-beta.1 or 4.1.0-beta.1-hotfix" >&2
+            exit 1
+          fi
+
+          TAG_NAME="v${VERSION}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag_name=${TAG_NAME}" >> "$GITHUB_OUTPUT"
+          echo "Validated version: ${VERSION}  (tag: ${TAG_NAME})"
+
       - name: Generate version.json
         shell: bash
         run: |
           cat > BLIS/version.json << EOF
           {
-            "version": "dev",
+            "version": "${{ steps.versioning.outputs.version }}",
             "build_timestamp": "$(date -u +%Y%m%d-%H%M%S)",
             "git_sha": "$(git -C BLIS rev-parse --short HEAD)",
             "min_launcher_version": "1.0.0"
@@ -160,3 +198,13 @@ jobs:
         with:
           name: BLIS-Update
           path: blis-update.zip
+
+      - name: Push Git Tag
+        if: ${{ inputs.push_tag == true }}
+        shell: bash
+        run: |
+          TAG="${{ steps.versioning.outputs.tag_name }}"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git -C BLIS tag "$TAG"
+          git -C BLIS push origin "$TAG"
