@@ -10,7 +10,10 @@
 
 ## Step 3: The reset is a role-based privilege, so please enter a supervisor account’s username and password.
 
-## Step 4: Click "Reset"
+![Enter admin username and password](../images/spring_2026/password-reset3.png)
+
+
+## Step 4: Click "Confirm Reset"
 A success message will confirm that the password reset is complete.
 
 ## Step 5: Use the new password and login to BLIS
