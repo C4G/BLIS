@@ -66,6 +66,18 @@ Current manual updates (copy-pasting ZIP contents) often result in a mix of old 
 2. Initial Evaluation survey: [Initial Experience Evaluation for BLIS Modernization Features](https://forms.office.com/r/td9Rqjsyv4)
 3. Troubleshooting contact: Haki Atalov or Ranjini Unnikrishnan on Microsoft teams
 
+## Partner Statement
+For our submission we must indicate the following as of 2026-04-19: 
+1. The partner understands the basics of the developer documentation
+2. The partner will not use deliverable at this time**
+
+For our documentation and final deliverable, we have all feature code in the `unstable` branch for the BLIS and BLIS-NG repos. There is an open PR to merge this branch into main and allow for deployment at a pilot lab. A final verdict of "The partner will not use deliverable at this time**" with asterisk is provided because the features will have to be merged and piloted. They are not generally available for existing labs.
+
+All documentation is in the `s2026-p3-project-webpage` branch with an open PR against main. Given the provided installation walkthrough statement and close collaboration with our BLIS partners, we believe the partner understands the basics of the developer documentation and how the features work. 
+
+## Installation Walkthrough Statement
+Our main partner, Sidney, performed a walkthrough of our features and provided feedback on 2026-04-08. He reviewed Password Reset, Self-Update, and PHP 7 related bug fixes in critical patient flows. This was done as part of our field evaluation effort. We completed our field evaluation in two stages: 1. With the professor and instructional staff, 2. Async with Sidney. This async evaluation serves as our walkthrough. 
+
 ## Lighthouse Scores
 
 - Performance: 97
