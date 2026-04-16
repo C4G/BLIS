@@ -59,7 +59,7 @@ The update feature is spread across a small number of files.
 
 ## High Level Architecture Diagram:
 
-# BLIS-NG Self-Update Data Flow
+### BLIS-NG Self-Update Data Flow
 
 ```
 User selects ZIP file via "More Options" → "Update with ZIP File"
@@ -137,7 +137,7 @@ User selects ZIP file via "More Options" → "Update with ZIP File"
               └───────────────────────┘
 ```
 
-## Understanding the Flow
+### Understanding the Flow
 
 When the user clicks "Update with ZIP File", `ServerControlViewModel` opens a native file picker filtered to `.zip` files. Once a file is selected, it creates an `UpdateProgressViewModel` and an `UpdateProgressWindow`, then calls `StartUpdate()`.
 
