@@ -183,7 +183,7 @@ Database backup lives in `CreateAutomatedDatabaseBackup()`. Server backup is don
 
 ### What you need
 
-- A release ZIP from the BLIS project's build pipeline (or a local build output from local release script)
+- A `blis-update.zip` from the `Build Release` GitHub Actions workflow (build-release.yml), or a locally built equivalent. See the Build and Release Workflow section for how to run the workflow and which inputs to use.
 - The ZIP must contain `version.json`, `BLIS-NG.exe`, and a `server/` directory
 - The version in the ZIP must be different from the currently running version
 
@@ -191,6 +191,7 @@ Database backup lives in `CreateAutomatedDatabaseBackup()`. Server backup is don
 
 1. Build or grab an update ZIP from the BLIS project release
 2. Launch BLIS-NG
+    >If launching from an IDE or CLI rather than a packaged installation, pass --WorkingDirectory <path> pointing to your local BLIS-Standalone directory. Without this, the launcher won't know where to find state.json, releases/, or the other runtime directories, and the update will fail to locate required paths. ConfigurationFile.ResolveBaseDirectory() is what reads this argument on startup.
 3. Click "More Options" in the main window
 4. Click "Update with ZIP File"
 5. Pick the ZIP in the file dialog
