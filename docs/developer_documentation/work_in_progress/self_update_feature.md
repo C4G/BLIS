@@ -223,35 +223,6 @@ Update activity goes to `{baseDir}/log/blis_ng_{date}.log`. Look for entries fro
 
 ## Build and Release Workflow
 
-Releases are produced by the `Build Release` GitHub Actions workflow (`build-release.yml`), which is triggered manually via `workflow_dispatch`. It pulls from three repositories -- `C4G/BLIS`, `C4G/BLISRuntime`, and `C4G/BLIS-NG` -- and produces two downloadable artifacts.
+Releases are produced by the `Build Release` GitHub Actions workflow (`build-release.yml`), triggered manually via `workflow_dispatch`. It pulls from three repositories (`C4G/BLIS`, `C4G/BLISRuntime`, and `C4G/BLIS-NG`) and produces two artifacts: `BLIS-Standalone.zip` (the full installation package) and `blis-update.zip` (the update payload used by the in-app updater).
 
-**Inputs**
-
-| Input | Description |
-|---|---|
-| `blis_branch` / `blisruntime_branch` / `blisng_branch` | Branch to build from for each repo. Defaults to `main`. |
-| `version` | SemVer string (e.g. `4.1.0`, `4.1.0-beta.1`). No leading `v`. Validated at build time. |
-| `include_launcher` | Whether to include `BLIS-NG.exe` in the update ZIP. |
-| `include_server_runtime` | Whether to include `server/` binaries in the update ZIP. |
-| `push_tag` | If true, tags the BLIS repo with `v{version}` after a successful build. |
-
-**Artifacts**
-
-`BLIS-Standalone.zip` is the full installation package. It is built with the complete directory structure described above, including a generated `state.json` with `active_version` set to the build version and `previous_version` set to null.
-
-`blis-update.zip` is the update payload -- the ZIP a user selects when running "Update with ZIP File" in the launcher. It contains the new app files (`htdocs`, `db`, `vendor`, `local`, `version.json`) and optionally the server runtime and/or launcher, depending on what changed. The `include_launcher` and `include_server_runtime` inputs control this. This is what the Stage 2 validation in `UpdateProgressViewModel` checks the contents of.
-
-**version.json**
-
-The workflow generates `version.json` at build time and embeds it into both artifacts. Its schema is:
-
-```json
-{
-  "version": "4.1.0",
-  "build_timestamp": "20250415-183000",
-  "git_sha": "a1b2c3d",
-  "min_launcher_version": "1.0.0"
-}
-```
-
-`min_launcher_version` is reserved for future compatibility enforcement. `VersionFile` in `Config/StateFile.cs` reads this file out of the update ZIP during Stage 2 validation.
+For full details on inputs, artifact contents, and how to run the workflow, see the [BLIS Release Pipeline](blis_release_pipeline.md) document.
