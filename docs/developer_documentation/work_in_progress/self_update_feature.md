@@ -2,7 +2,40 @@
 
 ## How It Works
 
-The self-update is a laucher based and user-initiated process. There is no auto-update or remote version check. The user manually selects a ZIP file containing a new release from their local storage (they can download the new release beforehand), and the app walks through a 10-stage pipeline to replace itself while preserving data.
+The self-update is a launcher based and user-initiated process. There is no auto-update or remote version check. The user manually selects a ZIP file containing a new release from their local storage (they can download the new release beforehand), and the app walks through a 10-stage pipeline to replace itself while preserving data.
+
+## Directory Structure
+
+The self-update feature introduced a new directory layout for BLIS standalone installations. Understanding this structure is important because the update pipeline depends on it directly.
+
+```
+BLIS-Standalone/
+├── BLIS-NG.exe           # Launcher executable (root level)
+├── state.json            # Tracks active_version and previous_version
+├── releases/
+│   └── <version>/        # One directory per installed version
+│       ├── htdocs/
+│       ├── db/
+│       ├── vendor/
+│       ├── local/
+│       └── version.json
+├── server/               # Apache2 + MySQL runtime binaries (from BLISRuntime)
+├── dbdir/                # MySQL data directory
+├── local/                # Working config (copy of defaults, may diverge over time)
+├── storage/              # Runtime file writes from htdocs
+├── data/
+│   └── backups/          # Timestamped DB and server backups created during updates
+├── log/                  # Launcher and server logs
+└── staging/              # Temporary extraction target during an update (cleaned up on restart)
+```
+
+Key things to know:
+
+- `releases/` is versioned. Each update adds a new subdirectory rather than overwriting the previous one. `state.json` tells the launcher which version is active. This is what makes rollback possible in the future.
+- `server/` lives at the root, not inside a release directory, because the server runtime is updated independently and is shared across versions.
+- `local/` at the root holds the working config. The copy inside each `releases/<version>/local/` is the default config shipped with that version and is not used directly at runtime.
+- `storage/` exists because htdocs file writes were moved out of the versioned release directory to keep release directories read-only after installation.
+- `staging/` is where update ZIPs are extracted before any files are moved. It is deleted on the next launcher startup, not during the update itself.
 
 ## Code Layout
 
@@ -24,7 +57,7 @@ The update feature is spread across a small number of files.
 
 **App.axaml.cs** calls `StartupCleanup()` on launch to remove leftover artifacts from the previous update.
 
-## High Level Architechture Diagram:
+## High Level Architecture Diagram:
 
 # BLIS-NG Self-Update Data Flow
 
@@ -186,3 +219,38 @@ Database backup lives in `CreateAutomatedDatabaseBackup()`. Server backup is don
 ### Checking logs
 
 Update activity goes to `{baseDir}/log/blis_ng_{date}.log`. Look for entries from `UpdateProgressViewModel` to trace the full update flow.
+
+## Build and Release Workflow
+
+Releases are produced by the `Build Release` GitHub Actions workflow (`build-release.yml`), which is triggered manually via `workflow_dispatch`. It pulls from three repositories -- `C4G/BLIS`, `C4G/BLISRuntime`, and `C4G/BLIS-NG` -- and produces two downloadable artifacts.
+
+**Inputs**
+
+| Input | Description |
+|---|---|
+| `blis_branch` / `blisruntime_branch` / `blisng_branch` | Branch to build from for each repo. Defaults to `main`. |
+| `version` | SemVer string (e.g. `4.1.0`, `4.1.0-beta.1`). No leading `v`. Validated at build time. |
+| `include_launcher` | Whether to include `BLIS-NG.exe` in the update ZIP. |
+| `include_server_runtime` | Whether to include `server/` binaries in the update ZIP. |
+| `push_tag` | If true, tags the BLIS repo with `v{version}` after a successful build. |
+
+**Artifacts**
+
+`BLIS-Standalone.zip` is the full installation package. It is built with the complete directory structure described above, including a generated `state.json` with `active_version` set to the build version and `previous_version` set to null.
+
+`blis-update.zip` is the update payload -- the ZIP a user selects when running "Update with ZIP File" in the launcher. It contains the new app files (`htdocs`, `db`, `vendor`, `local`, `version.json`) and optionally the server runtime and/or launcher, depending on what changed. The `include_launcher` and `include_server_runtime` inputs control this. This is what the Stage 2 validation in `UpdateProgressViewModel` checks the contents of.
+
+**version.json**
+
+The workflow generates `version.json` at build time and embeds it into both artifacts. Its schema is:
+
+```json
+{
+  "version": "4.1.0",
+  "build_timestamp": "20250415-183000",
+  "git_sha": "a1b2c3d",
+  "min_launcher_version": "1.0.0"
+}
+```
+
+`min_launcher_version` is reserved for future compatibility enforcement. `VersionFile` in `Config/StateFile.cs` reads this file out of the update ZIP during Stage 2 validation.
