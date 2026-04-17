@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y software-properties-common && \
         apache2 \
         curl \
         mysql-client \
+        pandoc \
         unzip \
         zip \
         php$PHP_VERSION \
