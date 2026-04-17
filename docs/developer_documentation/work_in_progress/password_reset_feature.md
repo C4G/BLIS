@@ -23,7 +23,7 @@ Passwords are hashed with SHA-1 before being stored or compared. A static salt s
 
 ## Architecture
 
-![Password reset architecure diagram](../images/spring_2026/arch-diagram-password-reset.png)
+![Password reset architecure diagram](../../images/spring_2026/arch-diagram-password-reset.png)
 
 ## Data Flow
 
@@ -45,6 +45,7 @@ ToolsWindowViewModel is a lightweight shell that holds PasswordResetViewModel as
 
 New Files added:
 
+```
 Server/
 ├── Mysql.cs
 
@@ -57,6 +58,7 @@ Views/
 ├── PasswordResetDialog.axaml.cs
 ├── ToolsWindow.axaml
 ├── ToolsWindow.axaml.cs
+```
 
 ## Testing
 
