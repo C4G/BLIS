@@ -104,7 +104,8 @@ if ($action == "connect") {
     $backup_filename = $_FILES["backup_file"]["name"];
     $backup_tmp_path = $_FILES["backup_file"]["tmp_name"];
 
-    $backup_location = realpath(__DIR__."/../../../files/storage/");
+    global $DATA_DIR;
+    $backup_location = $DATA_DIR . "/backups";
     // Format is: blis_backup_cloud_[lab config ID]_[date of backup]_[date of upload].zip
     $backup_filename = "blis_backup_cloud_".$lab_config_id."_" .
                        date("Ymd-His", $backup_date) . "_" . date("Ymd-His")  . ".zip";
@@ -119,7 +120,7 @@ if ($action == "connect") {
     }
 
     db_change($lab_db_name);
-    $backup = Backup::insert($lab_config_id, $backup_filename, "storage/$backup_filename");
+    $backup = Backup::insert($lab_config_id, $backup_filename, "backups/$backup_filename");
 
     $connection->last_backup_time = strftime("%s");
     $ip = "";

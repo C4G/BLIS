@@ -16,7 +16,13 @@ class PlatformLib {
 		if(self::runningOnWindows()) {
 			// If running on Windows, assume that we're running the portable/traditional
 			// version of BLIS, and use the bundled mysqldump.
-			$exe_path = realpath(dirname(__FILE__)."/../../server/mysql/bin/mysqldump.exe");
+			// DATA_DIR is e.g. C:\BLIS\data, so its parent is the BLIS root.
+			$data_dir = getenv("DATA_DIR");
+			if ($data_dir) {
+				$exe_path = dirname($data_dir) . "/server/mysql/bin/mysqldump.exe";
+			} else {
+				$exe_path = realpath(dirname(__FILE__)."/../../server/mysql/bin/mysqldump.exe");
+			}
             // https://www.php.net/manual/en/function.escapeshellcmd.php
             return preg_replace('`(?<!^) `', '^ ', escapeshellcmd('"'.$exe_path.'"'));
 		} else {
@@ -31,7 +37,12 @@ class PlatformLib {
 		if(self::runningOnWindows()) {
 			// If running on Windows, assume that we're running the portable/traditional
 			// version of BLIS, and use the bundled mysql.
-            $exe_path = realpath(dirname(__FILE__)."\..\..\server\mysql\bin\mysql.exe");
+			$data_dir = getenv("DATA_DIR");
+			if ($data_dir) {
+				$exe_path = dirname($data_dir) . "/server/mysql/bin/mysql.exe";
+			} else {
+				$exe_path = realpath(dirname(__FILE__)."\..\..\server\mysql\bin\mysql.exe");
+			}
 			return preg_replace('`(?<!^) `', '^ ', escapeshellcmd('"'.$exe_path.'"'));
 		} else {
 			// Otherwise, assume that mysql is in the system PATH.
@@ -66,9 +77,17 @@ class PlatformLib {
 		return $result === 0;
 	}
 
-	public static function removeDirectory($dir)
+	public static function ensurePath($baseDir, $subdir = '', $mask = 0755) {
+        $path = $subdir !== '' ? $baseDir . '/' . $subdir : $baseDir;
+        if (!is_dir($path)) {
+            mkdir($path, $mask, true);
+        }
+        return $path;
+    }
+
+    public static function removeDirectory($dir)
     {
-        $it = new RecursiveDirectoryIterator($dir);//, RecursiveDirectoryIterator::SKIP_DOTS);
+        $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new RecursiveIteratorIterator(
             $it,
             RecursiveIteratorIterator::CHILD_FIRST

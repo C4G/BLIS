@@ -6,6 +6,10 @@
 # https://github.com/PHPOffice/PHPExcel/blob/1.8/Documentation/markdown/Overview/08-Recipes.md#http-headers
 # Ensure that these files are _not_ encoded as "UTF-8 with BOM" (Byte Order Mark)
 # since that also counts. They should be "UTF-8".
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
 require_once("../includes/composer.php");
 require_once("../includes/db_lib.php");
 require_once("../includes/db_util.php");
@@ -47,9 +51,9 @@ $lab = query_associative_one($lab_db_name_query);
 $start_date = intval($_REQUEST['yyyy_from'])."-".intval($_REQUEST['mm_from'])."-".intval($_REQUEST['dd_from']);
 $end_date = intval($_REQUEST['yyyy_to'])."-".intval($_REQUEST['mm_to'])."-".intval($_REQUEST['dd_to']);
 
-$test_type_ids = $_REQUEST['test_types'];
-$patient_custom_fields = $_REQUEST['patient_custom_fields'];
-$specimen_custom_fields = $_REQUEST['specimen_custom_fields'];
+$test_type_ids = isset($_REQUEST['test_types']) ? $_REQUEST['test_types'] : array();
+$patient_custom_fields = isset($_REQUEST['patient_custom_fields']) ? $_REQUEST['patient_custom_fields'] : array();
+$specimen_custom_fields = isset($_REQUEST['specimen_custom_fields']) ? $_REQUEST['specimen_custom_fields'] : array();
 
 $include_name = ($_REQUEST["include_patient_name"] == "true");
 $include_sex = ($_REQUEST["include_patient_sex"] == "true");
@@ -115,7 +119,13 @@ array_push($fields, "t.result AS test_result");
 
 $fields_sql = implode(", ", $fields);
 
-$objPHPExcel = new PHPExcel();
+$objPHPExcel = new Spreadsheet();
+
+// Send the spreadsheet directly to the browser
+// Do not echo() or output anything else below this line!
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment;filename="report.xlsx"');
+header('Cache-Control: max-age=0');
 
 foreach($test_type_ids as $tt_idx => $test_type_id) {
 
@@ -184,11 +194,12 @@ EOQ;
     }
 
     foreach($headers as $index => $header) {
-        $sheet->setCellValueByColumnAndRow($index, 1, $header);
+        // PhpSpreadsheet uses 1-based column indexing (unlike PHPExcel which was 0-based)
+        $sheet->setCellValueByColumnAndRow($index + 1, 1, $header);
     }
 
     foreach($measure_headers as $index => $header) {
-        $sheet->setCellValueByColumnAndRow(count($headers) + $index, 1, $header);
+        $sheet->setCellValueByColumnAndRow(count($headers) + $index + 1, 1, $header);
     }
 
     $total_columns = count($headers) + count($measure_headers);
@@ -212,19 +223,28 @@ EOQ;
                 $value = get_custom_data_specimen_fieldvalue($value, $input_field_value);
             }
 
-            $sheet->setCellValueByColumnAndRow($col, $row_index + 2, $value);
+            $sheet->setCellValueByColumnAndRow($col + 1, $row_index + 2, $value);
             $col = $col + 1;
         }
         $test_result_split = explode(",", $test_result);
         foreach($test_result_split as $result) {
-            $sheet->setCellValueByColumnAndRow($col, $row_index + 2, $result);
+            $sheet->setCellValueByColumnAndRow($col + 1, $row_index + 2, $result);
             $col = $col + 1;
             if ($col >= $total_columns) break;
         }
     }
 }
 
-$objPHPExcel->removeSheetByIndex(0);
+// Remove the default empty sheet created by new Spreadsheet().
+// Only safe to do if the loop actually added at least one sheet.
+if ($objPHPExcel->getSheetCount() > 1) {
+    $objPHPExcel->removeSheetByIndex(0);
+} else if ($objPHPExcel->getSheetCount() == 1 && $objPHPExcel->getSheet(0)->getTitle() == 'Worksheet') {
+    // No test types had results — the only sheet is the default blank one.
+    // Rename it so the user sees a clear message instead of a corrupt file.
+    $objPHPExcel->getSheet(0)->setTitle('No Data');
+    $objPHPExcel->getSheet(0)->setCellValue('A1', 'No results found for the selected test types and date range.');
+}
 
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+$objWriter = IOFactory::createWriter($objPHPExcel, 'Xlsx');
 $objWriter->save("php://output");

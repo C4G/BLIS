@@ -68,7 +68,8 @@ class DebugLib
 
 			# Adds current query to log
 			date_default_timezone_set("UTC");
-			$file_name = __DIR__."/../../local/log_".$lab_config_id.".txt";
+			global $LOCAL_PATH;
+			$file_name = $LOCAL_PATH."/log_".$lab_config_id.".txt";
 			$file_handle = null;
 			if(file_exists($file_name))
 				$file_handle = fopen($file_name, "a");
@@ -94,8 +95,9 @@ class DebugLib
 			}
 
 			# Adds current query to update log
-			$file_name = __DIR__."/../../local/log_".$lab_config_id."_updates.sql";
-			$file_name_revamp = __DIR__."/../../local/log_".$lab_config_id."_revamp_updates.sql";
+			global $LOCAL_PATH;
+			$file_name = $LOCAL_PATH."/log_".$lab_config_id."_updates.sql";
+			$file_name_revamp = $LOCAL_PATH."/log_".$lab_config_id."_revamp_updates.sql";
 			$file_handle = null;
 			$file_handle_revamp = null;
 

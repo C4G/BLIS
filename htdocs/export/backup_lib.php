@@ -130,13 +130,17 @@ class BackupLib
      */
     public static function performBackup($lab_config_id, $include_langdata=true, $encryption_key=false)
     {
-        global $log, $con, $DB_HOST, $DB_PORT, $DB_USER, $DB_PASS;
+        global $log, $con, $DB_HOST, $DB_PORT, $DB_USER, $DB_PASS, $DATA_DIR, $LOG_DIR;
         $encryption_enabled = !!$encryption_key;
 
         $lab_db = "blis_$lab_config_id";
 
         // Create backup directory structure
-        $backup_dir = "../../files/backups/blis_backup_" . $lab_db . "_" . date("Ymd-His");
+        $backups_path = $DATA_DIR . "/backups";
+        if (!is_dir($backups_path)) {
+            mkdir($backups_path, 0700, true);
+        }
+        $backup_dir = $backups_path . "/blis_backup_" . $lab_db . "_" . date("Ymd-His");
         mkdir($backup_dir, 0700, true);
         mkdir("$backup_dir/$lab_db/", 0700, false);
         mkdir("$backup_dir/blis_revamp/", 0700, false);
@@ -247,7 +251,8 @@ class BackupLib
         }
 
         // Add language data files to backup folder
-        $lab_langdata = "../../local/langdata_$lab_config_id";
+        global $LOCAL_PATH;
+        $lab_langdata = $LOCAL_PATH."/langdata_$lab_config_id";
         if ($handle = opendir($lab_langdata)) {
             while (false !== ($file = readdir($handle))) {
                 if ($file === "." || $file == "..") {
@@ -277,7 +282,7 @@ class BackupLib
 
         self::createZipFile($zipFile, realpath($backup_dir));
 
-        $new_path = dirname(__FILE__)."/../../files/backups/".basename($zipFile);
+        $new_path = $backups_path . "/" . basename($zipFile);
         rename($zipFile, $new_path);
 
         // Removes the backup directory in files/
@@ -294,11 +299,11 @@ class BackupLib
     {
         // TODO: Can't determine if the backups are compatible from an encryption POV
         # Returns a list of all backup folders available on main dir
-        global $log;
+        global $log, $DATA_DIR;
         $backups = array();
-        $searchPath = dirname(__FILE__)."/../../files/backups";
-        if (!file_exists($searchPath)) {
-            mkdir($searchPath, 0600);
+        $searchPath = $DATA_DIR . "/backups";
+        if (!is_dir($searchPath)) {
+            mkdir($searchPath, 0700, true);
         }
 
         if ($handle = opendir($searchPath)) {

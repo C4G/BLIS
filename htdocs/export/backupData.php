@@ -54,15 +54,7 @@ if (Features::lab_config_v2_enabled()) {
     $lab_config_backups_path = "/config/v2/lab_config_backups.php?id=$lab_config_id";
 
     $base = basename($backup_path);
-    $oldpath = realpath(__DIR__."/../../files/backups/$base");
-    $relpath = "storage/$base";
-    $newpath = __DIR__."/../../files/$relpath";
-
-    if (!rename($oldpath, $newpath)) {
-        $_SESSION["FLASH"] = "Could not move $oldpath to $newpath.";
-        header("Location: $lab_config_backups_path");
-        exit;
-    }
+    $relpath = "backups/$base";
 
     try {
         db_change("blis_$lab_config_id");

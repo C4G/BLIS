@@ -45,7 +45,8 @@ if($_REQUEST['Clinical_Data'] == 'Y')
 	$ClinicalData = 1;
 else
 	$ClinicalData = 0;
-$name="../../logo_".$lab_config_id.".jpg";
+$logos_dir = PlatformLib::ensurePath($STORAGE_DIR, 'logos');
+$name = $logos_dir . "/logo_" . $lab_config_id . ".jpg";
 # Header text
 $align_header=array();
 $align_header[0]=db_escape($_REQUEST['header']);

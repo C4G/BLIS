@@ -6,7 +6,10 @@ The Basic Laboratory Information System (BLIS) is the flagship initiative of Com
 
 Our team is collaborating with the Ministry of Health and National Public Health Labs to modernize the platform. While the partner's goal is a transition to a cloud-based, bi-directional system, significant infrastructure challenges currently block progress.
 
-Our mission this semester is to bridge this gap by upgrading the legacy PHP core, securing the system with local password recovery tools, and implementing a reliable self-update mechanism that functions even in resource-constrained environments. 
+Our mission this semester is to bridge this gap by upgrading the legacy PHP core, securing the system with local password recovery tools, and implementing a reliable self-update mechanism that functions even in resource-constrained environments.
+
+## Assignment Links
+- [P6-Demo Presentation](https://gtvault-my.sharepoint.com/:v:/g/personal/hatalov3_gatech_edu/IQBht2wBxxVETZAyljo7sn7-AdHsssfrsJna-ixTSHoMFVc?e=Sm1fci&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
 
 ## Overall Project Goal
 
@@ -58,9 +61,9 @@ Current manual updates (copy-pasting ZIP contents) often result in a mix of old 
     - Email: easuquo3@gatech.edu
     
 
-## Peer Evaluations
-1. Please find our demo application here: https://demo.c4gblis.org/login.php
-2. Answer the following survey: [BLIS Peer Evaluation Survey](https://forms.office.com/r/snWhypaQiy)
+## Initial Partner Evaluation
+1. We shared with the partner the BLIS artifact form a new workflow: [Build Release](https://github.com/C4G/BLIS/actions/runs/22791471537)
+2. Initial Evaluation survey: [Initial Experience Evaluation for BLIS Modernization Features](https://forms.office.com/r/td9Rqjsyv4)
 3. Troubleshooting contact: Haki Atalov or Ranjini Unnikrishnan on Microsoft teams
 
 ## Lighthouse Scores

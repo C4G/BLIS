@@ -4797,11 +4797,11 @@ class UILog
         public $tag2;
         public $tag3;
 
-    function __construct($logfilename = '../../local/UILog.csv', $separator = ',') {
-                global $VERSION;
+    function __construct($logfilename = '', $separator = ',') {
+                global $VERSION, $LOCAL_PATH;
                 $vers = $VERSION;
                 $verss = str_replace('.','-',$vers);
-                $logfilename = "../../local/UILog_".$verss.".csv";
+                $logfilename = $LOCAL_PATH."/UILog_".$verss.".csv";
 		$this->LOGFILENAME = $logfilename;
 		$this->SEPARATOR = $separator;
 		$this->HEADERS =
@@ -4852,12 +4852,14 @@ class UILog
         $csvdata = array();
         if($mode == 0)
         {
+            global $LOCAL_PATH;
             $verss = str_replace('.','-',$vers);
-            $logfilename = "../../local/UILog_".$verss.".csv";
+            $logfilename = $LOCAL_PATH."/UILog_".$verss.".csv";
         }
         else
         {
-            $logfilename = "../../local/".$filename;
+            global $LOCAL_PATH;
+            $logfilename = $LOCAL_PATH."/".$filename;
         }
         if (($handle = fopen($logfilename, "r")) !== FALSE)
         {
@@ -6461,8 +6463,14 @@ function add_patient($patient, $importOn = false)
 	$surr_id = db_escape($patient->surrogateId);
 	$created_by = db_escape($patient->createdBy);
 	$hash_value = $patient->generateHashValue();
-	$satellite_lab_id = db_escape($patient->satelliteLabId);
-	$satellite_lab_name = db_escape($patient->satelliteLabName);
+
+    if ($patient->satelliteLabId != NULL && $patient->satelliteLabId != "") {
+        $satellite_lab_id = db_escape($patient->satelliteLabId);
+        $satellite_lab_name = db_escape($patient->satelliteLabName);
+
+        $satelliteLabKeys = ", `satellite_lab_id`, `satellite_lab_name`";
+        $satelliteLabValues = ", $satellite_lab_id, '$satellite_lab_name'";
+    }
 
 	$query_string = "";
 
@@ -6476,20 +6484,20 @@ function add_patient($patient, $importOn = false)
 	if($dob == "" && $partial_dob == "")
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `surr_id`, `created_by`, `hash_value` ,`ts`, `satellite_lab_id`, `satellite_lab_name`) ".
-			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id', '$satellite_lab_name')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `surr_id`, `created_by`, `hash_value` ,`ts` $satelliteLabKeys) ".
+			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date' $satelliteLabValues)";
 	}
 	else if($partial_dob != "")
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `partial_dob`, `surr_id`, `created_by`, `hash_value`,`ts`, `satellite_lab_id`, `satellite_lab_name`) ".
-			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$partial_dob', '$surr_id', $created_by, '$hash_value', '$receipt_date', '$satellite_lab_id', '$satellite_lab_name')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `age`, `sex`, `partial_dob`, `surr_id`, `created_by`, `hash_value`,`ts` $satelliteLabKeys) ".
+			"VALUES ($pid, '$addl_id', '$name', $age, '$sex', '$partial_dob', '$surr_id', $created_by, '$hash_value', '$receipt_date' $satelliteLabValues)";
 	}
 	else
 	{
 		$query_string =
-			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `dob`, `age`, `sex`, `surr_id`, `created_by`, `hash_value`, `ts`, `satellite_lab_id`, `satellite_lab_name`) ".
-			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date', $satellite_lab_id', '$satellite_lab_name')";
+			"INSERT INTO `patient`(`patient_id`, `addl_id`, `name`, `dob`, `age`, `sex`, `surr_id`, `created_by`, `hash_value`, `ts` $satelliteLabKeys) ".
+			"VALUES ($pid, '$addl_id', '$name', '$dob', $age, '$sex', '$surr_id', $created_by, '$hash_value', '$receipt_date' $satelliteLabValues)";
 	}
 
 	print $query_string;
@@ -14248,26 +14256,27 @@ function setVersionDataFlag($fl, $vers)
 }
 
 function update_language_files(){
-	$directories = scandir('../../local');
+	global $LOCAL_PATH;
+	$directories = scandir($LOCAL_PATH);
 	foreach($directories as $directory){
 		if($directory=='.' or $directory=='..' ){
 			continue;
 		}else{
-			if (strpos($directory,'langdata_') !== false && is_dir("../../local/".$directory)) {
-				copy("../Language/en.php","../../local/".$directory."/en.php");
-				copy("../Language/en.xml","../../local/".$directory."/en.xml");
-                copy("../Language/en_catalog.php","../../local/".$directory."/en_catalog.php");
-				copy("../Language/en_catalog.xml","../../local/".$directory."/en_catalog.xml");
+			if (strpos($directory,'langdata_') !== false && is_dir($LOCAL_PATH."/".$directory)) {
+				copy("../Language/en.php",$LOCAL_PATH."/".$directory."/en.php");
+				copy("../Language/en.xml",$LOCAL_PATH."/".$directory."/en.xml");
+                copy("../Language/en_catalog.php",$LOCAL_PATH."/".$directory."/en_catalog.php");
+				copy("../Language/en_catalog.xml",$LOCAL_PATH."/".$directory."/en_catalog.xml");
 
-				copy("../Language/default.php","../../local/".$directory."/default.php");
-				copy("../Language/default.xml","../../local/".$directory."/default.xml");
-				copy("../Language/default_catalog.php","../../local/".$directory."/default_catalog.php");
-				copy("../Language/default_catalog.xml","../../local/".$directory."/default_catalog.xml");
+				copy("../Language/default.php",$LOCAL_PATH."/".$directory."/default.php");
+				copy("../Language/default.xml",$LOCAL_PATH."/".$directory."/default.xml");
+				copy("../Language/default_catalog.php",$LOCAL_PATH."/".$directory."/default_catalog.php");
+				copy("../Language/default_catalog.xml",$LOCAL_PATH."/".$directory."/default_catalog.xml");
 
-				copy("../Language/fr.php","../../local/".$directory."/fr.php");
-				copy("../Language/fr.xml","../../local/".$directory."/fr.xml");
-                copy("../Language/fr_catalog.php","../../local/".$directory."/fr_catalog.php");
-				copy("../Language/fr_catalog.xml","../../local/".$directory."/fr_catalog.xml");
+				copy("../Language/fr.php",$LOCAL_PATH."/".$directory."/fr.php");
+				copy("../Language/fr.xml",$LOCAL_PATH."/".$directory."/fr.xml");
+                copy("../Language/fr_catalog.php",$LOCAL_PATH."/".$directory."/fr_catalog.php");
+				copy("../Language/fr_catalog.xml",$LOCAL_PATH."/".$directory."/fr_catalog.xml");
 			}
 
 		}
