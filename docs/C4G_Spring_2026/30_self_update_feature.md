@@ -76,5 +76,5 @@ This is expected behavior. Log into the BLIS PHP application and follow the exis
 
 ## Contributors (Spring 2026)
 
-Luqman Rashad
-Haki Atalov
+- Luqman Rashad
+- Haki Atalov
