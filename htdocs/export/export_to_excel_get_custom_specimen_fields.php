@@ -24,7 +24,7 @@ if (is_super_admin($current_user) || is_country_dir($current_user)) {
 if ($unauthorized) {
     // If the user is not a super admin or country director, they should only
     // be able to access data for their own lab, and only if they are an admin.
-    if ($lab_id == $current_user->labConfigId && is_admin($current_user)) {
+    if (count($lab_ids) == 1 && $lab_ids[0] == $current_user->labConfigId && is_admin($current_user)) {
         $unauthorized = false;
     }
 }
@@ -39,11 +39,11 @@ if ($unauthorized) {
 $lab_config = LabConfig::getById($_REQUEST['lab_config_id']);
 $custom_field_list = $lab_config->getSpecimenCustomFields();
 
-echo "[";
 foreach($custom_field_list as $idx => $custom_field) {
     echo '{ "id": '.$custom_field->id.', "fieldName": "'.$custom_field->fieldName.'" }';
-    if ($idx < count($custom_field_list) - 1) {
+    if ($idx < count($output_fields) - 1) {
         echo ",\n";
     }
 }
+
 echo "\n]";

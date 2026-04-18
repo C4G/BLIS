@@ -39,7 +39,7 @@ if ($unauthorized) {
     exit;
 }
 
-$fullpath = realpath(__DIR__."/../../../files/".$backup->location);
+$fullpath = $backup->full_path;
 $log->info("Sending ".$fullpath);
 $filename = $backup->filename;
 

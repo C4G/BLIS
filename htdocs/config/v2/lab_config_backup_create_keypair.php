@@ -8,7 +8,9 @@
 
 require_once(__DIR__."/../../users/accesslist.php");
 require_once(__DIR__."/../../includes/user_lib.php");
-require_once(__DIR__."/lib/backup.php");
+require_once(__DIR__."/../../encryption/keys.php");
+
+global $log;
 
 $current_user_id = $_SESSION["user_id"];
 $current_user = get_user_by_id($current_user_id);
@@ -19,6 +21,8 @@ DbUtil::switchToGlobal();
 $lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE lab_config_id = '$lab_config_id';";
 $lab = query_associative_one($lab_db_name_query);
 db_change($lab["db_name"]);
+
+$lab_config_name = $lab["name"];
 
 $super_admin_or_country_dir = is_super_admin($current_user) || is_country_dir($current_user);
 
@@ -37,34 +41,35 @@ if ($unauthorized) {
 }
 
 if ($unauthorized) {
-    header("HTTP/1.1 401 Unauthorized", true, 401);
+    header(LangUtil::$generalTerms['401_UNAUTHORIZE'], true, 401);
     header("Location: /home.php");
     exit;
 }
 
-$lab_config_backups_path = "/config/v2/lab_config_backups.php?id=$lab_config_id";
-
-$uploaded_filename = basename($_POST['confirmed_backup_filename']);
-$uploaded_tmp_path = $_POST['confirmed_backup_tmp_path'];
-
-global $DATA_DIR;
-$relpath = "backups/$uploaded_filename";
-$newpath = $DATA_DIR . "/$relpath";
-
-if (!rename($uploaded_tmp_path, $newpath)) {
-    $_SESSION["FLASH"] = "Failed to upload $uploaded_filename.";
-    header("Location: $lab_config_backups_path");
-    return;
+$keypair_name = trim($_POST['keypair_name']);
+if ($keypair_name == NULL || $keypair_name == "") {
+    $_SESSION['FLASH'] = "Must specify a name for the keypair.";
+    header("Bad Request", true, 400);
+    header("Location: lab_config_backup_settings.php?id=$lab_config_id");
+    exit;
 }
+
+$log->info("Generating new keypair for $lab_config_name ($lab_config_id)");
+
+$key = sodium_crypto_box_keypair();
+$key_b64 = base64_encode($key);
+sodium_memzero($key);
 
 try {
-    DbUtil::switchToLabConfig($lab_config_id);
-    Backup::insert($lab_config_id, $uploaded_filename, $relpath);
-
-    $_SESSION["FLASH"] = "Successfully uploaded $uploaded_filename";
+    db_change($lab["db_name"]);
+    $db_key_id = Key::insert($keypair_name, Key::$KEYPAIR, $key_b64);
+    sodium_memzero($key_b64);
 } catch (Exception $e) {
-    $_SESSION["FLASH"] = "Failed to upload $uploaded_filename:" . $e->getMessage();
+    $_SESSION['FLASH'] = "An error occurred generating the keypair: " . $e->getMessage();
+    header("Internal Server Error", true, 500);
+    header("Location: lab_config_backup_settings.php?id=$lab_config_id");
+    exit;
 }
 
-header("Location: $lab_config_backups_path");
-return;
+$_SESSION['FLASH'] = "Keypair generated successfully.";
+header("Location: lab_config_backup_settings.php?id=$lab_config_id");

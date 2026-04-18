@@ -9,25 +9,27 @@ $lab_config_id=$_REQUEST['id'];
 $user = get_user_by_id($_SESSION['user_id']);
 $country = $user->country;
 
-global $DB_HOST,$DB_USER,$DB_PASS;
-		
-$mysqldumpPath = '"'.PlatformLib::mySqlDumpPath().'"';
+global $DB_HOST,$DB_USER,$DB_PASS,$DATA_DIR;
+
+$tmp_dir = PlatformLib::ensurePath($DATA_DIR, 'exports_tmp', 0700);
+
+$mysqldumpPath = PlatformLib::mySqlDumpPath();
 $dbname = "blis_".$lab_config_id;
-$backupLabDbFileName= "blis_".$lab_config_id."_configuration.sql";
+$backupLabDbFileName = $tmp_dir . "/blis_".$lab_config_id."_configuration.sql";
 $count=0;
-$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupLabDbFileName";
+$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname -r ".escapeshellarg($backupLabDbFileName);
 system($command,$return);
 $file_list1[] = $backupLabDbFileName;
-		
+
 $dbname = "blis_revamp";
-$backupDbFileName = "blis_revamp_configuration.sql";
-$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname > $backupDbFileName";
+$backupDbFileName = $tmp_dir . "/blis_revamp_configuration.sql";
+$command = $mysqldumpPath." -B -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS $dbname -r ".escapeshellarg($backupDbFileName);
 system($command,$return);
 $file_list2[] = $backupDbFileName;
 
 $lab_config = LabConfig::getById($lab_config_id);
 $site_name = str_replace(" ", "-", $lab_config->getSiteName());
-$destination = "../../blis_configuration_".$site_name."_".$country."/";
+$destination = $DATA_DIR . "/blis_configuration_".$site_name."_".$country."/";
 $toScreenDestination = "blis_configuration_".$site_name."_".$country;
 @mkdir($destination);
 @mkdir($destination."blis_revamp/");

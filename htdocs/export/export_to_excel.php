@@ -147,6 +147,13 @@ EOQ;
         continue;
     }
 
+    // Send the spreadsheet directly to the browser
+    // Do not echo() or output anything else below this line!
+
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="report.xlsx"');
+    header('Cache-Control: max-age=0');
+
     $sheet = $objPHPExcel->createSheet();
 
     // Grab all the measures for this test type from the database.

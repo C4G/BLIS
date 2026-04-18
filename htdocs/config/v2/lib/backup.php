@@ -33,7 +33,7 @@ class Backup {
     private $analyzed;
 
     private static function base_path() {
-        return realpath(__DIR__ . "/../../../../files");
+        return getenv("DATA_DIR") ?: realpath(__DIR__ . "/../../../../files");
     }
 
     public static function insert($lab_config_id, $filename, $location) {
@@ -67,9 +67,11 @@ class Backup {
         $results = query_associative_all($query);
 
         $backups = array();
-        foreach($results as $result) {
-            $backup = Backup::from_row($result);
-            array_push($backups, $backup);
+        if ($results) {
+            foreach($results as $result) {
+                $backup = Backup::from_row($result);
+                array_push($backups, $backup);
+            }
         }
 
         return $backups;
@@ -114,9 +116,9 @@ class Backup {
         return $backup;
     }
 
-    public function analyze() {
+    public function analyze($private_key_id=null) {
         if ($this->analyzed == NULL) {
-            $this->analyzed = new AnalyzedBackup($this->filename, $this->full_path);
+            $this->analyzed = new AnalyzedBackup($this->filename, $this->full_path, $private_key_id);
         }
 
         return $this->analyzed;

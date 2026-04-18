@@ -33,6 +33,8 @@ class LabConfig
     public $country;
     public $site_choice_enabled;
     public $blis_cloud_hostname;
+    public $backup_encryption_enabled;
+    public $backup_encryption_key_id;
 
     public static $ID_AUTOINCR = 1;
     public static $ID_MANUAL = 2;
@@ -154,6 +156,8 @@ class LabConfig
         }
         $lab_config->site_choice_enabled = $record['site_choice_enabled'];
         $lab_config->blis_cloud_hostname = $record['blis_cloud_hostname'];
+        $lab_config->backup_encryption_enabled = ($record['backup_encryption_enabled'] > 0);
+        $lab_config->backup_encryption_key_id = intval($record['backup_encryption_key_id']);
         return $lab_config;
     }
 
@@ -943,6 +947,26 @@ class LabConfig
         $saved_db = DbUtil::switchToGlobal();
         $escaped = mysqli_real_escape_string($con, $hostname);
         $query = "UPDATE lab_config SET blis_cloud_hostname='$escaped' WHERE lab_config_id='$this->id'";
+        query_update($query);
+        DbUtil::switchRestore($saved_db);
+    }
+
+    public function setBackupEncryptionEnabled($encryption_enabled)
+    {
+        global $con;
+        $encryption_enabled_val = !!$encryption_enabled ? 1 : 0;
+        $saved_db = DbUtil::switchToGlobal();
+        $query = "UPDATE lab_config SET backup_encryption_enabled='$encryption_enabled_val' WHERE lab_config_id='$this->id'";
+        query_update($query);
+        DbUtil::switchRestore($saved_db);
+    }
+
+    public function updateBackupEncryptionKeyId($key_id)
+    {
+        global $con;
+        $saved_db = DbUtil::switchToGlobal();
+        $escaped = db_escape($key_id);
+        $query = "UPDATE lab_config SET backup_encryption_key_id='$escaped' WHERE lab_config_id='$this->id'";
         query_update($query);
         DbUtil::switchRestore($saved_db);
     }

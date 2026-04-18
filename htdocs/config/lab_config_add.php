@@ -219,7 +219,7 @@ global $LOCAL_PATH, $log;
 
 # Copy contents from langdata_revamp into this new folder
 if (is_dir($LOCAL_PATH."/langdata_".$lab_config_id)) {
-    $log->warn("$LOCAL_PATH/langdata_$lab_config_id already exists. Deleting it.");
+    $log->warning("$LOCAL_PATH/langdata_$lab_config_id already exists. Deleting it.");
     PlatformLib::removeDirectory($LOCAL_PATH."/langdata_".$lab_config_id);
 }
 chmod($LOCAL_PATH."/langdata_revamp", 0755);
