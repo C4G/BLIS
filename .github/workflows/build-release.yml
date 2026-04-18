@@ -73,12 +73,27 @@ jobs:
           # Copy BLIS-NG executable
           cp BLIS-NG/bin/Release/net10.0/win-x64/publish/BLIS-NG.exe BLIS-Standalone/
 
-      - name: Create Zip Archive
+          mkdir -p BLIS-Upgrade
+
+          # Copy BLIS (excluding .git and local/ runtime data)
+          cp -r BLIS/. BLIS-Upgrade/ && rm -rf BLIS-Upgrade/.git BLIS-Upgrade/local
+
+          # Copy BLISRuntime server component
+          cp -r BLISRuntime/server BLIS-Upgrade/server
+
+      - name: Create Zip Archives
         run: |
           cd BLIS-Standalone && zip -r ../BLIS-Standalone.zip . && cd ..
+          cd BLIS-Upgrade && zip -r ../BLIS-Upgrade.zip . && cd ..
 
-      - name: Upload Artifact
+      - name: Upload Standalone Artifact
         uses: actions/upload-artifact@v4
         with:
           name: BLIS-Standalone
           path: BLIS-Standalone.zip
+
+      - name: Upload Upgrade Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLIS-Upgrade
+          path: BLIS-Upgrade.zip
