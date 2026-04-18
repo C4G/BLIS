@@ -60,3 +60,5 @@ Thumbs.db
 
 # Wine prefix folder if using Wine to run the server on Linux with bin/wine-server
 /wine/
+
+_docs/
