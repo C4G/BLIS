@@ -21,7 +21,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout BLIS
@@ -61,25 +61,24 @@ jobs:
 
       - name: Prepare Artifact Folders
         run: |
-          mkdir BLIS-Standalone
+          mkdir -p BLIS-Standalone
           
           # Copy BLISRuntime (excluding .git)
-          Copy-Item "./BLISRuntime/*" -Destination "./BLIS-Standalone/" -Recurse -Exclude ".git"
+          cp -r BLISRuntime/. BLIS-Standalone/ && rm -rf BLIS-Standalone/.git
           
           # Copy BLIS (excluding .git and the legacy EXEs)
-          Copy-Item "./BLIS/*" -Destination "./BLIS-Standalone/" -Recurse -Exclude ".git"
-          Remove-Item "./BLIS-Standalone/BLIS.exe" -ErrorAction SilentlyContinue
-          Remove-Item "./BLIS-Standalone/BLIS.exe.manifest" -ErrorAction SilentlyContinue
+          cp -r BLIS/. BLIS-Standalone/ && rm -rf BLIS-Standalone/.git
+          rm -f BLIS-Standalone/BLIS.exe BLIS-Standalone/BLIS.exe.manifest
           
           # Copy BLIS-NG executable
-          Copy-Item "./BLIS-NG/bin/Release/net10.0/win-x64/publish/BLIS-NG.exe" -Destination "./BLIS-Standalone/"
+          cp BLIS-NG/bin/Release/net10.0/win-x64/publish/BLIS-NG.exe BLIS-Standalone/
 
       - name: Create Zip Archive
         run: |
-          Compress-Archive -Path "BLIS-Standalone/*" -DestinationPath BLIS-Standalone.zip
+          cd BLIS-Standalone && zip -r ../BLIS-Standalone.zip . && cd ..
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: BLIS-Standalone
           path: BLIS-Standalone.zip
