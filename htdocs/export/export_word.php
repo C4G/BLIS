@@ -2,7 +2,7 @@
 #
 # Exports the given HTML content as word document
 #
-include("../includes/db_lib.php");
+require_once("../includes/db_lib.php");
 require_once(__DIR__."/word_export_lib.php");
 putUILog('export_word', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
 
