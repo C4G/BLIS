@@ -58,6 +58,42 @@ Changes included in the PR:
 - `Dockerfile` — added `composer install` step and `unzip` apt dependency
 - Guarded against missing `test_types`/`specimen_custom_fields` in request
 
+### Fix: Word Export Modernization (`word_export_lib.php`) (commits: d61d5d1e, 4e1b93d1)
+
+In the `PHP-7-Upgrade` branch, Word export was refactored to use a shared helper library at `htdocs/export/word_export_lib.php` and to improve PHP 7 compatibility and export reliability.
+
+What changed:
+
+- Added `htdocs/export/word_export_lib.php` with reusable helpers:
+- `blis_word_normalize_html_fragment()` to safely normalize posted HTML payloads
+- `blis_word_sanitize_filename_segment()` to sanitize dynamic filename parts
+- `blis_word_export_docx()` to generate real `.docx` files using `pandoc`
+- `blis_word_send_legacy_doc()` fallback for legacy `.doc` export when `pandoc` is unavailable
+- `blis_word_sanitize_legacy_html()` to strip high-risk HTML/JS before legacy export
+- `blis_word_find_pandoc_bin()` to locate `pandoc` on Windows/Linux/macOS
+
+Integration updates:
+
+- `htdocs/export/export_word.php`
+- switched to `require_once` includes
+- validates and normalizes request inputs (`lab_id`, `data`)
+- adds logo only if lab logo file exists
+- attempts `.docx` export first, then falls back to legacy `.doc`
+- `htdocs/export/export_word_aggregate.php`
+- includes shared helper library
+- sanitizes `report_type` for safe filenames
+- normalizes posted HTML data
+- attempts `.docx` export first, then falls back to legacy `.doc`
+
+Why this matters for PHP 7:
+
+- Removes brittle inline export logic duplicated across multiple files
+- Prevents malformed/unsafe filenames and improves request handling
+- Reduces risk of corrupted binary output by clearing output buffers before streaming `.docx`
+- Keeps backward compatibility via `.doc` fallback when `pandoc` is not present
+
+Files changed: `htdocs/export/word_export_lib.php`, `htdocs/export/export_word.php`, `htdocs/export/export_word_aggregate.php`
+
 ---
 
 ## Remaining Work (not yet addressed)
