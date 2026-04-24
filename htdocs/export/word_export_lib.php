@@ -31,15 +31,34 @@ function blis_word_send_legacy_doc($html_fragment, $file_prefix)
 	$file_name = blis_word_sanitize_filename_segment($file_prefix).'_'.$date.'.doc';
 	header('Content-Type: application/vnd.ms-word');
 	header('Content-Disposition: attachment; filename="'.$file_name.'"');
+	$safe_html = blis_word_sanitize_legacy_html($html_fragment);
 	echo "<!DOCTYPE html>\n<html><head><meta charset=\"UTF-8\"></head><body>";
-	echo $html_fragment;
+	echo $safe_html;
 	echo "</body></html>";
 	exit;
 }
 
+function blis_word_sanitize_legacy_html($html_fragment)
+{
+	$safe = (string)$html_fragment;
+
+	# Remove high-risk executable elements.
+	$safe = preg_replace('/<\s*(script|iframe|object|embed|applet|meta|link|style)\b[^>]*>.*?<\s*\/\s*\1\s*>/is', '', $safe);
+	$safe = preg_replace('/<\s*(script|iframe|object|embed|applet|meta|link|style)\b[^>]*\/?\s*>/is', '', $safe);
+
+	# Remove inline JS event handlers (onclick, onload, etc.).
+	$safe = preg_replace('/\s+on[a-z]+\s*=\s*(".*?"|\'.*?\'|[^\s>]+)/is', '', $safe);
+
+	# Remove javascript: and data: URL payloads from common attributes.
+	$safe = preg_replace('/\s+(href|src|xlink:href)\s*=\s*("|\')\s*(javascript:|data:)[^"\']*\2/is', '', $safe);
+	$safe = preg_replace('/\s+(href|src|xlink:href)\s*=\s*(javascript:|data:)[^\s>]*/is', '', $safe);
+
+	return $safe;
+}
+
 function blis_word_export_docx($html_fragment, $file_prefix)
 {
-	$pandoc_bin = trim((string)shell_exec('command -v pandoc'));
+	$pandoc_bin = blis_word_find_pandoc_bin();
 	if($pandoc_bin === '')
 	{
 		return false;
@@ -86,8 +105,31 @@ function blis_word_export_docx($html_fragment, $file_prefix)
 	header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
 	header('Content-Disposition: attachment; filename="'.$file_name.'"');
 	header('Content-Length: '.filesize($tmp_docx));
+
+	# Prevent buffered warnings/whitespace from corrupting binary docx output.
+	while(ob_get_level() > 0)
+	{
+		ob_end_clean();
+	}
+
 	readfile($tmp_docx);
 	@unlink($tmp_docx);
 	exit;
 }
 
+function blis_word_find_pandoc_bin()
+{
+	if(PHP_OS_FAMILY === 'Windows')
+	{
+		$output = array();
+		$exit_code = 0;
+		exec('where pandoc', $output, $exit_code);
+		if($exit_code === 0 && isset($output[0]))
+		{
+			return trim($output[0]);
+		}
+		return '';
+	}
+
+	return trim((string)shell_exec('command -v pandoc'));
+}
