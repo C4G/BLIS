@@ -11,6 +11,7 @@ require_once(__DIR__."/db_util.php");
 require_once(__DIR__."/keymgmt.php");
 require_once(__DIR__."/lab_config.php");
 require_once(__DIR__."/migrations.php");
+require_once(__DIR__."/password_functions.php"); // modernized password hashing
 
 # Start session if not already started
 if(session_id() == "")
@@ -5740,67 +5741,13 @@ class Payment
 # Functions for managing user profiles and login
 #
 
-function encrypt_password($password)
-{
-	# Encrypts cleartext password before adding to DB or matching passwords
-	$salt = "This comment should suffice as salt.";
-	return sha1($password.$salt);
+// encrypt_password() moved to password_functions.php
 
-}
+// check_user_password() moved to password_functions.php
 
-function check_user_password($username, $password)
-{
-	# Verifies username and password
-	global $con;
-	$username = mysqli_real_escape_string($con, $username);
-	$saved_db = DbUtil::switchToGlobal();
-	$password = encrypt_password($password);
-	$query_string =
-		"SELECT * FROM user ".
-		"WHERE username='$username' ".
-		"AND password='$password' LIMIT 1";
-	$record = query_associative_one($query_string);
-	# Return user profile (null if incorrect username/password)
-	DbUtil::switchRestore($saved_db);
-	return User::getObject($record);
-}
+// change_user_password() moved to password_functions.php
 
-function change_user_password($username, $password)
-{
-	# Changes user password
-	global $con;
-	$username = mysqli_real_escape_string($con, $username);
-	$saved_db = DbUtil::switchToGlobal();
-	$password = encrypt_password($password);
-	$query_string =
-		"UPDATE user ".
-		"SET password='$password' ".
-		"WHERE username='$username'";
-	query_blind($query_string);
-	DbUtil::switchRestore($saved_db);
-}
-
-function change_user_password_oneTime($username, $password)
-{
-	# Changes user password
-	global $con;
-	$username = mysqli_real_escape_string($con, $username);
-	$saved_db = DbUtil::switchToGlobal();
-	$password = encrypt_password($password);
-	$query_string =
-	"UPDATE user ".
-	"SET password='$password' ".
-	"WHERE username='$username'";
-	query_blind($query_string);
-
-	//insert into blis_129.misc (vr_id, v1, v2) values ("username", "admin", "Password Reset Complete");
-	$query_string_misc =
-	"INSERT INTO MISC ".
-	"(username, action) values ('$username', 'password reset completed')";
-	query_blind($query_string_misc);
-
-	DbUtil::switchRestore($saved_db);
-}
+// change_user_password_oneTime() moved to password_functions.php
 
 function password_reset_need_confirm()
 {
@@ -5835,53 +5782,8 @@ function check_user_exists($username)
 	return true;
 }
 
-function add_user($user)
-{
-	global $con;
-	# Adds a new user account
-	if (!check_user_exists($user->username)){
-		$saved_db = DbUtil::switchToGlobal();
-		$password = encrypt_password($user->password);
-		$rwoptions = $user->rwoptions;
-		if($user->level == 17) {
-			$user->rwoptions = LabConfig::getDoctorUserOptions();
-		}
-		// If level = 20, generate the satellite_lab_id value
-        if ($user->level == 20) {
-            // Retrieve the last satellite_lab_id (assuming it's auto-incremented)
-            $query_string = "SELECT MAX(satellite_lab_id) AS max_lab_id FROM user";
-            $result = mysqli_query($con, $query_string);
-            $row = mysqli_fetch_assoc($result);
-            $new_satellite_lab_id = $row['max_lab_id'] + 1;
-        } else {
-            // Set the satellite_lab_id to NULL or handle differently for other levels
-            $new_satellite_lab_id = "NULL";
-        }
+// add_user() moved to password_functions.php
 
-		$query_string =
-			"INSERT INTO user(username, password, actualname, level, created_by, lab_config_id, email, phone, lang_id, rwoptions, satellite_lab_id, satellite_lab_name) ".
-			"VALUES ('$user->username', '$password', '$user->actualName', $user->level, $user->createdBy, '$user->labConfigId', '$user->email', '$user->phone', '$user->langId','$user->rwoptions', $new_satellite_lab_id, '$user->satelliteLabName')";
-
-		query_insert_one($query_string);
-		DbUtil::switchRestore($saved_db);
-
-		$saved_db = DbUtil::switchToGlobal();
-		$query_string = "SELECT user_id FROM user WHERE username='$user->username' LIMIT 1";
-		$record = query_associative_one($query_string);
-		$query_string =
-			"INSERT INTO user_config(user_id, level, parameter, value, created_by, created_on, modified_by, modified_on) ".
-			"VALUES ('".$record['user_id']."',$user->level, 'rwoptions', '$rwoptions', $user->createdBy, curdate(), $user->createdBy, curdate())";
-		query_insert_one($query_string);
-//AS 08/29/2018 For access to lab configurations for admin users BEGIN.
-		if($user->level == 2) {
-add_lab_config_access($record['user_id'],$user->labConfigId);
-}
-//AS 08/29/2018 END
-		DbUtil::switchRestore($saved_db);
-		return true;
-	}
-	return false;
-}
 function fetch_user_log($patientId,$logType){
 	$saved_db = DbUtil::switchToGlobal();
 	$queryString = "SELECT created_by, creation_date from user_log where patient_id =  ".$patientId." and log_type = '".$logType."'";
