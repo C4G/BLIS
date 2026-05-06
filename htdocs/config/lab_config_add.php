@@ -2,16 +2,15 @@
 #
 # Adds a new lab configuration to DB
 #
-include("redirect.php");
+require_once("redirect.php");
 require_once("includes/composer.php");
 require_once("includes/platform_lib.php");
 require_once("includes/user_lib.php");
-include("includes/db_lib.php");
-include("includes/random.php");
-include("lang/lang_xml2php.php");
+require_once("includes/db_lib.php");
+require_once("includes/random.php");
+require_once("lang/lang_xml2php.php");
 
 putUILog('lab_config_add', 'X', basename($_SERVER['REQUEST_URI'], ".php"), 'X', 'X', 'X');
-
 
 $saved_session = SessionUtil::save();
 

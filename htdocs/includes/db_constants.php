@@ -22,6 +22,9 @@ if($SERVER == $ON_ARC)
 	$LOCAL_PATH =  realpath(__DIR__."/../local/");
 }
 
+$DB_CHARSET="utf8mb4";
+$DB_COLLATION="utf8mb4_general_ci";
+
 $DB_HOST = getenv("DB_HOST");
 if (!$DB_HOST) {
 	$DB_HOST = "127.0.0.1";

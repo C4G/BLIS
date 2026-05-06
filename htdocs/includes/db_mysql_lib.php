@@ -28,17 +28,18 @@ function query_insert_one($query)
 {
 	# Single insert statement
 	global $con, $LOG_QUERIES, $log;
+
+	if($LOG_QUERIES == true) {
+        DebugLib::logDBUpdates($query, db_get_current());
+        DebugLib::logQuery($query, db_get_current(), _db_get_username());
+    }
+
     $result = mysqli_query($con, $query);
 
     if (!$result) {
         $err = mysqli_error($con);
         $log->error("mysqli error: " . $err);
         die();
-    }
-
-	if($LOG_QUERIES == true) {
-        DebugLib::logDBUpdates($query, db_get_current());
-        DebugLib::logQuery($query, db_get_current(), _db_get_username());
     }
 }
 
@@ -220,8 +221,8 @@ function db_change($db_name)
 
 function db_create($db_name)
 {
-	global $con, $LOG_QUERIES;
-	$query_string = "CREATE DATABASE $db_name;";
+	global $con, $LOG_QUERIES, $DB_CHARSET, $DB_COLLATION;
+	$query_string = "CREATE DATABASE $db_name CHARACTER SET $DB_CHARSET COLLATE $DB_COLLATION;";
 	mysqli_query($con, $query_string);
 }
 
