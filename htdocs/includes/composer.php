@@ -14,8 +14,13 @@ if (!file_exists(__DIR__."/../../log")) {
     mkdir(__DIR__."/../../log", 0755);
 }
 
+$is_cli = (php_sapi_name() === 'cli');
+
 $log = new Logger("application");
 $log->pushHandler(new StreamHandler(__DIR__."/../../log/application.log", Logger::DEBUG));
+if ($is_cli) {
+    $log->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+}
 
 $db_log = new Logger("database");
 $db_log->pushHandler(new StreamHandler(__DIR__."/../../log/database.log", Logger::DEBUG));
@@ -48,12 +53,12 @@ $lang_template_path = realpath(__DIR__."/../Language/");
 $local_path = realpath(__DIR__."/../../local");
 
 if (!file_exists("$local_path/langdata_revamp/")) {
-    $log->warn("$local_path/langdata_revamp does not exist, copying template");
+    $log->warning("$local_path/langdata_revamp does not exist, copying template");
     PlatformLib::copyDirectory($lang_template_path, "$local_path/langdata_revamp/");
 }
 
 if ($lab_config_id != null && !file_exists("$local_path/langdata_$lab_config_id/")) {
-    $log->warn("$local_path/langdata_$lab_config_id does not exist, copying template");
+    $log->warning("$local_path/langdata_$lab_config_id does not exist, copying template");
     PlatformLib::copyDirectory($lang_template_path, "$local_path/langdata_$lab_config_id/");
 }
 

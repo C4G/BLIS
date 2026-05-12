@@ -673,6 +673,10 @@
 			<key>CMD_VERIFY</key>
 			<value>Vérifier</value>
 		</term>
+        <term>
+            <key>CMD_RESTORE</key>
+            <value>Restore</value>
+        </term>
 		<term>
 			<key>ENTER_RESULTS</key>
 			<value>Entrer les Résultats</value>

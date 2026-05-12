@@ -7,6 +7,8 @@
 #
 
 require_once(__DIR__."/../../users/accesslist.php");
+require_once(__DIR__."/../../encryption/keys.php");
+require_once(__DIR__."/../../includes/lab_config.php");
 require_once(__DIR__."/../../includes/migrations.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 require_once(__DIR__."/lib/backup.php");
@@ -17,8 +19,9 @@ $lab_config_id = $_REQUEST['id'];
 
 DbUtil::switchToGlobal();
 
-$lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE lab_config_id = '$lab_config_id';";
+$lab_db_name_query = "SELECT * FROM lab_config WHERE lab_config_id = '$lab_config_id';";
 $lab = query_associative_one($lab_db_name_query);
+$lab_config = LabConfig::getObject($lab);
 db_change($lab['db_name']);
 
 $lab_config_name = $lab["name"];
@@ -50,8 +53,7 @@ $backups = Backup::for_lab_config_id($lab_config_id);
 
 require_once(__DIR__."/../../includes/keymgmt.php");
 
-// TODO: switch this to its own table, maybe...
-$settings_encryption_enabled = KeyMgmt::read_enc_setting() != "0";
+$settings_encryption_enabled = $lab_config->backup_encryption_enabled;
 
 $migrator = new LabDatabaseMigrator($lab['db_name']);
 $has_pending_migrations = $migrator->pending_migrations();
@@ -90,34 +92,21 @@ if ($has_pending_migrations) {
         <input type='hidden' value='<?php echo $lab_config_id; ?>' id='labConfigId' name='labConfigId' />
         <table>
             <?php if ($settings_encryption_enabled) {
+                $encryption_keys = Key::where_type(Key::$PUBLIC);
             ?>
             <tr id="keySelectRow">
                 <td style="text-align: right">Backup encryption key: </td>
                 <td>
-                    <select id="keySelectDropdown" name="target" autocomplete="off" onChange="updateKeyForm()">
-                        <option value="0" selected>Current Lab (default key)</option>
+                    <select id="keySelectDropdown" name="keySelectDropdown" autocomplete="off">
                         <?php
-                        $target_set=KeyMgmt::getAllKeys();
-                        foreach ($target_set as $option)
+                        foreach ($encryption_keys as $pubkey)
                         {
-                            echo "<option value='".$option->ID."'>".$option->LabName."</option>";
+                            echo "<option value=\"" . $pubkey->id . "\">" . $pubkey->name . "</option>";
                         }
                         ?>
-                        <option value="-1">New key...</option>
                     </select>
                 </td>
             </tr>
-
-            <tr id="keyUploadNameRow" style="display: none">
-                <td style="text-align: right">Key alias:</td>
-                <td><input type="text" name="pkey_alias" id="pkey_alias" autocomplete="off"/></td>
-            </tr>
-
-            <tr id="keyUploadFileRow" style="display: none">
-                <td style="text-align: right">Choose key file:</td>
-                <td><input type="file" name="pkey" id="pkey" autocomplete="off"/></td>
-            </tr>
-
             <?php
             }
             ?>

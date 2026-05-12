@@ -674,12 +674,12 @@
             <value>Remove</value>
         </term>
         <term>
-            <key>CMD_RESTORE</key>
-            <value>Restore</value>
-        </term>
-        <term>
             <key>CMD_VERIFY</key>
             <value>Verify</value>
+        </term>
+        <term>
+            <key>CMD_RESTORE</key>
+            <value>Restore</value>
         </term>
         <term>
             <key>ENTER_RESULTS</key>

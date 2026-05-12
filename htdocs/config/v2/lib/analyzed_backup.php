@@ -1,6 +1,8 @@
 <?php
 
 require_once(__DIR__."/../../../includes/composer.php");
+require_once(__DIR__."/../../../encryption/encryption.php");
+require_once(__DIR__."/../../../encryption/keys.php");
 
 class AnalyzedBackupException extends Exception { }
 
@@ -31,7 +33,7 @@ class AnalyzedBackup {
     // The path, within the zip file, to the lab backup SQL file.
     public $relative_lab_backup_sql_path;
 
-    function __construct($filename, $location) {
+    function __construct($filename, $location, $private_key_id=null) {
         global $log;
 
         $this->filename = $filename;
@@ -39,10 +41,17 @@ class AnalyzedBackup {
 
         $realpath = realpath($location);
 
-        $ends_with_enc = !!(substr($filename, -strlen("_enc.zip")) === "_enc.zip");
-        $likely_encrypted = $ends_with_enc || $pubkey_supplied;
+        $ends_with_enc = substr(strtolower($filename), strlen($filename) - 8, 8) == "_enc.zip";
+        $likely_encrypted = $ends_with_enc || $private_key_id != null;
 
-        $this->encryped = $likely_encrypted;
+        $this->encrypted = $likely_encrypted;
+        $decryptionKey = null;
+        if ($private_key_id != null) {
+            $decryptionKeyObj = Key::find($private_key_id);
+            if ($decryptionKeyObj) {
+                $decryptionKey = $decryptionKeyObj->data;
+            }
+        }
 
         $incorrect_backslashes = false;
 
@@ -117,6 +126,9 @@ class AnalyzedBackup {
         $probable_version = null;
         if ($revamp_backup != null) {
             $revamp_backup_contents = $zip->getFromName($revamp_backup);
+            if ($private_key_id != null) {
+                $revamp_backup_contents = Encryption::decrypt($revamp_backup_contents, $decryptionKey);
+            }
             $revamp_lines = explode("\n", $revamp_backup_contents);
             foreach($revamp_lines as $lineno => $line) {
                 $matches = null;
@@ -129,6 +141,9 @@ class AnalyzedBackup {
 
         if ($probable_version == null && $lab_sql_log != null) {
             $contents = $zip->getFromName($lab_sql_log);
+            if ($private_key_id != null) {
+                $revamp_backup_contents = Encryption::decrypt($revamp_backup_contents, $decryptionKey);
+            }
             $lines = array_reverse(explode("\n", $contents));
             foreach($lines as $lineno => $line) {
                 if (preg_match("/SELECT \* FROM version_data WHERE version = '([0-9\.]+)'/", $line, $matches) == 1) {
@@ -140,6 +155,9 @@ class AnalyzedBackup {
 
         if ($probable_version == null && $whole_database_log != null) {
             $contents = $zip->getFromName($whole_database_log);
+            if ($private_key_id != null) {
+                $revamp_backup_contents = Encryption::decrypt($revamp_backup_contents, $decryptionKey);
+            }
             $lines = array_reverse(explode("\n", $contents));
             foreach($lines as $lineno => $line) {
                 if (preg_match("/SELECT \* FROM version_data WHERE version = '([0-9\.]+)'/", $line, $matches) == 1) {
@@ -153,6 +171,9 @@ class AnalyzedBackup {
 
         if ($revamp_backup != null) {
             $revamp_backup_contents = $zip->getFromName($revamp_backup);
+            if ($private_key_id != null) {
+                $revamp_backup_contents = Encryption::decrypt($revamp_backup_contents, $decryptionKey);
+            }
             $revamp_lines = explode("\n", $revamp_backup_contents);
             foreach($revamp_lines as $lineno => $line) {
                 if (preg_match("/^INSERT INTO `lab_config` VALUES (?:\(.+\),)?\($lab_id,'(.+?)',/", $line, $matches) == 1) {
