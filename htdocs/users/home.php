@@ -122,13 +122,10 @@ echo LangUtil::getPageTerm("WELCOME").", " . $_SESSION['username'] . ".<br><br>"
 echo LangUtil::getPageTerm("TIPS_BLISINTRO");
 ?>
 <br><br>
-    <div id="update_div2" style="display:none;" class="warning">
-    <a rel='facebox' id='update_link' href='../update/blis_update.php?lab_config_id=<?php echo($lab_config_id); ?>'>Click here to complete update to version <?php echo $VERSION ?></a>
-    </div>
 
-    <div id="update_div" style="display:none;" class="warning">
+<div id="update_div" style="display:none;" class="warning">
     <a id='update_link' href='javascript:blis_update_t();'>Click here to complete update to version <?php echo $VERSION ?></a>
-    </div>
+</div>
 
 <div id='update_spinner' style='display:none;'>
 <?php
@@ -140,14 +137,11 @@ $page_elems->getProgressSpinnerBig($spinner_message);
  <div id="update_failure" style="display:none;" class="update_error">
     Update Error! Please Try Again by clicking <a id='update_link' href='javascript:blis_update_t();'>here</a><br>
     If still unsuccessful report error UE5 to dsaiteja@gatech.edu
-    </div>
+</div>
 
  <div id="update_success"  style="display:none;" class="update_success">
     Update Successful! Welcome to C4G BLIS <?php echo $VERSION; ?>
-    </div>
-
-
-
+</div>
 
 <?php
 # If technician user, show lab workflow

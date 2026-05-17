@@ -6,6 +6,7 @@
 
 require_once(__DIR__."/../../users/accesslist.php");
 require_once(__DIR__."/../../includes/composer.php");
+require_once(__DIR__."/../../includes/lab_config.php");
 require_once(__DIR__."/../../includes/migrations.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 require_once(__DIR__."/lib/backup.php");
@@ -13,12 +14,15 @@ require_once(__DIR__."/lib/backup_restorer.php");
 
 global $log;
 
+db_change('blis_revamp');
+
 $current_user_id = $_SESSION['user_id'];
 $current_user = get_user_by_id($current_user_id);
 
 $lab_config_id = $_REQUEST['lab_config_id'];
-$lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE lab_config_id = '$lab_config_id';";
+$lab_db_name_query = "SELECT * FROM lab_config WHERE lab_config_id = '$lab_config_id';";
 $lab = query_associative_one($lab_db_name_query);
+$lab_config = LabConfig::getObject($lab);
 db_change($lab['db_name']);
 $lab_config_name = $lab['name'];
 
@@ -45,7 +49,9 @@ if ($unauthorized) {
     exit;
 }
 
-$analyzed = $backup->analyze();
+$analyzed = $backup->analyze($lab_config->backup_encryption_key_id);
+
+$decryption_failed = $analyzed->encrypted && ($analyzed->lab_name == "") && ($analyzed->version == "");
 
 if ($_GET["action"] != "confirm") {
 
@@ -109,6 +115,8 @@ if ($_GET["action"] != "confirm") {
         </table>
     </div>
 
+    <?php if (!$decryption_failed) { ?>
+
     <div id="restore-footer">
         <p class="text-center">
             <b><?php echo LangUtil::$generalTerms['ALERT_FOR_BACKUP']; ?></b>
@@ -119,6 +127,15 @@ if ($_GET["action"] != "confirm") {
             <a style="float: right" class="text-bold" href="lab_config_backup_restore.php?lab_config_id=<?php echo($lab_config_id); ?>&id=<?php echo($backup_id); ?>&action=confirm">Next >></a>
         </div>
     </div>
+
+    <?php } else { ?>
+    <p class="text-center text-bold">
+        Backup decryption failed. Please ensure the correct decryption key is set in Settings.
+    </p>
+    <div>
+        <a style="float: left" class="text-bold" href="lab_config_backups.php?id=<?php echo($lab_config_id); ?>"><< <?php echo LangUtil::$generalTerms['CMD_CANCEL']; ?></a>
+    </div>
+    <?php } ?>
 </div>
 
 <?php
@@ -130,7 +147,7 @@ if ($_GET["action"] != "confirm") {
     $start_time = microtime(true);
     $end_time = null;
 
-    $restorer = new BackupRestorer($backup, $lab_config_id);
+    $restorer = new BackupRestorer($backup, $lab_config_id, $lab_config->backup_encryption_key_id);
 
     $restore_successful = $restorer->restore();
 

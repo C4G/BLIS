@@ -38,7 +38,7 @@ function query_insert_one($query)
 
     if (!$result) {
         $err = mysqli_error($con);
-        $log->error("mysqli error: " . $err);
+        $log->error("mysqli error: " . $err, formatted_backtrace());
         die();
     }
 }
@@ -47,9 +47,16 @@ function query_insert_one($query)
 function query_update($query)
 {
 	# Single update statement
-	global $con, $LOG_QUERIES;
-    mysqli_query($con,  $query ) or die(mysqli_error($con));
-	if($LOG_QUERIES == true)
+	global $con, $log, $LOG_QUERIES;
+
+    $result = mysqli_query($con, $query);
+	if (!$result) {
+        $err = mysqli_error($con);
+        $log->error("mysqli error: " . $err, formatted_backtrace());
+        die();
+    }
+
+    if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
 		DebugLib::logDBUpdates($query, db_get_current());
@@ -59,8 +66,15 @@ function query_update($query)
 function query_delete($query)
 {
 	# Single delete from statement
-	global $con, $LOG_QUERIES;
-	mysqli_query($con,  $query ) or die(mysqli_error($con));
+	global $con, $log, $LOG_QUERIES;
+
+	$result = mysqli_query($con, $query);
+	if (!$result) {
+        $err = mysqli_error($con);
+        $log->error("mysqli error: " . $err, formatted_backtrace());
+        die();
+    }
+
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
@@ -71,9 +85,16 @@ function query_delete($query)
 function query_alter($query)
 {
 	# Single ALTER statement
-	global $con, $LOG_QUERIES;
-    mysqli_query($con,  $query ) or die(mysqli_error($con));
-	if($LOG_QUERIES == true)
+	global $con, $log, $LOG_QUERIES;
+
+    $result = mysqli_query($con, $query);
+	if (!$result) {
+        $err = mysqli_error($con);
+        $log->error("mysqli error: " . $err, formatted_backtrace());
+        die();
+    }
+
+    if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
 		DebugLib::logDBUpdates($query, db_get_current());
@@ -82,13 +103,29 @@ function query_alter($query)
 
 function query_associative_all($query)
 {
-    global $con, $LOG_QUERIES;
-	if( !($result = mysqli_query($con,  $query ) ) )
+    global $con, $log, $LOG_QUERIES;
+
+    $result = mysqli_query($con, $query);
+	if(!$result)
 	{
+        $err = mysqli_error($con);
+        $log->error("mysqli error: " . $err, formatted_backtrace());
         return null;
     }
+
     $retval = array();
-    while ( $row = mysqli_fetch_assoc($result) ){ $retval[] = $row; }
+    while ($row = mysqli_fetch_assoc($result))
+    {
+        if(!$row)
+        {
+            $err = mysqli_error($con);
+            $log->error("mysqli error: " . $err, formatted_backtrace());
+            continue;
+        }
+
+        $retval[] = $row;
+    }
+
 	if($LOG_QUERIES == true) {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
 		DebugLib::logDBUpdates($query, db_get_current());
@@ -98,12 +135,17 @@ function query_associative_all($query)
 
 function query_associative_one( $query )
 {
-    global $con, $LOG_QUERIES;
-	if( !($result =  mysqli_query($con,  $query)))
+    global $log, $con, $LOG_QUERIES;
+
+    $result = mysqli_query($con,  $query);
+	if(!$result)
 	{
+        $err = mysqli_error($con);
+        $log->error("mysqli error: " . $err, formatted_backtrace());
         return null;
     }
-    $retval = mysqli_fetch_assoc( $result );
+
+    $retval = mysqli_fetch_assoc($result);
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query, db_get_current(), _db_get_username());
@@ -114,14 +156,14 @@ function query_associative_one( $query )
 
 function query_num_rows( $table_name )
 {
-	global $con, $LOG_QUERIES;
-	$query_string =
-		"SELECT COUNT(*) AS val FROM $table_name";
+	global $LOG_QUERIES;
+    $table_name = db_escape($table_name);
+	$query_string = "SELECT COUNT(*) AS val FROM $table_name";
 	$record = query_associative_one($query_string);
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query_string, db_get_current(), _db_get_username());
-		DebugLib::logDBUpdates($query, db_get_current());
+		DebugLib::logDBUpdates($query_string, db_get_current());
     }
 	return $record['val'];
 }
@@ -129,14 +171,27 @@ function query_num_rows( $table_name )
 function query_empty_table( $table_name )
 {
 	# Empty all data in the given table
-	global $con, $LOG_QUERIES;
+	global $LOG_QUERIES;
 	$query_string = "DELETE FROM $table_name";
 	query_blind($query_string);
 	if($LOG_QUERIES == true)
     {
 		DebugLib::logQuery($query_string, db_get_current(), _db_get_username());
-		DebugLib::logDBUpdates($query, db_get_current());
+		DebugLib::logDBUpdates($query_string, db_get_current());
     }
+}
+
+function formatted_backtrace() {
+    $rootpath = realpath(__DIR__ . "/../../");
+    $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 4);
+    $lines = [];
+    for($i = 1; $i < count($bt); $i++) {
+        $relpath = str_replace($rootpath, "", $bt[$i]["file"]);
+        $lineno = $bt[$i]["line"];
+        $func = $bt[$i]["function"];
+        $lines[] = "'$func' in $relpath:$lineno";
+    }
+    return $lines;
 }
 
 function db_escape( $value )

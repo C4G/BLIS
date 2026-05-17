@@ -11,19 +11,26 @@ require_once(__DIR__."/../includes/db_lib.php");
 class LabConfigResolver {
 
     private static $resolved_lab_config_id = null;
+    private static $is_multilab_admin = false;
 
     public static function resolveId() {
         global $log;
 
         if (LabConfigResolver::$resolved_lab_config_id != null) {
-            $log->debug("lab_config_id was cached");
+            // $log->debug("lab_config_id was cached");
             return LabConfigResolver::$resolved_lab_config_id;
         }
 
         if(isset($_SESSION["lab_config_id"]) && $_SESSION["lab_config_id"] != null) {
             LabConfigResolver::$resolved_lab_config_id = $_SESSION["lab_config_id"];
-            $log->debug("Resolved lab_config_id: ". LabConfigResolver::$resolved_lab_config_id ." from session.");
+            // $log->debug("Resolved lab_config_id: ". LabConfigResolver::$resolved_lab_config_id ." from session.");
             return LabConfigResolver::$resolved_lab_config_id;
+        }
+
+        if(LabConfigResolver::$is_multilab_admin == true) {
+            // If we have previously checked and seen a null lab_config_id because the user is a superadmin,
+            // then exit; this is intended.
+            return null;
         }
 
         if (isset($_SESSION["user_id"]) && $_SESSION["user_id"] != null) {
@@ -47,8 +54,15 @@ class LabConfigResolver {
                 $log->debug("Resolved lab_config_id: ". LabConfigResolver::$resolved_lab_config_id ." by looking up labs with admin user ID : " . $_SESSION["user_id"]);
                 return LabConfigResolver::$resolved_lab_config_id;
             }
+
+            $current_user = get_user_by_id($_SESSION['user_id']);
+
+            LabConfigResolver::$is_multilab_admin = is_super_admin($current_user) || is_country_dir($current_user);
+            // Special case: if the user is a superadmin or country director, there won't be a lab config ID.
+            // This is expected so log away the result for later!
         }
 
-        $log->warn("Could not resolve lab_config_id. Logged in user ID: " . $_SESSION["user_id"]);
+        // Helpful for debugging, but creates a lot of noise
+        // $log->debug("Could not resolve lab_config_id. Logged in user ID: " . $_SESSION["user_id"] . " (superadmin: " . (LabConfigResolver::$is_multilab_admin ? "true" : "false") . ")", formatted_backtrace());
     }
 }

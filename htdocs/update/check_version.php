@@ -1,30 +1,26 @@
 <?php
 
-include_once("redirect.php");
-include_once("../includes/composer.php");
-include_once("../includes/db_lib.php");
-include_once("../includes/migrations.php");
-include_once("../includes/user_lib.php");
-include_once("../lang/lang_util.php");
+require_once("redirect.php");
+require_once("../includes/composer.php");
+require_once("../includes/db_lib.php");
+require_once("../includes/migrations.php");
+require_once("../includes/user_lib.php");
+require_once("../config/lab_config_resolver.php");
+require_once("../lang/lang_util.php");
 
 LangUtil::setPageId("update");
+
 global $VERSION;
 global $log;
 
+db_change("blis_revamp");
+
 $check_revamp_versions_result = checkVersionDataEntryExists($VERSION);
 
-if (isset($_REQUEST["lab_config_id"])) {
-    $lab_config_id = $_REQUEST["lab_config_id"];
-} else if (isset($_SESSION["lab_config_id"])) {
-    $lab_config_id = $_SESSION["lab_config_id"];
-} else {
-    $log->error("Could not determine lab config ID in check_version.php.");
-    echo("1");
-    return;
-}
+$lab_config_id = LabConfigResolver::resolveId();
 
 $check_lab_migrations_complete = true;
-if (isset($lab_config_id) && $lab_config_id != '') {
+if (isset($lab_config_id) && $lab_config_id != "") {
     $lab_db_name_query = "SELECT db_name FROM lab_config WHERE lab_config_id = '$lab_config_id';";
     $result = query_associative_one($lab_db_name_query);
     $lab_db = $result['db_name'];
@@ -41,6 +37,9 @@ $result = ($check_revamp_versions_result &&
            $check_revamp_migrations_complete) ? "1" : "0";
 
 if ($result == "0") {
+    if (!$check_revamp_versions_result) {
+        $log->info("Version data entry for version $VERSION does not exist in blis_revamp.");
+    }
     if (!$check_revamp_migrations_complete) {
         $log->info("blis_revamp migrations are pending.");
     }

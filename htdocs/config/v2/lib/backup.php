@@ -36,17 +36,10 @@ class Backup {
         return realpath(__DIR__ . "/../../../../files");
     }
 
-    public static function insert($lab_config_id, $filename, $location) {
-        global $log;
-
+    public static function insert($lab_config_id, $filename, $location, $version=null) {
         $escaped_lab = db_escape($lab_config_id);
         $escaped_filename = db_escape($filename);
         $escaped_location = db_escape($location);
-
-        $fullpath = realpath(Backup::base_path() . "/" . $location);
-        $analyzed = new AnalyzedBackup($filename, $fullpath);
-
-        $version = $analyzed->version;
 
         $query = "INSERT INTO blis_backups (lab_config_id, filename, location, blis_version)
                   VALUES('$escaped_lab','$escaped_filename','$escaped_location', '$version');";
@@ -114,9 +107,9 @@ class Backup {
         return $backup;
     }
 
-    public function analyze() {
+    public function analyze($private_key_id=null) {
         if ($this->analyzed == NULL) {
-            $this->analyzed = new AnalyzedBackup($this->filename, $this->full_path);
+            $this->analyzed = new AnalyzedBackup($this->filename, $this->full_path, $private_key_id);
         }
 
         return $this->analyzed;
