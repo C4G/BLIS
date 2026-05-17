@@ -117,7 +117,7 @@ class User
 		$user->username = $record['username'];
 		$user->password = $record['password'];
 		$user->actualName = $record['actualname'];
-		$user->satelliteLabName = get_satellite_lab_name_by_user_id($user->userId);
+		$user->satelliteLabName = isset($record['satellite_lab_name']) ? $record['satellite_lab_name'] : '';
 		$user->level = $record['level'];
 		$user->email = $record['email'];
 		$user->phone = $record['phone'];
@@ -6244,13 +6244,14 @@ function delete_user_type($user_type)
 }
 function get_user_by_id($user_id)
 {
-	global $con;
+	global $con,$log;
 	$user_id = mysqli_real_escape_string($con, $user_id);
 	# Fetches user record by primary key
 	$saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT a.user_id, a.username, a.password, a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, a.satellite_lab_name, b.value as rwoptions
-	FROM user a, user_config b WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.user_id=$user_id LIMIT 1";
-	$record = query_associative_one($query_string);
+	$query_string = "SELECT a.*, b.value as rwoptions
+	FROM user a, user_config b
+    WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.user_id=$user_id LIMIT 1";
+    $record = query_associative_one($query_string);
 	DbUtil::switchRestore($saved_db);
 	return User::getObject($record);
 }
@@ -6360,11 +6361,7 @@ function get_user_by_name($username)
 	FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.username='$username' LIMIT 1";
 	$record = query_associative_one($query_string);
 	if ($record == null){
-		$query_string = "SELECT user_id, username, password, actualname, email, created_by, ts, lab_config_id, level, phone, lang_id, rwoptions FROM user WHERE username='$username' LIMIT 1";
-		$record = query_associative_one($query_string);
-	}
-	if ($record == null){
-		$query_string = "SELECT user_id, username, password, actualname, email, created_by, ts, lab_config_id, level, phone, lang_id FROM user WHERE username='$username' LIMIT 1";
+		$query_string = "SELECT * FROM user WHERE username='$username' LIMIT 1";
 		$record = query_associative_one($query_string);
 	}
 	DbUtil::switchRestore($saved_db);
@@ -6384,7 +6381,7 @@ function get_admin_users()
 		#$query_string =
 		#	"SELECT * FROM user ".
 		#	"WHERE level=$LIS_ADMIN ORDER BY username";
-		$query_string = "SELECT  a.user_id, a.username, a.password,a.actualname, a.email, a.created_by, a.ts, a.lab_config_id, a.level, a.phone, a.lang_id, b.value as rwoptions
+		$query_string = "SELECT  a.*, b.value as rwoptions
 		FROM user a, user_config b  WHERE a.user_id = b.user_id and b.parameter = 'rwoptions' and a.username='$LIS_ADMIN' ORDER BY username";
 	}
 	else if($_SESSION['user_level'] == $LIS_COUNTRYDIR)
@@ -8572,16 +8569,6 @@ $id=get_lab_config_id_admin($user_id);
 //echo "second:".$id;
 	DbUtil::switchRestore($saved_db);
 	return $id;
-}
-
-function get_satellite_lab_name_by_user_id($user_id)
-{
-	$saved_db = DbUtil::switchToGlobal();
-	$query_string = "SELECT satellite_lab_name FROM user WHERE user_id='$user_id'";
-	$record = query_associative_one($query_string);
-	$satelliteLabName = $record['satellite_lab_name'];
-	DbUtil::switchRestore($saved_db);
-	return $satelliteLabName;
 }
 
 /* Import Configuration function */

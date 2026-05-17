@@ -305,6 +305,10 @@ class LabConfig
     public static function getUserCountry($lab_config_id)
     {
         global $con;
+        if ($lab_config_id == null || $lab_config_id == "") {
+            return null;
+        }
+
         $lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
         $saved_db = DbUtil::switchToGlobal();
         $userId = $_SESSION['user_id'];
