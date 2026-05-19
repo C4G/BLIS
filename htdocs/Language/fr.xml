@@ -673,6 +673,10 @@
 			<key>CMD_VERIFY</key>
 			<value>Vérifier</value>
 		</term>
+        <term>
+            <key>CMD_RESTORE</key>
+            <value>Restore</value>
+        </term>
 		<term>
 			<key>ENTER_RESULTS</key>
 			<value>Entrer les Résultats</value>
@@ -819,8 +823,8 @@
 			<value>Région</value>
 		</term>
 		<term>
-      <key>404_BAD_REQUEST</key>
-      <value>HTTP/1.1 404 Page Non Trouvée</value>
+			<key>404_BAD_REQUEST</key>
+			<value>HTTP/1.1 404 Page Non Trouvée</value>
     </term>
 		<term>
 			<key>401_UNAUTHORIZE</key>

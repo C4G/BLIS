@@ -170,6 +170,7 @@ $LANG_ARRAY = array (
 		"REF_TO" => "Referred To", 
 		"CMD_REMOVE" => "Remove", 
 		"CMD_VERIFY" => "Verify", 
+		"CMD_RESTORE" => "Restore", 
 		"ENTER_RESULTS" => "Enter Results", 
 		"MSG_ADDED" => "Added", 
 		"FROM_DATE" => "From", 
