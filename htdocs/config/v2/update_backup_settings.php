@@ -14,6 +14,8 @@ $current_user = get_user_by_id($current_user_id);
 
 $lab_config_id = $_REQUEST['id'];
 $lab_db_name_query = "SELECT * FROM lab_config WHERE lab_config_id = '$lab_config_id' LIMIT 1;";
+
+db_change('blis_revamp');
 $lab = query_associative_one($lab_db_name_query);
 db_change($lab['db_name']);
 
