@@ -45,7 +45,7 @@ jobs:
           # list of Docker images to use as base name for tags
           images: |
             ghcr.io/${{steps.repoName.outputs.lowerCase}}
-            docker.io/c4good/${{steps.repoName.outputs.lowerCase}}
+            docker.io/c4good/blis
           # generate Docker tags based on the following events/attributes
           tags: |
             type=ref,event=branch
