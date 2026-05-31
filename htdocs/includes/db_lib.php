@@ -10294,12 +10294,12 @@ function add_lab_config_access($user_id, $lab_config_id)
 # Functions for fetching data from mapping tables
 #
 
-function get_compatible_tests($specimen_type_id)
+function get_compatible_tests($specimen_type_id, $lab_config_id=null)
 {
 	# Returns a list of compatible tests for a given specimen type in catalog
 	global $con;
 	$specimen_type_id = mysqli_real_escape_string($con, $specimen_type_id);
-	$saved_db = DbUtil::switchToLabConfigRevamp();
+	$saved_db = DbUtil::switchToLabConfigRevamp($lab_config_id);
 	$query_string =
 		"SELECT test_type_id FROM specimen_test WHERE specimen_type_id=$specimen_type_id";
 	$resultset = query_associative_all($query_string);

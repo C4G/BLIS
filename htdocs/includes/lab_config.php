@@ -161,12 +161,19 @@ class LabConfig
         return $lab_config;
     }
 
-    public static function getDoctorUserOptions()
+    public static function getDoctorUserOptions($lab_config_id=null)
     {
+        if ($lab_config_id == null) {
+            $lab_config_id = LabConfigResolver::resolveId();
+            if ($lab_config_id == null) {
+                return null;
+            }
+        }
+
         $saved_db = DbUtil::switchToGlobal();
         //global $con;
         //$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);
-        $query_rwoptions= "SELECT * FROM user WHERE level=17 and lab_config_id = ".$_SESSION['lab_config_id']." LIMIT 1";
+        $query_rwoptions= "SELECT * FROM user WHERE level=17 and lab_config_id = $lab_config_id LIMIT 1";
         $recordOptions = query_associative_one($query_rwoptions);
         DbUtil::switchRestore($saved_db);
         //echo "from db sid ".$record['sid'];
@@ -267,6 +274,10 @@ class LabConfig
 
     public static function getById($lab_config_id)
     {
+        if ($lab_config_id == null || $lab_config_id == "") {
+            return null;
+        }
+
         $saved_db = DbUtil::switchToGlobal();
         //global $con;
         //$lab_config_id = mysqli_real_escape_string($con, $lab_config_id);

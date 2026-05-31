@@ -11,7 +11,6 @@ $current_user = get_user_by_id($current_user_id);
 $lab_config_id = $_REQUEST['lab_config_id'];
 $lab_db_name_query = "SELECT lab_config_id, name, db_name FROM lab_config WHERE lab_config_id = '$lab_config_id';";
 $lab = query_associative_one($lab_db_name_query);
-//db_change($lab['db_name']);
 $lab_config_name = $lab['name'];
 
 db_change("blis_revamp");
@@ -53,65 +52,51 @@ $post = array('action'=> 'connect', 'public_key'=> '', 'lab_name'=>$lab_config_n
 
 $log->info("Connecting to BLIS cloud with URL: ".$connect_url);
 
-$curl_cmd = PlatformLib::curlPath();
-$curl_cmd = $curl_cmd . " -i --show-error -X POST ";
-if (PlatformLib::runningOnWindows()) {
-    // The Windows version of cURL is newer than the one we might have on Linux
-    // (especially Ubuntu 20.04) so we can add this new option.
-    $curl_cmd = $curl_cmd . "--fail-with-body ";
-} else {
-    $curl_cmd = $curl_cmd . "--fail ";
-}
-foreach($post as $key=>$value) {
-    $curl_cmd = $curl_cmd . " -F \"$key=$value\"";
-}
-$curl_cmd = $curl_cmd . " $connect_url";
+$ch = curl_init($connect_url);
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 
 $NUM_RETRIES = 5;
 
 for ($x = 0; $x < $NUM_RETRIES; $x = $x + 1) {
     $log->info("Attempt #" . ($x + 1));
 
-    ob_start();
-    system($curl_cmd, $return_code);
-    $output = ob_get_contents();
-    ob_end_clean();
+    $result = curl_exec($ch);
 
-    if ($return_code == 0 && strlen($output) > 0) {
-        // HACK HACK HACKITY HACK
-        // If there is ever a space in the output we're in trouble!
-        // Really we're in trouble for a lot of reasons with this code.
-        $resp_beginning = strpos($output, "{\"");
-        $parseable_output = substr($output, $resp_beginning);
-
-        $r_json = json_decode($parseable_output, true);
-
-        $new_conncode = $r_json["connection_code"];
-        $server_pubkey = base64_decode($r_json["public_key"]);
-
-        $key_lab_name = "BLIS Cloud Connection for $lab_config_name";
-        $key = KeyMgmt::create($key_lab_name, $server_pubkey, $current_user_id);
-        KeyMgmt::add_key_mgmt($key);
-        $key = KeyMgmt::getByLabName($key_lab_name);
-        $key_id = $key->ID;
-
-        $lc_update_query = "UPDATE lab_config SET blis_cloud_hostname = '" . db_escape($connect_url) . "',"
-                         . "blis_cloud_connection_key = '" . db_escape($new_conncode) . "',"
-                         . "blis_cloud_server_pubkey_id = $key_id WHERE lab_config.lab_config_id = $lab_config_id";
-
-        query_update($lc_update_query);
-
-        $failure = false;
-        break;
-    } else {
-        if (strlen($output) == 0) {
-            $outstr = "Output is empty!";
-        } else {
-            $outstr = "Output: $output";
-        }
-        $log->warning("Request failed. Curl exit code: $return_code. $outstr");
+    if ($result === false) {
+        $log->warning("Request failed. Curl error: " . curl_error($ch));
         $failure = true;
+        continue;
     }
+
+    $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    if ($code !== 200) {
+        $log->warning("Received a non-200 status code: $code" . $result);
+        $failure = true;
+        continue;
+    }
+
+    $r_json = json_decode($result, true);
+
+    $new_conncode = $r_json["connection_code"];
+    $server_pubkey = base64_decode($r_json["public_key"]);
+
+    $key_lab_name = "BLIS Cloud Connection for $lab_config_name";
+    $key = KeyMgmt::create($key_lab_name, $server_pubkey, $current_user_id);
+    KeyMgmt::add_key_mgmt($key);
+    $key = KeyMgmt::getByLabName($key_lab_name);
+    $key_id = $key->ID;
+
+    $lc_update_query = "UPDATE lab_config SET blis_cloud_hostname = '" . db_escape($connect_url) . "',"
+                        . "blis_cloud_connection_key = '" . db_escape($new_conncode) . "',"
+                        . "blis_cloud_server_pubkey_id = $key_id WHERE lab_config.lab_config_id = $lab_config_id";
+
+    query_update($lc_update_query);
+
+    $failure = false;
+    break;
 }
 
 if ($failure) {

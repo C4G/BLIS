@@ -6198,7 +6198,7 @@ $name_list = array("yyyy_to".$count, "mm_to".$count, "dd_to".$count);
 		echo "$array_name=new Array(); ";
 		foreach($specimen_type_list as $key=>$value)
 		{
-			$test_list = get_compatible_tests($key);
+			$test_list = get_compatible_tests($key, $lab_config_id);
 			$test_csv = implode(",", $test_list);
 			echo $array_name."[".$key."]='$test_csv'; ";
 		}
