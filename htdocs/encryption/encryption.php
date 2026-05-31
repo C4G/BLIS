@@ -32,6 +32,8 @@ class Encryption
 
     public static function decrypt($input, $keycontents)
     {
+        global $log;
+
         $keypair = base64_decode($keycontents);
         $res = false;
         try {
@@ -53,6 +55,7 @@ class Encryption
     public static function decryptFile($inputFile, $outputFile, $keycontents)
     {
         global $log;
+
         $data = file_get_contents($inputFile);
         try {
             $res = Encryption::decrypt($data, $keycontents);
