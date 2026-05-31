@@ -73,7 +73,7 @@ for ($x = 0; $x < $NUM_RETRIES; $x = $x + 1) {
 
     $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
     if ($code !== 200) {
-        $log->warning("Received a non-200 status code: " . $result);
+        $log->warning("Received a non-200 status code: $code" . $result);
         $failure = true;
         continue;
     }

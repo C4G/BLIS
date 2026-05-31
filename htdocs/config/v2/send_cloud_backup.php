@@ -91,7 +91,7 @@ if ($iv_required) {
     $iv_b64 = base64_encode($iv);
 }
 
-$curlfile = '@' . realpath($encpath);
+$curlfile = curl_file_create(realpath($encpath));
 
 $post = array(
     'action'=>'backup',
@@ -104,64 +104,42 @@ $post = array(
 
 $log->info("Sending backup to BLIS cloud with URL: ".$connect_url);
 
-// You may ask yourself, what is this code?
-// The answer is that I am going to ship the win32 build of curl.exe,
-// which uses a newer version of OpenSSL, and thus, can connect
-// to websites with TLS 1.2+.
-// The builtin version of OpenSSL/CURL in PHP 5.3 (current in BLIS at time of writing)
-// cannot do this! So I am shelling out to curl instead!
+$ch = curl_init($connect_url);
 
-$curl_cmd = PlatformLib::curlPath();
-$curl_cmd = $curl_cmd . " -i --show-error -X POST ";
-if (PlatformLib::runningOnWindows()) {
-    // The Windows version of cURL is newer than the one we might have on Linux
-    // (especially Ubuntu 20.04) so we can add this new option.
-    $curl_cmd = $curl_cmd . "--fail-with-body ";
-} else {
-    $curl_cmd = $curl_cmd . "--fail ";
-}
-foreach($post as $key=>$value) {
-    $curl_cmd = $curl_cmd . " -F \"$key=$value\"";
-}
-$curl_cmd = $curl_cmd . " $connect_url";
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 
 $NUM_RETRIES = 5;
 
 for ($x = 0; $x < $NUM_RETRIES; $x = $x + 1) {
     $log->info("Attempt #" . ($x + 1));
 
-    ob_start();
-    system($curl_cmd, $return_code);
-    $output = ob_get_contents();
-    ob_end_clean();
+    $result = curl_exec($ch);
 
-    if ($return_code == 0 && strlen($output) > 0) {
-        // HACK HACK HACKITY HACK
-        // If there is ever a space in the output we're in trouble!
-        // Really we're in trouble for a lot of reasons with this code.
-        $resp_beginning = strpos($output, "{\"");
-        $parseable_output = substr($output, $resp_beginning);
-
-        $resp = json_decode($parseable_output, true);
-        $new_connection_code = $resp["connection_code"];
-        $lc_update_query = "UPDATE lab_config SET blis_cloud_connection_key = '" . db_escape($new_connection_code)
-            . "' WHERE lab_config.lab_config_id = $lab_config_id";
-        query_update($lc_update_query);
-        $log->info("Backup sent and connection code refreshed!");
-        unlink($encpath);
-        $failure = false;
-        break;
-    } else {
-        if (strlen($output) == 0) {
-            $outstr = "Output is empty!";
-        } else {
-            $outstr = "Output: $output";
-        }
-        $log->warning("Request failed. Curl exit code: $return_code. $outstr");
+    if ($result === false) {
+        $log->warning("Request failed. Curl error: " . curl_error($ch));
         $failure = true;
+        continue;
     }
-}
 
+    $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    if ($code !== 200) {
+        $log->warning("Received a non-200 status code: $code" . $result);
+        $failure = true;
+        continue;
+    }
+
+    $resp = json_decode($result, true);
+    $new_connection_code = $resp["connection_code"];
+    $lc_update_query = "UPDATE lab_config SET blis_cloud_connection_key = '" . db_escape($new_connection_code)
+        . "' WHERE lab_config.lab_config_id = $lab_config_id";
+    query_update($lc_update_query);
+    $log->info("Backup sent and connection code refreshed!");
+    unlink($encpath);
+    $failure = false;
+    break;
+}
 
 if (!$failure) {
     $_SESSION['FLASH'] = "Backup sent successfully.";
