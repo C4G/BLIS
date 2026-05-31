@@ -66,10 +66,14 @@ $backup_blob = file_get_contents($latest_backup->full_path);
 
 $log->info("Sending backup: " . $latest_backup->full_path . " to " . $connect_url);
 
-// WARNING! RC4 is a very outdated and insecure encryption algorithm.
-// This will prevent only the most simple attempts to decrypt the file.
-// Unfortunately, the old version of PHP we use on Windows prevents anything newer (for now...)
-$ossl_result = openssl_seal($backup_blob, $sealed_data, $ekeys, array($ossl_pubkey), "RC4");
+// AES256 is probably not the best choice of encryption algorithm.
+// This should be dynamic, or more centrally managed somewhere.
+$cipher_algo = "aes-256-cbc";
+$iv_required = openssl_cipher_iv_length($cipher_algo) != false;
+$iv = null;
+$iv_b64 = '';
+
+$ossl_result = openssl_seal($backup_blob, $sealed_data, $ekeys, array($ossl_pubkey), "aes-256-cbc", $iv);
 if ($ossl_result === false) {
     $log->error("Could not encrypt backup: " . openssl_error_string());
     $_SESSION["FLASH"] = "Error sending backup.";
@@ -83,6 +87,9 @@ file_put_contents($encpath, $sealed_data);
 $log->info("Backup " . $latest_backup->full_path . " encrypted successfully.");
 
 $ekey = base64_encode($ekeys[0]);
+if ($iv_required) {
+    $iv_b64 = base64_encode($iv);
+}
 
 $curlfile = '@' . realpath($encpath);
 
@@ -91,7 +98,8 @@ $post = array(
     'connection_code'=>$connect_code,
     'backup_file'=>$curlfile,
     'backup_date'=>$latest_backup->timestamp,
-    'envelope_key'=>$ekey
+    'envelope_key'=>$ekey,
+    'iv'=>$iv_b64,
 );
 
 $log->info("Sending backup to BLIS cloud with URL: ".$connect_url);

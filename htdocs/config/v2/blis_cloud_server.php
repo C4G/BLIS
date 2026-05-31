@@ -101,6 +101,7 @@ if ($action == "connect") {
 
     $backup_date = $_POST["backup_date"];
     $backup_envelope_key = $_POST["envelope_key"];
+    $backup_iv = $_POST["iv"];
     $backup_filename = $_FILES["backup_file"]["name"];
     $backup_tmp_path = $_FILES["backup_file"]["tmp_name"];
 
@@ -111,7 +112,7 @@ if ($action == "connect") {
     $decrypted_path = "$backup_location/$backup_filename";
 
     $enc = new EncryptedFile($backup_tmp_path);
-    $result = $enc->decrypt("LAB_dir.blis", $backup_envelope_key, $decrypted_path);
+    $result = $enc->decrypt("LAB_dir.blis", $backup_envelope_key, $backup_iv, $decrypted_path);
 
     if (!$result) {
         header(LangUtil::$generalTerms['500_SERVER_ERROR'], true, 500);
