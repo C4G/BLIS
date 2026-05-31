@@ -61,11 +61,12 @@ class DbUtil
 
     public static function switchToLabConfigRevamp($lab_config_id=null)
     {
-        global $log;
-
         $saved_db_name = db_get_current();
         if ($lab_config_id == null) {
-            $lab_config_id = $_SESSION['lab_config_id'];
+            $lab_config_id = LabConfigResolver::resolveId();
+            if ($lab_config_id == null) {
+                return null;
+            }
         }
         $lab_config = get_lab_config_by_id($lab_config_id);
         if ($lab_config == null) {
