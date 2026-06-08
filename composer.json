@@ -1,6 +1,6 @@
 {
     "require": {
         "monolog/monolog": "^1.25",
-        "phpoffice/phpspreadsheet": "= 1.30.4"
+        "phpoffice/phpspreadsheet": "= 1.30.5"
     }
 }
