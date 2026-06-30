@@ -41,16 +41,26 @@ jobs:
         with:
           python-version: 3.x
           cache: 'pip' # caching pip dependencies
-      - run: pip install -r requirements.txt
+      - run: |
+          pip install -r requirements.txt
+          pip install zensical
 
-      - name: Build site
+      - name: Build site PDF
         run: mkdocs build -d _docs/
+
+      - name: Build Zensical site
+        run: zensical build --clean
+
+      - name: Copy PDF
+        run: |
+          mkdir site/pdf
+          cp _docs/pdf/document.pdf site/pdf/document.pdf
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          # Upload directory generated above
-          path: '_docs'
+          # Upload directory generated above (from Zensical)
+          path: 'site'
 
       - name: Deploy to GitHub Pages
         id: deployment
