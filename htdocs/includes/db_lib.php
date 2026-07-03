@@ -662,6 +662,7 @@ class ReportConfig
 	public $reportId;
 	public $testTypeId;
 	public $title;
+    public $name;
 
 	public $headerText;
 	public $titleText;
@@ -729,7 +730,7 @@ class ReportConfig
 
 	public static function getObject($record, $lab_config_id)
 	{
-		global $LANG_ARRAY, $LOCAL_PATH;
+		global $LOCAL_PATH;
 
 		if($record == null)
 			return null;
@@ -752,16 +753,16 @@ class ReportConfig
 		switch($report_config->reportId)
 		{
 			case 1:
-				$report_config->name = $LANG_ARRAY["reports"]["MENU_PATIENT"];
+				$report_config->name = LangUtil::$pageTerms->getTerm("reports", "MENU_PATIENT");
 				break;
 			case 2:
-				$report_config->name = $LANG_ARRAY["reports"]["MENU_SPECIMEN"];
+				$report_config->name = LangUtil::$pageTerms->getTerm("reports", "MENU_SPECIMEN");
 				break;
 			case 3:
-				$report_config->name = $LANG_ARRAY["reports"]["MENU_TESTRECORDS"];
+				$report_config->name = LangUtil::$pageTerms->getTerm("reports", "MENU_TESTRECORDS");
 				break;
 			case 4:
-				$report_config->name = $LANG_ARRAY["reports"]["MENU_DAILYLOGS"];
+				$report_config->name = LangUtil::$pageTerms->getTerm("reports", "MENU_DAILYLOGS");
 				break;
 		}
 

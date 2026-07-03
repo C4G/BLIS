@@ -6,7 +6,6 @@
 
 class LangUtil
 {
-	public static $generalPageId = "general";
 	public static $pageId;
 	public static $generalTerms;
 	public static $pageTerms;
@@ -14,7 +13,7 @@ class LangUtil
 	public static function init()
 	{
 		global $LANG_ARRAY;
-		self::$generalTerms = $LANG_ARRAY[self::$generalPageId];
+		self::$generalTerms = $LANG_ARRAY["general"];
 
 	}
 
@@ -50,16 +49,6 @@ class LangUtil
 		}
 		return $retval;
 	}
-	public static function getStockTerm($key)
-	{
-		global $LANG_ARRAY;
-		$retval = $LANG_ARRAY['stocks'][$key];
-		if($retval == null)
-		{
-			$retval = "[ERROR]";
-		}
-	return $retval;
-		}
 
 	public static function getTitle()
 	{
@@ -125,15 +114,6 @@ class LangUtil
 		return "[ERROR]";
 	}
 
-	public static function getMeasureRemarks($lab_config_id, $measure_id)
-	{
-		# Fetches existing result interpretation (remarks) strings
-		global $REMARKS_ARRAY;
-		$retval = null;
-		if(isset($REMARKS_ARRAY[$measure_id]))
-			$retval = $REMARKS_ARRAY[$measure_id];
-		return $retval;
-	}
 	public static function getSearchCondition($condition)
 	{
 		global $LANG_ARRAY;

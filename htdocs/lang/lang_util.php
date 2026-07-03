@@ -4,7 +4,7 @@
 #
 
 if(!class_exists('LangUtil')) {
-    require_once('lang_util_class.php');
+    require_once('lang_util_v2.php');
 }
 
 LangUtil::init();
