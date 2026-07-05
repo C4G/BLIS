@@ -1,6 +1,14 @@
 {
     "require": {
         "monolog/monolog": "^1.25",
-        "phpoffice/phpspreadsheet": "= 1.30.4"
+        "phpoffice/phpspreadsheet": "^1.30.4"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^v3.95.11"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.33"
+        }
     }
 }

@@ -49,6 +49,7 @@ Thumbs.db
 # Tooling
 ## php-cs-fixer cache
 .php_cs.cache
+.php-cs-fixer.cache
 
 # Directory that BLIS releases will be built into
 /dist
@@ -61,4 +62,7 @@ Thumbs.db
 # Wine prefix folder if using Wine to run the server on Linux with bin/wine-server
 /wine/
 
-_docs/
+/_docs/
+/site/
+
+/htdocs/phpMyAdmin
