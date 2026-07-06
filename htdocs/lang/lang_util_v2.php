@@ -63,14 +63,15 @@ class Terms implements ArrayAccess
     public function offsetGet($offset)
     {
         $page = $this->currentPageId;
-        if($this->currentPageId == null) {
+        if ($this->currentPageId == null) {
             $page = "general";
         }
 
         return $this->getTerm($page, $offset);
     }
 
-    public function getTerm(string $pageName, string $term): string {
+    public function getTerm(string $pageName, string $term): string
+    {
         $this->EnsureCache();
 
         global $log;
@@ -78,13 +79,13 @@ class Terms implements ArrayAccess
 
         $locale = $this->currentLocale;
 
-        if(!key_exists($pageName, $this->languageCache)) {
+        if (!key_exists($pageName, $this->languageCache)) {
             return "[MISSING PAGE: $locale:$pageName]";
         }
 
         $page = $this->languageCache[$pageName];
 
-        if(!key_exists($term, $page)) {
+        if (!key_exists($term, $page)) {
             return "[MISSING TERM: $locale:$pageName:$term]";
         }
 
@@ -265,7 +266,8 @@ class LangUtil
         return self::$pageTerms[$key];
     }
 
-    public static function getTerm(string $pageName, string $term) {
+    public static function getTerm(string $pageName, string $term)
+    {
         return self::$pageTerms->getTerm($pageName, $term);
     }
 
@@ -314,5 +316,30 @@ class LangUtil
             $retval = "[ERROR]";
         }
         return $retval;
+    }
+
+    /**
+     * Returns a multilevel array keyed by page, then term
+     */
+    public static function load_locale_file(string $filename)
+    {
+        $file = simplexml_load_file($filename);
+
+        $locale = array();
+        foreach ($file as $page) {
+            $pagename = strval($page['id']);
+
+            $pageterms = array();
+            foreach ($page->term as $term) {
+                $k = strval($term->key[0]);
+                $v = strval($term->value[0]);
+
+                $pageterms[$k] = $v;
+            }
+
+            $locale[$pagename] = $pageterms;
+        }
+
+        return $locale;
     }
 }
