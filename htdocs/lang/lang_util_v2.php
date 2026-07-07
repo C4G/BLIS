@@ -342,4 +342,51 @@ class LangUtil
 
         return $locale;
     }
+
+    public static function merge_locales(array $base, array $source): array
+    {
+        foreach ($source as $pagename => $pageterms) {
+            if (!array_key_exists($pagename, $base)) {
+                $base[$pagename] = $pageterms;
+            } else {
+                foreach ($pageterms as $term => $val) {
+                    $base[$pagename][$term] = $val;
+                }
+            }
+        }
+
+        return $base;
+    }
+
+    public static function find_overrides(array $base, array $overrides)
+    {
+        $o = array();
+
+        foreach ($overrides as $pagename => $pageterms) {
+            if (!array_key_exists($pagename, $base)) {
+                $o[$pagename] = $pageterms;
+            }
+        }
+
+        foreach ($base as $pagename => $pageterms) {
+            if (!array_key_exists($pagename, $overrides)) {
+                continue;
+            }
+
+            foreach ($pageterms as $term => $value) {
+                if (!array_key_exists($term, $overrides[$pagename])) {
+                    continue;
+                }
+
+                if ($overrides[$pagename][$term] != $value) {
+                    if (!array_key_exists($pagename, $o)) {
+                        $o[$pagename] = array();
+                    }
+                    $o[$pagename][$term] = $overrides[$pagename][$term];
+                }
+            }
+        }
+
+        return $o;
+    }
 }
