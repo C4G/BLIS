@@ -74,9 +74,6 @@ class Terms implements ArrayAccess
     {
         $this->EnsureCache();
 
-        global $log;
-        $log->info("getTerm: $pageName, $term");
-
         $locale = $this->currentLocale;
 
         if (!key_exists($pageName, $this->languageCache)) {
@@ -103,8 +100,6 @@ class Terms implements ArrayAccess
         }
 
         $this->currentPageId = $pageId;
-
-        $log->info("Set page ID to: " . $this->currentPageId);
     }
 
     private function TryLocaleValue(?string $value): bool
@@ -341,6 +336,20 @@ class LangUtil
         }
 
         return $locale;
+    }
+
+    public static function load_page_descriptions(string $filename)
+    {
+        $file = simplexml_load_file($filename);
+
+        $descriptions = array();
+        foreach ($file as $page) {
+            $pagename = strval($page['id']);
+            $descr = strval($page['descr']);
+            $descriptions[$pagename] = $descr;
+        }
+
+        return $descriptions;
     }
 
     public static function merge_locales(array $base, array $source): array

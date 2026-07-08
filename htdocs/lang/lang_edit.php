@@ -65,9 +65,9 @@ function get_edit_locale_form($lang_code, $lab_config_id)
     global $page_elems, $LANGDATA_PATH;
 
     $default_lang_pages = LangUtil::load_locale_file(__DIR__."/../Language/$lang_code.xml");
-    // $default_lang_pages = simplexml_load_file($LANGDATA_PATH . "default.xml");
-    $target_lang_pages = LangUtil::load_locale_file($LANGDATA_PATH . $lang_code . ".xml");
-    // $target_lang_pages = simplexml_load_file($LANGDATA_PATH . $lang_code . ".xml");
+    $override_lang_pages = LangUtil::load_locale_file($LANGDATA_PATH . $lang_code . ".xml");
+
+    $target_lang_pages = LangUtil::merge_locales($default_lang_pages, $override_lang_pages);
 
     # Test Catalog pages
     $default_catalog_pages = simplexml_load_file($LANGDATA_PATH . "default_catalog.xml");

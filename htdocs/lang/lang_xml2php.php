@@ -62,7 +62,12 @@ EOF;
  */
 function lang2php(array $pages, string $langdata_path, string $lang_code)
 {
-    $handle = fopen($langdata_path . $lang_code . ".php", "w");
+    global $log;
+
+    $target_file = "$langdata_path/$lang_code.php";
+    $log->info("Saving updated language to $target_file");
+
+    $handle = fopen($target_file, "w");
     $string_data = <<<EOF
 <?php
 \$LANG_ARRAY = array (
@@ -76,8 +81,12 @@ EOF;
         $string_data = '"' . $pagename . '" => array ( ';
         fwrite($handle, "\t" . $string_data . "\n");
 
+        $sorted_terms = array_keys($page);
+        sort($sorted_terms, SORT_STRING | SORT_FLAG_CASE);
+
         $term_count = 0;
-        foreach ($page as $key => $value) {
+        foreach ($sorted_terms as $key) {
+            $value = $page[$key];
             $term_count++;
             $string_data = "\"$key\" => \"$value\"";
             if ($term_count != count($page)) {

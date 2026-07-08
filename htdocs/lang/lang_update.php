@@ -22,6 +22,7 @@ if ($lab_config_id != null) {
 $xml_file_name = $LANGDATA_PATH.$lang_id.".xml";
 
 $language = LangUtil::load_locale_file(__DIR__."/../Language/$lang_id.xml");
+$descriptions = LangUtil::load_page_descriptions(__DIR__."/../Language/$lang_id.xml");
 $overrides = LangUtil::load_locale_file($xml_file_name);
 $merged = LangUtil::merge_locales($language, $overrides);
 
@@ -41,7 +42,14 @@ $new_xml->appendChild($pages_el);
 foreach($new_overrides as $pagename => $page) {
     $page_el = $new_xml->createElement("page");
     $page_el->setAttribute("id", $pagename);
-    foreach($page as $key=>$value) {
+    $page_el->setAttribute("descr", $descriptions[$pagename]);
+
+    $sorted_terms = array_keys($page);
+    sort($sorted_terms, SORT_STRING | SORT_FLAG_CASE);
+
+    foreach($sorted_terms as $key) {
+        $value = $page[$key];
+
         $term_el = $new_xml->createElement("term");
         $key_el = $new_xml->createElement("key", $key);
         $val_el = $new_xml->createElement("value", $value);
@@ -52,9 +60,9 @@ foreach($new_overrides as $pagename => $page) {
     $pages_el->appendChild($page_el);
 }
 
-# Store back updated XML into file
+# Store back updated XML into file (only the changed terms)
 $new_xml->save($LANGDATA_PATH.$lang_id.'.xml');
 
-// # Convert updated XML to updated PHP file
-// lang_xml2php($lang_id, $LANGDATA_PATH);
+// # Convert updated locale to updated PHP file
+lang2php($merged, $LANGDATA_PATH, $lang_id);
 ?>
