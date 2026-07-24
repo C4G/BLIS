@@ -62,7 +62,4 @@ foreach($new_overrides as $pagename => $page) {
 
 # Store back updated XML into file (only the changed terms)
 $new_xml->save($LANGDATA_PATH.$lang_id.'.xml');
-
-// # Convert updated locale to updated PHP file
-lang2php($merged, $LANGDATA_PATH, $lang_id);
 ?>

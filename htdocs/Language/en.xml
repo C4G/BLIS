@@ -826,6 +826,10 @@
             <value>Region</value>
         </term>
         <term>
+            <key>MENU_BACKUP</key>
+            <value>Backup Data</value>
+        </term>
+        <term>
             <key>BACKUP_LOCAL</key>
             <value>Download local .ZIP backup</value>
         </term>

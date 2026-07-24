@@ -57,61 +57,6 @@ EOF;
     fclose($handle);
 }
 
-/**
- * Save an in-memory language array to PHP
- */
-function lang2php(array $pages, string $langdata_path, string $lang_code)
-{
-    global $log;
-
-    $target_file = "$langdata_path/$lang_code.php";
-    $log->info("Saving updated language to $target_file");
-
-    $handle = fopen($target_file, "w");
-    $string_data = <<<EOF
-<?php
-\$LANG_ARRAY = array (
-
-EOF;
-    fwrite($handle, $string_data);
-
-    $page_count = 0;
-    foreach ($pages as $pagename => $page) {
-        $page_count++;
-        $string_data = '"' . $pagename . '" => array ( ';
-        fwrite($handle, "\t" . $string_data . "\n");
-
-        $sorted_terms = array_keys($page);
-        sort($sorted_terms, SORT_STRING | SORT_FLAG_CASE);
-
-        $term_count = 0;
-        foreach ($sorted_terms as $key) {
-            $value = $page[$key];
-            $term_count++;
-            $string_data = "\"$key\" => \"$value\"";
-            if ($term_count != count($page)) {
-                $string_data .= ", ";
-            }
-            fwrite($handle, "\t\t" . $string_data . "\n");
-        }
-
-        $string_data = ") ";
-        fwrite($handle, "\t" . $string_data);
-        if ($page_count < count($pages)) {
-            $string_data = ", ";
-            fwrite($handle, $string_data . "\n");
-        }
-    }
-
-    $string_data = <<<EOF
-);
-
-return \$LANG_ARRAY;
-EOF;
-    fwrite($handle, "\n" . $string_data);
-    fclose($handle);
-}
-
 #
 # Functions for handling test catalog translation
 #

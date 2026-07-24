@@ -36,6 +36,10 @@ class Terms implements ArrayAccess
 
     private ?array $languageCache = null;
 
+    private static string $baseLanguagePath = __DIR__."/../Language/";
+    private static string $localDir = __DIR__."/../../local/";
+    private static string $cachePath = __DIR__."/../../local/cache/";
+
     public function offsetSet($offset, $value): void
     {
         throw new Exception("Language terms may not be modified at runtime.");
@@ -186,33 +190,52 @@ class Terms implements ArrayAccess
         // Reset current cache
         $this->languageCache = array();
         $locale = $this->ResolveLocale();
-        $log->info("Locale resolved to $locale");
-
-        $base_language = $this->load_legacy_php_locale(__DIR__ . "/../Language/$locale.php");
-        if (!$base_language) {
-            $log->error("Failed to load base language files from htdocs/Language/$locale.php");
-            return;
-        }
-        $log->info("Loaded base file: $locale.php");
 
         // TODO: Fix this to resolve better...
         $lab_id = $_SESSION['lab_config_id'];
-        if ($lab_id) {
-            $lab_language = $this->load_legacy_php_locale(__DIR__ . "/../../local/langdata_$lab_id/$locale.php");
-            if (!$lab_language) {
-                $log->warn("Failed to load language files from local/langdata_$lab_id/$locale.php");
-            } else {
-                $log->info("Loaded lab file: local/langdata_$lab_id/$locale.php");
-                $this->squash_locales($base_language, $lab_language);
-            }
+        if (!isset($lab_id) || $lab_id == "") {
+            $lab_id = "revamp";
         }
 
-        $this->languageCache = $base_language;
+        $log->info("Locale resolved to $locale, lab ID: $lab_id");
+
+        $baseLocale = Terms::$baseLanguagePath . "/$locale.xml";
+        $cachedLocale = Terms::$cachePath . "/terms.$lab_id.$locale.php";
+        $overrides = Terms::$localDir . "/langdata_$lab_id/$locale.xml";
+
+        $regenerate = false;
+        if (file_exists($cachedLocale)) {
+            $base_ctime = filectime($baseLocale);
+            $ovrrd_ctime = filectime($overrides);
+            $cache_ctime = filectime($cachedLocale);
+
+            // If the cache exists, but the base files have been modified since it was generated,
+            // then regenerate it.
+            if ($base_ctime > $cache_ctime || $ovrrd_ctime > $cache_ctime) {
+                $regenerate = true;
+            }
+        } else {
+            $regenerate = true;
+        }
+
+        if ($regenerate) {
+            $log->info("Regenerating $cachedLocale...");
+
+            $base_language = LangUtil::load_locale_file($baseLocale);
+            $lab_language = LangUtil::load_locale_file($overrides);
+            $this->squash_locales($base_language, $lab_language);
+
+            LangUtil::lang2php($base_language, $cachedLocale);
+        }
+
+        $log->info("Loading terms from: " . realpath($cachedLocale));
+        $this->languageCache = require($cachedLocale);
     }
 
     private function EnsureCache()
     {
-        if ($this->languageCache == null || count($this->languageCache) == 0) {
+        $resolvedLocale = $this->ResolveLocale();
+        if ($this->languageCache == null || count($this->languageCache) == 0 || $resolvedLocale != $this->currentLocale) {
             $this->RefreshCache();
         }
     }
@@ -397,5 +420,59 @@ class LangUtil
         }
 
         return $o;
+    }
+
+    /**
+     * Save an in-memory language array to PHP
+     */
+    public static function lang2php(array $pages, string $target_file)
+    {
+        global $log;
+
+        $log->info("Saving updated language to $target_file");
+
+        $handle = fopen($target_file, "w");
+        $string_data = <<<EOF
+    <?php
+    \$LANG_ARRAY = array (
+
+    EOF;
+        fwrite($handle, $string_data);
+
+        $page_count = 0;
+        foreach ($pages as $pagename => $page) {
+            $page_count++;
+            $string_data = '"' . $pagename . '" => array ( ';
+            fwrite($handle, "\t" . $string_data . "\n");
+
+            $sorted_terms = array_keys($page);
+            sort($sorted_terms, SORT_STRING | SORT_FLAG_CASE);
+
+            $term_count = 0;
+            foreach ($sorted_terms as $key) {
+                $value = $page[$key];
+                $term_count++;
+                $string_data = "\"$key\" => \"$value\"";
+                if ($term_count != count($page)) {
+                    $string_data .= ", ";
+                }
+                fwrite($handle, "\t\t" . $string_data . "\n");
+            }
+
+            $string_data = ") ";
+            fwrite($handle, "\t" . $string_data);
+            if ($page_count < count($pages)) {
+                $string_data = ", ";
+                fwrite($handle, $string_data . "\n");
+            }
+        }
+
+        $string_data = <<<EOF
+    );
+
+    return \$LANG_ARRAY;
+    EOF;
+        fwrite($handle, "\n" . $string_data);
+        fclose($handle);
     }
 }

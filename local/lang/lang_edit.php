@@ -7,12 +7,15 @@
 //include("includes/header.php");
 
 require_once('../includes/composer.php');
+require_once(__DIR__."/../config/lab_config_resolver.php");
 
 LangUtil::setPageId("lang_modify");
 
 //$locale = $_REQUEST['locale'];
 //$lab_config_id = $_REQUEST['id'];
 $user = get_user_by_id($_SESSION['user_id']);
+
+$lab_config_id = LabConfigResolver::resolveId();
 
 if($locale === "default")
 {
@@ -42,7 +45,7 @@ function get_locale_page_select()
 		$log->error("Loading $LANGDATA_PATH$DEFAULT_LANG.xml failed.");
 		foreach (libxml_get_errors() as $error) {
 		  $log->error($error->message);
-		}  
+		}
 	}
 	/*$utf_encoded_content = utf8_encode(file_get_contents($LANGDATA_PATH.$DEFAULT_LANG.".xml"));
 	$default_lang_pages = simplexml_load_string($utf_encoded_content);*/
@@ -262,7 +265,7 @@ function fetch_page_form()
 		return;
 	}
 	if(locale_id != "<?php echo $locale; ?>")
-	{	
+	{
 		if( locale_id == 'fr' )
 			var url_string = "lab_config_home.php?id="+lab_config_id+"&set_locale&locale=fr";
 		else
@@ -324,12 +327,12 @@ function check_specialchar_alert(elem)
 }
 function check_specialchar(elem)
 {
-	//var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?~_"; 
-	var iChars = "'\"<>"; 
+	//var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?~_";
+	var iChars = "'\"<>";
 	var textval = elem.value;
-	for (var i = 0; i < textval.length; i++) 
+	for (var i = 0; i < textval.length; i++)
 	{
-		if (iChars.indexOf(textval.charAt(i)) != -1) 
+		if (iChars.indexOf(textval.charAt(i)) != -1)
 		{
 			return true;
 		}
@@ -378,8 +381,8 @@ function check_specialchar(elem)
 		<li><?php echo LangUtil::$pageTerms['TIPS_MODIFYLANG_2']; ?></li>
 	</ul>
 	</div>
-	
-	
+
+
 
 <div class='sidetip_nopos' id='server_msg' style='display:none'>
 	<?php # echo LangUtil::$pageTerms['MSG_LANGUPDATED']; ?>
