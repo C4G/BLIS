@@ -1,133 +1,92 @@
 #!/usr/bin/env php
 <?php
 
-
 /***
- * 1. Load en.xml from htdocs/Language
- * 2. Load en_catalog.xml from htdocs/Language
- * 3. Merge en.xml from local/langdata_127
- * 4. Merge en_catalog.xml from local/langdata_127
- *
+ * Migration test script
  */
 
-
-$locale = "en"; //$argv[1];
-$lab_id = 12; //$argv[2];
+$local_dir = $argv[1];
 
 $basepath = realpath(__DIR__ . "/../");
 $baselocale = "$basepath/htdocs/Language";
-$locallocale = "$basepath/local/langdata_$lab_id";
+$locallocale = "$basepath/$local_dir";
 
-$basefile = "$baselocale/$locale.xml";
+require_once("$basepath/htdocs/lang/lang_util_v2.php");
 
-// $reference = load_locale_file($basefile);
-// $base = load_locale_file($basefile);
+// Step 1: English
 
-// $default_base = load_locale_file("$baselocale/default.xml");
-// $default_ov = load_locale_file("$locallocale/default.xml");
-// $ov = load_locale_file("$locallocale/$locale.xml");
+$base_en = LangUtil::load_locale_file("$baselocale/en.xml");
+$descriptions = LangUtil::load_page_descriptions("$baselocale/en.xml");
 
-$reference = load_legacy_php_locale(__DIR__."/default_lang.php");
-$base = load_legacy_php_locale(__DIR__."/default_lang.php");
-$ov = load_legacy_php_locale(__DIR__."/en_lang.php");
+$local_en_1 = LangUtil::load_locale_file("$locallocale/en.xml");
+$ovr_en_1 = LangUtil::find_overrides($base_en, $local_en_1);
 
-if (!$base || !$ov) {
-    fwrite(STDERR, "Failed to load locales.\n");
-    exit(1);
-}
+$local_en_2 = LangUtil::load_legacy_php_locale("$locallocale/en.php");
+$ovr_en_2 = LangUtil::find_overrides($base_en, $local_en_2);
 
-// squash_locales($base, $default_base);
-// squash_locales($base, $default_ov);
-squash_locales($base, $ov);
-$diff = find_overrides($reference, $base);
+$local_def_1 = LangUtil::load_locale_file("$locallocale/default.xml");
+$ovr_def_1 = LangUtil::find_overrides($base_en, $local_def_1);
 
-echo(json_encode($diff)."\n");
-fwrite(STDOUT, json_encode($diff) . "\n");
+$local_def_2 = LangUtil::load_legacy_php_locale("$locallocale/default.php");
+$ovr_def_2 = LangUtil::find_overrides($base_en, $local_def_2);
 
-function load_legacy_php_locale(string $filename): array | false {
-    if(!file_exists($filename)) {
-        fwrite(STDERR, "File $filename does not exist.\n");
-        return false;
-    }
+$merged = LangUtil::merge_locales($base_en, $ovr_en_1);
+$merged = LangUtil::merge_locales($merged, $ovr_en_2);
+$merged = LangUtil::merge_locales($merged, $ovr_def_1);
+$merged = LangUtil::merge_locales($merged, $ovr_def_2);
 
-    $GLOBALS['LANG_ARRAY'] = null;
+$new_overrides = LangUtil::find_overrides($base_en, $merged);
 
-    global $LANG_ARRAY;
+write_xml($new_overrides, $descriptions, __DIR__."/en.xml");
 
-    include "$filename";
+// Step 2: French
 
-    if (!$GLOBALS['LANG_ARRAY']) {
-        fwrite(STDERR, "Failed to load LANG_ARRAY from $filename\n");
-        return false;
-    }
+$base_fr = LangUtil::load_locale_file("$baselocale/fr.xml");
+$descriptions = LangUtil::load_page_descriptions("$baselocale/fr.xml");
 
-    return $GLOBALS['LANG_ARRAY'];
-}
+$local_fr_1 = LangUtil::load_locale_file("$locallocale/fr.xml");
+$ovr_fr_1 = LangUtil::find_overrides($base_fr, $local_fr_1);
 
-/**
- * Returns a multilevel array keyed by page, then term
- */
-function load_locale_file(string $filename) {
-    $file = simplexml_load_file($filename);
+$local_fr_2 = LangUtil::load_legacy_php_locale("$locallocale/fr.php");
+$ovr_fr_2 = LangUtil::find_overrides($base_fr, $local_fr_2);
 
-    $locale = array();
-    foreach($file as $page)
-    {
-        $pagename = strval($page['id']);
+$merged = LangUtil::merge_locales($base_fr, $ovr_fr_1);
+$merged = LangUtil::merge_locales($merged, $ovr_fr_2);
 
-        $pageterms = array();
-        foreach($page->term as $term) {
-            $k = strval($term->key[0]);
-            $v = strval($term->value[0]);
+$new_overrides = LangUtil::find_overrides($base_fr, $merged);
 
-            $pageterms[$k] = $v;
+write_xml($new_overrides, $descriptions, __DIR__."/fr.xml");
+
+function write_xml(array $pages, array $descriptions, string $filename)
+{
+    $new_xml = new DOMDocument('1.0', 'UTF-8');
+    $new_xml->formatOutput = true;
+
+    $pages_el = $new_xml->createElement("pages");
+    $pages_el->setAttribute("lang", "en");
+    $new_xml->appendChild($pages_el);
+
+    foreach ($pages as $pagename => $page) {
+        $page_el = $new_xml->createElement("page");
+        $page_el->setAttribute("id", $pagename);
+        $page_el->setAttribute("descr", $descriptions[$pagename]);
+
+        $sorted_terms = array_keys($page);
+        sort($sorted_terms, SORT_STRING | SORT_FLAG_CASE);
+
+        foreach ($sorted_terms as $key) {
+            $value = $page[$key];
+
+            $term_el = $new_xml->createElement("term");
+            $key_el = $new_xml->createElement("key", $key);
+            $val_el = $new_xml->createElement("value", $value);
+            $term_el->appendChild($key_el);
+            $term_el->appendChild($val_el);
+            $page_el->appendChild($term_el);
         }
-
-        $locale[$pagename] = $pageterms;
+        $pages_el->appendChild($page_el);
     }
 
-    return $locale;
-}
-
-function squash_locales(array & $target, array $source) {
-    foreach($source as $pagename => $pageterms) {
-        if(!array_key_exists($pagename, $target)) {
-            $target[$pagename] = $pageterms;
-        } else {
-            foreach($pageterms as $term => $val) {
-                $target[$pagename][$term] = $val;
-            }
-        }
-    }
-}
-
-function find_overrides(array $base, array $overrides) {
-    $o = array();
-
-    foreach($overrides as $pagename => $pageterms) {
-        if(!array_key_exists($pagename, $base)) {
-            $o[$pagename] = $pageterms;
-        }
-    }
-
-    foreach($base as $pagename => $pageterms) {
-        if(!array_key_exists($pagename, $overrides)) {
-            continue;
-        }
-
-        foreach($pageterms as $term => $value) {
-            if(!array_key_exists($term, $overrides[$pagename])) {
-                continue;
-            }
-
-            if ($overrides[$pagename][$term] != $value) {
-                if (!array_key_exists($pagename, $o)) {
-                    $o[$pagename] = array();
-                }
-                $o[$pagename][$term] = $overrides[$pagename][$term];
-            }
-        }
-    }
-
-    return $o;
+    # Store back updated XML into file (only the changed terms)
+    $new_xml->save($filename);
 }

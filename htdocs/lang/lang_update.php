@@ -6,11 +6,10 @@
 
 include_once("redirect.php");
 require_once("lang/lang_xml2php.php");
-require_once(__DIR__."/../config/lab_config_resolver.php");
 
-$lang_id = $_REQUEST['lang_id'];
-$page_id = $_REQUEST['page_id'];
-$lab_config_id = LabConfigResolver::resolveId();
+$lang_id = $_POST['lang_id'];
+$page_id = $_POST['page_id'];
+$lab_config_id = $_POST['lab_config_id'];
 
 $LANGDATA_PATH = __DIR__."/../../local";
 if ($lab_config_id != null) {

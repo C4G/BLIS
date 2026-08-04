@@ -13,7 +13,7 @@ $DEBUG = false;
 
 # Default language for the system
 # Used to fetch appropriate locale file from lang/$DEFAULT_LANG.php
-$DEFAULT_LANG = "default";
+$DEFAULT_LANG = "en";
 
 # Lab Id Starts for various countries
 $labIdArray = array(

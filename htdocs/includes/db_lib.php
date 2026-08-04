@@ -11,6 +11,7 @@ require_once(__DIR__."/db_util.php");
 require_once(__DIR__."/keymgmt.php");
 require_once(__DIR__."/lab_config.php");
 require_once(__DIR__."/migrations.php");
+require_once(__DIR__."/user_lib.php");
 
 # Start session if not already started
 if(session_id() == "")
@@ -56,10 +57,8 @@ if(!isset($_SESSION['locale'])) {
 }
 
 $locale_catalog_file = $_SESSION['langdata_path'].$_SESSION['locale']."_catalog.php";
-$locale_file = $_SESSION['langdata_path'].$_SESSION['locale'].".php";
 
 require_once($locale_catalog_file);
-require_once($locale_file);
 
 require_once("debug_lib.php");
 require_once("date_lib.php");

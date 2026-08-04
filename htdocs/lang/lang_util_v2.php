@@ -143,33 +143,6 @@ class Terms implements ArrayAccess
         return $this->currentLocale;
     }
 
-    private function load_legacy_php_locale(string $filename): ?array
-    {
-        global $log;
-
-        if (!file_exists($filename)) {
-            $log->error("File $filename does not exist.");
-            return null;
-        }
-
-        $GLOBALS['LANG_ARRAY'] = null;
-        global $LANG_ARRAY;
-
-        /**
-         * Inherently unsafe code: if the language file has been modified to include dangerous code,
-         * it will be executed here.
-         * This should be replaced with a new format for language loading...
-         */
-        include "$filename";
-
-        if (!$GLOBALS['LANG_ARRAY']) {
-            $log->error("Failed to load LANG_ARRAY from $filename\n");
-            return null;
-        }
-
-        return $GLOBALS['LANG_ARRAY'];
-    }
-
     function squash_locales(array &$target, array $source)
     {
         foreach ($source as $pagename => $pageterms) {
@@ -197,7 +170,7 @@ class Terms implements ArrayAccess
             $lab_id = "revamp";
         }
 
-        $log->info("Locale resolved to $locale, lab ID: $lab_id");
+        // $log->info("Locale resolved to $locale, lab ID: $lab_id");
 
         $baseLocale = Terms::$baseLanguagePath . "/$locale.xml";
         $cachedLocale = Terms::$cachePath . "/terms.$lab_id.$locale.php";
@@ -228,7 +201,7 @@ class Terms implements ArrayAccess
             LangUtil::lang2php($base_language, $cachedLocale);
         }
 
-        $log->info("Loading terms from: " . realpath($cachedLocale));
+        // $log->info("Loading terms from: " . realpath($cachedLocale));
         $this->languageCache = require($cachedLocale);
     }
 
@@ -337,10 +310,44 @@ class LangUtil
     }
 
     /**
+     * Returns a multilevel locale array.
+     */
+    public static function load_legacy_php_locale(string $filename): ?array
+    {
+        global $log;
+
+        if (!file_exists($filename)) {
+            $log->error("File $filename does not exist.");
+            return null;
+        }
+
+        $GLOBALS['LANG_ARRAY'] = null;
+        global $LANG_ARRAY;
+
+        /**
+         * Inherently unsafe code: if the language file has been modified to include dangerous code,
+         * it will be executed here.
+         * This should be replaced with a new format for language loading...
+         */
+        include "$filename";
+
+        if (!$GLOBALS['LANG_ARRAY']) {
+            $log->error("Failed to load LANG_ARRAY from $filename\n");
+            return null;
+        }
+
+        return $GLOBALS['LANG_ARRAY'];
+    }
+
+    /**
      * Returns a multilevel array keyed by page, then term
      */
     public static function load_locale_file(string $filename)
     {
+        if (!file_exists($filename)) {
+            return array();
+        }
+
         $file = simplexml_load_file($filename);
 
         $locale = array();

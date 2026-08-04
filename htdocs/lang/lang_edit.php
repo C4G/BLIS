@@ -11,46 +11,38 @@ require_once(__DIR__."/../config/lab_config_resolver.php");
 
 LangUtil::setPageId("lang_modify");
 
-$locale = $_SESSION['locale'];
+$locale = $_GET['locale'];
+if (!$locale) {
+    $locale = $_SESSION['locale'];
+}
 
-$lab_config_id = LabConfigResolver::resolveId();
+// Hardcode default to en
+if ($locale === "default") {
+    $locale = "en";
+}
+
+$lab_config_id = $_GET['id'];
+if (!$lab_config_id) {
+    $lab_config_id = LabConfigResolver::resolveId();
+}
 
 $user = get_user_by_id($_SESSION['user_id']);
 
-if ($locale === "default") {
-    if (is_super_admin($user) || is_country_dir($user)) {
-        //Do nothing
-    } else {
-        $locale = "en";
-    }
+$LANGDATA_PATH = ""; // TODO: This should not happen, but still might...
+if ($lab_config_id) {
+    $LANGDATA_PATH = __DIR__."/../../local/langdata_$lab_config_id/";
 }
-
-$LANGDATA_PATH = "$LOCAL_PATH/langdata_revamp/";
-if ($SERVER == $ON_PORTABLE) {
-    $LANGDATA_PATH = $LOCAL_PATH . "/langdata_" . $lab_config_id . "/";
-}
-
 
 $script_elems->enableJQueryForm();
-//$script_elems->enableAutogrowTextarea();
-function get_locale_page_select()
+
+function get_locale_page_select(string $lang_code)
 {
-    global $DEFAULT_LANG, $LANGDATA_PATH, $log;
-    libxml_use_internal_errors(true);
-    $default_lang_pages = simplexml_load_file($LANGDATA_PATH . $DEFAULT_LANG . ".xml");
-    if ($default_lang_pages === false) {
-        $log->error("Loading $LANGDATA_PATH$DEFAULT_LANG.xml failed.");
-        foreach (libxml_get_errors() as $error) {
-            $log->error($error->message);
-        }
-    }
-    /*$utf_encoded_content = utf8_encode(file_get_contents($LANGDATA_PATH.$DEFAULT_LANG.".xml"));
-    $default_lang_pages = simplexml_load_string($utf_encoded_content);*/
-    foreach ($default_lang_pages as $default_lang_page) {
-        $page_id = $default_lang_page['id'];
-        $page_descr = $default_lang_page['descr'];
+    $default_lang_pages = LangUtil::load_page_descriptions(__DIR__."/../Language/$lang_code.xml");
+
+    foreach ($default_lang_pages as $page_id => $page_descr) {
         echo "<option value='$page_id'>$page_descr</option>";
     }
+
     # Catalog options
     if ($CATALOG_TRANSLATION === true) {
         echo "<option value='_test'>Test Names</option>";
@@ -322,7 +314,7 @@ if (isset($_REQUEST['p'])) {
                 &nbsp;&nbsp;
                 <select name='page_id' id='page_id'>
                     <option value=''><?php echo LangUtil::$generalTerms['CMD_SELECT']; ?> ..</option>
-                    <?php get_locale_page_select(); ?>
+                    <?php get_locale_page_select($locale); ?>
                 </select>
                 &nbsp;&nbsp;&nbsp;
                 <input type='button' id='cat_button' value="<?php echo LangUtil::$generalTerms['CMD_SEARCH']; ?>"> </input>
