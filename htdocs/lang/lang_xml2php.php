@@ -4,58 +4,7 @@
 # XML tags are mapped to a PHP associative list
 #
 
-
 require_once(dirname(__FILE__) . "/../includes/db_lib.php");
-
-#
-# Functions for handling language translation
-#
-
-function lang_xml2php($lang_code, $langdata_path)
-{
-    $handle = fopen($langdata_path . $lang_code . ".php", "w");
-    $string_data = <<<EOF
-<?php
-\$LANG_ARRAY = array (
-
-EOF;
-    fwrite($handle, $string_data);
-
-    $pages = simplexml_load_file($langdata_path . $lang_code . ".xml");
-
-    $page_count = 0;
-    foreach ($pages as $page) {
-        $page_count++;
-        $string_data = '"' . $page['id'] . '" => array ( ';
-        fwrite($handle, "\t" . $string_data . "\n");
-        $terms = $page->term;
-        $term_count = 0;
-        foreach ($terms as $term) {
-            $term_count++;
-            $string_data = "\"" . $term->key . "\" => \"" . $term->value . "\"";
-            if ($term_count != count($terms)) {
-                $string_data .= ", ";
-            }
-            fwrite($handle, "\t\t" . $string_data . "\n");
-        }
-
-        $string_data = ") ";
-        fwrite($handle, "\t" . $string_data);
-        if ($page_count < count($pages)) {
-            $string_data = ", ";
-            fwrite($handle, $string_data . "\n");
-        }
-    }
-
-    $string_data = <<<EOF
-);
-
-include_once(__DIR__."/../lang/lang_util.php");
-?>
-EOF;
-    fwrite($handle, "\n" . $string_data);
-    fclose($handle);
-}
 
 #
 # Functions for handling test catalog translation
@@ -295,7 +244,6 @@ EOF;
     $string_data = <<<EOF
 );
 
-include_once("../lang/lang_util.php");
 ?>
 EOF;
     fwrite($handle, "\n" . $string_data);
