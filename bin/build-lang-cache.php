@@ -3,6 +3,8 @@
 
 /***
  * Migration test script
+ * This is a work in progress, POC script detailing how a migration of the "local/langdata_" folders
+ * could be migrated to a minimal number of .xml files.
  */
 
 $local_dir = $argv[1];
