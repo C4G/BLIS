@@ -117,18 +117,18 @@ $_SESSION['lab_config_id'] = $lab_config_id;
 
 global $LOCAL_PATH, $log;
 
-# Copy contents of local/langdata_revamp/ into this new folder
-if (is_dir($LOCAL_PATH."/langdata_".$lab_config_id)) {
-    $log->warning("$LOCAL_PATH/langdata_$lab_config_id already exists. Deleting it.");
-    PlatformLib::removeDirectory($LOCAL_PATH."/langdata_".$lab_config_id);
-}
-chmod($LOCAL_PATH."/langdata_revamp", 0755);
-chmod($LOCAL_PATH."/langdata_".$lab_config_id, 0755);
-mkdir($LOCAL_PATH."/langdata_".$lab_config_id);
-$log->info("Copying langdata_revamp folder to langdata_$lab_config_id");
-PlatformLib::copyDirectory($LOCAL_PATH."/langdata_revamp", $LOCAL_PATH."/langdata_".$lab_config_id);
-
 $langdata_path = $LOCAL_PATH."/langdata_".$lab_config_id."/";
+
+# If the local/langdata_XX folder already exists, delete it
+if (is_dir($langdata_path)) {
+    $log->warning("$langdata_path already exists. Deleting it.");
+    PlatformLib::removeDirectory($langdata_path);
+}
+
+# Copy contents of local/langdata_revamp/ into this new folder
+$log->info("Copying langdata_revamp folder to langdata_$lab_config_id");
+PlatformLib::copyDirectory($LOCAL_PATH."/langdata_revamp", $langdata_path);
+
 remarks_db2xml($langdata_path, $lab_config_id);
 
 $_SESSION['lab_config_id'] = $saved_id;
