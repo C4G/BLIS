@@ -160,6 +160,10 @@ class Terms implements ArrayAccess
     {
         global $log;
 
+        if (!is_dir(Terms::$cachePath)) {
+            mkdir(Terms::$cachePath);
+        }
+
         // Reset current cache
         $this->languageCache = array();
         $locale = $this->ResolveLocale();
