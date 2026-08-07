@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "bmewburn.vscode-intelephense-client",
+        "timonwong.shellcheck",
+        "redhat.vscode-xml"
+    ]
+}

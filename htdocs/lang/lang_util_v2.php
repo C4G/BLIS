@@ -74,7 +74,7 @@ class Terms implements ArrayAccess
         return $this->getTerm($page, $offset);
     }
 
-    public function getTerm(string $pageName, string $term): string
+    public function getTerm(string $pageName, string $term, string ...$args): string
     {
         $this->EnsureCache();
 
@@ -90,7 +90,14 @@ class Terms implements ArrayAccess
             return "[MISSING TERM: $locale:$pageName:$term]";
         }
 
-        return $page[$term];
+        $template = $page[$term];
+
+        foreach($args as $n => $arg) {
+            $argno = "$" . ($n+1);
+            $template = str_replace($argno, $arg, $template);
+        }
+
+        return $template;
     }
 
     public function SetPageId(string $pageId)
@@ -116,7 +123,7 @@ class Terms implements ArrayAccess
             return false;
         }
 
-        if (!file_exists(__DIR__ . "/../Language/$value.php")) {
+        if (!file_exists(__DIR__ . "/../Language/$value.xml")) {
             return false;
         }
 
@@ -125,6 +132,8 @@ class Terms implements ArrayAccess
 
     private function ResolveLocale(): string
     {
+        session_start();
+
         if ($this->currentLocale != null) {
             return $this->currentLocale;
         }
@@ -177,14 +186,19 @@ class Terms implements ArrayAccess
         // $log->info("Locale resolved to $locale, lab ID: $lab_id");
 
         $baseLocale = Terms::$baseLanguagePath . "/$locale.xml";
-        $cachedLocale = Terms::$cachePath . "/terms.$lab_id.$locale.php";
+        $cachedFilename = "terms.$lab_id.$locale.php";
+        $cachedLocale = realpath(Terms::$cachePath) . DIRECTORY_SEPARATOR . $cachedFilename;
         $overrides = Terms::$localDir . "/langdata_$lab_id/$locale.xml";
 
         $regenerate = false;
         if (file_exists($cachedLocale)) {
-            $base_ctime = filectime($baseLocale);
-            $ovrrd_ctime = filectime($overrides);
-            $cache_ctime = filectime($cachedLocale);
+            $base_ctime = filemtime($baseLocale);
+            $cache_ctime = filemtime($cachedLocale);
+
+            $ovrrd_ctime = $base_ctime;
+            if (file_exists($overrides)) {
+                $ovrrd_ctime = filemtime($overrides);
+            }
 
             // If the cache exists, but the base files have been modified since it was generated,
             // then regenerate it.
@@ -194,6 +208,8 @@ class Terms implements ArrayAccess
         } else {
             $regenerate = true;
         }
+
+        $base_language = array();
 
         if ($regenerate) {
             $log->info("Regenerating $cachedLocale...");
@@ -205,8 +221,18 @@ class Terms implements ArrayAccess
             LangUtil::lang2php($base_language, $cachedLocale);
         }
 
-        // $log->info("Loading terms from: " . realpath($cachedLocale));
-        $this->languageCache = require($cachedLocale);
+        // $log->info("Loading terms from: $cachedLocale");
+
+        try {
+            $this->languageCache = require($cachedLocale);
+        } catch (\Throwable $e) {
+            $log->error("There was a problem loading the language cache: " . $e->getMessage() . " in file $cachedLocale:" . $e->getLine());
+            // We might be able to salvage this if we loaded terms from XML directly.
+            // However, if that also failed, then this will be an empty array.
+            if (count($base_language) > 0) {
+                $this->languageCache = $base_language;
+            }
+        }
     }
 
     private function EnsureCache()
@@ -216,6 +242,12 @@ class Terms implements ArrayAccess
             $this->RefreshCache();
         }
     }
+}
+
+function LangPageHelper(string $pageName) {
+    return function($term, ...$args) use ($pageName) {
+        return LangUtil::getTerm($pageName, $term, ...$args);
+    };
 }
 
 class LangUtil
@@ -261,9 +293,9 @@ class LangUtil
         return self::$pageTerms[$key];
     }
 
-    public static function getTerm(string $pageName, string $term)
+    public static function getTerm(string $pageName, string $term, ...$args)
     {
-        return self::$pageTerms->getTerm($pageName, $term);
+        return self::$pageTerms->getTerm($pageName, $term, ...$args);
     }
 
     # Fetching test catalog related terms

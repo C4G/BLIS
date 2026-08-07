@@ -1,4 +1,5 @@
 {
     // Uncomment if you are working with BLIS on Windows
-    // "php.validate.executablePath": "server/php/php.exe"
+    // "php.validate.executablePath": "server/php/php.exe",
+    "intelephense.environment.phpVersion": "7.4",
 }

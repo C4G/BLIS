@@ -3091,4 +3091,62 @@
             <value>Apply</value>
         </term>
     </page>
+    <page id="config_v2" descr="Lab configuration v2">
+        <term>
+            <key>MIGRATIONS_PENDING</key>
+            <value>There are database migrations pending. Please &lt;a href=\"lab_config_backups_apply_migrations.php?id=$1\"&gt;click here&lt;/a&gt; to apply them.</value>
+        </term>
+        <term>
+            <key>CONFIRM_DELETE</key>
+            <value>Are you sure you want to delete this backup?</value>
+        </term>
+        <term>
+            <key>BACKUP_KEY</key>
+            <value>Backup encryption key: </value>
+        </term>
+        <term>
+            <key>BACKUP_TYPE</key>
+            <value>Type of backup: </value>
+        </term>
+        <term>
+            <key>CREATE_BACKUP</key>
+            <value>Create New Backup</value>
+        </term>
+        <term>
+            <key>BACKUP_GENERAL</key>
+            <value>General Backup</value>
+        </term>
+        <term>
+            <key>BACKUP_ANONYMIZED</key>
+            <value>Anonymized Backup</value>
+        </term>
+        <term>
+            <key>BACKUPS</key>
+            <value>Backups</value>
+        </term>
+        <term>
+            <key>DATE</key>
+            <value>Date</value>
+        </term>
+        <term>
+            <key>BLIS_VERSION</key>
+            <value>BLIS Version</value>
+        </term>
+        <term>
+            <key>FILENAME</key>
+            <value>Filename</value>
+        </term>
+        <term>
+            <key>LAB_BACKUPS</key>
+            <value>Lab Backups</value>
+        </term>
+        <term>
+            <key>SETTINGS</key>
+            <value>Settings</value>
+        </term>
+        <term>
+            <key>UPLOAD_BACKUP</key>
+            <value>Upload Backup</value>
+        </term>
+    </page>
 </pages>

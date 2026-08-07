@@ -13,6 +13,9 @@ require_once(__DIR__."/../../includes/migrations.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 require_once(__DIR__."/lib/backup.php");
 
+require_once(__DIR__."/../../lang/lang_util_v2.php");
+$t = LangPageHelper("config_v2");
+
 $current_user_id = $_SESSION['user_id'];
 $current_user = get_user_by_id($current_user_id);
 $lab_config_id = $_REQUEST['id'];
@@ -69,7 +72,7 @@ require_once(__DIR__."/lab_config_backup_header.php");
     $(document).ready(function() {
 
         $('a.delete-backup').bind('click', function () {
-            return confirm('Are you sure you want to delete this backup?');
+            return confirm('<?= $t("CONFIRM_DELETE") ?>');
         });
 
     });
@@ -79,14 +82,14 @@ require_once(__DIR__."/lab_config_backup_header.php");
 if ($has_pending_migrations) {
 ?>
 <div class="section" id="pending-migrations">
-    There are database migrations pending. Please <a href="lab_config_backups_apply_migrations.php?id=<?php echo($lab_config_id);?>">click here</a> to apply them.
+    <?= $t("MIGRATIONS_PENDING", $lab_config_id); ?>
 </div>
 <?php
 }
 ?>
 
 <div id="create-backup" class="section">
-    <h3 class="section-head">Create New Backup</h3>
+    <h3 class="section-head"><?= $t("CREATE_BACKUP") ?></h3>
 
     <form id='databaseBackupType' name='databaseBackupType' action='/backupData.php' method='post' enctype="multipart/form-data">
         <input type='hidden' value='<?php echo $lab_config_id; ?>' id='labConfigId' name='labConfigId' />
@@ -95,7 +98,7 @@ if ($has_pending_migrations) {
                 $encryption_keys = Key::where_type(Key::$PUBLIC);
             ?>
             <tr id="keySelectRow">
-                <td style="text-align: right">Backup encryption key: </td>
+                <td style="text-align: right"><?= $t("BACKUP_KEY"); ?></td>
                 <td>
                     <select id="keySelectDropdown" name="keySelectDropdown" autocomplete="off">
                         <?php
@@ -112,13 +115,13 @@ if ($has_pending_migrations) {
             ?>
 
             <tr>
-                <td style="text-align: right">Type of backup:</td>
+                <td style="text-align: right"><?= $t("BACKUP_TYPE"); ?></td>
                 <td>
                     <input type='radio' id='backupTypeSelectGeneral' name='backupTypeSelect' value='normal' checked>
-                    <label for="backupTypeSelectGeneral">General Backup</label>
+                    <label for="backupTypeSelectGeneral"><?= $t("BACKUP_GENERAL") ?></label>
                     <br/>
                     <input type='radio' id='backupTypeSelectAnon' name='backupTypeSelect' value='anonymized'>
-                    <label for="backupTypeSelectAnon">Anonymized Backup</label>
+                    <label for="backupTypeSelectAnon"><?= $t("BACKUP_ANONYMIZED") ?></label>
                 </td>
             </tr>
 
@@ -133,7 +136,7 @@ if ($has_pending_migrations) {
 </div>
 
 <div id='backup_list' class="section">
-    <h3 class="section-head">Backups</h3>
+    <h3 class="section-head"><?= $t("BACKUPS") ?></h3>
 
     <?php
     if (count($backups) == 0) {
@@ -144,13 +147,13 @@ if ($has_pending_migrations) {
         <thead>
             <tr valign='top'>
                 <th class="text-right">
-                    Date
+                    <?= $t("DATE") ?>
                 </th>
                 <th class="text-right">
-                    BLIS Version
+                    <?= $t("BLIS_VERSION") ?>
                 </th>
                 <th class="text-center">
-                    Filename
+                    <?= $t("FILENAME") ?>
                 </th>
                 <th></th>
                 <th></th>
