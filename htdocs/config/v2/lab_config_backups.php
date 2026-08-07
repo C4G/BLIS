@@ -82,7 +82,7 @@ require_once(__DIR__."/lab_config_backup_header.php");
 if ($has_pending_migrations) {
 ?>
 <div class="section" id="pending-migrations">
-    <?= $t("MIGRATIONS_PENDING", $lab_config_id); ?>
+    <?= $t("MIGRATIONS_PENDING"); ?><a href="lab_config_backups_apply_migrations.php?id=<?= $lab_config_id ?>"><?= $t("MIGRATE") ?></a>
 </div>
 <?php
 }

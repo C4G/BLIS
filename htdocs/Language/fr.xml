@@ -2876,7 +2876,11 @@
     <page id="config_v2" descr="Lab configuration v2">
         <term>
             <key>MIGRATIONS_PENDING</key>
-            <value>There are database migrations pending. Please &lt;a href=\"lab_config_backups_apply_migrations.php?id=$1\"&gt;click here&lt;/a&gt; to apply them.</value>
+            <value>There are database migrations pending. Please click here to apply them: </value>
+        </term>
+        <term>
+            <key>MIGRATE</key>
+            <value>Migrate</value>
         </term>
         <term>
             <key>CONFIRM_DELETE</key>
