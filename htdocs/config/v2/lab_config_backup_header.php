@@ -4,6 +4,9 @@ require_once(__DIR__."/../../includes/db_mysql_lib.php");
 require_once(__DIR__."/../../includes/db_util.php");
 require_once(__DIR__."/../../includes/features.php");
 
+require_once(__DIR__."/../../lang/lang_util_v2.php");
+$t = LangPageHelper("config_v2");
+
 // Assume authentication + everything has been done outside of this file
 global $lab_config_id;
 global $lab_config_name;
@@ -97,12 +100,12 @@ a.delete-backup {
         if ($lab_config_name) {
             echo("<b>$lab_config_name</b>");
         } else {
-            echo("<b>" . "Lab Backups" . "</b>");
+            echo("<b>" . $t("LAB_BACKUPS") . "</b>");
         }
     ?>
-    | <?php render_tab("lab_backups", "lab_config_backups.php?id=$lab_config_id", "Lab Backups"); ?>
-    | <?php render_tab("settings", "lab_config_backup_settings.php?id=$lab_config_id", "Settings"); ?>
-    | <?php render_tab("upload", "lab_config_backup_upload.php?id=$lab_config_id", "Upload Backup"); ?>
+    | <?php render_tab("lab_backups", "lab_config_backups.php?id=$lab_config_id", $t("LAB_BACKUPS")); ?>
+    | <?php render_tab("settings", "lab_config_backup_settings.php?id=$lab_config_id", $t("SETTINGS")); ?>
+    | <?php render_tab("upload", "lab_config_backup_upload.php?id=$lab_config_id", $t("UPLOAD_BACKUP")); ?>
     <?php if (Features::allow_client_connections() && !is_connected_to_cloud()) { ?>
     | <?php render_tab("connect", "lab_config_backup_connect.php?id=$lab_config_id", "Connect Offline Lab"); ?>
     <?php } ?>

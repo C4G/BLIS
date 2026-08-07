@@ -22,8 +22,6 @@
 /local/log*
 /local/UILog*
 /logs/
-# Per-lab language data folders generated at runtime (langdata_{lab_config_id})
-/local/langdata_1
 
 # OS generated files #
 ######################
@@ -66,3 +64,5 @@ Thumbs.db
 /site/
 
 /htdocs/phpMyAdmin
+
+/local/cache/

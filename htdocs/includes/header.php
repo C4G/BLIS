@@ -28,7 +28,6 @@ if ($TRACK_LOADTIME) {
 require_once(__DIR__."/page_elems.php");
 require_once(__DIR__."/script_elems.php");
 include_once(__DIR__."/../lang/lang_util.php");
-LangUtil::setPageId("header");
 require_once(__DIR__."/perms_check.php");
 
 $script_elems = new ScriptElems();
@@ -76,21 +75,21 @@ $page_elems = new PageElems();
 <?php
 if (isset($_SESSION['username'])) {
         ?>
-    <?php echo LangUtil::getPageTerm("LOGGEDINAS"); ?>: <?php echo $_SESSION['username']; ?> |
-    <a href='/edit_profile.php' class="black"><?php echo LangUtil::$pageTerms['EDITPROFILE']; ?></a> |
+    <?php echo LangUtil::getTerm("header", "LOGGEDINAS"); ?>: <?php echo $_SESSION['username']; ?> |
+    <a href='/edit_profile.php' class="black"><?php echo LangUtil::getTerm("header", 'EDITPROFILE'); ?></a> |
     <?php
     //echo "test".$_SESSION['admin_as_tech'];
     if (isset($_SESSION['admin_as_tech']) && $_SESSION['admin_as_tech'] === true) {
         ?>
-        <a href='/switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOMGR"); ?></a> |
+        <a href='/switchto_admin.php' class="black"><?php echo LangUtil::getTerm("header", "SWITCH_TOMGR"); ?></a> |
         <?php
     } elseif (isset($_SESSION['dir_as_tech']) && $_SESSION['dir_as_tech'] === true) {
         ?>
-        <a href='/switchto_admin.php' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TODIR"); ?></a> |
+        <a href='/switchto_admin.php' class="black"><?php echo LangUtil::getTerm("header", "SWITCH_TODIR"); ?></a> |
         <?php
     } elseif (User::onlyOneLabConfig($_SESSION['user_id'], $_SESSION['user_level'])) {
         $lab_config_list = get_lab_configs($_SESSION['user_id']); ?>
-        <a href='/switchto_tech.php?id=<?php echo $lab_config_list[0]->id; ?>' class="black"><?php echo LangUtil::getPageTerm("SWITCH_TOTECH"); ?></a> |
+        <a href='/switchto_tech.php?id=<?php echo $lab_config_list[0]->id; ?>' class="black"><?php echo LangUtil::getTerm("header", "SWITCH_TOTECH"); ?></a> |
         <?php
     }
     }
@@ -102,7 +101,7 @@ if (isset($_SESSION['username'])) {
     <?php
     }
     ?>
-    <a rel='facebox' href='/user_rating.php' class="black"><?php echo LangUtil::getPageTerm("LOGOUT"); ?></a>
+    <a rel='facebox' href='/user_rating.php' class="black"><?php echo LangUtil::getTerm("header", "LOGOUT"); ?></a>
         </div>
         <table cellspacing="10px">
             <tr>
@@ -137,7 +136,7 @@ if (strpos($_SERVER['PHP_SELF'], 'login.php') === false) {
                 # Highlight current page tab
                 echo " class='here' ";
             }
-            if (strpos($key, LangUtil::$pageTerms['MENU_BACKUP']) !== false) {
+            if (strpos($key, LangUtil::getTerm("header", 'MENU_BACKUP')) !== false) {
                 //				echo " target='_blank' ";
             }
             if (strpos($_SERVER['PHP_SELF'], "_home.php") !== false && strpos($value, "lab_configs.php") !== false) {

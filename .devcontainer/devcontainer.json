@@ -3,7 +3,7 @@
     "features": {
         "ghcr.io/devcontainers/features/sshd:1": {},
         "ghcr.io/devcontainers/features/github-cli:1": {},
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:4.0.0": {},
     },
     "forwardPorts": [
         8000,
@@ -19,5 +19,14 @@
             "onAutoForward": "notify"
         }
     },
-    "postCreateCommand": ".devcontainer/post-create-command.sh"
+    "postCreateCommand": ".devcontainer/post-create-command.sh",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "timonwong.shellcheck",
+                "redhat.vscode-xml"
+            ]
+        }
+    }
 }

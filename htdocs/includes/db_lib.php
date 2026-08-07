@@ -11,6 +11,7 @@ require_once(__DIR__."/db_util.php");
 require_once(__DIR__."/keymgmt.php");
 require_once(__DIR__."/lab_config.php");
 require_once(__DIR__."/migrations.php");
+require_once(__DIR__."/user_lib.php");
 
 # Start session if not already started
 if(session_id() == "")
@@ -56,10 +57,8 @@ if(!isset($_SESSION['locale'])) {
 }
 
 $locale_catalog_file = $_SESSION['langdata_path'].$_SESSION['locale']."_catalog.php";
-$locale_file = $_SESSION['langdata_path'].$_SESSION['locale'].".php";
 
 require_once($locale_catalog_file);
-require_once($locale_file);
 
 require_once("debug_lib.php");
 require_once("date_lib.php");
@@ -662,6 +661,7 @@ class ReportConfig
 	public $reportId;
 	public $testTypeId;
 	public $title;
+    public $name;
 
 	public $headerText;
 	public $titleText;
@@ -729,7 +729,7 @@ class ReportConfig
 
 	public static function getObject($record, $lab_config_id)
 	{
-		global $LANG_ARRAY, $LOCAL_PATH;
+		global $LOCAL_PATH;
 
 		if($record == null)
 			return null;
@@ -752,16 +752,16 @@ class ReportConfig
 		switch($report_config->reportId)
 		{
 			case 1:
-				$report_config->name = $LANG_ARRAY["reports"]["MENU_PATIENT"];
+				$report_config->name = LangUtil::$pageTerms->getTerm("reports", "MENU_PATIENT");
 				break;
 			case 2:
-				$report_config->name = $LANG_ARRAY["reports"]["MENU_SPECIMEN"];
+				$report_config->name = LangUtil::$pageTerms->getTerm("reports", "MENU_SPECIMEN");
 				break;
 			case 3:
-				$report_config->name = $LANG_ARRAY["reports"]["MENU_TESTRECORDS"];
+				$report_config->name = LangUtil::$pageTerms->getTerm("reports", "MENU_TESTRECORDS");
 				break;
 			case 4:
-				$report_config->name = $LANG_ARRAY["reports"]["MENU_DAILYLOGS"];
+				$report_config->name = LangUtil::$pageTerms->getTerm("reports", "MENU_DAILYLOGS");
 				break;
 		}
 

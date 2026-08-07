@@ -10,6 +10,9 @@ require_once(__DIR__."/../../users/accesslist.php");
 require_once(__DIR__."/../../includes/user_lib.php");
 require_once(__DIR__."/lib/backup.php");
 
+require_once(__DIR__."/../../lang/lang_util_v2.php");
+$t = LangPageHelper("config_v2");
+
 $current_user_id = $_SESSION["user_id"];
 $current_user = get_user_by_id($current_user_id);
 $lab_config_id = $_REQUEST["id"];
@@ -66,7 +69,7 @@ if ($_GET["action"] != "confirm") {
 ?>
 
 <div id="upload-form" class="section">
-    <h3 class="section-head">Upload Backup</h3>
+    <h3 class="section-head"><?= $t("UPLOAD_BACKUP") ?></h3>
 
     <form id="upload_backup_form" name="upload_backup_form" action="lab_config_backup_upload.php?id=<?php echo($lab_config_id); ?>&action=confirm" method="post" enctype="multipart/form-data">
         <input type="file" id="backup_file" name="backup_file">
@@ -113,7 +116,7 @@ if (!move_uploaded_file($tmp_path, $perm_tmp_path)) {
 </style>
 
 <div id="confirm-upload-form" class="section">
-    <h3 class="section-head">Upload Backup</h3>
+    <h3 class="section-head"><?= $t("UPLOAD_BACKUP") ?></h3>
 
     <div id="confirm-upload-lab-data">
         <table>
@@ -122,7 +125,7 @@ if (!move_uploaded_file($tmp_path, $perm_tmp_path)) {
                 <td><?php echo($analyzed_backup->lab_name); ?></td>
             </tr>
             <tr>
-                <td class="text-bold">BLIS Version</td>
+                <td class="text-bold"><?= $t("BLIS_VERSION") ?></td>
                 <td><?php echo($analyzed_backup->version); ?></td>
             </tr>
             <tr>
