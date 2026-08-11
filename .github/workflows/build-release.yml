@@ -9,9 +9,9 @@ on:
         default: 'main'
         type: string
       blisruntime_branch:
-        description: 'Branch for C4G/BLISRuntime'
+        description: 'Release version of C4G/BLISRuntime'
         required: true
-        default: 'main'
+        default: 'v4.0.0'
         type: string
       blisng_branch:
         description: 'Branch for C4G/BLIS-NG'
@@ -31,15 +31,10 @@ jobs:
           ref: ${{ inputs.blis_branch }}
           path: 'BLIS'
           
-      - name: Checkout BLISRuntime
-        uses: actions/checkout@v7
-        with:
-          repository: 'C4G/BLISRuntime'
-          # BLISRuntime contains large binary files using Git LFS
-          # https://git-lfs.com/
-          lfs: true
-          ref: ${{ inputs.blisruntime_branch }}
-          path: 'BLISRuntime'
+      - name: Download BLISRuntime
+        run: |
+          curl -fsSlo blisruntime.zip "https://github.com/C4G/BLISRuntime/releases/download/{{inputs.blisruntime_branch}}/BLISRuntime.zip"
+          unzip blisruntime.zip
           
       - name: Checkout BLIS-NG
         uses: actions/checkout@v7
