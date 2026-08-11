@@ -75,3 +75,4 @@ jobs:
         with:
           name: BLIS-Standalone
           path: BLIS-Standalone/
+          include-hidden-files: true
