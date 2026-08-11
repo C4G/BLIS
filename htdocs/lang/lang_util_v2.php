@@ -512,7 +512,6 @@ class LangUtil
 
         $string_data = <<<EOF
     );
-
     return \$LANG_ARRAY;
     EOF;
         fwrite($handle, "\n" . $string_data);
