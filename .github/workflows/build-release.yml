@@ -33,7 +33,7 @@ jobs:
           
       - name: Download BLISRuntime
         run: |
-          curl -fsSlo blisruntime.zip "https://github.com/C4G/BLISRuntime/releases/download/{{inputs.blisruntime_branch}}/BLISRuntime.zip"
+          Invoke-WebRequest -OutFile blisruntime.zip -Uri "https://github.com/C4G/BLISRuntime/releases/download/${{inputs.blisruntime_branch}}/BLISRuntime.zip"
           unzip blisruntime.zip
           
       - name: Checkout BLIS-NG
