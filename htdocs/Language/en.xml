@@ -2983,7 +2983,7 @@
             <value>Contains</value>
         </term>
     </page>
-    <page id="doctor_register">
+    <page id="doctor_register" descr="Doctor Registration">
         <term>
             <key>TITLE</key>
             <value>Patient Look-up</value>
