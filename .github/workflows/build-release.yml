@@ -70,6 +70,9 @@ jobs:
           # Copy BLIS-NG executable
           Copy-Item "./BLIS-NG/bin/Release/net10.0/win-x64/publish/BLIS-NG.exe" -Destination "./BLIS-Standalone/"
 
+          # Remove extraneous files & folders
+          rm -R "./BLIS-Standalone/server/mysql/lib/"
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
         with:
