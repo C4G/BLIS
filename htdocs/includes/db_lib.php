@@ -12,6 +12,7 @@ require_once(__DIR__."/keymgmt.php");
 require_once(__DIR__."/lab_config.php");
 require_once(__DIR__."/migrations.php");
 require_once(__DIR__."/user_lib.php");
+require_once(__DIR__."/../config/lab_config_resolver.php");
 
 # Start session if not already started
 if(session_id() == "")
