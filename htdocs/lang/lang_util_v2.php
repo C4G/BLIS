@@ -86,6 +86,11 @@ class Terms implements ArrayAccess
 
         $page = $this->languageCache[$pageName];
 
+        if (!key_exists($term, $page) && $pageName != "general") {
+            // Special case: if this is not the general page, check the general page
+            $page = $this->languageCache["general"];
+        }
+
         if (!key_exists($term, $page)) {
             return "[MISSING TERM: $locale:$pageName:$term]";
         }
@@ -335,14 +340,9 @@ class LangUtil
         return "[ERROR]";
     }
 
-    public static function getSearchCondition($condition)
+    public static function getSearchCondition(string $condition)
     {
-        global $LANG_ARRAY;
-        $retval = $LANG_ARRAY["search_condition"][$condition];
-        if ($retval == null) {
-            $retval = "[ERROR]";
-        }
-        return $retval;
+        return LangUtil::getTerm("search_condition", $condition);
     }
 
     /**
