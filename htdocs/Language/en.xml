@@ -943,11 +943,19 @@
         </term>
         <term>
             <key>PENDING_EXPORT</key>
-            <value>Exporting Lab Configuration. Please wait..</value>
+            <value>Exporting Lab Configuration. Please wait...</value>
         </term>
         <term>
             <key>SATELLITE_LAB_NAME</key>
             <value>Satellite Lab Name</value>
+        </term>
+        <term>
+            <key>CONNECT_OFFLINE_LAB</key>
+            <value>Connect Offline Lab</value>
+        </term>
+        <term>
+            <key>CONNECT_LAB_INFO</key>
+            <value>Connected Lab Information</value>
         </term>
     </page>
     <page id="header" descr="Page Header">

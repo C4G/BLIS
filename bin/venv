@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if ! python3 -m venv --help >/dev/null 2>/dev/null; then
+    echo "Please install the 'venv' module for Python."
+    exit 1
+fi
+
+WORKSPACE="$(readlink -f "$(dirname "$0")/../")"
+cd "$WORKSPACE" || exit 1
+
+python3 -m venv .venv
+
+source .venv/bin/activate
+
+pip3 install mkdocs-material
+pip3 install zensical
+pip3 install argostranslate
+
+>&2 echo "source .venv/bin/activate"
