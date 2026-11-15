@@ -5,9 +5,9 @@
 # translate.py
 #
 # Usage:
-#    ./translate.py en fr [page name] [term name]
+#    ./translate.py en fr
 #
-# Using the argostranslate Python library, translate specific terms within BLIS localization files.
+# Using the argostranslate Python library, translate missing terms within BLIS localization files.
 
 import argostranslate.package
 import argostranslate.translate
@@ -16,8 +16,6 @@ import xml.etree.ElementTree as ET
 
 from_code = sys.argv[1]
 to_code = sys.argv[2]
-page = sys.argv[3]
-term = sys.argv[4]
 
 # Download and install Argos Translate package
 argostranslate.package.update_package_index()
@@ -29,15 +27,49 @@ package_to_install = next(
 )
 argostranslate.package.install_from_path(package_to_install.download())
 
-tree = ET.parse(f'htdocs/Language/{from_code}.xml')
-root = tree.getroot()
+from_tree = ET.parse(f'htdocs/Language/{from_code}.xml')
+from_root = from_tree.getroot()
 
-term_el = root.findall(f"./page[@id='{page}']/term[key='{term}']")[0]
-value_el = term_el.findall('value')[0]
+to_tree = ET.parse(f'htdocs/Language/{to_code}.xml')
+to_root = to_tree.getroot()
 
-# Translate
-translatedText = argostranslate.translate.translate(value_el.text, from_code, to_code)
+from_pages = from_root.findall("./page")
+for page in from_pages:
+    page_id = page.attrib['id']
+    to_pages = to_root.findall(f"./page[@id='{page_id}']")
+    if (len(to_pages) > 0):
+        to_page = to_pages[0]
+    else:
+        to_page = ET.SubElement(to_root, 'page')
+        to_page.set('id', page.attrib['id'])
 
-print(f"{from_code}:\t{value_el.text}")
-print(f"{to_code}:\t{translatedText}")
+    if 'descr' in page.attrib and ('descr' not in to_page.attrib or page.attrib['descr'] == to_page.attrib['descr']):
+        translated = argostranslate.translate.translate(page.attrib['descr'], from_code, to_code)
+        to_page.set('descr', translated)
 
+    from_term_els = page.findall("term")
+    for from_term in from_term_els:
+        term = from_term.find('key').text
+        val = from_term.find('value').text
+
+        to_term = to_page.findall(f"term[key='{term}']")
+        if (len(to_term) > 0):
+            continue
+
+        print(f"{page_id}:{term}")
+        print(f"{from_code}: {val}")
+
+        # Translate
+        if val is not None:
+            translatedText = argostranslate.translate.translate(val, from_code, to_code)
+
+        print(f"{to_code}: {translatedText}")
+
+        to_term = ET.SubElement(to_page, "term")
+        to_key = ET.SubElement(to_term, "key")
+        to_val = ET.SubElement(to_term, "value")
+        to_key.text = term
+        to_val.text = translatedText
+
+ET.indent(to_tree, space="    ", level=0)
+to_tree.write(f'htdocs/Language/{to_code}.xml', encoding="utf-8", xml_declaration=True)
